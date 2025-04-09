@@ -1,15 +1,14 @@
 import { getUserAuthData } from '@/entities/User'
 import { SidebarItemType } from '../types/sidebar'
 import MainIcon from '@/shared/assets/icons/home.svg'
-import ManualIcon from '@/shared/assets/icons/article.svg'
 import ProfileIcon from '@/shared/assets/icons/avatar.svg'
 import EndpointsIcon from '@/shared/assets/icons/endpoints.svg'
 import ContextsIcon from '@/shared/assets/icons/contexts.svg'
 import {
   getRouteMain,
-  getRouteManuals,
   getRouteEndpoints,
-  getRouteProfile, getRouteContexts
+  getRouteProfile,
+  getRouteContexts
 } from '@/shared/const/router'
 import { useSelector } from 'react-redux'
 
@@ -41,12 +40,6 @@ export const useSidebarItems = () => {
         path: getRouteProfile(userId),
         Icon: ProfileIcon,
         text: 'Профиль',
-        authOnly: true
-      },
-      {
-        path: getRouteManuals(),
-        Icon: ManualIcon,
-        text: 'Документация',
         authOnly: true
       }
     )

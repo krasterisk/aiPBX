@@ -4,6 +4,7 @@ import { memo } from 'react'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
 import { ContentView } from '../../model/types/content'
+import { HStack } from '@/shared/ui/redesigned/Stack'
 
 interface ContentListItemSkeletonProps {
   className?: string
@@ -16,7 +17,7 @@ export const ContentListItemSkeleton = memo((props: ContentListItemSkeletonProps
     view = 'SMALL'
   } = props
 
-  const mainClass = cls.ContentList
+  const mainClass = cls.card
 
   if (view === 'BIG') {
     return (
@@ -24,34 +25,36 @@ export const ContentListItemSkeleton = memo((props: ContentListItemSkeletonProps
               {},
               [className, cls[view]])}
             >
-                <Card className={cls.card}>
-                    <div className={cls.header}>
+                <Card className={cls.card} max>
+                    <HStack className={cls.header}>
                         <Skeleton border='50%' width={30} height={30}/>
                         <Skeleton width={150} height={16} className={cls.username}/>
-                        <Skeleton width={150} height={16}className={cls.date}/>
-                    </div>
-                    <Skeleton width={250} height={24} className={cls.title}/>
-                    <Skeleton height={200} className={cls.img} />
-                    <div className={cls.footer}>
-                        <Skeleton height={36} width={200} />
-                    </div>
+                        <Skeleton width={150} height={16} className={cls.date}/>
+                    </HStack>
+                    <HStack>
+                        <Skeleton width={250} height={24} className={cls.title}/>
+                        <Skeleton height={200} className={cls.img}/>
+                    </HStack>
                 </Card>
             </div>
     )
   }
 
   return (
-        <div className={classNames(mainClass, {}, [className, cls[view]])}>
-            <Card className={cls.card}>
-                <div className={cls.imageWrapper}>
+        <HStack
+            className={classNames(mainClass, {}, [className, cls[view]])}
+            max
+            wrap={'wrap'}
+         >
+            <Card className={cls.card} border={'partial'}>
+                <HStack className={cls.imageWrapper}>
                     <Skeleton className={cls.img} width={200} height={200}/>
-                </div>
-                <div className={cls.infoWrapper}>
-                    <Skeleton width={130} height={16}/>
-                </div>
-                <Skeleton width={150} height={16} className={cls.title}/>
-                <div/>
+                    <HStack className={cls.infoWrapper}>
+                        <Skeleton width={130} height={16}/>
+                    </HStack>
+                    <Skeleton width={150} height={16} className={cls.title}/>
+                </HStack>
             </Card>
-        </div>
+        </HStack>
   )
 })

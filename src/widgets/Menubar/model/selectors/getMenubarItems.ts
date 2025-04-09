@@ -1,69 +1,62 @@
 import { useSelector } from 'react-redux'
 import { getUserAuthData } from '@/entities/User'
 import {
+  getRouteAssistants,
   getRouteContexts, getRouteEndpointGroups,
   getRouteEndpoints,
-  getRouteMain,
-  getRouteManuals,
-  getRouteProfile, getRouteProvisioning
+  getRouteMain, getRouteProvisioning
 } from '@/shared/const/router'
 import MainIcon from '@/shared/assets/icons/home.svg'
 import EndpointsIcon from '@/shared/assets/icons/endpoints.svg'
 import ContextsIcon from '@/shared/assets/icons/contexts.svg'
-import ProfileIcon from '@/shared/assets/icons/avatar.svg'
 import ManualIcon from '@/shared/assets/icons/article.svg'
 import { MenubarItemType } from '../types/menubar'
+import { useTranslation } from 'react-i18next'
 
 export const useMenubarItems = () => {
   const userData = useSelector(getUserAuthData)
+  const { t } = useTranslation()
 
   const menubarItemsList: MenubarItemType[] = [
     {
       path: getRouteMain(),
       Icon: MainIcon,
-      text: 'Главная'
+      text: t('Главная')
     }
   ]
   if (userData) {
-    const userId = String(userData.id)
     menubarItemsList.push(
+      {
+        path: getRouteAssistants(),
+        Icon: ManualIcon,
+        text: t('Ассистенты'),
+        authOnly: true
+      },
       {
         path: getRouteEndpoints(),
         Icon: EndpointsIcon,
-        text: 'Абоненты',
+        text: t('Абоненты'),
         authOnly: false,
         subItems: [
           {
             path: getRouteContexts(),
             Icon: ContextsIcon,
-            text: 'Контексты',
+            text: t('Контексты'),
             authOnly: false
           },
           {
             path: getRouteEndpointGroups(),
             Icon: ContextsIcon,
-            text: 'Группы',
+            text: t('Группы'),
             authOnly: false
           },
           {
             path: getRouteProvisioning(),
             Icon: ContextsIcon,
-            text: 'Автонастройка',
+            text: t('Автонастройка'),
             authOnly: false
           }
         ]
-      },
-      {
-        path: getRouteProfile(userId),
-        Icon: ProfileIcon,
-        text: 'Профиль',
-        authOnly: true
-      },
-      {
-        path: getRouteManuals(),
-        Icon: ManualIcon,
-        text: 'Документация',
-        authOnly: true
       }
     )
   }

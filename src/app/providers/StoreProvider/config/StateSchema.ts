@@ -1,34 +1,20 @@
-import { CounterSchema } from '@/entities/Counter'
-import { UserSchema } from '@/entities/User'
+import { UserSchema, UsersPageSchema } from '@/entities/User'
 import { LoginSchema } from '@/features/AuthByUsername'
 import { AnyAction, CombinedState, EnhancedStore, Reducer, ReducersMapObject } from '@reduxjs/toolkit'
-import { ProfileSchema } from '@/features/EditableProfileCard'
 import { AxiosInstance } from 'axios'
-import { ManualDetailsSchema } from '@/entities/Manual'
-import { AddCommentFormSchema } from '@/features/AddCommentForm'
-import { ManualsPageSchema } from '@/pages/ManualsPage'
 import { ScrollSaveSchema } from '@/features/ScrollSave'
-import { ManualDetailsPageSchema } from '@/pages/ManualDetailsPage'
 import { rtkApi } from '@/shared/api/rtkApi'
-import { ContextsPageSchema, EndpointsPageSchema, EndpointGroupsPageSchema, ProvisioningPageSchema } from '@/pages/pbx'
+import { AssistantsPageSchema } from '@/entities/Assistants'
 
 export interface StateSchema {
-  counter: CounterSchema
   user: UserSchema
   saveScroll: ScrollSaveSchema
   [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>
 
   // Async reducers
   loginForm?: LoginSchema
-  profileForm: ProfileSchema
-  manualDetails?: ManualDetailsSchema
-  addCommentForm?: AddCommentFormSchema
-  manualsPage?: ManualsPageSchema
-  manualDetailsPage?: ManualDetailsPageSchema
-  endpointsPage?: EndpointsPageSchema
-  contextsPage?: ContextsPageSchema
-  endpointGroupsPage?: EndpointGroupsPageSchema
-  provisioningPage?: ProvisioningPageSchema
+  usersPage?: UsersPageSchema
+  assistantsPage?: AssistantsPageSchema
 }
 
 export type StateSchemaKey = keyof StateSchema

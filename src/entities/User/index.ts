@@ -4,20 +4,44 @@ export {
 } from './model/slice/userSlice'
 
 export {
-  isUserOperator,
-  isUserUser,
+  isUserClient,
   isUserAdmin,
-  isUserSupervisor,
-  isUserVPBXAdmin,
-  getAllUserRoles
+  isUserUser,
+  getAllUserRoles,
+  getVpbxUser
 } from './model/selectors/roleSelector'
 
 export type {
   User,
   UserSchema,
-  UserRoles
+  UserRoles,
+  UsersListProps,
+  ClientOptions,
+  ResetUserPasswordProps
 } from './model/types/user'
+
 export { getUserAuthData } from './model/selectors/getUserAuthData/getUserAuthData'
 export { getUserMounted } from './model/selectors/getUserMounted/getUserMounted'
 export { getUserRedesign } from './model/selectors/getUserRedesinged/getUserRedesigned'
-export { UserRolesValues } from './model/consts/consts'
+export { UserRolesValues, UserSortField } from './model/consts/consts'
+export { UsersList } from './ui/UsersList/UsersList'
+export { ClientSelect } from './ui/ClientSelect/ClientSelect'
+export { RoleSelect } from './ui/RoleSelect/RoleSelect'
+export { useUserFilters } from './lib/hooks/useUserFilters'
+export { useSortedAndFilteredData } from './lib/hooks/useSortedAndFilteredData'
+export { usersPageActions, usersPageReducer } from './model/slice/usersPageSlice'
+export type { UsersPageSchema } from './model/types/usersPageSchema'
+export { initUsersPage } from './model/service/initUsersPage/initUsersPage'
+export {
+  usersApi,
+  useGetUsers,
+  useGetUser,
+  useSetUsers,
+  useDeleteUser,
+  useGetAllUsers,
+  useUpdateUser,
+  useUploadAvatarUser,
+  useRegisterUser,
+  useForgotPasswordUser,
+  useUpdateUserPassword
+} from './api/usersApi'

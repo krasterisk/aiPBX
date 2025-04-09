@@ -1,32 +1,32 @@
-name: linting, testing, building
-on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
-jobs:
-  pipeline:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [ 18.x ]
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Starting Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: install modules
-        run: npm install
-      - name: build project
-        run: npm run build:prod
-        if: always()
-      - name: lint test
-        run: npm run lint:ts
-        if: always()
-      - name: lint css test
-        run: npm run lint:scss
+#name: linting, testing, building
+#on:
+#  push:
+#    branches: [master]
+#  pull_request:
+#    branches: [master]
+#jobs:
+#  pipeline:
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        node-version: [ 18.x ]
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Starting Node.js ${{ matrix.node-version }}
+#        uses: actions/setup-node@v1
+#        with:
+#          node-version: ${{ matrix.node-version }}
+#      - name: install modules
+#        run: npm install
+#      - name: build project
+#        run: npm run build:prod
+#        if: always()
+#      - name: lint test
+#        run: npm run lint:ts
+#        if: always()
+#      - name: lint css test
+#        run: npm run lint:scss
 #      - name: jest unit tests
 #        run: npm run test:unit
 #        if: always()

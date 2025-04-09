@@ -2,7 +2,7 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import { useTranslation } from 'react-i18next'
 import React, { memo, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserAuthData, isUserAdmin, isUserVPBXAdmin, userActions } from '@/entities/User'
+import { getUserAuthData, isUserAdmin, userActions } from '@/entities/User'
 import { getRouteAdmin, getRouteProfile, getRouteSettings } from '@/shared/const/router'
 import { Avatar } from '@/shared/ui/redesigned/Avatar'
 import { Dropdown } from '@/shared/ui/redesigned/Popups'
@@ -18,17 +18,14 @@ export const AvatarDropdown = memo((props: AvatarDropdownProps) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const authData = useSelector(getUserAuthData)
-  const isVPBXAdmin = useSelector(isUserVPBXAdmin)
   const isAdmin = useSelector(isUserAdmin)
 
   const onLogout = useCallback(() => {
     dispatch(userActions.logout())
   }, [dispatch])
 
-  const isAdminAvailable = isAdmin || isVPBXAdmin
-
   const items = [
-    ...(isAdminAvailable
+    ...(isAdmin
       ? [{
           content: t('Админ'),
           href: getRouteAdmin()

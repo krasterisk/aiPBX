@@ -18,7 +18,7 @@ const Template: ComponentStory<typeof ListBox> = (args) => <ListBox {...args}/>
 export const TopRight = Template.bind({})
 TopRight.args = {
   direction: 'top-right',
-  value: '123',
+  value: ['123'],
   items: [
     { value: '123', content: '321' },
     { value: '123', content: '321' },
@@ -29,7 +29,7 @@ TopRight.args = {
 export const TopLeft = Template.bind({})
 TopLeft.args = {
   direction: 'top-left',
-  value: '123',
+  value: ['123'],
   items: [
     { value: '123', content: '321' },
     { value: '123', content: '321' },
@@ -40,7 +40,7 @@ TopLeft.args = {
 export const BottomRight = Template.bind({})
 BottomRight.args = {
   direction: 'bottom-right',
-  value: '123',
+  value: ['123'],
   items: [
     { value: '123', content: '321' },
     { value: '123', content: '321' },
@@ -51,7 +51,7 @@ BottomRight.args = {
 export const BottomLeft = Template.bind({})
 BottomLeft.args = {
   direction: 'bottom-left',
-  value: '123',
+  value: ['123'],
   items: [
     { value: '123', content: '321' },
     { value: '123', content: '321' },
@@ -62,7 +62,7 @@ BottomLeft.args = {
 export const Disabled = Template.bind({})
 Disabled.args = {
   readonly: true,
-  value: '123',
+  value: ['123'],
   items: [
     { value: '123', content: '321', disabled: true },
     { value: '123', content: '321', disabled: true },
@@ -73,7 +73,7 @@ Disabled.args = {
 
 export const DisabledOption = Template.bind({})
 DisabledOption.args = {
-  value: '123',
+  value: ['123'],
   items: [
     { value: '123', content: '321' },
     { value: '123', content: '321', disabled: true },
@@ -84,7 +84,7 @@ DisabledOption.args = {
 
 export const WhitLabel = Template.bind({})
 WhitLabel.args = {
-  value: '123',
+  value: ['123'],
   label: 'label',
   items: [
     { value: '123', content: '321' },

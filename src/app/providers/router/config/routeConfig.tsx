@@ -2,10 +2,6 @@ import { MainPage } from '@/pages/MainPage'
 import { AboutPage } from '@/pages/AboutPage'
 import { AdminPage } from '@/pages/AdminPage'
 import { UserRolesValues } from '@/entities/User'
-import { ProfilePage } from '@/pages/ProfilePage'
-import { ManualsPage } from '@/pages/ManualsPage'
-import { ManualDetailsPage } from '@/pages/ManualDetailsPage'
-import { ManualEditPage } from '@/pages/ManualEditPage'
 import { ForbiddenPage } from '@/pages/ForbiddenPage'
 import { ErrorPage } from '@/pages/ErrorPage'
 import {
@@ -14,41 +10,15 @@ import {
   getRouteAdmin,
   getRouteForbidden,
   getRouteMain,
-  getRouteManualCreate,
-  getRouteManualDetails,
-  getRouteManualEdit,
-  getRouteManuals,
-  getRouteProfile,
   getRouteSettings,
-  getRouteEndpointCreate,
-  getRouteEndpointEdit,
-  getRouteEndpoints,
-  getRouteContexts,
-  getRouteContextCreate,
-  getRouteContextEdit,
-  getRouteEndpointGroupsCreate,
-  getRouteEndpointGroups,
-  getRouteEndpointGroupsEdit,
-  getRouteProvisioning,
-  getRouteProvisioningCreate,
-  getRouteProvisioningEdit
+  getRouteAssistants,
+  getRouteAssistantCreate,
+  getRouteAssistantEdit, getRouteUsers, getRouteUserCreate, getRouteUserEdit
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
-import {
-  EndpointCreatePage,
-  EndpointEditPage,
-  ContextsListPage,
-  ContextCreatePage,
-  EndpointGroupsCreatePage,
-  EndpointGroupsPage,
-  EndpointGroupsEditPage,
-  EndpointsPage,
-  ContextEditPage,
-  ProvisioningPage,
-  ProvisioningEditPage,
-  ProvisioningCreatePage
-} from '@/pages/pbx'
 import { SettingPage } from '@/pages/SettingsPage'
+import { AssistantsCreatePage, AssistantsPage, AssistantsEditPage } from '@/pages/AssistantsPage'
+import { UsersCreatePage, UsersEditPage, UsersPage } from '@/pages/UsersPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -59,94 +29,35 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     path: getRouteAbout(),
     element: <AboutPage/>
   },
-  [AppRoutes.ENDPOINTS]: {
-    path: getRouteEndpoints(),
-    element: <EndpointsPage />
+  [AppRoutes.ASSISTANTS]: {
+    path: getRouteAssistants(),
+    element: <AssistantsPage />
   },
-  [AppRoutes.ENDPOINT_CREATE]: {
-    path: getRouteEndpointCreate(),
-    element: <EndpointCreatePage />,
-    authOnly: false
+  [AppRoutes.ASSISTANT_CREATE]: {
+    path: getRouteAssistantCreate(),
+    element: <AssistantsCreatePage />
   },
-  [AppRoutes.ENDPOINT_EDIT]: {
-    path: getRouteEndpointEdit(':id'),
-    element: <EndpointEditPage />,
-    authOnly: false
+  [AppRoutes.ASSISTANT_EDIT]: {
+    path: getRouteAssistantEdit(':id'),
+    element: <AssistantsEditPage />
   },
-  [AppRoutes.CONTEXTS]: {
-    path: getRouteContexts(),
-    element: <ContextsListPage />
+  [AppRoutes.USERS]: {
+    path: getRouteUsers(),
+    element: <UsersPage />
   },
-  [AppRoutes.CONTEXT_CREATE]: {
-    path: getRouteContextCreate(),
-    element: <ContextCreatePage />,
-    authOnly: false
+  [AppRoutes.USER_CREATE]: {
+    path: getRouteUserCreate(),
+    element: <UsersCreatePage />
   },
-  [AppRoutes.CONTEXT_EDIT]: {
-    path: getRouteContextEdit(':id'),
-    element: <ContextEditPage />,
-    authOnly: false
-  },
-  [AppRoutes.ENDPOINT_GROUPS]: {
-    path: getRouteEndpointGroups(),
-    element: <EndpointGroupsPage />,
-    authOnly: false
-  },
-  [AppRoutes.ENDPOINT_GROUPS_CREATE]: {
-    path: getRouteEndpointGroupsCreate(),
-    element: <EndpointGroupsCreatePage />,
-    authOnly: false
-  },
-  [AppRoutes.ENDPOINT_GROUPS_EDIT]: {
-    path: getRouteEndpointGroupsEdit(':id'),
-    element: <EndpointGroupsEditPage />,
-    authOnly: false
-  },
-  [AppRoutes.PROVISIONING]: {
-    path: getRouteProvisioning(),
-    element: <ProvisioningPage />,
-    authOnly: false
-  },
-  [AppRoutes.PROVISIONING_CREATE]: {
-    path: getRouteProvisioningCreate(),
-    element: <ProvisioningCreatePage />,
-    authOnly: false
-  },
-  [AppRoutes.PROVISIONING_EDIT]: {
-    path: getRouteProvisioningEdit(':id'),
-    element: <ProvisioningEditPage />,
-    authOnly: false
+  [AppRoutes.USER_EDIT]: {
+    path: getRouteUserEdit(':id'),
+    element: <UsersEditPage />
   },
   [AppRoutes.ADMIN]: {
     path: getRouteAdmin(),
     element: <AdminPage/>,
     authOnly: true,
     roles: [UserRolesValues.ADMIN, UserRolesValues.USER]
-  },
-  [AppRoutes.PROFILE]: {
-    path: getRouteProfile(':id'),
-    element: <ProfilePage/>,
-    authOnly: false
-  },
-  [AppRoutes.MANUALS]: {
-    path: getRouteManuals(),
-    element: <ManualsPage/>,
-    authOnly: false
-  },
-  [AppRoutes.MANUAL_DETAILS]: {
-    path: getRouteManualDetails(':id'),
-    element: <ManualDetailsPage/>,
-    authOnly: false
-  },
-  [AppRoutes.MANUAL_EDIT]: {
-    path: getRouteManualEdit(':id'),
-    element: <ManualEditPage/>,
-    authOnly: false
-  },
-  [AppRoutes.MANUAL_CREATE]: {
-    path: getRouteManualCreate(),
-    element: <ManualEditPage/>,
-    authOnly: true
   },
   [AppRoutes.SETTINGS]: {
     path: getRouteSettings(),

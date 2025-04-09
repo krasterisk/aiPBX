@@ -1,0 +1,46 @@
+.UsersList {
+    position: relative;
+
+    &:hover {
+        .uncheck {
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: flex;
+            color: var(--icon-redesigned);
+        }
+
+    }
+
+
+    .uncheck {
+        position: absolute;
+        display: none;
+        color: var(--icon-redesigned);
+        left: 0;
+        top: 0;
+    }
+
+    .check {
+        position: absolute;
+        display: flex;
+        color: var(--icon-redesigned);
+        left: 0;
+        top: 0;
+    }
+
+    .uncheckButtons {
+        display: none;
+    }
+
+    .checkButtons {
+        display: flex;
+    }
+}
+
+.loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

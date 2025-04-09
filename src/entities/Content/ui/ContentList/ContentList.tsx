@@ -5,21 +5,17 @@ import { ContentListItemSkeleton } from './ContentListItemSkeleton'
 import React, { HTMLAttributeAnchorTarget } from 'react'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { useTranslation } from 'react-i18next'
-import { Context } from '../../../Pbx/Contexts/model/types/contexts'
-import { ContextItem } from '../../../Pbx/Contexts/ui/ContextItem/ContextItem'
-import { EndpointItem } from '../../../Pbx/Endpoints/ui/EndpointItem/EndpointItem'
-import { Endpoint } from '../../../Pbx/Endpoints/model/types/endpoints'
-import { EndpointGroups } from '../../../Pbx/EndpointGroups/model/types/endpointGroups'
-import { EndpointGroupItem } from '../../../Pbx/EndpointGroups/ui/EndpointGroupItem/EndpointGroupItem'
-import { ProvisioningItem } from '../../../Pbx/Provisioning/ui/ProvisioningItem/ProvisioningItem'
-import { ProvisionTemplate } from '@/entities/Pbx'
+import { User } from '../../../User'
+import { UserItem } from '../../../User/ui/UserItem/UserItem'
+import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import { Check } from '@/shared/ui/mui/Check'
 import { Card } from '@/shared/ui/redesigned/Card'
 
 interface ContentListProps<T extends object> {
   className?: string
   data: T[] | undefined
   isLoading?: boolean
-  view: ContentView
+  view?: ContentView
   target?: HTMLAttributeAnchorTarget
   componentName: string
 }
@@ -28,7 +24,7 @@ const getSkeletons = (view: ContentView) => {
   return new Array(view === 'SMALL' ? 9 : 4)
     .fill(0)
     .map((item, index) => (
-          <ContentListItemSkeleton className={cls.card} key={index} view={view} />
+            <ContentListItemSkeleton className={cls.card} key={index} view={view}/>
     ))
 }
 
@@ -39,82 +35,59 @@ export const ContentList = <T extends object>(props: ContentListProps<T>) => {
     isLoading,
     target,
     componentName,
-    view
+    view = 'BIG'
   } = props
 
   const { t } = useTranslation()
 
   const renderContent = (content: T) => {
-    if (componentName === 'endpoints') {
-      const endpoint = content as Endpoint
+    if (componentName === 'users') {
+      const user = content as User
       return (
-            <EndpointItem
-                key={endpoint.id}
-                endpoint={endpoint}
-                target={target}
-                view={view}
-                className={cls.EndpointItem}
-            />
-      )
-    }
-    if (componentName === 'contexts') {
-      const context = content as Context
-      return (
-          <ContextItem
-              key={context.id}
-              context={context}
-              target={target}
-              view={view}
-          />
-      )
-    }
-    if (componentName === 'endpointGroups') {
-      const endpointGroups = content as EndpointGroups
-      return (
-          <EndpointGroupItem
-              key={endpointGroups.id}
-              endpointGroup={endpointGroups}
-              target={target}
-              view={view}
-          />
-      )
-    }
-    if (componentName === 'provisioning') {
-      const provisioning = content as ProvisionTemplate
-      return (
-          <ProvisioningItem
-              key={provisioning.id}
-              provisionTemplate={provisioning}
-              target={target}
-              view={view}
-          />
+                <UserItem
+                    key={user.id}
+                    user={user}
+                    target={target}
+                    view={view}
+                    className={cls.caskItem}
+                />
       )
     }
   }
 
   if (!isLoading && !data?.length) {
     return (
-        <Card
-            max
-            padding={'24'}
-            border={'partial'}
-            className={classNames(cls.ContentList, {}, [className, cls[view]])}
-        >
-          <Text
-              size={'xl'}
-              text={t('Данные не найдены')}
-          />
-        </Card>
+            <HStack
+                justify={'start'}
+                max
+                className={classNames(cls.ContentList, {}, [className, cls[view]])}
+            >
+                <Text
+                    align={'center'}
+                    text={t('Данные не найдены')}
+                />
+            </HStack>
     )
   }
 
   return (
-      <div className={classNames(cls.ContentList, {}, [className, cls[view]])}>
-        {data?.length
-          ? data.map(renderContent)
-          : null
-        }
-        {isLoading && getSkeletons(view)}
-      </div>
+        <VStack
+            className={classNames(cls.ContentList, {}, [className, cls[view]])}
+            max
+            gap={'16'}
+        >
+            <Card max border={'partial'}>
+                <HStack gap={'4'} max wrap={'nowrap'}>
+                    <Check indeterminate className={cls.checkAll} label={'Выбрать всё'}/>
+                    <Text text={'Всего: ' + String(data?.length)}/>
+                </HStack>
+            </Card>
+
+            {data?.length
+              ? data.map(renderContent)
+              : null
+            }
+            {isLoading && getSkeletons(view)}
+        </VStack>
   )
 }

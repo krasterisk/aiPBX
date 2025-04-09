@@ -17,7 +17,7 @@ const AppRouter = () => {
             <Route
                 key={route.path}
                 path={route.path}
-                element={route.authOnly ? <RequireAuth roles={[UserRolesValues.ADMIN, UserRolesValues.VPBXADMIN]}>{element}</RequireAuth> : element}
+                element={route.authOnly ? <RequireAuth roles={[UserRolesValues.ADMIN]}>{element}</RequireAuth> : element}
             />
     )
   }, [])

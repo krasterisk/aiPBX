@@ -1,13 +1,14 @@
-.ContentList {
-    padding: 0;
-}
+.card {
+    &.BIG {
+        display: flex;
+        width: 100%;
+    }
 
-.BIG {
-    width: 100%;
+    &.SMALL {
+        display: flex;
+        width: 250px;
+    }
 }
-
-.SMALL {
-    display: flex; // расположить в одну строку
-    gap: 16px; // отступы
-    flex-wrap: wrap; // Переносить если не влезло
+.checkAll {
+    color: var(--icon-redesigned)
 }

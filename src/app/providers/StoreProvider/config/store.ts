@@ -1,12 +1,10 @@
 import { CombinedState, configureStore, Reducer, ReducersMapObject } from '@reduxjs/toolkit'
 import { StateSchema, ThunkExtraArg } from './StateSchema'
-import { counterReducer } from '@/entities/Counter'
 import { userReducer } from '@/entities/User'
 import { createReducerManager } from './reducerManager'
 import { $api } from '@/shared/api/api'
 import { scrollSaveReducer } from '@/features/ScrollSave'
 import { rtkApi } from '@/shared/api/rtkApi'
-import { profileReducer } from '@/features/EditableProfileCard'
 import { setupListeners } from '@reduxjs/toolkit/query'
 
 export function createReduxStore (
@@ -15,10 +13,8 @@ export function createReduxStore (
 ) {
   const rootReducers: ReducersMapObject<StateSchema> = {
     ...asyncReducers,
-    counter: counterReducer,
     user: userReducer,
     saveScroll: scrollSaveReducer,
-    profileForm: profileReducer,
     [rtkApi.reducerPath]: rtkApi.reducer
   }
 

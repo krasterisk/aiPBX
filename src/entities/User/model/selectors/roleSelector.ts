@@ -1,67 +1,34 @@
 import { StateSchema } from '@/app/providers/StoreProvider'
 import { createSelector } from '@reduxjs/toolkit'
-import { getTokenAllData } from '@/app/providers/getTokenData/getTokenData'
 import { UserRolesValues } from '../consts/consts'
 
-const getUserRoles = (state: StateSchema) => state.user.authData?.token
+const getUserRoles = (state: StateSchema) => state.user.authData?.roles
 
-export const getAllUserRoles = createSelector(getUserRoles, (token) => {
-  const getUserToken = getTokenAllData(token)
-  const roles = getUserToken?.roles
+export const getVpbxUser = (state: StateSchema) => state.user.authData?.vpbx_user_id
+
+export const getAllUserRoles = createSelector(getUserRoles, (roles) => {
   return roles?.map(role => role.value)
 })
 
-export const isUserAdmin = createSelector(getUserRoles, (token) => {
-  const getUserToken = getTokenAllData(token)
-  const roles = getUserToken?.roles
-
+export const isUserAdmin = createSelector(getUserRoles, (roles) => {
   if (!roles) {
     return false
   }
-
   return roles.some(role => role.value === UserRolesValues.ADMIN)
 })
 
-export const isUserOperator = createSelector(getUserRoles, (token) => {
-  const getUserToken = getTokenAllData(token)
-  const roles = getUserToken?.roles
-
+export const isUserClient = createSelector(getUserRoles, (roles) => {
   if (!roles) {
     return false
   }
 
-  return roles.some(role => role.value === UserRolesValues.OPERATOR)
+  return roles.some(role => role.value === UserRolesValues.CLIENT)
 })
 
-export const isUserUser = createSelector(getUserRoles, (token) => {
-  const getUserToken = getTokenAllData(token)
-  const roles = getUserToken?.roles
-
+export const isUserUser = createSelector(getUserRoles, (roles) => {
   if (!roles) {
     return false
   }
 
   return roles.some(role => role.value === UserRolesValues.USER)
-})
-
-export const isUserSupervisor = createSelector(getUserRoles, (token) => {
-  const getUserToken = getTokenAllData(token)
-  const roles = getUserToken?.roles
-
-  if (!roles) {
-    return false
-  }
-
-  return roles.some(role => role.value === UserRolesValues.SUPERVISOR)
-})
-
-export const isUserVPBXAdmin = createSelector(getUserRoles, (token) => {
-  const getUserToken = getTokenAllData(token)
-  const roles = getUserToken?.roles
-
-  if (!roles) {
-    return false
-  }
-
-  return roles.some(role => role.value === UserRolesValues.VPBXADMIN)
 })

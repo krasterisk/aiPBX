@@ -33,7 +33,7 @@ export const UiDesignSwitcher = memo((props: UiDesignSwitcherProps) => {
   const onChange = (value: string) => {
     if (authData) {
       dispatch(updateFeatureFlag({
-        id: authData.id,
+        id: authData.id || '',
         designed: value === 'new'
       }))
     }
@@ -44,7 +44,7 @@ export const UiDesignSwitcher = memo((props: UiDesignSwitcherProps) => {
             label={t('Интерфейс') || ''}
             items={items}
             onChange={onChange}
-            value={isAppRedesigned ? 'new' : 'old'}
+            value={isAppRedesigned ? ['new'] : ['old']}
             className={className}
         />
   )

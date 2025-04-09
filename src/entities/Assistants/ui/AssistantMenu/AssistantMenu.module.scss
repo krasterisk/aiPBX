@@ -1,0 +1,11 @@
+.AssistantMenu {
+    z-index: var(--popover-z-index);
+}
+.trigger {
+    margin: 4px;
+    color: var(--hint-redesigned);
+
+    &:hover {
+        color: var(--text-redesigned);
+    }
+}

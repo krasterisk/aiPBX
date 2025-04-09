@@ -1,27 +1,16 @@
 export enum AppRoutes {
   MAIN = 'main',
-  CONTEXTS = 'contexts',
-  CONTEXT_CREATE = 'context_create',
-  CONTEXT_EDIT = 'context_edit',
   ABOUT = 'about',
-  PROFILE = 'profile',
   ADMIN = 'admin',
   SETTINGS = 'settings',
-  MANUALS = 'manuals',
-  MANUAL_DETAILS = 'manual_details',
-  MANUAL_CREATE = 'manuals_create',
-  MANUAL_EDIT = 'manual_edit',
-  ENDPOINTS = 'endpoints',
-  ENDPOINT_EDIT = 'endpoint_edit',
-  ENDPOINT_CREATE = 'endpoint_create',
-  ENDPOINT_GROUPS = 'endpoints_groups',
-  ENDPOINT_GROUPS_EDIT = 'endpoints_group_edit',
-  ENDPOINT_GROUPS_CREATE = 'endpoints_group_create',
-  PROVISIONING_CREATE = 'provisioning_create',
-  PROVISIONING_EDIT = 'provisioning_edit',
-  PROVISIONING = 'provisioning',
+  ASSISTANTS = 'ASSISTANTS',
+  ASSISTANT_CREATE = 'ASSISTANT_create',
+  ASSISTANT_EDIT = 'ASSISTANT_edit',
   FORBIDDEN = 'forbidden',
-  ERROR = 'error'
+  ERROR = 'error',
+  USERS = 'users',
+  USER_EDIT = 'users_edit',
+  USER_CREATE = 'users_create',
 }
 
 export const getRouteMain = () => '/'
@@ -30,10 +19,10 @@ export const getRouteAdmin = () => '/admin'
 export const getRouteEndpoints = () => '/endpoints'
 export const getRouteContexts = () => '/contexts'
 export const getRouteSettings = () => '/settings'
-export const getRouteManuals = () => '/manuals'
-export const getRouteManualDetails = (id: string) => `/manuals/${id}`
-export const getRouteManualEdit = (id: string) => `/manuals/${id}`
-export const getRouteManualCreate = () => '/manuals/create'
+export const getRouteAssistants = () => '/assistants'
+export const getRouteAssistantDetails = (id: string) => `/assistants/${id}`
+export const getRouteAssistantEdit = (id: string) => `/assistants/${id}`
+export const getRouteAssistantCreate = () => '/assistants/create'
 export const getRouteEndpointCreate = () => '/endpoints/create'
 export const getRouteContextCreate = () => '/contexts/create'
 export const getRouteContextEdit = (id: string) => `/contexts/${id}`
@@ -46,29 +35,20 @@ export const getRouteProvisioningCreate = () => '/provisioning/create'
 export const getRouteProvisioningEdit = (id: string) => `/provisioning/${id}`
 export const getRouteProfile = (id: string) => `/profile/${id}`
 export const getRouteForbidden = () => '/forbidden'
+export const getRouteUsers = () => '/users'
+export const getRouteUserCreate = () => '/users/create'
+export const getRouteUserEdit = (id: string) => `/users/${id}`
 
 export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteMain()]: AppRoutes.MAIN,
   [getRouteAbout()]: AppRoutes.ABOUT,
-  [getRouteProfile(':id')]: AppRoutes.PROFILE,
   [getRouteAdmin()]: AppRoutes.ADMIN,
   [getRouteSettings()]: AppRoutes.SETTINGS,
-  [getRouteManuals()]: AppRoutes.MANUALS,
-  [getRouteManualDetails(':id')]: AppRoutes.MANUAL_DETAILS,
-  [getRouteManualCreate()]: AppRoutes.MANUAL_CREATE,
-  [getRouteManualEdit(':id')]: AppRoutes.MANUAL_EDIT,
-  [getRouteEndpoints()]: AppRoutes.ENDPOINTS,
-  [getRouteEndpointEdit(':id')]: AppRoutes.ENDPOINT_EDIT,
-  [getRouteEndpointCreate()]: AppRoutes.ENDPOINT_CREATE,
-  [getRouteContexts()]: AppRoutes.CONTEXTS,
-  [getRouteContextCreate()]: AppRoutes.CONTEXT_CREATE,
-  [getRouteContextEdit(':id')]: AppRoutes.CONTEXT_EDIT,
-  [getRouteProvisioning()]: AppRoutes.PROVISIONING,
-  [getRouteProvisioningEdit(':id')]: AppRoutes.PROVISIONING_EDIT,
-  [getRouteProvisioningCreate()]: AppRoutes.PROVISIONING_CREATE,
-  [getRouteEndpointGroupsCreate()]: AppRoutes.ENDPOINT_GROUPS_CREATE,
-  [getRouteEndpointGroups()]: AppRoutes.ENDPOINT_GROUPS,
-  [getRouteEndpointGroupsEdit(':id')]: AppRoutes.ENDPOINT_GROUPS_EDIT,
-  [getRouteEndpointGroupsCreate()]: AppRoutes.ENDPOINT_GROUPS_CREATE,
-  [getRouteForbidden()]: AppRoutes.FORBIDDEN
+  [getRouteAssistants()]: AppRoutes.ASSISTANTS,
+  [getRouteAssistantCreate()]: AppRoutes.ASSISTANT_CREATE,
+  [getRouteAssistantEdit(':id')]: AppRoutes.ASSISTANT_EDIT,
+  [getRouteForbidden()]: AppRoutes.FORBIDDEN,
+  [getRouteUsers()]: AppRoutes.USERS,
+  [getRouteUserEdit(':id')]: AppRoutes.USER_EDIT,
+  [getRouteUserCreate()]: AppRoutes.USER_CREATE
 }
