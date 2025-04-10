@@ -33,11 +33,13 @@ export const AssistantEditCard = memo((props: UserEditCardProps) => {
     skip: !assistantId
   })
 
-  const initAssistant = {
+  const initAssistant: Assistant = {
     id: '',
     name: '',
+    userId: '',
     comment: ''
   }
+
   const [formFields, setFormFields] = useState<Assistant>(initAssistant)
 
   const { t } = useTranslation('assistants')

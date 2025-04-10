@@ -10,6 +10,7 @@ import { ContentViewSelector } from '../../../Content'
 import { useTranslation } from 'react-i18next'
 import { Input } from '@/shared/ui/redesigned/Input'
 import { Icon } from '@/shared/ui/redesigned/Icon'
+import { Text } from '@/shared/ui/redesigned/Text'
 import SearchIcon from '@/shared/assets/icons/search.svg'
 import { useAssistantFilters } from '../../lib/hooks/useAssistantFilters'
 
@@ -35,11 +36,11 @@ export const AssistantsListHeader = memo((props: AssistantsListHeaderProps) => {
   return (
         <HStack
             className={classNames(cls.AssistantsListHeader, { [cls.mobileHeader]: isMobile }, [className])}
-            justify={'start'}
-            gap={'8'}
+            justify={'between'}
+            max
         >
+            <HStack gap={'8'} justify={'start'}>
             <ContentViewSelector view={view} onViewClick={onChangeView}/>
-            <HStack gap={'8'}>
                 <Input
                     data-testid={'AssistantSearch'}
                     className={cls.searchInput}
@@ -50,16 +51,18 @@ export const AssistantsListHeader = memo((props: AssistantsListHeaderProps) => {
                     value={search}
                 />
             </HStack>
-            <AppLink
-                title={String(t('Добавить голосового ассистента'))}
-                className={cls.CreateButton}
-                to={getRouteAssistantCreate()}
-            >
-                <IconButton>
-                    <AddBox className={cls.icon} fontSize={'large'}/>
-                </IconButton>
-            </AppLink>
-
+            <HStack>
+                <AppLink
+                    title={String(t('Создать голосового ассистента'))}
+                    className={cls.CreateButton}
+                    to={getRouteAssistantCreate()}
+                >
+                    <IconButton>
+                        <AddBox className={cls.icon} fontSize={'large'}/>
+                        <Text text={t('Создать ассистента')}/>
+                    </IconButton>
+                </AppLink>
+            </HStack>
         </HStack>
   )
 })

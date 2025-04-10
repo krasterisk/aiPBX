@@ -1,6 +1,9 @@
 export { AssistantsList } from './ui/AssistantsList/AssistantsList'
 export { useAssistantFilters } from './lib/hooks/useAssistantFilters'
 
+export { ModelSelect } from './ui/ModelSelect/ModelSelect'
+export { VoiceSelect } from './ui/VoiceSelect/VoiceSelect'
+
 export {
   assistantsPageActions,
   assistantsPageReducer
