@@ -1,6 +1,6 @@
 {
-  "name": "pbx_client",
-  "version": "1.0.1",
+  "name": "ai_pbx",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
