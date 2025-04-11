@@ -38,6 +38,7 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
 
   const initAssistant: Assistant = {
     id: '',
+    model: 'gpt-4o-mini-realtime-preview-2024-12-17',
     voice: 'Alloy',
     name: '',
     instruction: 'You are a helpful, witty, and friendly AI by name Alex. Your are Russian. ' +
@@ -76,29 +77,40 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
 
   useEffect(() => {
     if (!isAdmin && clientData?.id && clientData.username) {
-      dispatch(assistantsPageActions.setUser({
-        id: clientData?.vpbx_user_id || clientData.id,
-        name: clientData?.username
-      }))
-      dispatch(assistantsPageActions.setUserId(clientData.id))
       setFormFields({
         ...formFields,
+        user: {
+          id: clientData?.vpbx_user_id || clientData.id,
+          name: clientData?.username
+        },
         userId: clientData.id
       })
     }
+    dispatch(assistantsPageActions.updateAssistantsCreateForm(formFields))
   }, [clientData, dispatch, formFields, isAdmin])
 
   const onChangeClientHandler = useCallback((
     event: any,
     newValue: ClientOptions) => {
     dispatch(assistantsPageActions.setUser(newValue))
-    dispatch(assistantsPageActions.setUserId(newValue.id))
     setFormFields({
       ...formFields,
       userId: newValue.id,
       user: newValue
     })
   }, [dispatch, formFields])
+
+  const onChangeSelectHandler = (field: keyof Assistant) => (
+    event: any,
+    newValue: string
+  ) => {
+    const updatedFields = {
+      ...formFields,
+      [field]: newValue
+    }
+    setFormFields(updatedFields)
+    dispatch(assistantsPageActions.updateAssistantsCreateForm(updatedFields))
+  }
 
   const createTextChangeHandler = (field: keyof Assistant) =>
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -109,7 +121,7 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
       })
     }
 
-  const isAdminOptions = (
+  const IsAdminOptions = (
             <>
                 <ClientSelect
                     value={clientValues}
@@ -121,6 +133,89 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
                 />
                 <ModelSelect
                     label={String(t('Модель'))}
+                    value={formFields.model || ''}
+                    onChangeValue={onChangeSelectHandler('model')}
+                />
+                <Textarea
+                    label={t('Температура') ?? ''}
+                    onChange={createTextChangeHandler('temperature')}
+                    data-testid={'AssistantCardCreate.temperature'}
+                    value={formFields.temperature}
+                />
+                <Textarea
+                    label={t('Ограничитель токенов') ?? ''}
+                    onChange={createTextChangeHandler('max_tokens')}
+                    data-testid={'AssistantCardCreate.max_tokens'}
+                    value={formFields.max_tokens}
+                />
+                <Text text={'Синтез и распознавание речи'} bold />
+                <Textarea
+                    label={t('Модель распознавания речи') ?? ''}
+                    onChange={createTextChangeHandler('input_audio_transcription_model')}
+                    data-testid={'AssistantCardCreate.input_audio_transcription_model'}
+                    value={formFields.input_audio_transcription_model}
+                />
+                <Textarea
+                    label={t('Язык распознавания речи') ?? ''}
+                    onChange={createTextChangeHandler('input_audio_transcription_language')}
+                    data-testid={'AssistantCardCreate.input_audio_transcription_language'}
+                    value={formFields.input_audio_transcription_language}
+                />
+                <Textarea
+                    label={t('Модель синтеза речи') ?? ''}
+                    onChange={createTextChangeHandler('output_audio_transcription_model')}
+                    data-testid={'AssistantCardCreate.output_audio_transcription_model'}
+                    value={formFields.output_audio_transcription_model}
+                />
+                <Text text={'Аудио потоки'} bold />
+                <Textarea
+                    label={t('Формат входящего аудио') ?? ''}
+                    onChange={createTextChangeHandler('input_audio_format')}
+                    data-testid={'AssistantCardCreate.input_audio_format'}
+                    value={formFields.input_audio_format}
+                />
+                <Textarea
+                    label={t('Формат исходящего аудио') ?? ''}
+                    onChange={createTextChangeHandler('output_audio_format')}
+                    data-testid={'AssistantCardCreate.output_audio_format'}
+                    value={formFields.output_audio_format}
+                />
+                <Textarea
+                    label={t('Тип определения шума (none, near_field, far_field)') ?? ''}
+                    onChange={createTextChangeHandler('input_audio_noise_reduction')}
+                    data-testid={'AssistantCardCreate.input_audio_noise_reduction'}
+                    value={formFields.input_audio_noise_reduction}
+                />
+                <Text text={t('Автоматическое обнаружение голоса (VAD)')} bold />
+                <Textarea
+                    label={t('Тип VAD') ?? ''}
+                    onChange={createTextChangeHandler('turn_detection_type')}
+                    data-testid={'AssistantCardCreate.turn_detection_type'}
+                    value={formFields.turn_detection_type}
+                />
+                <Textarea
+                    label={t('Порог обнаружения голосовой активности, мс') ?? ''}
+                    onChange={createTextChangeHandler('turn_detection_threshold')}
+                    data-testid={'AssistantCardCreate.turn_detection_threshold'}
+                    value={formFields.turn_detection_threshold}
+                />
+                <Textarea
+                    label={t('Длительность включаемого в поток звука, мс') ?? ''}
+                    onChange={createTextChangeHandler('turn_detection_prefix_padding_ms')}
+                    data-testid={'AssistantCardCreate.turn_detection_prefix_padding_ms'}
+                    value={formFields.turn_detection_prefix_padding_ms}
+                />
+                <Textarea
+                    label={t('Продолжительность тишины, мс') ?? ''}
+                    onChange={createTextChangeHandler('turn_detection_silence_duration_ms')}
+                    data-testid={'AssistantCardCreate.turn_detection_silence_duration_ms'}
+                    value={formFields.turn_detection_silence_duration_ms}
+                />
+                <Textarea
+                    label={t('Семантический VAD(Auto, Low, Medium, High)') ?? ''}
+                    onChange={createTextChangeHandler('semantic_eagerness')}
+                    data-testid={'AssistantCardCreate.semantic_eagerness'}
+                    value={formFields.semantic_eagerness}
                 />
             </>
   )
@@ -135,7 +230,7 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
                 max
                 className={classNames(cls.AssistantCreateCard, {}, [className])}
             >
-                <AssistantCreateCardHeader onCreate={createHandler}/>
+                <AssistantCreateCardHeader onCreate={createHandler} variant={'diviner-top'}/>
                 {isError
                   ? <ErrorGetData
                         title={t('Ошибка при создании ассистента') || ''}
@@ -148,10 +243,10 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
                   : ''}
                 <Card
                     max
-                    padding={'8'}
+                    padding={'16'}
                     border={'partial'}
                 >
-                    <VStack gap={'8'} max>
+                    <VStack gap={'16'} max>
                         {!isAdmin && <Text title={clientData?.name}/>}
                         <Textarea
                             label={t('Наименование ассистента') ?? ''}
@@ -159,6 +254,7 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
                             data-testid={'AssistantCardCreate.name'}
                             value={formFields.name}
                         />
+                        <Text text={'Параметры LLM модели'} bold />
                         <Textarea
                             label={t('Инструкции для ассистента') ?? ''}
                             onChange={createTextChangeHandler('instruction')}
@@ -167,7 +263,12 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
                             minRows={5}
                             multiline
                         />
-                        <VoiceSelect label={String(t('Голос'))} />
+                        <VoiceSelect
+                            label={String(t('Голос'))}
+                            value={formFields.voice || ''}
+                            onChangeValue={onChangeSelectHandler('voice')}
+                        />
+                        {isAdmin && IsAdminOptions}
                         <Textarea
                             label={t('Комментарий') ?? ''}
                             onChange={createTextChangeHandler('comment')}
@@ -176,7 +277,7 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
                         />
                     </VStack>
                 </Card>
-                <AssistantCreateCardHeader onCreate={createHandler}/>
+                <AssistantCreateCardHeader onCreate={createHandler} variant={'diviner-bottom'}/>
             </VStack>
   )
 }

@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import cls from './AppLogo.module.scss'
 import { HStack } from '../Stack'
-import AppSvg from '@/shared/assets/icons/krasterisk-logo.svg'
+import AppSvg from '@/shared/assets/icons/aipbx_logo.svg'
 import { classNames } from '@/shared/lib/classNames/classNames'
 
 interface AppLogoProps {
@@ -21,7 +21,7 @@ export const AppLogo = memo(({ className, width = 120, height = 50 }: AppLogoPro
           <AppSvg
               width={width}
               height={height}
-              fill={'orange'}
+              // fill={'orange'}
               // color="black"
               className={cls.appLogo}
           />

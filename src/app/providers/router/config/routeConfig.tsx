@@ -13,12 +13,19 @@ import {
   getRouteSettings,
   getRouteAssistants,
   getRouteAssistantCreate,
-  getRouteAssistantEdit, getRouteUsers, getRouteUserCreate, getRouteUserEdit
+  getRouteAssistantEdit,
+  getRouteUsers,
+  getRouteUserCreate,
+  getRouteUserEdit,
+  getRouteTools,
+  getRouteToolsCreate,
+  getRouteToolsEdit
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 import { SettingPage } from '@/pages/SettingsPage'
 import { AssistantsCreatePage, AssistantsPage, AssistantsEditPage } from '@/pages/AssistantsPage'
 import { UsersCreatePage, UsersEditPage, UsersPage } from '@/pages/UsersPage'
+import { ToolsCreatePage, ToolsEditPage, ToolsPage } from '@/pages/ToolsPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -40,6 +47,18 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.ASSISTANT_EDIT]: {
     path: getRouteAssistantEdit(':id'),
     element: <AssistantsEditPage />
+  },
+  [AppRoutes.TOOLS]: {
+    path: getRouteTools(),
+    element: <ToolsPage />
+  },
+  [AppRoutes.TOOLS_CREATE]: {
+    path: getRouteToolsCreate(),
+    element: <ToolsCreatePage />
+  },
+  [AppRoutes.TOOLS_EDIT]: {
+    path: getRouteToolsEdit(':id'),
+    element: <ToolsEditPage />
   },
   [AppRoutes.USERS]: {
     path: getRouteUsers(),

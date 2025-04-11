@@ -7,7 +7,5 @@ export const getAssistantsHasMore = (state: StateSchema) => state.assistantsPage
 export const getAssistantsInited = (state: StateSchema) => state.assistantsPage?._inited
 export const getAssistantsPageSearch = (state: StateSchema) => state.assistantsPage?.search ?? ''
 export const getAssistantsRefreshOnFocus = (state: StateSchema) => state.assistantsPage?.refreshOnFocus ?? true
-export const getAssistantsClientSelect = (state: StateSchema) => state.assistantsPage?.createForm.user
 export const getAssistantsUserId = (state: StateSchema) => state.assistantsPage?.userId ?? ''
 export const getAssistantsUser = (state: StateSchema) => state.assistantsPage?.user
-export const getAssistantEditForm = (state: StateSchema) => state.assistantsPage?.editForm

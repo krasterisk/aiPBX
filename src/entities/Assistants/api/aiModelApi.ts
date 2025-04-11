@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { AiModel } from '../model/aiModel'
+import { AiModel } from '../model/types/aiModel'
 
 export const aiModelApi = rtkApi.injectEndpoints({
   endpoints: (build) => ({

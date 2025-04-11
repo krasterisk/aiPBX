@@ -3,9 +3,12 @@ export enum AppRoutes {
   ABOUT = 'about',
   ADMIN = 'admin',
   SETTINGS = 'settings',
-  ASSISTANTS = 'ASSISTANTS',
-  ASSISTANT_CREATE = 'ASSISTANT_create',
-  ASSISTANT_EDIT = 'ASSISTANT_edit',
+  ASSISTANTS = 'assistants',
+  ASSISTANT_CREATE = 'assistant_create',
+  ASSISTANT_EDIT = 'assistant_edit',
+  TOOLS = 'tools',
+  TOOLS_CREATE = 'tools_create',
+  TOOLS_EDIT = 'tools_edit',
   FORBIDDEN = 'forbidden',
   ERROR = 'error',
   USERS = 'users',
@@ -20,19 +23,11 @@ export const getRouteEndpoints = () => '/endpoints'
 export const getRouteContexts = () => '/contexts'
 export const getRouteSettings = () => '/settings'
 export const getRouteAssistants = () => '/assistants'
-export const getRouteAssistantDetails = (id: string) => `/assistants/${id}`
 export const getRouteAssistantEdit = (id: string) => `/assistants/${id}`
 export const getRouteAssistantCreate = () => '/assistants/create'
-export const getRouteEndpointCreate = () => '/endpoints/create'
-export const getRouteContextCreate = () => '/contexts/create'
-export const getRouteContextEdit = (id: string) => `/contexts/${id}`
-export const getRouteEndpointEdit = (id: string) => `/endpoints/${id}`
-export const getRouteEndpointGroups = () => '/endpoints-groups'
-export const getRouteEndpointGroupsCreate = () => '/endpoints-groups/create'
-export const getRouteEndpointGroupsEdit = (id: string) => `/endpoints-groups/${id}`
-export const getRouteProvisioning = () => '/provisioning'
-export const getRouteProvisioningCreate = () => '/provisioning/create'
-export const getRouteProvisioningEdit = (id: string) => `/provisioning/${id}`
+export const getRouteTools = () => '/tools'
+export const getRouteToolsEdit = (id: string) => `/tools/${id}`
+export const getRouteToolsCreate = () => '/tools/create'
 export const getRouteProfile = (id: string) => `/profile/${id}`
 export const getRouteForbidden = () => '/forbidden'
 export const getRouteUsers = () => '/users'
@@ -47,6 +42,9 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteAssistants()]: AppRoutes.ASSISTANTS,
   [getRouteAssistantCreate()]: AppRoutes.ASSISTANT_CREATE,
   [getRouteAssistantEdit(':id')]: AppRoutes.ASSISTANT_EDIT,
+  [getRouteTools()]: AppRoutes.TOOLS,
+  [getRouteToolsCreate()]: AppRoutes.TOOLS_CREATE,
+  [getRouteToolsEdit(':id')]: AppRoutes.TOOLS_EDIT,
   [getRouteForbidden()]: AppRoutes.FORBIDDEN,
   [getRouteUsers()]: AppRoutes.USERS,
   [getRouteUserEdit(':id')]: AppRoutes.USER_EDIT,

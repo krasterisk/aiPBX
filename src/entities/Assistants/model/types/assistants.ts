@@ -10,18 +10,22 @@ export interface AllAssistants {
 export interface Assistant {
   id?: string
   name?: string
+  model?: string
   instruction?: string
   voice?: string
   input_audio_format?: string
   output_audio_format?: string
+  input_audio_noise_reduction?: string
   input_audio_transcription_model?: string
   input_audio_transcription_language?: string
+  output_audio_transcription_model?: string
   turn_detection_type?: string
   turn_detection_threshold?: string
   turn_detection_prefix_padding_ms?: string
   turn_detection_silence_duration_ms?: string
   semantic_eagerness?: string
   temperature?: string
+  max_tokens?: string
   tools?: string
   user?: User
   userId?: string

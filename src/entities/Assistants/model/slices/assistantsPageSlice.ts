@@ -60,6 +60,7 @@ export const assistantsPageSlice = createSlice({
     },
     setUser: (state, action: PayloadAction<ClientOptions>) => {
       state.user = action.payload
+      state.userId = action.payload.id
     },
     updateAssistantEditForm: (state, action: PayloadAction<Assistant>) => {
       state.editForm = {

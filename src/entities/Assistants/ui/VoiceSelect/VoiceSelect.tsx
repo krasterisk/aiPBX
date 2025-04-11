@@ -2,17 +2,11 @@ import { memo } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { AutocompleteInputChangeReason } from '@mui/material'
 
-interface Voice {
-  id: string
-  name: string
-}
-
 interface VoiceSelectProps {
   label?: string
-  value?: Voice | string
-  voiceId?: string
+  value?: string
   className?: string
-  onChangeClient?: (event: any, newValue: Voice) => void
+  onChangeValue?: (event: any, newValue: string) => void
   onInputChange?: (
     event: React.SyntheticEvent,
     value: string,
@@ -26,56 +20,18 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
     className,
     label,
     value,
-    voiceId,
     inputValue,
-    onChangeClient,
+    onChangeValue,
     onInputChange,
     ...otherProps
   } = props
 
-  const topics = [
-    {
-      id: '1',
-      name: 'Alloy'
-    },
-    {
-      id: '2',
-      name: 'Ash'
-    },
-    {
-      id: '3',
-      name: 'Ballad'
-    },
-    {
-      id: '4',
-      name: 'Coral'
-    },
-    {
-      id: '5',
-      name: 'Echo'
-    },
-    {
-      id: '6',
-      name: 'Sage'
-    },
-    {
-      id: '7',
-      name: 'Shimmer'
-    },
-    {
-      id: '8',
-      name: 'Verse'
-    }
-  ]
+  const topics = ['Alloy', 'Ash', 'Ballad', 'Coral', 'Echo', 'Sage', 'Shimmer', 'Verse']
 
-  const selectedValue = voiceId ? topics.find(item => item.id === voiceId) : ''
+  const selectedValue = value ? topics.find(item => item === value) : ''
 
-  const onChangeHandler = (event: any, newValue: Voice) => {
-    if (newValue) {
-      onChangeClient?.(event, newValue)
-    } else {
-      onChangeClient?.(event, { id: '', name: '' })
-    }
+  const onChangeHandler = (event: any, newValue: string) => {
+    onChangeValue?.(event, newValue)
   }
 
   return (
@@ -84,12 +40,9 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
           autoComplete={true}
           clearOnBlur={false}
           options={topics}
-          value={value || selectedValue || ''}
+          value={selectedValue}
           onChange={onChangeHandler}
           inputValue={inputValue}
-          getOptionKey={option => option.id}
-          isOptionEqualToValue={(option, value) => value === undefined || value === '' || option.id === value.id}
-          getOptionLabel={(option) => option.id ? option.name : ''}
           onInputChange={onInputChange}
           {...otherProps}
       />

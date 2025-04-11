@@ -5,6 +5,7 @@ import { AxiosInstance } from 'axios'
 import { ScrollSaveSchema } from '@/features/ScrollSave'
 import { rtkApi } from '@/shared/api/rtkApi'
 import { AssistantsPageSchema } from '@/entities/Assistants'
+import { ToolsPageSchema } from '@/entities/Tools'
 
 export interface StateSchema {
   user: UserSchema
@@ -15,6 +16,7 @@ export interface StateSchema {
   loginForm?: LoginSchema
   usersPage?: UsersPageSchema
   assistantsPage?: AssistantsPageSchema
+  toolsPage?: ToolsPageSchema
 }
 
 export type StateSchemaKey = keyof StateSchema

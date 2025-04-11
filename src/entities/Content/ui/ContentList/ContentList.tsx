@@ -78,8 +78,8 @@ export const ContentList = <T extends object>(props: ContentListProps<T>) => {
         >
             <Card max border={'partial'}>
                 <HStack gap={'4'} max wrap={'nowrap'}>
-                    <Check indeterminate className={cls.checkAll} label={'Выбрать всё'}/>
-                    <Text text={'Всего: ' + String(data?.length)}/>
+                    <Check indeterminate className={cls.checkAll} label={t('Выбрать всё') || ''}/>
+                    <Text text={t('Всего') + ': ' + String(data?.length)}/>
                 </HStack>
             </Card>
 

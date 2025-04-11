@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { AssistantMenu } from './AssistantMenu'
 
 export default {
-  title: 'entities/TerminalMenu',
+  title: 'entities/AssistantMenu',
   component: AssistantMenu,
   argTypes: {
     backgroundColor: { control: 'color' }
