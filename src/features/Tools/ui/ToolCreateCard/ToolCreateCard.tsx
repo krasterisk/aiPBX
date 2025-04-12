@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import cls from './ToolCreateCard.module.scss'
-import React, { ChangeEvent, memo, useCallback, useEffect, useState } from 'react'
+import React, { ChangeEvent, memo, useCallback, useState } from 'react'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { ErrorGetData } from '@/entities/ErrorGetData'
@@ -37,6 +37,8 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
 
   const { t } = useTranslation('tools')
 
+  const [isAddParameterOpen, setIsAddParameterOpen] = useState<boolean>(false)
+
   const isAdmin = useSelector(isUserAdmin)
   const clientData = useSelector(getUserAuthData)
   const clientValues = useSelector(getToolsUser)
@@ -50,28 +52,28 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
     parameters: [],
     strict: false,
     comment: '',
-    userId: '',
+    userId: clientData?.id || '',
     user: {
-      id: '',
-      username: ''
+      id: clientData?.id || '',
+      username: clientData?.username || ''
     }
   }
 
   const [formFields, setFormFields] = useState<Tool>(initTool)
 
-  useEffect(() => {
-    if (!isAdmin && clientData?.id && clientData.username) {
-      setFormFields({
-        ...formFields,
-        user: {
-          id: clientData?.vpbx_user_id || clientData.id,
-          name: clientData?.username
-        },
-        userId: clientData.id
-      })
-    }
-    dispatch(toolsPageActions.updateToolsCreateForm(formFields))
-  }, [clientData, dispatch, formFields, isAdmin])
+  // useEffect(() => {
+  //   if (!isAdmin && clientData?.id && clientData.username) {
+  //     setFormFields({
+  //       ...formFields,
+  //       user: {
+  //         id: clientData?.vpbx_user_id || clientData.id,
+  //         name: clientData?.username
+  //       },
+  //       userId: clientData.id
+  //     })
+  //   }
+  //   dispatch(toolsPageActions.updateToolsCreateForm(formFields))
+  // }, [clientData, dispatch, formFields, isAdmin])
 
   const onChangeClientHandler = useCallback((
     event: any,
@@ -156,6 +158,12 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
                             value={formFields.parameters}
                             minRows={3}
                             multiline
+                        />
+                        <Textarea
+                            label={t('Адрес вебхука') ?? ''}
+                            onChange={createTextChangeHandler('webhook')}
+                            data-testid={'ToolCardCreate.webhook'}
+                            value={formFields.webhook}
                         />
                         <Textarea
                             label={t('Комментарий') ?? ''}
