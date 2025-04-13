@@ -12,12 +12,25 @@ export interface Tool {
   name?: string
   type?: string
   description?: string
-  parameters?: object[]
+  parameters?: ToolParameters
   strict?: boolean
   webhook?: string
   user?: User
   userId?: string
   comment?: string
+}
+
+export interface ToolParameters {
+  type: string
+  properties: Record<string, ToolParam>
+  required?: string[]
+}
+
+export interface ToolParam {
+  type: string
+  description?: string
+  enum?: string[]
+  required?: boolean
 }
 
 export interface ToolsListProps {

@@ -1,69 +1,77 @@
-import React, { ChangeEvent, memo, useCallback, useState } from 'react'
-import { Tool } from '@/entities/Tools'
+import React, { ChangeEvent, memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal } from '@/shared/ui/redesigned/Modal'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
-import { Tooltip } from '@mui/material'
+import { Check } from '@/shared/ui/mui/Check'
+import { ToolParam } from '@/entities/Tools'
 
 export interface ToolAddParameterModalProps {
   className?: string
-  tool: Tool
+  param?: ToolParam
+  paramName?: string
   show: boolean
   label?: string
   onClose?: () => void
-}
-
-interface Parameter {
-  name: string
-  description: string
-  parameters: {
-    type: string
-    properties: object[]
-  }
+  onSave?: (name: string, param: ToolParam, required: boolean) => void
 }
 
 const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
   const {
-    tool,
-    show,
     label,
-    onClose
+    show,
+    param,
+    paramName,
+    onClose,
+    onSave
   } = props
 
   const { t } = useTranslation('tools')
 
-  const initParam: Parameter = {
-    name: '',
-    description: '',
-    parameters: {
-      type: 'object',
-      properties: []
-    }
-  }
+  const [parName, setParName] = useState<string>(paramName || '')
+  const [description, setDescription] = useState<string>(param?.description || '')
+  const [required, setRequired] = useState<boolean>(false)
 
-  const [name, setName] = useState<string>('')
-  const [description, setDescription] = useState<string>('')
-  const [require, setRequier] = useState<boolean>(false)
-  const [param, setParam] = useState<Parameter>(initParam)
+  useEffect(() => {
+    if (!paramName) {
+      setParName('')
+      setDescription('')
+      setRequired(false)
+    }
+
+    if (param?.description && paramName) {
+      setParName(paramName)
+      setDescription(param?.description)
+      // setRequired(param?.required)
+      setRequired(false)
+    }
+  }, [param, paramName])
 
   const changeNameHandler = useCallback((
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = event.target.value
-    setName(value)
+    setParName(value)
   }, [])
 
-  const changedescriptionHandler = useCallback((
+  const changeDescriptionHandler = useCallback((
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = event.target.value
     setDescription(value)
   }, [])
 
   const handleOnSave = useCallback(() => {
+    if (!parName && !description) return
+
+    const param: ToolParam = {
+      type: 'string',
+      description
+    }
+
+    onSave?.(parName, param, required)
     onClose?.()
-  }, [onClose])
+  }, [description, onClose, onSave, parName, required])
 
   const handleOnClose = useCallback(() => {
     onClose?.()
@@ -73,28 +81,21 @@ const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
       <Modal isOpen={show} onClose={onClose} lazy>
         <VStack gap={'24'} max>
           <VStack max justify={'center'} align={'center'}>
-            <Text title={tool.name} bold/>
-            <Text text={String(label) + ':'} bold/>
+            <Text title={label} bold/>
           </VStack>
-          <HStack max wrap={'wrap'} gap={'16'}>
-            <Tooltip title={t('Идентификатор функции, используйте только латинские символы, подчёркивания вместо пробелов. Название функции должно отражать её суть, например get_price, get_client_name и т.д')}>
-              <Text text={t('Наименование функции')} bold/>
-            </Tooltip>
             <Textarea
                 label={t('Название параметра') ?? ''}
                 onChange={changeNameHandler}
-                value={name}
+                value={parName}
             />
-            <Tooltip title={t('Описание функции, опишите назначение функции, её роль и другие нюансы')}>
-              <Text text={t('Описание функции')} bold/>
-            </Tooltip>
             <Textarea
-                label={t('Описание функции') ?? ''}
-                onChange={changeNameHandler}
+                label={t('Описание параметра') ?? ''}
+                onChange={changeDescriptionHandler}
                 value={description}
+                multiline
+                minRows={3}
             />
-
-          </HStack>
+            <Check label={t('Параметр обязателен') || ''} />
           <HStack gap={'16'} align={'center'} justify={'end'} max>
             <Button onClick={handleOnClose} variant={'outline'} color={'normal'}>
               {t('Закрыть')}
@@ -105,7 +106,6 @@ const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
           </HStack>
         </VStack>
       </Modal>
-
   )
 })
 

@@ -9,7 +9,12 @@ type TextAreaProps = TextFieldProps & {
 }
 
 const areaStyles = {
+  // '& .MuiInputBase-root': {
+  //   overflow: 'auto',
+  //   maxHeight: '200px' // или любая другая подходящая высота
+  // },
   '& .MuiOutlinedInput-root': {
+
     '& fieldset': {
       border: '2px solid var(--icon-redesigned)', // Цвет по умолчанию
       borderRadius: '24px'

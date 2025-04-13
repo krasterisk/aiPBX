@@ -20,7 +20,7 @@ export {
 export { initToolsPage } from './model/service/initToolsPage/initToolsPage'
 
 export type { ToolsPageSchema } from './model/types/toolsPageSchema'
-export type { Tool, AllTools, ToolsListProps } from './model/types/tools'
+export type { Tool, AllTools, ToolsListProps, ToolParam, ToolParameters } from './model/types/tools'
 
 export {
   toolsApi,

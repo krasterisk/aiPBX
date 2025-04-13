@@ -16,11 +16,19 @@ export const Check = memo((props: CheckProps) => {
     ...otherProps
   } = props
 
+  const style = {
+    color: 'var(--icon-redesigned)',
+    '&.Mui-checked': {
+      color: 'var(--icon-redesigned)'
+    }
+  }
+
   return (
       <FormControlLabel
           label={label}
           control={<Checkbox
               className={classNames(cls.Check, {}, [className])}
+              sx={style}
               {...otherProps}
           />}
       />

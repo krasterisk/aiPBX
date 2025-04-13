@@ -9,3 +9,5 @@ export const getToolsPageSearch = (state: StateSchema) => state.toolsPage?.searc
 export const getToolsRefreshOnFocus = (state: StateSchema) => state.toolsPage?.refreshOnFocus ?? true
 export const getToolsUserId = (state: StateSchema) => state.toolsPage?.userId ?? ''
 export const getToolsUser = (state: StateSchema) => state.toolsPage?.user ?? { id: '', name: '' }
+export const getToolsCreateParameters = (state: StateSchema) => state.toolsPage?.createForm.parameters
+export const getToolsEditParameters = (state: StateSchema) => state.toolsPage?.editForm.parameters
