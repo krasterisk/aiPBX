@@ -6,10 +6,10 @@ import { AutocompleteInputChangeReason } from '@mui/material'
 
 interface ClientSelectProps {
   label?: string
-  value?: ClientOptions | string
+  value?: ClientOptions | null
   clientId?: string
   className?: string
-  onChangeClient?: (event: any, newValue: ClientOptions) => void
+  onChangeClient?: (event: any, newValue: ClientOptions | null) => void
   onInputChange?: (
     event: React.SyntheticEvent,
     value: string,
@@ -22,8 +22,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
   const {
     className,
     label,
-    value,
-    clientId,
+    value = null,
     inputValue,
     onChangeClient,
     onInputChange,
@@ -37,14 +36,12 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
     name: String(item.name)
   })) || []
 
-  const selectedUserValue = clientId ? clientItems.find(item => item.id === clientId) : ''
+  const selectedUserValue = value
+    ? clientItems.find(item => item.id === value.id) || null
+    : null
 
-  const onChangeHandler = (event: any, newValue: ClientOptions) => {
-    if (newValue) {
-      onChangeClient?.(event, newValue)
-    } else {
-      onChangeClient?.(event, { id: '', name: '' })
-    }
+  const onChangeHandler = (event: any, newValue: ClientOptions | null) => {
+    onChangeClient?.(event, newValue)
   }
 
   return (
@@ -53,7 +50,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
           autoComplete={true}
           clearOnBlur={false}
           options={clientItems}
-          value={value || selectedUserValue || ''}
+          value={selectedUserValue}
           onChange={onChangeHandler}
           inputValue={inputValue}
           getOptionKey={option => option.id}

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ContentView } from '../../../Content'
-import { Tool } from '../types/tools'
+import { Tool, ToolParameters } from '../types/tools'
 import { ToolsPageSchema } from '../types/toolsPageSchema'
 import { TOOLS_VIEW_LOCALSTORAGE_KEY } from '@/shared/const/localstorage'
 import { ClientOptions } from '@/entities/User'
@@ -15,12 +15,14 @@ const initialState: ToolsPageSchema = {
   search: '',
   userId: '',
   createForm: {
+    type: 'function',
     user: {
       id: '',
       name: ''
     }
   },
   editForm: {
+    type: 'function',
     id: '',
     name: '',
     userId: ''
@@ -34,6 +36,16 @@ export const toolsPageSlice = createSlice({
     resetToolEditForm: (state) => {
       state.editForm = {
         id: '',
+        type: 'function',
+        name: '',
+        comment: '',
+        userId: ''
+      }
+    },
+    resetToolCreateForm: (state) => {
+      state.createForm = {
+        id: '',
+        type: 'function',
         name: '',
         comment: '',
         userId: ''
@@ -62,6 +74,18 @@ export const toolsPageSlice = createSlice({
     updateToolEditForm: (state, action: PayloadAction<Tool>) => {
       state.editForm = {
         ...state.editForm,
+        ...action.payload
+      }
+    },
+    updateToolEditParameters: (state, action: PayloadAction<ToolParameters>) => {
+      state.editForm.parameters = {
+        ...state.editForm.parameters,
+        ...action.payload
+      }
+    },
+    updateToolCreateParameters: (state, action: PayloadAction<ToolParameters>) => {
+      state.createForm.parameters = {
+        ...state.createForm.parameters,
         ...action.payload
       }
     },

@@ -4,7 +4,7 @@ import { memo, useCallback } from 'react'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
 import { useTranslation } from 'react-i18next'
-import { Card } from '@/shared/ui/redesigned/Card'
+import { Card, CardVariant } from '@/shared/ui/redesigned/Card'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
@@ -17,6 +17,7 @@ interface ToolEditCardHeaderProps {
   toolId?: string
   error?: FetchBaseQueryError | SerializedError | undefined
   onDelete?: (id: string) => void
+  variant?: CardVariant
 }
 
 export const ToolEditCardHeader = memo((props: ToolEditCardHeaderProps) => {
@@ -24,7 +25,8 @@ export const ToolEditCardHeader = memo((props: ToolEditCardHeaderProps) => {
     className,
     toolId,
     onEdit,
-    onDelete
+    onDelete,
+    variant
   } = props
   const { t } = useTranslation('tools')
 
@@ -73,11 +75,17 @@ export const ToolEditCardHeader = memo((props: ToolEditCardHeaderProps) => {
           padding={'8'}
           border={'partial'}
           max
+          variant={variant}
       >
-        <HStack max justify={'between'} wrap={'wrap'}>
-          <Text title={t('Редактировать')}/>
-          {headerButtons}
-        </HStack>
+          {variant !== 'diviner-bottom'
+            ? <HStack max justify={'between'} wrap={'wrap'}>
+                  <Text title={t('Редактировать')}/>
+                  {headerButtons}
+              </HStack>
+            : <HStack max justify={'end'} wrap={'wrap'}>
+                  {headerButtons}
+              </HStack>
+          }
       </Card>
   )
 })

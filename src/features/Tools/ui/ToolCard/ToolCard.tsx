@@ -42,6 +42,7 @@ export const ToolCard = memo((props: ToolCardProps) => {
   const navigate = useNavigate()
 
   const handleCreateTool = useCallback((data: Tool) => {
+    console.log(data)
     toolMutation([data])
       .unwrap()
       .then(() => {
@@ -115,6 +116,7 @@ export const ToolCard = memo((props: ToolCardProps) => {
                   onDelete={onDelete}
               />
             : <ToolCreateCard
+                  // key={`create-form-${Date.now()}`}
                   onCreate={onCreate}
                   isError={isError}
                   error={error}

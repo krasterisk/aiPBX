@@ -33,21 +33,51 @@ const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
   const [parName, setParName] = useState<string>(paramName || '')
   const [description, setDescription] = useState<string>(param?.description || '')
   const [required, setRequired] = useState<boolean>(false)
+  const [enumShow, setEnumShow] = useState<boolean>(false)
+  const [enums, setEnums] = useState<string[]>([])
+  const [enumValue, setEnumValue] = useState<string>('')
 
   useEffect(() => {
-    if (!paramName) {
+    if (show && !param && !paramName) {
       setParName('')
       setDescription('')
+      setEnumValue('')
+      setEnums([])
+      setEnumShow(false)
       setRequired(false)
     }
+  }, [show, param, paramName])
 
-    if (param?.description && paramName) {
-      setParName(paramName)
-      setDescription(param?.description)
-      // setRequired(param?.required)
+  useEffect(() => {
+    if (paramName || param) {
+      setParName(paramName || '')
+      setDescription(param?.description || '')
+      setRequired(param?.required || false)
+      const enumList = param?.enum || []
+      setEnumValue(enumList.join('\n'))
+      setEnums(enumList)
+      setEnumShow(enumList.length > 0)
+    }
+    if (show && !param && !paramName) {
+      setParName('')
+      setDescription('')
+      setEnumValue('')
+      setEnums([])
+      setEnumShow(false)
       setRequired(false)
     }
-  }, [param, paramName])
+  }, [param, paramName, show])
+
+  useEffect(() => {
+    if (show && !param && !paramName) {
+      setParName('')
+      setDescription('')
+      setEnumValue('')
+      setEnums([])
+      setEnumShow(false)
+      setRequired(false)
+    }
+  }, [show, param, paramName])
 
   const changeNameHandler = useCallback((
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -64,18 +94,37 @@ const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
   const handleOnSave = useCallback(() => {
     if (!parName && !description) return
 
-    const param: ToolParam = {
+    const params: ToolParam = {
       type: 'string',
       description
     }
 
-    onSave?.(parName, param, required)
+    if (enumShow && enums.length > 0) {
+      params.enum = enums
+    }
+
+    onSave?.(parName, params, required)
     onClose?.()
-  }, [description, onClose, onSave, parName, required])
+  }, [description, enumShow, enums, onClose, onSave, parName, required])
 
   const handleOnClose = useCallback(() => {
     onClose?.()
   }, [onClose])
+
+  const toggleEnumHandler = useCallback(() => {
+    setEnumShow(prev => !prev)
+  }, [])
+
+  const toggleRequiredHandler = useCallback(() => {
+    setRequired(prev => !prev)
+  }, [])
+
+  const changeEnumsHandler = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const value = event.target.value
+    setEnumValue(value)
+    const lines = value.split('\n').map(line => line.trim()).filter(Boolean)
+    setEnums(lines)
+  }, [])
 
   return (
       <Modal isOpen={show} onClose={onClose} lazy>
@@ -95,7 +144,25 @@ const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
                 multiline
                 minRows={3}
             />
-            <Check label={t('Параметр обязателен') || ''} />
+          <Check
+              label={t('Указать возможные значения') || ''}
+              onChange={toggleEnumHandler}
+              checked={enumShow}
+          />
+          {enumShow &&
+              <Textarea
+                  label={t('Каждое значение - отдельная строка') ?? ''}
+                  onChange={changeEnumsHandler}
+                  value={enumValue}
+                  multiline
+                  minRows={3}
+              />
+          }
+          <Check
+              label={t('Параметр обязателен') || ''}
+              checked={required}
+              onChange={toggleRequiredHandler}
+          />
           <HStack gap={'16'} align={'center'} justify={'end'} max>
             <Button onClick={handleOnClose} variant={'outline'} color={'normal'}>
               {t('Закрыть')}

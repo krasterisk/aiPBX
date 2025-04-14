@@ -105,7 +105,7 @@ export const UserCreateCard = memo((props: UserCreateCardProps) => {
       })
     }
 
-  const onChangeClientHandler = useCallback((event: any, newValue: ClientOptions) => {
+  const onChangeClientHandler = useCallback((event: any, newValue: ClientOptions | null) => {
     if (newValue) {
       setClient(newValue)
       setFormFields({
@@ -220,8 +220,7 @@ export const UserCreateCard = memo((props: UserCreateCardProps) => {
                                     value={formFields.roles?.[0]}
                                 />
                                 <ClientSelect
-                                    value={client.id ? client : ''}
-                                    clientId={client.id}
+                                    value={client}
                                     onChangeClient={onChangeClientHandler}
                                     label={String(t('Клиент') + '**')}
                                     className={cls.client}

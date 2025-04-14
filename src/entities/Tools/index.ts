@@ -14,7 +14,11 @@ export {
   getToolsPageSearch,
   getToolsPageView,
   getToolsUserId,
-  getToolsUser
+  getToolsUser,
+  getToolsEditForm,
+  getToolsCreateForm,
+  getToolsCreateParameters,
+  getToolsEditParameters
 } from './model/selectors/toolsPageSelectors'
 
 export { initToolsPage } from './model/service/initToolsPage/initToolsPage'

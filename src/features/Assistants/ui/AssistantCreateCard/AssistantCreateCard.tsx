@@ -20,6 +20,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { AssistantCreateCardHeader } from '../AssistantCreateCardHeader/AssistantCreateCardHeader'
+import { toolsPageActions } from '@/entities/Tools'
 
 interface AssistantCreateCardProps {
   className?: string
@@ -91,13 +92,17 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
 
   const onChangeClientHandler = useCallback((
     event: any,
-    newValue: ClientOptions) => {
-    dispatch(assistantsPageActions.setUser(newValue))
-    setFormFields({
-      ...formFields,
-      userId: newValue.id,
-      user: newValue
-    })
+    newValue: ClientOptions | null) => {
+    if (newValue) {
+      dispatch(assistantsPageActions.setUser(newValue))
+      setFormFields({
+        ...formFields,
+        userId: newValue.id,
+        user: newValue
+      })
+    } else {
+      dispatch(toolsPageActions.setUser({ id: '', name: '' }))
+    }
   }, [dispatch, formFields])
 
   const onChangeSelectHandler = (field: keyof Assistant) => (
