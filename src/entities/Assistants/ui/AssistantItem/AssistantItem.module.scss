@@ -1,3 +1,89 @@
 .AssistantItem {
+    position: relative;
+    background: var(--light-bg-redesigned);
 
+    &:hover {
+        cursor: pointer;
+
+        .uncheck {
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: flex;
+            color: var(--icon-redesigned);
+        }
+
+        .menu {
+            position: absolute;
+            display: flex;
+            right: 0;
+            top: 0;
+        }
+
+    }
+
+    .uncheck {
+        position: absolute;
+        display: none;
+        color: var(--icon-redesigned);
+        left: 0;
+        top: 0;
+    }
+
+    .check {
+        position: absolute;
+        display: flex;
+        color: var(--icon-redesigned);
+        left: 0;
+        top: 0;
+    }
+
+    .menu {
+        position: absolute;
+        display: none;
+        right: 0;
+        top: 0;
+    }
+
+
+    &.BIG {
+        width: 100%;
+
+    }
+
+    &.SMALL {
+        width: 260px;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+
+        .img {
+            width: 100%;
+            object-fit: cover;
+            min-height: 140px;
+            max-height: 140px;
+        }
+
+        .info {
+            padding: 8px;
+        }
+
+
+    }
 }
+
+.avatar {
+    margin-left: 8px;
+}
+
+.isAdmin {
+    border: 2px solid var(--save-redesigned);
+}
+
+.isClient {
+    border: 2px solid var(--accent-redesigned);
+}
+

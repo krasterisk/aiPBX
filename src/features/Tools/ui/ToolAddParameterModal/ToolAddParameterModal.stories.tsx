@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { ToolAddParameterModal } from './ToolAddParameterModal'
+import ToolAddParameterModal from './ToolAddParameterModal'
 
 export default {
   title: 'shared/ToolAddParameterModal',

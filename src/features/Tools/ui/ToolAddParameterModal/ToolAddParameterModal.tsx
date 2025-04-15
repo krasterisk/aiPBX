@@ -15,7 +15,12 @@ export interface ToolAddParameterModalProps {
   show: boolean
   label?: string
   onClose?: () => void
-  onSave?: (name: string, param: ToolParam, required: boolean) => void
+  onSave?: (
+    name: string,
+    param: ToolParam,
+    required: boolean,
+    prevName?: string
+  ) => void
 }
 
 const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
@@ -31,6 +36,7 @@ const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
   const { t } = useTranslation('tools')
 
   const [parName, setParName] = useState<string>(paramName || '')
+  const [prevName, setPrevName] = useState<string>(paramName || '')
   const [description, setDescription] = useState<string>(param?.description || '')
   const [required, setRequired] = useState<boolean>(false)
   const [enumShow, setEnumShow] = useState<boolean>(false)
@@ -38,19 +44,9 @@ const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
   const [enumValue, setEnumValue] = useState<string>('')
 
   useEffect(() => {
-    if (show && !param && !paramName) {
-      setParName('')
-      setDescription('')
-      setEnumValue('')
-      setEnums([])
-      setEnumShow(false)
-      setRequired(false)
-    }
-  }, [show, param, paramName])
-
-  useEffect(() => {
     if (paramName || param) {
       setParName(paramName || '')
+      setPrevName(paramName || '')
       setDescription(param?.description || '')
       setRequired(param?.required || false)
       const enumList = param?.enum || []
@@ -67,17 +63,6 @@ const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
       setRequired(false)
     }
   }, [param, paramName, show])
-
-  useEffect(() => {
-    if (show && !param && !paramName) {
-      setParName('')
-      setDescription('')
-      setEnumValue('')
-      setEnums([])
-      setEnumShow(false)
-      setRequired(false)
-    }
-  }, [show, param, paramName])
 
   const changeNameHandler = useCallback((
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -102,10 +87,8 @@ const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
     if (enumShow && enums.length > 0) {
       params.enum = enums
     }
-
-    onSave?.(parName, params, required)
-    onClose?.()
-  }, [description, enumShow, enums, onClose, onSave, parName, required])
+    onSave?.(parName, params, required, prevName)
+  }, [description, enumShow, enums, onSave, parName, prevName, required])
 
   const handleOnClose = useCallback(() => {
     onClose?.()

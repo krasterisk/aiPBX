@@ -76,6 +76,8 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
   const clientValues = useSelector(getAssistantsUser)
   const dispatch = useAppDispatch()
 
+  const userId = isAdmin ? formFields?.userId : clientData?.id
+
   useEffect(() => {
     if (!isAdmin && clientData?.id && clientData.username) {
       setFormFields({
@@ -89,6 +91,13 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
     }
     dispatch(assistantsPageActions.updateAssistantsCreateForm(formFields))
   }, [clientData, dispatch, formFields, isAdmin])
+
+  // const {
+  //   data: tools
+  // } = useToolsAll(
+  //   userId,
+  //   { skip: !userId }
+  // )
 
   const onChangeClientHandler = useCallback((
     event: any,

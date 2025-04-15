@@ -1,16 +1,16 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import ToolsPage from './ToolsPage'
+import { SnackAlert } from './SnackAlert'
 
 export default {
-  title: 'shared/ToolsPage',
-  component: ToolsPage,
+  title: 'shared/Snackalert',
+  component: SnackAlert,
   argTypes: {
     backgroundColor: { control: 'color' }
   }
-} as ComponentMeta<typeof ToolsPage>
+} as ComponentMeta<typeof SnackAlert>
 
-const Template: ComponentStory<typeof ToolsPage> = (args) => <ToolsPage {...args} />
+const Template: ComponentStory<typeof SnackAlert> = (args) => <SnackAlert {...args} />
 
 export const Normal = Template.bind({})
 Normal.args = {}

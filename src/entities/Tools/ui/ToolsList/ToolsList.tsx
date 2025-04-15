@@ -130,7 +130,7 @@ export const ToolsList = (props: ToolsListProps) => {
   return (
         <VStack gap={'16'} max>
             <ToolsListHeader />
-            <Card max className={classNames(cls.ToolsToolBar, {}, [className])}>
+            <Card max className={classNames(cls.ToolsList, {}, [className])}>
                 <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
                     <Check
                         className={classNames(cls.ToolsList, {

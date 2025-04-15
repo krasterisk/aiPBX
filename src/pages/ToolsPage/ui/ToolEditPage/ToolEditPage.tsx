@@ -16,7 +16,7 @@ const ToolEditPage = memo(() => {
   return (
       <Page data-testid={'ToolPage'}>
         <VStack gap='8'>
-          <ToolCard />
+          <ToolCard isEdit toolId={id}/>
         </VStack>
       </Page>
   )

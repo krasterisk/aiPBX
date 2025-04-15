@@ -1,3 +1,9 @@
 .ToolsPage {
+    min-height: 100%;
+    overflow: inherit;
 
+    .list {
+        margin-top: 0;
+    }
 }
+

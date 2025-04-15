@@ -149,36 +149,36 @@ export const ToolEditCard = memo((props: UserEditCardProps) => {
                 label={t('Наименование функции') ?? ''}
                 onChange={editTextChangeHandler('name')}
                 data-testid={'ToolCardCreate.name'}
-                value={tool?.name}
+                value={formFields?.name}
             />
             <Textarea
                 label={t('Описание функции') ?? ''}
                 onChange={editTextChangeHandler('description')}
                 data-testid={'ToolCardCreate.description'}
-                value={tool?.description}
+                value={formFields?.description}
                 minRows={3}
                 multiline
             />
             <Check
                 label={t('Строгий режим вызова функции') || ''}
                 onChange={toggleStrictHandler}
-                checked={tool?.strict}
+                checked={formFields?.strict}
             />
             <ToolAddParam
-                isEdit={true}
-                toolName={tool?.name || ''}
+                isEdit
+                toolName={formFields?.name}
             />
             <Textarea
                 label={t('Адрес вебхука') ?? ''}
                 onChange={editTextChangeHandler('webhook')}
                 data-testid={'ToolCardCreate.webhook'}
-                value={tool?.webhook}
+                value={formFields?.webhook}
             />
             <Textarea
                 label={t('Комментарий') ?? ''}
                 onChange={editTextChangeHandler('comment')}
                 data-testid={'ToolCardCreate.comment'}
-                value={tool?.comment}
+                value={formFields?.comment}
             />
           </VStack>
         </Card>

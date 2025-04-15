@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { ThunkConfig } from '@/app/providers/StoreProvider'
 
-import { assistantsPageActions } from '../../slices/toolsPageSlice'
+import { toolsPageActions } from '../../slices/toolsPageSlice'
 import {
-  getAssistantsHasMore,
-  getAssistantsPageNum
+  getToolsHasMore,
+  getToolsPageNum
 } from '../../selectors/toolsPageSelectors'
 
 export const fetchNextToolsPage = createAsyncThunk<
@@ -15,11 +15,11 @@ ThunkConfig<string>
   'AssistantsPage/fetchNextAssistantsList',
   async (_, thunkAPI) => {
     const { dispatch, getState } = thunkAPI
-    const hasMore = getAssistantsHasMore(getState())
-    const page = getAssistantsPageNum(getState())
+    const hasMore = getToolsHasMore(getState())
+    const page = getToolsPageNum(getState())
 
     if (hasMore) {
-      dispatch(assistantsPageActions.setPage(page + 1))
+      dispatch(toolsPageActions.setPage(page + 1))
     }
   }
 )

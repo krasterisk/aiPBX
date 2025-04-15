@@ -25,7 +25,7 @@ export const UsersList = (props: UsersListProps) => {
     users
   } = props
 
-  const { t } = useTranslation()
+  const { t } = useTranslation('profile')
 
   const [checkedBox, setCheckedBox] = useState<string[]>([])
   const [indeterminateBox, setIndeterminateBox] = useState<boolean>(false)
@@ -91,7 +91,7 @@ export const UsersList = (props: UsersListProps) => {
     return (
             <ErrorGetData
                 title={String(t('Произошла ошибка при удалении пользователя!'))}
-                text={String(t('Проверьте, чтобы у пользователя не было связанных контейнеров или транспорта!'))}
+                text={String(t('Проверьте, чтобы у пользователя не было связанных ассистентов или функций!'))}
             />
     )
   }
@@ -156,8 +156,8 @@ export const UsersList = (props: UsersListProps) => {
                   {checkedButtons}
                   {
                       checkedBox.length > 0
-                        ? <Text text={'Выбрано: ' + String(checkedBox.length) + ' из ' + String(users?.count)}/>
-                        : <Text text={'Всего: ' + String(users?.count || 0)}/>
+                        ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(users?.count)}/>
+                        : <Text text={t('Всего') + ': ' + String(users?.count || 0)}/>
                   }
 
               </HStack>

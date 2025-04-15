@@ -42,7 +42,6 @@ export const ToolCard = memo((props: ToolCardProps) => {
   const navigate = useNavigate()
 
   const handleCreateTool = useCallback((data: Tool) => {
-    console.log(data)
     toolMutation([data])
       .unwrap()
       .then(() => {
@@ -56,28 +55,28 @@ export const ToolCard = memo((props: ToolCardProps) => {
     handleCreateTool(data)
   }, [handleCreateTool])
 
-  const handleEditTool = useCallback(async (data: Tool) => {
+  const handleEditTool = useCallback((data: Tool) => {
     try {
-      await toolUpdateMutation(data).unwrap()
+      toolUpdateMutation(data).unwrap()
     } finally {
       navigate(getRouteTools())
     }
   }, [navigate, toolUpdateMutation])
 
-  const handleDeleteTool = useCallback(async (id: string) => {
+  const handleDeleteTool = useCallback((id: string) => {
     try {
-      await toolDeleteMutation(id).unwrap()
+      toolDeleteMutation(id).unwrap()
     } finally {
       navigate(getRouteTools())
     }
   }, [toolDeleteMutation, navigate])
 
-  const onDelete = useCallback(async (id: string) => {
-    await handleDeleteTool(id)
+  const onDelete = useCallback((id: string) => {
+    handleDeleteTool(id)
   }, [handleDeleteTool])
 
-  const onEdit = useCallback(async (data: Tool) => {
-    await handleEditTool(data)
+  const onEdit = useCallback((data: Tool) => {
+    handleEditTool(data)
   }, [handleEditTool])
 
   if (!toolId && isEdit) {
@@ -108,15 +107,16 @@ export const ToolCard = memo((props: ToolCardProps) => {
   return (
       <VStack gap={'8'} max className={classNames(cls.EndpointCard, {}, [className])}>
         {
-          isEdit
+          isEdit && toolId
             ? <ToolEditCard
+                  key={`edit-form-${toolId}`}
                   onEdit={onEdit}
                   isError={isError}
                   toolId={toolId}
                   onDelete={onDelete}
               />
             : <ToolCreateCard
-                  // key={`create-form-${Date.now()}`}
+                  key={`create-form-${Date.now()}`}
                   onCreate={onCreate}
                   isError={isError}
                   error={error}

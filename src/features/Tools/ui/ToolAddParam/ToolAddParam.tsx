@@ -17,6 +17,7 @@ import ToolAddParameterModal from '../ToolAddParameterModal/ToolAddParameterModa
 import AddBoxIcon from '@mui/icons-material/AddBox'
 import cls from '../ToolCreateCard/ToolCreateCard.module.scss'
 import { useSelector } from 'react-redux'
+import { SnackAlert } from '@/shared/ui/mui/SnackAlert'
 
 interface ToolAddParamProps {
   parameters?: ToolParameters
@@ -34,9 +35,10 @@ export const ToolAddParam = memo((props: ToolAddParamProps) => {
 
   const { t } = useTranslation('tools')
   const dispatch = useAppDispatch()
-
   const [isAddParameterOpen, setIsAddParameterOpen] = useState<boolean>(false)
   const [param, setParam] = useState<ToolParam | undefined>(undefined)
+  const [errorOpen, setErrorOpen] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const [paramName, setParamName] = useState<string>('')
   const editParameters = useSelector(getToolsEditParameters)
   const createParameters = useSelector(getToolsCreateParameters)
@@ -48,27 +50,42 @@ export const ToolAddParam = memo((props: ToolAddParamProps) => {
     setIsAddParameterOpen(true)
   }, [])
 
+  const onCloseModalHandler = useCallback(() => {
+    setIsAddParameterOpen(false)
+  }, [])
+
   const onSaveHandler = useCallback((
     name: string,
     param: ToolParam,
-    required: boolean) => {
+    required: boolean,
+    prevName?: string
+  ) => {
     const existingProps = parameters?.properties ?? {}
     const existingRequired = parameters?.required ?? []
 
+    const isNameChanged = name !== prevName
+    const isDuplicate = !!existingProps[name]
+
+    if (isNameChanged && isDuplicate) {
+      setErrorMessage(String(t('Параметр с именем уже существует')))
+      setErrorOpen(true)
+      return
+    }
+    const updatedProperties = { ...existingProps }
+    if (isNameChanged && prevName && updatedProperties[prevName]) {
+      delete updatedProperties[prevName]
+    }
+
+    updatedProperties[name] = param
+
     const updatedRequired = required
       ? Array.from(new Set([...existingRequired, name]))
-      : existingRequired
-
-    const updatedProperties = {
-      ...existingProps,
-      [name]: param
-    }
+      : existingRequired.filter(name => name !== prevName)
 
     const updatedTool: ToolParameters = {
       type: 'object',
       properties: updatedProperties,
       required: updatedRequired
-
     }
 
     if (isEdit) {
@@ -76,7 +93,10 @@ export const ToolAddParam = memo((props: ToolAddParamProps) => {
     } else {
       dispatch(toolsPageActions.updateToolCreateParameters(updatedTool))
     }
-  }, [parameters?.properties, parameters?.required, isEdit, dispatch])
+    setErrorMessage('')
+    setErrorOpen(false)
+    onCloseModalHandler()
+  }, [parameters?.properties, parameters?.required, isEdit, onCloseModalHandler, t, dispatch])
 
   const onEditParamClick = useCallback((name: string, param: ToolParam, isRequired: boolean) => {
     const editableParam: ToolParam = {
@@ -111,14 +131,21 @@ export const ToolAddParam = memo((props: ToolAddParamProps) => {
 
   return (
         <VStack gap={'8'} className={className}>
+          <SnackAlert
+              message={errorMessage}
+              variant={'filled'}
+              severity={'error'}
+              onClose={() => {
+                setErrorOpen(false)
+              }}
+              open={errorOpen}
+          />
             <ToolAddParameterModal
                 param={param}
                 paramName={paramName}
                 label={toolName}
                 show={isAddParameterOpen}
-                onClose={() => {
-                  setIsAddParameterOpen(false)
-                }}
+                onClose={onCloseModalHandler}
                 onSave={onSaveHandler}
             />
             <Text text={t('Параметры функции')} bold/>
