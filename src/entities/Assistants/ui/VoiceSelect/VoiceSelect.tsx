@@ -26,7 +26,7 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
     ...otherProps
   } = props
 
-  const topics = ['Alloy', 'Ash', 'Ballad', 'Coral', 'Echo', 'Sage', 'Shimmer', 'Verse']
+  const topics = ['alloy', 'ash', 'ballad', 'coral', 'echo', 'sage', 'shimmer', 'verse']
 
   const selectedValue = value ? topics.find(item => item === value) : ''
 

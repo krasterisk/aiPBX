@@ -12,8 +12,8 @@ export interface AssistantsPageSchema {
   _inited?: boolean
   refreshOnFocus?: boolean
   search: string
-  createForm: Assistant
-  editForm: Assistant
+  createForm?: Assistant
+  editForm?: Assistant
   userId: string
   user?: ClientOptions
 }

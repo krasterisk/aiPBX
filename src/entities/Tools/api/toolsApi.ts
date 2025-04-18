@@ -41,7 +41,7 @@ export const toolsApi = rtkApi.injectEndpoints({
             ]
           : [{ type: 'Tools', id: 'LIST' }]
     }),
-    getToolsAll: build.query<Tool[], QueryArgs>({
+    getToolsAll: build.query<Tool[], { userId?: string }>({
       query: (args) => ({
         url: '/tools',
         params: args

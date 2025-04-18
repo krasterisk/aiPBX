@@ -2,13 +2,13 @@ import { memo } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { Checkbox } from '@mui/material'
 import { Tool } from '../../model/types/tools'
+import { useToolsAll } from '../../api/toolsApi'
 
 interface CasksSelectorProps {
   label?: string
   value?: Tool[]
   toolId?: string | null
   className?: string
-  tools?: Tool[]
   onChangeCask?: (event: any, newValue: Tool[]) => void
   userId?: string
 }
@@ -20,9 +20,15 @@ export const ToolsSelect = memo((props: CasksSelectorProps) => {
     value,
     onChangeCask,
     userId,
-    tools,
     ...otherProps
   } = props
+
+  const {
+    data: tools
+  } = useToolsAll(
+    { userId },
+    { skip: !userId }
+  )
 
   const onChangeMultipleHandler = (event: any, newValue: Tool[]) => {
     onChangeCask?.(event, newValue)
@@ -38,6 +44,7 @@ export const ToolsSelect = memo((props: CasksSelectorProps) => {
           options={tools || []}
           disableCloseOnSelect
           value={value}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
           renderOption={(props, option, { selected, inputValue, index }) => {
             const { ...otherProps } = props
             return (

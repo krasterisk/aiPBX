@@ -13,18 +13,7 @@ const initialState: AssistantsPageSchema = {
   view: 'SMALL',
   _inited: false,
   search: '',
-  userId: '',
-  createForm: {
-    user: {
-      id: '',
-      name: ''
-    }
-  },
-  editForm: {
-    id: '',
-    name: '',
-    userId: ''
-  }
+  userId: ''
 }
 
 export const assistantsPageSlice = createSlice({
@@ -62,7 +51,7 @@ export const assistantsPageSlice = createSlice({
       state.user = action.payload
       state.userId = action.payload.id
     },
-    updateAssistantEditForm: (state, action: PayloadAction<Assistant>) => {
+    updateAssistantsEditForm: (state, action: PayloadAction<Assistant>) => {
       state.editForm = {
         ...state.editForm,
         ...action.payload

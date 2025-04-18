@@ -17,7 +17,9 @@ export {
   getAssistantsPageSearch,
   getAssistantsPageView,
   getAssistantsUserId,
-  getAssistantsUser
+  getAssistantsUser,
+  getAssistantsCreateFormFields,
+  getAssistantsEditFormFields
 } from './model/selectors/assistantsPageSelectors'
 
 export { initAssistantsPage } from './model/service/initAssistantsPage/initAssistantsPage'

@@ -1,6 +1,7 @@
 import { User } from '../../../User'
 import { HTMLAttributeAnchorTarget } from 'react'
 import { ContentView } from '@/entities/Content'
+import { Tool } from '@/entities/Tools'
 
 export interface AllAssistants {
   count: number
@@ -25,8 +26,8 @@ export interface Assistant {
   turn_detection_silence_duration_ms?: string
   semantic_eagerness?: string
   temperature?: string
-  max_tokens?: string
-  tools?: string
+  max_response_output_tokens?: string
+  tools?: Tool[]
   user?: User
   userId?: string
   comment?: string

@@ -16,7 +16,7 @@ const AssistantEditPage = memo(() => {
   return (
       <Page data-testid={'AssistantPage'}>
         <VStack gap='8'>
-          <AssistantCard />
+          <AssistantCard assistantId={id} isEdit/>
         </VStack>
       </Page>
   )

@@ -1,4 +1,5 @@
 export { ToolsList } from './ui/ToolsList/ToolsList'
+export { ToolsSelect } from './ui/ToolsSelect/ToolsSelect'
 export { useToolsFilters } from './lib/hooks/useToolsFilters'
 
 export {

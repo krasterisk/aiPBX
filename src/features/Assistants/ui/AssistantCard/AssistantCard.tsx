@@ -71,12 +71,12 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
     }
   }, [assistantDeleteMutation, navigate])
 
-  const onDelete = useCallback(async (id: string) => {
-    await handleDeleteAssistant(id)
+  const onDelete = useCallback((id: string) => {
+    handleDeleteAssistant(id)
   }, [handleDeleteAssistant])
 
-  const onEdit = useCallback(async (data: Assistant) => {
-    await handleEditAssistant(data)
+  const onEdit = useCallback((data: Assistant) => {
+    handleEditAssistant(data)
   }, [handleEditAssistant])
 
   if (!assistantId && isEdit) {
@@ -105,13 +105,13 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
   }
 
   return (
-      <VStack gap={'8'} max className={classNames(cls.EndpointCard, {}, [className])}>
+      <VStack gap={'8'} max className={classNames(cls.AssistantCard, {}, [className])}>
         {
           isEdit
             ? <AssistantEditCard
                   onEdit={onEdit}
                   isError={isError}
-                  assistantId={assistantId}
+                  assistantId={assistantId || ''}
                   onDelete={onDelete}
               />
             : <AssistantCreateCard

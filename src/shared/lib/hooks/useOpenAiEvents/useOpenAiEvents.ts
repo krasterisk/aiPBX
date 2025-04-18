@@ -3,18 +3,41 @@ import { io } from 'socket.io-client'
 
 const socket = io('ws://localhost:3033')
 
+interface Event {
+  channelId: string
+  event_id: string
+  type: string
+  [key: string]: any
+}
+
 export function useOpenAiEvents () {
-  const [events, setEvents] = useState<any[]>([])
+  const [eventMap, setEventMap] = useState<Map<string, Event[]>>(new Map())
 
   useEffect(() => {
-    socket.on('openai.event', (event) => {
-      setEvents(prev => [...prev, event])
-    })
+    const handleEvent = (event: Event) => {
+      setEventMap(prev => {
+        const newMap = new Map(prev)
+
+        if (event.type === 'call.hangup') {
+          newMap.delete(event.channelId)
+        } else {
+          const existing = newMap.get(event.channelId) || []
+          newMap.set(event.channelId, [...existing, event])
+        }
+
+        return newMap
+      })
+    }
+
+    socket.on('openai.event', handleEvent)
 
     return () => {
-      socket.off('openai.event')
+      socket.off('openai.event', handleEvent)
     }
   }, [])
 
-  return events
+  // Преобразуем Map в обычный объект
+  const groupedEvents: Record<string, Event[]> = Object.fromEntries(eventMap)
+
+  return groupedEvents
 }

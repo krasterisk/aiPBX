@@ -69,7 +69,7 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
         userId: ''
       }))
     }
-  }, [dispatch])
+  }, [dispatch, formFields])
 
   const createTextChangeHandler = (field: keyof Tool) =>
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

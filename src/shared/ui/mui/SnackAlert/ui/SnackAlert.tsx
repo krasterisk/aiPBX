@@ -34,7 +34,7 @@ export const SnackAlert = memo((props: SnackalertProps) => {
   } = props
 
   const cStyle = {
-    zIndex: 'var(--modal-z-index+1)'
+    zIndex: 'var(--alert-z-index)'
   }
 
   return (
