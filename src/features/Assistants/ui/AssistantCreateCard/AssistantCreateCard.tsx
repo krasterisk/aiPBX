@@ -252,6 +252,12 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
                             data-testid={'AssistantCardCreate.name'}
                             value={formFields.name}
                         />
+                        <Textarea
+                            label={t('Приветственная фраза') ?? ''}
+                            onChange={onTextChangeHandler('greeting')}
+                            data-testid={'AssistantCardCreate.greeting'}
+                            value={formFields.greeting}
+                        />
                         <Text text={'Параметры LLM модели'} bold />
                         {isAdmin && IsAdminOptions}
                         <Textarea

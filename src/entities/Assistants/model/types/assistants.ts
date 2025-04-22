@@ -11,6 +11,7 @@ export interface AllAssistants {
 export interface Assistant {
   id?: string
   name?: string
+  greeting?: string
   model?: string
   instruction?: string
   voice?: string
