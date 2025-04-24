@@ -19,13 +19,14 @@ import {
   getRouteUserEdit,
   getRouteTools,
   getRouteToolsCreate,
-  getRouteToolsEdit
+  getRouteToolsEdit, getRouteReports
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 import { SettingPage } from '@/pages/SettingsPage'
 import { AssistantsCreatePage, AssistantsPage, AssistantsEditPage } from '@/pages/AssistantsPage'
 import { UsersCreatePage, UsersEditPage, UsersPage } from '@/pages/UsersPage'
 import { ToolsCreatePage, ToolsEditPage, ToolsPage } from '@/pages/ToolsPage'
+import { ReportsPage } from '@/pages/ReportPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -35,6 +36,10 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.ABOUT]: {
     path: getRouteAbout(),
     element: <AboutPage/>
+  },
+  [AppRoutes.REPORTS]: {
+    path: getRouteReports(),
+    element: <ReportsPage />
   },
   [AppRoutes.ASSISTANTS]: {
     path: getRouteAssistants(),

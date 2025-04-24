@@ -2,7 +2,10 @@ import { useSelector } from 'react-redux'
 import { getUserAuthData } from '@/entities/User'
 import {
   getRouteAssistants,
-  getRouteMain, getRouteTools, getRouteUsers
+  getRouteMain,
+  getRouteReports,
+  getRouteTools,
+  getRouteUsers
 } from '@/shared/const/router'
 import MainIcon from '@/shared/assets/icons/home.svg'
 import EndpointsIcon from '@/shared/assets/icons/endpoints.svg'
@@ -27,6 +30,12 @@ export const useMenubarItems = () => {
         path: getRouteAssistants(),
         Icon: ManualIcon,
         text: t('Ассистенты'),
+        authOnly: true
+      },
+      {
+        path: getRouteReports(),
+        Icon: EndpointsIcon,
+        text: t('Отчёт'),
         authOnly: true
       },
       {

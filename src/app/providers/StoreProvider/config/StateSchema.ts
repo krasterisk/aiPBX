@@ -6,6 +6,7 @@ import { ScrollSaveSchema } from '@/features/ScrollSave'
 import { rtkApi } from '@/shared/api/rtkApi'
 import { AssistantsPageSchema } from '@/entities/Assistants'
 import { ToolsPageSchema } from '@/entities/Tools'
+import { ReportsPageSchema } from '@/entities/Report'
 
 export interface StateSchema {
   user: UserSchema
@@ -17,6 +18,7 @@ export interface StateSchema {
   usersPage?: UsersPageSchema
   assistantsPage?: AssistantsPageSchema
   toolsPage?: ToolsPageSchema
+  reportsPage?: ReportsPageSchema
 }
 
 export type StateSchemaKey = keyof StateSchema
