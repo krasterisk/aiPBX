@@ -31,8 +31,8 @@ export function useReportFilters () {
     isFetching,
     refetch
   } = useGetReports({ page, limit, search: newSearch }, {
-    refetchOnFocus: true,
-    refetchOnReconnect: true
+    refetchOnFocus: false,
+    refetchOnReconnect: false
   })
 
   const onRefetch = useCallback(() => {
@@ -41,7 +41,14 @@ export function useReportFilters () {
 
   const onLoadNext = useCallback(() => {
     if (data && hasMore && !isLoading && !isFetching) {
-      const isHasMore = page < data.count / limit
+      const totalPages = Math.ceil(data.count / limit)
+      const isHasMore = page < totalPages
+
+      console.log('isHasMore: ', isHasMore)
+      console.log('dataCount: ', data.count)
+      console.log('totalPages: ', totalPages)
+      console.log('page: ', page)
+      console.log('limit: ', limit)
       dispatch(reportsPageActions.setHasMore(isHasMore))
       if (isHasMore) {
         dispatch(reportsPageActions.setPage(page + 1))

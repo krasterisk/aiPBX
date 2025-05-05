@@ -42,7 +42,7 @@ export const reportsPageSlice = createSlice({
     initState: (state) => {
       const view = localStorage.getItem(REPORTS_VIEW_LOCALSTORAGE_KEY) as ContentView
       state.view = view
-      state.limit = view === 'BIG' ? 250 : 250
+      state.limit = view === 'BIG' ? 25 : 25
       state._inited = true
     }
   }

@@ -1,4 +1,4 @@
-export type { AllReports, Report } from './model/types/report'
+export type { AllReports, Report, ReportEvent } from './model/types/report'
 export type { ReportsPageSchema } from './model/types/reportsPageSchema'
 export {
   getReportsHasMore,
@@ -10,6 +10,8 @@ export {
 } from './model/selectors/reportSelectors'
 
 export { initReportsPage } from './model/service/initReportsPage/initReportsPage'
+
+export { useReportDialog } from './hooks/useReportDialog'
 
 export {
   reportsPageSlice,

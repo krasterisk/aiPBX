@@ -1,16 +1,16 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ReportItem.module.scss'
-import React, { HTMLAttributeAnchorTarget, memo } from 'react'
+import React, { HTMLAttributeAnchorTarget, memo, useState } from 'react'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { ContentView } from '@/entities/Content'
 import { Check } from '@/shared/ui/mui/Check'
-import { Report } from '../../model/types/report'
+import { GroupedReport } from '../../model/types/report'
 
 interface ReportItemProps {
   className?: string
-  report: Report
+  report: GroupedReport
   view?: ContentView
   target?: HTMLAttributeAnchorTarget
   checkedItems?: string[]
@@ -26,6 +26,10 @@ export const ReportItem = memo((props: ReportItemProps) => {
     onChangeChecked
   } = props
 
+  const [showEvents, setShowEvents] = useState(false)
+  const [showDialog, setShowDialog] = useState(false)
+  const [expandedEventIds, setExpandedEventIds] = useState<Record<string, boolean>>({})
+
   if (view === 'BIG') {
     return (
                 <Card
@@ -35,16 +39,17 @@ export const ReportItem = memo((props: ReportItemProps) => {
                 >
                     <HStack gap={'24'} wrap={'wrap'} justify={'start'}>
                         <Check
-                            key={String(report.id)}
+                            key={report.channelId}
                             className={classNames('', {
-                              [cls.uncheck]: !checkedItems?.includes(String(report.id)),
-                              [cls.check]: checkedItems?.includes(String(report.id))
+                              [cls.uncheck]: !checkedItems?.includes(report.channelId),
+                              [cls.check]: checkedItems?.includes(report.channelId)
                             }, [])}
-                            value={String(report.id)}
+                            value={report.channelId}
                             size={'small'}
-                            checked={checkedItems?.includes(String(report.id))}
+                            checked={checkedItems?.includes(report.channelId)}
                             onChange={onChangeChecked}
                         />
+
                         {report.createdAt ? <Text text={report.createdAt}/> : ''}
                         {report.callerId ? <Text text={report.callerId}/> : ''}
                         {report.event ? <Text text={JSON.stringify(report.event)}/> : ''}

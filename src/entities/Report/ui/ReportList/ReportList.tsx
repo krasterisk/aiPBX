@@ -2,7 +2,7 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ReportList.module.scss'
 import React, { useCallback, useState } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
-import { Report, ReportsListProps } from '../../model/types/report'
+import { GroupedReport, ReportsListProps } from '../../model/types/report'
 import { ErrorGetData } from '../../../ErrorGetData'
 import { ContentView, ContentListItemSkeleton } from '../../../Content'
 import { Text } from '@/shared/ui/redesigned/Text'
@@ -12,6 +12,7 @@ import { Card } from '@/shared/ui/redesigned/Card'
 import { Check } from '@/shared/ui/mui/Check'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { ReportsListHeader } from '../ReportListHeader/ReportListHeader'
+import { useGroupedReportsByChannelId } from '../../hooks/useOpenAiGroupedEvents'
 
 export const ReportList = (props: ReportsListProps) => {
   const {
@@ -28,6 +29,8 @@ export const ReportList = (props: ReportsListProps) => {
   const [checkedBox, setCheckedBox] = useState<string[]>([])
   const [indeterminateBox, setIndeterminateBox] = useState<boolean>(false)
 
+  const groupedReports: GroupedReport[] = useGroupedReportsByChannelId(reports?.rows)
+
   const handleCheckChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     setCheckedBox((prev) => {
@@ -38,28 +41,28 @@ export const ReportList = (props: ReportsListProps) => {
       } else {
         newChecked.splice(currentIndex, 1)
       }
-      if (reports?.count) {
-        setIndeterminateBox(newChecked.length > 0 && newChecked.length < reports?.count)
+      if (groupedReports.length) {
+        setIndeterminateBox(newChecked.length > 0 && newChecked.length < groupedReports?.length)
       }
       return newChecked
     })
   }
 
   const handleCheckAll = useCallback(() => {
-    if (indeterminateBox && reports?.count && checkedBox.length > 0) {
-      setCheckedBox(reports?.rows.map(report => String(report.id)))
+    if (indeterminateBox && groupedReports?.length && checkedBox.length > 0) {
+      setCheckedBox(groupedReports.map(report => String(report.channelId)))
       setIndeterminateBox(false)
     }
 
-    if (!indeterminateBox && reports?.count && checkedBox.length === 0) {
-      setCheckedBox(reports?.rows.map(report => String(report.id)))
+    if (!indeterminateBox && groupedReports?.length && checkedBox.length === 0) {
+      setCheckedBox(groupedReports.map(report => String(report.channelId)))
       setIndeterminateBox(false)
     }
 
     if (!indeterminateBox && checkedBox.length > 0) {
       setCheckedBox([])
     }
-  }, [reports?.count, reports?.rows, checkedBox.length, indeterminateBox])
+  }, [checkedBox.length, groupedReports, indeterminateBox])
 
   const getSkeletons = (view: ContentView) => {
     return new Array(view === 'SMALL' ? 9 : 4)
@@ -92,10 +95,10 @@ export const ReportList = (props: ReportsListProps) => {
         </HStack>
   )
 
-  const renderContent = (report: Report) => {
+  const renderContent = (report: GroupedReport) => {
     return (
             <ReportItem
-                key={report.id}
+                key={report.channelId}
                 report={report}
                 checkedItems={checkedBox}
                 onChangeChecked={handleCheckChange}
@@ -123,15 +126,15 @@ export const ReportList = (props: ReportsListProps) => {
                     {checkedButtons}
                     {
                         checkedBox.length > 0
-                          ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(reports?.count)}/>
-                          : <Text text={t('Всего') + ': ' + String(reports?.count || 0)}/>
+                          ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(groupedReports?.length)}/>
+                          : <Text text={t('Всего') + ': ' + String(groupedReports.length || 0)}/>
                     }
                 </HStack>
             </Card>
 
             {reports?.rows.length
               ? <HStack wrap={'wrap'} gap={'4'} align={'start'} max>
-                    {reports.rows.map(renderContent)}
+                    {groupedReports.map(renderContent)}
                 </HStack>
               : <HStack
                     justify={'center'} max

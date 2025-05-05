@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Card } from '@/shared/ui/redesigned/Card'
 import cls from './CallCard.module.scss'
+import { useReportDialog } from '@/entities/Report'
 
 interface CallCardProps {
   channelId: string
@@ -40,25 +41,7 @@ export const CallCard = ({ channelId, callerId, events }: CallCardProps) => {
   }
 
   // Собираем диалог
-  const dialogMessages = events
-    .filter(e =>
-      e.type === 'conversation.item.input_audio_transcription.completed' ||
-          e.type === 'response.done'
-    )
-    .flatMap(e => {
-      if (e.type === 'conversation.item.input_audio_transcription.completed') {
-        return [{ role: 'user', text: e.transcript }]
-      }
-
-      if (e.type === 'response.done') {
-        const items = e.response?.output || []
-        return items.flatMap((item: any) =>
-          item?.content?.map((c: any) => ({ role: 'assistant', text: c.transcript })) || []
-        )
-      }
-
-      return []
-    })
+  const dialogMessages = useReportDialog(events)
 
   return (
       <Card variant="outlined" padding="16" border="round" className={cls.callCard}>
@@ -106,7 +89,7 @@ export const CallCard = ({ channelId, callerId, events }: CallCardProps) => {
 
           {showDialog && (
               <div className="mt-4 bg-gray-900 p-3 rounded space-y-2 text-sm">
-                {dialogMessages.map((msg, idx) => (
+                {dialogMessages.map((msg: any, idx: any) => (
                     <div key={idx}>
                 <span className={msg.role === 'user' ? 'text-yellow-400' : 'text-cyan-400'}>
                   {msg.role === 'user' ? '🙍 Пользователь' : '🤖 Ассистент'}:
