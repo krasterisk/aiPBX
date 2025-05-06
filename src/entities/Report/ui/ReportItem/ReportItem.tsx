@@ -1,16 +1,22 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ReportItem.module.scss'
-import React, { HTMLAttributeAnchorTarget, memo, useState } from 'react'
+import React, { HTMLAttributeAnchorTarget, memo, useCallback, useState } from 'react'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { ContentView } from '@/entities/Content'
 import { Check } from '@/shared/ui/mui/Check'
-import { GroupedReport } from '../../model/types/report'
+import { Report } from '../../model/types/report'
+import { useTranslation } from 'react-i18next'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import { Button } from '@/shared/ui/redesigned/Button'
+import { useGetReportDialogs } from '../../api/reportApi'
+import { Loader } from '@/shared/ui/Loader'
 
 interface ReportItemProps {
   className?: string
-  report: GroupedReport
+  report: Report
   view?: ContentView
   target?: HTMLAttributeAnchorTarget
   checkedItems?: string[]
@@ -26,35 +32,99 @@ export const ReportItem = memo((props: ReportItemProps) => {
     onChangeChecked
   } = props
 
-  const [showEvents, setShowEvents] = useState(false)
+  const { t } = useTranslation('reports')
   const [showDialog, setShowDialog] = useState(false)
-  const [expandedEventIds, setExpandedEventIds] = useState<Record<string, boolean>>({})
+
+  const {
+    data: Dialogs,
+    isLoading: isDialogLoading,
+    isError: isDialogError
+  } = useGetReportDialogs(report.channelId, {
+    skip: !showDialog,
+    refetchOnFocus: false,
+    refetchOnReconnect: false
+  })
+
+  const onHistoryHandle = useCallback(() => {
+    setShowDialog(prev => !prev)
+  }, [report.channelId])
 
   if (view === 'BIG') {
     return (
                 <Card
+                    border={'partial'}
+                    variant={'outlined'}
                     padding={'8'}
                     max
                     className={classNames(cls.ReportItem, {}, [className, cls[view]])}
                 >
-                    <HStack gap={'24'} wrap={'wrap'} justify={'start'}>
-                        <Check
-                            key={report.channelId}
-                            className={classNames('', {
-                              [cls.uncheck]: !checkedItems?.includes(report.channelId),
-                              [cls.check]: checkedItems?.includes(report.channelId)
-                            }, [])}
-                            value={report.channelId}
-                            size={'small'}
-                            checked={checkedItems?.includes(report.channelId)}
-                            onChange={onChangeChecked}
+                    {/* <Check */}
+                    {/*    key={report.channelId} */}
+                    {/*    className={classNames('', { */}
+                    {/*      [cls.uncheck]: !checkedItems?.includes(report.channelId), */}
+                    {/*      [cls.check]: checkedItems?.includes(report.channelId) */}
+                    {/*    }, [])} */}
+                    {/*    value={report.channelId} */}
+                    {/*    size={'small'} */}
+                    {/*    checked={checkedItems?.includes(report.channelId)} */}
+                    {/*    onChange={onChangeChecked} */}
+                    {/* /> */}
+                    <HStack gap={'24'} wrap={'wrap'} justify={'between'} max>
+                        <VStack gap={'8'}>
+                            {report.createdAt ? <Text text={report.createdAt}/> : ''}
+                            {report.assistantName ? <Text text={report.assistantName}/> : ''}
+                        </VStack>
+                        <VStack gap={'8'}>
+                            {report.callerId ? <Text text={report.callerId}/> : ''}
+                            {report.duration ? <Text text={String(report.duration)}/> : ''}
+                        </VStack>
+                        <VStack gap={'8'}>
+                            <Text text={t('Токены')}/>
+                            {report.tokens ? <Text text={String(report.tokens)}/> : ''}
+                        </VStack>
+                        <Button
+                            variant={'clear'}
+                            addonRight={
+                                showDialog
+                                  ? <ExpandLessIcon fontSize={'large'}/>
+                                  : <ExpandMoreIcon fontSize={'large'}/>
+                            }
+                            onClick={onHistoryHandle}
                         />
-
-                        {report.createdAt ? <Text text={report.createdAt}/> : ''}
-                        {report.callerId ? <Text text={report.callerId}/> : ''}
-                        {report.event ? <Text text={JSON.stringify(report.event)}/> : ''}
-
                     </HStack>
+                    {showDialog && (
+                        <VStack gap="8" className={cls.eventsContainer} wrap={'wrap'}>
+                            {isDialogLoading && <Loader/>}
+                            {isDialogError && <Text text={t('Ошибка при загрузке диалога')} variant="error"/>}
+                            {Dialogs?.length === 0 && <Text text={t('Диалог отсутствует')}/>}
+
+                            {Dialogs?.map((dialog, index) => (
+                                <HStack
+                                    key={index}
+                                    gap={'16'}
+                                    justify={'between'} max
+                                >
+                                    <VStack
+                                        gap={'4'}
+                                        justify={'start'}
+                                    >
+                                        <Text
+                                            text={dialog.timestamp}
+                                            bold
+                                        />
+                                        <Text
+                                            text={dialog.role}
+                                            variant={dialog.role === 'User' ? 'accent' : 'primary'}
+                                        />
+                                    </VStack>
+
+                                    <Card border={'partial'} variant={'outlined'}>
+                                        <Text text={dialog.text}/>
+                                    </Card>
+                                </HStack>
+                            ))}
+                        </VStack>
+                    )}
                 </Card>
     )
   }
@@ -82,8 +152,11 @@ export const ReportItem = memo((props: ReportItemProps) => {
                         onChange={onChangeChecked}
                     />
                     {report.createdAt ? <Text text={report.createdAt}/> : ''}
+                    {report.assistantName ? <Text text={report.callerId}/> : ''}
                     {report.callerId ? <Text text={report.callerId}/> : ''}
-                    {report.event ? <Text text={JSON.stringify(report.event)}/> : ''}
+                    {report.duration ? <Text text={String(report.duration)}/> : ''}
+                    <Text text={t('Токены')}/>
+                    {report.tokens ? <Text text={String(report.tokens)}/> : ''}
                 </VStack>
             </Card>
   )

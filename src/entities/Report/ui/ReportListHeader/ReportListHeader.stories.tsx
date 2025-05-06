@@ -1,16 +1,16 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { ReportListHeader } from './ReportListHeader'
+import { ReportsListHeader } from './ReportListHeader'
 
 export default {
   title: 'shared/ReportListHeader',
-  component: ReportListHeader,
+  component: ReportsListHeader,
   argTypes: {
     backgroundColor: { control: 'color' }
   }
-} as ComponentMeta<typeof ReportListHeader>
+} as ComponentMeta<typeof ReportsListHeader>
 
-const Template: ComponentStory<typeof ReportListHeader> = (args) => <ReportListHeader {...args} />
+const Template: ComponentStory<typeof ReportsListHeader> = (args) => <ReportsListHeader {...args} />
 
 export const Normal = Template.bind({})
 Normal.args = {}

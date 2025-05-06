@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { AllReports, Report } from '../model/types/report'
+import { AllReports, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
   page?: number
@@ -50,6 +50,30 @@ export const reportApi = rtkApi.injectEndpoints({
             ]
           : [{ type: 'Reports', id: 'LIST' }]
     }),
+    getReportEvents: build.query<Report[], string>({
+      query: (channelId) => ({
+        url: `/reports/events/${channelId}`
+      }),
+      providesTags: (result) =>
+        result?.length
+          ? [
+              ...result.map(({ channelId }) => ({ type: 'Reports', channelId } as const)),
+              { type: 'Reports', id: 'LIST' }
+            ]
+          : [{ type: 'Reports', id: 'LIST' }]
+    }),
+    getReportDialogs: build.query<ReportDialog[], string>({
+      query: (channelId) => ({
+        url: `/reports/dialogs/${channelId}`
+      }),
+      providesTags: (result) =>
+        result?.length
+          ? [
+              ...result.map(({ channelId }) => ({ type: 'Reports', channelId } as const)),
+              { type: 'Reports', id: 'LIST' }
+            ]
+          : [{ type: 'Reports', id: 'LIST' }]
+    }),
     setReports: build.mutation<Report, Report>({
       query: (arg) => ({
         url: '/reports',
@@ -91,6 +115,8 @@ export const reportApi = rtkApi.injectEndpoints({
   })
 })
 
+export const useGetReportDialogs = reportApi.useGetReportDialogsQuery
+export const useGetReportEvents = reportApi.useGetReportEventsQuery
 export const useGetReports = reportApi.useGetReportsQuery
 export const useGetAllReports = reportApi.useGetAllReportsQuery
 export const useSetReports = reportApi.useSetReportsMutation

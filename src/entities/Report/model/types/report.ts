@@ -10,16 +10,11 @@ export interface Report {
   id: string
   callerId: string
   channelId: string
-  event: ReportEvent
-  createdAt: string
-  userId: string
-}
-
-export interface GroupedReport {
-  id: string
-  callerId: string
-  channelId: string
-  event: ReportEvent[]
+  assistantName?: string
+  assistantId?: string
+  tokens?: number
+  duration?: number
+  events?: ReportEvent[]
   createdAt: string
   userId: string
 }
@@ -34,10 +29,10 @@ export interface ReportsListProps {
 }
 
 export interface ReportEvent {
-  channelId: string
-  callerId: string
-  type: string
-  event_id: string
+  channelId?: string
+  callerId?: string
+  type?: string
+  event_id?: string
   timestamp?: string
   transcript?: string
   response?: {
@@ -49,6 +44,8 @@ export interface ReportEvent {
 }
 
 export interface ReportDialog {
+  channelId: string
+  timestamp: string
   role: 'User' | 'Assistant'
   text: string
 }

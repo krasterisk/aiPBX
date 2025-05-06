@@ -26,7 +26,9 @@ export {
   useGetReport,
   useGetReports,
   useSetReports,
-  useUpdateReport
+  useUpdateReport,
+  useGetReportEvents,
+  useGetReportDialogs
 } from './api/reportApi'
 
 export { useReportFilters } from './lib/useReportFilters'
