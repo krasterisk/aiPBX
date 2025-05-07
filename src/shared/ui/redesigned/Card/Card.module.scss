@@ -14,6 +14,14 @@
     background: var(--light-bg-redesigned);
 }
 
+.warning {
+    border: 1px solid var(--cancel-redesigned);
+}
+
+.success {
+    border: 1px solid var(--save-redesigned);
+}
+
 .round {
     border-radius: 40px;
 }
@@ -57,3 +65,4 @@
 .gap_24 {
     padding: 24px;
 }
+

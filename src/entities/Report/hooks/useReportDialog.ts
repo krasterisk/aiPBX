@@ -8,13 +8,13 @@ export const useReportDialog = (events: ReportEvent[]) => {
     )
     .flatMap(e => {
       if (e.type === 'conversation.item.input_audio_transcription.completed') {
-        return [{ role: 'user', text: e.transcript }]
+        return [{ role: 'User', text: e.transcript }]
       }
 
       if (e.type === 'response.done') {
         const items = e.response?.output || []
         return items.flatMap((item: any) =>
-          item?.content?.map((c: any) => ({ role: 'assistant', text: c.transcript })) || []
+          item?.content?.map((c: any) => ({ role: 'Assistant', text: c.transcript })) || []
         )
       }
 

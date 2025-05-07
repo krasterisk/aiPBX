@@ -2,7 +2,7 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './Text.module.scss'
 import { memo } from 'react'
 
-export type TextVariant = 'primary' | 'error' | 'accent'
+export type TextVariant = 'primary' | 'error' | 'accent' | 'success'
 
 interface TextProps {
   className?: string

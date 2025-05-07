@@ -18,6 +18,8 @@ export function useOpenAiEvents () {
       setEventMap(prev => {
         const newMap = new Map(prev)
 
+        console.log(event.channelId, event.type)
+
         if (event.type === 'call.hangup') {
           newMap.delete(event.channelId)
         } else {

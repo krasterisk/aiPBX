@@ -13,6 +13,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useGetReportDialogs } from '../../api/reportApi'
 import { Loader } from '@/shared/ui/Loader'
+import { Divider } from '@/shared/ui/Divider'
 
 interface ReportItemProps {
   className?: string
@@ -45,33 +46,44 @@ export const ReportItem = memo((props: ReportItemProps) => {
     refetchOnReconnect: false
   })
 
+  const date = new Date(report.createdAt)
+  const formattedDate = new Intl.DateTimeFormat('ru-RU', {
+    // timeZone: 'UTC', // или 'Europe/Moscow' для другого смещения
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  }).format(date)
+
   const onHistoryHandle = useCallback(() => {
     setShowDialog(prev => !prev)
-  }, [report.channelId])
+  }, [])
 
   if (view === 'BIG') {
     return (
                 <Card
                     border={'partial'}
                     variant={'outlined'}
-                    padding={'8'}
+                    padding={'16'}
                     max
                     className={classNames(cls.ReportItem, {}, [className, cls[view]])}
                 >
-                    {/* <Check */}
-                    {/*    key={report.channelId} */}
-                    {/*    className={classNames('', { */}
-                    {/*      [cls.uncheck]: !checkedItems?.includes(report.channelId), */}
-                    {/*      [cls.check]: checkedItems?.includes(report.channelId) */}
-                    {/*    }, [])} */}
-                    {/*    value={report.channelId} */}
-                    {/*    size={'small'} */}
-                    {/*    checked={checkedItems?.includes(report.channelId)} */}
-                    {/*    onChange={onChangeChecked} */}
-                    {/* /> */}
+                    <Check
+                        key={report.channelId}
+                        className={classNames('', {
+                          [cls.uncheck]: !checkedItems?.includes(report.channelId),
+                          [cls.check]: checkedItems?.includes(report.channelId)
+                        }, [])}
+                        value={report.channelId}
+                        size={'small'}
+                        checked={checkedItems?.includes(report.channelId)}
+                        onChange={onChangeChecked}
+                    />
                     <HStack gap={'24'} wrap={'wrap'} justify={'between'} max>
                         <VStack gap={'8'}>
-                            {report.createdAt ? <Text text={report.createdAt}/> : ''}
+                            {report.createdAt ? <Text text={formattedDate}/> : ''}
                             {report.assistantName ? <Text text={report.assistantName}/> : ''}
                         </VStack>
                         <VStack gap={'8'}>
@@ -93,10 +105,24 @@ export const ReportItem = memo((props: ReportItemProps) => {
                         />
                     </HStack>
                     {showDialog && (
-                        <VStack gap="8" className={cls.eventsContainer} wrap={'wrap'}>
-                            {isDialogLoading && <Loader/>}
-                            {isDialogError && <Text text={t('Ошибка при загрузке диалога')} variant="error"/>}
-                            {Dialogs?.length === 0 && <Text text={t('Диалог отсутствует')}/>}
+                        <VStack gap="24" className={cls.eventsContainer} wrap={'wrap'}>
+                            <Divider/>
+
+                            {isDialogLoading &&
+                                <HStack max justify={'center'}>
+                                    <Loader/>
+                                </HStack>
+                            }
+                            {isDialogError &&
+                                <HStack max justify={'center'}>
+                                    <Text text={t('Ошибка при загрузке диалога')} variant="error"/>
+                                </HStack>
+                            }
+                            {Dialogs?.length === 0 &&
+                                <HStack max justify={'center'}>
+                                    <Text text={t('Диалог отсутствует')}/>
+                                </HStack>
+                            }
 
                             {Dialogs?.map((dialog, index) => (
                                 <HStack
@@ -104,21 +130,22 @@ export const ReportItem = memo((props: ReportItemProps) => {
                                     gap={'16'}
                                     justify={'between'} max
                                 >
+
                                     <VStack
                                         gap={'4'}
                                         justify={'start'}
                                     >
                                         <Text
                                             text={dialog.timestamp}
-                                            bold
                                         />
                                         <Text
                                             text={dialog.role}
-                                            variant={dialog.role === 'User' ? 'accent' : 'primary'}
+                                            variant={dialog.role === 'User' ? 'accent' : 'success'}
+                                            size={'m'}
                                         />
                                     </VStack>
 
-                                    <Card border={'partial'} variant={'outlined'}>
+                                    <Card border={'partial'} variant={dialog.role === 'User' ? 'outlined' : 'success'}>
                                         <Text text={dialog.text}/>
                                     </Card>
                                 </HStack>
