@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
 
-const socket = io('ws://192.168.2.37:3033')
+const wsUrl = __WS__
+const socket = io(wsUrl)
 
 interface Event {
   channelId: string

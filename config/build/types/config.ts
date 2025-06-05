@@ -16,6 +16,7 @@ export interface buildOptions {
   isDev: boolean
   port: number
   apiUrl: string
+  wsUrl: string
   project: 'storybook' | 'frontend' | 'jest'
 }
 
@@ -23,4 +24,5 @@ export interface buildEnv {
   mode: buildMode
   port: number
   apiUrl: string
+  wsUrl: string
 }
