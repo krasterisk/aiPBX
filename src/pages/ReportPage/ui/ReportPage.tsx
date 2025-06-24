@@ -7,7 +7,6 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch
 import { useSelector } from 'react-redux'
 import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitialEffect'
 import { Page } from '@/widgets/Page'
-import { useTranslation } from 'react-i18next'
 import {
   initReportsPage,
   ReportList,
@@ -26,16 +25,13 @@ const reducers: ReducersList = {
 const ReportsPage = ({ className }: ReportsPageProps) => {
   const {
     view,
+
     isError,
     isLoading,
-    error,
     data,
     hasMore,
-    onRefetch,
     onLoadNext
   } = useReportFilters()
-
-  const { t } = useTranslation('reports')
 
   const dispatch = useAppDispatch()
 
@@ -58,7 +54,13 @@ const ReportsPage = ({ className }: ReportsPageProps) => {
             className={classNames(cls.ReportPage, {}, [className])}
             isSaveScroll={true}
         >
-            <ReportList reports={data} isReportsLoading={isLoading} isReportsError={isError}/>
+
+            <ReportList
+                view={view}
+                reports={data}
+                isReportsLoading={isLoading}
+                isReportsError={isError}
+            />
         </Page>
   )
 

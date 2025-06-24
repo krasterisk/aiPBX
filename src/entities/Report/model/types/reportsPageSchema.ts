@@ -7,6 +7,9 @@ export interface ReportsPageSchema {
   limit: number
   hasMore: boolean
   // filters
+  tab?: string
+  startDate?: string
+  endDate?: string
   view: ContentView
   _inited?: boolean
   refreshOnFocus?: boolean

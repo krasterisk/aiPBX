@@ -5,6 +5,10 @@ interface QueryArgs {
   page?: number
   limit?: number
   search?: string
+  tab?: string
+  startDate?: string
+  endDate?: string
+  userId?: string
 }
 
 export const reportApi = rtkApi.injectEndpoints({

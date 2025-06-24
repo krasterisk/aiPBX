@@ -9,6 +9,7 @@ import { Input } from '@/shared/ui/redesigned/Input'
 import { Icon } from '@/shared/ui/redesigned/Icon'
 import SearchIcon from '@/shared/assets/icons/search.svg'
 import { useReportFilters } from '../../lib/useReportFilters'
+import { PeriodPicker } from '../../../PeriodPicker'
 
 interface ReportsListHeaderProps {
   className?: string
@@ -20,8 +21,16 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
   } = props
 
   const {
+    tab,
+    startDate,
+    endDate,
+    clientId,
     search,
     view,
+    isInited,
+    onChangeTab,
+    onChangeStartDate,
+    onChangeEndDate,
     onChangeSearch,
     onChangeView
   } = useReportFilters()
@@ -45,6 +54,18 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
                     onChange={onChangeSearch}
                     addonLeft={<Icon Svg={SearchIcon}/>}
                     value={search}
+                />
+                <PeriodPicker
+                    className={cls.datePicker}
+                    userId={clientId}
+                    onChangeTab={onChangeTab}
+                    tab={tab}
+                    isInited={isInited}
+                    startDate={startDate}
+                    endDate={endDate}
+                    onChangeStartDate={onChangeStartDate}
+                    onChangeEndDate={onChangeEndDate}
+                    onChangeUserId={onChangeTab}
                 />
             </HStack>
         </HStack>

@@ -26,6 +26,9 @@ export const reportsPageSlice = createSlice({
     setPage: (state, action: PayloadAction<number>) => {
       state.page = action.payload
     },
+    setTab: (state, action: PayloadAction<string>) => {
+      state.tab = action.payload
+    },
     setHasMore: (state, action: PayloadAction<boolean>) => {
       state.hasMore = action.payload
     },
@@ -34,6 +37,15 @@ export const reportsPageSlice = createSlice({
     },
     setSearch: (state, action: PayloadAction<string>) => {
       state.search = action.payload
+    },
+    setStartDate: (state, action: PayloadAction<string>) => {
+      state.startDate = action.payload
+    },
+    setEndDate: (state, action: PayloadAction<string>) => {
+      state.endDate = action.payload
+    },
+    setUserId: (state, action: PayloadAction<string>) => {
+      state.userId = action.payload
     },
     setUser: (state, action: PayloadAction<ClientOptions>) => {
       state.user = action.payload

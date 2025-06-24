@@ -5,6 +5,7 @@ export {
   getReportsInited,
   getReportsPageLimit,
   getReportsPageNum,
+  getReportsTab,
   getReportsPageSearch,
   getReportsPageView
 } from './model/selectors/reportSelectors'
