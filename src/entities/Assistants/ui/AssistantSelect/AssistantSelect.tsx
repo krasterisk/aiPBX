@@ -1,47 +1,46 @@
 import { memo } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { Checkbox } from '@mui/material'
-import { Tool } from '../../model/types/tools'
-import { useToolsAll } from '../../api/toolsApi'
+import { AssistantOptions } from '../../model/types/assistants'
+import { useAssistantsAll } from '../../api/assistantsApi'
 
-interface ToolsSelectorProps {
+interface AssistantSelectProps {
   label?: string
-  value?: Tool[]
-  toolId?: string | null
+  value?: AssistantOptions[]
+  assistantId?: string[]
   className?: string
-  onChangeTool?: (event: any, newValue: Tool[]) => void
+  onChangeAssistant?: (event: any, newValue: AssistantOptions[]) => void
   userId?: string
 }
 
-export const ToolsSelect = memo((props: ToolsSelectorProps) => {
+export const AssistantSelect = memo((props: AssistantSelectProps) => {
   const {
     className,
     label,
     value,
-    onChangeTool,
+    onChangeAssistant,
     userId,
     ...otherProps
   } = props
 
   const {
-    data: tools
-  } = useToolsAll(
-    { userId },
-    { skip: !userId }
+    data: assistants
+  } = useAssistantsAll(
+    { userId }
   )
 
-  const onChangeMultipleHandler = (event: any, newValue: Tool[]) => {
-    onChangeTool?.(event, newValue)
+  const onChangeMultipleHandler = (event: any, newValue: AssistantOptions[]) => {
+    onChangeAssistant?.(event, newValue)
   }
 
   return (
       <Combobox
-          id={'toolsSelectBox'}
+          id={'assistantSelectBox'}
           multiple
           label={label}
           autoComplete
           groupBy={(option) => option.group || ''}
-          options={tools || []}
+          options={assistants || []}
           disableCloseOnSelect
           value={value}
           isOptionEqualToValue={(option, value) => option.id === value.id}

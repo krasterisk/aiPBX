@@ -5,7 +5,7 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import Left from '@/shared/assets/icons/left.svg'
 import Right from '@/shared/assets/icons/right.svg'
 import { Icon } from '@/shared/ui/redesigned/Icon'
-import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { PeriodTabs } from '@/entities/Filters'
@@ -55,8 +55,6 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
       const end = dayjs(date).endOf(tab as OpUnitType).format('YYYY-MM-DD')
       onChangeStartDate(start)
       onChangeEndDate(end)
-
-      console.log(start, end)
     }
   }, [date, isInited, onChangeEndDate, onChangeStartDate, tab, startDate, endDate])
 
@@ -70,7 +68,8 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
   }
 
   return (
-        <VStack gap={'16'} wrap={'nowrap'}>
+        <HStack gap={'16'} wrap={'wrap'}>
+            <PeriodTabs tab={tab} onChangeTab={onChangeTab}/>
             <HStack gap={'8'}>
                 <Button
                     variant={'clear'}
@@ -93,7 +92,6 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
                     <Icon Svg={Right} width={16} height={16}/>
                 </Button>
             </HStack>
-            <PeriodTabs tab={tab} onChangeTab={onChangeTab}/>
-        </VStack>
+        </HStack>
   )
 })

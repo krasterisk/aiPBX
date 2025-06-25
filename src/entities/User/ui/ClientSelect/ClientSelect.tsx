@@ -9,7 +9,7 @@ interface ClientSelectProps {
   value?: ClientOptions | null
   clientId?: string
   className?: string
-  onChangeClient?: (event: any, newValue: ClientOptions | null) => void
+  onChangeClient?: (event: any, newValue: ClientOptions) => void
   onInputChange?: (
     event: React.SyntheticEvent,
     value: string,
@@ -24,6 +24,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
     label,
     value = null,
     inputValue,
+    clientId,
     onChangeClient,
     onInputChange,
     ...otherProps
@@ -36,12 +37,14 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
     name: String(item.name)
   })) || []
 
-  const selectedUserValue = value
-    ? clientItems.find(item => item.id === value.id) || null
-    : null
+  const selectedUserValue = clientId ? clientItems.find(item => item.id === clientId) : ''
 
-  const onChangeHandler = (event: any, newValue: ClientOptions | null) => {
-    onChangeClient?.(event, newValue)
+  const onChangeHandler = (event: any, newValue: ClientOptions) => {
+    if (newValue) {
+      onChangeClient?.(event, newValue)
+    } else {
+      onChangeClient?.(event, { id: '', name: '' })
+    }
   }
 
   return (
@@ -50,7 +53,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
           autoComplete={true}
           clearOnBlur={false}
           options={clientItems}
-          value={selectedUserValue}
+          value={value || selectedUserValue || ''}
           onChange={onChangeHandler}
           inputValue={inputValue}
           getOptionKey={option => option.id}

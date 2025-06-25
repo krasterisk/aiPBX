@@ -295,7 +295,7 @@ export const AssistantEditCard = memo((props: UserEditCardProps) => {
                     value={formFields.tools}
                     label={t('Функции') || ''}
                     userId={userId}
-                    onChangeCask={onChangeToolsHandler}
+                    onChangeTool={onChangeToolsHandler}
                 />
                 <Textarea
                     label={t('Комментарий') ?? ''}

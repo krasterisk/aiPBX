@@ -6,6 +6,7 @@ interface QueryArgs {
   limit?: number
   search?: string
   tab?: string
+  assistantId?: string[]
   startDate?: string
   endDate?: string
   userId?: string

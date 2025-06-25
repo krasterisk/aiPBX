@@ -1,5 +1,6 @@
 import { ContentView } from '@/entities/Content'
 import { ClientOptions } from '@/entities/User'
+import { AssistantOptions } from '@/entities/Assistants'
 
 export interface ReportsPageSchema {
   // pagination
@@ -8,6 +9,8 @@ export interface ReportsPageSchema {
   hasMore: boolean
   // filters
   tab?: string
+  assistantId?: string[]
+  assistants?: AssistantOptions[]
   startDate?: string
   endDate?: string
   view: ContentView

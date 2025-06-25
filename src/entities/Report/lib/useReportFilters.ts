@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux'
 import { useCallback, useState } from 'react'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import {
+  getReportAssistantId,
   getReportEndDate,
   getReportsHasMore, getReportsInited,
   getReportsPageLimit,
@@ -17,6 +18,7 @@ import { ContentView } from '../../Content'
 import { useGetReports } from '../api/reportApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
 import { ClientOptions, getUserAuthData, isUserAdmin } from '@/entities/User'
+import { AssistantOptions } from '@/entities/Assistants'
 
 export function useReportFilters () {
   const page = useSelector(getReportsPageNum)
@@ -28,6 +30,7 @@ export function useReportFilters () {
   const startDate = useSelector(getReportStartDate)
   const endDate = useSelector(getReportEndDate)
   const clientId = useSelector(getReportUserId)
+  const assistantId = useSelector(getReportAssistantId)
   const isInited = useSelector(getReportsInited)
 
   const authData = useSelector(getUserAuthData)
@@ -49,6 +52,7 @@ export function useReportFilters () {
     limit,
     search: newSearch,
     userId,
+    assistantId,
     startDate,
     endDate
   }, {
@@ -89,7 +93,6 @@ export function useReportFilters () {
 
   const onChangeTab = useCallback((value: string) => {
     dispatch(reportsPageActions.setTab(value))
-
     // const now = dayjs()
     // const newStart = now.startOf(value as OpUnitType).format('YYYY-MM-DD')
     // const newEnd = now.endOf(value as OpUnitType).format('YYYY-MM-DD')
@@ -107,11 +110,18 @@ export function useReportFilters () {
     dispatch(reportsPageActions.setStartDate(value))
   }, [dispatch])
 
-  const onChangeUserId = useCallback((event: any, client: ClientOptions) => {
-    const newUserId = client ? client.id || userId || '' : ''
+  const onChangeUserId = useCallback((event: any, client: ClientOptions | null) => {
+    const newUserId = client ? client.id : ''
     dispatch(reportsPageActions.setUserId(newUserId))
     dispatch(reportsPageActions.setPage(1))
-  }, [dispatch, userId])
+  }, [dispatch])
+
+  const onChangeAssistant = useCallback((event: any, assistant: AssistantOptions[]) => {
+    const newAssistantIds = assistant.map(item => item.id)
+    dispatch(reportsPageActions.setAssistantId(newAssistantIds))
+    dispatch(reportsPageActions.setAssistant(assistant))
+    dispatch(reportsPageActions.setPage(1))
+  }, [dispatch])
 
   const onChangeEndDate = useCallback((value: string) => {
     dispatch(reportsPageActions.setEndDate(value))
@@ -132,6 +142,8 @@ export function useReportFilters () {
     data,
     clientId,
     isInited,
+    assistantId,
+    onChangeAssistant,
     onChangeUserId,
     onChangeStartDate,
     onChangeEndDate,

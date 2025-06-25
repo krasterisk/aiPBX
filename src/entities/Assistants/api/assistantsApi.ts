@@ -41,7 +41,7 @@ export const assistantsApi = rtkApi.injectEndpoints({
             ]
           : [{ type: 'Assistants', id: 'LIST' }]
     }),
-    getAssistantsAll: build.query<Assistant[], QueryArgs>({
+    getAssistantsAll: build.query<Assistant[], { userId?: string }>({
       query: (args) => ({
         url: '/assistants',
         params: args

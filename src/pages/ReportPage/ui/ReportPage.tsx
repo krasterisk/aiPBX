@@ -2,9 +2,7 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ReportPage.module.scss'
 import React, { memo, useCallback } from 'react'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
-import { isUserAdmin } from '@/entities/User'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { useSelector } from 'react-redux'
 import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitialEffect'
 import { Page } from '@/widgets/Page'
 import {
@@ -34,8 +32,6 @@ const ReportsPage = ({ className }: ReportsPageProps) => {
   } = useReportFilters()
 
   const dispatch = useAppDispatch()
-
-  const isAdmin = useSelector(isUserAdmin)
 
   const onLoadNextPart = useCallback(() => {
     if (hasMore) {

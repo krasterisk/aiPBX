@@ -276,7 +276,7 @@ export const AssistantCreateCard = memo((props: AssistantCreateCardProps) => {
                         <ToolsSelect
                             label={t('Функции') || ''}
                             userId={userId}
-                            onChangeCask={onChangeToolsHandler}
+                            onChangeTool={onChangeToolsHandler}
                         />
                         <Textarea
                             label={t('Комментарий') ?? ''}

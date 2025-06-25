@@ -3,6 +3,7 @@ export { useAssistantFilters } from './lib/hooks/useAssistantFilters'
 
 export { ModelSelect } from './ui/ModelSelect/ModelSelect'
 export { VoiceSelect } from './ui/VoiceSelect/VoiceSelect'
+export { AssistantSelect } from './ui/AssistantSelect/AssistantSelect'
 
 export {
   assistantsPageActions,
@@ -25,7 +26,7 @@ export {
 export { initAssistantsPage } from './model/service/initAssistantsPage/initAssistantsPage'
 
 export type { AssistantsPageSchema } from './model/types/assistantsPageSchema'
-export type { Assistant, AllAssistants, AssistantsListProps } from './model/types/assistants'
+export type { Assistant, AllAssistants, AssistantsListProps, AssistantOptions } from './model/types/assistants'
 
 export {
   assistantsApi,

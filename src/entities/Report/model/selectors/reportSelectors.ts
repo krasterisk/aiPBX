@@ -9,5 +9,6 @@ export const getReportsTab = (state: StateSchema) => state.reportsPage?.tab ?? '
 export const getReportStartDate = (state: StateSchema) => state.reportsPage?.startDate ?? dayjs().format('YYYY-MM-DD')
 export const getReportEndDate = (state: StateSchema) => state.reportsPage?.endDate ?? dayjs().format('YYYY-MM-DD')
 export const getReportUserId = (state: StateSchema) => state.reportsPage?.userId ?? ''
+export const getReportAssistantId = (state: StateSchema) => state.reportsPage?.assistantId ?? []
 export const getReportsInited = (state: StateSchema) => state.reportsPage?._inited
 export const getReportsPageSearch = (state: StateSchema) => state.reportsPage?.search ?? ''

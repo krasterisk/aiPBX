@@ -8,6 +8,11 @@ export interface AllAssistants {
   rows: Assistant[]
 }
 
+export interface AssistantOptions {
+  id: string
+  name: string
+}
+
 export interface Assistant {
   id?: string
   name?: string

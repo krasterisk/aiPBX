@@ -3,6 +3,7 @@ import { ContentView } from '../../../Content'
 import { ReportsPageSchema } from '../types/reportsPageSchema'
 import { REPORTS_VIEW_LOCALSTORAGE_KEY } from '@/shared/const/localstorage'
 import { ClientOptions } from '@/entities/User'
+import { AssistantOptions } from '@/entities/Assistants'
 
 const initialState: ReportsPageSchema = {
   page: 1,
@@ -46,6 +47,12 @@ export const reportsPageSlice = createSlice({
     },
     setUserId: (state, action: PayloadAction<string>) => {
       state.userId = action.payload
+    },
+    setAssistantId: (state, action: PayloadAction<string[]>) => {
+      state.assistantId = action.payload
+    },
+    setAssistant: (state, action: PayloadAction<AssistantOptions[]>) => {
+      state.assistants = action.payload
     },
     setUser: (state, action: PayloadAction<ClientOptions>) => {
       state.user = action.payload
