@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import {
   getReportAssistantId,
@@ -64,7 +64,16 @@ export function useReportFilters () {
     refetch()
   }, [refetch])
 
+  useEffect(() => {
+    if (data && !isLoading && !isFetching) {
+      const totalPages = Math.ceil(data.count / limit)
+      const isHasMore = page < totalPages
+      dispatch(reportsPageActions.setHasMore(isHasMore))
+    }
+  }, [data, dispatch, isLoading, isFetching, limit, page])
+
   const onLoadNext = useCallback(() => {
+    console.log('onLoadNext')
     if (data && hasMore && !isLoading && !isFetching) {
       const totalPages = Math.ceil(data.count / limit)
       const isHasMore = page < totalPages

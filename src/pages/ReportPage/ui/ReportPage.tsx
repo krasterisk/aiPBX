@@ -23,7 +23,6 @@ const reducers: ReducersList = {
 const ReportsPage = ({ className }: ReportsPageProps) => {
   const {
     view,
-
     isError,
     isLoading,
     data,
