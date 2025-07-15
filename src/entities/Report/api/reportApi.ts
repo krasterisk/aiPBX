@@ -91,6 +91,12 @@ export const reportApi = rtkApi.injectEndpoints({
       query: (id) => `/reports/${id}`,
       providesTags: (result, error, id) => [{ type: 'Reports', id }]
     }),
+    getReportDashboard: build.query<Report, QueryArgs>({
+      query: (args) => ({
+        url: '/reports/dashboard',
+        params: args
+      })
+    }),
     updateReport: build.mutation<Report, Pick<Report, 'id'> & Partial<Report>>({
       query: ({ id, ...patch }) => ({
         url: '/reports',
@@ -122,6 +128,7 @@ export const reportApi = rtkApi.injectEndpoints({
 
 export const useGetReportDialogs = reportApi.useGetReportDialogsQuery
 export const useGetReportEvents = reportApi.useGetReportEventsQuery
+export const useDashboard = reportApi.useGetReportDashboardQuery
 export const useGetReports = reportApi.useGetReportsQuery
 export const useGetAllReports = reportApi.useGetAllReportsQuery
 export const useSetReports = reportApi.useSetReportsMutation

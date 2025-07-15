@@ -7,6 +7,7 @@ import { rtkApi } from '@/shared/api/rtkApi'
 import { AssistantsPageSchema } from '@/entities/Assistants'
 import { ToolsPageSchema } from '@/entities/Tools'
 import { ReportsPageSchema } from '@/entities/Report'
+import { DashboardPageSchema } from '@/widgets/Dashboard'
 
 export interface StateSchema {
   user: UserSchema
@@ -19,6 +20,8 @@ export interface StateSchema {
   assistantsPage?: AssistantsPageSchema
   toolsPage?: ToolsPageSchema
   reportsPage?: ReportsPageSchema
+  dashboardPage?: DashboardPageSchema
+
 }
 
 export type StateSchemaKey = keyof StateSchema

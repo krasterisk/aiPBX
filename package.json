@@ -1,6 +1,6 @@
 {
   "name": "ai_pbx",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -118,13 +118,16 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@fontsource/roboto": "^5.0.8",
     "@headlessui/react": "^1.7.13",
     "@mui/icons-material": "^5.15.10",
-    "@mui/material": "^5.15.10",
-    "@mui/x-tree-view": "^7.0.0-beta.3",
+    "@mui/material": "^5.15.14",
+    "@mui/system": "^5.15.14",
+    "@mui/x-charts": "^6.19.5",
+    "@mui/x-date-pickers": "^6.8.0",
+    "@mui/x-tree-view": "^7.29.1",
     "@react-spring/web": "^9.7.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@tanstack/react-table": "^8.10.3",

@@ -36,7 +36,7 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
                 >
                     <TreeItem
                         key={node.path}
-                        nodeId={node.path}
+                        itemId={node.path}
                         label={t(node.text)}
                         onClick={!node.subItems ? () => { if (onDrawerClose) onDrawerClose() } : undefined}
                         // icon={<Icon Svg={node.Icon} />}

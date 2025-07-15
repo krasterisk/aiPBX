@@ -1,4 +1,4 @@
-export type { AllReports, Report, ReportEvent } from './model/types/report'
+export type { AllReports, Report, ReportEvent, ReportFilters } from './model/types/report'
 export type { ReportsPageSchema } from './model/types/reportsPageSchema'
 export {
   getReportsHasMore,
@@ -29,7 +29,8 @@ export {
   useSetReports,
   useUpdateReport,
   useGetReportEvents,
-  useGetReportDialogs
+  useGetReportDialogs,
+  useDashboard
 } from './api/reportApi'
 
 export { useReportFilters } from './lib/useReportFilters'

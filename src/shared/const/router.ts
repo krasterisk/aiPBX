@@ -4,6 +4,8 @@ export enum AppRoutes {
   ADMIN = 'admin',
   SETTINGS = 'settings',
   REPORTS = 'reports',
+  ONLINE = 'online',
+  DASHBOARD = 'dashboard',
   ASSISTANTS = 'assistants',
   ASSISTANT_CREATE = 'assistant_create',
   ASSISTANT_EDIT = 'assistant_edit',
@@ -24,6 +26,8 @@ export const getRouteEndpoints = () => '/endpoints'
 export const getRouteContexts = () => '/contexts'
 export const getRouteSettings = () => '/settings'
 export const getRouteAssistants = () => '/assistants'
+export const getRouteOnline = () => '/online'
+export const getRouteDashboard = () => '/dashboard'
 export const getRouteAssistantEdit = (id: string) => `/assistants/${id}`
 export const getRouteAssistantCreate = () => '/assistants/create'
 export const getRouteTools = () => '/tools'
@@ -42,6 +46,8 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteAdmin()]: AppRoutes.ADMIN,
   [getRouteSettings()]: AppRoutes.SETTINGS,
   [getRouteReports()]: AppRoutes.REPORTS,
+  [getRouteOnline()]: AppRoutes.ONLINE,
+  [getRouteDashboard()]: AppRoutes.DASHBOARD,
   [getRouteAssistants()]: AppRoutes.ASSISTANTS,
   [getRouteAssistantCreate()]: AppRoutes.ASSISTANT_CREATE,
   [getRouteAssistantEdit(':id')]: AppRoutes.ASSISTANT_EDIT,

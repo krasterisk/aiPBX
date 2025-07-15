@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux'
 import { getUserAuthData } from '@/entities/User'
 import {
-  getRouteAssistants,
-  getRouteMain,
+  getRouteAssistants, getRouteDashboard,
+  getRouteMain, getRouteOnline,
   getRouteReports,
   getRouteTools,
   getRouteUsers
@@ -26,6 +26,18 @@ export const useMenubarItems = () => {
   ]
   if (userData) {
     menubarItemsList.push(
+      {
+        path: getRouteDashboard(),
+        Icon: ManualIcon,
+        text: t('Дашбоард'),
+        authOnly: true
+      },
+      {
+        path: getRouteOnline(),
+        Icon: ManualIcon,
+        text: t('Онлайн'),
+        authOnly: true
+      },
       {
         path: getRouteAssistants(),
         Icon: ManualIcon,

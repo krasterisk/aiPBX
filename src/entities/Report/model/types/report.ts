@@ -28,6 +28,24 @@ export interface ReportsListProps {
   reports?: AllReports
 }
 
+export interface ReportFilters {
+  userId?: string
+  terminalId?: string | null
+  tab?: string
+  chartData?: ChartData[]
+  allCount?: number
+  allTokensCount?: number
+  allDurationCount?: number
+  startDate?: string | null
+  endDate?: string | null
+}
+
+export interface ChartData {
+  label?: string[]
+  allCount?: number[]
+  tokensCount?: number[]
+  durationCount?: number[]
+}
 export interface ReportEvent {
   channelId?: string
   callerId?: string
