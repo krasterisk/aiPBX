@@ -8,8 +8,6 @@ import { useSelector } from 'react-redux'
 import { getUserAuthData } from '@/entities/User'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { AvatarDropdown } from '@/features/avatarDropdown'
-import { ThemeSwitcher } from '@/entities/ThemeSwitcher'
-import { LangSwitcher } from '@/entities/LangSwitcher'
 import { IconButton, useMediaQuery } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { AppLogo } from '@/shared/ui/redesigned/AppLogo'
@@ -60,11 +58,6 @@ export const Navbar = memo(({ className }: NavbarProps) => {
                         </>
                     )}
 
-                    <ThemeSwitcher className={cls.themeSwitcher} />
-                    <LangSwitcher
-                        short={isMobile}
-                        className={cls.lang}
-                    />
                 </HStack>
 
                 <HStack gap="16" className={cls.actions}>
