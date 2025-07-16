@@ -12,6 +12,7 @@ import { Card } from '@/shared/ui/redesigned/Card'
 import { Check } from '@/shared/ui/mui/Check'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { ReportsListHeader } from '../ReportListHeader/ReportListHeader'
+import { ReportTable } from '../ReportTable/ReportTable'
 
 export const ReportList = (props: ReportsListProps) => {
   const {
@@ -105,7 +106,21 @@ export const ReportList = (props: ReportsListProps) => {
                 onChangeChecked={handleCheckChange}
                 view={view}
                 target={target}
-                className={cls.caskItem}
+                className={cls.reportItem}
+            />
+    )
+  }
+
+  const renderTableContent = (report: Report) => {
+    return (
+            <ReportTable
+                key={report.id}
+                report={report}
+                checkedItems={checkedBox}
+                onChangeChecked={handleCheckChange}
+                view={view}
+                target={target}
+                className={cls.TableItem}
             />
     )
   }
@@ -134,9 +149,26 @@ export const ReportList = (props: ReportsListProps) => {
             </Card>
 
             {reports?.rows.length
-              ? <HStack wrap={'wrap'} gap={'4'} align={'start'} max>
-                    {reports.rows.map(renderContent)}
-                </HStack>
+              ? <table className={cls.Table}>
+                <thead className={cls.TableHeader}>
+                <tr>
+                    <th className={cls.tdCheck}></th>
+                    <th>{t('Дата')}</th>
+                    <th>{t('Ассистент')}</th>
+                    <th>{t('Звонивший')}</th>
+                    <th>{t('Длительность')}</th>
+                    <th>{t('Токены')}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                    {reports.rows.map(renderTableContent)}
+                </tbody>
+                </table>
+
+            // <HStack wrap={'wrap'} gap={'4'} align={'start'} max>
+            //     {reports.rows.map(renderContent)}
+            // </HStack>
               : <HStack
                     justify={'center'} max
                     className={classNames('', {}, [className, cls[view]])}

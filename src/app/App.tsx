@@ -8,7 +8,6 @@ import { setFeatureFlags } from '@/shared/lib/features'
 import { MainLayout } from '@/shared/layouts/MainLayout'
 import { PageLoader } from '@/widgets/PageLoader'
 import { getTokenAllData } from '@/app/providers/getTokenData/getTokenData'
-import { useAppToolbar } from './lib/useAppToolbar'
 import { Menubar } from '@/widgets/Menubar'
 
 const App = (): any => {
@@ -17,7 +16,7 @@ const App = (): any => {
   const userData = useSelector(getUserAuthData)
   const authData = getTokenAllData(userData?.token)
   const redesigned = authData?.designed
-  const toolbar = useAppToolbar()
+  // const toolbar = useAppToolbar()
 
   useEffect(() => {
     dispatch(userActions.initToken())
@@ -36,7 +35,7 @@ const App = (): any => {
                                   header={<Navbar/>}
                                   content={<AppRouter/>}
                                   sidebar={<Menubar/>}
-                                  toolbar={toolbar}
+                                  // toolbar={toolbar}
                               />
                           </Suspense>
                       </div>
