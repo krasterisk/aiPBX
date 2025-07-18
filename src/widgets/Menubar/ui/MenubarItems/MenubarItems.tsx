@@ -6,6 +6,7 @@ import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { SimpleTreeView, TreeItem } from '@mui/x-tree-view'
 import { useMenubarItems } from '../../model/selectors/getMenubarItems'
 import { Drawer } from '@/shared/ui/mui/Drawer'
+import { AppLogo } from '@/shared/ui/redesigned/AppLogo'
 
 interface MenubarItemProps {
   className?: string
@@ -27,6 +28,12 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
 
   const renderTree = (nodes: MenubarItemType[]) => (
         <SimpleTreeView>
+            {isMobile &&
+                <AppLogo
+                    size={50}
+                    className={cls.appLogo}
+                />
+            }
             {nodes.map((node) => (
                 <AppLink
                     key={node.path}

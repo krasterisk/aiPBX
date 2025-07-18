@@ -12,7 +12,7 @@ interface AppLinkProps extends LinkProps {
   activeClassName?: string
 }
 
-export const AppLink = memo(forwardRef<HTMLAnchorElement, AppLinkProps>((props: AppLinkProps) => {
+export const AppLink = memo(forwardRef<HTMLAnchorElement, AppLinkProps>((props: AppLinkProps, ref) => {
   const {
     to,
     className,
@@ -25,6 +25,7 @@ export const AppLink = memo(forwardRef<HTMLAnchorElement, AppLinkProps>((props: 
   return (
         <NavLink
             to={to}
+            ref={ref}
             className={({ isActive }) =>
               classNames(cls.AppLink, { [activeClassName]: isActive }, [className, cls[variant]])}
             {...otherProps}

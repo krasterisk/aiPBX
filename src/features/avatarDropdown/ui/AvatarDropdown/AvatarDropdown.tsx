@@ -3,11 +3,10 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserAuthData, isUserAdmin, userActions } from '@/entities/User'
-import { getRouteProfile, getRouteSettings } from '@/shared/const/router'
+import { getRoutePayment, getRouteProfile } from '@/shared/const/router'
 import { Avatar } from '@/shared/ui/redesigned/Avatar'
 import { Dropdown } from '@/shared/ui/redesigned/Popups'
 import { ThemeSwitcher } from '@/entities/ThemeSwitcher'
-import { LangSwitcher } from '@/entities/LangSwitcher'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 
 interface AvatarDropdownProps {
@@ -39,19 +38,18 @@ export const AvatarDropdown = memo((props: AvatarDropdownProps) => {
       href: getRouteProfile(String(authData?.id))
     },
     {
-      content: t('Настройки'),
-      href: getRouteSettings()
-    },
-    {
-      content:
-          <HStack max justify={'between'}>
-            <LangSwitcher short={true} />
-            <ThemeSwitcher />
-          </HStack>
+      content: t('Оплата'),
+      href: getRoutePayment()
     },
     {
       content: t('Выйти'),
       onClick: onLogout
+    },
+    {
+      content:
+                <HStack max justify={'end'}>
+                    <ThemeSwitcher/>
+                </HStack>
     }
   ]
 

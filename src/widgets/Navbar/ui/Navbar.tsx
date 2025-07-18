@@ -5,13 +5,13 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { LoginModal } from '@/features/AuthByUsername'
 import { useSelector } from 'react-redux'
-import { getUserAuthData } from '@/entities/User'
+import { getUserAuthData, UserBalance } from '@/entities/User'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { AvatarDropdown } from '@/features/avatarDropdown'
 import { IconButton, useMediaQuery } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import { AppLogo } from '@/shared/ui/redesigned/AppLogo'
 import { MenubarItems } from '../../Menubar/ui/MenubarItems/MenubarItems'
+import { LangSwitcher } from '@/entities/LangSwitcher'
 
 interface NavbarProps {
   className?: string
@@ -45,11 +45,6 @@ export const Navbar = memo(({ className }: NavbarProps) => {
                             <IconButton onClick={() => { toggleDrawer(true) }}>
                                 <MenuIcon className={cls.menuButton}/>
                             </IconButton>
-                            <AppLogo
-                                width={60}
-                                height={25}
-                                className={cls.appLogo}
-                            />
                             <MenubarItems
                                 isMobile={true}
                                 openDrawer={openDrawer}
@@ -57,11 +52,12 @@ export const Navbar = memo(({ className }: NavbarProps) => {
                             />
                         </>
                     )}
-
+                    <LangSwitcher short={isMobile} />
                 </HStack>
 
                 <HStack gap="16" className={cls.actions}>
                     {/* <NotificationButton/> */}
+                    <UserBalance />
                     <AvatarDropdown/>
                 </HStack>
             </header>

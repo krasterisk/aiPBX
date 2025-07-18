@@ -52,6 +52,11 @@ export const usersApi = rtkApi.injectEndpoints({
             ]
           : [{ type: 'Users', id: 'LIST' }]
     }),
+    getUserBalance: build.query<number, null>({
+      query: () => ({
+        url: '/users/balance'
+      })
+    }),
     setUsers: build.mutation<User, User>({
       query: (arg) => ({
         url: '/users',
@@ -132,6 +137,7 @@ export const usersApi = rtkApi.injectEndpoints({
 
 export const useGetUsers = usersApi.useGetUsersQuery
 export const useGetAllUsers = usersApi.useGetAllUsersQuery
+export const useGetUserBalance = usersApi.useGetUserBalanceQuery
 export const useRegisterUser = usersApi.useRegisterUserMutation
 export const useForgotPasswordUser = usersApi.useForgotPasswordMutation
 export const useSetUsers = usersApi.useSetUsersMutation

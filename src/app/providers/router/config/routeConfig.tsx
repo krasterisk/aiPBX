@@ -19,7 +19,11 @@ import {
   getRouteUserEdit,
   getRouteTools,
   getRouteToolsCreate,
-  getRouteToolsEdit, getRouteReports, getRouteOnline, getRouteDashboard
+  getRouteToolsEdit,
+  getRouteReports,
+  getRouteOnline,
+  getRouteDashboard,
+  getRoutePayment
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 import { SettingPage } from '@/pages/SettingsPage'
@@ -29,6 +33,7 @@ import { ToolsCreatePage, ToolsEditPage, ToolsPage } from '@/pages/ToolsPage'
 import { ReportsPage } from '@/pages/ReportPage'
 import { OnlinePage } from '@/pages/OnlinePage'
 import { DashboardPage } from '@/pages/DashboardPage'
+import { PaymentPage } from '@/pages/PaymentPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -46,6 +51,12 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.DASHBOARD]: {
     path: getRouteDashboard(),
     element: <DashboardPage/>
+  },
+  [AppRoutes.PAYMENT]: {
+    path: getRoutePayment(),
+    element: <PaymentPage />,
+    authOnly: true,
+    roles: [UserRolesValues.ADMIN, UserRolesValues.USER]
   },
   [AppRoutes.REPORTS]: {
     path: getRouteReports(),

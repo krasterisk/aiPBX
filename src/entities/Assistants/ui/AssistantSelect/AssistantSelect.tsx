@@ -20,6 +20,7 @@ export const AssistantSelect = memo((props: AssistantSelectProps) => {
     value,
     onChangeAssistant,
     userId,
+    assistantId,
     ...otherProps
   } = props
 

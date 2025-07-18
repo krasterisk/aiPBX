@@ -11,7 +11,6 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { Avatar } from '@/shared/ui/redesigned/Avatar'
 import { UserAddAvatar } from '../UserAddAvatar/UserAddAvatar'
 import { Check } from '@/shared/ui/mui/Check'
-import { useTranslation } from 'react-i18next'
 
 interface UserItemProps {
   className?: string
@@ -32,7 +31,6 @@ export const UserItem = memo((props: UserItemProps) => {
     view = 'BIG'
   } = props
 
-  const { t } = useTranslation('profile')
   const isAdmin = user?.roles?.some(role => role.value === 'ADMIN')
   const isClient = !user.vpbx_user_id && !isAdmin
   const [isUserAvatarOpen, setIsUserAvatarOpen] = useState<boolean>(false)

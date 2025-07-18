@@ -31,6 +31,7 @@ export interface User {
   clientData?: string
   designed?: boolean
   avatar?: string
+  balance?: number
   token?: string
   roles?: UserRoles[]
   vpbxUser?: ClientOptions

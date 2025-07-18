@@ -33,7 +33,7 @@ export const ReportTable = memo((props: ReportTableProps) => {
     onChangeChecked
   } = props
 
-  const { t } = useTranslation('')
+  const { t } = useTranslation('reports')
 
   const [showDialog, setShowDialog] = useState(false)
 
@@ -67,14 +67,14 @@ export const ReportTable = memo((props: ReportTableProps) => {
                 <tr className={classNames(cls.ReportTableItem, {}, [className, cls[view]])}>
                     <td className={cls.tdCheck}>
                         <Check
-                            key={report.channelId}
+                            key={report.id}
                             className={classNames('', {
-                              [cls.uncheck]: !checkedItems?.includes(report.channelId),
-                              [cls.check]: checkedItems?.includes(report.channelId)
+                              [cls.uncheck]: !checkedItems?.includes(String(report.id)),
+                              [cls.check]: checkedItems?.includes(String(report.id))
                             }, [])}
-                            value={report.channelId}
+                            value={report.id}
                             size={'small'}
-                            checked={checkedItems?.includes(report.channelId)}
+                            checked={checkedItems?.includes(String(report.id))}
                             onChange={onChangeChecked}
                         />
                     </td>
