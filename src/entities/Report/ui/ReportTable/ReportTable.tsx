@@ -94,6 +94,9 @@ export const ReportTable = memo((props: ReportTableProps) => {
                         {report.tokens ? <Text text={String(report.tokens)}/> : ''}
                     </td>
                     <td>
+                        {report.cost ? <Text text={String(report.cost)}/> : ''}
+                    </td>
+                    <td>
                         <Button
                             variant={'clear'}
                             addonRight={

@@ -13,6 +13,7 @@ export interface Report {
   assistantName?: string
   assistantId?: string
   tokens?: number
+  cost?: number
   duration?: number
   events?: ReportEvent[]
   createdAt: string

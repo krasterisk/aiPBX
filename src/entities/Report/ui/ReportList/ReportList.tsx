@@ -158,6 +158,7 @@ export const ReportList = (props: ReportsListProps) => {
                     <th>{t('Звонивший')}</th>
                     <th>{t('Длительность')}</th>
                     <th>{t('Токены')}</th>
+                    <th>{t('Стоимость')}</th>
                     <th></th>
                 </tr>
                 </thead>
