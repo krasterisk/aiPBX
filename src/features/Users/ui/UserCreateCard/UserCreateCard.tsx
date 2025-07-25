@@ -7,10 +7,11 @@ import { ErrorGetData } from '@/entities/ErrorGetData'
 import {
   ClientOptions,
   ClientSelect,
+  CurrencySelect,
   getUserAuthData,
   isUserAdmin,
   RoleSelect,
-  User,
+  User, UserCurrencyValues,
   UserRoles,
   UserRolesValues
 } from '@/entities/User'
@@ -125,6 +126,13 @@ export const UserCreateCard = memo((props: UserCreateCardProps) => {
     })
   }
 
+  const createChangeCurrencyHandler = (field: keyof User) => (event: any, value: UserCurrencyValues) => {
+    setFormFields({
+      ...formFields,
+      [field]: value
+    })
+  }
+
   const createHandler = useCallback(() => {
     if (!formFields.name) {
       setUserError({ message: String(t('Введите имя!')), isError: true })
@@ -211,11 +219,18 @@ export const UserCreateCard = memo((props: UserCreateCardProps) => {
                             data-testid={'UserCard.email'}
                             value={formFields.email}
                         />
-                        {isAdmin &&
+                      <CurrencySelect
+                          label={t('Валюта') ?? ''}
+                          data-testid={'UserCard.CurrencySelect'}
+                          onChange={createChangeCurrencyHandler('currency')}
+                          value={formFields?.currency}
+                      />
+
+                      {isAdmin &&
                             <>
                                 <RoleSelect
                                     label={t('Уровень доступа') + '*' || ''}
-                                    data-testid={'UserCard.CodecSelect'}
+                                    data-testid={'UserCard.RoleSelect'}
                                     onChange={createChangeRolesHandler('roles')}
                                     value={formFields.roles?.[0]}
                                 />

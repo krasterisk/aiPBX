@@ -8,7 +8,15 @@ import { ErrorGetData } from '@/entities/ErrorGetData'
 import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
-import { isUserAdmin, RoleSelect, useGetUser, User, UserRoles } from '@/entities/User'
+import {
+  CurrencySelect,
+  isUserAdmin,
+  RoleSelect,
+  useGetUser,
+  User,
+  UserCurrencyValues,
+  UserRoles
+} from '@/entities/User'
 import { UserEditCardHeader } from '../UserEditCardHeader/UserEditCardHeader'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { useSelector } from 'react-redux'
@@ -65,6 +73,14 @@ export const UserEditCard = memo((props: UserEditCardProps) => {
       [field]: [value]
     })
   }
+
+  const editChangeCurrencyHandler = (field: keyof User) => (event: any, value: UserCurrencyValues) => {
+    setFormFields({
+      ...formFields,
+      [field]: value
+    })
+  }
+
   const editHandler = useCallback(() => {
     onEdit?.(formFields)
   }, [formFields, onEdit])
@@ -95,7 +111,7 @@ export const UserEditCard = memo((props: UserEditCardProps) => {
   }
 
   return (
-        <VStack gap={'8'} max className={classNames(cls.CaskEditCard, {}, [className])}>
+        <VStack gap={'8'} max className={classNames(cls.UserEditCard, {}, [className])}>
             <UserEditCardHeader onEdit={editHandler} onDelete={onDelete} userId={userId}/>
             {isError
               ? <ErrorGetData
@@ -150,12 +166,18 @@ export const UserEditCard = memo((props: UserEditCardProps) => {
                         data-testid={'UserCard.email'}
                         value={formFields.email || ''}
                     />
+                    <CurrencySelect
+                        value={formFields.currency}
+                        label={t('Валюта') || ''}
+                        data-testid={'UserCard.CurrencySelect'}
+                        onChange={editChangeCurrencyHandler('currency')}
+                    />
                     {isAdmin &&
                         <>
                             <RoleSelect
                                 value={formFields.roles?.[0]}
                                 label={t('Уровень доступа') || ''}
-                                data-testid={'UserCard.CodecSelect'}
+                                data-testid={'UserCard.RoleSelect'}
                                 onChange={editChangeRolesHandler('roles')}
                             />
                         </>

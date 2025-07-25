@@ -1,4 +1,4 @@
-import { UserRolesValues } from '../consts/consts'
+import { UserCurrencyValues, UserRolesValues } from '../consts/consts'
 import { ContentView } from '../../../Content'
 import { HTMLAttributeAnchorTarget } from 'react'
 
@@ -10,6 +10,11 @@ export interface ResetUserPasswordProps {
 export interface UserRoles {
   value: UserRolesValues
   descriptions: string
+}
+
+export interface UserCurrency {
+  value: UserCurrencyValues
+  descriptions?: string
 }
 
 export interface ClientOptions {
@@ -32,6 +37,7 @@ export interface User {
   designed?: boolean
   avatar?: string
   balance?: number
+  currency?: UserCurrencyValues
   token?: string
   roles?: UserRoles[]
   vpbxUser?: ClientOptions

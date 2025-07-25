@@ -6,6 +6,7 @@ import { useGetUserBalance } from '../../api/usersApi'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Loader } from '@/shared/ui/Loader'
 import { Text } from '@/shared/ui/redesigned/Text'
+import { balanceWarnings, currencySymbols, UserCurrencyValues } from '../../model/consts/consts'
 
 interface UserBalanceProps {
   className?: string
@@ -27,11 +28,23 @@ export const UserBalance = memo((props: UserBalanceProps) => {
       refetchOnFocus: true,
       refetchOnReconnect: true
     })
+  const currency = currencySymbols[balance?.currency as UserCurrencyValues] || ''
+
+  const balanceWarningCount = balanceWarnings[balance?.currency as UserCurrencyValues] || ''
+
+  const formattedBalance = balance
+    ? `${currency}${balance.balance} `
+    : ''
+
+  const balanceWarning = balance && balance?.balance > balanceWarningCount
+    ? 'primary'
+    : 'error'
 
   return (
         <HStack max justify={'center'} className={classNames(cls.UserBalance, {}, [className])}>
             {isLoading && <Loader/>}
-            <Text title={t('Баланс')} text={String(balance)}/>
+            <Text text={t('Баланс') + ': '} />
+            <Text text={formattedBalance} bold variant={balanceWarning}/>
         </HStack>
   )
 })

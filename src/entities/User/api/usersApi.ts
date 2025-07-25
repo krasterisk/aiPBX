@@ -52,7 +52,7 @@ export const usersApi = rtkApi.injectEndpoints({
             ]
           : [{ type: 'Users', id: 'LIST' }]
     }),
-    getUserBalance: build.query<number, null>({
+    getUserBalance: build.query<{ balance: number, currency: string }, null>({
       query: () => ({
         url: '/users/balance'
       })
