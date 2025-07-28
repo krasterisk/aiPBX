@@ -3,7 +3,7 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserAuthData, isUserAdmin, userActions } from '@/entities/User'
-import { getRoutePayment, getRouteProfile } from '@/shared/const/router'
+import { getRoutePayment, getRouteUserEdit } from '@/shared/const/router'
 import { Avatar } from '@/shared/ui/redesigned/Avatar'
 import { Dropdown } from '@/shared/ui/redesigned/Popups'
 import { ThemeSwitcher } from '@/entities/ThemeSwitcher'
@@ -35,7 +35,7 @@ export const AvatarDropdown = memo((props: AvatarDropdownProps) => {
     //   : []),
     {
       content: t('Профиль'),
-      href: getRouteProfile(String(authData?.id))
+      href: getRouteUserEdit(String(authData?.id))
     },
     {
       content: t('Оплата'),
