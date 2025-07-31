@@ -18,6 +18,7 @@ export default (env: buildEnv) => {
   const PORT = env?.port || 3000
   const apiUrl = env?.apiUrl || 'http://192.168.2.37:5005/api'
   const wsUrl = env?.wsUrl || 'ws://192.168.2.37:3033'
+  const staticUrl = env?.staticUrl || 'http://localhost:5005/'
 
   const config: webpack.Configuration = buildWebpackConfig({
     mode,
@@ -26,7 +27,8 @@ export default (env: buildEnv) => {
     port: PORT,
     apiUrl,
     wsUrl,
-    project: 'frontend'
+    project: 'frontend',
+    staticUrl
   })
 
   return config

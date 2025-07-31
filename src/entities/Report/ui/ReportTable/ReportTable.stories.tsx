@@ -1,16 +1,16 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { RebortTable } from './ReportTable'
+import { ReportTable } from './ReportTable'
 
 export default {
-  title: 'shared/RebortTable',
-  component: RebortTable,
+  title: 'entities/ReportTable',
+  component: ReportTable,
   argTypes: {
     backgroundColor: { control: 'color' }
   }
-} as ComponentMeta<typeof RebortTable>
+} as ComponentMeta<typeof ReportTable>
 
-const Template: ComponentStory<typeof RebortTable> = (args) => <RebortTable {...args} />
+const Template: ComponentStory<typeof ReportTable> = (args) => <ReportTable {...args} />
 
 export const Normal = Template.bind({})
 Normal.args = {}

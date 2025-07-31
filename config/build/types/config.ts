@@ -18,6 +18,7 @@ export interface buildOptions {
   apiUrl: string
   wsUrl: string
   project: 'storybook' | 'frontend' | 'jest'
+  staticUrl: string
 }
 
 export interface buildEnv {
@@ -25,4 +26,5 @@ export interface buildEnv {
   port: number
   apiUrl: string
   wsUrl: string
+  staticUrl: string
 }

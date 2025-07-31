@@ -14,6 +14,7 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { useGetReportDialogs } from '../../api/reportApi'
 import { Loader } from '@/shared/ui/Loader'
 import { Divider } from '@/shared/ui/Divider'
+import { MediaPlayer } from '@/shared/ui/MediaPlayer'
 
 interface ReportTableProps {
   className?: string
@@ -62,6 +63,8 @@ export const ReportTable = memo((props: ReportTableProps) => {
     setShowDialog(prev => !prev)
   }, [])
 
+  const mediaUrl = __STATIC__ + 'audio_mixed_' + report.channelId + '.wav'
+
   return (
             <>
                 <tr className={classNames(cls.ReportTableItem, {}, [className, cls[view]])}>
@@ -94,7 +97,7 @@ export const ReportTable = memo((props: ReportTableProps) => {
                         {report.tokens ? <Text text={String(report.tokens)}/> : ''}
                     </td>
                     <td>
-                        {report.cost ? <Text text={String(report.cost)}/> : ''}
+                        {report.cost ? <Text text={String(report.cost) + ' р.'}/> : ''}
                     </td>
                     <td>
                         <Button
@@ -124,10 +127,11 @@ export const ReportTable = memo((props: ReportTableProps) => {
                                         <Text text={t('Ошибка при загрузке диалога')} variant="error"/>
                                     </HStack>
                                 }
-                                {Dialogs?.length === 0 &&
-                                    <HStack max justify={'center'}>
+                                {Dialogs?.length === 0
+                                  ? <HStack max justify={'center'}>
                                         <Text text={t('Диалог отсутствует')}/>
                                     </HStack>
+                                  : <MediaPlayer src={mediaUrl} />
                                 }
 
                                 {Dialogs?.map((dialog, index) => (

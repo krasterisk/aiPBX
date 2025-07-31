@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { PaymentPage } from './PaymentPage'
+import PaymentPage from './PaymentPage'
 
 export default {
   title: 'shared/PaymentPage',
@@ -10,7 +10,7 @@ export default {
   }
 } as ComponentMeta<typeof PaymentPage>
 
-const Template: ComponentStory<typeof PaymentPage> = (args) => <PaymentPage {...args} />
+const Template: ComponentStory<typeof PaymentPage> = (args) => <PaymentPage />
 
 export const Normal = Template.bind({})
 Normal.args = {}
