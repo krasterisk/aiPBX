@@ -136,7 +136,7 @@ export const ReportList = (props: ReportsListProps) => {
                           [cls.check]: checkedBox.length > 0
                         }, [])}
                         indeterminate={indeterminateBox}
-                        checked={checkedBox.length === reports?.count}
+                        // checked={checkedBox.length === reports?.count}
                         onChange={handleCheckAll}
                     />
                     {checkedButtons}

@@ -15,6 +15,7 @@ import { useGetReportDialogs } from '../../api/reportApi'
 import { Loader } from '@/shared/ui/Loader'
 import { Divider } from '@/shared/ui/Divider'
 import { MediaPlayer } from '@/shared/ui/MediaPlayer'
+import { formatTime } from '@/shared/lib/functions/formatTime'
 
 interface ReportTableProps {
   className?: string
@@ -64,6 +65,7 @@ export const ReportTable = memo((props: ReportTableProps) => {
   }, [])
 
   const mediaUrl = __STATIC__ + 'audio_mixed_' + report.channelId + '.wav'
+  const duration = report.duration ? formatTime(report.duration, t) : ''
 
   return (
             <>
@@ -91,7 +93,7 @@ export const ReportTable = memo((props: ReportTableProps) => {
                         {report.callerId ? <Text text={report.callerId}/> : ''}
                     </td>
                     <td>
-                        {report.duration ? <Text text={String(report.duration)}/> : ''}
+                        <Text text={String(duration)} />
                     </td>
                     <td>
                         {report.tokens ? <Text text={String(report.tokens)}/> : ''}
