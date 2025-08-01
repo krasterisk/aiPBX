@@ -13,6 +13,10 @@ import { Check } from '@/shared/ui/mui/Check'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { ReportsListHeader } from '../ReportListHeader/ReportListHeader'
 import { ReportTable } from '../ReportTable/ReportTable'
+import * as XLSX from 'xlsx'
+import FileSaver from 'file-saver'
+import { formatDate } from '@/shared/lib/functions/formatDate'
+import { formatTime } from '@/shared/lib/functions/formatTime'
 
 export const ReportList = (props: ReportsListProps) => {
   const {
@@ -46,9 +50,30 @@ export const ReportList = (props: ReportsListProps) => {
     })
   }
 
-  const handleHistoryShow = useCallback((channelId: string) => {
+  const exportToExcel = () => {
+    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+    const fileExtension = '.xlsx'
 
-  }, [])
+    if (reports) {
+      const exportData = reports.rows.map((report, index) => ({
+        '№п/п': index + 1,
+        Date: report.createdAt ? formatDate(report.createdAt) : '',
+        'Assistant:': report.assistantName,
+        'CallerId:': report.callerId ? report.callerId : '',
+        'Duration:': report.duration && formatTime(report.duration, t),
+        'Tokens:': report.tokens && report.tokens,
+        'Cost:': report.cost && report.cost
+      }))
+
+      const ws = XLSX.utils.json_to_sheet(exportData)
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, ws, 'data')
+      // Сохранение книги в формате Excel
+      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
+      const data = new Blob([excelBuffer], { type: fileType })
+      FileSaver.saveAs(data, 'reports_list' + fileExtension)
+    }
+  }
 
   const handleCheckAll = useCallback(() => {
     if (indeterminateBox && reports?.count && checkedBox.length > 0) {
@@ -91,6 +116,7 @@ export const ReportList = (props: ReportsListProps) => {
         >
             <Button
                 variant={'clear'}
+                onClick={exportToExcel}
             >
                 <Text text={t('Выгрузить в Excel')} variant={'accent'}/>
             </Button>
@@ -127,7 +153,7 @@ export const ReportList = (props: ReportsListProps) => {
 
   return (
         <VStack gap={'16'} max>
-            <ReportsListHeader />
+            <ReportsListHeader/>
             <Card max className={classNames(cls.ReportList, {}, [className])}>
                 <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
                     <Check
@@ -142,29 +168,33 @@ export const ReportList = (props: ReportsListProps) => {
                     {checkedButtons}
                     {
                         checkedBox.length > 0
-                          ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(reports?.count)}/>
-                          : <Text text={t('Всего') + ': ' + String(reports?.count || 0)}/>
+                          ? <Text
+                                text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(reports?.count)}/>
+                          : <HStack gap={'8'}>
+                                <Text text={t('Всего') + ': ' + String(reports?.count || 0)}/>
+                                <Text text={t('на сумму') + ': ' + String(reports?.totalCost || 0)}/>
+                            </HStack>
                     }
                 </HStack>
             </Card>
 
             {reports?.rows.length
               ? <table className={cls.Table}>
-                <thead className={cls.TableHeader}>
-                <tr>
-                    <th className={cls.tdCheck}></th>
-                    <th>{t('Дата')}</th>
-                    <th>{t('Ассистент')}</th>
-                    <th>{t('Звонивший')}</th>
-                    <th>{t('Длительность')}</th>
-                    <th>{t('Токены')}</th>
-                    <th>{t('Стоимость')}</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
+                    <thead className={cls.TableHeader}>
+                    <tr>
+                        <th className={cls.tdCheck}></th>
+                        <th>{t('Дата')}</th>
+                        <th>{t('Ассистент')}</th>
+                        <th>{t('Звонивший')}</th>
+                        <th>{t('Длительность')}</th>
+                        <th>{t('Токены')}</th>
+                        <th>{t('Стоимость')}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     {reports.rows.map(renderTableContent)}
-                </tbody>
+                    </tbody>
                 </table>
 
             // <HStack wrap={'wrap'} gap={'4'} align={'start'} max>

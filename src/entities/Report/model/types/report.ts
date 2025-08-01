@@ -3,6 +3,7 @@ import { ContentView } from '@/entities/Content'
 
 export interface AllReports {
   count: number
+  totalCost: number
   rows: Report[]
 }
 

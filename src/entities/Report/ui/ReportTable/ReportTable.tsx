@@ -66,6 +66,7 @@ export const ReportTable = memo((props: ReportTableProps) => {
 
   const mediaUrl = __STATIC__ + 'audio_mixed_' + report.channelId + '.wav'
   const duration = report.duration ? formatTime(report.duration, t) : ''
+  const formattedCost = report.cost ? parseFloat((report.cost || 0).toFixed(2)) : 0
 
   return (
             <>
@@ -99,7 +100,7 @@ export const ReportTable = memo((props: ReportTableProps) => {
                         {report.tokens ? <Text text={String(report.tokens)}/> : ''}
                     </td>
                     <td>
-                        {report.cost ? <Text text={String(report.cost) + ' р.'}/> : ''}
+                        {report.cost ? <Text text={String(formattedCost) + ' р.'}/> : ''}
                     </td>
                     <td>
                         <Button
