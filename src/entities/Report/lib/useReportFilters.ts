@@ -4,11 +4,13 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch
 import {
   getReportAssistantId,
   getReportEndDate,
-  getReportsHasMore, getReportsInited,
+  getReportsHasMore,
+  getReportsInited,
   getReportsPageLimit,
   getReportsPageNum,
   getReportsPageSearch,
   getReportsPageView,
+  getReportsPageManualView,
   getReportsTab,
   getReportStartDate,
   getReportUserId
@@ -25,6 +27,7 @@ export function useReportFilters () {
   const limit = useSelector(getReportsPageLimit)
   const hasMore = useSelector(getReportsHasMore)
   const view = useSelector(getReportsPageView)
+  const manualView = useSelector(getReportsPageManualView)
   const tab = useSelector(getReportsTab)
   const search = useSelector(getReportsPageSearch)
   const startDate = useSelector(getReportStartDate)
@@ -86,6 +89,7 @@ export function useReportFilters () {
 
   const onChangeView = useCallback((view: ContentView) => {
     dispatch(reportsPageActions.setView(view))
+    dispatch(reportsPageActions.setManualView(true))
   }, [dispatch])
 
   const debouncedSearch = useDebounce((search: string) => { setNewSearch(search) }, 500)
@@ -141,6 +145,7 @@ export function useReportFilters () {
     page,
     limit,
     view,
+    manualView,
     search,
     startDate,
     endDate,

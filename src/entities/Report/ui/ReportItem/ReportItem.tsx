@@ -14,6 +14,9 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { useGetReportDialogs } from '../../api/reportApi'
 import { Loader } from '@/shared/ui/Loader'
 import { Divider } from '@/shared/ui/Divider'
+import { formatTime } from '@/shared/lib/functions/formatTime'
+import { MediaPlayer } from '@/shared/ui/MediaPlayer'
+import { useMediaQuery } from '@mui/material'
 
 interface ReportItemProps {
   className?: string
@@ -60,40 +63,60 @@ export const ReportItem = memo((props: ReportItemProps) => {
   const onHistoryHandle = useCallback(() => {
     setShowDialog(prev => !prev)
   }, [])
+  const mediaUrl = __STATIC__ + 'audio_mixed_' + report.channelId + '.wav'
+  const duration = report.duration ? formatTime(report.duration, t) : ''
+  const formattedCost = report.cost ? parseFloat((report.cost || 0).toFixed(2)) : 0
+  const isMobile = useMediaQuery('(max-width:800px)')
+  const viewMode = isMobile ? 'MOBILE' : cls[view]
 
-  if (view === 'BIG') {
-    return (
-                <Card
-                    border={'partial'}
-                    variant={'outlined'}
-                    padding={'16'}
-                    max
-                    className={classNames(cls.ReportItem, {}, [className, cls[view]])}
-                >
-                    <Check
-                        key={report.channelId}
-                        className={classNames('', {
-                          [cls.uncheck]: !checkedItems?.includes(report.channelId),
-                          [cls.check]: checkedItems?.includes(report.channelId)
-                        }, [])}
-                        value={report.channelId}
-                        size={'small'}
-                        checked={checkedItems?.includes(report.channelId)}
-                        onChange={onChangeChecked}
-                    />
-                    <HStack gap={'24'} wrap={'wrap'} justify={'between'} max>
-                        <VStack gap={'8'}>
-                            {report.createdAt ? <Text text={formattedDate}/> : ''}
-                            {report.assistantName ? <Text text={report.assistantName}/> : ''}
-                        </VStack>
-                        <VStack gap={'8'}>
-                            {report.callerId ? <Text text={report.callerId}/> : ''}
-                            {report.duration ? <Text text={String(report.duration)}/> : ''}
-                        </VStack>
-                        <VStack gap={'8'}>
-                            <Text text={t('Токены')}/>
-                            {report.tokens ? <Text text={String(report.tokens)}/> : ''}
-                        </VStack>
+  return (
+            <Card
+                border={'partial'}
+                variant={'outlined'}
+                padding={'16'}
+                max
+                className={classNames(cls.ReportItem, {}, [className, viewMode])}
+            >
+                <Check
+                    key={report.channelId}
+                    className={classNames('', {
+                      [cls.uncheck]: !checkedItems?.includes(report.channelId),
+                      [cls.check]: checkedItems?.includes(report.channelId)
+                    }, [])}
+                    value={report.channelId}
+                    size={'small'}
+                    checked={checkedItems?.includes(report.channelId)}
+                    onChange={onChangeChecked}
+                />
+                <VStack gap={'8'} wrap={'wrap'} justify={'between'} max>
+                    {report.createdAt ? <Text text={formattedDate} bold/> : ''}
+                    {report.assistantName ? <Text text={report.assistantName}/> : ''}
+                    {report.callerId &&
+                        <HStack gap={'8'} wrap={'wrap'}>
+                            <Text text={t('Звонивший') + ':'} bold/>
+                            <Text text={report.callerId}/>
+                        </HStack>
+                    }
+                    {report.duration &&
+                        <HStack gap={'8'} wrap={'wrap'}>
+                            <Text text={t('Длительность') + ':'} bold/>
+                            <Text text={String(duration)}/>
+                        </HStack>
+                    }
+
+                    {report.tokens &&
+                        <HStack gap={'8'} wrap={'wrap'}>
+                            <Text text={t('Токены') + ':'} bold/>
+                            <Text text={String(report.tokens)}/>
+                        </HStack>
+                    }
+                    {formattedCost > 0 &&
+                        <HStack gap={'8'} wrap={'wrap'}>
+                            <Text text={t('Стоимость') + ':'} bold/>
+                            <Text text={String(formattedCost)}/>
+                        </HStack>
+                    }
+                    <HStack max justify={'end'}>
                         <Button
                             variant={'clear'}
                             addonRight={
@@ -104,87 +127,56 @@ export const ReportItem = memo((props: ReportItemProps) => {
                             onClick={onHistoryHandle}
                         />
                     </HStack>
-                    {showDialog && (
-                        <VStack gap="24" className={cls.eventsContainer} wrap={'wrap'}>
-                            <Divider/>
-
-                            {isDialogLoading &&
-                                <HStack max justify={'center'}>
-                                    <Loader/>
-                                </HStack>
-                            }
-                            {isDialogError &&
-                                <HStack max justify={'center'}>
-                                    <Text text={t('Ошибка при загрузке диалога')} variant="error"/>
-                                </HStack>
-                            }
-                            {Dialogs?.length === 0 &&
-                                <HStack max justify={'center'}>
-                                    <Text text={t('Диалог отсутствует')}/>
-                                </HStack>
-                            }
-
-                            {Dialogs?.map((dialog, index) => (
-                                <HStack
-                                    key={index}
-                                    gap={'16'}
-                                    justify={'between'} max
-                                >
-
-                                    <VStack
-                                        gap={'4'}
-                                        justify={'start'}
-                                    >
-                                        <Text
-                                            text={dialog.timestamp}
-                                        />
-                                        <Text
-                                            text={dialog.role}
-                                            variant={dialog.role === 'User' ? 'accent' : 'success'}
-                                            size={'m'}
-                                        />
-                                    </VStack>
-
-                                    <Card border={'partial'} variant={dialog.role === 'User' ? 'outlined' : 'success'}>
-                                        <Text text={dialog.text}/>
-                                    </Card>
-                                </HStack>
-                            ))}
-                        </VStack>
-                    )}
-                </Card>
-    )
-  }
-
-  return (
-            <Card
-                padding={'24'}
-                border={'partial'}
-                className={classNames(cls.ReportItem, {}, [className, cls[view]])}
-            >
-                <VStack
-                    gap={'8'}
-                    justify={'start'}
-                >
-
-                    <Check
-                        key={String(report.id)}
-                        className={classNames('', {
-                          [cls.uncheck]: !checkedItems?.includes(String(report.id)),
-                          [cls.check]: checkedItems?.includes(String(report.id))
-                        }, [])}
-                        value={String(report.id)}
-                        size={'small'}
-                        checked={checkedItems?.includes(String(report.id))}
-                        onChange={onChangeChecked}
-                    />
-                    {report.createdAt ? <Text text={report.createdAt}/> : ''}
-                    {report.assistantName ? <Text text={report.callerId}/> : ''}
-                    {report.callerId ? <Text text={report.callerId}/> : ''}
-                    {report.duration ? <Text text={String(report.duration)}/> : ''}
-                    <Text text={t('Токены')}/>
-                    {report.tokens ? <Text text={String(report.tokens)}/> : ''}
                 </VStack>
+                {showDialog && (
+                    <VStack gap="24" className={cls.eventsContainer} wrap={'wrap'}>
+                        <Divider/>
+
+                        {isDialogLoading &&
+                            <HStack max justify={'center'}>
+                                <Loader/>
+                            </HStack>
+                        }
+                        {isDialogError &&
+                            <HStack max justify={'center'}>
+                                <Text text={t('Ошибка при загрузке диалога')} variant="error"/>
+                            </HStack>
+                        }
+                        {Dialogs?.length === 0
+                          ? <HStack max justify={'center'}>
+                                <Text text={t('Диалог отсутствует')}/>
+                            </HStack>
+                          : <MediaPlayer src={mediaUrl}/>
+                        }
+
+                        {Dialogs?.map((dialog, index) => (
+                            <HStack
+                                key={index}
+                                gap={'16'}
+                                justify={'between'} max
+                            >
+
+                                <VStack
+                                    gap={'4'}
+                                    justify={'start'}
+                                >
+                                    <Text
+                                        text={dialog.timestamp}
+                                    />
+                                    <Text
+                                        text={dialog.role}
+                                        variant={dialog.role === 'User' ? 'accent' : 'success'}
+                                        size={'m'}
+                                    />
+                                </VStack>
+
+                                <Card border={'partial'} variant={dialog.role === 'User' ? 'outlined' : 'success'}>
+                                    <Text text={dialog.text}/>
+                                </Card>
+                            </HStack>
+                        ))}
+                    </VStack>
+                )}
             </Card>
   )
 }

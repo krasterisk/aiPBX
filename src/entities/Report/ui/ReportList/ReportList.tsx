@@ -179,27 +179,30 @@ export const ReportList = (props: ReportsListProps) => {
             </Card>
 
             {reports?.rows.length
-              ? <table className={cls.Table}>
-                    <thead className={cls.TableHeader}>
-                    <tr>
-                        <th className={cls.tdCheck}></th>
-                        <th>{t('Дата')}</th>
-                        <th>{t('Ассистент')}</th>
-                        <th>{t('Звонивший')}</th>
-                        <th>{t('Длительность')}</th>
-                        <th>{t('Токены')}</th>
-                        <th>{t('Стоимость')}</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {reports.rows.map(renderTableContent)}
-                    </tbody>
-                </table>
-
-            // <HStack wrap={'wrap'} gap={'4'} align={'start'} max>
-            //     {reports.rows.map(renderContent)}
-            // </HStack>
+              ? <>
+                    {view === 'BIG'
+                      ? <table className={cls.Table}>
+                            <thead className={cls.TableHeader}>
+                            <tr>
+                                <th className={cls.tdCheck}></th>
+                                <th>{t('Дата')}</th>
+                                <th>{t('Ассистент')}</th>
+                                <th>{t('Звонивший')}</th>
+                                <th>{t('Длительность')}</th>
+                                <th>{t('Токены')}</th>
+                                <th>{t('Стоимость')}</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {reports.rows.map(renderTableContent)}
+                            </tbody>
+                        </table>
+                      : <HStack wrap={'wrap'} gap={'4'} align={'start'} max>
+                            {reports.rows.map(renderContent)}
+                        </HStack>
+                    }
+                </>
               : <HStack
                     justify={'center'} max
                     className={classNames('', {}, [className, cls[view]])}

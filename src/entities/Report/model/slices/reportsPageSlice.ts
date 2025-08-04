@@ -10,7 +10,8 @@ const initialState: ReportsPageSchema = {
   limit: 250,
   hasMore: true,
   // filters
-  view: 'SMALL',
+  view: 'BIG',
+  manualView: false,
   _inited: false,
   search: '',
   userId: ''
@@ -24,6 +25,10 @@ export const reportsPageSlice = createSlice({
       state.view = action.payload
       localStorage.setItem(REPORTS_VIEW_LOCALSTORAGE_KEY, action.payload)
     },
+    setManualView: (state, action: PayloadAction<boolean>) => {
+      state.manualView = action.payload
+    },
+
     setPage: (state, action: PayloadAction<number>) => {
       state.page = action.payload
     },
@@ -61,6 +66,7 @@ export const reportsPageSlice = createSlice({
     initState: (state) => {
       const view = localStorage.getItem(REPORTS_VIEW_LOCALSTORAGE_KEY) as ContentView
       state.view = view
+      state.manualView = false
       state.limit = view === 'BIG' ? 25 : 25
       state._inited = true
     }

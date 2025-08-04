@@ -1,16 +1,17 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ReportPage.module.scss'
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitialEffect'
 import { Page } from '@/widgets/Page'
 import {
   initReportsPage,
-  ReportList,
+  ReportList, reportsPageActions,
   reportsPageReducer,
   useReportFilters
 } from '@/entities/Report'
+import { useMediaQuery } from '@mui/material'
 
 interface ReportsPageProps {
   className?: string
@@ -23,6 +24,7 @@ const reducers: ReducersList = {
 const ReportsPage = ({ className }: ReportsPageProps) => {
   const {
     view,
+    manualView,
     isError,
     isLoading,
     data,
@@ -31,6 +33,7 @@ const ReportsPage = ({ className }: ReportsPageProps) => {
   } = useReportFilters()
 
   const dispatch = useAppDispatch()
+  const isMobile = useMediaQuery('(max-width:800px)')
 
   const onLoadNextPart = useCallback(() => {
     if (hasMore) {
@@ -41,6 +44,18 @@ const ReportsPage = ({ className }: ReportsPageProps) => {
   useInitialEffect(() => {
     dispatch(initReportsPage())
   })
+
+  console.log(isMobile)
+
+  useEffect(() => {
+    if (!manualView) {
+      if (isMobile) {
+        dispatch(reportsPageActions.setView('SMALL'))
+      } else {
+        dispatch(reportsPageActions.setView('BIG'))
+      }
+    }
+  }, [dispatch, isMobile, manualView, view])
 
   const content = (
         <Page

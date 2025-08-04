@@ -14,6 +14,7 @@ export interface ReportsPageSchema {
   startDate?: string
   endDate?: string
   view: ContentView
+  manualView: boolean
   _inited?: boolean
   refreshOnFocus?: boolean
   search: string

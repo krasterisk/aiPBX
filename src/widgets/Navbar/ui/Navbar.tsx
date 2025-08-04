@@ -46,7 +46,7 @@ export const Navbar = memo(({ className }: NavbarProps) => {
                                 <MenuIcon className={cls.menuButton}/>
                             </IconButton>
                             <MenubarItems
-                                isMobile={true}
+                                isMobile={isMobile}
                                 openDrawer={openDrawer}
                                 onDrawerClose={() => { toggleDrawer(false) }}
                             />

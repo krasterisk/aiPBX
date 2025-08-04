@@ -8,7 +8,7 @@
 
         .uncheck {
             position: absolute;
-            left: 0;
+            right: 0;
             top: 0;
             display: flex;
             color: var(--icon-redesigned);
@@ -27,7 +27,7 @@
         position: absolute;
         display: none;
         color: var(--icon-redesigned);
-        left: 0;
+        right: 0;
         top: 0;
     }
 
@@ -35,7 +35,7 @@
         position: absolute;
         display: flex;
         color: var(--icon-redesigned);
-        left: 0;
+        right: 0;
         top: 0;
     }
 
@@ -60,7 +60,6 @@
         flex-direction: column;
         gap: 8px;
 
-
         .img {
             width: 100%;
             object-fit: cover;
@@ -71,8 +70,12 @@
         .info {
             padding: 8px;
         }
+    }
 
-
+    &.MOBILE {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
     }
 }
 

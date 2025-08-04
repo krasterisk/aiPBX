@@ -16,6 +16,7 @@ import { Loader } from '@/shared/ui/Loader'
 import { Divider } from '@/shared/ui/Divider'
 import { MediaPlayer } from '@/shared/ui/MediaPlayer'
 import { formatTime } from '@/shared/lib/functions/formatTime'
+import { useMediaQuery } from '@mui/material'
 
 interface ReportTableProps {
   className?: string
@@ -67,10 +68,13 @@ export const ReportTable = memo((props: ReportTableProps) => {
   const mediaUrl = __STATIC__ + 'audio_mixed_' + report.channelId + '.wav'
   const duration = report.duration ? formatTime(report.duration, t) : ''
   const formattedCost = report.cost ? parseFloat((report.cost || 0).toFixed(2)) : 0
+  const isMobile = useMediaQuery('(max-width:800px)')
+
+  const viewMode = isMobile ? 'SMALL' : cls[view]
 
   return (
             <>
-                <tr className={classNames(cls.ReportTableItem, {}, [className, cls[view]])}>
+                <tr className={classNames(cls.ReportTableItem, {}, [className, viewMode])}>
                     <td className={cls.tdCheck}>
                         <Check
                             key={report.id}
