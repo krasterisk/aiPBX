@@ -3,6 +3,7 @@ import { memo } from 'react'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { ReportFilters } from '@/entities/Report'
+import { formatTime } from '@/shared/lib/functions/formatTime'
 
 interface SummaryCardProps {
   className?: string
@@ -15,13 +16,20 @@ export const SummaryCard = memo((props: SummaryCardProps) => {
     graphData
   } = props
 
-  const { t } = useTranslation('assistants')
+  const { t } = useTranslation('reports')
+
+  const formattedRings = graphData?.allCount ? graphData.allCount : 0
+  const formattedDuration = graphData?.allDurationCount ? formatTime(graphData.allDurationCount, t) : ''
+  const formattedTokens = graphData?.allTokensCount ? graphData.allTokensCount : 0
+  const formattedCost = graphData?.allCost ? parseFloat((graphData.allCost || 0).toFixed(2)) : 0
 
   return (
         <VStack gap={'4'}>
-            <Text text={t('Всего звонков за период') + ': ' + String(graphData?.allCount)}/>
-            <Text text={t('Всего токенов') + ': ' + String(graphData?.allTokensCount)}/>
-            <Text text={t('Всего длительность') + ': ' + String(graphData?.allDurationCount)}/>
+            <Text text={t('Всего за период') + ': '} bold/>
+            <Text text={t('Звонков') + ': ' + String(formattedRings)}/>
+            <Text text={t('Длительность') + ': ' + String(formattedDuration)}/>
+            <Text text={t('Токенов') + ': ' + String(formattedTokens)}/>
+            <Text text={t('Стоимость') + ': ' + String(formattedCost)}/>
         </VStack>
   )
 })

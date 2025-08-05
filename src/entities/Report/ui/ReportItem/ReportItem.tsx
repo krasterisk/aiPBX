@@ -12,11 +12,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useGetReportDialogs } from '../../api/reportApi'
-import { Loader } from '@/shared/ui/Loader'
-import { Divider } from '@/shared/ui/Divider'
 import { formatTime } from '@/shared/lib/functions/formatTime'
-import { MediaPlayer } from '@/shared/ui/MediaPlayer'
 import { useMediaQuery } from '@mui/material'
+import { ReportShowDialog } from '../ReportShowDialog/ReportShowDialog'
 
 interface ReportItemProps {
   className?: string
@@ -128,55 +126,14 @@ export const ReportItem = memo((props: ReportItemProps) => {
                         />
                     </HStack>
                 </VStack>
-                {showDialog && (
-                    <VStack gap="24" className={cls.eventsContainer} wrap={'wrap'}>
-                        <Divider/>
-
-                        {isDialogLoading &&
-                            <HStack max justify={'center'}>
-                                <Loader/>
-                            </HStack>
-                        }
-                        {isDialogError &&
-                            <HStack max justify={'center'}>
-                                <Text text={t('Ошибка при загрузке диалога')} variant="error"/>
-                            </HStack>
-                        }
-                        {Dialogs?.length === 0
-                          ? <HStack max justify={'center'}>
-                                <Text text={t('Диалог отсутствует')}/>
-                            </HStack>
-                          : <MediaPlayer src={mediaUrl}/>
-                        }
-
-                        {Dialogs?.map((dialog, index) => (
-                            <HStack
-                                key={index}
-                                gap={'16'}
-                                justify={'between'} max
-                            >
-
-                                <VStack
-                                    gap={'4'}
-                                    justify={'start'}
-                                >
-                                    <Text
-                                        text={dialog.timestamp}
-                                    />
-                                    <Text
-                                        text={dialog.role}
-                                        variant={dialog.role === 'User' ? 'accent' : 'success'}
-                                        size={'m'}
-                                    />
-                                </VStack>
-
-                                <Card border={'partial'} variant={dialog.role === 'User' ? 'outlined' : 'success'}>
-                                    <Text text={dialog.text}/>
-                                </Card>
-                            </HStack>
-                        ))}
-                    </VStack>
-                )}
+                {showDialog &&
+                    <ReportShowDialog
+                        isDialogLoading={isDialogLoading}
+                        isDialogError={isDialogError}
+                        Dialogs={Dialogs}
+                        mediaUrl={mediaUrl}
+                    />
+                }
             </Card>
   )
 }

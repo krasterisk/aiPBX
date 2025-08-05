@@ -2,8 +2,6 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ReportTable.module.scss'
 import React, { HTMLAttributeAnchorTarget, memo, useCallback, useState } from 'react'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
-import { Card } from '@/shared/ui/redesigned/Card'
 import { ContentView } from '@/entities/Content'
 import { Check } from '@/shared/ui/mui/Check'
 import { Report } from '../../model/types/report'
@@ -12,11 +10,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useGetReportDialogs } from '../../api/reportApi'
-import { Loader } from '@/shared/ui/Loader'
-import { Divider } from '@/shared/ui/Divider'
-import { MediaPlayer } from '@/shared/ui/MediaPlayer'
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { useMediaQuery } from '@mui/material'
+import { ReportShowDialog } from '../ReportShowDialog/ReportShowDialog'
 
 interface ReportTableProps {
   className?: string
@@ -121,54 +117,12 @@ export const ReportTable = memo((props: ReportTableProps) => {
                 {showDialog && (
                     <tr>
                         <td colSpan={7}>
-                            <VStack gap="24" className={cls.eventsContainer} wrap={'wrap'}>
-                                <Divider/>
-
-                                {isDialogLoading &&
-                                    <HStack max justify={'center'}>
-                                        <Loader/>
-                                    </HStack>
-                                }
-                                {isDialogError &&
-                                    <HStack max justify={'center'}>
-                                        <Text text={t('Ошибка при загрузке диалога')} variant="error"/>
-                                    </HStack>
-                                }
-                                {Dialogs?.length === 0
-                                  ? <HStack max justify={'center'}>
-                                        <Text text={t('Диалог отсутствует')}/>
-                                    </HStack>
-                                  : <MediaPlayer src={mediaUrl} />
-                                }
-
-                                {Dialogs?.map((dialog, index) => (
-                                    <HStack
-                                        key={index}
-                                        gap={'16'}
-                                        justify={'between'} max
-                                    >
-
-                                        <VStack
-                                            gap={'4'}
-                                            justify={'start'}
-                                        >
-                                            <Text
-                                                text={dialog.timestamp}
-                                            />
-                                            <Text
-                                                text={dialog.role}
-                                                variant={dialog.role === 'User' ? 'accent' : 'success'}
-                                                size={'m'}
-                                            />
-                                        </VStack>
-
-                                        <Card border={'partial'}
-                                              variant={dialog.role === 'User' ? 'outlined' : 'success'}>
-                                            <Text text={dialog.text}/>
-                                        </Card>
-                                    </HStack>
-                                ))}
-                            </VStack>
+                            <ReportShowDialog
+                                Dialogs={Dialogs}
+                                isDialogLoading={isDialogLoading}
+                                isDialogError={isDialogError}
+                                mediaUrl={mediaUrl}
+                             />
                         </td>
                     </tr>
                 )}

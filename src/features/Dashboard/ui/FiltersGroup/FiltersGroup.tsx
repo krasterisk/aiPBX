@@ -8,6 +8,7 @@ import { PeriodPicker } from '../PeriodPicker/PeriodPicker'
 import { SummaryCard } from '../SummaryCard/SummaryCard'
 import { ReportFilters } from '@/entities/Report'
 import { AssistantOptions } from '@/entities/Assistants'
+import { BarsChart } from '@/shared/ui/mui/BarsChart'
 
 interface FiltersGroupProps {
   className?: string
@@ -46,7 +47,8 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
 
   const ringsCount = dashboardData?.chartData?.map(item => Number(item.allCount)) || []
   const tokensCount = dashboardData?.chartData?.map(item => Number(item.tokensCount)) || []
-  const durationCount = dashboardData?.chartData?.map(item => Number(item.durationCount)) || []
+  const durationCount = dashboardData?.chartData?.map(item => Number(item.durationCount) / 60) || []
+  const amount = dashboardData?.chartData?.map(item => Number(item.amount)) || []
   const label = dashboardData?.chartData?.map(item => String(item.label)) || []
 
   return (
@@ -77,14 +79,22 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
             </Card>
              <SummaryCard graphData={dashboardData} />
             <Card max border={'partial'} padding={'16'}>
+                <BarsChart
+                    xAxis={[{ scaleType: 'band', data: label }]}
+                    series={[
+                      { data: ringsCount, label: String(t('Звонки')) },
+                      { data: durationCount, label: String(t('Длительность')) },
+                      { data: amount, label: String(t('Стоимость')) }
+                    ]}
+                    height={300}
+                />
+            </Card>
+            <Card max border={'partial'} padding={'16'}>
                 <LinesChart
                     height={300}
                     series={[
-                      { data: ringsCount, label: String(t('Звонки')) },
-                      { data: tokensCount, label: String(t('Токены')) },
-                      { data: durationCount, label: String(t('Длительность')) }
+                      { data: tokensCount, label: String(t('Токены')) }
                     ]}
-                    colors={['#1E222F', '#2E96FF', '#02B2AF']}
                     xAxis={[{ scaleType: 'point', data: label }]}
                 />
             </Card>

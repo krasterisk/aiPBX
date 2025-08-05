@@ -38,6 +38,7 @@ export interface ReportFilters {
   allCount?: number
   allTokensCount?: number
   allDurationCount?: number
+  allCost?: number
   startDate?: string | null
   endDate?: string | null
 }
@@ -47,6 +48,7 @@ export interface ChartData {
   allCount?: number[]
   tokensCount?: number[]
   durationCount?: number[]
+  amount?: number[]
 }
 export interface ReportEvent {
   channelId?: string
