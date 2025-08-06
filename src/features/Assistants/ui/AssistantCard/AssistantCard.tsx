@@ -15,15 +15,14 @@ import {
   Assistant
 } from '@/entities/Assistants'
 
-import { AssistantEditCard } from '../AssistantEditCard/AssistantEditCard'
-import { AssistantCreateCard } from '../AssistantCreateCard/AssistantCreateCard'
+import { AssistantOptionSelector } from '../AssistantOptionSelector/AssistantOptionSelector'
 
 export interface AssistantCardProps {
   className?: string
   error?: string
   isLoading?: boolean
   readonly?: boolean
-  isEdit?: boolean
+  isEdit: boolean
   assistantId?: string
 }
 
@@ -107,19 +106,13 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
   return (
       <VStack gap={'8'} max className={classNames(cls.AssistantCard, {}, [className])}>
         {
-          isEdit
-            ? <AssistantEditCard
+            <AssistantOptionSelector
                   onEdit={onEdit}
-                  isError={isError}
+                  isEdit={isEdit}
+                  onCreate={onCreate}
                   assistantId={assistantId || ''}
                   onDelete={onDelete}
               />
-            : <AssistantCreateCard
-                  onCreate={onCreate}
-                  isError={isError}
-                  error={error}
-              />
-
         }
       </VStack>
   )

@@ -1,7 +1,9 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './TabsPanel.module.scss'
 import { memo, ReactNode } from 'react'
-import { Box, Typography, Tabs, Tab } from '@mui/material'
+import { Box, Tab, Tabs } from '@mui/material'
+import { VStack } from '../../../redesigned/Stack'
+import { Card } from '../../../redesigned/Card'
 
 export interface TabPanelItem {
   label: string
@@ -32,7 +34,7 @@ function CustomTabPanel ({ children, value, index, ...other }: CustomTabPanelPro
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    <div>{children}</div>
                 </Box>
             )}
         </div>
@@ -55,8 +57,12 @@ export const TabsPanel = memo((props: TabsPanelProps) => {
   }
 
   return (
-        <Box className={classNames(cls.TabsPanel, {}, [className])}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Card
+            className={classNames(cls.TabsPanel, {}, [className])}
+            max
+            border={'round'}
+        >
+            <VStack max gap={'16'}>
                 <Tabs
                     value={value}
                     onChange={onChange}
@@ -70,12 +76,12 @@ export const TabsPanel = memo((props: TabsPanelProps) => {
                         <Tab className={cls.tab} key={index} label={item.label} {...a11yProps(index)} />
                     ))}
                 </Tabs>
-            </Box>
+            </VStack>
             {tabItems.map((item, index) => (
                 <CustomTabPanel key={index} value={value} index={index}>
                     {item.content}
                 </CustomTabPanel>
             ))}
-        </Box>
+        </Card>
   )
 })

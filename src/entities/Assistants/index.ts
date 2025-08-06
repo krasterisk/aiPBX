@@ -1,4 +1,7 @@
 export { AssistantsList } from './ui/AssistantsList/AssistantsList'
+export { AssistantOptionsMain } from './ui/AssistantOptionsMain/AssistantOptionsMain'
+export { AssistantOptionsPrompts } from './ui/AssistantOptionsPrompts/AssistantOptionsPrompts'
+export { AssistantOptionsModel } from './ui/AssistantOptionsModel/AssistantOptionsModel'
 export { useAssistantFilters } from './lib/hooks/useAssistantFilters'
 
 export { ModelSelect } from './ui/ModelSelect/ModelSelect'

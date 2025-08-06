@@ -15,6 +15,7 @@ interface AssistantEditCardHeaderProps {
   className?: string
   onEdit?: () => void
   assistantId?: string
+  assistantName?: string
   error?: FetchBaseQueryError | SerializedError | undefined
   onDelete?: (id: string) => void
 }
@@ -23,6 +24,7 @@ export const AssistantEditCardHeader = memo((props: AssistantEditCardHeaderProps
   const {
     className,
     assistantId,
+    assistantName,
     onEdit,
     onDelete
   } = props
@@ -75,7 +77,7 @@ export const AssistantEditCardHeader = memo((props: AssistantEditCardHeaderProps
           max
       >
         <HStack max justify={'between'} wrap={'wrap'}>
-          <Text title={t('Редактировать')}/>
+          <Text title={assistantName || t('Редактировать')}/>
           {headerButtons}
         </HStack>
       </Card>

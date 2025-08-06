@@ -7,7 +7,7 @@ const AssistantCreatePage = memo(() => {
   return (
       <Page data-testid={'AssistantPage'}>
         <VStack gap='8'>
-          <AssistantCard />
+          <AssistantCard isEdit={false}/>
         </VStack>
       </Page>
   )
