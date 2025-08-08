@@ -9,7 +9,7 @@ import {
   AssistantOptionsPrompts,
   assistantsPageActions,
   getAssistantsCreateFormFields,
-  getAssistantsEditFormFields,
+  getAssistantsEditFormFields, initAssistant,
   useAssistant
 } from '@/entities/Assistants'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
@@ -85,6 +85,12 @@ export const AssistantOptionSelector = memo((props: AddistantOptionSelecterProps
     }
   }, [assistant, isEdit, dispatch, updateAction])
 
+  useEffect(() => {
+    if (!isEdit) {
+      dispatch(updateAction(initAssistant))
+    }
+  }, [dispatch, isEdit])
+
   const onChangeToolsHandler = useCallback((
     event: any,
     value: Tool[]) => {
@@ -108,7 +114,7 @@ export const AssistantOptionSelector = memo((props: AddistantOptionSelecterProps
         userId: newValue.id
       }
       dispatch(updateAction(updateForm))
-      dispatch(assistantsPageActions.setUser(newValue))
+      // dispatch(assistantsPageActions.setUser(newValue))
     } else {
       const updateForm = {
         ...formFields,
@@ -149,7 +155,7 @@ export const AssistantOptionSelector = memo((props: AddistantOptionSelecterProps
       label: t('Главное'),
       content:
                     <AssistantOptionsMain
-                        isEdit
+                        isEdit={isEdit}
                         onChangeToolsHandler={onChangeToolsHandler}
                         onChangeSelectHandler={onChangeSelectHandler}
                         onChangeTextHandler={onChangeTextHandler}
@@ -158,13 +164,17 @@ export const AssistantOptionSelector = memo((props: AddistantOptionSelecterProps
     },
     {
       label: t('Инструкции для модели'),
-      content: <AssistantOptionsPrompts isEdit onTextChangeHandler={onChangeTextHandler}/>
+      content:
+                  <AssistantOptionsPrompts
+                      isEdit={isEdit}
+                        onTextChangeHandler={onChangeTextHandler}
+                  />
     },
     {
       label: t('Параметры модели'),
       content:
                     <AssistantOptionsModel
-                        isEdit
+                        isEdit={isEdit}
                         onTextChangeHandler={onChangeTextHandler}
                         onChangeSelectHandler={onChangeTextHandler}
                     />

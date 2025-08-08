@@ -28,7 +28,7 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
 
   const topics = ['alloy', 'ash', 'ballad', 'coral', 'echo', 'sage', 'shimmer', 'verse']
 
-  const selectedValue = value ? topics.find(item => item === value) : ''
+  const selectedValue = topics.find(item => item === value) ?? null
 
   const onChangeHandler = (event: any, newValue: string) => {
     onChangeValue?.(event, newValue)

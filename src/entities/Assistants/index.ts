@@ -23,7 +23,8 @@ export {
   getAssistantsUserId,
   getAssistantsUser,
   getAssistantsCreateFormFields,
-  getAssistantsEditFormFields
+  getAssistantsEditFormFields,
+  initAssistant
 } from './model/selectors/assistantsPageSelectors'
 
 export { initAssistantsPage } from './model/service/initAssistantsPage/initAssistantsPage'

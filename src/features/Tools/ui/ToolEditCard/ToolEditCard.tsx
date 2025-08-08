@@ -86,7 +86,7 @@ export const ToolEditCard = memo((props: UserEditCardProps) => {
   const IsAdminOptions = (
       <>
         <ClientSelect
-            value={clientValues}
+            value={tool?.user as ClientOptions}
             onChangeClient={onChangeClientHandler}
             label={String(t('Клиент'))}
             className={cls.client}

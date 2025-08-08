@@ -67,7 +67,7 @@ export const AssistantOptionsMain = memo((props: AssistantOptionsMainProps) => {
             />
             <VoiceSelect
                 label={String(t('Голос'))}
-                value={formFields.voice || ''}
+                value={formFields.voice ?? ''}
                 onChangeValue={onChangeSelectHandler?.('voice')}
             />
             <ToolsSelect

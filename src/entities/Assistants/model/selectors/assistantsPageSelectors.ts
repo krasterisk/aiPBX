@@ -1,7 +1,7 @@
 import { StateSchema } from '@/app/providers/StoreProvider'
 import { Assistant } from '../..'
 
-const initAssistant: Assistant = {
+export const initAssistant: Assistant = {
   id: '',
   model: 'gpt-4o-mini-realtime-preview-2024-12-17',
   voice: 'Alloy',

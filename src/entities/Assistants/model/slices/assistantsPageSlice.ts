@@ -3,7 +3,8 @@ import { ContentView } from '../../../Content'
 import { Assistant } from '../types/assistants'
 import { AssistantsPageSchema } from '../types/assistantsPageSchema'
 import { ASSISTANTS_VIEW_LOCALSTORAGE_KEY } from '@/shared/const/localstorage'
-import { ClientOptions } from '@/entities/User'
+import { ClientOptions } from '../../../User'
+import { initAssistant } from '../selectors/assistantsPageSelectors'
 
 const initialState: AssistantsPageSchema = {
   page: 1,
@@ -27,6 +28,9 @@ export const assistantsPageSlice = createSlice({
         comment: '',
         userId: ''
       }
+    },
+    resetAssistantCreateForm: (state) => {
+      state.editForm = initAssistant
     },
     setView: (state, action: PayloadAction<ContentView>) => {
       state.view = action.payload

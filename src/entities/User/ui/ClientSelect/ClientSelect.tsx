@@ -37,7 +37,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
     name: String(item.name)
   })) || []
 
-  const selectedUserValue = clientId ? clientItems.find(item => item.id === clientId) : ''
+  const selectedUserValue = clientId ? clientItems.find(item => item.id === clientId) : null
 
   const onChangeHandler = (event: any, newValue: ClientOptions) => {
     if (newValue) {
@@ -53,7 +53,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
           autoComplete={true}
           clearOnBlur={false}
           options={clientItems}
-          value={value || selectedUserValue || ''}
+          value={value || selectedUserValue || null}
           onChange={onChangeHandler}
           inputValue={inputValue}
           getOptionKey={option => option.id}
