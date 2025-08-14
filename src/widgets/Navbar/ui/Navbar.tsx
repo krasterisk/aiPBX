@@ -12,6 +12,7 @@ import { IconButton, useMediaQuery } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { MenubarItems } from '../../Menubar/ui/MenubarItems/MenubarItems'
 import { LangSwitcher } from '@/entities/LangSwitcher'
+import { ThemeSwitcher } from '@/entities/ThemeSwitcher'
 
 interface NavbarProps {
   className?: string
@@ -53,6 +54,7 @@ export const Navbar = memo(({ className }: NavbarProps) => {
                         </>
                     )}
                     <LangSwitcher short={isMobile} />
+                    <ThemeSwitcher />
                 </HStack>
 
                 <HStack gap="16" className={cls.actions}>

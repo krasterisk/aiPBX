@@ -6,8 +6,6 @@ import { getUserAuthData, isUserAdmin, userActions } from '@/entities/User'
 import { getRoutePayment, getRouteUserEdit } from '@/shared/const/router'
 import { Avatar } from '@/shared/ui/redesigned/Avatar'
 import { Dropdown } from '@/shared/ui/redesigned/Popups'
-import { ThemeSwitcher } from '@/entities/ThemeSwitcher'
-import { HStack } from '@/shared/ui/redesigned/Stack'
 
 interface AvatarDropdownProps {
   className?: string
@@ -44,12 +42,6 @@ export const AvatarDropdown = memo((props: AvatarDropdownProps) => {
     {
       content: t('Выйти'),
       onClick: onLogout
-    },
-    {
-      content:
-                <HStack max justify={'end'}>
-                    <ThemeSwitcher/>
-                </HStack>
     }
   ]
 
