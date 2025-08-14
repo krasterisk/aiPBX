@@ -1,16 +1,16 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { AssistantOptionSelecter } from './AssistantOptionSelector'
+import { AssistantOptionSelector } from './AssistantOptionSelector'
 
 export default {
   title: 'shared/AddistantOptionSelecter',
-  component: AssistantOptionSelecter,
+  component: AssistantOptionSelector,
   argTypes: {
     backgroundColor: { control: 'color' }
   }
-} as ComponentMeta<typeof AssistantOptionSelecter>
+} as ComponentMeta<typeof AssistantOptionSelector>
 
-const Template: ComponentStory<typeof AssistantOptionSelecter> = (args) => <AssistantOptionSelecter {...args} />
+const Template: ComponentStory<typeof AssistantOptionSelector> = (args) => <AssistantOptionSelector {...args} />
 
 export const Normal = Template.bind({})
 Normal.args = {}
