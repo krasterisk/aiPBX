@@ -9,6 +9,7 @@ import { MainLayout } from '@/shared/layouts/MainLayout'
 import { PageLoader } from '@/widgets/PageLoader'
 import { getTokenAllData } from '@/app/providers/getTokenData/getTokenData'
 import { Menubar } from '@/widgets/Menubar'
+import { MainPage } from '@/pages/MainPage'
 
 const App = (): any => {
   const dispatch = useDispatch()
@@ -29,16 +30,21 @@ const App = (): any => {
   }
 
   return (
-        <div id='app' className={classNames('app_redesigned', {}, [])}>
-                          <Suspense>
-                              <MainLayout
-                                  header={<Navbar/>}
-                                  content={<AppRouter/>}
-                                  sidebar={<Menubar/>}
-                                  // toolbar={toolbar}
-                              />
-                          </Suspense>
-                      </div>
+        <Suspense fallback={<PageLoader />}>
+            {userData
+              ? (
+                <div id='app' className={classNames('app_redesigned', {}, [])}>
+                    <MainLayout
+                        header={<Navbar />}
+                        content={<AppRouter />}
+                        sidebar={<Menubar />}
+                    />
+                </div>
+                )
+              : (
+                <MainPage />
+                )}
+        </Suspense>
   )
 }
 

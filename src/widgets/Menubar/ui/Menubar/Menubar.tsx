@@ -25,7 +25,7 @@ export const Menubar = memo((props: MenubarProps) => {
                     role="navigation"
                     className={cls.items}
                 >
-                    <MenubarItems />
+                    <MenubarItems/>
                 </VStack>
 
             </section>

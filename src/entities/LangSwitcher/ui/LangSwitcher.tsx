@@ -16,10 +16,11 @@ export const LangSwitcher = memo(({ className, short }: LangSwitcherProps) => {
 
   return (
         <Button
-                                      variant="clear"
-                                      onClick={toggle}
-                                  >
-                                      {t(short ? 'Яз' : 'Язык')}
-                                  </Button>
+            className={className}
+            variant="clear"
+            onClick={toggle}
+        >
+            {t(short ? 'Яз' : 'Язык')}
+        </Button>
   )
 })

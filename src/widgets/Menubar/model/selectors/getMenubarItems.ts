@@ -1,13 +1,11 @@
 import { useSelector } from 'react-redux'
 import { getUserAuthData } from '@/entities/User'
 import {
-  getRouteAssistants, getRouteDashboard,
-  getRouteMain, getRouteOnline,
+  getRouteAssistants, getRouteDashboard, getRouteOnline,
   getRouteReports,
   getRouteTools,
   getRouteUsers
 } from '@/shared/const/router'
-import MainIcon from '@/shared/assets/icons/home.svg'
 import EndpointsIcon from '@/shared/assets/icons/endpoints.svg'
 import ManualIcon from '@/shared/assets/icons/article.svg'
 import { MenubarItemType } from '../types/menubar'
@@ -18,11 +16,11 @@ export const useMenubarItems = () => {
   const { t } = useTranslation()
 
   const menubarItemsList: MenubarItemType[] = [
-    {
-      path: getRouteMain(),
-      Icon: MainIcon,
-      text: t('Главная')
-    }
+    // {
+    //   path: getRouteMain(),
+    //   Icon: MainIcon,
+    //   text: t('Главная')
+    // }
   ]
   if (userData) {
     menubarItemsList.push(

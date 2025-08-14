@@ -45,8 +45,6 @@ const ReportsPage = ({ className }: ReportsPageProps) => {
     dispatch(initReportsPage())
   })
 
-  console.log(isMobile)
-
   useEffect(() => {
     if (!manualView) {
       if (isMobile) {
