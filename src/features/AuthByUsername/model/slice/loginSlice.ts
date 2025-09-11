@@ -6,6 +6,7 @@ const initialState: LoginSchema = {
   isLoading: false,
   username: '',
   name: '',
+  activationCode: '',
   password: '',
   email: ''
 }
@@ -23,6 +24,10 @@ export const loginSlice = createSlice({
     setPassword: (state, action: PayloadAction<string>) => {
       state.password = action.payload
     },
+    setActivationCode: (state, action: PayloadAction<string>) => {
+      state.activationCode = action.payload
+    },
+
     setEmail: (state, action: PayloadAction<string>) => {
       state.email = action.payload
     },

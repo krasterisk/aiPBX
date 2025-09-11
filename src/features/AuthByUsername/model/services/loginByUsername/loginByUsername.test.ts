@@ -8,7 +8,7 @@ describe('loginByUsername.test', () => {
     const userToken = '12313123fasfsadfsdfsdfsdfsf'
     thunk.api.post.mockReturnValue(Promise.resolve({ data: userToken }))
     const result = await thunk.callThunk({
-      username: 'admin',
+      email: 'admin@gmail.com',
       password: '123'
     })
 
@@ -23,7 +23,7 @@ describe('loginByUsername.test', () => {
     const thunk = new TestAsyncThunk(loginByUsername)
     thunk.api.post.mockReturnValue(Promise.resolve({ status: 403 }))
     const result = await thunk.callThunk({
-      username: 'admin',
+      email: 'mail@gmail.com',
       password: '123'
     })
 

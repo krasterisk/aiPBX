@@ -8,7 +8,6 @@ import React, { memo, useCallback, useState } from 'react'
 import { loginActions, loginReducer } from '../../model/slice/loginSlice'
 import { loginByUsername } from '../../model/services/loginByUsername/loginByUsername'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { getLoginUsername } from '../../model/selectors/getLoginUsername/getLoginUsername'
 import { getLoginPassword } from '../../model/selectors/getLoginPassword/getLoginPassword'
 import { getLoginIsLoading } from '../../model/selectors/getLoginIsLoading/getLoginIsLoading'
 import { getLoginError } from '../../model/selectors/getLoginError/getLoginError'
@@ -17,11 +16,11 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { getLoginEmail } from '../../model/selectors/getLoginEmail/getLoginEmail'
 import { Loader } from '@/shared/ui/Loader'
-import { User, useRegisterUser, useForgotPasswordUser } from '@/entities/User'
+import { User, useRegisterUser, useForgotPasswordUser, useActivateUser } from '@/entities/User'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { getLoginName } from '../../model/selectors/getLoginName/getLoginName'
+import { getActivationCode } from '../../model/selectors/getActivationCode/getActivationCode'
 
 export interface LoginFormProps {
   className?: string
@@ -35,20 +34,19 @@ const initialReducers: ReducersList = {
 const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
   const { t } = useTranslation('login')
   const dispatch = useAppDispatch()
-  const username = useSelector(getLoginUsername)
   const password = useSelector(getLoginPassword)
-  const name = useSelector(getLoginName)
   const email = useSelector(getLoginEmail)
   const isLoading = useSelector(getLoginIsLoading)
   const error = useSelector(getLoginError)
+  const activationCode = useSelector(getActivationCode)
 
   const [isLoginForm, setLoginForm] = useState<boolean>(true)
   const [isRegisterForm, setRegisterForm] = useState<boolean>(false)
-  const [registerMessage, setRegisterMessage] = useState<string>('')
   const [forgotPasswordMessage, setForgotPasswordMessage] = useState<string>('')
   const [isForgotPasswordForm, setForgotPasswordForm] = useState<boolean>(false)
   const [isFormInputError, setFormInputError] = useState<boolean>(false)
   const [isToggleShowPassword, setToggleShowPassword] = useState<boolean>(false)
+  const [isActivateForm, setActivateForm] = useState<boolean>(false)
 
   const [userRegisterMutation,
     {
@@ -58,6 +56,15 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
       isSuccess: isRegisterSuccess
     }
   ] = useRegisterUser()
+
+  const [userActivateMutation,
+    {
+      isError: isActivateError,
+      isLoading: isActivateLoading,
+      error: activateError,
+      isSuccess: isActivateSuccess
+    }
+  ] = useActivateUser()
 
   const [userForgotPasswordMutation,
     {
@@ -94,13 +101,40 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
     setRegisterForm(false)
   }, [])
 
-  const onChangeUsername = useCallback((value: string) => {
-    dispatch(loginActions.setUsername(value))
-  }, [dispatch])
+  const onActivateClick = useCallback(() => {
+    if (!activationCode) {
+      setFormInputError(true)
+      return
+    }
+    userActivateMutation(activationCode)
+      .unwrap()
+      .then(() => {
+        setActivateForm(false)
+        setLoginForm(true)
+      })
+  }, [activationCode, userActivateMutation])
 
-  const onChangeName = useCallback((value: string) => {
-    dispatch(loginActions.setName(value))
-  }, [dispatch])
+  const onRegisterClick = useCallback(() => {
+    setFormInputError(false)
+    if (!email || !password) {
+      setFormInputError(true)
+      return
+    }
+    const user: User = {
+      id: '',
+      password,
+      email
+    }
+    userRegisterMutation(user)
+      .unwrap()
+      .then(() => {
+        setRegisterForm(false)
+        setActivateForm(true)
+      })
+      .catch(() => {
+        console.log('error:', registerError)
+      })
+  }, [email, isRegisterSuccess, password, registerError, userRegisterMutation])
 
   const onChangeEmail = useCallback((value: string) => {
     dispatch(loginActions.setEmail(value))
@@ -110,37 +144,16 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
     dispatch(loginActions.setPassword(value))
   }, [dispatch])
 
+  const onChangeActivationCode = useCallback((value: string) => {
+    dispatch(loginActions.setActivationCode(value))
+  }, [dispatch])
+
   const onLoginClick = useCallback(async () => {
-    const login = await dispatch(loginByUsername({ username, password }))
+    const login = await dispatch(loginByUsername({ email, password }))
     if (onSuccess && login.payload !== 'error') {
       onSuccess()
     }
-  }, [dispatch, onSuccess, password, username])
-
-  const onRegisterClick = useCallback(() => {
-    setFormInputError(false)
-    if (!username || !email || !password || !name) {
-      setFormInputError(true)
-      return
-    }
-    const user: User = {
-      id: '',
-      name,
-      username,
-      password,
-      email
-    }
-    userRegisterMutation(user)
-      .unwrap()
-      .then(() => {
-        setRegisterMessage(
-          String(t('Для активации аккаунта, проверьте почту и перейдите по ссылке из письма'))
-        )
-      })
-      .catch(() => {
-        console.log('error:', registerError)
-      })
-  }, [email, name, password, registerError, t, userRegisterMutation, username])
+  }, [dispatch, email, onSuccess, password])
 
   const onForgotPasswordClick = useCallback(() => {
     setFormInputError(false)
@@ -171,20 +184,33 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
     if (e === 'Enter') {
       isLoginForm && onLoginClick()
       isRegisterForm && onRegisterClick()
-      isForgotPasswordForm && onRegisterClick()
+      isForgotPasswordForm && onForgotPasswordClick()
+      isActivateForm && onActivateClick()
     }
-  }, [isForgotPasswordForm, isLoginForm, isRegisterForm, onLoginClick, onRegisterClick])
+  }, [
+    isActivateForm,
+    isForgotPasswordForm,
+    isLoginForm,
+    isRegisterForm,
+    onActivateClick,
+    onForgotPasswordClick,
+    onLoginClick,
+    onRegisterClick
+  ])
 
   const loginContent = (
         <>
             <Text title={t('Авторизация')}></Text>
             {error && <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'}/>}
+            {isActivateSuccess &&
+                <Text text={t('Вы успешно зарегистрированы')}/>
+            }
             <Input
                 type="text"
                 className={cls.input}
-                placeholder={t('Логин') ?? ''}
-                onChange={onChangeUsername}
-                value={username}
+                placeholder={t('Электронная почта') ?? ''}
+                onChange={onChangeEmail}
+                value={email}
             />
             <Input
                 type={!isToggleShowPassword ? 'password' : 'text'}
@@ -234,18 +260,34 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
         </>
   )
 
+  const activationContent = (
+      <>
+        <Text title={t('Активация')}
+              text={t('Мы отправили на указанную вами почту код активации,введите его ниже')}
+        />
+        <Input
+            type="text"
+            className={cls.input}
+            placeholder={t('Код активации') ?? ''}
+            onChange={onChangeActivationCode}
+            value={activationCode}
+        />
+        <Button
+            variant={'outline'}
+            className={cls.loginBtn}
+            onClick={onActivateClick}
+            disabled={isLoading}
+        >
+          {t('Завершить')}
+        </Button>
+      </>
+  )
+
   const registerContent = (
         <>
             <Text title={t('Регистрация')}></Text>
-            {registerMessage && isRegisterSuccess &&
-                <Text
-                    title={t('Регистрация прошла успешно!')}
-                    text={registerMessage} variant={'success'}
-                />
-            }
             {isRegisterError &&
                 <Text
-                    title={t('Ошибка при регистрации')}
                     text={
                         isRegisterError &&
                         registerError &&
@@ -259,22 +301,6 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
                     variant={'error'}
                 />
             }
-            {!isRegisterSuccess &&
-                <>
-                    <Input
-                        type="text"
-                        className={cls.input}
-                        placeholder={t('Наименование клиента') ?? ''}
-                        onChange={onChangeName}
-                        value={name}
-                    />
-                    <Input
-                        type="text"
-                        className={cls.input}
-                        placeholder={t('Логин') ?? ''}
-                        onChange={onChangeUsername}
-                        value={username}
-                    />
                     <Input
                         type="text"
                         className={cls.input}
@@ -305,10 +331,7 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
                             </Button>
                           : ''}
                     />
-                </>
-            }
-            {!registerMessage
-              ? <HStack max justify={'between'}>
+                  <HStack max justify={'between'}>
                     <Button
                         addonRight={<ArrowBackIcon/>}
                         onClick={onBackClick}
@@ -320,19 +343,9 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
                         onClick={onRegisterClick}
                         disabled={isLoading}
                     >
-                        {t('Регистрация')}
+                      {t('Продолжить')}
                     </Button>
-
-                </HStack>
-              : <Button
-                    variant={'outline'}
-                    className={cls.loginBtn}
-                    onClick={onCloseClick}
-                    disabled={isLoading}
-                >
-                    {t('Закрыть')}
-                </Button>
-            }
+                  </HStack>
         </>
   )
 
@@ -424,12 +437,14 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
                 }
                 {
                     (isRegisterLoading ||
+                        isActivateLoading ||
                         isForgotPasswordLoading ||
                         isLoading) &&
                     <Loader className={cls.loginLoader}/>
                 }
                 {isLoginForm && loginContent}
                 {isRegisterForm && registerContent}
+                {isActivateForm && activationContent}
                 {isForgotPasswordForm && forgotPasswordContent}
             </DynamicModuleLoader>
         </VStack>

@@ -43,15 +43,15 @@ export const useMenubarItems = () => {
         authOnly: true
       },
       {
-        path: getRouteReports(),
-        Icon: EndpointsIcon,
-        text: t('Отчёт'),
-        authOnly: true
-      },
-      {
         path: getRouteTools(),
         Icon: EndpointsIcon,
         text: t('Функции'),
+        authOnly: true
+      },
+      {
+        path: getRouteReports(),
+        Icon: EndpointsIcon,
+        text: t('Отчёт'),
         authOnly: true
       },
       {

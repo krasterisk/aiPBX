@@ -4,7 +4,7 @@ import { TOKEN_LOCALSTORAGE_KEY } from '@/shared/const/localstorage'
 import { ThunkConfig } from '@/app/providers/StoreProvider'
 
 interface loginByUsernameProps {
-  username: string
+  email: string
   password: string
 }
 
@@ -12,7 +12,7 @@ export const loginByUsername = createAsyncThunk<
 string,
 loginByUsernameProps,
 ThunkConfig<string>>(
-  'common/loginByUsername',
+  'common/loginByEmail',
   async (authData, thunkAPI) => {
     const {
       extra,
