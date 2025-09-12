@@ -110,6 +110,7 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
       .unwrap()
       .then(() => {
         setActivateForm(false)
+        setFormInputError(false)
         setLoginForm(true)
       })
   }, [activationCode, userActivateMutation])
@@ -134,7 +135,7 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
       .catch(() => {
         console.log('error:', registerError)
       })
-  }, [email, isRegisterSuccess, password, registerError, userRegisterMutation])
+  }, [email, password, registerError, userRegisterMutation])
 
   const onChangeEmail = useCallback((value: string) => {
     dispatch(loginActions.setEmail(value))
@@ -201,7 +202,11 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
   const loginContent = (
         <>
             <Text title={t('Авторизация')}></Text>
-            {error && <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'}/>}
+            {
+                error &&
+                isFormInputError &&
+                <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'}/>
+            }
             {isActivateSuccess &&
                 <Text text={t('Вы успешно зарегистрированы')}/>
             }
