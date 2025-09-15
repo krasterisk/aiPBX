@@ -15,6 +15,7 @@ export const userSlice = createSlice({
       const token = action.payload
       state.redesigned = getUserFeatureData(token)
       state.authData = getTokenAllData(token)
+      localStorage.setItem(TOKEN_LOCALSTORAGE_KEY, token)
     },
     initToken: (state) => {
       const token = localStorage.getItem(TOKEN_LOCALSTORAGE_KEY)

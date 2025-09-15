@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useEffect, useState } from 'react'
+import React, { FC, memo, useCallback } from 'react'
 import { Page } from '@/widgets/Page'
 import cls from './MainPage.module.scss'
 import { useTranslation } from 'react-i18next'
@@ -25,11 +25,10 @@ import {
   LucideIcon
 } from 'lucide-react'
 import { LangSwitcher } from '@/entities/LangSwitcher'
-import { LoginModal } from '@/features/AuthByUsername'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { getUserAuthData } from '@/entities/User'
-import { getRouteDashboard } from '@/shared/const/router'
+import { getRouteLogin } from '@/shared/const/router'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },
@@ -71,18 +70,18 @@ const FeatureCard: FC<FeatureCardProps> = ({ icon: Icon, title, desc }) => (
 const MainPage: FC = memo(() => {
   const { t } = useTranslation('main')
   const isMobile = useMediaQuery('(max-width:800px)')
-  const [isAuthModal, setIsAuthModal] = useState(false)
   const userData = useSelector(getUserAuthData)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (userData) {
-      navigate(getRouteDashboard())
-    }
-  }, [navigate, userData])
+  // useEffect(() => {
+  //   if (userData) {
+  //     navigate(getRouteDashboard())
+  //   }
+  // }, [navigate, userData])
 
-  const onShowModal = useCallback(() => { setIsAuthModal(true) }, [])
-  const onCloseModal = useCallback(() => { setIsAuthModal(false) }, [])
+  const onLogin = useCallback(() => {
+    navigate(getRouteLogin())
+  }, [navigate])
 
   return (
         <Page data-testid={'MainPage'} className={cls.MainPage}>
@@ -165,15 +164,11 @@ const MainPage: FC = memo(() => {
                                 color="primary"
                                 size="large"
                                 startIcon={<LogIn />}
-                                onClick={onShowModal}
+                                onClick={onLogin}
                             >
                                 {t('Войти')}
                             </Button>
                         </Box>
-
-                        {isAuthModal && (
-                            <LoginModal isOpen={isAuthModal} onClose={onCloseModal} />
-                        )}
                     </motion.div>
                 </Container>
 

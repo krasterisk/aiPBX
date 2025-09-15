@@ -23,7 +23,9 @@ import {
   getRouteReports,
   getRouteOnline,
   getRouteDashboard,
-  getRoutePayment
+  getRoutePayment,
+  getRouteSignup,
+  getRouteLogin
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 import { SettingPage } from '@/pages/SettingsPage'
@@ -34,6 +36,7 @@ import { ReportsPage } from '@/pages/ReportPage'
 import { OnlinePage } from '@/pages/OnlinePage'
 import { DashboardPage } from '@/pages/DashboardPage'
 import { PaymentPage } from '@/pages/PaymentPage'
+import { LoginPage } from '@/pages/LoginPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -44,12 +47,22 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     path: getRouteAbout(),
     element: <AboutPage/>
   },
+  [AppRoutes.LOGIN]: {
+    path: getRouteLogin(),
+    element: <LoginPage/>
+  },
+  [AppRoutes.SIGNUP]: {
+    path: getRouteSignup(),
+    element: <AboutPage/>
+  },
   [AppRoutes.ONLINE]: {
     path: getRouteOnline(),
+    authOnly: true,
     element: <OnlinePage/>
   },
   [AppRoutes.DASHBOARD]: {
     path: getRouteDashboard(),
+    authOnly: true,
     element: <DashboardPage/>
   },
   [AppRoutes.PAYMENT]: {
@@ -60,42 +73,52 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   },
   [AppRoutes.REPORTS]: {
     path: getRouteReports(),
+    authOnly: true,
     element: <ReportsPage />
   },
   [AppRoutes.ASSISTANTS]: {
     path: getRouteAssistants(),
+    authOnly: true,
     element: <AssistantsPage />
   },
   [AppRoutes.ASSISTANT_CREATE]: {
     path: getRouteAssistantCreate(),
+    authOnly: true,
     element: <AssistantsCreatePage />
   },
   [AppRoutes.ASSISTANT_EDIT]: {
     path: getRouteAssistantEdit(':id'),
+    authOnly: true,
     element: <AssistantsEditPage />
   },
   [AppRoutes.TOOLS]: {
     path: getRouteTools(),
+    authOnly: true,
     element: <ToolsPage />
   },
   [AppRoutes.TOOLS_CREATE]: {
     path: getRouteToolsCreate(),
+    authOnly: true,
     element: <ToolsCreatePage />
   },
   [AppRoutes.TOOLS_EDIT]: {
     path: getRouteToolsEdit(':id'),
+    authOnly: true,
     element: <ToolsEditPage />
   },
   [AppRoutes.USERS]: {
     path: getRouteUsers(),
+    authOnly: true,
     element: <UsersPage />
   },
   [AppRoutes.USER_CREATE]: {
     path: getRouteUserCreate(),
+    authOnly: true,
     element: <UsersCreatePage />
   },
   [AppRoutes.USER_EDIT]: {
     path: getRouteUserEdit(':id'),
+    authOnly: true,
     element: <UsersEditPage />
   },
   [AppRoutes.ADMIN]: {
@@ -107,7 +130,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.SETTINGS]: {
     path: getRouteSettings(),
     element: <SettingPage />,
-    authOnly: false
+    authOnly: true
   },
   [AppRoutes.FORBIDDEN]: {
     path: getRouteForbidden(),

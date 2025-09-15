@@ -9,7 +9,6 @@ import { MainLayout } from '@/shared/layouts/MainLayout'
 import { PageLoader } from '@/widgets/PageLoader'
 import { getTokenAllData } from '@/app/providers/getTokenData/getTokenData'
 import { Menubar } from '@/widgets/Menubar'
-import { MainPage } from '@/pages/MainPage'
 
 const App = (): any => {
   const dispatch = useDispatch()
@@ -42,7 +41,7 @@ const App = (): any => {
                 </div>
                 )
               : (
-                <MainPage />
+                <AppRouter />
                 )}
         </Suspense>
   )

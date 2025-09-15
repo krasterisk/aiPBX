@@ -2,14 +2,11 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ToolsPage.module.scss'
 import React, { memo, useCallback } from 'react'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
-import { isUserAdmin } from '@/entities/User'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { useSelector } from 'react-redux'
 import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitialEffect'
 import { Page } from '@/widgets/Page'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { ToolsList, toolsPageReducer, useToolsFilters, initToolsPage } from '@/entities/Tools'
-import { useTranslation } from 'react-i18next'
 
 interface ToolsPageProps {
   className?: string
@@ -31,11 +28,7 @@ const ToolsPage = ({ className }: ToolsPageProps) => {
     onLoadNext
   } = useToolsFilters()
 
-  const { t } = useTranslation('tools')
-
   const dispatch = useAppDispatch()
-
-  const isAdmin = useSelector(isUserAdmin)
 
   const onLoadNextPart = useCallback(() => {
     if (hasMore) {
@@ -63,15 +56,6 @@ const ToolsPage = ({ className }: ToolsPageProps) => {
         />
       </Page>
   )
-
-  if (!isAdmin) {
-    return (
-        <ErrorGetData
-            text={t('Доступ запрещён!') || ''}
-            onRefetch={onRefetch}
-        />
-    )
-  }
 
   if (isError) {
     const errMsg = error && 'data' in error

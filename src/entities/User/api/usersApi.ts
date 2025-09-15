@@ -74,7 +74,14 @@ export const usersApi = rtkApi.injectEndpoints({
     }),
     registerUser: build.mutation<{ success: boolean }, User>({
       query: (arg) => ({
-        url: '/users/register',
+        url: '/auth/registration',
+        method: 'POST',
+        body: arg
+      })
+    }),
+    loginUser: build.mutation<{ token: string }, { email: string, password: string }>({
+      query: (arg) => ({
+        url: '/auth/login',
         method: 'POST',
         body: arg
       })
@@ -146,6 +153,7 @@ export const useGetUsers = usersApi.useGetUsersQuery
 export const useGetAllUsers = usersApi.useGetAllUsersQuery
 export const useGetUserBalance = usersApi.useGetUserBalanceQuery
 export const useRegisterUser = usersApi.useRegisterUserMutation
+export const useLoginUser = usersApi.useLoginUserMutation
 export const useActivateUser = usersApi.useActivateUserMutation
 export const useForgotPasswordUser = usersApi.useForgotPasswordMutation
 export const useSetUsers = usersApi.useSetUsersMutation

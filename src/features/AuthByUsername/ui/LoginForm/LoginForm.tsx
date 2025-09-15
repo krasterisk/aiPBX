@@ -5,22 +5,20 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { Input } from '@/shared/ui/redesigned/Input'
 import { useSelector } from 'react-redux'
 import React, { memo, useCallback, useState } from 'react'
-import { loginActions, loginReducer } from '../../model/slice/loginSlice'
-import { loginByUsername } from '../../model/services/loginByUsername/loginByUsername'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { getLoginPassword } from '../../model/selectors/getLoginPassword/getLoginPassword'
-import { getLoginIsLoading } from '../../model/selectors/getLoginIsLoading/getLoginIsLoading'
-import { getLoginError } from '../../model/selectors/getLoginError/getLoginError'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { getLoginEmail } from '../../model/selectors/getLoginEmail/getLoginEmail'
 import { Loader } from '@/shared/ui/Loader'
-import { User, useRegisterUser, useForgotPasswordUser, useActivateUser } from '@/entities/User'
+import { User, useRegisterUser, useForgotPasswordUser, useActivateUser, useLoginUser, userActions } from '@/entities/User'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { getActivationCode } from '../../model/selectors/getActivationCode/getActivationCode'
+import { getErrorMessage } from '../../helpers/getErrorMessage'
+import { loginActions, loginReducer } from '../../model/slice/loginSlice'
 
 export interface LoginFormProps {
   className?: string
@@ -36,8 +34,6 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
   const dispatch = useAppDispatch()
   const password = useSelector(getLoginPassword)
   const email = useSelector(getLoginEmail)
-  const isLoading = useSelector(getLoginIsLoading)
-  const error = useSelector(getLoginError)
   const activationCode = useSelector(getActivationCode)
 
   const [isLoginForm, setLoginForm] = useState<boolean>(true)
@@ -74,6 +70,15 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
       isSuccess: isForgotPasswordSuccess
     }
   ] = useForgotPasswordUser()
+
+  const [userLoginMutation,
+    {
+      isError: isLoginError,
+      isLoading: isLoginLoading,
+      error: loginError,
+      isSuccess: isLoginSuccess
+    }
+  ] = useLoginUser()
 
   const togglePasswordVisibility = useCallback(() => {
     setToggleShowPassword(!isToggleShowPassword)
@@ -150,11 +155,28 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
   }, [dispatch])
 
   const onLoginClick = useCallback(async () => {
-    const login = await dispatch(loginByUsername({ email, password }))
-    if (onSuccess && login.payload !== 'error') {
-      onSuccess()
+    setFormInputError(false)
+    if (!email || !password) {
+      setFormInputError(true)
+      return
     }
-  }, [dispatch, email, onSuccess, password])
+    userLoginMutation({ email, password })
+      .unwrap()
+      .then((data) => {
+        const token = data.token
+        if (token) {
+          dispatch(userActions.setToken(token))
+          onSuccess()
+        }
+      })
+      .catch(() => {
+        setFormInputError(true)
+      })
+    // const login = await dispatch(loginByUsername({ email, password }))
+    // if (onSuccess && login.payload !== 'error') {
+    //   onSuccess()
+    // }
+  }, [dispatch, email, onSuccess, password, userLoginMutation])
 
   const onForgotPasswordClick = useCallback(() => {
     setFormInputError(false)
@@ -203,24 +225,30 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
         <>
             <Text title={t('Авторизация')}></Text>
             {
-                error &&
+                loginError &&
+                isLoginError &&
                 isFormInputError &&
                 <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'}/>
             }
             {isActivateSuccess &&
                 <Text text={t('Вы успешно зарегистрированы')}/>
             }
+            {isLoginSuccess &&
+                <Text text={t('Авторизация прошла успешно')}/>
+            }
             <Input
                 type="text"
                 className={cls.input}
                 placeholder={t('Электронная почта') ?? ''}
                 onChange={onChangeEmail}
+                autoComplete={'username'}
                 value={email}
             />
             <Input
                 type={!isToggleShowPassword ? 'password' : 'text'}
                 className={cls.input}
                 placeholder={t('Пароль') ?? ''}
+                autoComplete={'current-password'}
                 onChange={onChangePassword}
                 value={password}
                 addonRight={password
@@ -257,8 +285,10 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
             <Button
                 variant={'outline'}
                 className={cls.loginBtn}
-                onClick={() => { onLoginClick() }}
-                disabled={isLoading}
+                onClick={() => {
+                  onLoginClick()
+                }}
+                disabled={isLoginLoading}
             >
                 {t('Вход')}
             </Button>
@@ -266,91 +296,84 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
   )
 
   const activationContent = (
-      <>
-        <Text title={t('Активация')}
-              text={t('Мы отправили на указанную вами почту код активации,введите его ниже')}
-        />
-        <Input
-            type="text"
-            className={cls.input}
-            placeholder={t('Код активации') ?? ''}
-            onChange={onChangeActivationCode}
-            value={activationCode}
-        />
-        <Button
-            variant={'outline'}
-            className={cls.loginBtn}
-            onClick={onActivateClick}
-            disabled={isLoading}
-        >
-          {t('Завершить')}
-        </Button>
-      </>
+        <>
+            <Text title={t('Активация')}
+                  text={t('Мы отправили на указанную вами почту код активации,введите его ниже')}
+            />
+            <Input
+                type="text"
+                className={cls.input}
+                placeholder={t('Код активации') ?? ''}
+                onChange={onChangeActivationCode}
+                value={activationCode}
+            />
+            <Button
+                variant={'outline'}
+                className={cls.loginBtn}
+                onClick={onActivateClick}
+                disabled={isLoginLoading}
+            >
+                {t('Завершить')}
+            </Button>
+        </>
   )
 
   const registerContent = (
         <>
             <Text title={t('Регистрация')}></Text>
-            {isRegisterError &&
+            {isRegisterError && registerError && (
                 <Text
-                    text={
-                        isRegisterError &&
-                        registerError &&
-                        typeof registerError === 'object' &&
-                        'data' in registerError
-                          ? Array.isArray(registerError.data)
-                            ? registerError.data.join(', ')
-                            : ''
-                          : ''
-                    }
-                    variant={'error'}
+                    text={getErrorMessage(registerError)}
+                    variant="error"
                 />
-            }
-                    <Input
-                        type="text"
-                        className={cls.input}
-                        placeholder={t('Электронная почта') ?? ''}
-                        onChange={onChangeEmail}
-                        value={email}
-                    />
-                    <Input
-                        type={!isToggleShowPassword ? 'password' : 'text'}
-                        className={cls.input}
-                        placeholder={t('Пароль') ?? ''}
-                        onChange={onChangePassword}
-                        value={password}
-                        addonRight={password
-                          ? <Button variant={'clear'}>
-                                {!isToggleShowPassword
-                                  ? <VisibilityIcon
-                                        fontSize={'small'}
-                                        onClick={togglePasswordVisibility}
-                                        className={cls.icon}
-                                    />
-                                  : <VisibilityOffIcon
-                                        fontSize={'small'}
-                                        onClick={togglePasswordVisibility}
-                                        className={cls.icon}
-                                    />
-                                }
-                            </Button>
-                          : ''}
-                    />
-                  <HStack max justify={'between'}>
-                    <Button
-                        addonRight={<ArrowBackIcon/>}
-                        onClick={onBackClick}
-                        variant={'clear'}
-                    />
-                    <Button
-                        variant={'outline'}
-                        className={cls.loginBtn}
-                        onClick={onRegisterClick}
-                        disabled={isLoading}
-                    >
-                      {t('Продолжить')}
+            )}
+            <Input
+                type="text"
+                className={cls.input}
+                placeholder={t('Электронная почта') ?? ''}
+                autoComplete={'username'}
+                onChange={onChangeEmail}
+                value={email}
+            />
+            <Input
+                type={!isToggleShowPassword ? 'password' : 'text'}
+                className={cls.input}
+                placeholder={t('Пароль') ?? ''}
+                onChange={onChangePassword}
+                value={password}
+                autoComplete={'new-password'}
+                addonRight={password
+                  ? <Button variant={'clear'}>
+                        {!isToggleShowPassword
+                          ? <VisibilityIcon
+                                fontSize={'small'}
+                                onClick={togglePasswordVisibility}
+                                className={cls.icon}
+                            />
+                          : <VisibilityOffIcon
+                                fontSize={'small'}
+                                onClick={togglePasswordVisibility}
+                                className={cls.icon}
+                            />
+                        }
                     </Button>
-                  </HStack>
+                  : ''}
+            />
+            <HStack max justify={'between'}>
+                <Button
+                    addonRight={<ArrowBackIcon/>}
+                    onClick={onBackClick}
+                    variant={'clear'}
+                />
+                <Button
+                    variant={'outline'}
+                    className={cls.loginBtn}
+                    onClick={onRegisterClick}
+                    disabled={isLoginLoading}
+                >
+                    {t('Продолжить')}
+                </Button>
+            </HStack>
         </>
   )
 
@@ -380,6 +403,7 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
                         type="text"
                         className={cls.input}
                         placeholder={t('Электронная почта') ?? ''}
+                        autoComplete={'username'}
                         onChange={onChangeEmail}
                         value={email}
                     />
@@ -396,7 +420,7 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
                         variant={'outline'}
                         className={cls.loginBtn}
                         onClick={onForgotPasswordClick}
-                        disabled={isLoading}
+                        disabled={isLoginLoading}
                     >
                         {t('Восстановить')}
                     </Button>
@@ -405,7 +429,7 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
                     variant={'outline'}
                     className={cls.loginBtn}
                     onClick={onCloseClick}
-                    disabled={isLoading}
+                    disabled={isLoginLoading}
                 >
                     {t('Закрыть')}
                 </Button>
@@ -414,45 +438,47 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
   )
 
   return (
-        <VStack
-            className={classNames(cls.LoginForm, {}, [className])} gap={'16'}
-            onKeyDown={(e) => {
-              handleKeypress(e.key)
-            }}
-        >
-            <DynamicModuleLoader
-                removeAfterUnmount
-                reducers={initialReducers}
+        <form className={classNames(cls.LoginForm, {}, [className])}>
+            <VStack
+                gap={'16'}
+                onKeyDown={(e) => {
+                  handleKeypress(e.key)
+                }}
             >
-                {isFormInputError &&
-                    <Text
-                        title={t('Ошибка. Пожалуйста, заполните все поля.')}
-                        text={
-                            registerError &&
-                            !isRegisterError &&
-                            typeof registerError === 'object' &&
-                            'data' in registerError
-                              ? Array.isArray(registerError.data)
-                                ? registerError.data.join('\n')
-                                : ''
-                              : ''
-                        }
-                        variant={'error'}
-                    />
-                }
-                {
-                    (isRegisterLoading ||
-                        isActivateLoading ||
-                        isForgotPasswordLoading ||
-                        isLoading) &&
-                    <Loader className={cls.loginLoader}/>
-                }
-                {isLoginForm && loginContent}
-                {isRegisterForm && registerContent}
-                {isActivateForm && activationContent}
-                {isForgotPasswordForm && forgotPasswordContent}
-            </DynamicModuleLoader>
-        </VStack>
+                <DynamicModuleLoader
+                    removeAfterUnmount
+                    reducers={initialReducers}
+                >
+                    {isFormInputError &&
+                        <Text
+                            title={t('Ошибка!')}
+                            text={
+                                registerError &&
+                                !isRegisterError &&
+                                typeof registerError === 'object' &&
+                                'data' in registerError
+                                  ? Array.isArray(registerError.data)
+                                    ? registerError.data.join('\n')
+                                    : ''
+                                  : ''
+                            }
+                            variant={'error'}
+                        />
+                    }
+                    {
+                        (isRegisterLoading ||
+                            isActivateLoading ||
+                            isForgotPasswordLoading ||
+                            isLoginLoading) &&
+                        <Loader className={cls.loginLoader}/>
+                    }
+                    {isLoginForm && loginContent}
+                    {isRegisterForm && registerContent}
+                    {isActivateForm && activationContent}
+                    {isForgotPasswordForm && forgotPasswordContent}
+                </DynamicModuleLoader>
+            </VStack>
+        </form>
   )
 })
 

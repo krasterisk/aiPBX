@@ -1,5 +1,7 @@
 export enum AppRoutes {
   MAIN = 'main',
+  LOGIN = 'login',
+  SIGNUP = 'signup',
   ABOUT = 'about',
   ADMIN = 'admin',
   SETTINGS = 'settings',
@@ -22,6 +24,8 @@ export enum AppRoutes {
 
 export const getRouteMain = () => '/'
 export const getRouteAbout = () => '/about'
+export const getRouteLogin = () => '/login'
+export const getRouteSignup = () => '/signup'
 export const getRouteAdmin = () => '/admin'
 export const getRouteEndpoints = () => '/endpoints'
 export const getRouteContexts = () => '/contexts'
@@ -44,6 +48,8 @@ export const getRouteUserEdit = (id: string) => `/users/${id}`
 
 export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteMain()]: AppRoutes.MAIN,
+  [getRouteLogin()]: AppRoutes.LOGIN,
+  [getRouteSignup()]: AppRoutes.SIGNUP,
   [getRouteAbout()]: AppRoutes.ABOUT,
   [getRouteAdmin()]: AppRoutes.ADMIN,
   [getRouteSettings()]: AppRoutes.SETTINGS,
