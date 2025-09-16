@@ -3,7 +3,6 @@
     align-items: center;
     text-align: center;
     width: 100%;
-    margin: 30px 0;
 }
 
 .Divider::before,
@@ -11,10 +10,12 @@
     content: "";
     flex: 1;
     height: 1px;
-    background: var(--dark-bg-redesigned);
+    background: var(--accent-redesigned);
 }
 
 .Divider span {
     color: var(--text-redesigned);
+    padding-right: 8px;
+    padding-left: 8px;
     font-size: 14px;
 }

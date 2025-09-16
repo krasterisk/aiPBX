@@ -1,10 +1,9 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './Login.module.scss'
 import { useTranslation } from 'react-i18next'
-import React, { memo, useCallback, useState } from 'react'
+import React, { ChangeEvent, memo, useCallback, useState } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { Input } from '@/shared/ui/redesigned/Input'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Icon } from '@/shared/ui/redesigned/Icon'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
@@ -14,12 +13,18 @@ import { getLoginPassword } from '../../../AuthByUsername/model/selectors/getLog
 import { getLoginEmail } from '../../../AuthByUsername/model/selectors/getLoginEmail/getLoginEmail'
 import { loginActions } from '../../../AuthByUsername/model/slice/loginSlice'
 import AiPbxIcon from '@/shared/assets/icons/ai-pbx-icon.svg'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Loader } from '@/shared/ui/Loader'
 import { LangSwitcher } from '@/entities/LangSwitcher'
 import { useMediaQuery } from '@mui/material'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import GoogleIcon from '@/shared/assets/icons/googleIcon.svg'
+import TelegramIcon from '@mui/icons-material/Telegram'
+import { Textarea } from '@/shared/ui/mui/Textarea'
+import { Divider } from '@/shared/ui/Divider'
+import { getRouteSignup } from '@/shared/const/router'
+import { useNavigate } from 'react-router-dom'
 
 interface LoginFormProps {
   className?: string
@@ -38,6 +43,7 @@ export const Login = memo((props: LoginFormProps) => {
   const [isFormError, setFormError] = useState<boolean>(false)
   const [isToggleShowPassword, setToggleShowPassword] = useState<boolean>(false)
   const isMobile = useMediaQuery('(max-width:800px)')
+  const navigate = useNavigate()
 
   const togglePasswordVisibility = useCallback(() => {
     setToggleShowPassword(!isToggleShowPassword)
@@ -52,7 +58,7 @@ export const Login = memo((props: LoginFormProps) => {
     }
   ] = useLoginUser()
 
-  const onLoginClick = useCallback(async () => {
+  const onLoginClick = useCallback(() => {
     if (!email || !password) {
       setFormError(true)
       return
@@ -70,12 +76,18 @@ export const Login = memo((props: LoginFormProps) => {
       })
   }, [dispatch, email, password, userLoginMutation])
 
-  const onChangeEmail = useCallback((value: string) => {
-    dispatch(loginActions.setEmail(value))
+  const onChangeEmail = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const email = event.target.value
+    dispatch(loginActions.setEmail(email))
   }, [dispatch])
 
-  const onChangePassword = useCallback((value: string) => {
-    dispatch(loginActions.setPassword(value))
+  const onSignup = useCallback(() => {
+    navigate(getRouteSignup())
+  }, [navigate])
+
+  const onChangePassword = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const password = event.target.value
+    dispatch(loginActions.setPassword(password))
   }, [dispatch])
 
   return (
@@ -86,7 +98,7 @@ export const Login = memo((props: LoginFormProps) => {
             </HStack>
             <form className={cls.formWrapper}>
                 <Card max padding={'48'} border={'partial'} className={cls.loginCard}>
-                    <VStack max gap={'24'}>
+                    <VStack max gap={'16'}>
                     <VStack gap={'4'} align={'center'}>
                         <Text title={t('Вход в облачную AI PBX')} align={'center'}/>
                         <Text text={t('Голосовые ассистенты для бизнеса')} align={'center'}/>
@@ -100,60 +112,93 @@ export const Login = memo((props: LoginFormProps) => {
                             <Text text={t('Авторизация прошла успешно')}/>
                         }
                         {isLoginLoading &&
+                            <HStack max justify={'center'}>
                             <Loader className={cls.loginLoader}/>
+                            </HStack>
                         }
-                        <Input
-                            type="text"
-                            className={cls.input}
-                            placeholder={t('Электронная почта') ?? ''}
+                        <Textarea
+                            type={'email'}
+                            label={t('Электронная почта') ?? ''}
                             onChange={onChangeEmail}
-                            autoComplete={'username'}
+                            autoComplete={'email'}
                             value={email}
+                            fullWidth
+                            required
                         />
-                        <Input
+                        <Textarea
                             type={!isToggleShowPassword ? 'password' : 'text'}
-                            className={cls.input}
-                            placeholder={t('Пароль') ?? ''}
+                            label={t('Пароль') ?? ''}
                             autoComplete={'current-password'}
                             onChange={onChangePassword}
                             value={password}
-                            addonRight={password
-                              ? <Button variant={'clear'}>
-                                    {!isToggleShowPassword
-                                      ? <VisibilityIcon
+                            required
+                            fullWidth
+                            slotProps={{
+                              input: {
+                                endAdornment: (
+                                  isToggleShowPassword
+                                    ? <VisibilityOffIcon
                                             fontSize={'small'}
                                             onClick={togglePasswordVisibility}
                                             className={cls.visibilityIcon}
                                         />
-                                      : <VisibilityOffIcon
+                                    : <VisibilityIcon
                                             fontSize={'small'}
                                             onClick={togglePasswordVisibility}
-                                            className={cls.visibilityIcon}
-                                        />
-                                    }
-                                </Button>
-                              : ''}
+                                            className={cls.visibilityIcon} />)
+                              }
+                            }}
                         />
+                        <Button
+                            variant={'filled'}
+                            fullWidth
+                            className={cls.loginBtn}
+                            onClick={() => { onLoginClick() }}
+                            disabled={isLoginLoading}
+                        >
+                            {t('Вход')}
+                        </Button>
+                        <HStack max justify={'center'} gap={'0'}>
                         <Button
                             variant={'clear'}
                             className={cls.linkButton}
                         >
                             {t('Забыли пароль?')}
                         </Button>
+                        </HStack>
+                        <Divider>{t('или')}</Divider>
+                        <VStack gap={'0'} max>
                         <Button
-                            variant={'clear'}
-                            className={cls.linkButton}
-                        >
-                            {t('Регистрация')}
-                        </Button>
-                        <Button
-                            variant={'outline'}
+                            variant={'filled'}
+                            fullWidth
                             className={cls.loginBtn}
-                            onClick={onLoginClick}
+                            onClick={() => { onLoginClick() }}
                             disabled={isLoginLoading}
+                            addonLeft={<GoogleIcon />}
                         >
-                            {t('Вход')}
+                            {t('Вход через Google')}
                         </Button>
+                        <Button
+                            variant={'filled'}
+                            fullWidth
+                            className={cls.loginBtn}
+                            onClick={() => { onLoginClick() }}
+                            disabled={isLoginLoading}
+                            addonLeft={<TelegramIcon />}
+                        >
+                            {t('Вход через Telegram')}
+                        </Button>
+                        </VStack>
+                        <HStack max justify={'center'}>
+                            <Text text={t('Ещё нет аккаунта?')} />
+                            <Button
+                                variant={'clear'}
+                                className={cls.linkButton}
+                                onClick={onSignup}
+                            >
+                                {t('Регистрация')}
+                            </Button>
+                        </HStack>
                     </VStack>
                 </Card>
             </form>

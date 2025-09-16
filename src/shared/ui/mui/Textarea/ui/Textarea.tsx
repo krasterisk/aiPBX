@@ -16,8 +16,8 @@ const areaStyles = {
   '& .MuiOutlinedInput-root': {
 
     '& fieldset': {
-      border: '2px solid var(--icon-redesigned)', // Цвет по умолчанию
-      borderRadius: '24px'
+      border: '1px solid var(--icon-redesigned)', // Цвет по умолчанию
+      borderRadius: '8px'
     },
     '&:hover fieldset': {
       borderColor: 'var(--accent-redesigned)' // Цвет рамки при наведении

@@ -21,12 +21,17 @@
 }
 
 .withAddon {
-    padding: 0 16px;
+    padding: 8px 16px;
 }
 
-.addonLeft,
+.addonLeft {
+  display: flex;
+  padding-right: 8px;
+}
+
 .addonRight {
-    display: flex;
+  display: flex;
+  padding-left: 8px;
 }
 
 .clear {
@@ -37,10 +42,10 @@
 }
 
 .filled {
-    background: var(--light-bg-redesigned);
+    background: var(--icon-redesigned);
     border: none;
     outline: none;
-    border-radius: 34px;
+    border-radius: 8px;
 }
 
 .outline {
