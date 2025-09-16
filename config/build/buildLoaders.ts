@@ -17,7 +17,7 @@ export function buildLoaders (options: buildOptions): webpack.RuleSetRule[] {
             {
               name: 'convertColors',
               params: {
-                currentColor: true
+                currentColor: false
               }
             }
           ]

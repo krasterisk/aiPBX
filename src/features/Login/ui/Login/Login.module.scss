@@ -1,9 +1,69 @@
-.Login {
+.LoginContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--bg-redesigned)
 
 }
 
-.icon {
-    position: absolute;
-    top: 0;
-    left: 0;
+.logoIcon {
+    //position: absolute;
+    //top: 16px;
+    //left: 16px;
+    width: 200px;
+    height: 50px;
+}
+
+.formWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    min-height: 100%;
+}
+
+.loginCard {
+    max-width: 400px;
+    width: 100%;
+}
+
+.input {
+    width: 100%;
+}
+
+.visibilityIcon {
+    color: var(--icon-color);
+    cursor: pointer;
+
+    &:hover {
+        color: var(--primary-color);
+    }
+}
+
+.linkButton {
+    justify-content: flex-start;
+    padding: 8px 0;
+
+    &:hover {
+        background-color: transparent;
+        color: var(--primary-color);
+    }
+}
+
+.loginBtn {
+    margin-top: 16px;
+}
+
+// Адаптивность для мобильных устройств
+@media (max-width: 768px) {
+    .LoginContainer {
+        padding: 16px;
+    }
+
+    .loginCard {
+        max-width: 100%;
+    }
 }

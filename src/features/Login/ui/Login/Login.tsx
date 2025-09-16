@@ -2,7 +2,7 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './Login.module.scss'
 import { useTranslation } from 'react-i18next'
 import React, { memo, useCallback, useState } from 'react'
-import { VStack } from '@/shared/ui/redesigned/Stack'
+import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Input } from '@/shared/ui/redesigned/Input'
 import { Button } from '@/shared/ui/redesigned/Button'
@@ -17,10 +17,12 @@ import AiPbxIcon from '@/shared/assets/icons/ai-pbx-icon.svg'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { Card } from '@/shared/ui/redesigned/Card'
+import { Loader } from '@/shared/ui/Loader'
+import { LangSwitcher } from '@/entities/LangSwitcher'
+import { useMediaQuery } from '@mui/material'
 
 interface LoginFormProps {
   className?: string
-
 }
 
 export const Login = memo((props: LoginFormProps) => {
@@ -35,6 +37,7 @@ export const Login = memo((props: LoginFormProps) => {
   const email = useSelector(getLoginEmail)
   const [isFormError, setFormError] = useState<boolean>(false)
   const [isToggleShowPassword, setToggleShowPassword] = useState<boolean>(false)
+  const isMobile = useMediaQuery('(max-width:800px)')
 
   const togglePasswordVisibility = useCallback(() => {
     setToggleShowPassword(!isToggleShowPassword)
@@ -76,82 +79,84 @@ export const Login = memo((props: LoginFormProps) => {
   }, [dispatch])
 
   return (
-        <form className={classNames(cls.LoginPage, {}, [className])}>
-            <Icon Svg={AiPbxIcon} className={cls.icon}/>
-            <Card max padding={'48'} border={'partial'}>
-                <VStack
-                    gap={'16'}
-                    // onKeyDown={(e) => {
-                    //     handleKeypress(e.key)
-                    // }}
-                >
-                    <Text title={t('Авторизация')}></Text>
-                    {
-                        loginError &&
-                        isLoginError &&
-                        <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'}/>
-                    }
-                    {isLoginSuccess &&
-                        <Text text={t('Авторизация прошла успешно')}/>
-                    }
-                    <Input
-                        type="text"
-                        className={cls.input}
-                        placeholder={t('Электронная почта') ?? ''}
-                        onChange={onChangeEmail}
-                        autoComplete={'username'}
-                        value={email}
-                    />
-                    <Input
-                        type={!isToggleShowPassword ? 'password' : 'text'}
-                        className={cls.input}
-                        placeholder={t('Пароль') ?? ''}
-                        autoComplete={'current-password'}
-                        onChange={onChangePassword}
-                        value={password}
-                        addonRight={password
-                          ? <Button variant={'clear'}>
-                                {!isToggleShowPassword
-                                  ? <VisibilityIcon
-                                        fontSize={'small'}
-                                        onClick={togglePasswordVisibility}
-                                        className={cls.icon}
-                                    />
-                                  : <VisibilityOffIcon
-                                        fontSize={'small'}
-                                        onClick={togglePasswordVisibility}
-                                        className={cls.icon}
-                                    />
-                                }
-                            </Button>
-                          : ''}
-                    />
-                    <VStack>
+        <div className={classNames(cls.LoginContainer, {}, [className])}>
+            <HStack gap={'24'} justify={'between'} max>
+                <Icon Svg={AiPbxIcon} width={200} height={50} className={cls.logoIcon}/>
+                <LangSwitcher short={isMobile} className={cls.lang} />
+            </HStack>
+            <form className={cls.formWrapper}>
+                <Card max padding={'48'} border={'partial'} className={cls.loginCard}>
+                    <VStack max gap={'24'}>
+                    <VStack gap={'4'} align={'center'}>
+                        <Text title={t('Вход в облачную AI PBX')} align={'center'}/>
+                        <Text text={t('Голосовые ассистенты для бизнеса')} align={'center'}/>
+                    </VStack>
+                        {
+                            loginError &&
+                            isLoginError &&
+                            <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'}/>
+                        }
+                        {isLoginSuccess &&
+                            <Text text={t('Авторизация прошла успешно')}/>
+                        }
+                        {isLoginLoading &&
+                            <Loader className={cls.loginLoader}/>
+                        }
+                        <Input
+                            type="text"
+                            className={cls.input}
+                            placeholder={t('Электронная почта') ?? ''}
+                            onChange={onChangeEmail}
+                            autoComplete={'username'}
+                            value={email}
+                        />
+                        <Input
+                            type={!isToggleShowPassword ? 'password' : 'text'}
+                            className={cls.input}
+                            placeholder={t('Пароль') ?? ''}
+                            autoComplete={'current-password'}
+                            onChange={onChangePassword}
+                            value={password}
+                            addonRight={password
+                              ? <Button variant={'clear'}>
+                                    {!isToggleShowPassword
+                                      ? <VisibilityIcon
+                                            fontSize={'small'}
+                                            onClick={togglePasswordVisibility}
+                                            className={cls.visibilityIcon}
+                                        />
+                                      : <VisibilityOffIcon
+                                            fontSize={'small'}
+                                            onClick={togglePasswordVisibility}
+                                            className={cls.visibilityIcon}
+                                        />
+                                    }
+                                </Button>
+                              : ''}
+                        />
                         <Button
                             variant={'clear'}
-                            // onClick={onForgotPassword}
+                            className={cls.linkButton}
                         >
                             {t('Забыли пароль?')}
                         </Button>
                         <Button
                             variant={'clear'}
-                            // onClick={onRegister}
+                            className={cls.linkButton}
                         >
                             {t('Регистрация')}
                         </Button>
+                        <Button
+                            variant={'outline'}
+                            className={cls.loginBtn}
+                            onClick={onLoginClick}
+                            disabled={isLoginLoading}
+                        >
+                            {t('Вход')}
+                        </Button>
                     </VStack>
-                    <Button
-                        variant={'outline'}
-                        className={cls.loginBtn}
-                        onClick={() => {
-                          onLoginClick()
-                        }}
-                        disabled={isLoginLoading}
-                    >
-                        {t('Вход')}
-                    </Button>
-                </VStack>
-            </Card>
-        </form>
+                </Card>
+            </form>
+        </div>
   )
 })

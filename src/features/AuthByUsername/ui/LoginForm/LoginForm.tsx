@@ -154,8 +154,9 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
     dispatch(loginActions.setActivationCode(value))
   }, [dispatch])
 
-  const onLoginClick = useCallback(async () => {
+  const onLoginClick = useCallback(() => {
     setFormInputError(false)
+    console.log('fdsfd')
     if (!email || !password) {
       setFormInputError(true)
       return
@@ -289,6 +290,7 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
                   onLoginClick()
                 }}
                 disabled={isLoginLoading}
+                fullWidth
             >
                 {t('Вход')}
             </Button>
