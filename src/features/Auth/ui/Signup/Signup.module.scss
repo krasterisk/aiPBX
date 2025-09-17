@@ -1,15 +1,28 @@
-.LoginContainer {
+.SignupContainer {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding: 24px;
     position: relative;
+    padding: 16px;
     overflow: hidden;
-    background-color: var(--bg-redesigned);
+    background: var(--bg-redesigned)
 }
 
-.loginLoader {
-  position: absolute;
+.SignupContainerDesktop {
+    // фон
+    background-size: auto;      // растянуть под размер контейнера
+    background-position: left; // выровнять по центру
+    background-repeat: repeat;// не повторять
+    background-image: var(--signup-logo);
+
+}
+
+.lang {
+    color: white;
+}
+
+.signupLoader {
+    position: absolute;
 }
 
 .logoIcon {
@@ -20,6 +33,12 @@
     height: 50px;
 }
 
+.img {
+    width: 100%;
+    height: 100%;
+}
+
+
 .formWrapper {
     display: flex;
     justify-content: center;
@@ -28,7 +47,7 @@
     min-height: 100%;
 }
 
-.loginCard {
+.signupCard {
     max-width: 400px;
     width: 100%;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); // тень
@@ -53,19 +72,8 @@
     }
 }
 
-.loginBtn {
+.signupBtn {
     display: flex;
     justify-content: center;
     margin-top: 16px;
-}
-
-// Адаптивность для мобильных устройств
-@media (max-width: 768px) {
-    .LoginContainer {
-        padding: 16px;
-    }
-
-    .loginCard {
-        max-width: 100%;
-    }
 }

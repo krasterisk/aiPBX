@@ -1,0 +1,212 @@
+import { classNames, Mods } from '@/shared/lib/classNames/classNames'
+import cls from './Signup.module.scss'
+import { useTranslation } from 'react-i18next'
+import React, { ChangeEvent, memo, useCallback, useState } from 'react'
+import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import { Text } from '@/shared/ui/redesigned/Text'
+import { Button } from '@/shared/ui/redesigned/Button'
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
+import { useSelector } from 'react-redux'
+import { useSignupUser, User } from '@/entities/User'
+import { getSignupPassword } from '../../model/selectors/signup/getSignupPassword/getSignupPassword'
+import { getSignupEmail } from '../../model/selectors/signup/getSignupEmail/getSignupEmail'
+import { signupActions } from '../../model/slice/signupSlice'
+import { Card } from '@/shared/ui/redesigned/Card'
+import { Loader } from '@/shared/ui/Loader'
+import { LangSwitcher } from '@/entities/LangSwitcher'
+import { useMediaQuery } from '@mui/material'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import GoogleIcon from '@/shared/assets/icons/googleIcon.svg'
+import TelegramIcon from '@mui/icons-material/Telegram'
+import { Textarea } from '@/shared/ui/mui/Textarea'
+import { Divider } from '@/shared/ui/Divider'
+import { getRouteLogin } from '@/shared/const/router'
+import { useNavigate } from 'react-router-dom'
+
+interface SignupFormProps {
+  className?: string
+}
+
+export const Signup = memo((props: SignupFormProps) => {
+  const {
+    className
+  } = props
+
+  const { t } = useTranslation('login')
+
+  const dispatch = useAppDispatch()
+  const password = useSelector(getSignupPassword)
+  const email = useSelector(getSignupEmail)
+  const [isSignupFormError, setSignupFormError] = useState<boolean>(false)
+  const [isToggleShowPassword, setToggleShowPassword] = useState<boolean>(false)
+  const isMobile = useMediaQuery('(max-width:768px)')
+  const navigate = useNavigate()
+
+  const togglePasswordVisibility = useCallback(() => {
+    setToggleShowPassword(!isToggleShowPassword)
+  }, [isToggleShowPassword])
+
+  const [userSignupMutation,
+    {
+      isError: isSignupError,
+      isLoading: isSignupLoading,
+      error: signupError,
+      isSuccess: isSignupSuccess
+    }
+  ] = useSignupUser()
+
+  const onSignupClick = useCallback(() => {
+    setSignupFormError(false)
+    if (!email || !password) {
+      setSignupFormError(true)
+      return
+    }
+    const user: User = {
+      id: '',
+      password,
+      email
+    }
+    userSignupMutation(user)
+      .unwrap()
+      .then(() => {
+        setSignupFormError(false)
+      })
+      .catch(() => {
+        console.log('error:', signupError)
+      })
+  }, [email, password, signupError, userSignupMutation])
+
+  const onChangeEmail = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const email = event.target.value
+    dispatch(signupActions.setEmail(email))
+  }, [dispatch])
+
+  const onLogin = useCallback(() => {
+    navigate(getRouteLogin())
+  }, [navigate])
+
+  const onChangePassword = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const password = event.target.value
+    dispatch(signupActions.setPassword(password))
+  }, [dispatch])
+
+  const mods: Mods = {
+    [cls.SignupContainerDesktop]: !isMobile
+  }
+
+  return (
+        <VStack max gap={'8'} className={classNames(cls.SignupContainer, mods, [className])}>
+            <HStack gap={'16'} justify={'end'} max>
+                 {/* <Icon Svg={AiPbxIcon} width={200} height={50} className={cls.logoIcon}/> */}
+                <LangSwitcher short={isMobile} className={cls.lang}/>
+            </HStack>
+            <HStack max gap={'0'}>
+                <form className={cls.formWrapper}>
+                    <Card max padding={'48'} border={'partial'} className={cls.signupCard}>
+                        <VStack max gap={'16'}>
+                            <VStack gap={'4'} align={'center'}>
+                                <Text title={t('Регистрация в AI PBX')} align={'center'}/>
+                                <Text text={t('Голосовые ассистенты для бизнеса')} align={'center'}/>
+                            </VStack>
+                            {
+                                signupError &&
+                                isSignupError &&
+                                <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'}/>
+                            }
+                            {isSignupSuccess &&
+                                <Text text={t('Авторизация прошла успешно')}/>
+                            }
+                            {isSignupLoading &&
+                                <HStack max justify={'center'}>
+                                    <Loader className={cls.signupLoader}/>
+                                </HStack>
+                            }
+                            <Textarea
+                                type={'email'}
+                                label={t('Электронная почта') ?? ''}
+                                onChange={onChangeEmail}
+                                autoComplete={'email'}
+                                value={email}
+                                fullWidth
+                                required
+                            />
+                            <Textarea
+                                type={!isToggleShowPassword ? 'password' : 'text'}
+                                label={t('Пароль') ?? ''}
+                                autoComplete={'current-password'}
+                                onChange={onChangePassword}
+                                value={password}
+                                required
+                                fullWidth
+                                slotProps={{
+                                  input: {
+                                    endAdornment: (
+                                      isToggleShowPassword
+                                        ? <VisibilityOffIcon
+                                                    fontSize={'small'}
+                                                    onClick={togglePasswordVisibility}
+                                                    className={cls.visibilityIcon}
+                                                />
+                                        : <VisibilityIcon
+                                                    fontSize={'small'}
+                                                    onClick={togglePasswordVisibility}
+                                                    className={cls.visibilityIcon}/>)
+                                  }
+                                }}
+                            />
+                            <Button
+                                variant={'filled'}
+                                fullWidth
+                                className={cls.signupBtn}
+                                onClick={() => {
+                                  onSignupClick()
+                                }}
+                                disabled={isSignupLoading}
+                            >
+                                {t('Регистрация')}
+                            </Button>
+                            <Divider>{t('или')}</Divider>
+                            <VStack gap={'0'} max>
+                                <Button
+                                    variant={'filled'}
+                                    fullWidth
+                                    className={cls.signupBtn}
+                                    onClick={() => {
+                                      onSignupClick()
+                                    }}
+                                    disabled={isSignupLoading}
+                                    addonLeft={<GoogleIcon/>}
+                                >
+                                    {t('Продолжить с Google')}
+                                </Button>
+                                <Button
+                                    variant={'filled'}
+                                    fullWidth
+                                    className={cls.signupBtn}
+                                    onClick={() => {
+                                      onSignupClick()
+                                    }}
+                                    disabled={isSignupLoading}
+                                    addonLeft={<TelegramIcon/>}
+                                >
+                                    {t('Продолжить с Telegram')}
+                                </Button>
+                            </VStack>
+                            <HStack max justify={'center'}>
+                                <Text text={t('Уже есть аккаунт?')}/>
+                                <Button
+                                    variant={'clear'}
+                                    className={cls.linkButton}
+                                    onClick={onLogin}
+                                >
+                                    {t('Вход')}
+                                </Button>
+                            </HStack>
+                        </VStack>
+                    </Card>
+                </form>
+            </HStack>
+        </VStack>
+  )
+})

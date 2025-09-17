@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import UsersEditPage from './UsersEditPage'
+import { UsersEditPageAsync as UsersEditPage } from './UsersEditPage.async'
 
 export default {
   title: 'pages/UsersEditPage',

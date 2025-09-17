@@ -1,5 +1,4 @@
 import { UserSchema, UsersPageSchema } from '@/entities/User'
-import { LoginSchema } from '@/features/AuthByUsername'
 import { AnyAction, CombinedState, EnhancedStore, Reducer, ReducersMapObject } from '@reduxjs/toolkit'
 import { AxiosInstance } from 'axios'
 import { ScrollSaveSchema } from '@/features/ScrollSave'
@@ -8,6 +7,7 @@ import { AssistantsPageSchema } from '@/entities/Assistants'
 import { ToolsPageSchema } from '@/entities/Tools'
 import { ReportsPageSchema } from '@/entities/Report'
 import { DashboardPageSchema } from '@/widgets/Dashboard'
+import { LoginSchema, SignupSchema } from '@/features/Auth'
 
 export interface StateSchema {
   user: UserSchema
@@ -16,6 +16,7 @@ export interface StateSchema {
 
   // Async reducers
   loginForm?: LoginSchema
+  signupForm?: SignupSchema
   usersPage?: UsersPageSchema
   assistantsPage?: AssistantsPageSchema
   toolsPage?: ToolsPageSchema

@@ -7,11 +7,11 @@ interface registerUserProps {
   email: string
 }
 
-export const registerUser = createAsyncThunk<
+export const signupUser = createAsyncThunk<
 string,
 registerUserProps,
 ThunkConfig<string>>(
-  'common/registerUser',
+  'common/signupUser',
   async (authData, thunkAPI) => {
     const {
       extra,

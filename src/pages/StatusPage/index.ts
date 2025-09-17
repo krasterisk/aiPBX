@@ -1,1 +1,1 @@
-export { StatusPage } from './ui/StatusPage'
+export { StatusPageAsync as StatusPage } from './ui/StatusPage.async'

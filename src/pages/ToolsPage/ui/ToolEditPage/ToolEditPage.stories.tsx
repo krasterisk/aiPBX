@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import ToolEditPage from './ToolEditPage'
+import { ToolEditPageAsync as ToolEditPage } from './ToolEditPage.async'
 
 export default {
   title: 'shared/ToolEditPage',

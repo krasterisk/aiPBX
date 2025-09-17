@@ -37,6 +37,7 @@ import { OnlinePage } from '@/pages/OnlinePage'
 import { DashboardPage } from '@/pages/DashboardPage'
 import { PaymentPage } from '@/pages/PaymentPage'
 import { LoginPage } from '@/pages/LoginPage'
+import { SignupPage } from '@/pages/SignupPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -53,7 +54,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   },
   [AppRoutes.SIGNUP]: {
     path: getRouteSignup(),
-    element: <AboutPage/>
+    element: <SignupPage />
   },
   [AppRoutes.ONLINE]: {
     path: getRouteOnline(),

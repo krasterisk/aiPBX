@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import AssistantsPage from './AssistantsPage'
+import { AssistantsPageAsync as AssistantsPage } from './AssistantsPage.async'
 
 export default {
   title: 'pages/AssistantsPage',

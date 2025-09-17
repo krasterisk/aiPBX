@@ -50,7 +50,7 @@ export {
   useGetAllUsers,
   useUpdateUser,
   useUploadAvatarUser,
-  useRegisterUser,
+  useSignupUser,
   useActivateUser,
   useForgotPasswordUser,
   useUpdateUserPassword,

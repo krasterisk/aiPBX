@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import ReportPage from './ReportPage'
+import { ReportPageAsync as ReportPage } from './ReportPage.async'
 
 export default {
   title: 'shared/ReportPage',

@@ -38,18 +38,26 @@ export function buildLoaders (options: buildOptions): webpack.RuleSetRule[] {
   //     use: 'ts-loader',
   //     exclude: /node_modules/,
   // };
+  // через FileLoader, заменил на assetLoader ниже
+  // const fileLoader = {
+  //   test: /\.(png|jpe?g|gif|woff2|woff)$/i,
+  //   use: [
+  //     {
+  //       loader: 'file-loader'
+  //     }
+  //   ]
+  // }
 
-  const fileLoader = {
-    test: /\.(png|jpe?g|gif|woff2|woff)$/i,
-    use: [
-      {
-        loader: 'file-loader'
-      }
-    ]
+  const assetLoader = {
+    test: /\.(png|jpe?g|gif|woff2?|woff|eot|ttf|otf)$/i,
+    type: 'asset/resource',
+    generator: {
+      filename: 'assets/[name].[contenthash][ext][query]' // куда класть ассеты
+    }
   }
 
   return [
-    fileLoader,
+    assetLoader,
     svgLoader,
     codeBabelLoader,
     tsxCodeBabelLoader,

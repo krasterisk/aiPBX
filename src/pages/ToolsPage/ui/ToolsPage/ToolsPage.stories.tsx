@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import ToolsPage from './ToolsPage'
+import { ToolsPageAsync as ToolsPage } from './ToolsPage.async'
 
 export default {
   title: 'shared/ToolsPage',

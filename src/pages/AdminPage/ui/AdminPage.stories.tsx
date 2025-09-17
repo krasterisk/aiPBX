@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
-import AdminPage from './AdminPage'
+import { AdminPageAsync as AdminPage } from './AdminPage.async'
 import { StoreDecorator } from '@/shared/config/storybook/StoreDecorator/StoreDecorator'
 import { RouterDecorator } from '@/shared/config/storybook/RouterDecorator/RouterDecorator'
 

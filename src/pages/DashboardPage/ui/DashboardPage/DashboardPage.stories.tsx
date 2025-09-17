@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import DashboardPage from './DashboardPage'
+import { DashboardPageAsync as DashboardPage } from './DashboardPage.async'
 
 export default {
   title: 'shared/DashboardPage',

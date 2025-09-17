@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { LoginPage } from './LoginPage'
+import { LoginPageAsync as LoginPage } from './LoginPage.async'
 
 export default {
   title: 'pages/LoginPage',

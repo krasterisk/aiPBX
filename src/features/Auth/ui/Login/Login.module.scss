@@ -1,0 +1,84 @@
+.LoginContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--bg-redesigned);
+}
+
+.LoginContainerDesktop {
+    // фон
+    background-size: auto;      // растянуть под размер контейнера
+    background-position: left; // выровнять по центру
+    background-repeat: repeat;// не повторять
+    background-image: var(--login-logo);
+
+}
+
+.lang {
+    color: white;
+}
+
+.loginLoader {
+  position: absolute;
+}
+
+.logoIcon {
+    //position: absolute;
+    //top: 16px;
+    //left: 16px;
+    width: 200px;
+    height: 50px;
+}
+
+.formWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    min-height: 100%;
+}
+
+.loginCard {
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); // тень
+}
+
+
+.visibilityIcon {
+    color: var(--icon-color);
+    cursor: pointer;
+
+    &:hover {
+        color: var(--primary-color);
+    }
+}
+
+.linkButton {
+    padding: 0;
+
+    &:hover {
+        background-color: transparent;
+        color: var(--primary-color);
+    }
+}
+
+.loginBtn {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+// Адаптивность для мобильных устройств
+@media (max-width: 768px) {
+    .LoginContainer {
+        padding: 16px;
+    }
+
+    .loginCard {
+        max-width: 100%;
+    }
+}

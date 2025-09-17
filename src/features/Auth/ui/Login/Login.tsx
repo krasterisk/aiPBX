@@ -1,18 +1,16 @@
-import { classNames } from '@/shared/lib/classNames/classNames'
+import { classNames, Mods } from '@/shared/lib/classNames/classNames'
 import cls from './Login.module.scss'
 import { useTranslation } from 'react-i18next'
 import React, { ChangeEvent, memo, useCallback, useState } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { Icon } from '@/shared/ui/redesigned/Icon'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useSelector } from 'react-redux'
 import { useLoginUser, userActions } from '@/entities/User'
-import { getLoginPassword } from '../../../AuthByUsername/model/selectors/getLoginPassword/getLoginPassword'
-import { getLoginEmail } from '../../../AuthByUsername/model/selectors/getLoginEmail/getLoginEmail'
-import { loginActions } from '../../../AuthByUsername/model/slice/loginSlice'
-import AiPbxIcon from '@/shared/assets/icons/ai-pbx-icon.svg'
+import { getLoginPassword } from '../../model/selectors/login/getLoginPassword/getLoginPassword'
+import { getLoginEmail } from '../../model/selectors/login/getLoginEmail/getLoginEmail'
+import { loginActions } from '../../model/slice/loginSlice'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Loader } from '@/shared/ui/Loader'
 import { LangSwitcher } from '@/entities/LangSwitcher'
@@ -42,7 +40,7 @@ export const Login = memo((props: LoginFormProps) => {
   const email = useSelector(getLoginEmail)
   const [isFormError, setFormError] = useState<boolean>(false)
   const [isToggleShowPassword, setToggleShowPassword] = useState<boolean>(false)
-  const isMobile = useMediaQuery('(max-width:800px)')
+  const isMobile = useMediaQuery('(max-width:768px)')
   const navigate = useNavigate()
 
   const togglePasswordVisibility = useCallback(() => {
@@ -90,18 +88,22 @@ export const Login = memo((props: LoginFormProps) => {
     dispatch(loginActions.setPassword(password))
   }, [dispatch])
 
+  const mods: Mods = {
+    [cls.LoginContainerDesktop]: !isMobile
+  }
+
   return (
-        <div className={classNames(cls.LoginContainer, {}, [className])}>
-            <HStack gap={'24'} justify={'between'} max>
-                <Icon Svg={AiPbxIcon} width={200} height={50} className={cls.logoIcon}/>
+        <div className={classNames(cls.LoginContainer, mods, [className])}>
+            <HStack gap={'16'} justify={'end'} max>
+                {/* <Icon Svg={AiPbxIcon} width={200} height={50} className={cls.logoIcon}/> */}
                 <LangSwitcher short={isMobile} className={cls.lang} />
             </HStack>
             <form className={cls.formWrapper}>
                 <Card max padding={'48'} border={'partial'} className={cls.loginCard}>
                     <VStack max gap={'16'}>
-                    <VStack gap={'4'} align={'center'}>
-                        <Text title={t('Вход в облачную AI PBX')} align={'center'}/>
-                        <Text text={t('Голосовые ассистенты для бизнеса')} align={'center'}/>
+                    <VStack gap={'4'} justify={'center'} align={'center'} max>
+                        <Text title={t('Вход в облачную AI PBX')} />
+                        <Text text={t('Голосовые ассистенты для бизнеса')} />
                     </VStack>
                         {
                             loginError &&

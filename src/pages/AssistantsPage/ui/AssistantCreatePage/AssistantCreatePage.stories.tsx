@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import AssistantCreatePage from './AssistantCreatePage'
+import { AssistantCreatePageAsync as AssistantCreatePage } from './AssistantCreatePage.async'
 
 export default {
   title: 'pages/AssistantCreatePage',

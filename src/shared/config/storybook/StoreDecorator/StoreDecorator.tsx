@@ -1,6 +1,6 @@
 import { Story } from '@storybook/react'
 import { StateSchema, StoreProvider } from '@/app/providers/StoreProvider'
-import { loginReducer } from '@/features/AuthByUsername/testing'
+import { loginReducer } from '@/features/Auth/testing'
 import { ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 
 const defaultAsyncReducers: ReducersList = {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
-import AboutPage from './AboutPage'
+import { AboutPageAsync as AboutPage } from './AboutPage.async'
 
 export default {
   title: 'pages/AdminPage',

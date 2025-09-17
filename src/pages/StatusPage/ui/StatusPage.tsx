@@ -11,7 +11,7 @@ interface StatusPageProps {
   className?: string
 }
 
-export const StatusPage = memo((props: StatusPageProps) => {
+const StatusPage = memo((props: StatusPageProps) => {
   const { className } = props
   const { t } = useTranslation('main')
   const groupedEvents = useOpenAiEvents()
@@ -38,3 +38,5 @@ export const StatusPage = memo((props: StatusPageProps) => {
         </VStack>
   )
 })
+
+export default StatusPage

@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import PaymentPage from './PaymentPage'
+import { PaymentPageAsync as PaymentPage } from './PaymentPage.async'
 
 export default {
   title: 'shared/PaymentPage',

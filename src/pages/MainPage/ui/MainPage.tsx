@@ -26,8 +26,6 @@ import {
 } from 'lucide-react'
 import { LangSwitcher } from '@/entities/LangSwitcher'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { getUserAuthData } from '@/entities/User'
 import { getRouteLogin } from '@/shared/const/router'
 
 const fadeInUp = {
@@ -70,7 +68,6 @@ const FeatureCard: FC<FeatureCardProps> = ({ icon: Icon, title, desc }) => (
 const MainPage: FC = memo(() => {
   const { t } = useTranslation('main')
   const isMobile = useMediaQuery('(max-width:800px)')
-  const userData = useSelector(getUserAuthData)
   const navigate = useNavigate()
 
   // useEffect(() => {

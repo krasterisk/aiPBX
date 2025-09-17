@@ -6,19 +6,19 @@ import { Input } from '@/shared/ui/redesigned/Input'
 import { useSelector } from 'react-redux'
 import React, { memo, useCallback, useState } from 'react'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { getLoginPassword } from '../../model/selectors/getLoginPassword/getLoginPassword'
+import { getLoginPassword } from '../../../Auth/model/selectors/login/getLoginPassword/getLoginPassword'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
-import { getLoginEmail } from '../../model/selectors/getLoginEmail/getLoginEmail'
+import { getLoginEmail } from '../../../Auth/model/selectors/login/getLoginEmail/getLoginEmail'
 import { Loader } from '@/shared/ui/Loader'
-import { User, useRegisterUser, useForgotPasswordUser, useActivateUser, useLoginUser, userActions } from '@/entities/User'
+import { User, useSignupUser, useForgotPasswordUser, useActivateUser, useLoginUser, userActions } from '@/entities/User'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { getActivationCode } from '../../model/selectors/getActivationCode/getActivationCode'
-import { getErrorMessage } from '../../helpers/getErrorMessage'
-import { loginActions, loginReducer } from '../../model/slice/loginSlice'
+import { getActivationCode } from '../../../Auth/model/selectors/getActivationCode/getActivationCode'
+import { getErrorMessage } from '../../../Auth/helpers/getErrorMessage'
+import { loginActions, loginReducer } from '../../../Auth/model/slice/loginSlice'
 
 export interface LoginFormProps {
   className?: string
@@ -51,7 +51,7 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
       error: registerError,
       isSuccess: isRegisterSuccess
     }
-  ] = useRegisterUser()
+  ] = useSignupUser()
 
   const [userActivateMutation,
     {
@@ -156,7 +156,6 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
 
   const onLoginClick = useCallback(() => {
     setFormInputError(false)
-    console.log('fdsfd')
     if (!email || !password) {
       setFormInputError(true)
       return

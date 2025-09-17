@@ -4,7 +4,7 @@ import { ThemeDecorator } from '@/shared/config/storybook/ThemeDecorator/ThemeDe
 import { StoreDecorator } from '@/shared/config/storybook/StoreDecorator/StoreDecorator'
 import { Theme } from '@/shared/const/theme'
 import { RouterDecorator } from '@/shared/config/storybook/RouterDecorator/RouterDecorator'
-import OnlinePage from './OnlinePage'
+import { OnlinePageAsync as OnlinePage } from './OnlinePage.async'
 
 export default {
   title: 'pages/OnlinePage',
