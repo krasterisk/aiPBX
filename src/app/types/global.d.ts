@@ -18,6 +18,7 @@ declare const __API__: string
 declare const __WS__: string
 declare const __PROJECT__: 'storybook' | 'frontend' | 'jest'
 declare const __STATIC__: string
+declare const __GOOGLE_CLIENT_ID__: string
 
 type DeepPartial<T> = T extends object ? {
   [P in keyof T]?: DeepPartial<T[P]>

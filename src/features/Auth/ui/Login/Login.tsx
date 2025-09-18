@@ -7,7 +7,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useSelector } from 'react-redux'
-import { useLoginUser, userActions } from '@/entities/User'
+import { useGoogleUser, useLoginUser, userActions } from '@/entities/User'
 import { getLoginPassword } from '../../model/selectors/login/getLoginPassword/getLoginPassword'
 import { getLoginEmail } from '../../model/selectors/login/getLoginEmail/getLoginEmail'
 import { loginActions } from '../../model/slice/loginSlice'
@@ -23,6 +23,7 @@ import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Divider } from '@/shared/ui/Divider'
 import { getRouteSignup } from '@/shared/const/router'
 import { useNavigate } from 'react-router-dom'
+import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin'
 
 interface LoginFormProps {
   className?: string
@@ -55,6 +56,22 @@ export const Login = memo((props: LoginFormProps) => {
       isSuccess: isLoginSuccess
     }
   ] = useLoginUser()
+
+  const [googleLoginMutation] = useGoogleUser()
+
+  const handleGoogleSuccess = (idToken: string) => {
+    googleLoginMutation({ id_token: idToken })
+      .unwrap()
+      .then((data) => {
+        if (data.token) {
+          dispatch(userActions.setToken(data.token))
+        }
+      })
+      .catch((e) => {
+        console.error('Google login failed', e)
+      })
+  }
+  const onGoogleLoginClick = useGoogleLogin(handleGoogleSuccess)
 
   const onLoginClick = useCallback(() => {
     if (!email || !password) {
@@ -174,7 +191,7 @@ export const Login = memo((props: LoginFormProps) => {
                             variant={'filled'}
                             fullWidth
                             className={cls.loginBtn}
-                            onClick={() => { onLoginClick() }}
+                            onClick={onGoogleLoginClick}
                             disabled={isLoginLoading}
                             addonLeft={<GoogleIcon />}
                         >
@@ -184,7 +201,7 @@ export const Login = memo((props: LoginFormProps) => {
                             variant={'filled'}
                             fullWidth
                             className={cls.loginBtn}
-                            onClick={() => { onLoginClick() }}
+                            onClick={onGoogleLoginClick}
                             disabled={isLoginLoading}
                             addonLeft={<TelegramIcon />}
                         >

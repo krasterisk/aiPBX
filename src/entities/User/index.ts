@@ -54,5 +54,6 @@ export {
   useActivateUser,
   useForgotPasswordUser,
   useUpdateUserPassword,
-  useLoginUser
+  useLoginUser,
+  useGoogleUser
 } from './api/usersApi'
