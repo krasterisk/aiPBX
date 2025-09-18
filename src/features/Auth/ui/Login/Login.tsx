@@ -7,7 +7,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useSelector } from 'react-redux'
-import { useGoogleUser, useLoginUser, userActions } from '@/entities/User'
+import { useGoogleLoginUser, useLoginUser, userActions } from '@/entities/User'
 import { getLoginPassword } from '../../model/selectors/login/getLoginPassword/getLoginPassword'
 import { getLoginEmail } from '../../model/selectors/login/getLoginEmail/getLoginEmail'
 import { loginActions } from '../../model/slice/loginSlice'
@@ -21,7 +21,7 @@ import GoogleIcon from '@/shared/assets/icons/googleIcon.svg'
 import TelegramIcon from '@mui/icons-material/Telegram'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Divider } from '@/shared/ui/Divider'
-import { getRouteSignup } from '@/shared/const/router'
+import { getRouteDashboard, getRouteSignup } from '@/shared/const/router'
 import { useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin'
 
@@ -50,7 +50,7 @@ export const Login = memo((props: LoginFormProps) => {
 
   const [userLoginMutation, { isLoading: isLoginLoading }] = useLoginUser()
 
-  const [googleLoginMutation, , { isLoading: isGoogleLoading }] = useGoogleUser()
+  const [googleLoginMutation, { isLoading: isGoogleLoading }] = useGoogleLoginUser()
 
   const handleGoogleSuccess = (idToken: string) => {
     googleLoginMutation({ id_token: idToken })
@@ -78,11 +78,12 @@ export const Login = memo((props: LoginFormProps) => {
         if (token) {
           dispatch(userActions.setToken(token))
         }
+        navigate(getRouteDashboard())
       })
       .catch(() => {
         setFormError(true)
       })
-  }, [dispatch, email, password, userLoginMutation])
+  }, [dispatch, email, navigate, password, userLoginMutation])
 
   const onChangeEmail = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const email = event.target.value
@@ -108,6 +109,7 @@ export const Login = memo((props: LoginFormProps) => {
                 {/* <Icon Svg={AiPbxIcon} width={200} height={50} className={cls.logoIcon}/> */}
                 <LangSwitcher short={isMobile} className={cls.lang} />
             </HStack>
+            <HStack max gap={'0'}>
             <form className={cls.formWrapper}>
                 <Card max padding={'48'} border={'partial'} className={cls.loginCard}>
                     <VStack max gap={'16'}>
@@ -117,7 +119,9 @@ export const Login = memo((props: LoginFormProps) => {
                     </VStack>
                         {
                             isFormError &&
-                            <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'}/>
+                            <HStack max justify={'center'} align={'center'}>
+                            <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'} />
+                            </HStack>
                         }
                         {(isLoginLoading || isGoogleLoading) &&
                             <HStack max justify={'center'}>
@@ -210,6 +214,7 @@ export const Login = memo((props: LoginFormProps) => {
                     </VStack>
                 </Card>
             </form>
+            </HStack>
         </div>
   )
 })

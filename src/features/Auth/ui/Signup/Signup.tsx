@@ -7,7 +7,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useSelector } from 'react-redux'
-import { useSignupUser, User } from '@/entities/User'
+import { useSignupUser, User, userActions, useGoogleSignupUser } from '@/entities/User'
 import { getSignupPassword } from '../../model/selectors/signup/getSignupPassword/getSignupPassword'
 import { getSignupEmail } from '../../model/selectors/signup/getSignupEmail/getSignupEmail'
 import { signupActions } from '../../model/slice/signupSlice'
@@ -21,8 +21,9 @@ import GoogleIcon from '@/shared/assets/icons/googleIcon.svg'
 import TelegramIcon from '@mui/icons-material/Telegram'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Divider } from '@/shared/ui/Divider'
-import { getRouteLogin } from '@/shared/const/router'
+import { getRouteDashboard, getRouteLogin } from '@/shared/const/router'
 import { useNavigate } from 'react-router-dom'
+import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin'
 
 interface SignupFormProps {
   className?: string
@@ -38,7 +39,7 @@ export const Signup = memo((props: SignupFormProps) => {
   const dispatch = useAppDispatch()
   const password = useSelector(getSignupPassword)
   const email = useSelector(getSignupEmail)
-  const [isSignupFormError, setSignupFormError] = useState<boolean>(false)
+  const [isFormError, setFormError] = useState<boolean>(false)
   const [isToggleShowPassword, setToggleShowPassword] = useState<boolean>(false)
   const isMobile = useMediaQuery('(max-width:768px)')
   const navigate = useNavigate()
@@ -47,19 +48,30 @@ export const Signup = memo((props: SignupFormProps) => {
     setToggleShowPassword(!isToggleShowPassword)
   }, [isToggleShowPassword])
 
-  const [userSignupMutation,
-    {
-      isError: isSignupError,
-      isLoading: isSignupLoading,
-      error: signupError,
-      isSuccess: isSignupSuccess
-    }
-  ] = useSignupUser()
+  const [userSignupMutation, { isLoading: isSignupLoading }] = useSignupUser()
+
+  const [googleSignupMutation, { isLoading: isGoogleLoading }] = useGoogleSignupUser()
+
+  const handleGoogleSuccess = (idToken: string) => {
+    googleSignupMutation({ id_token: idToken })
+      .unwrap()
+      .then((data) => {
+        if (data.token) {
+          dispatch(userActions.setToken(data.token))
+        }
+        navigate(getRouteDashboard())
+      })
+      .catch((e) => {
+        setFormError(true)
+      })
+  }
+
+  const onGoogleSignupClick = useGoogleLogin(handleGoogleSuccess)
 
   const onSignupClick = useCallback(() => {
-    setSignupFormError(false)
+    setFormError(false)
     if (!email || !password) {
-      setSignupFormError(true)
+      setFormError(true)
       return
     }
     const user: User = {
@@ -70,12 +82,12 @@ export const Signup = memo((props: SignupFormProps) => {
     userSignupMutation(user)
       .unwrap()
       .then(() => {
-        setSignupFormError(false)
+        setFormError(false)
       })
       .catch(() => {
-        console.log('error:', signupError)
+        setFormError(true)
       })
-  }, [email, password, signupError, userSignupMutation])
+  }, [email, password, userSignupMutation])
 
   const onChangeEmail = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const email = event.target.value
@@ -96,7 +108,7 @@ export const Signup = memo((props: SignupFormProps) => {
   }
 
   return (
-        <VStack max gap={'8'} className={classNames(cls.SignupContainer, mods, [className])}>
+      <div className={classNames(cls.SignupContainer, mods, [className])}>
             <HStack gap={'16'} justify={'end'} max>
                  {/* <Icon Svg={AiPbxIcon} width={200} height={50} className={cls.logoIcon}/> */}
                 <LangSwitcher short={isMobile} className={cls.lang}/>
@@ -105,19 +117,17 @@ export const Signup = memo((props: SignupFormProps) => {
                 <form className={cls.formWrapper}>
                     <Card max padding={'48'} border={'partial'} className={cls.signupCard}>
                         <VStack max gap={'16'}>
-                            <VStack gap={'4'} align={'center'}>
-                                <Text title={t('Регистрация в AI PBX')} align={'center'}/>
-                                <Text text={t('Голосовые ассистенты для бизнеса')} align={'center'}/>
+                            <VStack gap={'4'} justify={'center'} align={'center'} max>
+                                <Text title={t('Регистрация в AI PBX')} />
+                                <Text text={t('Голосовые ассистенты для бизнеса')} />
                             </VStack>
                             {
-                                signupError &&
-                                isSignupError &&
-                                <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'}/>
+                                isFormError &&
+                                <HStack max justify={'center'} align={'center'}>
+                                    <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'} />
+                                </HStack>
                             }
-                            {isSignupSuccess &&
-                                <Text text={t('Авторизация прошла успешно')}/>
-                            }
-                            {isSignupLoading &&
+                            {(isSignupLoading || isGoogleLoading) &&
                                 <HStack max justify={'center'}>
                                     <Loader className={cls.signupLoader}/>
                                 </HStack>
@@ -172,9 +182,7 @@ export const Signup = memo((props: SignupFormProps) => {
                                     variant={'filled'}
                                     fullWidth
                                     className={cls.signupBtn}
-                                    onClick={() => {
-                                      onSignupClick()
-                                    }}
+                                    onClick={onGoogleSignupClick}
                                     disabled={isSignupLoading}
                                     addonLeft={<GoogleIcon/>}
                                 >
@@ -207,6 +215,6 @@ export const Signup = memo((props: SignupFormProps) => {
                     </Card>
                 </form>
             </HStack>
-        </VStack>
+      </div>
   )
 })

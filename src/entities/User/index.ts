@@ -55,5 +55,6 @@ export {
   useForgotPasswordUser,
   useUpdateUserPassword,
   useLoginUser,
-  useGoogleUser
+  useGoogleLoginUser,
+  useGoogleSignupUser
 } from './api/usersApi'

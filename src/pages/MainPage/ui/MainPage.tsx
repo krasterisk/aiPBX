@@ -3,7 +3,6 @@ import { Page } from '@/widgets/Page'
 import cls from './MainPage.module.scss'
 import { useTranslation } from 'react-i18next'
 import {
-  Button,
   Card,
   CardContent,
   CardHeader,
@@ -15,7 +14,6 @@ import {
 import { motion } from 'framer-motion'
 import {
   BrainCircuit,
-  LogIn,
   Headphones,
   Zap,
   Database,
@@ -156,15 +154,15 @@ const MainPage: FC = memo(() => {
                               flexWrap: 'wrap'
                             }}
                         >
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                                startIcon={<LogIn />}
-                                onClick={onLogin}
-                            >
-                                {t('Войти')}
-                            </Button>
+                            {/* <Button */}
+                            {/*    variant="contained" */}
+                            {/*    color="primary" */}
+                            {/*    size="large" */}
+                            {/*    startIcon={<LogIn />} */}
+                            {/*    onClick={onLogin} */}
+                            {/* > */}
+                            {/*    {t('Войти')} */}
+                            {/* </Button> */}
                         </Box>
                     </motion.div>
                 </Container>

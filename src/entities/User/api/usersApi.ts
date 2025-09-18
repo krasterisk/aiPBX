@@ -88,12 +88,32 @@ export const usersApi = rtkApi.injectEndpoints({
     }),
     googleLoginUser: build.mutation<{ token: string, user?: User }, { id_token: string }>({
       query: (arg) => ({
-        url: '/auth/google',
+        url: '/auth/google/login',
         method: 'POST',
         body: arg
       })
     }),
-
+    googleSignupUser: build.mutation<{ token: string, user?: User }, { id_token: string }>({
+      query: (arg) => ({
+        url: '/auth/google/signup',
+        method: 'POST',
+        body: arg
+      })
+    }),
+    telegramLoginUser: build.mutation<{ token: string, user?: User }, any>({
+      query: (arg) => ({
+        url: '/auth/telegram/login',
+        method: 'POST',
+        body: arg
+      })
+    }),
+    telegramSignupUser: build.mutation<{ token: string, user?: User }, any>({
+      query: (arg) => ({
+        url: '/auth/telegram/signup',
+        method: 'POST',
+        body: arg
+      })
+    }),
     activateUser: build.mutation<{ success: boolean }, string>({
       query: (arg) => ({
         url: '/users/activation',
@@ -162,7 +182,8 @@ export const useGetAllUsers = usersApi.useGetAllUsersQuery
 export const useGetUserBalance = usersApi.useGetUserBalanceQuery
 export const useSignupUser = usersApi.useSignupUserMutation
 export const useLoginUser = usersApi.useLoginUserMutation
-export const useGoogleUser = usersApi.useGoogleLoginUserMutation
+export const useGoogleLoginUser = usersApi.useGoogleLoginUserMutation
+export const useGoogleSignupUser = usersApi.useGoogleSignupUserMutation
 export const useActivateUser = usersApi.useActivateUserMutation
 export const useForgotPasswordUser = usersApi.useForgotPasswordMutation
 export const useSetUsers = usersApi.useSetUsersMutation

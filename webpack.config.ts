@@ -1,4 +1,3 @@
-import type webpack from 'webpack'
 import { buildWebpackConfig } from './config/build/buildWebpackConfig'
 import { type buildEnv, type buildPaths } from './config/build/types/config'
 import path from 'path'
@@ -21,7 +20,7 @@ export default (env: buildEnv) => {
   const staticUrl = env?.staticUrl || 'http://192.168.2.37:5005/api'
   const googleClientId = env.googleClientId || '833962533381-ehqsn7soc4s9e82cv9ats589787ihrog.apps.googleusercontent.com'
 
-  const config: webpack.Configuration = buildWebpackConfig({
+  return buildWebpackConfig({
     mode,
     isDev,
     paths,
@@ -32,6 +31,4 @@ export default (env: buildEnv) => {
     staticUrl,
     googleClientId
   })
-
-  return config
 }
