@@ -48,16 +48,9 @@ export const Login = memo((props: LoginFormProps) => {
     setToggleShowPassword(!isToggleShowPassword)
   }, [isToggleShowPassword])
 
-  const [userLoginMutation,
-    {
-      isError: isLoginError,
-      isLoading: isLoginLoading,
-      error: loginError,
-      isSuccess: isLoginSuccess
-    }
-  ] = useLoginUser()
+  const [userLoginMutation, { isLoading: isLoginLoading }] = useLoginUser()
 
-  const [googleLoginMutation] = useGoogleUser()
+  const [googleLoginMutation, , { isLoading: isGoogleLoading }] = useGoogleUser()
 
   const handleGoogleSuccess = (idToken: string) => {
     googleLoginMutation({ id_token: idToken })
@@ -68,7 +61,7 @@ export const Login = memo((props: LoginFormProps) => {
         }
       })
       .catch((e) => {
-        console.error('Google login failed', e)
+        setFormError(true)
       })
   }
   const onGoogleLoginClick = useGoogleLogin(handleGoogleSuccess)
@@ -123,14 +116,10 @@ export const Login = memo((props: LoginFormProps) => {
                         <Text text={t('Голосовые ассистенты для бизнеса')} />
                     </VStack>
                         {
-                            loginError &&
-                            isLoginError &&
+                            isFormError &&
                             <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'}/>
                         }
-                        {isLoginSuccess &&
-                            <Text text={t('Авторизация прошла успешно')}/>
-                        }
-                        {isLoginLoading &&
+                        {(isLoginLoading || isGoogleLoading) &&
                             <HStack max justify={'center'}>
                             <Loader className={cls.loginLoader}/>
                             </HStack>
