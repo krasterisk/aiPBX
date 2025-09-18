@@ -10,8 +10,6 @@ export const useGoogleLogin = (onSuccess: (idToken: string) => void) => {
   useEffect(() => {
     if (!window.google) return
 
-    console.log(window.google?.accounts?.id)
-
     if (window.google?.accounts?.id) {
       window.google.accounts.id.initialize({
         client_id: __GOOGLE_CLIENT_ID__,

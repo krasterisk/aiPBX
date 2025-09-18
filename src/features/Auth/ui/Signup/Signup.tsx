@@ -7,7 +7,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useSelector } from 'react-redux'
-import { useSignupUser, User, userActions, useGoogleSignupUser } from '@/entities/User'
+import { useSignupUser, User, userActions, useGoogleSignupUser, useTelegramSignupUser } from '@/entities/User'
 import { getSignupPassword } from '../../model/selectors/signup/getSignupPassword/getSignupPassword'
 import { getSignupEmail } from '../../model/selectors/signup/getSignupEmail/getSignupEmail'
 import { signupActions } from '../../model/slice/signupSlice'
@@ -49,8 +49,8 @@ export const Signup = memo((props: SignupFormProps) => {
   }, [isToggleShowPassword])
 
   const [userSignupMutation, { isLoading: isSignupLoading }] = useSignupUser()
-
   const [googleSignupMutation, { isLoading: isGoogleLoading }] = useGoogleSignupUser()
+  const [telegramSignup, { isLoading: isTelegramLoading }] = useTelegramSignupUser()
 
   const handleGoogleSuccess = (idToken: string) => {
     googleSignupMutation({ id_token: idToken })
@@ -67,6 +67,17 @@ export const Signup = memo((props: SignupFormProps) => {
   }
 
   const onGoogleSignupClick = useGoogleLogin(handleGoogleSuccess)
+
+  const onTelegramSignupClick = () => {
+    const botId = '8298793342'
+    const redirectUri = `${window.location.origin}/auth/signup/telegram`
+
+    window.open(
+            `https://oauth.telegram.org/auth?bot_id=${botId}&origin=${window.location.origin}&embed=1&request_access=write&redirect_uri=${redirectUri}`,
+            '_blank',
+            'width=500,height=600'
+    )
+  }
 
   const onSignupClick = useCallback(() => {
     setFormError(false)
@@ -188,18 +199,16 @@ export const Signup = memo((props: SignupFormProps) => {
                                 >
                                     {t('Продолжить с Google')}
                                 </Button>
-                                <Button
+                                 <Button
                                     variant={'filled'}
                                     fullWidth
                                     className={cls.signupBtn}
-                                    onClick={() => {
-                                      onSignupClick()
-                                    }}
+                                    onClick={onTelegramSignupClick}
                                     disabled={isSignupLoading}
-                                    addonLeft={<TelegramIcon/>}
-                                >
+                                    addonLeft={<TelegramIcon />}
+                                 >
                                     {t('Продолжить с Telegram')}
-                                </Button>
+                                 </Button>
                             </VStack>
                             <HStack max justify={'center'}>
                                 <Text text={t('Уже есть аккаунт?')}/>
