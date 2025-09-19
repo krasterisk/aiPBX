@@ -71,11 +71,14 @@ export const Signup = memo((props: SignupFormProps) => {
   const onTelegramSignupClick = () => {
     const botId = '8298793342'
     const redirectUri = `${window.location.origin}/auth/signup/telegram`
+    const origin = `${window.location.origin}`
+    // const redirectUri = 'https://localhost:3000/auth/signup/telegram'
+    // const origin = 'https://aipbx.net'
 
     window.open(
-            `https://oauth.telegram.org/auth?bot_id=${botId}&origin=${window.location.origin}&embed=1&request_access=write&redirect_uri=${redirectUri}`,
+            `https://oauth.telegram.org/auth?bot_id=${botId}&origin=${origin}&embed=1&request_access=write&redirect_uri=${redirectUri}`,
             '_blank',
-            'width=500,height=600'
+            'width=300,height=400'
     )
   }
 

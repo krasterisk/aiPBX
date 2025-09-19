@@ -1,16 +1,16 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { TelegramPageAsync as TelegramPage } from './TelegramPage.async'
+import { TelegramSignupPageAsync as TelegramSignupPage } from './TelegramSignupPage.async'
 
 export default {
   title: 'pages/TelegramPage',
-  component: TelegramPage,
+  component: TelegramSignupPage,
   argTypes: {
     backgroundColor: { control: 'color' }
   }
-} as ComponentMeta<typeof TelegramPage>
+} as ComponentMeta<typeof TelegramSignupPage>
 
-const Template: ComponentStory<typeof TelegramPage> = (args) => <TelegramPage {...args} />
+const Template: ComponentStory<typeof TelegramSignupPage> = (args) => <TelegramSignupPage />
 
 export const Normal = Template.bind({})
 Normal.args = {}

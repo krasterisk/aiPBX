@@ -3,19 +3,21 @@ import { userActions, useTelegramSignupUser } from '@/entities/User'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useNavigate } from 'react-router-dom'
 import { getRouteDashboard, getRouteForbidden, getRouteSignup } from '@/shared/const/router'
+import { Loader } from '@/shared/ui/Loader'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 
 interface TelegramProps {
   className?: string
 }
 
-export const Telegram = memo((props: TelegramProps) => {
+export const TelegramSignup = memo((props: TelegramProps) => {
   const {
     className
   } = props
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const [telegramSignup] = useTelegramSignupUser()
+  const [telegramSignup, { isLoading }] = useTelegramSignupUser()
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -42,5 +44,11 @@ export const Telegram = memo((props: TelegramProps) => {
       })
   }, [navigate, telegramSignup, dispatch])
 
-  return <div>Авторизация через Telegram...</div>
+  return (
+        <VStack max justify={'center'} align={'center'}>
+            {isLoading &&
+                <Loader/>
+            }
+        </VStack>
+  )
 })

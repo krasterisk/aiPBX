@@ -1,16 +1,16 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { Telegram } from './Telegram'
+import { TelegramSignup } from './TelegramSignup'
 
 export default {
   title: 'shared/Telegram',
-  component: Telegram,
+  component: TelegramSignup,
   argTypes: {
     backgroundColor: { control: 'color' }
   }
-} as ComponentMeta<typeof Telegram>
+} as ComponentMeta<typeof TelegramSignup>
 
-const Template: ComponentStory<typeof Telegram> = (args) => <Telegram {...args} />
+const Template: ComponentStory<typeof TelegramSignup> = (args) => <TelegramSignup {...args} />
 
 export const Normal = Template.bind({})
 Normal.args = {}

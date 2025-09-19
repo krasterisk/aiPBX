@@ -2,6 +2,8 @@ export enum AppRoutes {
   MAIN = 'main',
   LOGIN = 'login',
   SIGNUP = 'signup',
+  TELEGRAM_SIGNUP = 'telegram_signup',
+  TELEGRAM_LOGIN = 'telegram_login',
   ABOUT = 'about',
   ADMIN = 'admin',
   SETTINGS = 'settings',
@@ -26,6 +28,8 @@ export const getRouteMain = () => '/'
 export const getRouteAbout = () => '/about'
 export const getRouteLogin = () => '/login'
 export const getRouteSignup = () => '/signup'
+export const getRouteSignupTelegram = () => '/auth/signup/telegram'
+export const getRouteLoginTelegram = () => '/auth/login/telegram'
 export const getRouteAdmin = () => '/admin'
 export const getRouteEndpoints = () => '/endpoints'
 export const getRouteContexts = () => '/contexts'
@@ -51,6 +55,8 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteLogin()]: AppRoutes.LOGIN,
   [getRouteSignup()]: AppRoutes.SIGNUP,
   [getRouteAbout()]: AppRoutes.ABOUT,
+  [getRouteSignupTelegram()]: AppRoutes.TELEGRAM_SIGNUP,
+  [getRouteLoginTelegram()]: AppRoutes.TELEGRAM_LOGIN,
   [getRouteAdmin()]: AppRoutes.ADMIN,
   [getRouteSettings()]: AppRoutes.SETTINGS,
   [getRouteReports()]: AppRoutes.REPORTS,

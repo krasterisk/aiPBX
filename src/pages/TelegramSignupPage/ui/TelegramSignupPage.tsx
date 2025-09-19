@@ -1,10 +1,10 @@
-import { Telegram } from '@/features/Telegram'
+import { TelegramSignup } from '@/features/Auth'
 import { memo } from 'react'
 
-const TelegramPage = memo(() => {
+const TelegramSignupPage = memo(() => {
   return (
-      <Telegram />
+      <TelegramSignup />
   )
 })
 
-export default TelegramPage
+export default TelegramSignupPage

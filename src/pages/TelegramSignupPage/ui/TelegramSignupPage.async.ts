@@ -1,3 +1,3 @@
 import { lazy } from 'react'
 
-export const TelegramPageAsync = lazy(async () => await import('./TelegramPage'))
+export const TelegramSignupPageAsync = lazy(async () => await import('./TelegramSignupPage'))
