@@ -1,13 +1,13 @@
 {
   "name": "ai_pbx",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --env mode=production apiUrl=http://192.168.2.37:5005/api wsUrl=ws://192.168.2.37:3033 port=3005",
+    "start": "webpack serve --env mode=production apiUrl=http://192.168.2.37:5005/api wsUrl=ws://192.168.2.37:3033 port=3005 tgBotId=8298793342",
     "start:dev": "webpack serve --env mode=development",
     "start:vite": "vite",
-    "build:prod": "webpack --env mode=production apiUrl=https://aipbx.krasterisk.ru/api wsUrl=wss://aipbx.krasterisk.ru port=7003",
+    "build:prod": "webpack --env mode=production apiUrl=https://aipbx.krasterisk.ru/api wsUrl=wss://aipbx.krasterisk.ru port=7003 tgBotId=8298793342",
     "build:dev": "webpack --env mode=development",
     "prettier": "npx prettier --write **/*.{ts,tsx}",
     "lint:ts": "eslint \"**/*.{ts,tsx}\"",

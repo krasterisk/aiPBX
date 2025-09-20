@@ -7,7 +7,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useSelector } from 'react-redux'
-import { useGoogleLoginUser, useLoginUser, userActions } from '@/entities/User'
+import { useGoogleLoginUser, useLoginUser, userActions, useTelegramLoginUser } from '@/entities/User'
 import { getLoginPassword } from '../../model/selectors/login/getLoginPassword/getLoginPassword'
 import { getLoginEmail } from '../../model/selectors/login/getLoginEmail/getLoginEmail'
 import { loginActions } from '../../model/slice/loginSlice'
@@ -24,6 +24,7 @@ import { Divider } from '@/shared/ui/Divider'
 import { getRouteDashboard, getRouteSignup } from '@/shared/const/router'
 import { useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin'
+import { useTelegramLogin } from '@/shared/lib/hooks/useTelegramLogin/useTelegramLogin'
 
 interface LoginFormProps {
   className?: string
@@ -48,12 +49,12 @@ export const Login = memo((props: LoginFormProps) => {
     setToggleShowPassword(!isToggleShowPassword)
   }, [isToggleShowPassword])
 
-  const [userLoginMutation, { isLoading: isLoginLoading }] = useLoginUser()
-
-  const [googleLoginMutation, { isLoading: isGoogleLoading }] = useGoogleLoginUser()
+  const [userLogin, { isLoading: isLoginLoading }] = useLoginUser()
+  const [googleLogin, { isLoading: isGoogleLoading }] = useGoogleLoginUser()
+  const [telegramLogin, { isLoading: isTelegramLoading }] = useTelegramLoginUser()
 
   const handleGoogleSuccess = (idToken: string) => {
-    googleLoginMutation({ id_token: idToken })
+    googleLogin({ id_token: idToken })
       .unwrap()
       .then((data) => {
         if (data.token) {
@@ -64,14 +65,31 @@ export const Login = memo((props: LoginFormProps) => {
         setFormError(true)
       })
   }
+
   const onGoogleLoginClick = useGoogleLogin(handleGoogleSuccess)
+
+  const handleTelegramSuccess = useCallback((data: any) => {
+    telegramLogin(data)
+      .unwrap()
+      .then((response) => {
+        if (response.token) {
+          dispatch(userActions.setToken(response.token))
+          navigate(getRouteDashboard())
+        }
+      })
+      .catch(() => {
+        setFormError(true)
+      })
+  }, [telegramLogin, dispatch, navigate])
+
+  const onTelegramLoginClick = useTelegramLogin(handleTelegramSuccess)
 
   const onLoginClick = useCallback(() => {
     if (!email || !password) {
       setFormError(true)
       return
     }
-    userLoginMutation({ email, password })
+    userLogin({ email, password })
       .unwrap()
       .then((data) => {
         const token = data.token
@@ -83,7 +101,7 @@ export const Login = memo((props: LoginFormProps) => {
       .catch(() => {
         setFormError(true)
       })
-  }, [dispatch, email, navigate, password, userLoginMutation])
+  }, [dispatch, email, navigate, password, userLogin])
 
   const onChangeEmail = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const email = event.target.value
@@ -123,7 +141,7 @@ export const Login = memo((props: LoginFormProps) => {
                             <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'} />
                             </HStack>
                         }
-                        {(isLoginLoading || isGoogleLoading) &&
+                        {(isLoginLoading || isGoogleLoading || isTelegramLoading) &&
                             <HStack max justify={'center'}>
                             <Loader className={cls.loginLoader}/>
                             </HStack>
@@ -194,7 +212,7 @@ export const Login = memo((props: LoginFormProps) => {
                             variant={'filled'}
                             fullWidth
                             className={cls.loginBtn}
-                            onClick={onGoogleLoginClick}
+                            onClick={onTelegramLoginClick}
                             disabled={isLoginLoading}
                             addonLeft={<TelegramIcon />}
                         >

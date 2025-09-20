@@ -9,7 +9,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import { buildOptions } from './types/config'
 
 export function buildPlugins ({
-  paths, isDev, apiUrl, wsUrl, project, staticUrl, googleClientId
+  paths, isDev, apiUrl, wsUrl, project, staticUrl, googleClientId, tgBotId
 }: buildOptions): webpack.WebpackPluginInstance[] {
   const isProd = !isDev
 
@@ -24,7 +24,8 @@ export function buildPlugins ({
       __WS__: JSON.stringify(wsUrl),
       __PROJECT__: JSON.stringify(project),
       __STATIC__: JSON.stringify(staticUrl),
-      __GOOGLE_CLIENT_ID__: JSON.stringify(googleClientId)
+      __GOOGLE_CLIENT_ID__: JSON.stringify(googleClientId),
+      __TG_BOT_ID__: JSON.stringify(googleClientId)
     }),
     new CircularDependencyPlugin({
       exclude: /node_modules/,

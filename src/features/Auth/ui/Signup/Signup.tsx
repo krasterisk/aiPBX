@@ -69,25 +69,6 @@ export const Signup = memo((props: SignupFormProps) => {
 
   const onGoogleSignupClick = useGoogleLogin(handleGoogleSuccess)
 
-  // const onTelegramSignupClick = () => {
-  //   const botId = '8298793342'
-  //   // const redirectUri = `${window.location.origin}/auth/signup/telegram`
-  //   // const origin = `${window.location.origin}`
-  //   const redirectUri = 'https://aipbx.net/auth/signup/telegram'
-  //   const origin = 'https://aipbx.net'
-  //
-  //       // Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
-  //       console.log(data)
-  //     }
-  //   )
-  //
-  //   // window.open(
-  //   //         `https://oauth.telegram.org/auth?bot_id=${botId}&origin=${origin}&request_access=write&redirect_uri=${redirectUri}`
-  //   //         // '_blank',
-  //   //         // 'width=500,height=500'
-  //   // )
-  // }
-
   const handleTelegramSuccess = useCallback((data: any) => {
     telegramSignup(data)
       .unwrap()
@@ -102,10 +83,7 @@ export const Signup = memo((props: SignupFormProps) => {
       })
   }, [telegramSignup, dispatch, navigate])
 
-  const onTelegramSignupClick = useTelegramLogin(
-    handleTelegramSuccess,
-    '8298793342'
-  )
+  const onTelegramSignupClick = useTelegramLogin(handleTelegramSuccess)
 
   const onSignupClick = useCallback(() => {
     setFormError(false)

@@ -15,17 +15,19 @@ declare global {
 }
 
 export const useTelegramLogin = (
-  onSuccess: (data: any) => void,
-  botId: string
+  onSuccess: (data: any) => void
 ) => {
-  const login = useCallback(() => {
+  return useCallback(() => {
     if (!window.Telegram) {
       console.error('Telegram SDK not loaded')
       return
     }
 
     window.Telegram.Login.auth(
-      { bot_id: botId, request_access: true },
+      {
+        bot_id: __TG_BOT_ID__,
+        request_access: true
+      },
       (data) => {
         if (data) {
           onSuccess(data)
@@ -34,7 +36,5 @@ export const useTelegramLogin = (
         }
       }
     )
-  }, [onSuccess, botId])
-
-  return login
+  }, [onSuccess])
 }

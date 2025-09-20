@@ -18,7 +18,8 @@ export default (env: buildEnv) => {
   const apiUrl = env?.apiUrl || 'http://192.168.2.37:5005/api'
   const wsUrl = env?.wsUrl || 'ws://192.168.2.37:3033'
   const staticUrl = env?.staticUrl || 'http://192.168.2.37:5005/api'
-  const googleClientId = env.googleClientId || '833962533381-ehqsn7soc4s9e82cv9ats589787ihrog.apps.googleusercontent.com'
+  const googleClientId = env?.googleClientId || '833962533381-ehqsn7soc4s9e82cv9ats589787ihrog.apps.googleusercontent.com'
+  const tgBotId = env?.tgBotId || '8298793342'
 
   return buildWebpackConfig({
     mode,
@@ -29,6 +30,7 @@ export default (env: buildEnv) => {
     wsUrl,
     project: 'frontend',
     staticUrl,
-    googleClientId
+    googleClientId,
+    tgBotId
   })
 }

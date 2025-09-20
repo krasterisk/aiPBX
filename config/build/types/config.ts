@@ -20,6 +20,7 @@ export interface buildOptions {
   project: 'storybook' | 'frontend' | 'jest'
   staticUrl: string
   googleClientId: string
+  tgBotId: string
 }
 
 export interface buildEnv {
@@ -29,4 +30,5 @@ export interface buildEnv {
   wsUrl: string
   staticUrl: string
   googleClientId: string
+  tgBotId: string
 }
