@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TOKEN_LOCALSTORAGE_KEY } from '@/shared/const/localstorage'
-import { UserSchema } from '../types/user'
+import { User, UserSchema } from '../types/user'
 import { setFeatureFlags } from '@/shared/lib/features'
 import { getTokenAllData, getUserFeatureData } from '@/app/providers/getTokenData/getTokenData'
 
@@ -16,6 +16,9 @@ export const userSlice = createSlice({
       state.redesigned = getUserFeatureData(token)
       state.authData = getTokenAllData(token)
       localStorage.setItem(TOKEN_LOCALSTORAGE_KEY, token)
+    },
+    setAuthData: (state, action: PayloadAction<User>) => {
+      state.authData = action.payload
     },
     initToken: (state) => {
       const token = localStorage.getItem(TOKEN_LOCALSTORAGE_KEY)
