@@ -141,7 +141,7 @@ export const Signup = memo((props: SignupFormProps) => {
                             {
                                 isFormError &&
                                 <HStack max justify={'center'} align={'center'}>
-                                    <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'} />
+                                    <Text text={t('Ошибка при создании пользователя')} variant={'error'} />
                                 </HStack>
                             }
                             {(isSignupLoading || isGoogleLoading || isTelegramLoading) &&

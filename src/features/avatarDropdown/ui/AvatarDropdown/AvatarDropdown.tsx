@@ -3,9 +3,10 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserAuthData, isUserAdmin, userActions } from '@/entities/User'
-import { getRoutePayment, getRouteUserEdit } from '@/shared/const/router'
+import { getRouteMain, getRoutePayment, getRouteUserEdit } from '@/shared/const/router'
 import { Avatar } from '@/shared/ui/redesigned/Avatar'
 import { Dropdown } from '@/shared/ui/redesigned/Popups'
+import { useNavigate } from 'react-router-dom'
 
 interface AvatarDropdownProps {
   className?: string
@@ -19,10 +20,12 @@ export const AvatarDropdown = memo((props: AvatarDropdownProps) => {
   const dispatch = useDispatch()
   const authData = useSelector(getUserAuthData)
   const isAdmin = useSelector(isUserAdmin)
+  const navigate = useNavigate()
 
   const onLogout = useCallback(() => {
     dispatch(userActions.logout())
-  }, [dispatch])
+    navigate(getRouteMain())
+  }, [dispatch, navigate])
 
   const items = [
     // ...(isAdmin

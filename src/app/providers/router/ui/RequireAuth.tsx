@@ -29,6 +29,7 @@ export function RequireAuth ({ children, roles }: RequireAuthProps) {
   }
 
   if (!hasRequiredRoles) {
+    console.log(hasRequiredRoles)
     return <Navigate to={getRouteForbidden()} state={{ from: location }} replace />
   }
 

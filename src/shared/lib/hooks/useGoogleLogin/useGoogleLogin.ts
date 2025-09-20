@@ -13,7 +13,6 @@ export const useGoogleLogin = (onSuccess: (idToken: string) => void) => {
     if (window.google?.accounts?.id) {
       window.google.accounts.id.initialize({
         client_id: __GOOGLE_CLIENT_ID__,
-        use_fedcm_for_prompt: false,
         callback: (response: any) => {
           if (response.credential) {
             onSuccess(response.credential) // это id_token
