@@ -57,10 +57,11 @@ export const Signup = memo((props: SignupFormProps) => {
     googleSignup({ id_token: idToken })
       .unwrap()
       .then((data) => {
-        if (data.token) {
+        if (data.token && data.user) {
           dispatch(userActions.setToken(data.token))
+          dispatch(userActions.setAuthData(data.user))
+          navigate(getRouteDashboard())
         }
-        navigate(getRouteDashboard())
       })
       .catch((e) => {
         setFormError(true)
@@ -73,8 +74,9 @@ export const Signup = memo((props: SignupFormProps) => {
     telegramSignup(data)
       .unwrap()
       .then((response) => {
-        if (response.token) {
+        if (response.token && response.user) {
           dispatch(userActions.setToken(response.token))
+          dispatch(userActions.setAuthData(response.user))
           navigate(getRouteDashboard())
         }
       })

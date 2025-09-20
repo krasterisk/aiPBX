@@ -58,8 +58,11 @@ export const Login = memo((props: LoginFormProps) => {
     googleLogin({ id_token: idToken })
       .unwrap()
       .then((data) => {
-        if (data.token) {
+        if (data.token && data.user) {
           dispatch(userActions.setToken(data.token))
+          dispatch(userActions.setAuthData(data.user))
+          console.log(authData)
+          navigate(getRouteDashboard())
         }
       })
       .catch((e) => {
@@ -73,10 +76,11 @@ export const Login = memo((props: LoginFormProps) => {
     telegramLogin(data)
       .unwrap()
       .then((response) => {
-        if (response.token) {
+        if (response.token && response.user) {
           dispatch(userActions.setToken(response.token))
+          dispatch(userActions.setAuthData(response.user))
           console.log(authData)
-          // navigate(getRouteDashboard())
+          navigate(getRouteDashboard())
         }
       })
       .catch(() => {
