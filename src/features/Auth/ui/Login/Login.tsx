@@ -7,7 +7,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useSelector } from 'react-redux'
-import { useGoogleLoginUser, useLoginUser, userActions, useTelegramLoginUser } from '@/entities/User'
+import { getUserAuthData, useGoogleLoginUser, useLoginUser, userActions, useTelegramLoginUser } from '@/entities/User'
 import { getLoginPassword } from '../../model/selectors/login/getLoginPassword/getLoginPassword'
 import { getLoginEmail } from '../../model/selectors/login/getLoginEmail/getLoginEmail'
 import { loginActions } from '../../model/slice/loginSlice'
@@ -44,6 +44,7 @@ export const Login = memo((props: LoginFormProps) => {
   const [isToggleShowPassword, setToggleShowPassword] = useState<boolean>(false)
   const isMobile = useMediaQuery('(max-width:768px)')
   const navigate = useNavigate()
+  const authData = useSelector(getUserAuthData)
 
   const togglePasswordVisibility = useCallback(() => {
     setToggleShowPassword(!isToggleShowPassword)
@@ -74,13 +75,14 @@ export const Login = memo((props: LoginFormProps) => {
       .then((response) => {
         if (response.token) {
           dispatch(userActions.setToken(response.token))
-          navigate(getRouteDashboard())
+          console.log(authData)
+          // navigate(getRouteDashboard())
         }
       })
       .catch(() => {
         setFormError(true)
       })
-  }, [telegramLogin, dispatch, navigate])
+  }, [telegramLogin, dispatch, authData])
 
   const onTelegramLoginClick = useTelegramLogin(handleTelegramSuccess)
 
