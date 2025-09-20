@@ -25,7 +25,7 @@ export function buildPlugins ({
       __PROJECT__: JSON.stringify(project),
       __STATIC__: JSON.stringify(staticUrl),
       __GOOGLE_CLIENT_ID__: JSON.stringify(googleClientId),
-      __TG_BOT_ID__: JSON.stringify(googleClientId)
+      __TG_BOT_ID__: JSON.stringify(tgBotId)
     }),
     new CircularDependencyPlugin({
       exclude: /node_modules/,

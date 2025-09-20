@@ -49,12 +49,12 @@ export const Signup = memo((props: SignupFormProps) => {
     setToggleShowPassword(!isToggleShowPassword)
   }, [isToggleShowPassword])
 
-  const [userSignupMutation, { isLoading: isSignupLoading }] = useSignupUser()
-  const [googleSignupMutation, { isLoading: isGoogleLoading }] = useGoogleSignupUser()
+  const [userSignup, { isLoading: isSignupLoading }] = useSignupUser()
+  const [googleSignup, { isLoading: isGoogleLoading }] = useGoogleSignupUser()
   const [telegramSignup, { isLoading: isTelegramLoading }] = useTelegramSignupUser()
 
   const handleGoogleSuccess = (idToken: string) => {
-    googleSignupMutation({ id_token: idToken })
+    googleSignup({ id_token: idToken })
       .unwrap()
       .then((data) => {
         if (data.token) {
@@ -96,7 +96,7 @@ export const Signup = memo((props: SignupFormProps) => {
       password,
       email
     }
-    userSignupMutation(user)
+    userSignup(user)
       .unwrap()
       .then(() => {
         setFormError(false)
@@ -104,7 +104,7 @@ export const Signup = memo((props: SignupFormProps) => {
       .catch(() => {
         setFormError(true)
       })
-  }, [email, password, userSignupMutation])
+  }, [email, password, userSignup])
 
   const onChangeEmail = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const email = event.target.value
@@ -144,7 +144,7 @@ export const Signup = memo((props: SignupFormProps) => {
                                     <Text text={t('Неправильные имя пользователя или пароль')} variant={'error'} />
                                 </HStack>
                             }
-                            {(isSignupLoading || isGoogleLoading) &&
+                            {(isSignupLoading || isGoogleLoading || isTelegramLoading) &&
                                 <HStack max justify={'center'}>
                                     <Loader className={cls.signupLoader}/>
                                 </HStack>
