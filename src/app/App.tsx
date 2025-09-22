@@ -1,35 +1,24 @@
-import React, { Suspense, useEffect } from 'react'
+import React, { Suspense } from 'react'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { Navbar } from '@/widgets/Navbar'
-import { useDispatch, useSelector } from 'react-redux'
-import { getUserAuthData, getUserMounted, useGetMe, userActions } from '@/entities/User'
+import { useSelector } from 'react-redux'
+import { getUserAuthData, useGetMe } from '@/entities/User'
 import { AppRouter } from './providers/router'
-import { setFeatureFlags } from '@/shared/lib/features'
 import { MainLayout } from '@/shared/layouts/MainLayout'
 import { PageLoader } from '@/widgets/PageLoader'
 import { Menubar } from '@/widgets/Menubar'
 
 const App = (): any => {
-  const dispatch = useDispatch()
-  const mounted = useSelector(getUserMounted)
   const userData = useSelector(getUserAuthData)
-  const redesigned = userData?.designed
   // const toolbar = useAppToolbar()
-
-  const { data: user } = useGetMe(null)
+  const { data: user, isLoading } = useGetMe(null)
 
   console.log('USERDATA FROM APP: ', userData)
   console.log('USER FROM APP: ', user)
 
-  useEffect(() => {
-    if (!userData && user) {
-      dispatch(userActions.initAuth(user))
-    }
-  }, [dispatch, user, userData])
+  // setFeatureFlags({ isAppRedesigned: redesigned })
 
-  setFeatureFlags({ isAppRedesigned: redesigned })
-
-  if (!mounted) {
+  if (isLoading) {
     return <PageLoader/>
   }
 

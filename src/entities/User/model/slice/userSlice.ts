@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TOKEN_LOCALSTORAGE_KEY } from '@/shared/const/localstorage'
-import { AuthData, User, UserSchema } from '../types/user'
+import { AuthData, UserSchema } from '../types/user'
+import { usersApi } from '../../api/usersApi'
 
 const initialState: UserSchema = { _mounted: false, redesigned: false }
 
@@ -17,20 +18,41 @@ export const userSlice = createSlice({
       // state.authData = getTokenAllData(token)
       localStorage.setItem(TOKEN_LOCALSTORAGE_KEY, token)
     },
-    initAuth: (state, user: PayloadAction<User>) => {
-      const token = localStorage.getItem(TOKEN_LOCALSTORAGE_KEY)
-      console.log('USER FORM USERSLICE: ', user)
-      if (token) {
-        state.token = token
-      }
-      state.authData = user.payload
-      state._mounted = true
-    },
+    // initUser: (state, action: PayloadAction<User>) => {
+    //   const token = localStorage.getItem(TOKEN_LOCALSTORAGE_KEY)
+    //   console.log('USER FORM USERSLICE: ', user)
+    //   if (token) {
+    //     state.token = token
+    //   }
+    //   if (action.payload) {
+    //     state.authData = action.payload
+    //   }
+    //
+    //   state._mounted = true
+    // },
     logout: (state) => {
       state.token = undefined
       state.authData = undefined
       localStorage.removeItem(TOKEN_LOCALSTORAGE_KEY)
     }
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      usersApi.endpoints.getMe.matchFulfilled,
+      (state, { payload }) => {
+        state.authData = payload
+        state.token = localStorage.getItem(TOKEN_LOCALSTORAGE_KEY) || undefined
+        state._mounted = true
+      }
+    )
+    builder.addMatcher(
+      usersApi.endpoints.getMe.matchRejected,
+      (state) => {
+        state.token = undefined
+        state.authData = undefined
+        state._mounted = true
+      }
+    )
   }
 })
 
