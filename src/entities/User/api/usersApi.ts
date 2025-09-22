@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { User, AllUsers, ResetUserPasswordProps } from '../model/types/user'
+import { User, AllUsers, ResetUserPasswordProps, AuthResponse } from '../model/types/user'
 
 interface QueryArgs {
   page?: number
@@ -93,14 +93,14 @@ export const usersApi = rtkApi.injectEndpoints({
         body: arg
       })
     }),
-    googleSignupUser: build.mutation<{ token: string, user?: User }, { id_token: string }>({
+    googleSignupUser: build.mutation<AuthResponse, { id_token: string }>({
       query: (arg) => ({
         url: '/auth/google/signup',
         method: 'POST',
         body: arg
       })
     }),
-    telegramLoginUser: build.mutation<{ token: string, user?: User }, any>({
+    telegramLoginUser: build.mutation<AuthResponse, any>({
       query: (arg) => ({
         url: '/auth/telegram/login',
         method: 'POST',

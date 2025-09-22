@@ -60,3 +60,8 @@ export interface UsersListProps {
   users?: AllUsers
   onDelete?: (id: string) => void
 }
+
+export interface AuthResponse {
+  token: string
+  user: User
+}
