@@ -1,7 +1,5 @@
 export { Login } from './ui/Login/Login'
 export { Signup } from './ui/Signup/Signup'
-export { TelegramSignup } from './ui/TelegramSignup/TelegramSignup'
-export { TelegramLogin } from './ui/TelegramLogin/TelegramLogin'
 
 export {
   loginActions,

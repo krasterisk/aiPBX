@@ -163,11 +163,8 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
     userLoginMutation({ email, password })
       .unwrap()
       .then((data) => {
-        const token = data.token
-        if (token) {
-          dispatch(userActions.setToken(token))
-          onSuccess()
-        }
+        dispatch(userActions.setToken(data))
+        onSuccess()
       })
       .catch(() => {
         setFormInputError(true)

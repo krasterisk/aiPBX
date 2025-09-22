@@ -18,7 +18,8 @@ export type {
   UsersListProps,
   ClientOptions,
   UserCurrency,
-  ResetUserPasswordProps
+  ResetUserPasswordProps,
+  AuthData
 } from './model/types/user'
 
 export { getUserAuthData } from './model/selectors/getUserAuthData/getUserAuthData'
@@ -58,5 +59,6 @@ export {
   useGoogleLoginUser,
   useGoogleSignupUser,
   useTelegramLoginUser,
-  useTelegramSignupUser
+  useTelegramSignupUser,
+  useGetMe
 } from './api/usersApi'

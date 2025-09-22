@@ -7,7 +7,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useSelector } from 'react-redux'
-import { getUserAuthData, useGoogleLoginUser, useLoginUser, userActions, useTelegramLoginUser } from '@/entities/User'
+import { AuthData, getUserAuthData, useGoogleLoginUser, useLoginUser, userActions, useTelegramLoginUser } from '@/entities/User'
 import { getLoginPassword } from '../../model/selectors/login/getLoginPassword/getLoginPassword'
 import { getLoginEmail } from '../../model/selectors/login/getLoginEmail/getLoginEmail'
 import { loginActions } from '../../model/slice/loginSlice'
@@ -25,7 +25,6 @@ import { getRouteDashboard, getRouteSignup } from '@/shared/const/router'
 import { useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin'
 import { useTelegramLogin } from '@/shared/lib/hooks/useTelegramLogin/useTelegramLogin'
-import { TelegramData } from '../../model/types/TelegramData'
 
 interface LoginFormProps {
   className?: string
@@ -60,8 +59,7 @@ export const Login = memo((props: LoginFormProps) => {
       .unwrap()
       .then((data) => {
         if (data.token && data.user) {
-          dispatch(userActions.setToken(data.token))
-          dispatch(userActions.setAuthData(data.user))
+          dispatch(userActions.setToken(data))
           console.log(authData)
           navigate(getRouteDashboard())
         }
@@ -74,19 +72,16 @@ export const Login = memo((props: LoginFormProps) => {
 
   const onGoogleLoginClick = useGoogleLogin(handleGoogleSuccess)
 
-  const handleTelegramSuccess = (data: TelegramData) => {
+  const handleTelegramSuccess = (data: AuthData) => {
     telegramLogin(data)
       .unwrap()
       .then((response) => {
-        if (response.token && response.user) {
-          dispatch(userActions.setToken(response.token))
-          dispatch(userActions.setAuthData(response.user))
-          console.log('Telegram authData: ', authData)
-          console.log('User: ', response.user)
-          console.log('Token: ', response.user)
-          console.log('Response: ', response)
-          navigate(getRouteDashboard())
-        }
+        dispatch(userActions.setToken(response))
+        console.log('Telegram authData: ', authData)
+        console.log('User: ', response.user)
+        console.log('Token: ', response.token)
+        console.log('Response: ', response)
+        navigate(getRouteDashboard())
       })
       .catch((e) => {
         console.log(e)
@@ -104,10 +99,7 @@ export const Login = memo((props: LoginFormProps) => {
     userLogin({ email, password })
       .unwrap()
       .then((data) => {
-        const token = data.token
-        if (token) {
-          dispatch(userActions.setToken(token))
-        }
+        dispatch(userActions.setToken(data))
         navigate(getRouteDashboard())
       })
       .catch(() => {

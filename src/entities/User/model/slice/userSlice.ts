@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TOKEN_LOCALSTORAGE_KEY } from '@/shared/const/localstorage'
-import { User, UserSchema } from '../types/user'
-import { setFeatureFlags } from '@/shared/lib/features'
-import { getTokenAllData, getUserFeatureData } from '@/app/providers/getTokenData/getTokenData'
+import { AuthData, UserSchema } from '../types/user'
 
 const initialState: UserSchema = { _mounted: false, redesigned: false }
 
@@ -10,24 +8,21 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setToken: (state, action: PayloadAction<string>) => {
-      state.token = action.payload
-      const token = action.payload
+    setToken: (state, action: PayloadAction<AuthData>) => {
+      const token = action.payload.token
+      const authData = action.payload.user
+      state.token = token
+      state.authData = authData
       // state.redesigned = getUserFeatureData(token)
       // state.authData = getTokenAllData(token)
       localStorage.setItem(TOKEN_LOCALSTORAGE_KEY, token)
     },
-    setAuthData: (state, action: PayloadAction<User>) => {
-      state.authData = action.payload
-    },
-    initToken: (state) => {
+    initAuth: (state, user) => {
       const token = localStorage.getItem(TOKEN_LOCALSTORAGE_KEY)
       if (token) {
         state.token = token
-        state.authData = getTokenAllData(token)
-        state.redesigned = getUserFeatureData(token)
-        setFeatureFlags({ isAppRedesigned: getUserFeatureData(token) })
       }
+      state.authData = user.payload
       state._mounted = true
     },
     logout: (state) => {

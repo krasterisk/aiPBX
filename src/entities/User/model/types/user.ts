@@ -61,7 +61,7 @@ export interface UsersListProps {
   onDelete?: (id: string) => void
 }
 
-export interface AuthResponse {
+export interface AuthData {
   token: string
   user: User
 }

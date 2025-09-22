@@ -25,7 +25,7 @@ import {
   getRouteDashboard,
   getRoutePayment,
   getRouteSignup,
-  getRouteLogin, getRouteSignupTelegram, getRouteLoginTelegram
+  getRouteLogin
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 import { SettingPage } from '@/pages/SettingsPage'
@@ -38,8 +38,6 @@ import { DashboardPage } from '@/pages/DashboardPage'
 import { PaymentPage } from '@/pages/PaymentPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { SignupPage } from '@/pages/SignupPage'
-import { TelegramLoginPage } from '@/pages/TelegramLoginPage'
-import { TelegramSignupPage } from '@/pages/TelegramSignupPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -57,14 +55,6 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.SIGNUP]: {
     path: getRouteSignup(),
     element: <SignupPage />
-  },
-  [AppRoutes.TELEGRAM_LOGIN]: {
-    path: getRouteLoginTelegram(),
-    element: <TelegramLoginPage />
-  },
-  [AppRoutes.TELEGRAM_SIGNUP]: {
-    path: getRouteSignupTelegram(),
-    element: <TelegramSignupPage />
   },
   [AppRoutes.ONLINE]: {
     path: getRouteOnline(),

@@ -7,7 +7,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useSelector } from 'react-redux'
-import { useSignupUser, User, userActions, useGoogleSignupUser, useTelegramSignupUser } from '@/entities/User'
+import { useSignupUser, User, userActions, useGoogleSignupUser, useTelegramSignupUser, AuthData } from '@/entities/User'
 import { getSignupPassword } from '../../model/selectors/signup/getSignupPassword/getSignupPassword'
 import { getSignupEmail } from '../../model/selectors/signup/getSignupEmail/getSignupEmail'
 import { signupActions } from '../../model/slice/signupSlice'
@@ -25,7 +25,6 @@ import { getRouteDashboard, getRouteLogin } from '@/shared/const/router'
 import { useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin'
 import { useTelegramLogin } from '@/shared/lib/hooks/useTelegramLogin/useTelegramLogin'
-import { TelegramData } from '../../model/types/TelegramData'
 
 interface SignupFormProps {
   className?: string
@@ -58,11 +57,8 @@ export const Signup = memo((props: SignupFormProps) => {
     googleSignup({ id_token: idToken })
       .unwrap()
       .then((data) => {
-        if (data.token && data.user) {
-          dispatch(userActions.setToken(data.token))
-          dispatch(userActions.setAuthData(data.user))
-          navigate(getRouteDashboard())
-        }
+        dispatch(userActions.setToken(data))
+        navigate(getRouteDashboard())
       })
       .catch((e) => {
         setFormError(true)
@@ -71,15 +67,12 @@ export const Signup = memo((props: SignupFormProps) => {
 
   const onGoogleSignupClick = useGoogleLogin(handleGoogleSuccess)
 
-  const handleTelegramSuccess = (data: TelegramData) => {
+  const handleTelegramSuccess = (data: AuthData) => {
     telegramSignup(data)
       .unwrap()
       .then((response) => {
-        if (response.token && response.user) {
-          dispatch(userActions.setToken(response.token))
-          dispatch(userActions.setAuthData(response.user))
-          navigate(getRouteDashboard())
-        }
+        dispatch(userActions.setToken(response))
+        navigate(getRouteDashboard())
       })
       .catch(() => {
         setFormError(true)

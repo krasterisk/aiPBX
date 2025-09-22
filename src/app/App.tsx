@@ -2,25 +2,25 @@ import React, { Suspense, useEffect } from 'react'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { Navbar } from '@/widgets/Navbar'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserAuthData, getUserMounted, userActions } from '@/entities/User'
+import { getUserAuthData, getUserMounted, useGetMe, userActions } from '@/entities/User'
 import { AppRouter } from './providers/router'
 import { setFeatureFlags } from '@/shared/lib/features'
 import { MainLayout } from '@/shared/layouts/MainLayout'
 import { PageLoader } from '@/widgets/PageLoader'
-import { getTokenAllData } from '@/app/providers/getTokenData/getTokenData'
 import { Menubar } from '@/widgets/Menubar'
 
 const App = (): any => {
   const dispatch = useDispatch()
   const mounted = useSelector(getUserMounted)
   const userData = useSelector(getUserAuthData)
-  const authData = getTokenAllData(userData?.token)
-  const redesigned = authData?.designed
+  const redesigned = userData?.designed
   // const toolbar = useAppToolbar()
 
+  const { data: user } = useGetMe(null)
+
   useEffect(() => {
-    dispatch(userActions.initToken())
-  }, [dispatch])
+    dispatch(userActions.initAuth(user))
+  }, [dispatch, user])
 
   setFeatureFlags({ isAppRedesigned: redesigned })
 

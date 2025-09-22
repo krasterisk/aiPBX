@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { User, AllUsers, ResetUserPasswordProps, AuthResponse } from '../model/types/user'
+import { User, AllUsers, ResetUserPasswordProps, AuthData } from '../model/types/user'
 
 interface QueryArgs {
   page?: number
@@ -79,35 +79,35 @@ export const usersApi = rtkApi.injectEndpoints({
         body: arg
       })
     }),
-    loginUser: build.mutation<{ token: string }, { email: string, password: string }>({
+    loginUser: build.mutation<AuthData, { email: string, password: string }>({
       query: (arg) => ({
         url: '/auth/login',
         method: 'POST',
         body: arg
       })
     }),
-    googleLoginUser: build.mutation<{ token: string, user?: User }, { id_token: string }>({
+    googleLoginUser: build.mutation<AuthData, { id_token: string }>({
       query: (arg) => ({
         url: '/auth/google/login',
         method: 'POST',
         body: arg
       })
     }),
-    googleSignupUser: build.mutation<AuthResponse, { id_token: string }>({
+    googleSignupUser: build.mutation<AuthData, { id_token: string }>({
       query: (arg) => ({
         url: '/auth/google/signup',
         method: 'POST',
         body: arg
       })
     }),
-    telegramLoginUser: build.mutation<AuthResponse, any>({
+    telegramLoginUser: build.mutation<AuthData, any>({
       query: (arg) => ({
         url: '/auth/telegram/login',
         method: 'POST',
         body: arg
       })
     }),
-    telegramSignupUser: build.mutation<{ token: string, user?: User }, any>({
+    telegramSignupUser: build.mutation<AuthData, any>({
       query: (arg) => ({
         url: '/auth/telegram/signup',
         method: 'POST',
@@ -131,6 +131,9 @@ export const usersApi = rtkApi.injectEndpoints({
     getUser: build.query<User, string>({
       query: (id) => `/users/${id}`,
       providesTags: (result, error, id) => [{ type: 'Users', id }]
+    }),
+    getMe: build.query<User, null>({
+      query: (id) => '/users/me'
     }),
     uploadAvatarUser: build.mutation<User, { formData: FormData, id: string }>({
       query: ({ formData }) => ({
@@ -182,6 +185,7 @@ export const useGetAllUsers = usersApi.useGetAllUsersQuery
 export const useGetUserBalance = usersApi.useGetUserBalanceQuery
 export const useSignupUser = usersApi.useSignupUserMutation
 export const useLoginUser = usersApi.useLoginUserMutation
+export const useGetMe = usersApi.useGetMeQuery
 export const useGoogleLoginUser = usersApi.useGoogleLoginUserMutation
 export const useGoogleSignupUser = usersApi.useGoogleSignupUserMutation
 export const useTelegramLoginUser = usersApi.useTelegramLoginUserMutation
