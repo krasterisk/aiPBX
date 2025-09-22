@@ -13,8 +13,8 @@ export const userSlice = createSlice({
     setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload
       const token = action.payload
-      state.redesigned = getUserFeatureData(token)
-      state.authData = getTokenAllData(token)
+      // state.redesigned = getUserFeatureData(token)
+      // state.authData = getTokenAllData(token)
       localStorage.setItem(TOKEN_LOCALSTORAGE_KEY, token)
     },
     setAuthData: (state, action: PayloadAction<User>) => {
@@ -22,7 +22,6 @@ export const userSlice = createSlice({
     },
     initToken: (state) => {
       const token = localStorage.getItem(TOKEN_LOCALSTORAGE_KEY)
-
       if (token) {
         state.token = token
         state.authData = getTokenAllData(token)
