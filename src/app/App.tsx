@@ -12,10 +12,6 @@ const App = (): any => {
   const userData = useSelector(getUserAuthData)
   // const toolbar = useAppToolbar()
   const { data: user, isLoading } = useGetMe(null)
-
-  console.log('USERDATA FROM APP: ', userData)
-  console.log('USER FROM APP: ', user)
-
   // setFeatureFlags({ isAppRedesigned: redesigned })
 
   if (isLoading) {

@@ -64,8 +64,7 @@ export const Login = memo((props: LoginFormProps) => {
           navigate(getRouteDashboard())
         }
       })
-      .catch((e) => {
-        console.log(e)
+      .catch(() => {
         setFormError(true)
       })
   }
@@ -77,14 +76,9 @@ export const Login = memo((props: LoginFormProps) => {
       .unwrap()
       .then((response) => {
         dispatch(userActions.setToken(response))
-        console.log('Telegram authData: ', authData)
-        console.log('User: ', response.user)
-        console.log('Token: ', response.token)
-        console.log('Response: ', response)
         navigate(getRouteDashboard())
       })
-      .catch((e) => {
-        console.log(e)
+      .catch(() => {
         setFormError(true)
       })
   }
