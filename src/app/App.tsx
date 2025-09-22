@@ -18,9 +18,14 @@ const App = (): any => {
 
   const { data: user } = useGetMe(null)
 
+  console.log('USERDATA FROM APP: ', userData)
+  console.log('USER FROM APP: ', user)
+
   useEffect(() => {
-    dispatch(userActions.initAuth(user))
-  }, [dispatch, user])
+    if (!userData && user) {
+      dispatch(userActions.initAuth(user))
+    }
+  }, [dispatch, user, userData])
 
   setFeatureFlags({ isAppRedesigned: redesigned })
 
