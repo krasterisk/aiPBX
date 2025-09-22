@@ -72,7 +72,7 @@ export const Login = memo((props: LoginFormProps) => {
 
   const onGoogleLoginClick = useGoogleLogin(handleGoogleSuccess)
 
-  const handleTelegramSuccess = useCallback((data: any) => {
+  const handleTelegramSuccess = (data: any) => {
     telegramLogin(data)
       .unwrap()
       .then((response) => {
@@ -86,7 +86,7 @@ export const Login = memo((props: LoginFormProps) => {
       .catch(() => {
         setFormError(true)
       })
-  }, [telegramLogin, dispatch, authData])
+  }
 
   const onTelegramLoginClick = useTelegramLogin(handleTelegramSuccess)
 

@@ -25,6 +25,7 @@ import { getRouteDashboard, getRouteLogin } from '@/shared/const/router'
 import { useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin'
 import { useTelegramLogin } from '@/shared/lib/hooks/useTelegramLogin/useTelegramLogin'
+import { TelegramData } from '../../model/types/TelegramData'
 
 interface SignupFormProps {
   className?: string
@@ -70,7 +71,7 @@ export const Signup = memo((props: SignupFormProps) => {
 
   const onGoogleSignupClick = useGoogleLogin(handleGoogleSuccess)
 
-  const handleTelegramSuccess = useCallback((data: any) => {
+  const handleTelegramSuccess = (data: TelegramData) => {
     telegramSignup(data)
       .unwrap()
       .then((response) => {
@@ -83,7 +84,7 @@ export const Signup = memo((props: SignupFormProps) => {
       .catch(() => {
         setFormError(true)
       })
-  }, [telegramSignup, dispatch, navigate])
+  }
 
   const onTelegramSignupClick = useTelegramLogin(handleTelegramSuccess)
 
