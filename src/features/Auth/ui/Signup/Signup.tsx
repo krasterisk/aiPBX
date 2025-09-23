@@ -183,7 +183,7 @@ export const Signup = memo((props: SignupFormProps) => {
                             }
                             {isActivateError &&
                                 <Text
-                                    text={t('Произошла ошибка активации. Пожалуйста, попробуйте повторить позже') +
+                                    text={t('Ошибка активации, пожалуйста, попробуйте позже') +
                                         String(activationError)}
                                     variant={'error'}
                                 />
@@ -229,7 +229,7 @@ export const Signup = memo((props: SignupFormProps) => {
                             {isActivation
                               ? <VStack max>
                                     <Text
-                                        text={t('Мы отправили на указанную вами почту код активации, введите его ниже') + ':'}
+                                        text={t('Введите код активации из почты') + ':'}
                                         bold
                                     />
                                     <Textarea
