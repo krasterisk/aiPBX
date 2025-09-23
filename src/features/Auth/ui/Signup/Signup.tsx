@@ -7,7 +7,15 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useSelector } from 'react-redux'
-import { useSignupUser, User, userActions, useGoogleSignupUser, useTelegramSignupUser, AuthData } from '@/entities/User'
+import {
+  useSignupUser,
+  User,
+  userActions,
+  useGoogleSignupUser,
+  useTelegramSignupUser,
+  AuthData,
+  useActivateUser
+} from '@/entities/User'
 import { getSignupPassword } from '../../model/selectors/signup/getSignupPassword/getSignupPassword'
 import { getSignupEmail } from '../../model/selectors/signup/getSignupEmail/getSignupEmail'
 import { signupActions } from '../../model/slice/signupSlice'
@@ -25,6 +33,7 @@ import { getRouteDashboard, getRouteLogin } from '@/shared/const/router'
 import { useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin'
 import { useTelegramLogin } from '@/shared/lib/hooks/useTelegramLogin/useTelegramLogin'
+import { getActivationCode } from '../../model/selectors/getActivationCode/getActivationCode'
 
 interface SignupFormProps {
   className?: string
@@ -40,7 +49,9 @@ export const Signup = memo((props: SignupFormProps) => {
   const dispatch = useAppDispatch()
   const password = useSelector(getSignupPassword)
   const email = useSelector(getSignupEmail)
+  const activationCode = useSelector(getActivationCode)
   const [isFormError, setFormError] = useState<boolean>(false)
+  const [isActivation, setIsActivation] = useState<boolean>(false)
   const [isToggleShowPassword, setToggleShowPassword] = useState<boolean>(false)
   const isMobile = useMediaQuery('(max-width:768px)')
   const navigate = useNavigate()
@@ -52,6 +63,13 @@ export const Signup = memo((props: SignupFormProps) => {
   const [userSignup, { isLoading: isSignupLoading }] = useSignupUser()
   const [googleSignup, { isLoading: isGoogleLoading }] = useGoogleSignupUser()
   const [telegramSignup, { isLoading: isTelegramLoading }] = useTelegramSignupUser()
+  const [activateUser,
+    {
+      isError: isActivateError,
+      isLoading: isActivateLoading,
+      error: activationError
+    }
+  ] = useActivateUser()
 
   const handleGoogleSuccess = (idToken: string) => {
     googleSignup({ id_token: idToken })
@@ -60,7 +78,7 @@ export const Signup = memo((props: SignupFormProps) => {
         dispatch(userActions.setToken(data))
         navigate(getRouteDashboard())
       })
-      .catch((e) => {
+      .catch(() => {
         setFormError(true)
       })
   }
@@ -96,11 +114,35 @@ export const Signup = memo((props: SignupFormProps) => {
       .unwrap()
       .then(() => {
         setFormError(false)
+        setIsActivation(true)
+        dispatch(signupActions.setActivationCode(''))
       })
       .catch(() => {
         setFormError(true)
       })
-  }, [email, password, userSignup])
+  }, [dispatch, email, password, userSignup])
+
+  const onChangeActivationCode = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const value = event.target.value
+    dispatch(signupActions.setActivationCode(value))
+  }, [dispatch])
+
+  const onActivateClick = useCallback(() => {
+    setFormError(false)
+    if (!activationCode || !email || !password) {
+      setFormError(true)
+      return
+    }
+    activateUser({ email, password, activationCode })
+      .unwrap()
+      .then((data) => {
+        dispatch(userActions.setToken(data))
+        navigate(getRouteDashboard())
+      })
+      .catch((e) => {
+        setFormError(true)
+      })
+  }, [activationCode, email, password, activateUser, dispatch, navigate])
 
   const onChangeEmail = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const email = event.target.value
@@ -134,13 +176,19 @@ export const Signup = memo((props: SignupFormProps) => {
                                 <Text title={t('Регистрация в AI PBX')} />
                                 <Text text={t('Голосовые ассистенты для бизнеса')} />
                             </VStack>
-                            {
-                                isFormError &&
+                            {isFormError &&
                                 <HStack max justify={'center'} align={'center'}>
                                     <Text text={t('Ошибка при создании пользователя')} variant={'error'} />
                                 </HStack>
                             }
-                            {(isSignupLoading || isGoogleLoading || isTelegramLoading) &&
+                            {isActivateError &&
+                                <Text
+                                    text={t('Произошла ошибка активации. Пожалуйста, попробуйте повторить позже') +
+                                        String(activationError)}
+                                    variant={'error'}
+                                />
+                            }
+                            {(isSignupLoading || isGoogleLoading || isTelegramLoading || isActivateLoading) &&
                                 <HStack max justify={'center'}>
                                     <Loader className={cls.signupLoader}/>
                                 </HStack>
@@ -178,17 +226,44 @@ export const Signup = memo((props: SignupFormProps) => {
                                   }
                                 }}
                             />
-                            <Button
-                                variant={'filled'}
-                                fullWidth
-                                className={cls.signupBtn}
-                                onClick={() => {
-                                  onSignupClick()
-                                }}
-                                disabled={isSignupLoading}
-                            >
-                                {t('Регистрация')}
-                            </Button>
+                            {isActivation
+                              ? <VStack max>
+                                    <Text
+                                        text={t('Мы отправили на указанную вами почту код активации, введите его ниже') + ':'}
+                                        bold
+                                    />
+                                    <Textarea
+                                        type="text"
+                                        className={cls.input}
+                                        placeholder={t('Код активации') ?? ''}
+                                        onChange={onChangeActivationCode}
+                                        value={activationCode}
+                                        fullWidth
+                                    />
+                                    <Button
+                                        variant={'filled'}
+                                        fullWidth
+                                        className={cls.signupBtn}
+                                        onClick={() => {
+                                          onActivateClick()
+                                        }}
+                                        disabled={isActivateLoading}
+                                    >
+                                        {t('Вход')}
+                                    </Button>
+                                </VStack>
+                              : <Button
+                                    variant={'filled'}
+                                    fullWidth
+                                    className={cls.signupBtn}
+                                    onClick={() => {
+                                      onSignupClick()
+                                    }}
+                                    disabled={isSignupLoading}
+                                >
+                                    {t('Регистрация')}
+                                </Button>
+                            }
                             <Divider>{t('или')}</Divider>
                             <VStack gap={'0'} max>
                                 <Button

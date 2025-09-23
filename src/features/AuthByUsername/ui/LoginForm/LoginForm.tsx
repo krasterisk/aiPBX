@@ -111,14 +111,14 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
       setFormInputError(true)
       return
     }
-    userActivateMutation(activationCode)
+    userActivateMutation({ email, password, activationCode })
       .unwrap()
       .then(() => {
         setActivateForm(false)
         setFormInputError(false)
         setLoginForm(true)
       })
-  }, [activationCode, userActivateMutation])
+  }, [activationCode, email, password, userActivateMutation])
 
   const onRegisterClick = useCallback(() => {
     setFormInputError(false)
