@@ -21,23 +21,6 @@
     color: white;
 }
 
-.signupLoader {
-    position: absolute;
-}
-
-.logoIcon {
-    //position: absolute;
-    //top: 16px;
-    //left: 16px;
-    width: 200px;
-    height: 50px;
-}
-
-.img {
-    width: 100%;
-    height: 100%;
-}
-
 
 .formWrapper {
     display: flex;
@@ -47,33 +30,9 @@
     min-height: 100%;
 }
 
+
 .signupCard {
     max-width: 400px;
     width: 100%;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); // тень
-}
-
-
-.visibilityIcon {
-    color: var(--icon-color);
-    cursor: pointer;
-
-    &:hover {
-        color: var(--primary-color);
-    }
-}
-
-.linkButton {
-    padding: 0;
-
-    &:hover {
-        background-color: transparent;
-        color: var(--primary-color);
-    }
-}
-
-.signupBtn {
-    display: flex;
-    justify-content: center;
-    margin-top: 16px;
 }

@@ -42,5 +42,6 @@
   "Регистрация в AI PBX": "Sign up for AI PBX",
   "Ошибка при создании пользователя": "User creation error",
   "Ошибка активации, пожалуйста, попробуйте позже": "Activation error, please try later",
-  "Введите код активации из почты": "Enter activation code from email"
+  "Введите код активации из почты": "Enter activation code from email",
+  "Ошибка проверки данных": "Data verification error"
 }

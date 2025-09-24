@@ -16,7 +16,9 @@ import { User, useSignupUser, useForgotPasswordUser, useActivateUser, useLoginUs
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { getActivationCode } from '../../../Auth/model/selectors/getActivationCode/getActivationCode'
+import {
+  getSignupActivationCode
+} from '../../../Auth/model/selectors/signup/getSignupActivationCode/getSignupActivationCode'
 import { getErrorMessage } from '../../../Auth/helpers/getErrorMessage'
 import { loginActions, loginReducer } from '../../../Auth/model/slice/loginSlice'
 
@@ -34,7 +36,7 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
   const dispatch = useAppDispatch()
   const password = useSelector(getLoginPassword)
   const email = useSelector(getLoginEmail)
-  const activationCode = useSelector(getActivationCode)
+  const activationCode = useSelector(getSignupActivationCode)
 
   const [isLoginForm, setLoginForm] = useState<boolean>(true)
   const [isRegisterForm, setRegisterForm] = useState<boolean>(false)
@@ -111,7 +113,7 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
       setFormInputError(true)
       return
     }
-    userActivateMutation({ email, password, activationCode })
+    userActivateMutation({ email, activationCode })
       .unwrap()
       .then(() => {
         setActivateForm(false)
@@ -126,12 +128,8 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
       setFormInputError(true)
       return
     }
-    const user: User = {
-      id: '',
-      password,
-      email
-    }
-    userRegisterMutation(user)
+
+    userRegisterMutation({ email })
       .unwrap()
       .then(() => {
         setRegisterForm(false)
@@ -160,7 +158,7 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
       setFormInputError(true)
       return
     }
-    userLoginMutation({ email, password })
+    userLoginMutation({ email })
       .unwrap()
       .then((data) => {
         dispatch(userActions.setToken(data))

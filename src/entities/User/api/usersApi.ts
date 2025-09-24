@@ -72,14 +72,14 @@ export const usersApi = rtkApi.injectEndpoints({
         body: arg
       })
     }),
-    signupUser: build.mutation<{ success: boolean }, User>({
+    signupUser: build.mutation<{ success: boolean }, { email: string }>({
       query: (arg) => ({
         url: '/auth/signup',
         method: 'POST',
         body: arg
       })
     }),
-    loginUser: build.mutation<AuthData, { email: string, password: string }>({
+    loginUser: build.mutation<AuthData, { email: string }>({
       query: (arg) => ({
         url: '/auth/login',
         method: 'POST',
@@ -114,7 +114,7 @@ export const usersApi = rtkApi.injectEndpoints({
         body: arg
       })
     }),
-    activateUser: build.mutation<AuthData, { email: string, password: string, activationCode: string }>({
+    activateUser: build.mutation<AuthData, { email: string, activationCode: string }>({
       query: (arg) => ({
         url: '/auth/activation',
         method: 'POST',
