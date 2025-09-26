@@ -24,6 +24,7 @@ export const LoginForm = memo((props: LoginFormProps) => {
   const {
     email,
     activationLoginCode,
+    resendTimer,
     isLoginLoading,
     isLoginError,
     isLoginActivation,
@@ -75,30 +76,42 @@ export const LoginForm = memo((props: LoginFormProps) => {
                     <Textarea
                         type="text"
                         className={cls.input}
-                        placeholder={t('Код активации') ?? ''}
+                        placeholder={t('Введите код') ?? ''}
                         onChange={onChangeActivationCode}
                         value={activationLoginCode}
                         fullWidth
+                        required
                     />
                     <Button
                         variant={'filled'}
                         fullWidth
-                        className={cls.signupBtn}
-                        onClick={() => {
-                          onLoginActivateClick()
-                        }}
+                        className={cls.loginBtn}
+                        onClick={onLoginActivateClick}
                         disabled={isLoginActivateLoading}
                     >
                         {t('Продолжить')}
                     </Button>
+                    <HStack
+                        max
+                        justify={'center'}
+                        align={'center'}
+                    >
+                        <Text text={t('Не пришло письмо?')}/>
+                    <Button
+                         variant={'clear'}
+                         className={cls.linkButton}
+                         onClick={onLoginClick}
+                         disabled={resendTimer > 0}
+                    >
+                        {resendTimer > 0 ? `${t('Повторить')} (${resendTimer})` : t('Повторить')}
+                    </Button>
+                    </HStack>
                 </VStack>
               : <Button
                     variant={'filled'}
                     fullWidth
                     className={cls.loginBtn}
-                    onClick={() => {
-                      onLoginClick()
-                    }}
+                    onClick={onLoginClick}
                     disabled={isLoginLoading}
                 >
                     {t('Вход')}

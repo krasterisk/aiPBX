@@ -25,6 +25,10 @@ export const SignupForm = memo((props: SignupFormProps) => {
   const { t } = useTranslation('login')
 
   const {
+    signupActivationError,
+    email,
+    resendTimer,
+    activationSignupCode,
     isSignupLoading,
     isSignupError,
     isGoogleLoading,
@@ -32,9 +36,6 @@ export const SignupForm = memo((props: SignupFormProps) => {
     isSignupActivateLoading,
     isSignupActivateError,
     isSignupActivation,
-    signupActivationError,
-    email,
-    activationSignupCode,
     onLogin,
     onChangeActivationCode,
     onSignupActivateClick,
@@ -52,7 +53,7 @@ export const SignupForm = memo((props: SignupFormProps) => {
                 </VStack>
                 {isSignupError &&
                     <HStack max justify={'center'} align={'center'}>
-                        <Text text={t('Ошибка при создании пользователя')} variant={'error'} />
+                        <Text text={t('Некорректные данные')} variant={'error'} />
                     </HStack>
                 }
                 {isSignupActivateError &&
@@ -85,30 +86,42 @@ export const SignupForm = memo((props: SignupFormProps) => {
                         <Textarea
                             type="text"
                             className={cls.input}
-                            placeholder={t('Код активации') ?? ''}
+                            placeholder={t('Введите код') ?? ''}
                             onChange={onChangeActivationCode}
                             value={activationSignupCode}
                             fullWidth
+                            required
                         />
                         <Button
                             variant={'filled'}
                             fullWidth
                             className={cls.signupBtn}
-                            onClick={() => {
-                              onSignupActivateClick()
-                            }}
+                            onClick={onSignupActivateClick}
                             disabled={isSignupActivateLoading}
                         >
                             {t('Вход')}
                         </Button>
+                        <HStack
+                            max
+                            justify={'center'}
+                            align={'center'}
+                        >
+                            <Text text={t('Не пришло письмо?')}/>
+                            <Button
+                                variant={'clear'}
+                                className={cls.linkButton}
+                                onClick={onSignupClick}
+                                disabled={resendTimer > 0}
+                            >
+                                {resendTimer > 0 ? `${t('Повторить')} (${resendTimer})` : t('Повторить')}
+                            </Button>
+                        </HStack>
                     </VStack>
                   : <Button
                         variant={'filled'}
                         fullWidth
                         className={cls.signupBtn}
-                        onClick={() => {
-                          onSignupClick()
-                        }}
+                        onClick={onSignupClick}
                         disabled={isSignupLoading}
                     >
                         {t('Регистрация')}

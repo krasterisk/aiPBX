@@ -8,7 +8,7 @@ import {
   useTelegramSignupUser, useActivateUser
 } from '@/entities/User'
 import { getRouteDashboard, getRouteLogin } from '@/shared/const/router'
-import { ChangeEvent, useCallback, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useNavigate } from 'react-router-dom'
 import { signupActions } from '../../model/slice/signupSlice'
@@ -27,6 +27,7 @@ export function useSignupData () {
   const navigate = useNavigate()
   const [userSignup, { isLoading: isSignupLoading }] = useSignupUser()
   const [googleSignup, { isLoading: isGoogleLoading }] = useGoogleSignupUser()
+  const [resendTimer, setResendTimer] = useState<number>(0)
   const [telegramSignup, { isLoading: isTelegramLoading }] = useTelegramSignupUser()
   const [signupActivateUser,
     {
@@ -35,6 +36,16 @@ export function useSignupData () {
       error: signupActivationError
     }
   ] = useActivateUser()
+
+  useEffect(() => {
+    if (resendTimer > 0) {
+      const timer = setInterval(() => {
+        setResendTimer((prev: number) => (prev > 0 ? prev - 1 : 0))
+      }, 1000)
+
+      return () => { clearInterval(timer) }
+    }
+  }, [resendTimer, setResendTimer])
 
   const handleGoogleSignupSuccess = (idToken: string) => {
     googleSignup({ id_token: idToken })
@@ -77,6 +88,7 @@ export function useSignupData () {
         setSignupError(false)
         setIsSignupActivation(true)
         dispatch(signupActions.setActivationCode(''))
+        setResendTimer(60)
       })
       .catch(() => {
         setSignupError(true)
@@ -118,6 +130,7 @@ export function useSignupData () {
     email,
     activationSignupCode,
     signupActivationError,
+    resendTimer,
     isSignupError,
     isGoogleLoading,
     isSignupLoading,

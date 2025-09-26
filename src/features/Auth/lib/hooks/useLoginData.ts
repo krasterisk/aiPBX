@@ -10,7 +10,7 @@ import {
 import { getRouteDashboard, getRouteSignup } from '@/shared/const/router'
 import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin'
 import { useTelegramLogin } from '@/shared/lib/hooks/useTelegramLogin/useTelegramLogin'
-import { ChangeEvent, useCallback, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useNavigate } from 'react-router-dom'
 import { loginActions } from '../../model/slice/loginSlice'
@@ -23,6 +23,7 @@ export function useLoginData () {
   const activationLoginCode = useSelector(getLoginActivationCode)
   const [isLoginError, setLoginError] = useState<boolean>(false)
   const [isLoginActivation, setIsLoginActivation] = useState<boolean>(false)
+  const [resendTimer, setResendTimer] = useState<number>(0)
 
   const [userLogin, { isLoading: isLoginLoading }] = useLoginUser()
   const [googleLogin, { isLoading: isGoogleLoading }] = useGoogleLoginUser()
@@ -37,6 +38,16 @@ export function useLoginData () {
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (resendTimer > 0) {
+      const timer = setInterval(() => {
+        setResendTimer((prev: number) => (prev > 0 ? prev - 1 : 0))
+      }, 1000)
+
+      return () => { clearInterval(timer) }
+    }
+  }, [resendTimer, setResendTimer])
 
   const onChangeActivationCode = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = event.target.value
@@ -103,6 +114,7 @@ export function useLoginData () {
       .unwrap()
       .then(() => {
         setIsLoginActivation(true)
+        setResendTimer(60)
       })
       .catch(() => {
         setIsLoginActivation(false)
@@ -119,6 +131,7 @@ export function useLoginData () {
     email,
     activationLoginCode,
     loginActivationError,
+    resendTimer,
     isLoginError,
     isLoginActivation,
     isLoginActivateError,
