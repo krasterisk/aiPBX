@@ -14,22 +14,9 @@ export const userSlice = createSlice({
       const authData = action.payload.user
       state.token = token
       state.authData = authData
-      // state.redesigned = getUserFeatureData(token)
-      // state.authData = getTokenAllData(token)
       localStorage.setItem(TOKEN_LOCALSTORAGE_KEY, token)
+      state._mounted = true
     },
-    // initUser: (state, action: PayloadAction<User>) => {
-    //   const token = localStorage.getItem(TOKEN_LOCALSTORAGE_KEY)
-    //   console.log('USER FORM USERSLICE: ', user)
-    //   if (token) {
-    //     state.token = token
-    //   }
-    //   if (action.payload) {
-    //     state.authData = action.payload
-    //   }
-    //
-    //   state._mounted = true
-    // },
     logout: (state) => {
       state.token = undefined
       state.authData = undefined
