@@ -1,7 +1,9 @@
 import { useSelector } from 'react-redux'
 import { getUserAuthData } from '@/entities/User'
 import {
-  getRouteAssistants, getRouteDashboard, getRouteOnline,
+  getRouteAssistants,
+  getRouteDashboard,
+  getRouteOnline,
   getRouteReports,
   getRouteTools,
   getRouteUsers
