@@ -60,7 +60,7 @@ export function useLoginData () {
       setLoginError(true)
       return
     }
-    loginActivateUser({ email, activationCode: activationLoginCode })
+    loginActivateUser({ email, activationCode: activationLoginCode, type: 'login' })
       .unwrap()
       .then((data) => {
         dispatch(userActions.setToken(data))

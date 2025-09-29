@@ -11,7 +11,7 @@ import { Menubar } from '@/widgets/Menubar'
 const App = (): any => {
   const userData = useSelector(getUserAuthData)
   // const toolbar = useAppToolbar()
-  const { data: user, isLoading } = useGetMe(null)
+  const { isLoading } = useGetMe(null)
   // setFeatureFlags({ isAppRedesigned: redesigned })
 
   if (isLoading) {

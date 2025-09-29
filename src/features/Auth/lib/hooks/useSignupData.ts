@@ -106,7 +106,7 @@ export function useSignupData () {
       setSignupError(true)
       return
     }
-    signupActivateUser({ email, activationCode: activationSignupCode })
+    signupActivateUser({ email, activationCode: activationSignupCode, type: 'signup' })
       .unwrap()
       .then((data) => {
         dispatch(userActions.setToken(data))
