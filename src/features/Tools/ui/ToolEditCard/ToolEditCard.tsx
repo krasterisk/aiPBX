@@ -1,14 +1,12 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ToolEditCard.module.scss'
 import React, { ChangeEvent, memo, useCallback, useEffect } from 'react'
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import { SerializedError } from '@reduxjs/toolkit'
 import { useTranslation } from 'react-i18next'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
-import { getToolsEditForm, getToolsUser, Tool, toolsPageActions, useTool } from '@/entities/Tools'
+import { getToolsEditForm, Tool, toolsPageActions, useTool } from '@/entities/Tools'
 import { ToolEditCardHeader } from '../ToolEditCardHeader/ToolEditCardHeader'
 import { useSelector } from 'react-redux'
 import { ClientOptions, ClientSelect, getUserAuthData, isUserAdmin } from '@/entities/User'
@@ -20,10 +18,8 @@ import { ToolAddParam } from '../ToolAddParam/ToolAddParam'
 
 interface UserEditCardProps {
   className?: string
-  isError?: boolean
   onEdit?: (data: Tool) => void
   toolId?: string
-  error?: FetchBaseQueryError | SerializedError | undefined
   onDelete?: (id: string) => void
 }
 
@@ -32,8 +28,7 @@ export const ToolEditCard = memo((props: UserEditCardProps) => {
     className,
     onEdit,
     toolId,
-    onDelete,
-    error
+    onDelete
   } = props
 
   const { t } = useTranslation('tools')
@@ -45,7 +40,6 @@ export const ToolEditCard = memo((props: UserEditCardProps) => {
   const dispatch = useAppDispatch()
   const clientData = useSelector(getUserAuthData)
   const isAdmin = useSelector(isUserAdmin)
-  const clientValues = useSelector(getToolsUser)
   const formFields = useSelector(getToolsEditForm)
 
   useEffect(() => {
@@ -127,16 +121,6 @@ export const ToolEditCard = memo((props: UserEditCardProps) => {
           className={classNames(cls.ToolCreateCard, {}, [className])}
       >
         <ToolEditCardHeader onEdit={editHandler} onDelete={onDelete}/>
-        {isError
-          ? <ErrorGetData
-                title={t('Ошибка при сохранении функции') || ''}
-                text={
-                  error && 'data' in error
-                    ? String(t((error.data as { message: string }).message))
-                    : String(t('Проверьте заполняемые поля и повторите ещё раз'))
-                }
-            />
-          : ''}
         <Card
             max
             padding={'16'}

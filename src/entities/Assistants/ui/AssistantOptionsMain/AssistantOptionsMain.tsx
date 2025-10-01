@@ -13,7 +13,6 @@ import {
   getAssistantsEditFormFields
 } from '../../model/selectors/assistantsPageSelectors'
 import { VStack } from '@/shared/ui/redesigned/Stack'
-import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Tool, ToolsSelect } from '@/entities/Tools'
 import { VoiceSelect } from '../VoiceSelect/VoiceSelect'
@@ -48,15 +47,14 @@ export const AssistantOptionsMain = memo((props: AssistantOptionsMainProps) => {
 
   return (
         <VStack max gap={'16'} className={className}>
-            {isAdmin
-              ? <ClientSelect
+            {isAdmin &&
+              <ClientSelect
                     value={formFields.user as ClientOptions}
                     onChangeClient={onChangeClientHandler}
                     label={String(t('Клиент'))}
                     className={cls.client}
                     data-testid={'AssistantCard.ClientSelect'}
                 />
-              : <Text title={clientData?.name}/>
             }
 
             <Textarea
@@ -64,6 +62,7 @@ export const AssistantOptionsMain = memo((props: AssistantOptionsMainProps) => {
                 onChange={onChangeTextHandler?.('name')}
                 data-testid={'AssistantCard.name'}
                 value={formFields.name || ''}
+                required
             />
             <VoiceSelect
                 label={String(t('Голос'))}

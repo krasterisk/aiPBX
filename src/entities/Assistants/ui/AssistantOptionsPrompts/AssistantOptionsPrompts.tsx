@@ -36,6 +36,7 @@ export const AssistantOptionsPrompts = memo((props: AssistantOptionsPromptsProps
                 value={formFields.greeting || ''}
                 minRows={5}
                 multiline
+                required
             />
             <Textarea
                 label={t('Основная инструкция для ассистента') ?? ''}
@@ -44,6 +45,7 @@ export const AssistantOptionsPrompts = memo((props: AssistantOptionsPromptsProps
                 value={formFields.instruction || ''}
                 minRows={5}
                 multiline
+                required
             />
         </VStack>
   )

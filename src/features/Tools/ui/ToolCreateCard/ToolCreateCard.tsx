@@ -103,7 +103,6 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
   )
 
   const createHandler = useCallback(() => {
-    console.log('formfields: ', formFields)
     if (formFields) {
       onCreate?.(formFields)
     }

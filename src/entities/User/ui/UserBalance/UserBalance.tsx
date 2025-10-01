@@ -25,8 +25,8 @@ export const UserBalance = memo((props: UserBalanceProps) => {
     isLoading
   } = useGetUserBalance(null,
     {
-      refetchOnFocus: true,
-      refetchOnReconnect: true
+      refetchOnFocus: false,
+      refetchOnReconnect: false
     })
   const currency = currencySymbols[balance?.currency as UserCurrencyValues] || ''
 

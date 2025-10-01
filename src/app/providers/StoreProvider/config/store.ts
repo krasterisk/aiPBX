@@ -6,6 +6,7 @@ import { $api } from '@/shared/api/api'
 import { scrollSaveReducer } from '@/features/ScrollSave'
 import { rtkApi } from '@/shared/api/rtkApi'
 import { setupListeners } from '@reduxjs/toolkit/query'
+import { toastMiddleware } from '@/app/middleware/toastMiddleware'
 
 export function createReduxStore (
   initialState?: StateSchema,
@@ -32,7 +33,9 @@ export function createReduxStore (
       thunk: {
         extraArgument: extraArg
       }
-    }).concat(rtkApi.middleware)
+    })
+      .concat(rtkApi.middleware)
+      .concat(toastMiddleware)
   })
 
   // enable listener behavior for the store

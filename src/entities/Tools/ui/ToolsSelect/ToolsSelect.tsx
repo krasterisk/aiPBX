@@ -25,10 +25,7 @@ export const ToolsSelect = memo((props: ToolsSelectorProps) => {
 
   const {
     data: tools
-  } = useToolsAll(
-    { userId },
-    { skip: !userId }
-  )
+  } = useToolsAll(null)
 
   const onChangeMultipleHandler = (event: any, newValue: Tool[]) => {
     onChangeTool?.(event, newValue)

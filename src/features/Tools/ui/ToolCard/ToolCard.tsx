@@ -1,7 +1,6 @@
 import React, { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRouteTools } from '@/shared/const/router'
-import { ErrorGetData } from '@/entities/ErrorGetData'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
@@ -35,21 +34,18 @@ export const ToolCard = memo((props: ToolCardProps) => {
     toolId
   } = props
 
-  const [toolMutation, { isError, error }] = useSetTools()
-  const [toolUpdateMutation] = useUpdateTool()
-  const [toolDeleteMutation] = useDeleteTool()
+  const [toolCreate] = useSetTools()
+  const [toolUpdate] = useUpdateTool()
+  const [toolDelete] = useDeleteTool()
 
   const navigate = useNavigate()
 
   const handleCreateTool = useCallback((data: Tool) => {
-    toolMutation([data])
-      .unwrap()
-      .then(() => {
-        navigate(getRouteTools())
-      })
-      .catch(() => {
-      })
-  }, [toolMutation, navigate])
+    toolCreate([data]).then((res) => {
+      if ('error' in res) return
+      navigate(getRouteTools())
+    })
+  }, [toolCreate, navigate])
 
   const onCreate = useCallback((data: Tool) => {
     handleCreateTool(data)
@@ -57,19 +53,19 @@ export const ToolCard = memo((props: ToolCardProps) => {
 
   const handleEditTool = useCallback((data: Tool) => {
     try {
-      toolUpdateMutation(data).unwrap()
+      toolUpdate(data).unwrap()
     } finally {
       navigate(getRouteTools())
     }
-  }, [navigate, toolUpdateMutation])
+  }, [navigate, toolUpdate])
 
   const handleDeleteTool = useCallback((id: string) => {
-    try {
-      toolDeleteMutation(id).unwrap()
-    } finally {
-      navigate(getRouteTools())
-    }
-  }, [toolDeleteMutation, navigate])
+    toolDelete(id)
+      .unwrap()
+      .then(() => {
+        navigate(getRouteTools())
+      })
+  }, [toolDelete, navigate])
 
   const onDelete = useCallback((id: string) => {
     handleDeleteTool(id)
@@ -78,12 +74,6 @@ export const ToolCard = memo((props: ToolCardProps) => {
   const onEdit = useCallback((data: Tool) => {
     handleEditTool(data)
   }, [handleEditTool])
-
-  if (!toolId && isEdit) {
-    return (
-        <ErrorGetData/>
-    )
-  }
 
   if (isLoading) {
     return (
@@ -111,15 +101,12 @@ export const ToolCard = memo((props: ToolCardProps) => {
             ? <ToolEditCard
                   key={`edit-form-${toolId}`}
                   onEdit={onEdit}
-                  isError={isError}
                   toolId={toolId}
                   onDelete={onDelete}
               />
             : <ToolCreateCard
                   key={`create-form-${Date.now()}`}
                   onCreate={onCreate}
-                  isError={isError}
-                  error={error}
               />
 
         }

@@ -44,8 +44,7 @@ export function useAssistantFilters () {
   } = useAssistants({
     page,
     limit,
-    search: newSearch,
-    userId
+    search: newSearch
   }, {
     // pollingInterval: 60000,
     refetchOnMountOrArgChange: true,

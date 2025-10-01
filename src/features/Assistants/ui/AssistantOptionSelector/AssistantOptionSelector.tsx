@@ -89,7 +89,7 @@ export const AssistantOptionSelector = memo((props: AddistantOptionSelecterProps
     if (!isEdit) {
       dispatch(updateAction(initAssistant))
     }
-  }, [dispatch, isEdit])
+  }, [dispatch, isEdit, updateAction])
 
   const onChangeToolsHandler = useCallback((
     event: any,
@@ -170,16 +170,18 @@ export const AssistantOptionSelector = memo((props: AddistantOptionSelecterProps
                         onTextChangeHandler={onChangeTextHandler}
                   />
     },
-    {
-      label: t('Параметры модели'),
-      content:
+    ...(isAdmin
+      ? [{
+          label: t('Параметры модели'),
+          content:
                     <AssistantOptionsModel
                         isEdit={isEdit}
                         onTextChangeHandler={onChangeTextHandler}
-                        onChangeSelectHandler={onChangeTextHandler}
+                        onChangeSelectHandler={onChangeSelectHandler}
                     />
-    }
-
+        }]
+      : []
+    )
   ]
 
   const actionHandler = useCallback(() => {

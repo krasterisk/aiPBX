@@ -3,7 +3,7 @@ import { Assistant } from '../..'
 
 export const initAssistant: Assistant = {
   id: '',
-  model: 'gpt-4o-mini-realtime-preview-2024-12-17',
+  model: 'gpt-realtime-2025-08-28',
   voice: 'Alloy',
   name: '',
   instruction: 'You are a helpful, witty, and friendly AI by name Alex. Your are Russian. ' +

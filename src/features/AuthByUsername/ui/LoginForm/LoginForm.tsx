@@ -19,8 +19,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import {
   getSignupActivationCode
 } from '../../../Auth/model/selectors/signup/getSignupActivationCode/getSignupActivationCode'
-import { getErrorMessage } from '../../../Auth/helpers/getErrorMessage'
 import { loginActions, loginReducer } from '../../../Auth/model/slice/loginSlice'
+import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 
 export interface LoginFormProps {
   className?: string

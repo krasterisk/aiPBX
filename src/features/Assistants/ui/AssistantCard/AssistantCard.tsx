@@ -16,6 +16,8 @@ import {
 } from '@/entities/Assistants'
 
 import { AssistantOptionSelector } from '../AssistantOptionSelector/AssistantOptionSelector'
+import { toast } from 'react-toastify'
+import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 
 export interface AssistantCardProps {
   className?: string
@@ -34,41 +36,48 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
     assistantId
   } = props
 
-  const [assistantMutation, { isError, error }] = useSetAssistants()
-  const [assistantUpdateMutation] = useUpdateAssistant()
-  const [assistantDeleteMutation] = useDeleteAssistant()
+  const [assistantCreate, { isError, error }] = useSetAssistants()
+  const [assistantUpdate] = useUpdateAssistant()
+  const [assistantDelete] = useDeleteAssistant()
 
   const navigate = useNavigate()
 
   const handleCreateAssistant = useCallback((data: Assistant) => {
-    assistantMutation([data])
+    assistantCreate([data])
       .unwrap()
       .then(() => {
         navigate(getRouteAssistants())
       })
-      .catch(() => {
+      .catch((err) => {
+        toast.error(getErrorMessage(err))
       })
-  }, [assistantMutation, navigate])
+  }, [assistantCreate, navigate])
 
   const onCreate = useCallback((data: Assistant) => {
     handleCreateAssistant(data)
   }, [handleCreateAssistant])
 
-  const handleEditAssistant = useCallback(async (data: Assistant) => {
-    try {
-      await assistantUpdateMutation(data).unwrap()
-    } finally {
-      navigate(getRouteAssistants())
-    }
-  }, [navigate, assistantUpdateMutation])
+  const handleEditAssistant = useCallback((data: Assistant) => {
+    assistantUpdate(data)
+      .unwrap()
+      .then(() => {
+        navigate(getRouteAssistants())
+      })
+      .catch((err) => {
+        toast.error(getErrorMessage(err))
+      })
+  }, [navigate, assistantUpdate])
 
-  const handleDeleteAssistant = useCallback(async (id: string) => {
-    try {
-      await assistantDeleteMutation(id).unwrap()
-    } finally {
-      navigate(getRouteAssistants())
-    }
-  }, [assistantDeleteMutation, navigate])
+  const handleDeleteAssistant = useCallback((id: string) => {
+    assistantDelete(id)
+      .unwrap()
+      .then(() => {
+        navigate(getRouteAssistants())
+      })
+      .catch((err) => {
+        toast.error(getErrorMessage(err))
+      })
+  }, [assistantDelete, navigate])
 
   const onDelete = useCallback((id: string) => {
     handleDeleteAssistant(id)
@@ -78,7 +87,7 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
     handleEditAssistant(data)
   }, [handleEditAssistant])
 
-  if (!assistantId && isEdit) {
+  if (!assistantId && isEdit && isError && error) {
     return (
         <ErrorGetData/>
     )
