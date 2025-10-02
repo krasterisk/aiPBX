@@ -42,5 +42,6 @@
   "Ошибка проверки данных": "Verification error",
   "Некорректные данные": "Input data error",
   "Не пришло письмо?": "Didn't receive an email?",
-  "Повторить": "Resend"
+  "Повторить": "Resend",
+  "Activation code is wrong": "The code is incorrect!"
 }

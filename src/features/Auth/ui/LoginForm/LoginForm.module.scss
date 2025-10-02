@@ -1,5 +1,6 @@
 .loginLoader {
     position: absolute;
+    z-index: var(--alert-z-index);
 }
 
 .logoIcon {
@@ -8,6 +9,7 @@
     //left: 16px;
     width: 200px;
     height: 50px;
+
 }
 
 .visibilityIcon {
