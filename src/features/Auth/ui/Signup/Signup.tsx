@@ -23,18 +23,16 @@ export const Signup = memo((props: SignupFormProps) => {
   }
 
   return (
-      <div className={classNames(cls.SignupContainer, mods, [className])}>
+        <div className={classNames(cls.SignupContainer, mods, [className])}>
             <HStack gap={'16'} justify={'end'} max>
-                 {/* <Icon Svg={AiPbxIcon} width={200} height={50} className={cls.logoIcon}/> */}
+                {/* <Icon Svg={AiPbxIcon} width={200} height={50} className={cls.logoIcon}/> */}
                 <LangSwitcher short={isMobile} className={cls.lang}/>
             </HStack>
-            <HStack max gap={'0'}>
-                <form className={cls.formWrapper}>
-                    <Card max padding={'48'} border={'partial'} className={cls.signupCard}>
-                        <SignupForm />
-                    </Card>
-                </form>
+            <HStack max gap={'0'} className={cls.formWrapper} justify={'center'}>
+                <Card max padding={'48'} border={'partial'} className={cls.signupCard}>
+                    <SignupForm />
+                </Card>
             </HStack>
-      </div>
+        </div>
   )
 })

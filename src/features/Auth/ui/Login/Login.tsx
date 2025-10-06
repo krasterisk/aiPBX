@@ -28,9 +28,9 @@ export const Login = memo((props: LoginFormProps) => {
                 {/* <Icon Svg={AiPbxIcon} width={200} height={50} className={cls.logoIcon}/> */}
                 <LangSwitcher short={isMobile} className={cls.lang}/>
             </HStack>
-            <HStack max gap={'0'} justify={'center'}>
+            <HStack max gap={'0'} className={cls.formWrapper}>
                 <Card max padding={'48'} border={'partial'} className={cls.loginCard}>
-                    <LoginForm/>
+                    <LoginForm />
                 </Card>
             </HStack>
         </div>

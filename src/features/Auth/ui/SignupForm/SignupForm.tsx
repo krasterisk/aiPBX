@@ -45,15 +45,38 @@ export const SignupForm = memo((props: SignupFormProps) => {
     onGoogleSignupClick
   } = useSignupData()
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if (isSignupActivation) {
+      onSignupActivateClick()
+    } else {
+      onSignupClick()
+    }
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault()
+
+      if (isSignupActivation) {
+        onSignupActivateClick()
+      } else {
+        onSignupClick()
+      }
+    }
+  }
+
   return (
+        <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
             <VStack max gap={'16'} className={classNames(cls.SignupForm, {}, [className])}>
                 <VStack gap={'4'} justify={'center'} align={'center'} max>
-                    <Text title={t('Регистрация в AI PBX')} />
-                    <Text text={t('Голосовые ассистенты для бизнеса')} />
+                    <Text title={t('Регистрация в AI PBX')}/>
+                    <Text text={t('Голосовые ассистенты для бизнеса')}/>
                 </VStack>
                 {isSignupError &&
                     <HStack max justify={'center'} align={'center'}>
-                        <Text text={t('Некорректные данные')} variant={'error'} />
+                        <Text text={t('Некорректные данные')} variant={'error'}/>
                     </HStack>
                 }
                 {isSignupActivateError &&
@@ -145,7 +168,7 @@ export const SignupForm = memo((props: SignupFormProps) => {
                         className={cls.signupBtn}
                         onClick={onTelegramSignupClick}
                         disabled={isSignupLoading}
-                        addonLeft={<TelegramIcon />}
+                        addonLeft={<TelegramIcon/>}
                     >
                         {t('Продолжить с Telegram')}
                     </Button>
@@ -161,5 +184,6 @@ export const SignupForm = memo((props: SignupFormProps) => {
                     </Button>
                 </HStack>
             </VStack>
+        </form>
   )
 })

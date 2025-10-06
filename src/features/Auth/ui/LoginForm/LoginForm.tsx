@@ -64,6 +64,7 @@ export const LoginForm = memo((props: LoginFormProps) => {
   }
 
   return (
+      <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
         <VStack max gap={'16'} className={className}>
             <VStack gap={'4'} justify={'center'} align={'center'} max>
                 <Text title={t('Вход в облачную AI PBX')}/>
@@ -80,7 +81,6 @@ export const LoginForm = memo((props: LoginFormProps) => {
                     <Loader className={cls.loginLoader}/>
                 </HStack>
             }
-            <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
                 <Textarea
                     type={'email'}
                     label={t('Электронная почта') ?? ''}
@@ -173,7 +173,7 @@ export const LoginForm = memo((props: LoginFormProps) => {
                         {t('Регистрация')}
                     </Button>
                 </HStack>
-            </form>
         </VStack>
+      </form>
   )
 })
