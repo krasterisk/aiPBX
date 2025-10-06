@@ -2,7 +2,7 @@
   "Изменить": "Edit",
   "Удалить": "Delete",
   "Поиск": "Search",
-  "Создать функцию": "Create Function",
+  "Создать функцию": "Create Tool",
   "Удалить выбранные": "Delete Selected",
   "Выбрано": "Selected",
   "Всего": "Total",
@@ -10,13 +10,13 @@
   "Данные не найдены": "No data found",
   "Закрыть": "Close",
   "Создать": "Create",
-  "Новая функция": "New Function",
-  "Ошибка при создании функции": "Error creating function",
+  "Новая функция": "New Tool",
+  "Ошибка при создании функции": "Error creating tool",
   "Проверьте заполняемые поля и повторите ещё раз": "Check the fields and try again",
-  "Наименование функции": "Function Name",
-  "Описание функции(обязательно)": "Function Description (required)",
-  "Описание функции": "Function Description",
-  "Строгий режим вызова функции": "Strict function call mode",
+  "Наименование функции": "Tool Name",
+  "Описание функции(обязательно)": "Tool Description (required)",
+  "Описание функции": "Tool Description",
+  "Строгий режим вызова функции": "Strict tool call mode",
   "Комментарий": "Comment",
   "Параметр": "Parameter",
   "Параметры": "Parameters",
@@ -25,20 +25,20 @@
   "Адрес вебхука": "Webhook URL",
   "Идентификатор функции, используйте только латинские символы, подчёркивания вместо пробелов": {
     " Название функции должно отражать её суть, например get_price, get_client_name и т": {
-      "д": "Function identifier: use only Latin letters and underscores instead of spaces. The function name should reflect its purpose, e.g., get_price, get_client_name, etc."
+      "д": "Tool identifier: use only Latin letters and underscores instead of spaces. The tool name should reflect its purpose, e.g., get_price, get_client_name, etc."
     }
   },
   "Название параметра": "Parameter Name",
-  "Описание функции, опишите назначение функции, её роль и другие нюансы": "Function description: explain its purpose, role, and other details",
+  "Описание функции, опишите назначение функции, её роль и другие нюансы": "Tool description: explain its purpose, role, and other details",
   "Сохранить": "Save",
   "Добавить параметр": "Add Parameter",
   "Описание параметра, опишите назначение параметра, его роль и другие нюансы": "Parameter description: explain its purpose, role, and other details",
   "Описание параметра": "Parameter Description",
   "Параметр обязателен": "Parameter is required",
-  "Параметры функции": "Function Parameters",
+  "Параметры функции": "Tool Parameters",
   "Указать возможные значения": "Specify possible values",
   "Каждое значение - отдельная строка": "Each value on a separate line",
-  "Ошибка при сохранении функции": "Error saving function",
+  "Ошибка при сохранении функции": "Error saving tool",
   "Редактировать": "Edit",
   "Параметр с именем уже существует": "Parameter with this name already exists"
 }

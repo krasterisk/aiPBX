@@ -41,6 +41,29 @@ export const LoginForm = memo((props: LoginFormProps) => {
     onChangeEmail
   } = useLoginData()
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault() // Предотвращаем отправку формы и перезагрузку страницы
+
+    if (isLoginActivation) {
+      onLoginActivateClick()
+    } else {
+      onLoginClick()
+    }
+  }
+
+  // Обработчик нажатия клавиш
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault()
+
+      if (isLoginActivation) {
+        onLoginActivateClick()
+      } else {
+        onLoginClick()
+      }
+    }
+  }
+
   return (
         <VStack max gap={'16'} className={className}>
             <VStack gap={'4'} justify={'center'} align={'center'} max>
@@ -58,98 +81,100 @@ export const LoginForm = memo((props: LoginFormProps) => {
                     <Loader className={cls.loginLoader}/>
                 </HStack>
             }
-            <Textarea
-                type={'email'}
-                label={t('Электронная почта') ?? ''}
-                onChange={onChangeEmail}
-                autoComplete={'email'}
-                value={email}
-                fullWidth
-                required
-            />
-            {isLoginActivation
-              ? <VStack max gap={'16'}>
-                    <Text
-                        text={t('Введите код активации из почты') + ':'}
-                        bold
-                    />
-                    <Textarea
-                        type="text"
-                        className={cls.input}
-                        placeholder={t('Введите код') ?? ''}
-                        onChange={onChangeActivationCode}
-                        value={activationLoginCode}
+            <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
+                <Textarea
+                    type={'email'}
+                    label={t('Электронная почта') ?? ''}
+                    onChange={onChangeEmail}
+                    autoComplete={'email'}
+                    value={email}
+                    fullWidth
+                    required
+                />
+                {isLoginActivation
+                  ? <VStack max gap={'16'}>
+                        <Text
+                            text={t('Введите код активации из почты') + ':'}
+                            bold
+                        />
+                        <Textarea
+                            type="text"
+                            className={cls.input}
+                            placeholder={t('Введите код') ?? ''}
+                            onChange={onChangeActivationCode}
+                            value={activationLoginCode}
+                            fullWidth
+                            required
+                        />
+                        <Button
+                            variant={'filled'}
+                            fullWidth
+                            className={cls.loginBtn}
+                            onClick={onLoginActivateClick}
+                            disabled={isLoginActivateLoading}
+                        >
+                            {t('Продолжить')}
+                        </Button>
+                        <HStack
+                            max
+                            justify={'center'}
+                            align={'center'}
+                        >
+                            <Text text={t('Не пришло письмо?')}/>
+                            <Button
+                                variant={'clear'}
+                                className={cls.linkButton}
+                                onClick={onLoginClick}
+                                disabled={resendTimer > 0}
+                            >
+                                {resendTimer > 0 ? `${t('Повторить')} (${resendTimer})` : t('Повторить')}
+                            </Button>
+                        </HStack>
+                    </VStack>
+                  : <Button
+                        variant={'filled'}
                         fullWidth
-                        required
-                    />
+                        className={cls.loginBtn}
+                        onClick={onLoginClick}
+                        disabled={isLoginLoading}
+                    >
+                        {t('Вход')}
+                    </Button>
+                }
+                <Divider>{t('или')}</Divider>
+                <VStack gap={'0'} max>
                     <Button
                         variant={'filled'}
                         fullWidth
                         className={cls.loginBtn}
-                        onClick={onLoginActivateClick}
-                        disabled={isLoginActivateLoading}
+                        onClick={onGoogleLoginClick}
+                        disabled={isLoginLoading}
+                        addonLeft={<GoogleIcon/>}
                     >
-                        {t('Продолжить')}
+                        {t('Вход через Google')}
                     </Button>
-                    <HStack
-                        max
-                        justify={'center'}
-                        align={'center'}
-                    >
-                        <Text text={t('Не пришло письмо?')}/>
                     <Button
-                         variant={'clear'}
-                         className={cls.linkButton}
-                         onClick={onLoginClick}
-                         disabled={resendTimer > 0}
+                        variant={'filled'}
+                        fullWidth
+                        className={cls.loginBtn}
+                        onClick={onTelegramLoginClick}
+                        disabled={isLoginLoading}
+                        addonLeft={<TelegramIcon/>}
                     >
-                        {resendTimer > 0 ? `${t('Повторить')} (${resendTimer})` : t('Повторить')}
+                        {t('Вход через Telegram')}
                     </Button>
-                    </HStack>
                 </VStack>
-              : <Button
-                    variant={'filled'}
-                    fullWidth
-                    className={cls.loginBtn}
-                    onClick={onLoginClick}
-                    disabled={isLoginLoading}
-                >
-                    {t('Вход')}
-                </Button>
-            }
-            <Divider>{t('или')}</Divider>
-            <VStack gap={'0'} max>
-                <Button
-                    variant={'filled'}
-                    fullWidth
-                    className={cls.loginBtn}
-                    onClick={onGoogleLoginClick}
-                    disabled={isLoginLoading}
-                    addonLeft={<GoogleIcon/>}
-                >
-                    {t('Вход через Google')}
-                </Button>
-                <Button
-                    variant={'filled'}
-                    fullWidth
-                    className={cls.loginBtn}
-                    onClick={onTelegramLoginClick}
-                    disabled={isLoginLoading}
-                    addonLeft={<TelegramIcon/>}
-                >
-                    {t('Вход через Telegram')}
-                </Button>
-            </VStack>
-            <HStack max justify={'center'}>
-                <Text text={t('Ещё нет аккаунта?')}/>
-                <Button
-                    variant={'clear'}
-                    className={cls.linkButton}
-                    onClick={onSignup}
-                >
-                    {t('Регистрация')}
-                </Button>
-            </HStack>
+                <HStack max justify={'center'}>
+                    <Text text={t('Ещё нет аккаунта?')}/>
+                    <Button
+                        variant={'clear'}
+                        className={cls.linkButton}
+                        onClick={onSignup}
+                    >
+                        {t('Регистрация')}
+                    </Button>
+                </HStack>
+            </form>
         </VStack>
   )
 })

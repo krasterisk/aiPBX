@@ -13,8 +13,6 @@ import {
 import { toolsPageActions } from '../../model/slices/toolsPageSlice'
 import { useTools } from '../../api/toolsApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
-import { getUserAuthData } from '../../../User/model/selectors/getUserAuthData/getUserAuthData'
-import { isUserAdmin } from '../../../User/model/selectors/roleSelector'
 import { ContentView } from '../../../Content'
 import { ClientOptions } from '../../../User/model/types/user'
 
@@ -26,10 +24,8 @@ export function useToolsFilters () {
   const refetchOnFocus = useSelector(getToolsRefreshOnFocus)
   const search = useSelector(getToolsPageSearch)
   const clientId = useSelector(getToolsUserId)
-  const authData = useSelector(getUserAuthData)
-  const isAdmin = useSelector(isUserAdmin)
 
-  const userId = !isAdmin ? authData?.id || authData?.id : clientId
+  const userId = clientId || undefined
 
   const dispatch = useAppDispatch()
   const [newSearch, setNewSearch] = useState<string>('')

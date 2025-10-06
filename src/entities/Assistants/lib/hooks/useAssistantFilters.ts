@@ -13,8 +13,6 @@ import {
 import { assistantsPageActions } from '../../model/slices/assistantsPageSlice'
 import { useAssistants } from '../../api/assistantsApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
-import { getUserAuthData } from '../../../User/model/selectors/getUserAuthData/getUserAuthData'
-import { isUserAdmin } from '../../../User/model/selectors/roleSelector'
 import { ContentView } from '../../../Content'
 import { User } from '@/entities/User'
 
@@ -26,10 +24,8 @@ export function useAssistantFilters () {
   const refetchOnFocus = useSelector(getAssistantsRefreshOnFocus)
   const search = useSelector(getAssistantsPageSearch)
   const clientId = useSelector(getAssistantsUserId)
-  const authData = useSelector(getUserAuthData)
-  const isAdmin = useSelector(isUserAdmin)
 
-  const userId = !isAdmin ? authData?.id || authData?.id : clientId
+  const userId = clientId || undefined
 
   const dispatch = useAppDispatch()
   const [newSearch, setNewSearch] = useState<string>('')
@@ -44,7 +40,8 @@ export function useAssistantFilters () {
   } = useAssistants({
     page,
     limit,
-    search: newSearch
+    search: newSearch,
+    userId
   }, {
     // pollingInterval: 60000,
     refetchOnMountOrArgChange: true,

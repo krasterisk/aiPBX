@@ -53,8 +53,8 @@ export const Navbar = memo(({ className }: NavbarProps) => {
                             />
                         </>
                     )}
-                    <LangSwitcher short={isMobile} />
-                    <ThemeSwitcher />
+                     <LangSwitcher short={isMobile} />
+                     <ThemeSwitcher />
                 </HStack>
 
                 <HStack gap="16" className={cls.actions}>

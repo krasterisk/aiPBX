@@ -18,11 +18,7 @@
 }
 
 .formWrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    min-height: 100%;
+
 }
 
 .lang {
@@ -33,4 +29,5 @@
     max-width: 400px;
     width: 100%;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); // тень
+
 }
