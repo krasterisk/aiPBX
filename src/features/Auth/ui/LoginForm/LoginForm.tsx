@@ -42,7 +42,7 @@ export const LoginForm = memo((props: LoginFormProps) => {
   } = useLoginData()
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault() // Предотвращаем отправку формы и перезагрузку страницы
+    event.preventDefault()
 
     if (isLoginActivation) {
       onLoginActivateClick()
@@ -51,7 +51,6 @@ export const LoginForm = memo((props: LoginFormProps) => {
     }
   }
 
-  // Обработчик нажатия клавиш
   const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
