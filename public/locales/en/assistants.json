@@ -62,5 +62,9 @@
   "Основная инструкция для ассистента": "Main Prompt for Assistant",
   "Главное": "Main",
   "Инструкции для модели": "Model Prompts",
-  "Параметры модели": "Model Parameters"
+  "Параметры модели": "Model Parameters",
+  "Публикация": "Publication",
+  "Создать SIP аккаунт": "Create SIP account",
+  "Создать WebRTC скрипт для сайта": "Create a WebRTC script for a website",
+  "Создать переадресацию с внешнего номера": "Create a redirect from an external number"
 }

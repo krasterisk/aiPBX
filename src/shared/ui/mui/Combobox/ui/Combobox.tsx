@@ -23,8 +23,8 @@ export const Combobox = memo((props: ComboBoxProps) => {
   const acStyles = {
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
-        border: '2px solid var(--icon-redesigned)', // Цвет по умолчанию
-        borderRadius: '48px'
+        border: '1px solid var(--icon-redesigned)', // Цвет по умолчанию
+        borderRadius: '8px'
       },
       '&:hover fieldset': {
         borderColor: 'var(--accent-redesigned)' // Цвет рамки при наведении

@@ -7,6 +7,7 @@ import {
   AssistantOptionsMain,
   AssistantOptionsModel,
   AssistantOptionsPrompts,
+  AssistantOptionsPublication,
   assistantsPageActions,
   getAssistantsCreateFormFields,
   getAssistantsEditFormFields, initAssistant,
@@ -24,7 +25,7 @@ import { AssistantCreateCardHeader } from '../AssistantCreateCardHeader/Assistan
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { AssistantEditCardHeader } from '../AssistantEditCardHeader/AssistantEditCardHeader'
 
-interface AddistantOptionSelecterProps {
+interface AssistantOptionsSelectorProps {
   className?: string
   isEdit: boolean
   onCreate?: (data: Assistant) => void
@@ -34,7 +35,7 @@ interface AddistantOptionSelecterProps {
   error?: FetchBaseQueryError | SerializedError | undefined
 }
 
-export const AssistantOptionSelector = memo((props: AddistantOptionSelecterProps) => {
+export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProps) => {
   const {
     className,
     onEdit,
@@ -181,7 +182,12 @@ export const AssistantOptionSelector = memo((props: AddistantOptionSelecterProps
                     />
         }]
       : []
-    )
+    ),
+    {
+      label: t('Публикация'),
+      content:
+          <AssistantOptionsPublication isEdit={isEdit}/>
+    }
   ]
 
   const actionHandler = useCallback(() => {

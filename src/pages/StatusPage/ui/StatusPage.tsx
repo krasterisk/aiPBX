@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { CallCard } from '@/features/CallCard'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
+import { useSelector } from 'react-redux'
+import { getUserAuthData } from '@/entities/User'
 
 interface StatusPageProps {
   className?: string
@@ -14,7 +16,10 @@ interface StatusPageProps {
 const StatusPage = memo((props: StatusPageProps) => {
   const { className } = props
   const { t } = useTranslation('main')
-  const groupedEvents = useOpenAiEvents()
+  const userData = useSelector(getUserAuthData)
+  const userId = userData?.id || ''
+  console.log('userId: ', userId)
+  const groupedEvents = useOpenAiEvents(userId)
 
   return (
       <VStack
