@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { getUserAuthData } from '@/entities/User'
+import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import {
   getRouteAssistants,
   getRouteDashboard,
@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 export const useMenubarItems = () => {
   const userData = useSelector(getUserAuthData)
   const { t } = useTranslation()
+  const isAdmin = useSelector(isUserAdmin)
 
   const menubarItemsList: MenubarItemType[] = [
     // {
@@ -56,12 +57,17 @@ export const useMenubarItems = () => {
         text: t('Отчёт'),
         authOnly: true
       },
-      {
-        path: getRouteUsers(),
-        Icon: EndpointsIcon,
-        text: t('Пользователи'),
-        authOnly: true
-      }
+      ...(isAdmin
+        ? [
+            {
+              path: getRouteUsers(),
+              Icon: EndpointsIcon,
+              text: t('Пользователи'),
+              authOnly: true
+            }
+          ]
+        : []
+      )
     )
   }
   return menubarItemsList
