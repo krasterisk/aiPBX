@@ -1,5 +1,6 @@
 .signupLoader {
     position: absolute;
+    z-index: var(--alert-z-index);
 }
 
 .logoIcon {

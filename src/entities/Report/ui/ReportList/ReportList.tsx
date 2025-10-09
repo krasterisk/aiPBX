@@ -171,8 +171,8 @@ export const ReportList = (props: ReportsListProps) => {
                           ? <Text
                                 text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(reports?.count)}/>
                           : <HStack gap={'8'}>
-                                <Text text={t('Всего') + ': ' + String(reports?.count || 0)}/>
-                                <Text text={t('на сумму') + ': ' + String(reports?.totalCost || 0)}/>
+                                <Text text={t('Всего звонков') + ': ' + String(reports?.count || 0)}/>
+                                <Text text={t('на сумму') + ': $' + String(reports?.totalCost || 0)}/>
                             </HStack>
                     }
                 </HStack>

@@ -63,7 +63,7 @@ export const ReportItem = memo((props: ReportItemProps) => {
   }, [])
   const mediaUrl = __STATIC__ + 'audio_mixed_' + report.channelId + '.wav'
   const duration = report.duration ? formatTime(report.duration, t) : ''
-  const formattedCost = report.cost ? parseFloat((report.cost || 0).toFixed(2)) : 0
+  const formattedCost = report.cost ? parseFloat((report.cost || 0).toFixed(4)) : 0
   const isMobile = useMediaQuery('(max-width:800px)')
   const viewMode = isMobile ? 'MOBILE' : cls[view]
 
@@ -111,7 +111,7 @@ export const ReportItem = memo((props: ReportItemProps) => {
                     {formattedCost > 0 &&
                         <HStack gap={'8'} wrap={'wrap'}>
                             <Text text={t('Стоимость') + ':'} bold/>
-                            <Text text={String(formattedCost)}/>
+                            <Text text={`$${String(formattedCost)}`}/>
                         </HStack>
                     }
                     <HStack max justify={'end'}>

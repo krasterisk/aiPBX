@@ -26,10 +26,8 @@ export const LoginForm = memo((props: LoginFormProps) => {
     activationLoginCode,
     resendTimer,
     isLoginLoading,
-    isLoginError,
     isLoginActivation,
     isLoginActivateLoading,
-    isLoginActivateError,
     onLoginActivateClick,
     onChangeActivationCode,
     onLoginClick,
@@ -70,12 +68,6 @@ export const LoginForm = memo((props: LoginFormProps) => {
                 <Text title={t('Вход в облачную AI PBX')}/>
                 <Text text={t('Голосовые ассистенты для бизнеса')}/>
             </VStack>
-            {
-                (isLoginError || isLoginActivateError) &&
-                <HStack max justify={'center'} align={'center'}>
-                    <Text text={t('Ошибка проверки данных')} variant={'error'}/>
-                </HStack>
-            }
             {(isLoginLoading || isGoogleLoading || isTelegramLoading || isLoginActivateLoading) &&
                 <HStack max justify={'center'}>
                     <Loader className={cls.loginLoader}/>

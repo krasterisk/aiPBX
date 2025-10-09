@@ -25,16 +25,13 @@ export const SignupForm = memo((props: SignupFormProps) => {
   const { t } = useTranslation('login')
 
   const {
-    signupActivationError,
     email,
     resendTimer,
     activationSignupCode,
     isSignupLoading,
-    isSignupError,
     isGoogleLoading,
     isTelegramLoading,
     isSignupActivateLoading,
-    isSignupActivateError,
     isSignupActivation,
     onLogin,
     onChangeActivationCode,
@@ -74,18 +71,6 @@ export const SignupForm = memo((props: SignupFormProps) => {
                     <Text title={t('Регистрация в AI PBX')}/>
                     <Text text={t('Голосовые ассистенты для бизнеса')}/>
                 </VStack>
-                {isSignupError &&
-                    <HStack max justify={'center'} align={'center'}>
-                        <Text text={t('Некорректные данные')} variant={'error'}/>
-                    </HStack>
-                }
-                {isSignupActivateError &&
-                    <Text
-                        text={t('Ошибка активации, пожалуйста, попробуйте позже') +
-                            String(signupActivationError)}
-                        variant={'error'}
-                    />
-                }
                 {(isSignupLoading || isGoogleLoading || isTelegramLoading || isSignupActivateLoading) &&
                     <HStack max justify={'center'}>
                         <Loader className={cls.signupLoader}/>
