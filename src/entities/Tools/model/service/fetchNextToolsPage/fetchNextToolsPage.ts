@@ -12,7 +12,7 @@ void | never,
 void | never,
 ThunkConfig<string>
 >(
-  'AssistantsPage/fetchNextAssistantsList',
+  'ToolsPage/fetchNextToolsList',
   async (_, thunkAPI) => {
     const { dispatch, getState } = thunkAPI
     const hasMore = getToolsHasMore(getState())

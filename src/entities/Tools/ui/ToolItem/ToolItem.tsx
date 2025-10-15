@@ -35,7 +35,6 @@ export const ToolItem = memo((props: ToolItemProps) => {
                 <Card
                     padding={'16'}
                     max
-                    border={'round'}
                     className={classNames(cls.ToolItem, {}, [className, cls[view]])}
                 >
                     <HStack gap={'24'} wrap={'wrap'} justify={'start'}>
@@ -84,8 +83,10 @@ export const ToolItem = memo((props: ToolItemProps) => {
                         checked={checkedItems?.includes(String(tool.id))}
                         onChange={onChangeChecked}
                     />
-                    <Text title={tool.name}/>
-                    {tool.comment ? <HStack><Text text={tool.comment}/></HStack> : ''}
+                    <AppLink to={getRouteToolsEdit(tool.id || '')}>
+                        <Text title={tool.name}/>
+                        {tool.comment ? <HStack><Text text={tool.comment}/></HStack> : ''}
+                    </AppLink>
                 </VStack>
                 <ToolMenu id={tool?.id || ''} className={cls.menu}/>
             </Card>

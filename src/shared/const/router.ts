@@ -15,6 +15,9 @@ export enum AppRoutes {
   TOOLS = 'tools',
   TOOLS_CREATE = 'tools_create',
   TOOLS_EDIT = 'tools_edit',
+  PBX_SERVERS = 'pbx_servers',
+  PBX_SERVER_CREATE = 'pbx_create',
+  PBX_SERVER_EDIT = 'pbx_edit',
   FORBIDDEN = 'forbidden',
   ERROR = 'error',
   USERS = 'users',
@@ -36,10 +39,13 @@ export const getRoutePayment = () => '/payment'
 export const getRouteDashboard = () => '/dashboard'
 export const getRouteAssistantEdit = (id: string) => `/assistants/${id}`
 export const getRouteAssistantCreate = () => '/assistants/create'
-export const getRouteTools = () => '/tools'
 export const getRouteReports = () => '/reports'
+export const getRouteTools = () => '/tools'
 export const getRouteToolsEdit = (id: string) => `/tools/${id}`
 export const getRouteToolsCreate = () => '/tools/create'
+export const getRoutePbxServers = () => '/pbxServers'
+export const getRoutePbxServerEdit = (id: string) => `/pbxServer/${id}`
+export const getRoutePbxServerCreate = () => '/pbxServer/create'
 export const getRouteProfile = (id: string) => `/profile/${id}`
 export const getRouteForbidden = () => '/forbidden'
 export const getRouteUsers = () => '/users'

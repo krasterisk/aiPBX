@@ -3,7 +3,7 @@ import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import {
   getRouteAssistants,
   getRouteDashboard,
-  getRouteOnline,
+  getRouteOnline, getRoutePbxServers,
   getRouteReports,
   getRouteTools,
   getRouteUsers
@@ -59,6 +59,12 @@ export const useMenubarItems = () => {
       },
       ...(isAdmin
         ? [
+            {
+              path: getRoutePbxServers(),
+              Icon: EndpointsIcon,
+              text: t('VoIP Серверы'),
+              authOnly: true
+            },
             {
               path: getRouteUsers(),
               Icon: EndpointsIcon,

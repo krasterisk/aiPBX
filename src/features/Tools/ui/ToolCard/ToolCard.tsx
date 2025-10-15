@@ -95,7 +95,7 @@ export const ToolCard = memo((props: ToolCardProps) => {
   }
 
   return (
-      <VStack gap={'8'} max className={classNames(cls.EndpointCard, {}, [className])}>
+      <VStack gap={'8'} max className={classNames(cls.ToolCard, {}, [className])}>
         {
           isEdit && toolId
             ? <ToolEditCard

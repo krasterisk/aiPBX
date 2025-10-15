@@ -1,0 +1,67 @@
+import { classNames } from '@/shared/lib/classNames/classNames'
+import cls from './PbxServerCreateCardHeader.module.scss'
+import { useTranslation } from 'react-i18next'
+import { memo } from 'react'
+import { Card, CardVariant } from '@/shared/ui/redesigned/Card'
+import { AppLink } from '@/shared/ui/redesigned/AppLink'
+import { getRoutePbxServers } from '@/shared/const/router'
+import { Button } from '@/shared/ui/redesigned/Button'
+import { Text } from '@/shared/ui/redesigned/Text'
+import { HStack } from '@/shared/ui/redesigned/Stack'
+
+interface PbxServerCreateCardHeaderProps {
+  className?: string
+  onCreate?: () => void
+  variant?: CardVariant
+}
+
+export const PbxServerCreateCardHeader = memo((props: PbxServerCreateCardHeaderProps) => {
+  const {
+    className,
+    variant,
+    onCreate
+  } = props
+  const { t } = useTranslation('pbx')
+
+  const headerButtons = (
+      <HStack gap="8" align={'end'}>
+        <AppLink to={getRoutePbxServers()}>
+          <Button
+              title={t('Закрыть') ?? ''}
+              variant={'outline'}
+              color={'error'}
+          >
+            {t('Закрыть')}
+          </Button>
+        </AppLink>
+        <Button
+            title={t('Создать') ?? ''}
+            variant={'outline'}
+            color={'success'}
+            onClick={onCreate}
+        >
+          {t('Создать')}
+        </Button>
+      </HStack>
+  )
+
+  return (
+      <Card
+          className={classNames(cls.PbxServerCreateCardHeader, {}, [className])}
+          variant={variant}
+          padding={'8'}
+          border={'partial'}
+          max
+      >
+        {variant !== 'diviner-bottom'
+          ? <HStack max justify={'between'} wrap={'wrap'}>
+              <Text title={t('Новый сервер')}/>
+              {headerButtons}
+            </HStack>
+          : <HStack max justify={'end'} wrap={'wrap'}>
+              {headerButtons}
+            </HStack>
+        }
+      </Card>
+  )
+})

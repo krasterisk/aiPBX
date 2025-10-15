@@ -25,7 +25,7 @@ import {
   getRouteDashboard,
   getRoutePayment,
   getRouteSignup,
-  getRouteLogin
+  getRouteLogin, getRoutePbxServers, getRoutePbxServerCreate, getRoutePbxServerEdit
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 import { SettingPage } from '@/pages/SettingsPage'
@@ -38,6 +38,7 @@ import { DashboardPage } from '@/pages/DashboardPage'
 import { PaymentPage } from '@/pages/PaymentPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { SignupPage } from '@/pages/SignupPage'
+import { PbxServerCreatePage, PbxServerEditPage, PbxServersPage } from '@/pages/PbxServersPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -106,6 +107,21 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     path: getRouteToolsEdit(':id'),
     authOnly: true,
     element: <ToolsEditPage />
+  },
+  [AppRoutes.PBX_SERVERS]: {
+    path: getRoutePbxServers(),
+    authOnly: true,
+    element: <PbxServersPage />
+  },
+  [AppRoutes.PBX_SERVER_CREATE]: {
+    path: getRoutePbxServerCreate(),
+    authOnly: true,
+    element: <PbxServerCreatePage />
+  },
+  [AppRoutes.PBX_SERVER_EDIT]: {
+    path: getRoutePbxServerEdit(':id'),
+    authOnly: true,
+    element: <PbxServerEditPage />
   },
   [AppRoutes.USERS]: {
     path: getRouteUsers(),

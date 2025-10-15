@@ -20,7 +20,8 @@ export const rtkApi = createApi({
     'Assistants',
     'AiModels',
     'Tools',
-    'Reports'
+    'Reports',
+    'PbxServers'
   ],
   endpoints: (builder) => ({})
 })

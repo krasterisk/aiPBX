@@ -16,6 +16,7 @@ export interface AssistantOptions {
 export interface Assistant {
   id?: string
   name?: string
+  uniqueId?: string
   greeting?: string
   model?: string
   instruction?: string

@@ -8,6 +8,7 @@ import { ToolsPageSchema } from '@/entities/Tools'
 import { ReportsPageSchema } from '@/entities/Report'
 import { DashboardPageSchema } from '@/widgets/Dashboard'
 import { LoginSchema, SignupSchema } from '@/features/Auth'
+import { PbxServersPageSchema } from '@/entities/PbxServers'
 
 export interface StateSchema {
   user: UserSchema
@@ -22,7 +23,7 @@ export interface StateSchema {
   toolsPage?: ToolsPageSchema
   reportsPage?: ReportsPageSchema
   dashboardPage?: DashboardPageSchema
-
+  pbxServersPage?: PbxServersPageSchema
 }
 
 export type StateSchemaKey = keyof StateSchema

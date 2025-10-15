@@ -35,10 +35,14 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
                 <Card
                     padding={'16'}
                     max
-                    border={'round'}
                     className={classNames(cls.AssistantItem, {}, [className, cls[view]])}
                 >
-                    <HStack gap={'24'} wrap={'wrap'} justify={'start'}>
+                    <HStack
+                        max
+                        gap={'24'}
+                        wrap={'wrap'}
+                        justify={'start'}
+                    >
                         <Check
                             key={String(assistant.id)}
                             className={classNames('', {
@@ -84,8 +88,10 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
                         checked={checkedItems?.includes(String(assistant.id))}
                         onChange={onChangeChecked}
                     />
-                    <Text title={assistant.name}/>
-                    {assistant.comment ? <HStack><Text text={assistant.comment}/></HStack> : ''}
+                    <AppLink to={getRouteAssistantEdit(assistant.id || '')}>
+                        <Text title={assistant.name}/>
+                        {assistant.comment ? <HStack><Text text={assistant.comment}/></HStack> : ''}
+                    </AppLink>
                 </VStack>
                 <AssistantMenu id={assistant?.id || ''} className={cls.menu}/>
             </Card>

@@ -1,24 +1,39 @@
 import { isRejectedWithValue, Middleware } from '@reduxjs/toolkit'
-
 import { toast } from 'react-toastify'
-import i18n from '@/shared/config/i18n/i18n' // тот же самый экземпляр, что и в useTranslation
+import i18n from '@/shared/config/i18n/i18n'
 
 export const toastMiddleware: Middleware = () => next => action => {
   if (isRejectedWithValue(action)) {
-    const status = action?.payload?.status
-    const message =
+    const status: number | undefined = action?.payload?.status
+    const message: string =
         action?.payload?.data?.message ||
         action?.error?.message ||
         'unknownError'
 
-    // Исключение для 404
-    if (status === 404 || status === 403) {
+    console.log(message)
+
+    if (
+      status === 403 ||
+        status === 404 ||
+        message.includes('ERR_CONNECTION_REFUSED') ||
+        message.includes('Network Error') ||
+        message.includes('Failed to fetch')
+    ) {
       return next(action)
     }
 
-    // Пробуем найти перевод
-    const translated = i18n.t(`${String(message)}`) || message
+    // 🔤 Перевод ошибки (если есть)
+    let translated = message
 
+    if (i18n.exists(`errors.${translated}`)) {
+      translated = i18n.t(`errors.${translated}`)
+    } else if (status && i18n.exists(`errors.${status}`)) {
+      translated = i18n.t(`errors.${status}`)
+    } else if (i18n.exists(translated)) {
+      translated = i18n.t(translated)
+    }
+
+    // 🔔 Показываем уведомление
     toast.error(translated)
   }
 
