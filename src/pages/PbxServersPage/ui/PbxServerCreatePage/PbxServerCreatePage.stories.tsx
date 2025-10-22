@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { PbxServerCreatePage } from './PbxServerCreatePage'
+import PbxServerCreatePage from './PbxServerCreatePage'
 
 export default {
   title: 'shared/PbxServerCreatePage',
@@ -10,7 +10,7 @@ export default {
   }
 } as ComponentMeta<typeof PbxServerCreatePage>
 
-const Template: ComponentStory<typeof PbxServerCreatePage> = (args) => <PbxServerCreatePage {...args} />
+const Template: ComponentStory<typeof PbxServerCreatePage> = (args) => <PbxServerCreatePage />
 
 export const Normal = Template.bind({})
 Normal.args = {}
