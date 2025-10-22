@@ -41,7 +41,7 @@ export const PbxServerCard = memo((props: PbxServerCardProps) => {
   const navigate = useNavigate()
 
   const handleCreatePbxServer = useCallback((data: PbxServer) => {
-    pbxServerCreate([data]).then((res) => {
+    pbxServerCreate(data).then((res) => {
       if ('error' in res) return
       navigate(getRoutePbxServers())
     })

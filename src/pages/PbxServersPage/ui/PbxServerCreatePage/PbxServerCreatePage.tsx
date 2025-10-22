@@ -1,20 +1,15 @@
-import { classNames } from '@/shared/lib/classNames/classNames'
-import cls from './PbxServerCreatePage.module.scss'
 import { memo } from 'react'
+import { Page } from '@/widgets/Page'
+import { VStack } from '@/shared/ui/redesigned/Stack'
+import { PbxServerCard } from '@/features/PbxServers'
 
-interface PbxServerCreatePageProps {
-  className?: string
-
-}
-
-const PbxServerCreatePage = memo((props: PbxServerCreatePageProps) => {
-  const {
-    className
-  } = props
+const PbxServerCreatePage = memo(() => {
   return (
-        <div className={classNames(cls.PbxServerCreatePage, {}, [className])}>
-
-        </div>
+      <Page data-testid={'PbxServersCreatePage'}>
+        <VStack gap='8'>
+          <PbxServerCard />
+        </VStack>
+      </Page>
   )
 })
 

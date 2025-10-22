@@ -141,7 +141,7 @@ export const PbxServerCreateCard = memo((props: PbxServerCreateCardProps) => {
                     label={t('ARI USER') ?? ''}
                     onChange={createTextChangeHandler('ari_user')}
                     data-testid={'PbxServerCardCreate.ari_user'}
-                    value={formFields?.ari_url || ''}
+                    value={formFields?.ari_user || ''}
                 />
                 <Textarea
                     label={t('ARI PASSWORD') ?? ''}

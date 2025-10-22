@@ -14,7 +14,7 @@ export const pbxServersApi = rtkApi.injectEndpoints({
   endpoints: (build) => ({
     getPbxServers: build.query<AllPbxServers, QueryArgs>({
       query: (args) => ({
-        url: '/pbxServers/page',
+        url: '/pbx-servers/page',
         params: args
       }),
       serializeQueryArgs: ({ endpointName }) => {
@@ -43,7 +43,7 @@ export const pbxServersApi = rtkApi.injectEndpoints({
     }),
     getPbxServersAll: build.query<PbxServer[], null>({
       query: (args) => ({
-        url: '/pbxServers'
+        url: '/pbx-servers'
       }),
       providesTags: (result) =>
         result?.length
@@ -53,21 +53,21 @@ export const pbxServersApi = rtkApi.injectEndpoints({
             ]
           : [{ type: 'PbxServers', id: 'LIST' }]
     }),
-    setPbxServers: build.mutation<PbxServer[], PbxServer[]>({
+    setPbxServers: build.mutation<PbxServer, PbxServer>({
       query: (arg) => ({
-        url: '/pbxServers',
+        url: '/pbx-servers',
         method: 'POST',
         body: arg
       }),
       invalidatesTags: [{ type: 'PbxServers', id: 'LIST' }]
     }),
     getPbxServer: build.query<PbxServer, string>({
-      query: (id) => `/pbxServers/${id}`,
+      query: (id) => `/pbx-servers/${id}`,
       providesTags: (result, error, id) => [{ type: 'PbxServers', id }]
     }),
     updatePbxServer: build.mutation<PbxServer, Pick<PbxServer, 'id'> & Partial<PbxServer>>({
       query: ({ id, ...patch }) => ({
-        url: '/pbxServers',
+        url: '/pbx-servers',
         method: 'PATCH',
         body: { id, ...patch }
       }),
@@ -84,7 +84,7 @@ export const pbxServersApi = rtkApi.injectEndpoints({
     deletePbxServer: build.mutation<{ success: boolean, id: string }, string>({
       query (id) {
         return {
-          url: `pbxServers/${id}`,
+          url: `pbx-servers/${id}`,
           method: 'DELETE'
         }
       },

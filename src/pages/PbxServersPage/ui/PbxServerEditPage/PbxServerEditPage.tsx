@@ -1,20 +1,24 @@
-import { classNames } from '@/shared/lib/classNames/classNames'
-import cls from './PbxServerEditPage.module.scss'
 import { memo } from 'react'
+import { useParams } from 'react-router-dom'
+import { ErrorPage } from '../../../ErrorPage'
+import { Page } from '@/widgets/Page'
+import { VStack } from '@/shared/ui/redesigned/Stack'
+import { PbxServerCard } from '@/features/PbxServers'
 
-interface PbxServerEditPageProps {
-  className?: string
+const PbxServerEditPage = memo(() => {
+  const { id } = useParams<{ id: string }>()
 
-}
-
-const PbxServerEditPage = memo((props: PbxServerEditPageProps) => {
-  const {
-    className
-  } = props
+  if (!id) {
+    return (
+        <ErrorPage />
+    )
+  }
   return (
-        <div className={classNames(cls.PbxServerEditPage, {}, [className])}>
-
-        </div>
+      <Page data-testid={'PbxServerPage'}>
+        <VStack gap='8'>
+          <PbxServerCard isEdit pbxServerId={id}/>
+        </VStack>
+      </Page>
   )
 })
 

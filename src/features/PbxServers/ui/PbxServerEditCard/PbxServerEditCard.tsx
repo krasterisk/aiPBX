@@ -149,7 +149,7 @@ export const PbxServerEditCard = memo((props: UserEditCardProps) => {
                 label={t('ARI USER') ?? ''}
                 onChange={editTextChangeHandler('ari_user')}
                 data-testid={'PbxServerCardEdit.ari_user'}
-                value={formFields?.ari_url || ''}
+                value={formFields?.ari_user || ''}
             />
             <Textarea
                 label={t('ARI PASSWORD') ?? ''}

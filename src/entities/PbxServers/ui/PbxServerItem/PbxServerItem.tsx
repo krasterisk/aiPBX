@@ -36,7 +36,7 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
                 max
                 className={classNames(cls.PbxServerItem, {}, [className, cls[view]])}
             >
-              <HStack gap={'24'} wrap={'wrap'} justify={'start'}>
+              <HStack gap={'24'} wrap={'wrap'} justify={'start'} max>
                 <Check
                     key={String(pbxServer.id)}
                     className={classNames('', {
@@ -49,10 +49,10 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
                     onChange={onChangeChecked}
                 />
                 <AppLink to={getRoutePbxServerEdit(pbxServer.id || '')}>
-                  <VStack max>
                     <Text title={pbxServer.name}/>
+                    <Text text={pbxServer.sip_host}/>
+                    <Text text={pbxServer.location}/>
                     {pbxServer.comment ? <HStack><Text text={pbxServer.comment}/></HStack> : ''}
-                  </VStack>
                 </AppLink>
               </HStack>
             </Card>
@@ -68,6 +68,7 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
             <VStack
                 gap={'8'}
                 justify={'start'}
+                max
             >
 
               <Check
@@ -82,8 +83,10 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
                   onChange={onChangeChecked}
               />
               <AppLink to={getRoutePbxServerEdit(pbxServer.id || '')}>
-                <Text title={pbxServer.name}/>
-                {pbxServer.comment ? <HStack><Text text={pbxServer.comment}/></HStack> : ''}
+                  <Text title={pbxServer.name}/>
+                  <Text text={pbxServer.sip_host}/>
+                  <Text text={pbxServer.location}/>
+                  {pbxServer.comment ? <HStack><Text text={pbxServer.comment}/></HStack> : ''}
               </AppLink>
             </VStack>
           </Card>
