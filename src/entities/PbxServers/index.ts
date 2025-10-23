@@ -1,4 +1,3 @@
-
 export { usePbxServersFilters } from './lib/hooks/usePbxServersFilters'
 
 export {
@@ -24,6 +23,7 @@ export { initNextPbxServerPage } from './model/service/initNextPbxServersPage/in
 export type { PbxServersPageSchema } from './model/types/pbxServersPageSchema'
 export type { PbxServer, AllPbxServers, PbxServerListProps } from './model/types/pbxServers'
 export { PbxServersList } from './ui/PbxServersList/PbxServersList'
+export { PbxServerSelect } from './ui/PbxServerSelect/PbxServerSelect'
 
 export {
   pbxServersApi,

@@ -8,6 +8,11 @@ export interface AllPbxServers {
   rows: PbxServer[]
 }
 
+export interface PbxServerOptions {
+  id: string
+  name: string
+}
+
 export interface PbxServer {
   id?: string
   name?: string

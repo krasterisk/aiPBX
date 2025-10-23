@@ -32,7 +32,9 @@ export const AssistantOptionsPublication = memo((props: AssistantPublicationProp
                 }}
             />
           {/* eslint-disable-next-line react/jsx-no-undef */}
-            <Button>{t('Создать SIP аккаунт')}</Button>
+            <Button onClick={() => { setIsCreateSipAccountOpen(true) }}>
+                {t('Создать SIP аккаунт')}
+            </Button>
             <Button>{t('Создать WebRTC скрипт для сайта')}</Button>
             <Button>{t('Создать переадресацию с внешнего номера')}</Button>
         </VStack>

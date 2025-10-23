@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { AssistantSipAccount } from './AssistantSipAccount'
+import AssistantSipAccount from './AssistantSipAccount'
 
 export default {
   title: 'shared/AssistantSipAccount',
