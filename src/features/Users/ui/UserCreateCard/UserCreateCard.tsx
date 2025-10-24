@@ -202,10 +202,11 @@ export const UserCreateCard = memo((props: UserCreateCardProps) => {
                             value={formFields.username}
                         />
                         <Textarea
-                            label={t('Пароль') + '*' ?? ''}
+                            label={t('Пароль')}
                             onChange={createTextChangeHandler('password')}
                             data-testid={'UserCard.password'}
                             value={formFields.password}
+                            required
                         />
                         <Textarea
                             label={t('Реквизиты') ?? ''}

@@ -1,5 +1,6 @@
 export { ToolsList } from './ui/ToolsList/ToolsList'
 export { ToolsSelect } from './ui/ToolsSelect/ToolsSelect'
+export { ToolTypeSelect } from './ui/ToolTypeSelect/ToolTypeSelect'
 export { useToolsFilters } from './lib/hooks/useToolsFilters'
 
 export {
@@ -25,7 +26,7 @@ export {
 export { initToolsPage } from './model/service/initToolsPage/initToolsPage'
 
 export type { ToolsPageSchema } from './model/types/toolsPageSchema'
-export type { Tool, AllTools, ToolsListProps, ToolParam, ToolParameters } from './model/types/tools'
+export type { Tool, AllTools, ToolsListProps, ToolParam, ToolParameters, ToolType } from './model/types/tools'
 
 export {
   toolsApi,

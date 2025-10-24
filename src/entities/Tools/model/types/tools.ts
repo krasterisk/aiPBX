@@ -1,6 +1,7 @@
 import { User } from '../../../User'
 import { HTMLAttributeAnchorTarget } from 'react'
 import { ContentView } from '@/entities/Content'
+import { ToolTypesValues } from '../consts/consts'
 
 export interface AllTools {
   count: number
@@ -41,4 +42,9 @@ export interface ToolsListProps {
   view?: ContentView
   tools?: AllTools
   onDelete?: (id: string) => void
+}
+
+export interface ToolType {
+  value: ToolTypesValues
+  descriptions: string
 }

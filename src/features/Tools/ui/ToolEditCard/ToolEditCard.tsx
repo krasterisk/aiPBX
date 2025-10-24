@@ -120,7 +120,11 @@ export const ToolEditCard = memo((props: UserEditCardProps) => {
           max
           className={classNames(cls.ToolCreateCard, {}, [className])}
       >
-        <ToolEditCardHeader onEdit={editHandler} onDelete={onDelete}/>
+        <ToolEditCardHeader
+            onEdit={editHandler}
+            onDelete={onDelete}
+            toolId={toolId}
+        />
         <Card
             max
             padding={'16'}
@@ -166,7 +170,11 @@ export const ToolEditCard = memo((props: UserEditCardProps) => {
             />
           </VStack>
         </Card>
-        <ToolEditCardHeader onEdit={editHandler} variant={'diviner-bottom'}/>
+        <ToolEditCardHeader
+            onEdit={editHandler}
+            variant={'diviner-bottom'}
+            toolId={toolId}
+        />
       </VStack>
   )
 })

@@ -46,6 +46,7 @@ export const ToolEditCardHeader = memo((props: ToolEditCardHeaderProps) => {
         >
           {t('Удалить')}
         </Button>
+
         <AppLink
             to={getRouteTools()}
         >

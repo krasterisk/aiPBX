@@ -60,6 +60,7 @@ export const ToolCard = memo((props: ToolCardProps) => {
   }, [navigate, toolUpdate])
 
   const handleDeleteTool = useCallback((id: string) => {
+    console.log(id)
     toolDelete(id)
       .unwrap()
       .then(() => {

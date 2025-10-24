@@ -16,18 +16,12 @@
   "Наименование функции": "Tool Name",
   "Описание функции(обязательно)": "Tool Description (required)",
   "Описание функции": "Tool Description",
-  "Строгий режим вызова функции": "Strict tool call mode",
   "Комментарий": "Comment",
   "Параметр": "Parameter",
   "Параметры": "Parameters",
   "Доступ запрещён!": "Access denied!",
   "Клиент": "Client",
   "Адрес вебхука": "Webhook URL",
-  "Идентификатор функции, используйте только латинские символы, подчёркивания вместо пробелов": {
-    " Название функции должно отражать её суть, например get_price, get_client_name и т": {
-      "д": "Tool identifier: use only Latin letters and underscores instead of spaces. The tool name should reflect its purpose, e.g., get_price, get_client_name, etc."
-    }
-  },
   "Название параметра": "Parameter Name",
   "Описание функции, опишите назначение функции, её роль и другие нюансы": "Tool description: explain its purpose, role, and other details",
   "Сохранить": "Save",
@@ -40,5 +34,11 @@
   "Каждое значение - отдельная строка": "Each value on a separate line",
   "Ошибка при сохранении функции": "Error saving tool",
   "Редактировать": "Edit",
-  "Параметр с именем уже существует": "Parameter with this name already exists"
+  "Параметр с именем уже существует": "Parameter with this name already exists",
+  "Функция": "Function",
+  "MCP сервер": "MCP server",
+  "Тип": "Type",
+  "Наименование": "Name",
+  "Описание": "Description",
+  "Строгий режим вызова": "Strict mode"
 }

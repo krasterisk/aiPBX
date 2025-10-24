@@ -10,12 +10,14 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import {
   Tool,
   toolsPageActions,
-  getToolsUser, getToolsCreateForm
+  getToolsUser,
+  getToolsCreateForm,
+  ToolTypeSelect,
+  ToolType
 } from '@/entities/Tools'
 import { useSelector } from 'react-redux'
-import { ClientOptions, ClientSelect, getUserAuthData, isUserAdmin } from '@/entities/User'
+import { ClientOptions, ClientSelect, isUserAdmin } from '@/entities/User'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { ToolCreateCardHeader } from '../ToolCreateCardHeader/ToolCreateCardHeader'
 import { Check } from '@/shared/ui/mui/Check'
@@ -39,7 +41,6 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
   const { t } = useTranslation('tools')
 
   const isAdmin = useSelector(isUserAdmin)
-  const clientData = useSelector(getUserAuthData)
   const clientValues = useSelector(getToolsUser)
 
   const dispatch = useAppDispatch()
@@ -81,6 +82,14 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
       }
       dispatch(toolsPageActions.updateToolsCreateForm(updatedForm))
     }
+
+  const createChangeTypeHandler = (field: keyof Tool) => (event: any, value: ToolType) => {
+    const updatedForm = {
+      ...formFields,
+      [field]: value
+    }
+    dispatch(toolsPageActions.updateToolsCreateForm(updatedForm))
+  }
 
   const toggleStrictHandler = useCallback(() => {
     const updatedForm = {
@@ -131,23 +140,30 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
                     border={'partial'}
                 >
                     <VStack gap={'16'} max>
-                        {!isAdmin ? <Text title={clientData?.name}/> : IsAdminOptions}
+                        { !isAdmin && IsAdminOptions }
+
                         <Textarea
-                            label={t('Наименование функции') ?? ''}
+                            label={t('Наименование') ?? ''}
                             onChange={createTextChangeHandler('name')}
                             data-testid={'ToolCardCreate.name'}
                             value={formFields?.name || ''}
                         />
                         <Textarea
-                            label={t('Описание функции') ?? ''}
+                            label={t('Описание') ?? ''}
                             onChange={createTextChangeHandler('description')}
                             data-testid={'ToolCardCreate.description'}
                             value={formFields?.description || ''}
                             minRows={3}
                             multiline
                         />
+                        <ToolTypeSelect
+                            label={t('Тип') ?? ''}
+                            value={formFields?.type}
+                            onChangeToolType={createChangeTypeHandler('type')}
+                            data-testid={'ToolCardCreate.type'}
+                        />
                         <Check
-                            label={t('Строгий режим вызова функции') || ''}
+                            label={t('Строгий режим вызова') || ''}
                             onChange={toggleStrictHandler}
                             checked={formFields?.strict || false}
                         />
