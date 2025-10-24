@@ -15,14 +15,14 @@ const initialState: ToolsPageSchema = {
   search: '',
   userId: '',
   createForm: {
-    type: 'function',
+    type: '',
     user: {
       id: '',
       name: ''
     }
   },
   editForm: {
-    type: 'function',
+    type: '',
     id: '',
     name: '',
     userId: ''
@@ -36,7 +36,7 @@ export const toolsPageSlice = createSlice({
     resetToolEditForm: (state) => {
       state.editForm = {
         id: '',
-        type: 'function',
+        type: '',
         name: '',
         comment: '',
         userId: ''
@@ -45,7 +45,7 @@ export const toolsPageSlice = createSlice({
     resetToolCreateForm: (state) => {
       state.createForm = {
         id: '',
-        type: 'function',
+        type: '',
         name: '',
         comment: '',
         userId: ''

@@ -83,10 +83,12 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
       dispatch(toolsPageActions.updateToolsCreateForm(updatedForm))
     }
 
-  const createChangeTypeHandler = (field: keyof Tool) => (event: any, value: ToolType) => {
+  const createChangeTypeHandler = (field: keyof Tool) => (event: any, functionType: ToolType) => {
+    const type = functionType.value
+
     const updatedForm = {
       ...formFields,
-      [field]: value
+      [field]: type || ''
     }
     dispatch(toolsPageActions.updateToolsCreateForm(updatedForm))
   }
@@ -117,6 +119,26 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
     }
   }, [formFields, onCreate])
 
+  const functionType = (
+            <>
+                <Check
+                    label={t('Строгий режим вызова') || ''}
+                    onChange={toggleStrictHandler}
+                    checked={formFields?.strict || false}
+                />
+                <ToolAddParam
+                    parameters={formFields?.parameters}
+                    toolName={formFields?.name || ''}
+                />
+                <Textarea
+                    label={t('Адрес вебхука') ?? ''}
+                    onChange={createTextChangeHandler('webhook')}
+                    data-testid={'ToolCardCreate.webhook'}
+                    value={formFields?.webhook || ''}
+                />
+            </>
+  )
+
   return (
             <VStack
                 gap={'8'}
@@ -140,7 +162,7 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
                     border={'partial'}
                 >
                     <VStack gap={'16'} max>
-                        { !isAdmin && IsAdminOptions }
+                        {!isAdmin && IsAdminOptions}
 
                         <Textarea
                             label={t('Наименование') ?? ''}
@@ -162,21 +184,7 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
                             onChangeToolType={createChangeTypeHandler('type')}
                             data-testid={'ToolCardCreate.type'}
                         />
-                        <Check
-                            label={t('Строгий режим вызова') || ''}
-                            onChange={toggleStrictHandler}
-                            checked={formFields?.strict || false}
-                        />
-                        <ToolAddParam
-                            parameters={formFields?.parameters}
-                            toolName={formFields?.name || ''}
-                        />
-                        <Textarea
-                            label={t('Адрес вебхука') ?? ''}
-                            onChange={createTextChangeHandler('webhook')}
-                            data-testid={'ToolCardCreate.webhook'}
-                            value={formFields?.webhook || ''}
-                        />
+                        {formFields?.type === 'function' && functionType}
                         <Textarea
                             label={t('Комментарий') ?? ''}
                             onChange={createTextChangeHandler('comment')}
