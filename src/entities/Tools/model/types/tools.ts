@@ -14,6 +14,7 @@ export interface Tool {
   type?: string
   description?: string
   parameters?: ToolParameters
+  toolData?: object
   strict?: boolean
   webhook?: string
   user?: User

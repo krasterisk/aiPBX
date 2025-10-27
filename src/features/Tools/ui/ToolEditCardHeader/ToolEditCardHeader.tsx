@@ -38,14 +38,16 @@ export const ToolEditCardHeader = memo((props: ToolEditCardHeaderProps) => {
 
   const headerButtons = (
       <HStack gap="8">
-        <Button
-            title={t('Удалить') ?? ''}
-            variant={'outline'}
-            color={'error'}
-            onClick={deleteHandler}
-        >
-          {t('Удалить')}
-        </Button>
+          {variant !== 'diviner-bottom' &&
+              <Button
+                  title={t('Удалить') ?? ''}
+                  variant={'outline'}
+                  color={'error'}
+                  onClick={deleteHandler}
+              >
+                  {t('Удалить')}
+              </Button>
+          }
 
         <AppLink
             to={getRouteTools()}
@@ -67,7 +69,6 @@ export const ToolEditCardHeader = memo((props: ToolEditCardHeaderProps) => {
           {t('Сохранить')}
         </Button>
       </HStack>
-
   )
 
   return (

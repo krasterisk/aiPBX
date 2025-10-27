@@ -35,10 +35,11 @@
   "Ошибка при сохранении функции": "Error saving tool",
   "Редактировать": "Edit",
   "Параметр с именем уже существует": "Parameter with this name already exists",
-  "Функция": "Function",
-  "MCP сервер": "MCP server",
+  "Функция": "Function calling",
+  "MCP сервер": "Remote MCP",
   "Тип": "Type",
   "Наименование": "Name",
   "Описание": "Description",
-  "Строгий режим вызова": "Strict mode"
+  "Строгий режим вызова": "Strict mode",
+  "Параметры MCP сервера": "Параметры MCP сервера"
 }

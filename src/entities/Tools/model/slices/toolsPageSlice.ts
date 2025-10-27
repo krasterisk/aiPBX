@@ -38,6 +38,13 @@ export const toolsPageSlice = createSlice({
         id: '',
         type: '',
         name: '',
+        toolData: {
+          type: 'mcp',
+          server_label: 'dmcp',
+          server_description: 'A Dungeons and Dragons MCP server to assist with dice rolling.',
+          server_url: 'https://mymcpserver.dev/sse',
+          require_approval: 'never'
+        },
         comment: '',
         userId: ''
       }
@@ -47,6 +54,13 @@ export const toolsPageSlice = createSlice({
         id: '',
         type: '',
         name: '',
+        toolData: {
+          type: 'mcp',
+          server_label: 'dmcp',
+          server_description: 'A Dungeons and Dragons MCP server to assist with dice rolling.',
+          server_url: 'https://mymcpserver.dev/sse',
+          require_approval: 'never'
+        },
         comment: '',
         userId: ''
       }
@@ -94,6 +108,12 @@ export const toolsPageSlice = createSlice({
         ...state.createForm,
         ...action.payload
       }
+    },
+    updateToolCreateType: (state, action: PayloadAction<string>) => {
+      state.createForm.type = action.payload
+    },
+    updateToolEditType: (state, action: PayloadAction<string>) => {
+      state.editForm.type = action.payload
     },
 
     initState: (state) => {

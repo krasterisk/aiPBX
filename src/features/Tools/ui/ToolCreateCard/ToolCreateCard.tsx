@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import cls from './ToolCreateCard.module.scss'
-import React, { ChangeEvent, memo, useCallback, useEffect } from 'react'
+import React, { ChangeEvent, memo, useCallback, useEffect, useState } from 'react'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { ErrorGetData } from '@/entities/ErrorGetData'
@@ -39,17 +39,42 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
   } = props
 
   const { t } = useTranslation('tools')
-
   const isAdmin = useSelector(isUserAdmin)
   const clientValues = useSelector(getToolsUser)
-
   const dispatch = useAppDispatch()
-
   const formFields = useSelector(getToolsCreateForm)
+  const [jsonText, setJsonText] = useState(() =>
+    formFields?.toolData ? JSON.stringify(formFields.toolData, null, 2) : ''
+  )
 
   useEffect(() => {
     dispatch(toolsPageActions.resetToolCreateForm())
   }, [dispatch])
+
+  useEffect(() => {
+    if (formFields?.toolData) {
+      setJsonText(JSON.stringify(formFields.toolData, null, 2))
+    }
+  }, [formFields?.toolData])
+
+  const onJsonChangeHandler = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const text = event.target.value
+      setJsonText(text)
+
+      try {
+        const parsed = JSON.parse(text)
+        const updatedForm = {
+          ...formFields,
+          toolData: parsed
+        }
+        dispatch(toolsPageActions.updateToolEditForm(updatedForm))
+      } catch {
+        // невалидный JSON — просто не трогаем store
+      }
+    },
+    [dispatch, formFields]
+  )
 
   const onChangeClientHandler = useCallback((
     event: any,
@@ -83,14 +108,9 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
       dispatch(toolsPageActions.updateToolsCreateForm(updatedForm))
     }
 
-  const createChangeTypeHandler = (field: keyof Tool) => (event: any, functionType: ToolType) => {
+  const createChangeTypeHandler = (event: any, functionType: ToolType) => {
     const type = functionType.value
-
-    const updatedForm = {
-      ...formFields,
-      [field]: type || ''
-    }
-    dispatch(toolsPageActions.updateToolsCreateForm(updatedForm))
+    dispatch(toolsPageActions.updateToolCreateType(type))
   }
 
   const toggleStrictHandler = useCallback(() => {
@@ -121,6 +141,14 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
 
   const functionType = (
             <>
+                <Textarea
+                    label={t('Описание') ?? ''}
+                    onChange={createTextChangeHandler('description')}
+                    data-testid={'ToolCardCreate.description'}
+                    value={formFields?.description || ''}
+                    minRows={3}
+                    multiline
+                />
                 <Check
                     label={t('Строгий режим вызова') || ''}
                     onChange={toggleStrictHandler}
@@ -135,6 +163,19 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
                     onChange={createTextChangeHandler('webhook')}
                     data-testid={'ToolCardCreate.webhook'}
                     value={formFields?.webhook || ''}
+                />
+            </>
+  )
+
+  const toolType = (
+            <>
+                <Textarea
+                    label={t('Параметры') ?? ''}
+                    onChange={onJsonChangeHandler}
+                    data-testid={'ToolCardCreate.mcp'}
+                    value={jsonText}
+                    minRows={3}
+                    multiline
                 />
             </>
   )
@@ -170,21 +211,14 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
                             data-testid={'ToolCardCreate.name'}
                             value={formFields?.name || ''}
                         />
-                        <Textarea
-                            label={t('Описание') ?? ''}
-                            onChange={createTextChangeHandler('description')}
-                            data-testid={'ToolCardCreate.description'}
-                            value={formFields?.description || ''}
-                            minRows={3}
-                            multiline
-                        />
                         <ToolTypeSelect
                             label={t('Тип') ?? ''}
                             value={formFields?.type}
-                            onChangeToolType={createChangeTypeHandler('type')}
+                            onChangeToolType={createChangeTypeHandler}
                             data-testid={'ToolCardCreate.type'}
                         />
-                        {formFields?.type === 'function' && functionType}
+                        {formFields?.type && formFields?.type === 'function' && functionType}
+                        {formFields?.type && formFields?.type !== 'function' && toolType}
                         <Textarea
                             label={t('Комментарий') ?? ''}
                             onChange={createTextChangeHandler('comment')}

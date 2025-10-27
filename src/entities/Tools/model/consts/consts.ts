@@ -1,5 +1,5 @@
 export enum ToolTypesValues {
   FUNCTION = 'function',
-  MCP = 'mcp server',
-  WEB_SEARCH = 'web search'
+  MCP = 'mcp',
+  WEB_SEARCH = 'web_search'
 }

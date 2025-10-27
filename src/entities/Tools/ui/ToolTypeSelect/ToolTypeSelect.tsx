@@ -33,8 +33,12 @@ export const ToolTypeSelect = memo((props: ToolTypeSelectorProps) => {
     }
   ]
 
+  const currentValue = toolsData.find(option => option.value === value) || null
+
   const onChangeHandler = (event: any, newValue: ToolType) => {
-    onChangeToolType?.(event, newValue)
+    if (newValue) {
+      onChangeToolType?.(event, newValue)
+    }
   }
 
   return (
@@ -42,7 +46,8 @@ export const ToolTypeSelect = memo((props: ToolTypeSelectorProps) => {
             label={label}
             autoComplete={true}
             options={toolsData}
-            // value={value}
+            disableClearable
+            value={currentValue}
             onChange={onChangeHandler}
             getOptionKey={option => option.value}
             isOptionEqualToValue={(option, value) => value === undefined || value === '' || option.value === value.value}
