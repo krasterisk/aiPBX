@@ -14,7 +14,7 @@ export const Divider = memo((props: DividerProps) => {
   } = props
   return (
         <div className={classNames(cls.Divider, {}, [className])}>
-          <span>{children}</span>
+            {children && <span>{children}</span>}
         </div>
   )
 })

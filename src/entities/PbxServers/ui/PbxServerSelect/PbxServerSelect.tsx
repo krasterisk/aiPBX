@@ -1,15 +1,14 @@
 import { memo } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
-import { Checkbox } from '@mui/material'
 import { PbxServerOptions } from '../../model/types/pbxServers'
 import { usePbxServersAll } from '../../api/pbxServersApi'
 
 interface PbxServerSelectProps {
   label?: string
-  value?: PbxServerOptions[]
-  PbxServerId?: string[]
+  value?: PbxServerOptions | null
+  PbxServerId?: string
   className?: string
-  onChangePbxServer?: (event: any, newValue: PbxServerOptions[]) => void
+  onChangePbxServer?: (event: any, newValue: PbxServerOptions | null) => void
   userId?: string
 }
 
@@ -23,40 +22,25 @@ export const PbxServerSelect = memo((props: PbxServerSelectProps) => {
     ...otherProps
   } = props
 
-  const {
-    data: PbxServers
-  } = usePbxServersAll(null)
+  const { data: PbxServers } = usePbxServersAll(null)
 
-  const onChangeMultipleHandler = (event: any, newValue: PbxServerOptions[]) => {
+  const onChangeHandler = (event: any, newValue: PbxServerOptions | null) => {
     onChangePbxServer?.(event, newValue)
   }
 
   return (
         <Combobox
-            id={'PbxServerSelectBox'}
-            multiple
+            id="PbxServerSelectBox"
             label={label}
             autoComplete
-            groupBy={(option) => option.group || ''}
             options={PbxServers || []}
-            disableCloseOnSelect
             value={value}
+            groupBy={(option) => option.location || ''}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            renderOption={(props, option, { selected, inputValue, index }) => {
-              const { ...otherProps } = props
-              return (
-                    <li {...otherProps}>
-                        <Checkbox
-                            // icon={icon}
-                            // checkedIcon={checkedIcon}
-                            style={{ marginRight: 8 }}
-                            checked={selected}
-                        />
-                        {String(option.name)}
-                    </li>
-              )
-            }}
-            onChange={onChangeMultipleHandler}
+            renderOption={(props, option) => (
+                <li {...props}>{option.name}</li>
+            )}
+            onChange={onChangeHandler}
             getOptionLabel={(option) => option.name}
             {...otherProps}
         />

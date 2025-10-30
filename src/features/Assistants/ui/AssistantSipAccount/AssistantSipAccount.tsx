@@ -2,8 +2,9 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './AssistantSipAccount.module.scss'
 import { memo } from 'react'
 import { Modal } from '@/shared/ui/redesigned/Modal'
-import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
+import { Text } from '@/shared/ui/redesigned/Text'
+import { Divider } from '@/shared/ui/Divider'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { PbxServerSelect } from '@/entities/PbxServers'
 import { useTranslation } from 'react-i18next'
@@ -27,13 +28,16 @@ const AssistantSipAccount = memo((props: AssistantSipAccountProps) => {
 
         <Modal isOpen={show} onClose={onClose} lazy className={classNames(cls.AssistantSipAccount, {}, [className])}>
             <VStack gap={'24'} max>
-                <Text text={t('Выберите сервер')}/>
-                <PbxServerSelect/>
-                <HStack max justify={'end'}>
-                    <Button>
+                <VStack gap={'8'}>
+                    <Text title={t('Публикация агента через SIP-транк')}/>
+                    <Divider />
+                </VStack>
+                <PbxServerSelect label={t('Выберите сервер') || ''}/>
+                <HStack max justify={'end'} gap={'16'}>
+                    <Button onClick={onClose} color={'error'}>
                         {t('Закрыть')}
                     </Button>
-                    <Button onClick={onClose}>
+                    <Button onClick={onClose} color={'success'}>
                         {t('Создать')}
                     </Button>
                 </HStack>
