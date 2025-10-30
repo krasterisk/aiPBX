@@ -41,7 +41,6 @@ export const toolsPageSlice = createSlice({
         toolData: {
           type: 'mcp',
           server_label: 'dmcp',
-          server_description: 'A Dungeons and Dragons MCP server to assist with dice rolling.',
           server_url: 'https://mymcpserver.dev/sse',
           require_approval: 'never'
         },
@@ -57,7 +56,6 @@ export const toolsPageSlice = createSlice({
         toolData: {
           type: 'mcp',
           server_label: 'dmcp',
-          server_description: 'A Dungeons and Dragons MCP server to assist with dice rolling.',
           server_url: 'https://mymcpserver.dev/sse',
           require_approval: 'never'
         },
