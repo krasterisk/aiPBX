@@ -4,7 +4,6 @@ import { memo } from 'react'
 import { Modal } from '@/shared/ui/redesigned/Modal'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { Divider } from '@/shared/ui/Divider'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { PbxServerSelect } from '@/entities/PbxServers'
 import { useTranslation } from 'react-i18next'
@@ -28,11 +27,8 @@ const AssistantSipAccount = memo((props: AssistantSipAccountProps) => {
 
         <Modal isOpen={show} onClose={onClose} lazy className={classNames(cls.AssistantSipAccount, {}, [className])}>
             <VStack gap={'24'} max>
-                <VStack gap={'8'}>
-                    <Text title={t('Публикация агента через SIP-транк')}/>
-                    <Divider />
-                </VStack>
-                <PbxServerSelect label={t('Выберите сервер') || ''}/>
+                <Text title={t('SIP-транк')} />
+                <PbxServerSelect label={t('Выберите сервер') || ''} />
                 <HStack max justify={'end'} gap={'16'}>
                     <Button onClick={onClose} color={'error'}>
                         {t('Закрыть')}

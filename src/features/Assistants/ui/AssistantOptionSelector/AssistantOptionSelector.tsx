@@ -205,7 +205,10 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
                 className={classNames(cls.AssistantOptionSelector, {}, [className])}
             >
                 {!isEdit
-                  ? <AssistantCreateCardHeader onCreate={actionHandler} variant={'diviner-top'}/>
+                  ? <AssistantCreateCardHeader
+                        onCreate={actionHandler}
+                        variant={'diviner-top'}
+                    />
                   : <AssistantEditCardHeader
                         onEdit={actionHandler}
                         onDelete={onDelete}

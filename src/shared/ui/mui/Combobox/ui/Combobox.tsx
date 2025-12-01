@@ -47,18 +47,36 @@ export const Combobox = memo((props: ComboBoxProps) => {
     },
     '& .MuiSvgIcon-root': {
       color: 'var(--icon-redesigned)'
+    },
+    // --- СТИЛИ ДЛЯ MULTIPLE CHIP-ЭЛЕМЕНТОВ ---
+    '& .MuiChip-root': {
+      backgroundColor: 'var(--hint-redesigned)', // фон выбранного элемента
+      color: 'var(--text-redesigned)', // цвет текста внутри чипа
+      borderRadius: '6px',
+      '& .MuiChip-label': {
+        fontWeight: 500
+      },
+      '& .MuiChip-deleteIcon': {
+        color: 'var(--light-bg-redesigned)',
+        '&:hover': {
+          color: 'var(--icon-redesigned)'
+        }
+      }
+    },
+    '& .MuiAutocomplete-inputRoot.MuiOutlinedInput-root.Mui-focused .MuiChip-root': {
+      backgroundColor: 'var(--hint-redesigned)' // цвет при фокусе
     }
   }
 
   return (
-      <Autocomplete
-          fullWidth
-          className={classNames(cls.Combobox, {}, [className])}
-          renderInput={renderInputProp}
-          sx={acStyles}
-          size={'medium'}
-          options={options}
-          {...otherProps}
-      />
+        <Autocomplete
+            fullWidth
+            className={classNames(cls.Combobox, {}, [className])}
+            renderInput={renderInputProp}
+            sx={acStyles}
+            size={'medium'}
+            options={options}
+            {...otherProps}
+        />
   )
 })

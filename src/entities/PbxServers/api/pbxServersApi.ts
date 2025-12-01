@@ -61,6 +61,14 @@ export const pbxServersApi = rtkApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'PbxServers', id: 'LIST' }]
     }),
+    checkPbxServer: build.mutation<PbxServer, PbxServer>({
+      query: (arg) => ({
+        url: '/pbx-servers/check',
+        method: 'POST',
+        body: arg
+      }),
+      invalidatesTags: [{ type: 'PbxServers', id: 'LIST' }]
+    }),
     getPbxServer: build.query<PbxServer, string>({
       query: (id) => `/pbx-servers/${id}`,
       providesTags: (result, error, id) => [{ type: 'PbxServers', id }]
@@ -97,6 +105,7 @@ export const pbxServersApi = rtkApi.injectEndpoints({
 export const usePbxServers = pbxServersApi.useGetPbxServersQuery
 export const usePbxServersAll = pbxServersApi.useGetPbxServersAllQuery
 export const useSetPbxServers = pbxServersApi.useSetPbxServersMutation
+export const useCheckPbxServer = pbxServersApi.useCheckPbxServerMutation
 export const usePbxServer = pbxServersApi.useGetPbxServerQuery
 export const useUpdatePbxServers = pbxServersApi.useUpdatePbxServerMutation
 export const useDeletePbxServers = pbxServersApi.useDeletePbxServerMutation

@@ -11,7 +11,8 @@ import {
   useDeletePbxServers,
   useSetPbxServers,
   useUpdatePbxServers,
-  PbxServer
+  PbxServer,
+  useCheckPbxServer
 } from '@/entities/PbxServers'
 
 import { PbxServerEditCard } from '../PbxServerEditCard/PbxServerEditCard'
@@ -36,6 +37,7 @@ export const PbxServerCard = memo((props: PbxServerCardProps) => {
 
   const [pbxServerCreate] = useSetPbxServers()
   const [pbxServerUpdate] = useUpdatePbxServers()
+  const [checkPbxServer] = useCheckPbxServer()
   const [pbxServerDelete] = useDeletePbxServers()
 
   const navigate = useNavigate()
@@ -58,6 +60,14 @@ export const PbxServerCard = memo((props: PbxServerCardProps) => {
       navigate(getRoutePbxServers())
     }
   }, [navigate, pbxServerUpdate])
+
+  const handleCheckPbxServer = useCallback((data: PbxServer) => {
+    try {
+      checkPbxServer(data).unwrap()
+    } finally {
+      navigate(getRoutePbxServers())
+    }
+  }, [checkPbxServer, navigate])
 
   const handleDeletePbxServer = useCallback((id: string) => {
     pbxServerDelete(id)
