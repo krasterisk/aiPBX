@@ -54,6 +54,8 @@ export const ToolAddParam = memo((props: ToolAddParamProps) => {
     setIsAddParameterOpen(false)
   }, [])
 
+  console.log(isEdit)
+
   const onSaveHandler = useCallback((
     name: string,
     param: ToolParam,

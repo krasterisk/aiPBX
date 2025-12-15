@@ -144,6 +144,7 @@ export const ToolEditCard = memo((props: UserEditCardProps) => {
                 checked={formFields?.strict || false}
             />
             <ToolAddParam
+                isEdit
                 parameters={formFields?.parameters}
                 toolName={formFields?.name || ''}
             />
