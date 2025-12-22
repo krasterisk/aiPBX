@@ -115,6 +115,12 @@ export const AssistantOptionsModel = memo((props: AssistantOptionsModelProps) =>
                 value={formFields.turn_detection_silence_duration_ms || ''}
             />
             <Textarea
+                label={t('Продолжительность простоя, мс') ?? ''}
+                onChange={onTextChangeHandler?.('idle_timeout_ms')}
+                data-testid={'AssistantCardCreate.idle_timeout_ms'}
+                value={formFields.idle_timeout_ms || ''}
+            />
+            <Textarea
                 label={t('Семантический VAD(Auto, Low, Medium, High)') ?? ''}
                 onChange={onTextChangeHandler?.('semantic_eagerness')}
                 data-testid={'AssistantCardCreate.semantic_eagerness'}

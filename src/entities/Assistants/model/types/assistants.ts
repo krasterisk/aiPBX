@@ -31,6 +31,7 @@ export interface Assistant {
   turn_detection_threshold?: string
   turn_detection_prefix_padding_ms?: string
   turn_detection_silence_duration_ms?: string
+  idle_timeout_ms?: string
   semantic_eagerness?: string
   temperature?: string
   max_response_output_tokens?: string
