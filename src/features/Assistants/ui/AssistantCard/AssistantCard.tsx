@@ -18,6 +18,7 @@ import {
 import { AssistantOptionSelector } from '../AssistantOptionSelector/AssistantOptionSelector'
 import { toast } from 'react-toastify'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
+import { useTranslation } from 'react-i18next'
 
 export interface AssistantCardProps {
   className?: string
@@ -41,6 +42,7 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
   const [assistantDelete] = useDeleteAssistant()
 
   const navigate = useNavigate()
+  const { t } = useTranslation('assistants')
 
   const handleCreateAssistant = useCallback((data: Assistant) => {
     assistantCreate([data])
@@ -61,12 +63,12 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
     assistantUpdate(data)
       .unwrap()
       .then(() => {
-        navigate(getRouteAssistants())
+        toast.success(t('Сохранено успешно'))
       })
       .catch((err) => {
         toast.error(getErrorMessage(err))
       })
-  }, [navigate, assistantUpdate])
+  }, [assistantUpdate, t])
 
   const handleDeleteAssistant = useCallback((id: string) => {
     assistantDelete(id)
