@@ -4,28 +4,21 @@ import { Assistant } from '../../model/types/assistants'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { useSelector } from 'react-redux'
-import {
-  getAssistantsCreateFormFields,
-  getAssistantsEditFormFields
-} from '../../model/selectors/assistantsPageSelectors'
+import { getAssistantFormData } from '../../model/selectors/assistantFormSelectors'
 
 interface AssistantOptionsPromptsProps {
   className?: string
-  isEdit: boolean
   onTextChangeHandler?: (field: keyof Assistant) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
 }
 
 export const AssistantOptionsPrompts = memo((props: AssistantOptionsPromptsProps) => {
   const {
     className,
-    onTextChangeHandler,
-    isEdit
+    onTextChangeHandler
   } = props
 
   const { t } = useTranslation('assistants')
-  const editFields = useSelector(getAssistantsEditFormFields)
-  const createFields = useSelector(getAssistantsCreateFormFields)
-  const formFields = isEdit ? editFields : createFields
+  const formFields = useSelector(getAssistantFormData)
 
   return (
         <VStack max gap={'16'} className={className}>
@@ -33,7 +26,7 @@ export const AssistantOptionsPrompts = memo((props: AssistantOptionsPromptsProps
                 label={t('Приветственная фраза или инструкция') ?? ''}
                 onChange={onTextChangeHandler?.('greeting')}
                 data-testid={'AssistantCard.greeting'}
-                value={formFields.greeting || ''}
+                value={formFields?.greeting || ''}
                 minRows={5}
                 multiline
                 required
@@ -42,7 +35,7 @@ export const AssistantOptionsPrompts = memo((props: AssistantOptionsPromptsProps
                 label={t('Основная инструкция для ассистента') ?? ''}
                 onChange={onTextChangeHandler?.('instruction')}
                 data-testid={'AssistantCard.instruction'}
-                value={formFields.instruction || ''}
+                value={formFields?.instruction || ''}
                 minRows={5}
                 multiline
                 required

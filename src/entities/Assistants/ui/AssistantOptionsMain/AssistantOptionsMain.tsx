@@ -8,19 +8,15 @@ import {
   isUserAdmin
 } from '../../../User'
 import { useTranslation } from 'react-i18next'
-import {
-  getAssistantsCreateFormFields,
-  getAssistantsEditFormFields
-} from '../../model/selectors/assistantsPageSelectors'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Tool, ToolsSelect } from '@/entities/Tools'
 import { VoiceSelect } from '../VoiceSelect/VoiceSelect'
 import { Assistant } from '../../model/types/assistants'
+import { getAssistantFormData } from '../../model/selectors/assistantFormSelectors'
 
 interface AssistantOptionsMainProps {
   className?: string
-  isEdit: boolean
   onChangeTextHandler?: (field: keyof Assistant) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   onChangeSelectHandler?: (field: keyof Assistant) => (event: any, newValue: string) => void
   onChangeClientHandler?: (event: any, newValue: ClientOptions | null) => void
@@ -30,7 +26,6 @@ interface AssistantOptionsMainProps {
 export const AssistantOptionsMain = memo((props: AssistantOptionsMainProps) => {
   const {
     className,
-    isEdit,
     onChangeTextHandler,
     onChangeSelectHandler,
     onChangeClientHandler,
@@ -40,16 +35,15 @@ export const AssistantOptionsMain = memo((props: AssistantOptionsMainProps) => {
   const { t } = useTranslation('assistants')
   const isAdmin = useSelector(isUserAdmin)
   const clientData = useSelector(getUserAuthData)
-  const editFields = useSelector(getAssistantsEditFormFields)
-  const createFields = useSelector(getAssistantsCreateFormFields)
-  const formFields = isEdit ? editFields : createFields
+  const formFields = useSelector(getAssistantFormData)
+
   const userId = isAdmin ? formFields?.userId : clientData?.id
 
   return (
         <VStack max gap={'16'} className={className}>
             {isAdmin &&
               <ClientSelect
-                    value={formFields.user as ClientOptions}
+                    value={formFields?.user as ClientOptions}
                     onChangeClient={onChangeClientHandler}
                     label={String(t('Клиент'))}
                     className={cls.client}
@@ -61,17 +55,17 @@ export const AssistantOptionsMain = memo((props: AssistantOptionsMainProps) => {
                 label={t('Наименование ассистента') ?? ''}
                 onChange={onChangeTextHandler?.('name')}
                 data-testid={'AssistantCard.name'}
-                value={formFields.name || ''}
+                value={formFields?.name || ''}
                 required
             />
             <VoiceSelect
                 label={String(t('Голос'))}
-                value={formFields.voice ?? ''}
+                value={formFields?.voice ?? ''}
                 onChangeValue={onChangeSelectHandler?.('voice')}
             />
             <ToolsSelect
                 label={t('Функции') || ''}
-                value={formFields.tools || []}
+                value={formFields?.tools || []}
                 userId={userId}
                 onChangeTool={onChangeToolsHandler}
             />
@@ -79,7 +73,7 @@ export const AssistantOptionsMain = memo((props: AssistantOptionsMainProps) => {
               label={t('Комментарий') ?? ''}
               onChange={onChangeTextHandler?.('comment')}
               data-testid={'AssistantCardCreate.comment'}
-              value={formFields.comment || ''}
+              value={formFields?.comment || ''}
           />
         </VStack>
   )

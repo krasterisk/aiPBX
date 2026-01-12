@@ -3,7 +3,7 @@ import { AnyAction, CombinedState, EnhancedStore, Reducer, ReducersMapObject } f
 import { AxiosInstance } from 'axios'
 import { ScrollSaveSchema } from '@/features/ScrollSave'
 import { rtkApi } from '@/shared/api/rtkApi'
-import { AssistantsPageSchema } from '@/entities/Assistants'
+import { AssistantFormSchema, AssistantsPageSchema } from '@/entities/Assistants'
 import { ToolsPageSchema } from '@/entities/Tools'
 import { ReportsPageSchema } from '@/entities/Report'
 import { DashboardPageSchema } from '@/widgets/Dashboard'
@@ -20,6 +20,7 @@ export interface StateSchema {
   signupForm?: SignupSchema
   usersPage?: UsersPageSchema
   assistantsPage?: AssistantsPageSchema
+  assistantForm?: AssistantFormSchema
   toolsPage?: ToolsPageSchema
   reportsPage?: ReportsPageSchema
   dashboardPage?: DashboardPageSchema

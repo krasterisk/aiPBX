@@ -1,10 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ContentView } from '../../../Content'
-import { Assistant } from '../types/assistants'
 import { AssistantsPageSchema } from '../types/assistantsPageSchema'
 import { ASSISTANTS_VIEW_LOCALSTORAGE_KEY } from '@/shared/const/localstorage'
 import { ClientOptions } from '../../../User'
-import { initAssistant } from '../selectors/assistantsPageSelectors'
 
 const initialState: AssistantsPageSchema = {
   page: 1,
@@ -21,17 +19,6 @@ export const assistantsPageSlice = createSlice({
   name: 'assistantsPageSlice',
   initialState,
   reducers: {
-    resetAssistantEditForm: (state) => {
-      state.editForm = {
-        id: '',
-        name: '',
-        comment: '',
-        userId: ''
-      }
-    },
-    resetAssistantCreateForm: (state) => {
-      state.editForm = initAssistant
-    },
     setView: (state, action: PayloadAction<ContentView>) => {
       state.view = action.payload
       localStorage.setItem(ASSISTANTS_VIEW_LOCALSTORAGE_KEY, action.payload)
@@ -55,19 +42,6 @@ export const assistantsPageSlice = createSlice({
       state.user = action.payload
       state.userId = action.payload.id
     },
-    updateAssistantsEditForm: (state, action: PayloadAction<Assistant>) => {
-      state.editForm = {
-        ...state.editForm,
-        ...action.payload
-      }
-    },
-    updateAssistantsCreateForm: (state, action: PayloadAction<Assistant>) => {
-      state.createForm = {
-        ...state.createForm,
-        ...action.payload
-      }
-    },
-
     initState: (state) => {
       const view = localStorage.getItem(ASSISTANTS_VIEW_LOCALSTORAGE_KEY) as ContentView
       state.view = view

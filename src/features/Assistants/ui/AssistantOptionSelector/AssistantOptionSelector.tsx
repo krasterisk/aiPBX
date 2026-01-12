@@ -2,17 +2,17 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './AssistantOptionSelector.module.scss'
 import { useTranslation } from 'react-i18next'
 import React, { ChangeEvent, memo, useCallback, useEffect, useState } from 'react'
+
 import {
   Assistant,
+  assistantFormActions,
   AssistantOptionsMain,
   AssistantOptionsModel,
   AssistantOptionsPrompts,
-  AssistantOptionsPublication,
-  assistantsPageActions,
-  getAssistantsCreateFormFields,
-  getAssistantsEditFormFields, initAssistant,
+  AssistantOptionsPublication, getAssistantFormData, getAssistantFormMode,
   useAssistant
 } from '@/entities/Assistants'
+
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
@@ -27,7 +27,6 @@ import { AssistantEditCardHeader } from '../AssistantEditCardHeader/AssistantEdi
 
 interface AssistantOptionsSelectorProps {
   className?: string
-  isEdit: boolean
   onCreate?: (data: Assistant) => void
   onEdit?: (data: Assistant) => void
   assistantId?: string
@@ -41,7 +40,6 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
     onEdit,
     onDelete,
     error,
-    isEdit,
     assistantId,
     onCreate
   } = props
@@ -49,9 +47,8 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
   const { t } = useTranslation('assistants')
   const isAdmin = useSelector(isUserAdmin)
   const clientData = useSelector(getUserAuthData)
-  const editFields = useSelector(getAssistantsEditFormFields)
-  const createFields = useSelector(getAssistantsCreateFormFields)
-  const formFields = isEdit ? editFields : createFields
+  const formFields = useSelector(getAssistantFormData)
+  const mode = useSelector(getAssistantFormMode)
   const dispatch = useAppDispatch()
   const [activeTab, setActiveTab] = useState(0)
 
@@ -59,38 +56,25 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
     setActiveTab(newValue)
   }
 
-  const { data: assistant, isError, isLoading } = useAssistant(assistantId!, {
+  const { data: assistant, isError } = useAssistant(assistantId ?? '', {
     skip: !assistantId
   })
 
-  const updateAction = isEdit
-    ? assistantsPageActions.updateAssistantsEditForm
-    : assistantsPageActions.updateAssistantsCreateForm
+  const isEdit = !!assistantId
 
   useEffect(() => {
-    if (!isEdit && !isAdmin && clientData?.id && clientData.username) {
-      dispatch(updateAction({
-        ...createFields,
-        user: {
-          id: clientData?.vpbx_user_id || clientData.id,
-          name: clientData?.username
-        },
-        userId: clientData.id
-      }))
+    if (!isEdit && !assistant) {
+      dispatch(assistantFormActions.initCreate)
     }
-  }, [clientData, isAdmin, isEdit, dispatch, updateAction, createFields])
+  }, [assistant, dispatch, isEdit])
+
+  console.log('ASSISTANT ID: ', isEdit)
 
   useEffect(() => {
     if (isEdit && assistant) {
-      dispatch(updateAction(assistant))
+      dispatch(assistantFormActions.initEdit(assistant))
     }
-  }, [assistant, isEdit, dispatch, updateAction])
-
-  useEffect(() => {
-    if (!isEdit) {
-      dispatch(updateAction(initAssistant))
-    }
-  }, [dispatch, isEdit, updateAction])
+  }, [assistant, isEdit, dispatch])
 
   const onChangeToolsHandler = useCallback((
     event: any,
@@ -99,14 +83,14 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
       ...formFields,
       tools: value
     }
-    dispatch(updateAction(updatedFields))
-  }, [dispatch, formFields, updateAction])
+    dispatch(assistantFormActions.updateForm(updatedFields))
+  }, [dispatch, formFields])
 
   const onChangeClientHandler = useCallback((
     event: any,
     newValue: ClientOptions | null) => {
     if (newValue) {
-      const updateForm = {
+      const updatedForm = {
         ...formFields,
         user: {
           id: newValue.id,
@@ -114,10 +98,10 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
         },
         userId: newValue.id
       }
-      dispatch(updateAction(updateForm))
+      dispatch(assistantFormActions.updateForm(updatedForm))
       // dispatch(assistantsPageActions.setUser(newValue))
     } else {
-      const updateForm = {
+      const updatedForm = {
         ...formFields,
         user: {
           id: '',
@@ -125,10 +109,10 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
         },
         userId: ''
       }
-      dispatch(updateAction(updateForm))
+      dispatch(assistantFormActions.updateForm(updatedForm))
       dispatch(toolsPageActions.setUser({ id: '', name: '' }))
     }
-  }, [dispatch, formFields, updateAction])
+  }, [dispatch, formFields])
 
   const onChangeSelectHandler = useCallback((field: keyof Assistant) => (
     event: any,
@@ -138,8 +122,8 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
       ...formFields,
       [field]: newValue
     }
-    dispatch(updateAction(updatedFields))
-  }, [dispatch, formFields, updateAction])
+    dispatch(assistantFormActions.updateForm(updatedFields))
+  }, [dispatch, formFields])
 
   const onChangeTextHandler = useCallback((field: keyof Assistant) =>
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -148,15 +132,14 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
         ...formFields,
         [field]: value
       }
-      dispatch(updateAction(updatedFields))
-    }, [dispatch, formFields, updateAction])
+      dispatch(assistantFormActions.updateForm(updatedFields))
+    }, [dispatch, formFields])
 
   const tabItems: TabPanelItem[] = [
     {
       label: t('Главное'),
       content:
                     <AssistantOptionsMain
-                        isEdit={isEdit}
                         onChangeToolsHandler={onChangeToolsHandler}
                         onChangeSelectHandler={onChangeSelectHandler}
                         onChangeTextHandler={onChangeTextHandler}
@@ -167,7 +150,6 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
       label: t('Инструкции для модели'),
       content:
                   <AssistantOptionsPrompts
-                      isEdit={isEdit}
                         onTextChangeHandler={onChangeTextHandler}
                   />
     },
@@ -176,7 +158,6 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
           label: t('Параметры модели'),
           content:
                     <AssistantOptionsModel
-                        isEdit={isEdit}
                         onTextChangeHandler={onChangeTextHandler}
                         onChangeSelectHandler={onChangeSelectHandler}
                     />
@@ -191,6 +172,8 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
   ]
 
   const actionHandler = useCallback(() => {
+    if (!formFields) return
+
     if (isEdit) {
       onEdit?.(formFields)
     } else {
@@ -213,7 +196,7 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
                         onEdit={actionHandler}
                         onDelete={onDelete}
                         assistantId={assistantId}
-                        assistantName={formFields.name}
+                        assistantName={formFields?.name || ''}
                     />
                 }
 

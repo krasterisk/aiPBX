@@ -12,13 +12,15 @@ import {
   useDeleteAssistant,
   useSetAssistants,
   useUpdateAssistant,
-  Assistant
+  Assistant,
+  assistantFormReducer
 } from '@/entities/Assistants'
 
 import { AssistantOptionSelector } from '../AssistantOptionSelector/AssistantOptionSelector'
 import { toast } from 'react-toastify'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { useTranslation } from 'react-i18next'
+import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 
 export interface AssistantCardProps {
   className?: string
@@ -43,6 +45,10 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
 
   const navigate = useNavigate()
   const { t } = useTranslation('assistants')
+
+  const reducers: ReducersList = {
+    assistantForm: assistantFormReducer
+  }
 
   const handleCreateAssistant = useCallback((data: Assistant) => {
     assistantCreate([data])
@@ -91,40 +97,41 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
 
   if (!assistantId && isEdit && isError && error) {
     return (
-        <ErrorGetData/>
+            <ErrorGetData/>
     )
   }
 
   if (isLoading) {
     return (
-        <Card padding="24" max>
-          <VStack gap="32">
-            <HStack gap="32" max>
-              <VStack gap="16" max>
-                <Skeleton width="100%" height={38}/>
-                <Skeleton width="100%" height={38}/>
-                <Skeleton width="100%" height={38}/>
-                <Skeleton width="100%" height={38}/>
-                <Skeleton width="100%" height={38}/>
-                <Skeleton width="100%" height={38}/>
-              </VStack>
-            </HStack>
-          </VStack>
-        </Card>
+            <Card padding="24" max>
+                <VStack gap="32">
+                    <HStack gap="32" max>
+                        <VStack gap="16" max>
+                            <Skeleton width="100%" height={38}/>
+                            <Skeleton width="100%" height={38}/>
+                            <Skeleton width="100%" height={38}/>
+                            <Skeleton width="100%" height={38}/>
+                            <Skeleton width="100%" height={38}/>
+                            <Skeleton width="100%" height={38}/>
+                        </VStack>
+                    </HStack>
+                </VStack>
+            </Card>
     )
   }
 
   return (
-      <VStack gap={'8'} max className={classNames(cls.AssistantCard, {}, [className])}>
-        {
-            <AssistantOptionSelector
-                  onEdit={onEdit}
-                  isEdit={isEdit}
-                  onCreate={onCreate}
-                  assistantId={assistantId || ''}
-                  onDelete={onDelete}
-              />
-        }
-      </VStack>
+        <VStack gap={'8'} max className={classNames(cls.AssistantCard, {}, [className])}>
+            {
+                <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
+                    <AssistantOptionSelector
+                        onEdit={onEdit}
+                        onCreate={onCreate}
+                        assistantId={assistantId || ''}
+                        onDelete={onDelete}
+                    />
+                </DynamicModuleLoader>
+            }
+        </VStack>
   )
 })
