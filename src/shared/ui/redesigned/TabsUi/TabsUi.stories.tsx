@@ -1,6 +1,6 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { Tabs } from './Tabs'
+import { Tabs } from './TabsUi'
 import { action } from '@storybook/addon-actions'
 
 export default {

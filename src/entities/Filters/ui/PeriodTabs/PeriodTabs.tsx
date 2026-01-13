@@ -1,6 +1,6 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { memo, useCallback } from 'react'
-import { TabItem, Tabs } from '@/shared/ui/redesigned/Tabs'
+import { TabItem, TabsUi } from '@/shared/ui/redesigned/TabsUi'
 import { useTranslation } from 'react-i18next'
 
 interface PeriodTabsProps {
@@ -46,7 +46,7 @@ export const PeriodTabs = memo((props: PeriodTabsProps) => {
   }, [onChangeTab])
 
   return (
-        <Tabs
+        <TabsUi
             direction={'row'}
             data-testid={'PeriodFiltersTabs'}
             className={classNames('', {}, [className])}

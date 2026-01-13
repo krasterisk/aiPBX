@@ -1,6 +1,11 @@
 .TabsPanelMain {
-    width: 100%;
+  width: 100%;
 }
+
+.TabsMobile {
+    max-width: 320px;
+}
+
 
 .tab {
     border: none;

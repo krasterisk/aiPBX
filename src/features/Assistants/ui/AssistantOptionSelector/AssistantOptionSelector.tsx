@@ -68,8 +68,6 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
     }
   }, [assistant, dispatch, isEdit])
 
-  console.log('ASSISTANT ID: ', isEdit)
-
   useEffect(() => {
     if (isEdit && assistant) {
       dispatch(assistantFormActions.initEdit(assistant))
@@ -147,7 +145,7 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
                     />
     },
     {
-      label: t('Инструкции для модели'),
+      label: t('Инструкции'),
       content:
                   <AssistantOptionsPrompts
                         onTextChangeHandler={onChangeTextHandler}
@@ -155,7 +153,7 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
     },
     ...(isAdmin
       ? [{
-          label: t('Параметры модели'),
+          label: t('Параметры'),
           content:
                     <AssistantOptionsModel
                         onTextChangeHandler={onChangeTextHandler}

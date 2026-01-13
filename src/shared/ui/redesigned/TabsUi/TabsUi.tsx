@@ -1,5 +1,5 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
-import cls from './Tabs.module.scss'
+import cls from './TabsUi.module.scss'
 import { memo, ReactNode, useCallback } from 'react'
 import { Card } from '../Card'
 import { Flex, FlexDirection } from '../Stack/Flex/Flex'
@@ -17,7 +17,7 @@ interface TabsProps {
   direction?: FlexDirection
 }
 
-export const Tabs = memo((props: TabsProps) => {
+export const TabsUi = memo((props: TabsProps) => {
   const {
     className,
     tabs,
