@@ -1,17 +1,17 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import { Tabs } from './TabsUi'
+import { TabsUi } from './TabsUi'
 import { action } from '@storybook/addon-actions'
 
 export default {
   title: 'shared/Tabs',
-  component: Tabs,
+  component: TabsUi,
   argTypes: {
     backgroundColor: { control: 'color' }
   }
-} as ComponentMeta<typeof Tabs>
+} as ComponentMeta<typeof TabsUi>
 
-const Template: ComponentStory<typeof Tabs> = (args) => <Tabs {...args} />
+const Template: ComponentStory<typeof TabsUi> = (args) => <TabsUi {...args} />
 
 export const Normal = Template.bind({})
 Normal.args = {
