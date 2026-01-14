@@ -41,7 +41,6 @@ const App = (): any => {
             {userData
               ? (
                     <div id='app' className={classNames('app_redesigned', {}, [])}>
-
                         <MainLayout
                             header={<Navbar/>}
                             content={<AppRouter/>}

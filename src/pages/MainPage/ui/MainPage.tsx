@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback } from 'react'
+import React, { FC, memo, useCallback, useEffect } from 'react'
 import { Page } from '@/widgets/Page'
 import cls from './MainPage.module.scss'
 import { useTranslation } from 'react-i18next'
@@ -24,7 +24,9 @@ import {
 } from 'lucide-react'
 import { LangSwitcher } from '@/entities/LangSwitcher'
 import { useNavigate } from 'react-router-dom'
-import { getRouteLogin } from '@/shared/const/router'
+import { getRouteDashboard, getRouteLogin } from '@/shared/const/router'
+import { getUserAuthData } from '@/entities/User'
+import { useSelector } from 'react-redux'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },
@@ -67,12 +69,13 @@ const MainPage: FC = memo(() => {
   const { t } = useTranslation('main')
   const isMobile = useMediaQuery('(max-width:800px)')
   const navigate = useNavigate()
+  const auth = useSelector(getUserAuthData)
 
-  // useEffect(() => {
-  //   if (userData) {
-  //     navigate(getRouteDashboard())
-  //   }
-  // }, [navigate, userData])
+  useEffect(() => {
+    if (auth) {
+      navigate(getRouteDashboard(), { replace: true })
+    }
+  }, [auth, navigate])
 
   const onLogin = useCallback(() => {
     navigate(getRouteLogin())
