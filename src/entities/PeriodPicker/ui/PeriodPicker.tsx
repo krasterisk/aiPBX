@@ -5,12 +5,13 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import Left from '@/shared/assets/icons/left.svg'
 import Right from '@/shared/assets/icons/right.svg'
 import { Icon } from '@/shared/ui/redesigned/Icon'
-import { HStack } from '@/shared/ui/redesigned/Stack'
+import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { PeriodTabs } from '@/entities/Filters'
 import quarterOfYear from 'dayjs/plugin/quarterOfYear'
 import { ClientOptions } from '@/entities/User'
+import TuneIcon from '@mui/icons-material/Tune'
 
 // Расширяем Day.js плагинами weekday и updateLocale
 dayjs.extend(weekday)
@@ -28,6 +29,7 @@ interface PeriodPickerProps {
   startDate?: string
   endDate?: string
   isInited?: boolean
+  onOpenFilters?: () => void
   onChangeTab: (tab: string) => void
   onChangeStartDate: (value: string) => void
   onChangeEndDate: (value: string) => void
@@ -41,6 +43,7 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
     startDate,
     endDate,
     isInited,
+    onOpenFilters,
     onChangeTab,
     onChangeEndDate,
     onChangeStartDate,
@@ -49,14 +52,30 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
 
   const [date, setDate] = useState<Dayjs>(dayjs())
 
+  // Sync internal state with props
+  useEffect(() => {
+    if (startDate) {
+      const d = dayjs(startDate)
+      if (!d.isSame(date, 'day')) {
+        setDate(d)
+      }
+    }
+  }, [startDate])
+
+  // Handle Tab change logic
   useEffect(() => {
     if (isInited) {
       const start = dayjs(date).startOf(tab as OpUnitType).format('YYYY-MM-DD')
       const end = dayjs(date).endOf(tab as OpUnitType).format('YYYY-MM-DD')
-      onChangeStartDate(start)
-      onChangeEndDate(end)
+
+      // Only invoke callback if values are different to avoid loops if parent passes them back
+      // Using simple string check assumes format consistency
+      if (start !== startDate || end !== endDate) {
+        onChangeStartDate(start)
+        onChangeEndDate(end)
+      }
     }
-  }, [date, isInited, onChangeEndDate, onChangeStartDate, tab, startDate, endDate])
+  }, [isInited, tab]) // Removed date, startDate, endDate from dependencies
 
   const handleDateChange = (direction: 'left' | 'right') => {
     const newDate = dayjs(date).add(direction === 'right' ? 1 : -1, tab as ManipulateType)
@@ -68,30 +87,37 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
   }
 
   return (
-        <HStack gap={'16'} wrap={'wrap'}>
-            <PeriodTabs tab={tab} onChangeTab={onChangeTab}/>
-            <HStack gap={'8'}>
-                <Button
-                    variant={'clear'}
-                    onClick={() => {
-                      handleDateChange('left')
-                    }}
-                >
-                    <Icon Svg={Left} width={16} height={16}/>
-                </Button>
-                <Text
-                    data-testid={'PeriodPicker.period'}
-                    text={String(startDate) + ' - ' + String(endDate)}
-                />
-                <Button
-                    variant={'clear'}
-                    onClick={() => {
-                      handleDateChange('right')
-                    }}
-                >
-                    <Icon Svg={Right} width={16} height={16}/>
-                </Button>
-            </HStack>
-        </HStack>
+    <VStack gap={'16'} align={'center'}>
+      <HStack gap={'16'}>
+        <PeriodTabs tab={tab} onChangeTab={onChangeTab} />
+        {onOpenFilters && (
+          <Button variant={'clear'} onClick={onOpenFilters}>
+            <TuneIcon fontSize={'large'} />
+          </Button>
+        )}
+      </HStack>
+      <HStack gap={'8'}>
+        <Button
+          variant={'clear'}
+          onClick={() => {
+            handleDateChange('left')
+          }}
+        >
+          <Icon Svg={Left} width={16} height={16} />
+        </Button>
+        <Text
+          data-testid={'PeriodPicker.period'}
+          text={String(startDate) + ' - ' + String(endDate)}
+        />
+        <Button
+          variant={'clear'}
+          onClick={() => {
+            handleDateChange('right')
+          }}
+        >
+          <Icon Svg={Right} width={16} height={16} />
+        </Button>
+      </HStack>
+    </VStack>
   )
 })

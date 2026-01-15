@@ -43,22 +43,25 @@ export const DateSelector = memo((props: DateSelectorProps) => {
     ...otherProps
   } = props
   return (
-        <LocalizationProvider
-            dateAdapter={AdapterDayjs}
-            adapterLocale={'ru'}
-            dateFormats={{ fullDate: 'YYYY-mm-dd' }}
-        >
-            <DatePicker
-                format={'YYYY-MM-DD'}
-                sx={acStyles}
-                closeOnSelect
-                slotProps={{
-                  actionBar: {
-                    actions: ['clear']
-                  }
-                }}
-                {...otherProps}
-            />
-        </LocalizationProvider>
+    <LocalizationProvider
+      dateAdapter={AdapterDayjs}
+      adapterLocale={'ru'}
+      dateFormats={{ fullDate: 'YYYY-MM-DD' }}
+    >
+      <DatePicker
+        format={'YYYY-MM-DD'}
+        sx={acStyles}
+        closeOnSelect
+        slotProps={{
+          actionBar: {
+            actions: ['clear']
+          },
+          popper: {
+            sx: { zIndex: 12000 }
+          }
+        }}
+        {...otherProps}
+      />
+    </LocalizationProvider>
   )
 })
