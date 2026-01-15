@@ -30,15 +30,15 @@ export const assistantsApi = rtkApi.injectEndpoints({
         }
       },
       // Refetch when the page arg changes
-      forceRefetch ({ currentArg, previousArg }) {
+      forceRefetch({ currentArg, previousArg }) {
         return JSON.stringify(currentArg) !== JSON.stringify(previousArg)
       },
       providesTags: (result) =>
         result?.rows?.length
           ? [
-              ...result.rows.map(({ id }) => ({ type: 'Assistants', id } as const)),
-              { type: 'Assistants', id: 'LIST' }
-            ]
+            ...result.rows.map(({ id }) => ({ type: 'Assistants', id } as const)),
+            { type: 'Assistants', id: 'LIST' }
+          ]
           : [{ type: 'Assistants', id: 'LIST' }]
     }),
     getAssistantsAll: build.query<Assistant[], { userId?: string }>({
@@ -49,9 +49,9 @@ export const assistantsApi = rtkApi.injectEndpoints({
       providesTags: (result) =>
         result?.length
           ? [
-              ...result.map(({ id }) => ({ type: 'Assistants', id } as const)),
-              { type: 'Assistants', id: 'LIST' }
-            ]
+            ...result.map(({ id }) => ({ type: 'Assistants', id } as const)),
+            { type: 'Assistants', id: 'LIST' }
+          ]
           : [{ type: 'Assistants', id: 'LIST' }]
     }),
     getUserAssistants: build.query<Assistant[], string>({
@@ -61,9 +61,9 @@ export const assistantsApi = rtkApi.injectEndpoints({
       providesTags: (result) =>
         result?.length
           ? [
-              ...result.map(({ id }) => ({ type: 'Assistants', id } as const)),
-              { type: 'Assistants', id: 'LIST' }
-            ]
+            ...result.map(({ id }) => ({ type: 'Assistants', id } as const)),
+            { type: 'Assistants', id: 'LIST' }
+          ]
           : [{ type: 'Assistants', id: 'LIST' }]
     }),
     setAssistants: build.mutation<Assistant[], Assistant[]>({
@@ -84,7 +84,7 @@ export const assistantsApi = rtkApi.injectEndpoints({
         method: 'PATCH',
         body: { id, ...patch }
       }),
-      async onQueryStarted ({ id, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           assistantsApi.util.updateQueryData('getAssistant', id!, (draft) => {
             Object.assign(draft, patch)
@@ -95,14 +95,20 @@ export const assistantsApi = rtkApi.injectEndpoints({
       invalidatesTags: (result, error, { id }) => [{ type: 'Assistants', id }]
     }),
     deleteAssistant: build.mutation<{ success: boolean, id: string }, string>({
-      query (id) {
+      query(id) {
         return {
           url: `assistants/${id}`,
           method: 'DELETE'
         }
       },
-      // Invalidates all queries that subscribe to this Post `id` only.
       invalidatesTags: (result, error, id) => [{ type: 'Assistants', id }]
+    }),
+    generatePrompt: build.mutation<{ success: boolean, greeting: string, instruction: string }, { assistantId: string, prompt: string }>({
+      query: (arg) => ({
+        url: '/assistants/generate-prompt',
+        method: 'POST',
+        body: arg
+      })
     })
   })
 })
@@ -114,3 +120,4 @@ export const useSetAssistants = assistantsApi.useSetAssistantsMutation
 export const useAssistant = assistantsApi.useGetAssistantQuery
 export const useUpdateAssistant = assistantsApi.useUpdateAssistantMutation
 export const useDeleteAssistant = assistantsApi.useDeleteAssistantMutation
+export const useGeneratePrompt = assistantsApi.useGeneratePromptMutation

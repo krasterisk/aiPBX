@@ -30,15 +30,15 @@ export const pbxServersApi = rtkApi.injectEndpoints({
         }
       },
       // Refetch when the page arg changes
-      forceRefetch ({ currentArg, previousArg }) {
+      forceRefetch({ currentArg, previousArg }) {
         return JSON.stringify(currentArg) !== JSON.stringify(previousArg)
       },
       providesTags: (result) =>
         result?.rows?.length
           ? [
-              ...result.rows.map(({ id }) => ({ type: 'PbxServers', id } as const)),
-              { type: 'PbxServers', id: 'LIST' }
-            ]
+            ...result.rows.map(({ id }) => ({ type: 'PbxServers', id } as const)),
+            { type: 'PbxServers', id: 'LIST' }
+          ]
           : [{ type: 'PbxServers', id: 'LIST' }]
     }),
     getPbxServersAll: build.query<PbxServer[], null>({
@@ -48,9 +48,9 @@ export const pbxServersApi = rtkApi.injectEndpoints({
       providesTags: (result) =>
         result?.length
           ? [
-              ...result.map(({ id }) => ({ type: 'PbxServers', id } as const)),
-              { type: 'PbxServers', id: 'LIST' }
-            ]
+            ...result.map(({ id }) => ({ type: 'PbxServers', id } as const)),
+            { type: 'PbxServers', id: 'LIST' }
+          ]
           : [{ type: 'PbxServers', id: 'LIST' }]
     }),
     setPbxServers: build.mutation<PbxServer, PbxServer>({
@@ -79,7 +79,7 @@ export const pbxServersApi = rtkApi.injectEndpoints({
         method: 'PATCH',
         body: { id, ...patch }
       }),
-      async onQueryStarted ({ id, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           pbxServersApi.util.updateQueryData('getPbxServer', id!, (draft) => {
             Object.assign(draft, patch)
@@ -90,7 +90,7 @@ export const pbxServersApi = rtkApi.injectEndpoints({
       invalidatesTags: (result, error, { id }) => [{ type: 'PbxServers', id }]
     }),
     deletePbxServer: build.mutation<{ success: boolean, id: string }, string>({
-      query (id) {
+      query(id) {
         return {
           url: `pbx-servers/${id}`,
           method: 'DELETE'
@@ -98,6 +98,13 @@ export const pbxServersApi = rtkApi.injectEndpoints({
       },
       // Invalidates all queries that subscribe to this Post `id` only.
       invalidatesTags: (result, error, id) => [{ type: 'PbxServers', id }]
+    }),
+    createSipUri: build.mutation<{ success: boolean, sipUri: string }, { assistantId: string, serverId: string, ipAddress: string }>({
+      query: (arg) => ({
+        url: '/pbx-servers/create-sip-uri',
+        method: 'POST',
+        body: arg
+      })
     })
   })
 })
@@ -109,3 +116,4 @@ export const useCheckPbxServer = pbxServersApi.useCheckPbxServerMutation
 export const usePbxServer = pbxServersApi.useGetPbxServerQuery
 export const useUpdatePbxServers = pbxServersApi.useUpdatePbxServerMutation
 export const useDeletePbxServers = pbxServersApi.useDeletePbxServerMutation
+export const useCreateSipUri = pbxServersApi.useCreateSipUriMutation

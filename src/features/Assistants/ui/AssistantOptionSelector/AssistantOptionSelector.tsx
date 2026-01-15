@@ -137,35 +137,35 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
     {
       label: t('Главное'),
       content:
-                    <AssistantOptionsMain
-                        onChangeToolsHandler={onChangeToolsHandler}
-                        onChangeSelectHandler={onChangeSelectHandler}
-                        onChangeTextHandler={onChangeTextHandler}
-                        onChangeClientHandler={onChangeClientHandler}
-                    />
+        <AssistantOptionsMain
+          onChangeToolsHandler={onChangeToolsHandler}
+          onChangeSelectHandler={onChangeSelectHandler}
+          onChangeTextHandler={onChangeTextHandler}
+          onChangeClientHandler={onChangeClientHandler}
+        />
     },
     {
       label: t('Инструкции'),
       content:
-                  <AssistantOptionsPrompts
-                        onTextChangeHandler={onChangeTextHandler}
-                  />
+        <AssistantOptionsPrompts
+          onTextChangeHandler={onChangeTextHandler}
+        />
     },
     ...(isAdmin
       ? [{
-          label: t('Параметры'),
-          content:
-                    <AssistantOptionsModel
-                        onTextChangeHandler={onChangeTextHandler}
-                        onChangeSelectHandler={onChangeSelectHandler}
-                    />
-        }]
+        label: t('Параметры'),
+        content:
+          <AssistantOptionsModel
+            onTextChangeHandler={onChangeTextHandler}
+            onChangeSelectHandler={onChangeSelectHandler}
+          />
+      }]
       : []
     ),
     {
       label: t('Публикация'),
       content:
-          <AssistantOptionsPublication isEdit={isEdit}/>
+        <AssistantOptionsPublication isEdit={isEdit} assistantId={assistantId} />
     }
   ]
 
@@ -180,45 +180,45 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
   }, [formFields, isEdit, onCreate, onEdit])
 
   return (
-            <VStack
-                gap={'8'}
-                max
-                className={classNames(cls.AssistantOptionSelector, {}, [className])}
-            >
-                {!isEdit
-                  ? <AssistantCreateCardHeader
-                        onCreate={actionHandler}
-                        variant={'diviner-top'}
-                    />
-                  : <AssistantEditCardHeader
-                        onEdit={actionHandler}
-                        onDelete={onDelete}
-                        assistantId={assistantId}
-                        assistantName={formFields?.name || ''}
-                    />
-                }
+    <VStack
+      gap={'8'}
+      max
+      className={classNames(cls.AssistantOptionSelector, {}, [className])}
+    >
+      {!isEdit
+        ? <AssistantCreateCardHeader
+          onCreate={actionHandler}
+          variant={'diviner-top'}
+        />
+        : <AssistantEditCardHeader
+          onEdit={actionHandler}
+          onDelete={onDelete}
+          assistantId={assistantId}
+          assistantName={formFields?.name || ''}
+        />
+      }
 
-                {isError
-                  ? <ErrorGetData
-                        title={!isEdit
-                          ? t('Ошибка при создании ассистента') || ''
-                          : t('Ошибка при обновлении ассистента') || ''
-                        }
-                        text={
-                            error && 'data' in error
-                              ? String(t((error.data as { message: string }).message))
-                              : String(t('Проверьте заполняемые поля и повторите ещё раз'))
-                        }
-                    />
-                  : ''}
-                <TabsPanel
-                    className={cls.tab}
-                    tabItems={tabItems}
-                    value={activeTab}
-                    onChange={handleTabChange}
+      {isError
+        ? <ErrorGetData
+          title={!isEdit
+            ? t('Ошибка при создании ассистента') || ''
+            : t('Ошибка при обновлении ассистента') || ''
+          }
+          text={
+            error && 'data' in error
+              ? String(t((error.data as { message: string }).message))
+              : String(t('Проверьте заполняемые поля и повторите ещё раз'))
+          }
+        />
+        : ''}
+      <TabsPanel
+        className={cls.tab}
+        tabItems={tabItems}
+        value={activeTab}
+        onChange={handleTabChange}
 
-                />
-            </VStack>
+      />
+    </VStack>
   )
 }
 )

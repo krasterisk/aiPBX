@@ -4,39 +4,42 @@ import { memo, useState } from 'react'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useTranslation } from 'react-i18next'
 import { VStack } from '@/shared/ui/redesigned/Stack'
-import { AssistantSipAccountAsync } from '../AssistantSipAccount/AssistantSipAccount.async'
+import AssistantSipAccount from '../AssistantSipAccount/AssistantSipAccount'
 
 interface AssistantPublicationProps {
   className?: string
   isEdit: boolean
+  assistantId?: string
 }
 
 export const AssistantOptionsPublication = memo((props: AssistantPublicationProps) => {
   const {
     className,
-    isEdit
+    isEdit,
+    assistantId
   } = props
 
   const { t } = useTranslation('assistants')
   const [isCreateSipAccountOpen, setIsCreateSipAccountOpen] = useState<boolean>(false)
 
   return (
-        <VStack
-            className={classNames(cls.AssistantPublication, {}, [className])}
-            gap={'16'}
-        >
-            <AssistantSipAccountAsync
-                show={isCreateSipAccountOpen}
-                onClose={() => {
-                  setIsCreateSipAccountOpen(false)
-                }}
-            />
-          {/* eslint-disable-next-line react/jsx-no-undef */}
-            <Button onClick={() => { setIsCreateSipAccountOpen(true) }}>
-                {t('Создать SIP аккаунт')}
-            </Button>
-            <Button>{t('Создать WebRTC скрипт для сайта')}</Button>
-            <Button>{t('Создать переадресацию с внешнего номера')}</Button>
-        </VStack>
+    <VStack
+      className={classNames(cls.AssistantPublication, {}, [className])}
+      gap={'16'}
+      max
+    >
+      <AssistantSipAccount
+        show={isCreateSipAccountOpen}
+        onClose={() => {
+          setIsCreateSipAccountOpen(false)
+        }}
+        assistantId={assistantId}
+      />
+      <Button onClick={() => { setIsCreateSipAccountOpen(true) }}>
+        {t('Создать SIP аккаунт')}
+      </Button>
+      <Button>{t('Создать WebRTC скрипт для сайта')}</Button>
+      <Button>{t('Создать переадресацию с внешнего номера')}</Button>
+    </VStack>
   )
 })
