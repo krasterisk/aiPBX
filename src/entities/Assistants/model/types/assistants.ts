@@ -13,6 +13,13 @@ export interface AssistantOptions {
   name: string
 }
 
+export interface AssistantSipAccount {
+  id: string
+  sipUri: string
+  ipAddress: string
+  pbxId: string
+}
+
 export interface Assistant {
   id?: string
   name?: string
@@ -38,6 +45,7 @@ export interface Assistant {
   tools?: Tool[]
   user?: User
   userId?: string
+  sipAccount?: AssistantSipAccount
   comment?: string
 }
 

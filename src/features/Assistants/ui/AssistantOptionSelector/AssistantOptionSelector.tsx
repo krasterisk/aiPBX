@@ -9,7 +9,8 @@ import {
   AssistantOptionsMain,
   AssistantOptionsModel,
   AssistantOptionsPrompts,
-  AssistantOptionsPublication, getAssistantFormData, getAssistantFormMode,
+  getAssistantFormData,
+  getAssistantFormMode,
   useAssistant
 } from '@/entities/Assistants'
 
@@ -24,6 +25,7 @@ import { TabPanelItem, TabsPanel } from '@/shared/ui/mui/TabsPanel'
 import { AssistantCreateCardHeader } from '../AssistantCreateCardHeader/AssistantCreateCardHeader'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { AssistantEditCardHeader } from '../AssistantEditCardHeader/AssistantEditCardHeader'
+import { AssistantOptionsPublication } from '../AssistantOptionsPublication/AssistantOptionsPublication'
 
 interface AssistantOptionsSelectorProps {
   className?: string

@@ -34,5 +34,6 @@ export {
   useSetPbxServers,
   useUpdatePbxServers,
   useCheckPbxServer,
-  useCreateSipUri
+  useCreateSipUri,
+  useDeleteSipUri
 } from './api/pbxServersApi'

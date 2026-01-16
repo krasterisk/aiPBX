@@ -56,7 +56,7 @@
   "Токенов": "Tokens",
   "Стоимость": "Cost",
   "Приветственная фраза или инструкция": "Welcome Phrase or Prompt",
-  "Основная инструкция для ассистента": "Main Prompt for Assistant",
+  "Инструкция для ассистента": "Assistant System Prompt",
   "Главное": "Main",
   "Инструкции": "Prompts",
   "Параметры": "Parameters",
@@ -69,5 +69,16 @@
   "SIP-аккаунт": "SIP-аккаунт",
   "SIP-транк": "SIP-транк",
   "Продолжительность простоя, мс": "Idle timeout, ms",
-  "Сохранено успешно": "Saved successfully"
+  "Сохранено успешно": "Saved successfully",
+  "Сгенерировать": "Generate",
+  "Промпты успешно сгенерированы": "Prompts generated successfully",
+  "Задача ассистента": "Assistant Task",
+  "Например: помощник для записи на приём к врачу": "For example: assistant for appointment booking",
+  "Генерация...": "Generating...",
+  "SIP Аккаунты": "SIP Accounts",
+  "SIP Аккаунт": "SIP Account",
+  "SIP аккаунт обновлен": "SIP account updated",
+  "SIP аккаунт удален": "SIP account deleted",
+  "Вы уверены, что хотите удалить SIP аккаунт?": "Are you sure you want to delete SIP account?",
+  "Скопировано в буфер обмена": "Copied to clipboard"
 }

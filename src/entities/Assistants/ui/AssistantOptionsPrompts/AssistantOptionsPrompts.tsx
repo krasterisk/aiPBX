@@ -50,14 +50,6 @@ export const AssistantOptionsPrompts = memo((props: AssistantOptionsPromptsProps
       }).unwrap()
 
       if (result.success) {
-        // Update the form fields with generated content
-        if (result.greeting && onTextChangeHandler) {
-          const greetingEvent = {
-            target: { value: result.greeting }
-          } as ChangeEvent<HTMLTextAreaElement>
-          onTextChangeHandler('greeting')(greetingEvent)
-        }
-
         if (result.instruction && onTextChangeHandler) {
           const instructionEvent = {
             target: { value: result.instruction }
@@ -127,7 +119,7 @@ export const AssistantOptionsPrompts = memo((props: AssistantOptionsPromptsProps
       >
         <VStack gap={'16'} max style={{ padding: '16px', width: '320px', maxWidth: 'calc(100vw - 32px)' }}>
           <Textarea
-            label={t('Что вы хотите чтобы сделал ассистент?') || ''}
+            label={t('Задача ассистента') || ''}
             value={userPrompt}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setUserPrompt(e.target.value)}
             placeholder={t('Например: помощник для записи на приём к врачу') || ''}
@@ -139,6 +131,7 @@ export const AssistantOptionsPrompts = memo((props: AssistantOptionsPromptsProps
             <Button
               onClick={handleGenerate}
               color={'success'}
+              variant={'filled'}
               disabled={!userPrompt.trim() || isLoading}
               size={'m'}
             >

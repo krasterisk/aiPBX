@@ -105,6 +105,13 @@ export const pbxServersApi = rtkApi.injectEndpoints({
         method: 'POST',
         body: arg
       })
+    }),
+    deleteSipUri: build.mutation<{ success: boolean }, { assistantId: string }>({
+      query: (arg) => ({
+        url: '/pbx-servers/delete-sip-uri',
+        method: 'DELETE',
+        body: arg
+      })
     })
   })
 })
@@ -117,3 +124,4 @@ export const usePbxServer = pbxServersApi.useGetPbxServerQuery
 export const useUpdatePbxServers = pbxServersApi.useUpdatePbxServerMutation
 export const useDeletePbxServers = pbxServersApi.useDeletePbxServerMutation
 export const useCreateSipUri = pbxServersApi.useCreateSipUriMutation
+export const useDeleteSipUri = pbxServersApi.useDeleteSipUriMutation
