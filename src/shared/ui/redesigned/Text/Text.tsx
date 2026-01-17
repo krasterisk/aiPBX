@@ -2,7 +2,7 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './Text.module.scss'
 import { memo } from 'react'
 
-export type TextVariant = 'primary' | 'error' | 'accent' | 'success'
+export type TextVariant = 'primary' | 'error' | 'accent' | 'success' | 'warning'
 
 interface TextProps {
   className?: string
@@ -53,22 +53,22 @@ export const Text = memo((props: TextProps) => {
   const additionalClasses = [className, cls[variant], cls[align], sizeClass]
 
   return (
-        <div className={classNames(cls.Text, { [cls.bold]: bold }, additionalClasses)}>
-            {title && <HeaderTag
-                className={cls.title}
-                data-testid={`${dataTestId}.header`}
-            >
-                {title}
-            </HeaderTag>}
-            {text && (
-                <p
-                    className={cls.text}
-                    data-testid={`${dataTestId}.Paragraph`}
-                >
-                    {text}
-                </p>
-            )}
+    <div className={classNames(cls.Text, { [cls.bold]: bold }, additionalClasses)}>
+      {title && <HeaderTag
+        className={cls.title}
+        data-testid={`${dataTestId}.header`}
+      >
+        {title}
+      </HeaderTag>}
+      {text && (
+        <p
+          className={cls.text}
+          data-testid={`${dataTestId}.Paragraph`}
+        >
+          {text}
+        </p>
+      )}
 
-        </div>
+    </div>
   )
 })

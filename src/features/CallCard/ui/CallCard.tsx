@@ -43,96 +43,90 @@ export const CallCard = ({ channelId, callerId, assistant, events }: CallCardPro
   const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
   const { t } = useTranslation('reports')
 
-  // const toggleEventJson = (eventId: string) => {
-  //   setExpandedEventIds(prev => ({
-  //     ...prev,
-  //     [eventId]: !prev[eventId]
-  //   }))
-  // }
-
   // Собираем диалог
   const dialogMessages = useReportDialog(events)
 
+  // Определяем variant для Card в зависимости от роли
+  const getCardVariantByRole = (role: string) => {
+    if (role === 'User') return 'outlined'
+    if (role === 'Assistant') return 'success'
+    if (role === 'Function') return 'warning'
+    if (role === 'System') return 'danger'
+    return 'outlined'
+  }
+
+  // Определяем variant для Text в зависимости от роли
+  const getTextVariantByRole = (role: string) => {
+    if (role === 'User') return 'accent'
+    if (role === 'Assistant') return 'success'
+    if (role === 'Function') return 'warning'
+    if (role === 'System') return 'error'
+    return 'primary'
+  }
+
   return (
-        <Card
-            border={'partial'}
-            variant={'outlined'}
-            padding={'8'}
-            max
-            className={classNames(cls.CallCard, {}, [])}
-        >
-          <HStack gap={'8'} wrap={'wrap'} justify={'between'} max>
-            {channelId ? <Text text={channelId}/> : ''}
-            {assistant ? <Text text={assistant}/> : ''}
-              {callerId ? <Text text={callerId}/> : ''}
-              {formattedTime ? <Text text={formattedTime}/> : ''}
-              <Text text={t('Токены')}/>
-              {totalTokens ? <Text text={String(totalTokens)}/> : '0'}
-            <Button
-                variant={'clear'}
-                addonRight={
-                  showDialog
-                    ? <ExpandLessIcon fontSize={'large'}/>
-                    : <ExpandMoreIcon fontSize={'large'}/>
-                }
-                onClick={() => { setShowDialog(prev => !prev) }}
-            />
-          </HStack>
+    <Card
+      border={'partial'}
+      variant={'outlined'}
+      padding={'8'}
+      max
+      className={classNames(cls.CallCard, {}, [])}
+    >
+      <HStack gap={'8'} wrap={'wrap'} justify={'between'} max>
+        {channelId ? <Text text={channelId} /> : ''}
+        {assistant ? <Text text={assistant} /> : ''}
+        {callerId ? <Text text={callerId} /> : ''}
+        {formattedTime ? <Text text={formattedTime} /> : ''}
+        <Text text={t('Токены')} />
+        {totalTokens ? <Text text={String(totalTokens)} /> : '0'}
+        <Button
+          variant={'clear'}
+          addonRight={
+            showDialog
+              ? <ExpandLessIcon fontSize={'large'} />
+              : <ExpandMoreIcon fontSize={'large'} />
+          }
+          onClick={() => { setShowDialog(prev => !prev) }}
+        />
+      </HStack>
 
-          {/* {showEvents && ( */}
-          {/*    <div className="mt-4 space-y-2"> */}
-          {/*      {events.map((event) => ( */}
-          {/*          <div key={event.event_id}> */}
-          {/*            <div */}
-          {/*                onClick={() => { toggleEventJson(event.event_id) }} */}
-          {/*                className="cursor-pointer text-blue-400 hover:underline" */}
-          {/*            > */}
-          {/*              🧾 {event.type} */}
-          {/*            </div> */}
-          {/*            {expandedEventIds[event.event_id] && ( */}
-          {/*                <pre className="bg-gray-900 text-green-400 text-xs mt-1 p-2 rounded overflow-x-auto"> */}
-          {/*          {JSON.stringify(event, null, 2)} */}
-          {/*        </pre> */}
-          {/*            )} */}
-          {/*          </div> */}
-          {/*      ))} */}
-          {/*    </div> */}
-          {/* )} */}
-
-          {showDialog && (
-          <VStack gap="16" className={cls.eventsContainer} wrap={'wrap'}>
-
-            <Divider />
-            {dialogMessages?.length === 0 &&
+      {showDialog && (
+        <VStack gap="16" className={cls.eventsContainer} wrap={'wrap'}>
+          <Divider />
+          {dialogMessages?.length === 0 &&
             <HStack max justify={'center'}>
-                <Text text={t('Диалог отсутствует')}/>
+              <Text text={t('Диалог отсутствует')} />
             </HStack>
-            }
-            {dialogMessages?.map((dialog, index) => (
-                <HStack
-                    key={index}
-                    gap={'16'}
-                    justify={'between'} max
-                >
+          }
+          {dialogMessages?.map((dialog, index) => (
+            <HStack
+              key={index}
+              gap={'16'}
+              justify={'between'}
+              max
+            >
+              <VStack
+                gap={'4'}
+                justify={'start'}
+              >
+                <Text
+                  text={dialog.role}
+                  variant={getTextVariantByRole(dialog.role)}
+                  size={'m'}
+                />
+              </VStack>
 
-                  <VStack
-                      gap={'4'}
-                      justify={'start'}
-                  >
-                    <Text
-                        text={dialog.role}
-                        variant={dialog.role === 'User' ? 'accent' : 'success'}
-                        size={'m'}
-                    />
-                  </VStack>
-
-                  <Card border={'partial'} variant={dialog.role === 'User' ? 'outlined' : 'success'}>
-                    <Text text={dialog.text}/>
-                  </Card>
-                </HStack>
-            ))}
-          </VStack>
-          )}
-      </Card>
+              <Card
+                border={'partial'}
+                variant={getCardVariantByRole(dialog.role)}
+                max
+              >
+                <Text text={dialog.text} />
+              </Card>
+            </HStack>
+          ))}
+        </VStack>
+      )}
+    </Card>
   )
 }

@@ -3,12 +3,14 @@ import cls from './Card.module.scss'
 import { HTMLAttributes, memo, ReactNode } from 'react'
 
 export type CardVariant = 'normal'
-| 'outlined'
-| 'light'
-| 'diviner-top'
-| 'diviner-bottom'
-| 'warning'
-| 'success'
+  | 'outlined'
+  | 'light'
+  | 'diviner-top'
+  | 'diviner-bottom'
+  | 'warning'
+  | 'success'
+  | 'danger'
+  | 'accent'
 export type CardPadding = '0' | '8' | '16' | '24' | '48'
 export type CardBorder = 'round' | 'normal' | 'partial'
 
@@ -45,21 +47,21 @@ export const Card = memo((props: CardProps) => {
   const paddingClass = mapPaddingToClass[padding]
 
   return (
-        <div
-            className={classNames(
-              cls.Card,
-              { [cls.max]: max, [cls.fullHeight]: fullHeight },
-              [
-                className,
-                cls[variant],
-                cls[paddingClass],
-                cls[border]
-              ])
-            }
-            {...otherProps}
-        >
-            {children}
+    <div
+      className={classNames(
+        cls.Card,
+        { [cls.max]: max, [cls.fullHeight]: fullHeight },
+        [
+          className,
+          cls[variant],
+          cls[paddingClass],
+          cls[border]
+        ])
+      }
+      {...otherProps}
+    >
+      {children}
 
-        </div>
+    </div>
   )
 })

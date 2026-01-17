@@ -30,56 +30,72 @@ export const ReportShowDialog = memo((props: ReportShowDialogProps) => {
   const { t } = useTranslation('reports')
 
   return (
+    <VStack
+      gap="24"
+      className={classNames(cls.ReportShowDialog, {}, [className])}
+      wrap={'wrap'}
+    >
+      <Divider />
+
+      {isDialogLoading &&
+        <HStack max justify={'center'}>
+          <Loader />
+        </HStack>
+      }
+      {isDialogError &&
+        <HStack max justify={'center'}>
+          <Text text={t('Ошибка при загрузке диалога')} variant="error" />
+        </HStack>
+      }
+      {Dialogs?.length === 0
+        ? <HStack max justify={'center'}>
+          <Text text={t('Диалог отсутствует')} />
+        </HStack>
+        : <MediaPlayer src={mediaUrl} />
+      }
+
+      {Dialogs?.map((dialog, index) => (
+        <HStack
+          key={index}
+          gap={'16'}
+          justify={'between'} max
+        >
+
           <VStack
-              gap="24"
-              className={classNames(cls.ReportShowDialog, {}, [className])}
-              wrap={'wrap'}
+            gap={'4'}
+            justify={'start'}
           >
-            <Divider/>
-
-            {isDialogLoading &&
-                <HStack max justify={'center'}>
-                  <Loader/>
-                </HStack>
-            }
-            {isDialogError &&
-                <HStack max justify={'center'}>
-                  <Text text={t('Ошибка при загрузке диалога')} variant="error"/>
-                </HStack>
-            }
-            {Dialogs?.length === 0
-              ? <HStack max justify={'center'}>
-                  <Text text={t('Диалог отсутствует')}/>
-                </HStack>
-              : <MediaPlayer src={mediaUrl}/>
-            }
-
-            {Dialogs?.map((dialog, index) => (
-                <HStack
-                    key={index}
-                    gap={'16'}
-                    justify={'between'} max
-                >
-
-                  <VStack
-                      gap={'4'}
-                      justify={'start'}
-                  >
-                    <Text
-                        text={dialog.timestamp}
-                    />
-                    <Text
-                        text={dialog.role}
-                        variant={dialog.role === 'User' ? 'accent' : 'success'}
-                        size={'m'}
-                    />
-                  </VStack>
-
-                  <Card border={'partial'} variant={dialog.role === 'User' ? 'outlined' : 'success'}>
-                    <Text text={dialog.text}/>
-                  </Card>
-                </HStack>
-            ))}
+            <Text
+              text={dialog.timestamp}
+            />
+            <Text
+              text={dialog.role}
+              variant={
+                dialog.role === 'User'
+                  ? 'accent'
+                  : dialog.role === 'Assistant'
+                    ? 'success'
+                    : dialog.role === 'Function'
+                      ? 'warning'
+                      : 'error'
+              }
+              size={'m'}
+            />
           </VStack>
+
+          <Card border={'partial'} variant={
+            dialog.role === 'User'
+              ? 'outlined'
+              : dialog.role === 'Assistant'
+                ? 'success'
+                : dialog.role === 'Function'
+                  ? 'warning'
+                  : 'warning'
+          }>
+            <Text text={dialog.text} />
+          </Card>
+        </HStack>
+      ))}
+    </VStack>
   )
 })

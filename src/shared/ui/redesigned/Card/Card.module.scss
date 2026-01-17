@@ -15,7 +15,7 @@
 }
 
 .warning {
-    border: 1px solid var(--cancel-redesigned);
+    border: 1px solid #ffb300;
 }
 
 .success {
@@ -32,6 +32,15 @@
 
 .outlined {
     border: 1px solid var(--accent-redesigned);
+}
+
+.danger {
+    border: 1px solid var(--cancel-redesigned);
+}
+
+.accent {
+    border: 1px solid var(--accent-redesigned);
+    background: var(--dark-bg-redesigned);
 }
 
 .diviner-top {
@@ -69,4 +78,3 @@
 .gap_48 {
     padding: 48px;
 }
-

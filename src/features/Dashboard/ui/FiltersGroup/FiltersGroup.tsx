@@ -111,7 +111,25 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
         <LinesChart
           height={300}
           series={[
-            { data: tokensCount, label: String(t('Токены')) }
+            { data: tokensCount, label: String(t('Токены')) },
+          ]}
+          xAxis={[{ scaleType: 'point', data: label }]}
+        />
+      </Card>
+      <Card max border={'partial'} padding={'16'}>
+        <LinesChart
+          height={300}
+          series={[
+            { data: ringsCount, label: String(t('Звонки')) },
+          ]}
+          xAxis={[{ scaleType: 'point', data: label }]}
+        />
+      </Card>
+      <Card max border={'partial'} padding={'16'}>
+        <LinesChart
+          height={300}
+          series={[
+            { data: amount, label: String(t('Стоимость')) + `, ${currencySymbol}` },
           ]}
           xAxis={[{ scaleType: 'point', data: label }]}
         />

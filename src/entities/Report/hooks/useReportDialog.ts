@@ -4,7 +4,7 @@ export const useReportDialog = (events: ReportEvent[]) => {
   return events
     .filter(e =>
       e.type === 'conversation.item.input_audio_transcription.completed' ||
-          e.type === 'response.done'
+      e.type === 'response.done'
     )
     .flatMap(e => {
       if (e.type === 'conversation.item.input_audio_transcription.completed') {
@@ -13,9 +13,21 @@ export const useReportDialog = (events: ReportEvent[]) => {
 
       if (e.type === 'response.done') {
         const items = e.response?.output || []
-        return items.flatMap((item: any) =>
-          item?.content?.map((c: any) => ({ role: 'Assistant', text: c.transcript })) || []
-        )
+        return items.flatMap((item: any) => {
+          if (item.type === 'function_call') {
+            return [{
+              role: 'Function',
+              text: `Call: ${item.name}(${item.arguments})`
+            }]
+          }
+          if (item.type === 'message' && item.content) {
+            return item.content.map((c: any) => ({
+              role: 'Assistant',
+              text: c.transcript || c.text || ''
+            }))
+          }
+          return []
+        })
       }
 
       return []
