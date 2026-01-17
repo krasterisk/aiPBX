@@ -1,5 +1,7 @@
 import { memo } from 'react'
+import { classNames } from '@/shared/lib/classNames/classNames'
 import { HStack } from '../../redesigned/Stack'
+import cls from './MediaPlayer.module.scss'
 
 interface MediaPlayerProps {
   className?: string
@@ -12,29 +14,11 @@ export const MediaPlayer = memo((props: MediaPlayerProps) => {
     src
   } = props
 
-  // const audioRef = useRef<HTMLAudioElement>(null)
-  //
-  // const handlePlay = useCallback(() => {
-  //   audioRef.current?.play()
-  // }, [])
-  //
-  // const handlePause = useCallback(() => {
-  //   audioRef.current?.pause()
-  // }, [])
-  //   {/*<div className={classNames(cls.MediaPlayer, {}, [className])}>*/}
-  //   {/*<audio ref={audioRef} src={src} preload="auto" />*/}
-  //   {/*<div className={cls.nav}>*/}
-  //   {/*  <button onClick={handlePlay}>▶</button>*/}
-  //   {/*  <button onClick={handlePause}>❚❚</button>*/}
-  //   {/*</div>*/}
-  // {/*</div>*/}
-
   return (
-
-        <HStack max>
-            <audio controls src={src} preload="auto" className={className}>
-                Your browser does not support the audio element.
-            </audio>
-        </HStack>
+    <HStack max className={classNames(cls.MediaPlayer, {}, [className])}>
+      <audio controls src={src} preload="auto" className={cls.audio}>
+        Your browser does not support the audio element.
+      </audio>
+    </HStack>
   )
 })

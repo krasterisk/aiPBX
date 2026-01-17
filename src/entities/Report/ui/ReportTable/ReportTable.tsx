@@ -66,7 +66,7 @@ export const ReportTable = memo((props: ReportTableProps) => {
     setShowDialog(prev => !prev)
   }, [])
 
-  const mediaUrl = __STATIC__ + '/' + 'audio_mixed_' + report.channelId + '.wav'
+  const mediaUrl = report.recordUrl || ''
   const duration = report.duration ? formatTime(report.duration, t) : ''
   const isMobile = useMediaQuery('(max-width:800px)')
 

@@ -67,7 +67,8 @@ export const ReportItem = memo((props: ReportItemProps) => {
   const onHistoryHandle = useCallback(() => {
     setShowDialog(prev => !prev)
   }, [])
-  const mediaUrl = __STATIC__ + '/' + 'audio_mixed_' + report.channelId + '.wav'
+
+  const mediaUrl = report.recordUrl || ''
   const duration = report.duration ? formatTime(report.duration, t) : ''
   const isMobile = useMediaQuery('(max-width:800px)')
   const viewMode = isMobile ? 'MOBILE' : cls[view]

@@ -16,6 +16,7 @@ export interface Report {
   tokens?: number
   cost?: number
   duration?: number
+  recordUrl?: string
   events?: ReportEvent[]
   createdAt: string
   userId: string
