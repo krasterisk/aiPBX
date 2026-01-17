@@ -47,7 +47,7 @@ export const AssistantOptionsPublication = memo((props: AssistantPublicationProp
         pbxId: serverId
       }
     }))
-    toast.success(t('SIP аккаунт обновлен') || 'SIP account updated')
+    toast.success(t('SIP URI обновлен') || 'SIP URI updated')
   }, [dispatch, t])
 
   const handleCopy = useCallback((text: string) => {
@@ -62,13 +62,14 @@ export const AssistantOptionsPublication = memo((props: AssistantPublicationProp
 
   const handleDelete = useCallback(async () => {
     if (!assistantId) return
-    if (!window.confirm(t('Вы уверены, что хотите удалить SIP аккаунт?') || 'Are you sure you want to delete SIP account?')) return
+    if (!window.confirm(t('Вы уверены, что хотите удалить SIP URI?')
+      || 'Are you sure you want to delete SIP URI?')) return
 
     try {
       const result = await deleteSip({ assistantId }).unwrap()
       if (result.success) {
         dispatch(assistantFormActions.updateForm({ sipAccount: undefined }))
-        toast.success(t('SIP аккаунт удален') || 'SIP account deleted')
+        toast.success(t('SIP URI удален') || 'SIP URI deleted')
       }
     } catch (e) {
       toast.error(getErrorMessage(e))
@@ -147,7 +148,6 @@ export const AssistantOptionsPublication = memo((props: AssistantPublicationProp
           </Button>
         }
         <Button>{t('Создать WebRTC скрипт для сайта')}</Button>
-        <Button>{t('Создать переадресацию с внешнего номера')}</Button>
       </HStack>
     </VStack>
   )

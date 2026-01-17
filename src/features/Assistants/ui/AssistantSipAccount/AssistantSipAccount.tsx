@@ -94,15 +94,15 @@ const AssistantSipAccount = memo((props: AssistantSipAccountProps) => {
   }, [assistantId, createSip, ipAddress, selectedPbx, onClose, onSuccess])
 
   return (
-    <Modal isOpen={show} onClose={onClose} lazy className={classNames(cls.AssistantSipAccount, {}, [className])}>
-      <VStack gap={'24'} max>
+    <Modal isOpen={show} onClose={onClose} lazy className={className}>
+      <VStack gap={'24'} max className={cls.AssistantSipAccount}>
         <Text title={t('SIP URI') || ''} />
 
         {sipUri && (
           <VStack gap={'8'} max>
             <Text text={t('Ваш SIP URI:') || ''} bold />
-            <HStack gap={'8'} align={'center'} max>
-              <Text text={sipUri} variant={'accent'} size={'l'} />
+            <HStack gap={'8'} align={'center'} max wrap={'wrap'}>
+              <Text text={sipUri} variant={'accent'} size={'l'} className={cls.sipUri} />
               <Button onClick={() => handleCopy(sipUri)} variant={'clear'}>
                 <ContentCopyIcon fontSize={'small'} />
               </Button>
@@ -113,8 +113,8 @@ const AssistantSipAccount = memo((props: AssistantSipAccountProps) => {
         <VStack gap={'24'} max>
           {initialPbxId ? (
             <VStack gap={'8'} max>
-              <HStack gap={'8'} align={'center'} max>
-                <Text text={initialSipUri || ''} bold />
+              <HStack gap={'8'} align={'center'} max wrap={'wrap'}>
+                <Text text={initialSipUri || ''} bold className={cls.sipUri} />
                 <Button onClick={() => handleCopy(initialSipUri || '')} variant={'clear'}>
                   <ContentCopyIcon fontSize={'small'} />
                 </Button>
@@ -133,8 +133,14 @@ const AssistantSipAccount = memo((props: AssistantSipAccountProps) => {
             onChange={handleIpAddressChange}
           />
         </VStack>
-        {isLoading && <Loader />}
-        <HStack max justify={'end'} gap={'16'}>
+
+        {isLoading && (
+          <div className={cls.loaderWrapper}>
+            <Loader />
+          </div>
+        )}
+
+        <HStack max justify={'end'} gap={'16'} wrap={'wrap'}>
           <Button
             onClick={onClose}
             color={'error'}
@@ -148,7 +154,7 @@ const AssistantSipAccount = memo((props: AssistantSipAccountProps) => {
             variant={'filled'}
             disabled={!selectedPbx || !ipAddress || isLoading}
           >
-            {isLoading ? <Loader /> : (initialPbxId ? t('Сохранить') : t('Создать'))}
+            {initialPbxId ? t('Сохранить') : t('Создать')}
           </Button>
         </HStack>
       </VStack>

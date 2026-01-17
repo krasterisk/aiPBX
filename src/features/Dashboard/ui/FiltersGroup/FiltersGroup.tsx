@@ -10,6 +10,9 @@ import { BarsChart } from '@/shared/ui/mui/BarsChart'
 import { PeriodPicker } from '@/entities/PeriodPicker'
 import { SummaryCard } from '../SummaryCard/SummaryCard'
 import { PeriodExtendedFilters } from '../PeriodExtendedFilter/PeriodExtendedFilter'
+import { useSelector } from 'react-redux'
+import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
+import { currencySymbols } from "@/entities/User/model/consts/consts"
 
 interface FiltersGroupProps {
   className?: string
@@ -44,7 +47,11 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
     onChangeEndDate
   } = props
 
-  const { t } = useTranslation('endpoints')
+  const { t } = useTranslation('reports')
+  const authData = useSelector(getUserAuthData)
+  const userCurrency = authData?.currency || UserCurrencyValues.USD
+  const currencySymbol = currencySymbols[userCurrency] || '$'
+
   const [filterShow, setFilterShow] = useState<boolean>(false)
 
   const ringsCount = dashboardData?.chartData?.map(item => Number(item.allCount)) || []
@@ -95,7 +102,7 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
           series={[
             { data: ringsCount, label: String(t('Звонки')) },
             { data: durationCount, label: String(t('Длительность')) },
-            { data: amount, label: String(t('Стоимость')) }
+            { data: amount, label: String(t('Стоимость')) + `, ${currencySymbol}` }
           ]}
           height={300}
         />

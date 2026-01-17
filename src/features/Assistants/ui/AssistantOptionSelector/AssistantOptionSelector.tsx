@@ -67,14 +67,32 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
   useEffect(() => {
     if (!isEdit && !assistant) {
       dispatch(assistantFormActions.initCreate)
+      if (!isAdmin && clientData) {
+        dispatch(assistantFormActions.updateForm({
+          userId: clientData.id,
+          user: {
+            id: clientData.id,
+            name: clientData.name
+          }
+        }))
+      }
     }
-  }, [assistant, dispatch, isEdit])
+  }, [assistant, dispatch, isEdit, isAdmin, clientData])
 
   useEffect(() => {
     if (isEdit && assistant) {
       dispatch(assistantFormActions.initEdit(assistant))
+      if (!isAdmin && clientData) {
+        dispatch(assistantFormActions.updateForm({
+          userId: clientData.id,
+          user: {
+            id: clientData.id,
+            name: clientData.name
+          }
+        }))
+      }
     }
-  }, [assistant, isEdit, dispatch])
+  }, [assistant, isEdit, dispatch, isAdmin, clientData])
 
   const onChangeToolsHandler = useCallback((
     event: any,

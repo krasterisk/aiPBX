@@ -13,6 +13,9 @@ import { useGetReportDialogs } from '../../api/reportApi'
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { useMediaQuery } from '@mui/material'
 import { ReportShowDialog } from '../ReportShowDialog/ReportShowDialog'
+import { useSelector } from 'react-redux'
+import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
+import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
 
 interface ReportTableProps {
   className?: string
@@ -32,7 +35,9 @@ export const ReportTable = memo((props: ReportTableProps) => {
     onChangeChecked
   } = props
 
-  const { t } = useTranslation('reports')
+  const { t } = useTranslation(['reports', 'translation'])
+  const authData = useSelector(getUserAuthData)
+  const userCurrency = authData?.currency || UserCurrencyValues.USD
 
   const [showDialog, setShowDialog] = useState(false)
 
@@ -63,70 +68,69 @@ export const ReportTable = memo((props: ReportTableProps) => {
 
   const mediaUrl = __STATIC__ + '/' + 'audio_mixed_' + report.channelId + '.wav'
   const duration = report.duration ? formatTime(report.duration, t) : ''
-  const formattedCost = report.cost ? parseFloat((report.cost || 0).toFixed(4)) : 0
   const isMobile = useMediaQuery('(max-width:800px)')
 
   const viewMode = isMobile ? 'SMALL' : cls[view]
 
   return (
-            <>
-                <tr className={classNames(cls.ReportTableItem, {}, [className, viewMode])}>
-                    <td className={cls.tdCheck}>
-                        <Check
-                            key={report.id}
-                            className={classNames('', {
-                              [cls.uncheck]: !checkedItems?.includes(String(report.id)),
-                              [cls.check]: checkedItems?.includes(String(report.id))
-                            }, [])}
-                            value={report.id}
-                            size={'small'}
-                            checked={checkedItems?.includes(String(report.id))}
-                            onChange={onChangeChecked}
-                        />
-                    </td>
-                    <td>
-                        {report.createdAt ? <Text text={formattedDate}/> : ''}
-                    </td>
-                    <td>
-                        {report.assistantName ? <Text text={report.assistantName}/> : ''}
-                    </td>
-                    <td>
-                        {report.callerId ? <Text text={report.callerId}/> : ''}
-                    </td>
-                    <td>
-                        <Text text={String(duration)} />
-                    </td>
-                    <td>
-                        {report.tokens ? <Text text={String(report.tokens)}/> : ''}
-                    </td>
-                    <td>
-                        {report.cost ? <Text text={'$' + String(formattedCost)} bold /> : ''}
-                    </td>
-                    <td>
-                        <Button
-                            variant={'clear'}
-                            addonRight={
-                                showDialog
-                                  ? <ExpandLessIcon fontSize={'large'}/>
-                                  : <ExpandMoreIcon fontSize={'large'}/>
-                            }
-                            onClick={onHistoryHandle}
-                        />
-                    </td>
-                </tr>
-                {showDialog && (
-                    <tr>
-                        <td colSpan={7}>
-                            <ReportShowDialog
-                                Dialogs={Dialogs}
-                                isDialogLoading={isDialogLoading}
-                                isDialogError={isDialogError}
-                                mediaUrl={mediaUrl}
-                             />
-                        </td>
-                    </tr>
-                )}
-            </>
+    <>
+      <tr className={classNames(cls.ReportTableItem, {}, [className, viewMode])}>
+        <td className={cls.tdCheck}>
+          <Check
+            key={report.id}
+            className={classNames('', {
+              [cls.uncheck]: !checkedItems?.includes(String(report.id)),
+              [cls.check]: checkedItems?.includes(String(report.id))
+            }, [])}
+            value={report.id}
+            size={'small'}
+            checked={checkedItems?.includes(String(report.id))}
+            onChange={onChangeChecked}
+          />
+        </td>
+        <td>
+          {report.createdAt ? <Text text={formattedDate} /> : ''}
+        </td>
+        <td>
+          {report.assistantName ? <Text text={report.assistantName} /> : ''}
+        </td>
+        <td>
+          {report.callerId ? <Text text={report.callerId} /> : ''}
+        </td>
+        <td>
+          <Text text={String(duration)} />
+        </td>
+        <td>
+          {report.tokens ? <Text text={String(report.tokens)} /> : ''}
+        </td>
+        <td>
+          {report.cost ? <Text text={formatCurrency(report.cost, userCurrency, 4)} bold /> : ''}
+        </td>
+        <td>
+          <Button
+            variant={'clear'}
+            addonRight={
+              showDialog
+                ? <ExpandLessIcon fontSize={'large'} />
+                : <ExpandMoreIcon fontSize={'large'} />
+            }
+            onClick={onHistoryHandle}
+          />
+        </td>
+      </tr>
+      {showDialog && (
+        <tr>
+          <td colSpan={7}>
+            <ReportShowDialog
+              Dialogs={Dialogs}
+              isDialogLoading={isDialogLoading}
+              isDialogError={isDialogError}
+              mediaUrl={mediaUrl}
+            />
+          </td>
+        </tr>
+      )}
+    </>
   )
 }
 )

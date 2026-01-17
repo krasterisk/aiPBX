@@ -6,7 +6,7 @@
   "Выгрузить в Excel": "Export to Excel",
   "Выбрано": "Selected",
   "Всего": "Total",
-  " из ": " of ",
+  "из": "of",
   "Данные не найдены": "No data found",
   "Токены": "Tokens",
   "Ошибка при загрузке диалога": "Error loading dialogue",
@@ -22,10 +22,14 @@
   "Неделя": "Week",
   "Месяц": "Month",
   "Год": "Year",
-  "на сумму": "for a total of",
+  "на сумму": "for",
   "Всего за период": "Total for the period",
   "Звонков": "Calls",
   "Токенов": "Tokens",
   "Клиент": "Customer",
-  "Всего звонков": "Total calls"
+  "Всего звонков": "Total calls",
+  "час": "hour",
+  "мин": "min",
+  "сек": "sec",
+  "Звонки": "Calls"
 }

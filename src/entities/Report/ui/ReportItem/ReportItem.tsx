@@ -15,6 +15,9 @@ import { useGetReportDialogs } from '../../api/reportApi'
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { useMediaQuery } from '@mui/material'
 import { ReportShowDialog } from '../ReportShowDialog/ReportShowDialog'
+import { useSelector } from 'react-redux'
+import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
+import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
 
 interface ReportItemProps {
   className?: string
@@ -34,7 +37,10 @@ export const ReportItem = memo((props: ReportItemProps) => {
     onChangeChecked
   } = props
 
-  const { t } = useTranslation('reports')
+  const { t } = useTranslation(['reports', 'translation'])
+  const authData = useSelector(getUserAuthData)
+  const userCurrency = authData?.currency || UserCurrencyValues.USD
+
   const [showDialog, setShowDialog] = useState(false)
 
   const {
@@ -63,78 +69,77 @@ export const ReportItem = memo((props: ReportItemProps) => {
   }, [])
   const mediaUrl = __STATIC__ + '/' + 'audio_mixed_' + report.channelId + '.wav'
   const duration = report.duration ? formatTime(report.duration, t) : ''
-  const formattedCost = report.cost ? parseFloat((report.cost || 0).toFixed(4)) : 0
   const isMobile = useMediaQuery('(max-width:800px)')
   const viewMode = isMobile ? 'MOBILE' : cls[view]
 
   return (
-            <Card
-                border={'partial'}
-                variant={'outlined'}
-                padding={'16'}
-                max
-                className={classNames(cls.ReportItem, {}, [className, viewMode])}
-            >
-                <Check
-                    key={report.channelId}
-                    className={classNames('', {
-                      [cls.uncheck]: !checkedItems?.includes(report.channelId),
-                      [cls.check]: checkedItems?.includes(report.channelId)
-                    }, [])}
-                    value={report.channelId}
-                    size={'small'}
-                    checked={checkedItems?.includes(report.channelId)}
-                    onChange={onChangeChecked}
-                />
-                <VStack gap={'8'} wrap={'wrap'} justify={'between'} max>
-                    {report.createdAt ? <Text text={formattedDate} bold/> : ''}
-                    {report.assistantName ? <Text text={report.assistantName}/> : ''}
-                    {report.callerId &&
-                        <HStack gap={'8'} wrap={'wrap'}>
-                            <Text text={t('Звонивший') + ':'} bold/>
-                            <Text text={report.callerId}/>
-                        </HStack>
-                    }
-                    {report.duration &&
-                        <HStack gap={'8'} wrap={'wrap'}>
-                            <Text text={t('Длительность') + ':'} bold/>
-                            <Text text={String(duration)}/>
-                        </HStack>
-                    }
+    <Card
+      border={'partial'}
+      variant={'outlined'}
+      padding={'16'}
+      max
+      className={classNames(cls.ReportItem, {}, [className, viewMode])}
+    >
+      <Check
+        key={report.channelId}
+        className={classNames('', {
+          [cls.uncheck]: !checkedItems?.includes(report.channelId),
+          [cls.check]: checkedItems?.includes(report.channelId)
+        }, [])}
+        value={report.channelId}
+        size={'small'}
+        checked={checkedItems?.includes(report.channelId)}
+        onChange={onChangeChecked}
+      />
+      <VStack gap={'8'} wrap={'wrap'} justify={'between'} max>
+        {report.createdAt ? <Text text={formattedDate} bold /> : ''}
+        {report.assistantName ? <Text text={report.assistantName} /> : ''}
+        {report.callerId &&
+          <HStack gap={'8'} wrap={'wrap'}>
+            <Text text={t('Звонивший') + ':'} bold />
+            <Text text={report.callerId} />
+          </HStack>
+        }
+        {report.duration &&
+          <HStack gap={'8'} wrap={'wrap'}>
+            <Text text={t('Длительность') + ':'} bold />
+            <Text text={String(duration)} />
+          </HStack>
+        }
 
-                    {report.tokens &&
-                        <HStack gap={'8'} wrap={'wrap'}>
-                            <Text text={t('Токены') + ':'} bold/>
-                            <Text text={String(report.tokens)}/>
-                        </HStack>
-                    }
-                    {formattedCost > 0 &&
-                        <HStack gap={'8'} wrap={'wrap'}>
-                            <Text text={t('Стоимость') + ':'} bold/>
-                            <Text text={`$${String(formattedCost)}`}/>
-                        </HStack>
-                    }
-                    <HStack max justify={'end'}>
-                        <Button
-                            variant={'clear'}
-                            addonRight={
-                                showDialog
-                                  ? <ExpandLessIcon fontSize={'large'}/>
-                                  : <ExpandMoreIcon fontSize={'large'}/>
-                            }
-                            onClick={onHistoryHandle}
-                        />
-                    </HStack>
-                </VStack>
-                {showDialog &&
-                    <ReportShowDialog
-                        isDialogLoading={isDialogLoading}
-                        isDialogError={isDialogError}
-                        Dialogs={Dialogs}
-                        mediaUrl={mediaUrl}
-                    />
-                }
-            </Card>
+        {report.tokens &&
+          <HStack gap={'8'} wrap={'wrap'}>
+            <Text text={t('Токены') + ':'} bold />
+            <Text text={String(report.tokens)} />
+          </HStack>
+        }
+        {report.cost && report.cost > 0 &&
+          <HStack gap={'8'} wrap={'wrap'}>
+            <Text text={t('Стоимость') + ':'} bold />
+            <Text text={formatCurrency(report.cost, userCurrency, 4)} />
+          </HStack>
+        }
+        <HStack max justify={'end'}>
+          <Button
+            variant={'clear'}
+            addonRight={
+              showDialog
+                ? <ExpandLessIcon fontSize={'large'} />
+                : <ExpandMoreIcon fontSize={'large'} />
+            }
+            onClick={onHistoryHandle}
+          />
+        </HStack>
+      </VStack>
+      {showDialog &&
+        <ReportShowDialog
+          isDialogLoading={isDialogLoading}
+          isDialogError={isDialogError}
+          Dialogs={Dialogs}
+          mediaUrl={mediaUrl}
+        />
+      }
+    </Card>
   )
 }
 )
