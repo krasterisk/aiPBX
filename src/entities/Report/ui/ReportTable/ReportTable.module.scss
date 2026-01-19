@@ -24,7 +24,7 @@
     }
 
     .uncheck {
-//        position: absolute;
+        //        position: absolute;
         display: flex;
         color: var(--icon-redesigned);
         //left: 0;
@@ -32,12 +32,12 @@
     }
 
     .check {
-//        position: absolute;
+        //        position: absolute;
         display: flex;
         color: var(--icon-redesigned);
         width: 40px;
-//        left: 0;
-//        top: 0;
+        //        left: 0;
+        //        top: 0;
     }
 
     .tdCheck {
@@ -92,4 +92,3 @@
 .isClient {
     border: 2px solid var(--accent-redesigned);
 }
-

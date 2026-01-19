@@ -13,9 +13,6 @@ import { Check } from '@/shared/ui/mui/Check'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { ReportsListHeader } from '../ReportListHeader/ReportListHeader'
 import { ReportTable } from '../ReportTable/ReportTable'
-import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
-import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
-import { useSelector } from 'react-redux'
 import * as XLSX from 'xlsx'
 import FileSaver from 'file-saver'
 import { formatDate } from '@/shared/lib/functions/formatDate'
@@ -31,9 +28,7 @@ export const ReportList = (props: ReportsListProps) => {
     view = 'BIG'
   } = props
 
-  const { t } = useTranslation(['reports', 'translation'])
-  const authData = useSelector(getUserAuthData)
-  const userCurrency = authData?.currency || UserCurrencyValues.USD
+  const { t } = useTranslation('reports')
 
   const [checkedBox, setCheckedBox] = useState<string[]>([])
   const [indeterminateBox, setIndeterminateBox] = useState<boolean>(false)
@@ -67,7 +62,7 @@ export const ReportList = (props: ReportsListProps) => {
         'CallerId:': report.callerId ? report.callerId : '',
         'Duration:': report.duration && formatTime(report.duration, t),
         'Tokens:': report.tokens && report.tokens,
-        'Cost:': report.cost ? formatCurrency(report.cost, userCurrency) : 0
+        'Cost:': report.cost && report.cost
       }))
 
       const ws = XLSX.utils.json_to_sheet(exportData)
@@ -177,7 +172,7 @@ export const ReportList = (props: ReportsListProps) => {
                 text={t('Выбрано') + ': ' + String(checkedBox.length) + ' ' + t('из') + ' ' + String(reports?.count)} />
               : <HStack gap={'8'}>
                 <Text text={t('Всего звонков') + ': ' + String(reports?.count || 0)} />
-                <Text text={t('на сумму') + ': ' + formatCurrency(reports?.totalCost || 0, userCurrency)} />
+                <Text text={t('на сумму') + ': ' + String(reports?.totalCost || 0)} />
               </HStack>
           }
         </HStack>

@@ -23,6 +23,7 @@ export enum AppRoutes {
   USERS = 'users',
   USER_EDIT = 'users_edit',
   USER_CREATE = 'users_create',
+  PLAYGROUND = 'playground',
 }
 
 export const getRouteMain = () => '/'
@@ -51,6 +52,7 @@ export const getRouteForbidden = () => '/forbidden'
 export const getRouteUsers = () => '/users'
 export const getRouteUserCreate = () => '/users/create'
 export const getRouteUserEdit = (id: string) => `/users/${id}`
+export const getRoutePlayground = () => '/playground'
 
 export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteMain()]: AppRoutes.MAIN,
@@ -75,5 +77,6 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteForbidden()]: AppRoutes.FORBIDDEN,
   [getRouteUsers()]: AppRoutes.USERS,
   [getRouteUserEdit(':id')]: AppRoutes.USER_EDIT,
-  [getRouteUserCreate()]: AppRoutes.USER_CREATE
+  [getRouteUserCreate()]: AppRoutes.USER_CREATE,
+  [getRoutePlayground()]: AppRoutes.PLAYGROUND
 }

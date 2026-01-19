@@ -25,7 +25,11 @@ import {
   getRouteDashboard,
   getRoutePayment,
   getRouteSignup,
-  getRouteLogin, getRoutePbxServers, getRoutePbxServerCreate, getRoutePbxServerEdit
+  getRouteLogin,
+  getRoutePbxServers,
+  getRoutePbxServerCreate,
+  getRoutePbxServerEdit,
+  getRoutePlayground
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 import { SettingPage } from '@/pages/SettingsPage'
@@ -39,19 +43,20 @@ import { PaymentPage } from '@/pages/PaymentPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { SignupPage } from '@/pages/SignupPage'
 import { PbxServerCreatePage, PbxServerEditPage, PbxServersPage } from '@/pages/PbxServersPage'
+import { PlaygroundPage } from '@/pages/Playground'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
     path: getRouteMain(),
-    element: <MainPage/>
+    element: <MainPage />
   },
   [AppRoutes.ABOUT]: {
     path: getRouteAbout(),
-    element: <AboutPage/>
+    element: <AboutPage />
   },
   [AppRoutes.LOGIN]: {
     path: getRouteLogin(),
-    element: <LoginPage/>
+    element: <LoginPage />
   },
   [AppRoutes.SIGNUP]: {
     path: getRouteSignup(),
@@ -60,12 +65,12 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.ONLINE]: {
     path: getRouteOnline(),
     authOnly: true,
-    element: <OnlinePage/>
+    element: <OnlinePage />
   },
   [AppRoutes.DASHBOARD]: {
     path: getRouteDashboard(),
     authOnly: true,
-    element: <DashboardPage/>
+    element: <DashboardPage />
   },
   [AppRoutes.PAYMENT]: {
     path: getRoutePayment(),
@@ -140,7 +145,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   },
   [AppRoutes.ADMIN]: {
     path: getRouteAdmin(),
-    element: <AdminPage/>,
+    element: <AdminPage />,
     authOnly: true,
     roles: [UserRolesValues.ADMIN, UserRolesValues.USER]
   },
@@ -149,13 +154,18 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     element: <SettingPage />,
     authOnly: true
   },
+  [AppRoutes.PLAYGROUND]: {
+    path: getRoutePlayground(),
+    element: <PlaygroundPage />,
+    authOnly: true
+  },
   [AppRoutes.FORBIDDEN]: {
     path: getRouteForbidden(),
-    element: <ForbiddenPage/>
+    element: <ForbiddenPage />
   },
   [AppRoutes.ERROR]: {
     path: '*',
-    element: <ErrorPage/>
+    element: <ErrorPage />
   }
 
 }

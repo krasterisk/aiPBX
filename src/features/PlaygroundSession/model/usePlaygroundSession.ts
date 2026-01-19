@@ -1,0 +1,245 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { io, Socket } from 'socket.io-client'
+import { toast } from 'react-toastify'
+import { AUDIO_WORKLET_CODE } from '../lib/audioWorklet'
+
+const SAMPLE_RATE = 24000  // PCM16 from OpenAI Realtime API works at 24kHz
+const INITIAL_BUFFER_DELAY = 0.15 // 150ms buffering
+const RECONNECT_DELAY = 1000
+
+interface UsePlaygroundSessionProps {
+    onConnect?: () => void
+    onDisconnect?: () => void
+    onError?: (error: string) => void
+}
+
+export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
+    const [status, setStatus] = useState<'idle' | 'connecting' | 'connected' | 'error'>('idle')
+    const [isMicAccessGranted, setIsMicAccessGranted] = useState(false)
+
+    const socketRef = useRef<Socket | null>(null)
+    const audioContextRef = useRef<AudioContext | null>(null)
+    const audioWorkletNodeRef = useRef<AudioWorkletNode | null>(null)
+    const mediaStreamRef = useRef<MediaStream | null>(null)
+
+    // Playback state
+    const nextStartTimeRef = useRef<number>(0)
+    const activeSourcesRef = useRef<AudioBufferSourceNode[]>([])
+    const isPlayingRef = useRef<boolean>(false)
+
+    // Helper to stop all audio
+    const interruptPlayback = useCallback(() => {
+        activeSourcesRef.current.forEach(source => {
+            try {
+                source.stop()
+            } catch (e) {
+                // ignore already stopped
+            }
+        })
+        activeSourcesRef.current = []
+        isPlayingRef.current = false
+
+        // Reset scheduling pointer to "now" (or slightly future) so we don't schedule in the past
+        if (audioContextRef.current) {
+            nextStartTimeRef.current = audioContextRef.current.currentTime
+        }
+    }, [])
+
+    const cleanupAudio = useCallback(() => {
+        if (mediaStreamRef.current) {
+            mediaStreamRef.current.getTracks().forEach(t => t.stop())
+            mediaStreamRef.current = null
+        }
+        if (audioWorkletNodeRef.current) {
+            audioWorkletNodeRef.current.disconnect()
+            audioWorkletNodeRef.current = null
+        }
+        if (audioContextRef.current) {
+            audioContextRef.current.close()
+            audioContextRef.current = null
+        }
+        interruptPlayback()
+        setIsMicAccessGranted(false)
+    }, [interruptPlayback])
+
+    const playAudioChunk = useCallback((arrayBuffer: ArrayBuffer) => {
+        const ctx = audioContextRef.current
+        if (!ctx) return
+
+        // 1. Decode PCM16 -> Float32
+        const int16 = new Int16Array(arrayBuffer)
+        const float32 = new Float32Array(int16.length)
+        for (let i = 0; i < int16.length; i++) {
+            float32[i] = int16[i] >= 0 ? int16[i] / 32767 : int16[i] / 32768
+        }
+
+        // 2. Create Buffer
+        const audioBuffer = ctx.createBuffer(1, float32.length, SAMPLE_RATE)
+        audioBuffer.copyToChannel(float32, 0)
+
+        // 3. Schedule "Jitter Buffer" logic
+        const currentTime = ctx.currentTime
+        // If we fell behind (buffer empty or network lag), reset start time to "now" + small buffer
+        if (nextStartTimeRef.current < currentTime) {
+            nextStartTimeRef.current = currentTime + INITIAL_BUFFER_DELAY
+        }
+
+        const source = ctx.createBufferSource()
+        source.buffer = audioBuffer
+        source.connect(ctx.destination)
+
+        source.start(nextStartTimeRef.current)
+        nextStartTimeRef.current += audioBuffer.duration
+
+        // Keep track for interrupt
+        source.onended = () => {
+            activeSourcesRef.current = activeSourcesRef.current.filter(s => s !== source)
+        }
+        activeSourcesRef.current.push(source)
+    }, [])
+
+    // Initialize Audio Input (Mic) -> Worklet -> Socket
+    const initAudioInput = useCallback(async (socket: Socket, selectedMicId?: string) => {
+        try {
+            // Force 8000Hz context if possible
+            const ctx = new window.AudioContext({ sampleRate: SAMPLE_RATE })
+            audioContextRef.current = ctx
+
+            // Helper to resume context if suspended (policy)
+            if (ctx.state === 'suspended') {
+                await ctx.resume()
+            }
+
+            // Load worklet
+            const blob = new Blob([AUDIO_WORKLET_CODE], { type: 'application/javascript' })
+            const workletUrl = URL.createObjectURL(blob)
+            await ctx.audioWorklet.addModule(workletUrl)
+
+            // Get Mic Stream
+            // Note: requesting 8000Hz from hardware is ideal, but browser support varies.
+            // Text Context handles the resampling if hardware is 48k.
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    deviceId: selectedMicId ? { exact: selectedMicId } : undefined,
+                    channelCount: 1,
+                    sampleRate: SAMPLE_RATE,
+                    // specific constraints for voice
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    autoGainControl: true
+                }
+            })
+            mediaStreamRef.current = stream
+
+            const source = ctx.createMediaStreamSource(stream)
+            const worklet = new AudioWorkletNode(ctx, 'audio-input-processor')
+
+            worklet.port.onmessage = (event) => {
+                // Send raw Int16 buffer
+                socket.emit('playground_audio', event.data.buffer)
+            }
+
+            // Connect graph
+            // source -> worklet -> (silent destination to keep alive)
+            source.connect(worklet)
+
+            // Mute output of mic to avoid self-loop
+            const gain = ctx.createGain()
+            gain.gain.value = 0
+            worklet.connect(gain).connect(ctx.destination)
+
+            audioWorkletNodeRef.current = worklet
+            setIsMicAccessGranted(true)
+
+        } catch (e: any) {
+            console.error('Audio Init Failed:', e)
+            toast.error('Microphone initialization failed: ' + e.message)
+            cleanupAudio()
+            throw e
+        }
+    }, [cleanupAudio])
+
+    const connect = useCallback((assistantId: string, micDeviceId?: string) => {
+        if (socketRef.current) return
+
+        setStatus('connecting')
+
+        // IMPORTANT: Update this URL to match your environment variable or configuration
+        // Using relative path for typical proxy setup, or allow argument
+        const wsUrl = __WS__ || '/'
+        // Note: process.env.wsUrl usage depends on build system setup (e.g. webpack DefinePlugin)
+
+        const socket = io(wsUrl, {
+            path: '/socket.io/', // Standard
+            transports: ['websocket'],
+            reconnection: true,
+            reconnectionDelay: RECONNECT_DELAY
+        })
+        socketRef.current = socket
+
+        socket.on('connect', () => {
+            console.log('Playground Socket Connected')
+            socket.emit('playground_init', { assistantId })
+        })
+
+        socket.on('playground.ready', async () => {
+            console.log('Playground Session Ready')
+            setStatus('connected')
+            try {
+                await initAudioInput(socket, micDeviceId)
+                props?.onConnect?.()
+                toast.success('Сессия установлена')
+            } catch (e) {
+                // If audio fails, we should disconnect
+                socket.disconnect()
+            }
+        })
+
+        socket.on('playground.audio_out', (data: ArrayBuffer) => {
+            playAudioChunk(data)
+        })
+
+        socket.on('playground.interrupt', () => {
+            console.warn('AI Interrupt')
+            interruptPlayback()
+            props?.onError?.('AI Interrupt')
+        })
+
+        socket.on('disconnect', () => {
+            console.log('Playground Socket Disconnected')
+            cleanupAudio()
+            setStatus('idle')
+            socketRef.current = null
+            props?.onDisconnect?.()
+        })
+
+        socket.on('connect_error', (err) => {
+            console.error('Socket Connect Error:', err)
+            // Ideally we retry or show status
+            // toast.error('Connection error')
+        })
+
+    }, [cleanupAudio, initAudioInput, interruptPlayback, playAudioChunk, props])
+
+    const disconnect = useCallback(() => {
+        if (socketRef.current) {
+            socketRef.current.emit('playground_stop')
+            socketRef.current.disconnect()
+        }
+        cleanupAudio()
+        setStatus('idle')
+    }, [cleanupAudio])
+
+    useEffect(() => {
+        return () => {
+            disconnect()
+        }
+    }, [disconnect])
+
+    return {
+        status,
+        connect,
+        disconnect,
+        isMicAccessGranted
+    }
+}

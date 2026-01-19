@@ -60,5 +60,6 @@
   "час": "hour",
   "мин": "min",
   "сек": "sec",
-  "VoIP Серверы": "VoIP Servers"
+  "VoIP Серверы": "VoIP Servers",
+  "Playground": "Playground"
 }

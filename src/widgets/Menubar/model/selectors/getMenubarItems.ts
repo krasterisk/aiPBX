@@ -4,11 +4,13 @@ import {
   getRouteAssistants,
   getRouteDashboard,
   getRouteOnline, getRoutePbxServers,
+  getRoutePlayground,
   getRouteReports,
   getRouteTools,
   getRouteUsers
 } from '@/shared/const/router'
 import EndpointsIcon from '@/shared/assets/icons/endpoints.svg'
+import StarIcon from '@/shared/assets/icons/star.svg'
 import ManualIcon from '@/shared/assets/icons/article.svg'
 import { MenubarItemType } from '../types/menubar'
 import { useTranslation } from 'react-i18next'
@@ -40,6 +42,12 @@ export const useMenubarItems = () => {
         authOnly: true
       },
       {
+        path: getRoutePlayground(),
+        Icon: StarIcon,
+        text: t('Playground'),
+        authOnly: true
+      },
+      {
         path: getRouteAssistants(),
         Icon: ManualIcon,
         text: t('Ассистенты'),
@@ -59,19 +67,19 @@ export const useMenubarItems = () => {
       },
       ...(isAdmin
         ? [
-            {
-              path: getRoutePbxServers(),
-              Icon: EndpointsIcon,
-              text: t('VoIP Серверы'),
-              authOnly: true
-            },
-            {
-              path: getRouteUsers(),
-              Icon: EndpointsIcon,
-              text: t('Пользователи'),
-              authOnly: true
-            }
-          ]
+          {
+            path: getRoutePbxServers(),
+            Icon: EndpointsIcon,
+            text: t('VoIP Серверы'),
+            authOnly: true
+          },
+          {
+            path: getRouteUsers(),
+            Icon: EndpointsIcon,
+            text: t('Пользователи'),
+            authOnly: true
+          }
+        ]
         : []
       )
     )

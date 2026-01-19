@@ -1,0 +1,16 @@
+{
+    "Playground": "Playground",
+    "Настройка сессии": "Session Setup",
+    "Выберите ассистента": "Select Assistant",
+    "Микрофон": "Microphone",
+    "Микрофон ": "Microphone ",
+    "Начать сессию": "Start Session",
+    "Завершить сессию": "End Session",
+    "Загрузка...": "Loading...",
+    "Подключение к ассистенту...": "Connecting to assistant...",
+    "Сессия завершена": "Session ended",
+    "Идет разговор с ": "Conversation with ",
+    "Сессия успешно запущена": "Session started successfully",
+    "Ошибка при запуске сессии: ": "Error starting session: ",
+    "Не удалось получить токен доступа": "Failed to get access token"
+}
