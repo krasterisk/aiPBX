@@ -34,6 +34,10 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
     const isLoading = status === 'connecting'
 
     const getDevices = useCallback(async () => {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+            console.warn('Media devices API not available. Ensure you are using HTTPS or localhost.')
+            return
+        }
         try {
             const devices = await navigator.mediaDevices.enumerateDevices()
             const audioInputDevices = devices.filter((device) => device.kind === 'audioinput')
@@ -48,9 +52,13 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
 
     useEffect(() => {
         getDevices()
-        navigator.mediaDevices.ondevicechange = getDevices
+        if (navigator.mediaDevices) {
+            navigator.mediaDevices.ondevicechange = getDevices
+        }
         return () => {
-            navigator.mediaDevices.ondevicechange = null
+            if (navigator.mediaDevices) {
+                navigator.mediaDevices.ondevicechange = null
+            }
         }
     }, [getDevices])
 
@@ -86,8 +94,16 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
                             getOptionLabel={(option) => option.label || 'Microphone ' + option.deviceId.slice(0, 5)}
                             onChange={(_, newValue) => setSelectedMic(newValue?.deviceId || '')}
                             className={cls.select}
+                            disabled={!navigator.mediaDevices}
                         />
                     </HStack>
+
+                    {!navigator.mediaDevices && (
+                        <Text
+                            variant={'error'}
+                            text={t('Микрофон недоступен. Для работы микрофона требуется HTTPS или localhost.')}
+                        />
+                    )}
 
                     <HStack justify={'end'} max>
                         {!isSessionActive ? (
