@@ -28,9 +28,7 @@ export { getUserRedesign } from './model/selectors/getUserRedesinged/getUserRede
 export {
   UserRolesValues,
   UserSortField,
-  UserCurrencyValues,
-  currencySymbols,
-  balanceWarnings
+  UserCurrencyValues
 } from './model/consts/consts'
 export { UsersList } from './ui/UsersList/UsersList'
 export { ClientSelect } from './ui/ClientSelect/ClientSelect'

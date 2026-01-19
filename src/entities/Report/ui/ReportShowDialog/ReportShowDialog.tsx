@@ -29,8 +29,6 @@ export const ReportShowDialog = memo((props: ReportShowDialogProps) => {
 
   const { t } = useTranslation('reports')
 
-  console.log(mediaUrl)
-
   return (
     <VStack
       gap="24"

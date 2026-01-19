@@ -50,57 +50,53 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
   }, [onClose])
 
   return (
-        <Modal isOpen={show} onClose={onClose} lazy>
-            <VStack gap={'24'} max>
-                <HStack gap={'16'} max justify={'center'}>
-                    <Text title={t('Фильтры')} bold />
-                </HStack>
-                <DateSelector
-                    label={t('Дата с')}
-                    onChange={(newValue: any) => {
-                      // Преобразуем newValue в объект Dayjs перед обновлением состояния
-                      const dayjsValue = newValue ? dayjs(newValue) : null
-                      const formattedDate = dayjsValue ? dayjsValue.format('YYYY-MM-DD') : ''
-                      onChangeStartDate?.(formattedDate)
-                    }}
-                    data-testid={'CaskDashboardFilterCard.fromDate'}
-                    value={startDate ? dayjs(startDate) : null}
-                />
+    <Modal isOpen={show} onClose={onClose} lazy>
+      <VStack gap={'24'} max>
+        <HStack gap={'16'} max justify={'center'}>
+          <Text title={t('Фильтры')} bold />
+        </HStack>
+        <DateSelector
+          label={t('Дата с')}
+          onChange={(newValue: any) => {
+            const formattedDate = newValue && dayjs(newValue).isValid() ? dayjs(newValue).format('YYYY-MM-DD') : ''
+            onChangeStartDate?.(formattedDate)
+          }}
+          data-testid={'CaskDashboardFilterCard.fromDate'}
+          value={startDate ? dayjs(startDate) : null}
+        />
 
-                <DateSelector
-                    label={t('Дата по')}
-                    onChange={(newValue: any) => {
-                      // Преобразуем newValue в объект Dayjs перед обновлением состояния
-                      const dayjsValue = newValue ? dayjs(newValue) : null
-                      const formattedDate = dayjsValue ? dayjsValue.format('YYYY-MM-DD') : ''
-                      onChangeEndDate?.(formattedDate)
-                    }}
-                    data-testid={'CaskDashboardFilterCard.issueDate'}
-                    value={endDate ? dayjs(endDate) : null}
-                />
-                {isAdmin
-                  ? <ClientSelect
-                        label={t('Клиент') || ''}
-                        className={cls.clientSelect}
-                        clientId={userId}
-                        onChangeClient={onChangeUserId}
-                    />
-                  : ''
-                }
-                <AssistantSelect
-                    label={t('Ассистент') || ''}
-                    className={cls.clientSelect}
-                    assistantId={assistantId}
-                    onChangeAssistant={onChangeAssistant}
-                />
-                <HStack gap={'16'} justify={'end'} max wrap={'wrap'}>
-                    <Button onClick={handleOnClose}
-                            variant={'outline'} color={'success'}>
-                        <SearchIcon className={cls.icon} fontSize={'small'}/>
-                        {t('Показать')}
-                    </Button>
-                </HStack>
-            </VStack>
-        </Modal>
+        <DateSelector
+          label={t('Дата по')}
+          onChange={(newValue: any) => {
+            const formattedDate = newValue && dayjs(newValue).isValid() ? dayjs(newValue).format('YYYY-MM-DD') : ''
+            onChangeEndDate?.(formattedDate)
+          }}
+          data-testid={'CaskDashboardFilterCard.issueDate'}
+          value={endDate ? dayjs(endDate) : null}
+        />
+        {isAdmin
+          ? <ClientSelect
+            label={t('Клиент') || ''}
+            className={cls.clientSelect}
+            clientId={userId}
+            onChangeClient={onChangeUserId}
+          />
+          : ''
+        }
+        <AssistantSelect
+          label={t('Ассистент') || ''}
+          className={cls.clientSelect}
+          assistantId={assistantId}
+          onChangeAssistant={onChangeAssistant}
+        />
+        <HStack gap={'16'} justify={'end'} max wrap={'wrap'}>
+          <Button onClick={handleOnClose}
+            variant={'outline'} color={'success'}>
+            <SearchIcon className={cls.icon} fontSize={'small'} />
+            {t('Показать')}
+          </Button>
+        </HStack>
+      </VStack>
+    </Modal>
   )
 })

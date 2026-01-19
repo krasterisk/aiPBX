@@ -1,3 +1,8 @@
 .BarsChart {
-
+    :global {
+        .MuiChartsLabel-root.MuiChartsLegend-label {
+            fill: var(--text-redesigned) !important;
+            color: var(--text-redesigned) !important;
+        }
+    }
 }
