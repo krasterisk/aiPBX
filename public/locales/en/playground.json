@@ -12,5 +12,9 @@
     "Идет разговор с ": "Conversation with ",
     "Сессия успешно запущена": "Session started successfully",
     "Ошибка при запуске сессии: ": "Error starting session: ",
-    "Не удалось получить токен доступа": "Failed to get access token"
+    "Не удалось получить токен доступа": "Failed to get access token",
+    "connecting": "Connecting...",
+    "liveSession": "Live Session",
+    "disconnected": "Disconnected",
+    "with": "with {{name}}"
 }

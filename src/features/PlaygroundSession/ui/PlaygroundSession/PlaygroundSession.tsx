@@ -12,6 +12,7 @@ import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { usePlaygroundSession } from '../../model/usePlaygroundSession'
+import { PlaygroundCall } from '../../ui/PlaygroundCall/PlaygroundCall'
 
 interface PlaygroundSessionProps {
     className?: string
@@ -27,7 +28,7 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
     const [mics, setMics] = useState<MediaDeviceInfo[]>([])
     const [selectedMic, setSelectedMic] = useState<string>('')
 
-    const { status, connect, disconnect } = usePlaygroundSession()
+    const { status, connect, disconnect, events, analyserNode } = usePlaygroundSession()
 
     // Status derivatives
     const isSessionActive = status === 'connected'
@@ -129,14 +130,12 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
             </Card>
 
             {isSessionActive && (
-                <Card max padding={'24'}>
-                    <VStack gap={'16'} align={'center'} max>
-                        <div className={cls.visualizer}>
-                            <div className={classNames(cls.pulse, { [cls.active]: isSessionActive })} />
-                        </div>
-                        <Text text={t('Идет разговор с ') + (selectedAssistant?.name || '')} />
-                    </VStack>
-                </Card>
+                <PlaygroundCall
+                    status={status}
+                    events={events}
+                    analyserNode={analyserNode || undefined}
+                    assistantName={selectedAssistant?.name}
+                />
             )}
         </VStack>
     )

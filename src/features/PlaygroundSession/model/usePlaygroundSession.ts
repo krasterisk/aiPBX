@@ -16,9 +16,12 @@ interface UsePlaygroundSessionProps {
 export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
     const [status, setStatus] = useState<'idle' | 'connecting' | 'connected' | 'error'>('idle')
     const [isMicAccessGranted, setIsMicAccessGranted] = useState(false)
+    const [events, setEvents] = useState<any[]>([])
+    const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(null)
 
     const socketRef = useRef<Socket | null>(null)
     const audioContextRef = useRef<AudioContext | null>(null)
+    const analyserRef = useRef<AnalyserNode | null>(null)
     const audioWorkletNodeRef = useRef<AudioWorkletNode | null>(null)
     const mediaStreamRef = useRef<MediaStream | null>(null)
 
@@ -58,8 +61,11 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             audioContextRef.current.close()
             audioContextRef.current = null
         }
+        analyserRef.current = null
+        setAnalyserNode(null)
         interruptPlayback()
         setIsMicAccessGranted(false)
+        setEvents([])
     }, [interruptPlayback])
 
     const playAudioChunk = useCallback((arrayBuffer: ArrayBuffer) => {
@@ -88,6 +94,10 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         source.buffer = audioBuffer
         source.connect(ctx.destination)
 
+        if (analyserRef.current) {
+            source.connect(analyserRef.current)
+        }
+
         source.start(nextStartTimeRef.current)
         nextStartTimeRef.current += audioBuffer.duration
 
@@ -114,6 +124,12 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             const blob = new Blob([AUDIO_WORKLET_CODE], { type: 'application/javascript' })
             const workletUrl = URL.createObjectURL(blob)
             await ctx.audioWorklet.addModule(workletUrl)
+
+            // Analyser Setup
+            const analyser = ctx.createAnalyser()
+            analyser.fftSize = 512
+            analyserRef.current = analyser
+            setAnalyserNode(analyser)
 
             // Get Mic Stream
             // Note: requesting 8000Hz from hardware is ideal, but browser support varies.
@@ -142,6 +158,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             // Connect graph
             // source -> worklet -> (silent destination to keep alive)
             source.connect(worklet)
+            source.connect(analyser)
 
             // Mute output of mic to avoid self-loop
             const gain = ctx.createGain()
@@ -199,6 +216,10 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             playAudioChunk(data)
         })
 
+        socket.on('playground.event', (event: any) => {
+            setEvents(prev => [...prev, event])
+        })
+
         socket.on('playground.interrupt', () => {
             console.warn('AI Interrupt')
             interruptPlayback()
@@ -240,6 +261,8 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         status,
         connect,
         disconnect,
-        isMicAccessGranted
+        isMicAccessGranted,
+        events,
+        analyserNode
     }
 }
