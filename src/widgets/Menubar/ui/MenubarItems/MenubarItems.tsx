@@ -9,25 +9,25 @@ import { Drawer } from '@/shared/ui/mui/Drawer'
 import { AppLogo } from '@/shared/ui/redesigned/AppLogo'
 
 interface MenubarItemProps {
-  className?: string
-  isMobile?: boolean
-  openDrawer?: boolean
-  onDrawerClose?: () => void
+    className?: string
+    isMobile?: boolean
+    openDrawer?: boolean
+    onDrawerClose?: () => void
 }
 
 export const MenubarItems = memo((props: MenubarItemProps) => {
-  const {
-    openDrawer = false,
-    isMobile = false,
-    onDrawerClose
-  } = props
+    const {
+        openDrawer = false,
+        isMobile = false,
+        onDrawerClose
+    } = props
 
-  const { t } = useTranslation()
-  // const isAuth = useSelector(getUserAuthData)
-  const menubarItemList = useMenubarItems()
+    const { t } = useTranslation()
+    // const isAuth = useSelector(getUserAuthData)
+    const menubarItemList = useMenubarItems()
 
-  const renderTree = (nodes: MenubarItemType[]) => (
-        <SimpleTreeView>
+    const renderTree = (nodes: MenubarItemType[]) => (
+        <SimpleTreeView className={cls.menuContainer}>
             {isMobile &&
                 <AppLogo
                     size={50}
@@ -38,33 +38,35 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
                 <AppLink
                     key={node.path}
                     to={node.path}
-                    className={cls.MenubarItems}
-                    // activeClassName={cls.active}
+                // activeClassName={cls.active}
                 >
                     <TreeItem
                         key={node.path}
                         itemId={node.path}
                         label={t(node.text)}
                         onClick={!node.subItems ? () => { if (onDrawerClose) onDrawerClose() } : undefined}
-                        // icon={<Icon Svg={node.Icon} />}
+                        slots={{
+                            icon: () => <node.Icon />
+                        }}
                     >
                         {node.subItems ? renderTree(node.subItems) : null}
                     </TreeItem>
                 </AppLink>
             ))}
         </SimpleTreeView>
-  )
-  if (isMobile) {
-    return (
+    )
+
+    if (isMobile) {
+        return (
             <Drawer isOpen={openDrawer} onClose={onDrawerClose}>
                 {renderTree(menubarItemList)}
             </Drawer>
-    )
-  }
+        )
+    }
 
-  return (
+    return (
         <>
             {renderTree(menubarItemList)}
         </>
-  )
+    )
 })

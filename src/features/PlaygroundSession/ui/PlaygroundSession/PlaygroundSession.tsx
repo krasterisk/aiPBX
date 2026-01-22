@@ -1,7 +1,7 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { useTranslation } from 'react-i18next'
 import cls from './PlaygroundSession.module.scss'
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
@@ -10,7 +10,6 @@ import { AssistantSelectSingle } from '@/entities/Assistants'
 import { useSelector } from 'react-redux'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
-import { Combobox } from '@/shared/ui/mui/Combobox'
 import { usePlaygroundSession } from '../../model/usePlaygroundSession'
 import { PlaygroundCall } from '../../ui/PlaygroundCall/PlaygroundCall'
 
@@ -25,8 +24,6 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
     const isAdmin = useSelector(isUserAdmin)
 
     const [selectedAssistant, setSelectedAssistant] = useState<AssistantOptions | null>(null)
-    const [mics, setMics] = useState<MediaDeviceInfo[]>([])
-    const [selectedMic, setSelectedMic] = useState<string>('')
 
     const { status, connect, disconnect, events, analyserNode } = usePlaygroundSession()
 
@@ -34,40 +31,12 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
     const isSessionActive = status === 'connected'
     const isLoading = status === 'connecting'
 
-    const getDevices = useCallback(async () => {
-        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-            console.warn('Media devices API not available. Ensure you are using HTTPS or localhost.')
-            return
-        }
-        try {
-            const devices = await navigator.mediaDevices.enumerateDevices()
-            const audioInputDevices = devices.filter((device) => device.kind === 'audioinput')
-            setMics(audioInputDevices)
-            if (audioInputDevices.length > 0 && !selectedMic) {
-                setSelectedMic(audioInputDevices[0].deviceId)
-            }
-        } catch (e) {
-            console.error('Error enumerating devices:', e)
-        }
-    }, [selectedMic])
-
-    useEffect(() => {
-        getDevices()
-        if (navigator.mediaDevices) {
-            navigator.mediaDevices.ondevicechange = getDevices
-        }
-        return () => {
-            if (navigator.mediaDevices) {
-                navigator.mediaDevices.ondevicechange = null
-            }
-        }
-    }, [getDevices])
-
     const handleStartSession = useCallback(() => {
         if (selectedAssistant) {
-            connect(selectedAssistant.id, selectedMic)
+            // No micDeviceId - will use default microphone
+            connect(selectedAssistant.id)
         }
-    }, [connect, selectedAssistant, selectedMic])
+    }, [connect, selectedAssistant])
 
     const handleStopSession = useCallback(() => {
         disconnect()
@@ -87,16 +56,6 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
                             userId={isAdmin ? undefined : userData?.id}
                             className={cls.select}
                         />
-
-                        <Combobox
-                            label={t('Микрофон') || 'Microphone'}
-                            options={mics}
-                            value={mics.find(m => m.deviceId === selectedMic) || null}
-                            getOptionLabel={(option) => option.label || 'Microphone ' + option.deviceId.slice(0, 5)}
-                            onChange={(_, newValue) => setSelectedMic(newValue?.deviceId || '')}
-                            className={cls.select}
-                            disabled={!navigator.mediaDevices}
-                        />
                     </HStack>
 
                     {!navigator.mediaDevices && (
@@ -111,7 +70,7 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
                             <Button
                                 variant={'outline'}
                                 color={'success'}
-                                disabled={!selectedAssistant || isLoading}
+                                disabled={!selectedAssistant || isLoading || !navigator.mediaDevices}
                                 onClick={handleStartSession}
                             >
                                 {isLoading ? t('Подключение...') : t('Начать сессию')}

@@ -9,9 +9,14 @@ import {
   getRouteTools,
   getRouteUsers
 } from '@/shared/const/router'
-import EndpointsIcon from '@/shared/assets/icons/endpoints.svg'
-import StarIcon from '@/shared/assets/icons/star.svg'
-import ManualIcon from '@/shared/assets/icons/article.svg'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import WifiTetheringIcon from '@mui/icons-material/WifiTethering'
+import ScienceIcon from '@mui/icons-material/Science'
+import SmartToyIcon from '@mui/icons-material/SmartToy'
+import BuildIcon from '@mui/icons-material/Build'
+import AssessmentIcon from '@mui/icons-material/Assessment'
+import DnsIcon from '@mui/icons-material/Dns'
+import PeopleIcon from '@mui/icons-material/People'
 import { MenubarItemType } from '../types/menubar'
 import { useTranslation } from 'react-i18next'
 
@@ -31,37 +36,37 @@ export const useMenubarItems = () => {
     menubarItemsList.push(
       {
         path: getRouteDashboard(),
-        Icon: ManualIcon,
+        Icon: DashboardIcon,
         text: t('Дашбоард'),
         authOnly: true
       },
       {
         path: getRouteOnline(),
-        Icon: ManualIcon,
+        Icon: WifiTetheringIcon,
         text: t('Онлайн'),
         authOnly: true
       },
       {
         path: getRoutePlayground(),
-        Icon: StarIcon,
+        Icon: ScienceIcon,
         text: t('Playground'),
         authOnly: true
       },
       {
         path: getRouteAssistants(),
-        Icon: ManualIcon,
+        Icon: SmartToyIcon,
         text: t('Ассистенты'),
         authOnly: true
       },
       {
         path: getRouteTools(),
-        Icon: EndpointsIcon,
+        Icon: BuildIcon,
         text: t('Функции'),
         authOnly: true
       },
       {
         path: getRouteReports(),
-        Icon: EndpointsIcon,
+        Icon: AssessmentIcon,
         text: t('Отчёт'),
         authOnly: true
       },
@@ -69,13 +74,13 @@ export const useMenubarItems = () => {
         ? [
           {
             path: getRoutePbxServers(),
-            Icon: EndpointsIcon,
+            Icon: DnsIcon,
             text: t('VoIP Серверы'),
             authOnly: true
           },
           {
             path: getRouteUsers(),
-            Icon: EndpointsIcon,
+            Icon: PeopleIcon,
             text: t('Пользователи'),
             authOnly: true
           }

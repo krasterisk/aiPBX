@@ -26,7 +26,7 @@ export const UserBalance = memo((props: UserBalanceProps) => {
     isLoading
   } = useGetUserBalance(null,
     {
-      refetchOnFocus: false,
+      refetchOnFocus: true,
       refetchOnReconnect: false
     })
 

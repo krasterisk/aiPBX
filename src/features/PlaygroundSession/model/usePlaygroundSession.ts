@@ -111,8 +111,32 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
     // Initialize Audio Input (Mic) -> Worklet -> Socket
     const initAudioInput = useCallback(async (socket: Socket, selectedMicId?: string) => {
         try {
-            // Force 8000Hz context if possible
-            const ctx = new window.AudioContext({ sampleRate: SAMPLE_RATE })
+            // Get Mic Stream FIRST to know its native sample rate
+            // Note: Browser may ignore sampleRate request and use hardware native rate (usually 48kHz)
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    deviceId: selectedMicId ? { exact: selectedMicId } : undefined,
+                    channelCount: 1,
+                    // Request 24kHz, but browser may use native rate
+                    sampleRate: SAMPLE_RATE,
+                    // specific constraints for voice
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    autoGainControl: true
+                }
+            })
+            mediaStreamRef.current = stream
+
+            // Get actual sample rate from the stream
+            const audioTrack = stream.getAudioTracks()[0]
+            const settings = audioTrack.getSettings()
+            const actualSampleRate = settings.sampleRate || 48000
+
+            console.log(`[Audio] Requested: ${SAMPLE_RATE}Hz, Actual: ${actualSampleRate}Hz`)
+
+            // Create AudioContext with THE SAME sample rate as the stream
+            // This prevents the "different sample-rate" error
+            const ctx = new window.AudioContext({ sampleRate: actualSampleRate })
             audioContextRef.current = ctx
 
             // Helper to resume context if suspended (policy)
@@ -120,7 +144,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
                 await ctx.resume()
             }
 
-            // Load worklet
+            // Load worklet with resampling capability
             const blob = new Blob([AUDIO_WORKLET_CODE], { type: 'application/javascript' })
             const workletUrl = URL.createObjectURL(blob)
             await ctx.audioWorklet.addModule(workletUrl)
@@ -131,27 +155,19 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             analyserRef.current = analyser
             setAnalyserNode(analyser)
 
-            // Get Mic Stream
-            // Note: requesting 8000Hz from hardware is ideal, but browser support varies.
-            // Text Context handles the resampling if hardware is 48k.
-            const stream = await navigator.mediaDevices.getUserMedia({
-                audio: {
-                    deviceId: selectedMicId ? { exact: selectedMicId } : undefined,
-                    channelCount: 1,
-                    sampleRate: SAMPLE_RATE,
-                    // specific constraints for voice
-                    echoCancellation: true,
-                    noiseSuppression: true,
-                    autoGainControl: true
+            // Create MediaStreamSource - now with matching sample rate
+            const source = ctx.createMediaStreamSource(stream)
+
+            // Create worklet with resampling parameters
+            const worklet = new AudioWorkletNode(ctx, 'audio-input-processor', {
+                processorOptions: {
+                    targetSampleRate: SAMPLE_RATE,  // 24kHz for OpenAI
+                    sourceSampleRate: actualSampleRate  // Native rate
                 }
             })
-            mediaStreamRef.current = stream
-
-            const source = ctx.createMediaStreamSource(stream)
-            const worklet = new AudioWorkletNode(ctx, 'audio-input-processor')
 
             worklet.port.onmessage = (event) => {
-                // Send raw Int16 buffer
+                // Send resampled Int16 buffer (24kHz)
                 socket.emit('playground_audio', event.data.buffer)
             }
 
