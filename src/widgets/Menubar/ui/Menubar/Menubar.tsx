@@ -16,18 +16,18 @@ export const Menubar = memo((props: MenubarProps) => {
   } = props
 
   return (
-            <section
-                data-testid="menubar"
-                className={classNames(cls.Menubar, {}, [className])}
-            >
-                <AppLogo className={cls.appLogo}/>
-                <VStack
-                    role="navigation"
-                    className={cls.items}
-                >
-                    <MenubarItems/>
-                </VStack>
+    <section
+      data-testid="menubar"
+      className={classNames(cls.Menubar, {}, [className])}
+    >
+      <AppLogo className={cls.appLogo} />
+      <VStack
+        role="navigation"
+        className={cls.items}
+      >
+        <MenubarItems />
+      </VStack>
 
-            </section>
+    </section>
   )
 })

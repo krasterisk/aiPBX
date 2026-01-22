@@ -12,7 +12,22 @@
 
     .appLogo {
         padding-top: 0;
-        padding-bottom: 20px;
+        padding-bottom: 10px;
+    }
+
+    .brandText {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: -1px;
+        background: linear-gradient(90deg, #06B6D4, #8B5CF6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-top: -10px;
+        margin-bottom: 20px;
+        text-shadow: 0 0 1px rgba(6, 182, 212, 0.5);
+        -webkit-text-stroke: 0.5px #06B6D4;
     }
 
     .switchers {

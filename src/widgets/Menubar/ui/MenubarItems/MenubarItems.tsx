@@ -28,13 +28,16 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
 
     const renderTree = (nodes: MenubarItemType[]) => (
         <SimpleTreeView className={cls.menuContainer}>
-            {isMobile &&
-                <AppLogo
-                    size={50}
-                    variant="3"
-                    className={cls.appLogo}
-                />
-            }
+            {isMobile && (
+                <>
+                    <AppLogo
+                        size={60}
+                        variant="3"
+                        className={cls.appLogo}
+                    />
+                    <div className={cls.brandText}>AI PBX</div>
+                </>
+            )}
             {nodes.map((node) => (
                 <AppLink
                     key={node.path}

@@ -2,6 +2,7 @@ import React, { memo } from 'react'
 import cls from './AppLogo.module.scss'
 import { HStack } from '../Stack'
 import AppSvgV1 from '@/shared/assets/icons/aipbx_logo_v1.svg'
+import AppSvgV3 from '@/shared/assets/icons/aipbx_logo_v3.svg'
 import { classNames } from '@/shared/lib/classNames/classNames'
 
 interface AppLogoProps {
@@ -22,7 +23,7 @@ export const AppLogo = memo(({ className, size, width, height, variant = '1' }: 
   const logoHeight = size ? size : (height ?? 50)
 
   // Choose SVG based on variant
-  const AppSvg = variant === '3' ? AppSvgV1 : AppSvgV1
+  const AppSvg = variant === '3' ? AppSvgV3 : AppSvgV1
 
   return (
     <HStack
