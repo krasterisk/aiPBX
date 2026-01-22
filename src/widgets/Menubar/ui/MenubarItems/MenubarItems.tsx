@@ -31,6 +31,7 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
             {isMobile &&
                 <AppLogo
                     size={50}
+                    variant="3"
                     className={cls.appLogo}
                 />
             }
