@@ -20,6 +20,7 @@ export default (env: buildEnv) => {
   const staticUrl = env?.staticUrl || 'http://192.168.2.37:5005/static'
   const googleClientId = env?.googleClientId || '833962533381-ehqsn7soc4s9e82cv9ats589787ihrog.apps.googleusercontent.com'
   const tgBotId = env?.tgBotId || '8298793342'
+  const stripePublishableKey = env?.stripePublishableKey || 'pk_test_51SraxrIPIiX1aE70WbOwZQhPPjDvHQELzJQ8WbgZOMomPve8AxQlFgczq9qT2QQhCwgZDPbtiBZ4eFdtOSWuiZC200kLK9XSQ0'
 
   return buildWebpackConfig({
     mode,
@@ -31,6 +32,7 @@ export default (env: buildEnv) => {
     project: 'frontend',
     staticUrl,
     googleClientId,
-    tgBotId
+    tgBotId,
+    stripePublishableKey
   })
 }

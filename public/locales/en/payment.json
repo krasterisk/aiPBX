@@ -1,3 +1,15 @@
 {
-  "Страница оплаты": "Payment page"
+  "Страница оплаты": "Payment page",
+  "Refill Balance": "Refill Balance",
+  "Enter Amount": "Enter Amount",
+  "Amount (USD)": "Amount (USD)",
+  "Continue": "Continue",
+  "Invalid amount": "Invalid amount",
+  "Failed to create payment intent": "Failed to create payment intent",
+  "Complete Payment": "Complete Payment",
+  "Pay": "Pay",
+  "Processing...": "Processing...",
+  "An unexpected error occurred.": "An unexpected error occurred.",
+  "Back": "Back",
+  "Loading...": "Loading..."
 }

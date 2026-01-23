@@ -20,6 +20,7 @@ declare const __PROJECT__: 'storybook' | 'frontend' | 'jest'
 declare const __STATIC__: string
 declare const __GOOGLE_CLIENT_ID__: string
 declare const __TG_BOT_ID__: string
+declare const __STRIPE_PUBLISHABLE_KEY__: string
 
 type DeepPartial<T> = T extends object ? {
   [P in keyof T]?: DeepPartial<T[P]>

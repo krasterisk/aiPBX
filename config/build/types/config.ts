@@ -21,6 +21,7 @@ export interface buildOptions {
   staticUrl: string
   googleClientId: string
   tgBotId: string
+  stripePublishableKey: string
 }
 
 export interface buildEnv {
@@ -31,4 +32,5 @@ export interface buildEnv {
   staticUrl: string
   googleClientId: string
   tgBotId: string
+  stripePublishableKey: string
 }
