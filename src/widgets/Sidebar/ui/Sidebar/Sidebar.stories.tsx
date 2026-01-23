@@ -35,16 +35,6 @@ Dark.decorators = [
   RouterDecorator
 ]
 
-export const Purple = Template.bind({})
-Purple.args = {}
-Purple.decorators = [
-  ThemeDecorator(Theme.PURPLE),
-  StoreDecorator({
-    user: { authData: {} }
-  }),
-  RouterDecorator
-]
-
 export const NoAuth = Template.bind({})
 NoAuth.args = {}
 NoAuth.decorators = [

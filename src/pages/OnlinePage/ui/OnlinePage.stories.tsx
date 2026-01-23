@@ -30,9 +30,3 @@ Dark.decorators = [
   RouterDecorator
 ]
 
-export const Purple = Template.bind({})
-Purple.args = {}
-Purple.decorators = [
-  ThemeDecorator(Theme.PURPLE),
-  RouterDecorator
-]

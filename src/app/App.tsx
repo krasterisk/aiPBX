@@ -25,45 +25,43 @@ const App = (): any => {
         return 'dark'
       case Theme.LIGHT:
         return 'light'
-      case Theme.PURPLE:
-        return 'colored' // или "light", если хочешь белый фон
       default:
         return 'light'
     }
   }
 
   if (isLoading) {
-    return <PageLoader/>
+    return <PageLoader />
   }
 
   return (
-        <Suspense fallback={<PageLoader/>}>
-            {userData
-              ? (
-                    <div id='app' className={classNames('app_redesigned', {}, [])}>
-                        <MainLayout
-                            header={<Navbar/>}
-                            content={<AppRouter/>}
-                            sidebar={<Menubar/>}
-                        />
-                    </div>
-                )
-              : (
-                    <AppRouter/>
-                )}
-            <ToastContainer
-                position="top-right"
-                autoClose={3000} // 3 сек
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme={mapThemeToToast()} // варианты: light, dark, colored
+    <Suspense fallback={<PageLoader />}>
+      {userData
+        ? (
+          <div id='app' className={classNames('app_redesigned', {}, [])}>
+            <MainLayout
+              header={<Navbar />}
+              content={<AppRouter />}
+              sidebar={<Menubar />}
             />
-        </Suspense>
+          </div>
+        )
+        : (
+          <AppRouter />
+        )}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000} // 3 сек
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme={mapThemeToToast()} // варианты: light, dark, colored
+      />
+    </Suspense>
   )
 }
 

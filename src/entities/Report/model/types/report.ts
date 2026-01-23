@@ -69,6 +69,6 @@ export interface ReportEvent {
 export interface ReportDialog {
   channelId: string
   timestamp: string
-  role: 'User' | 'Assistant' | 'Function' | 'Call' | 'Error'
+  role: 'User' | 'Assistant' | 'Function' | 'Call' | 'Error' | 'System'
   text: string
 }

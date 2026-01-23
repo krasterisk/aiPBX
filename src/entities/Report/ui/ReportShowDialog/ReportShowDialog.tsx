@@ -9,6 +9,7 @@ import { MediaPlayer } from '@/shared/ui/MediaPlayer'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { ReportDialog } from '../../model/types/report'
 import { useTranslation } from 'react-i18next'
+import { Code } from '@/shared/ui/redesigned/Code'
 
 interface ReportShowDialogProps {
   className?: string
@@ -33,7 +34,7 @@ export const ReportShowDialog = memo((props: ReportShowDialogProps) => {
     <VStack
       gap="24"
       className={classNames(cls.ReportShowDialog, {}, [className])}
-      wrap={'wrap'}
+      max
     >
       <Divider />
 
@@ -83,16 +84,23 @@ export const ReportShowDialog = memo((props: ReportShowDialogProps) => {
             />
           </VStack>
 
-          <Card border={'partial'} variant={
-            dialog.role === 'User'
-              ? 'outlined'
-              : dialog.role === 'Assistant'
-                ? 'success'
-                : dialog.role === 'Function'
-                  ? 'warning'
-                  : 'warning'
-          }>
-            <Text text={dialog.text} />
+          <Card
+            border={'partial'}
+            variant={
+              dialog.role === 'User'
+                ? 'outlined'
+                : dialog.role === 'Assistant'
+                  ? 'success'
+                  : dialog.role === 'Function'
+                    ? 'warning'
+                    : 'warning'
+            }
+            style={{ flex: 1, minWidth: 0, width: '100%' }}
+          >
+            {dialog.role === 'Function' || dialog.role === 'System'
+              ? <Code text={dialog.text} />
+              : <Text text={dialog.text} />
+            }
           </Card>
         </HStack>
       ))}

@@ -39,11 +39,6 @@ const preview: Preview = {
           name: 'dark',
           class: Theme.DARK,
           color: '#000000'
-        },
-        {
-          name: 'purple',
-          class: Theme.PURPLE,
-          color: '#ff5d05'
         }
       ]
     }

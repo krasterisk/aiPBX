@@ -29,7 +29,8 @@ import {
   getRoutePbxServers,
   getRoutePbxServerCreate,
   getRoutePbxServerEdit,
-  getRoutePlayground
+  getRoutePlayground,
+  getRouteBilling
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 import { SettingPage } from '@/pages/SettingsPage'
@@ -44,6 +45,7 @@ import { LoginPage } from '@/pages/LoginPage'
 import { SignupPage } from '@/pages/SignupPage'
 import { PbxServerCreatePage, PbxServerEditPage, PbxServersPage } from '@/pages/PbxServersPage'
 import { PlaygroundPage } from '@/pages/Playground'
+import { BillingPage } from '@/pages/BillingPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -162,6 +164,11 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.FORBIDDEN]: {
     path: getRouteForbidden(),
     element: <ForbiddenPage />
+  },
+  [AppRoutes.BILLING]: {
+    path: getRouteBilling(),
+    element: <BillingPage />,
+    authOnly: true
   },
   [AppRoutes.ERROR]: {
     path: '*',

@@ -7,18 +7,40 @@
 }
 
 .CodeRedesigned {
-    padding: 20px;
+    padding: 16px;
+    padding-right: 48px;
+    /* Space for copy button */
     position: relative;
-    background: var(--light-bg-redesigned);
-    overflow: auto;
-    border: 1px solid var(--accent-redesigned);
-    border-radius: 16px;
+    background: var(--code-bg-redesigned, rgba(0, 0, 0, 0.03));
+    overflow: hidden;
+    /* Handle overflow via code block, or auto here */
+    border-radius: 12px;
+    /* Removed border to avoid 'card in card' look when nested */
+
+    code {
+        display: block;
+        white-space: pre-wrap;
+        word-break: break-all;
+        /* Changed to break-word for better wrapping */
+        font-family: 'Consolas', 'Monaco', 'Andale Mono', monospace;
+        font-size: 13px;
+        line-height: 1.5;
+        overflow-x: auto;
+        /* enable horizontal scroll if needed, though wrap handles most */
+        color: var(--text-color);
+    }
 }
 
 .copyBtn {
     position: absolute;
-    right: 20px;
-    top: 20px;
+    right: 12px;
+    top: 12px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 1;
+    }
 }
 
 .copyIcon path {

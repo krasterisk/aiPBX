@@ -1,7 +1,7 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './AssistantOptionSelector.module.scss'
 import { useTranslation } from 'react-i18next'
-import React, { ChangeEvent, memo, useCallback, useEffect, useState } from 'react'
+import React, { ChangeEvent, memo, useCallback, useEffect, useRef, useState } from 'react'
 
 import {
   Assistant,
@@ -53,6 +53,7 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
   const mode = useSelector(getAssistantFormMode)
   const dispatch = useAppDispatch()
   const [activeTab, setActiveTab] = useState(0)
+  const isFormInited = useRef(false)
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue)
@@ -64,18 +65,24 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
 
   const isEdit = !!assistantId
 
+  // Init form effect
   useEffect(() => {
-    if (!isEdit && !assistant) {
-      dispatch(assistantFormActions.initCreate)
-      if (!isAdmin && clientData) {
-        dispatch(assistantFormActions.updateForm({
-          userId: clientData.id,
-          user: {
-            id: clientData.id,
-            name: clientData.name
-          }
-        }))
-      }
+    if (!isEdit && !assistant && !isFormInited.current) {
+      dispatch(assistantFormActions.initCreate())
+      isFormInited.current = true
+    }
+  }, [assistant, dispatch, isEdit])
+
+  // Set user data effect
+  useEffect(() => {
+    if (!isEdit && !assistant && !isAdmin && clientData) {
+      dispatch(assistantFormActions.updateForm({
+        userId: clientData.id,
+        user: {
+          id: clientData.id,
+          name: clientData.name
+        }
+      }))
     }
   }, [assistant, dispatch, isEdit, isAdmin, clientData])
 
