@@ -5,11 +5,14 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
 import { useTranslation } from 'react-i18next'
 import { Card, CardVariant } from '@/shared/ui/redesigned/Card'
-import { HStack } from '@/shared/ui/redesigned/Stack'
+import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { getRoutePbxServers } from '@/shared/const/router'
+import DeleteIcon from '@mui/icons-material/Delete'
+import CloseIcon from '@mui/icons-material/Close'
+import SaveIcon from '@mui/icons-material/Save'
 
 interface PbxServerEditCardHeaderProps {
   className?: string
@@ -37,55 +40,44 @@ export const PbxServerEditCardHeader = memo((props: PbxServerEditCardHeaderProps
   }, [pbxServerId, onDelete])
 
   const headerButtons = (
-      <HStack gap="8">
-        <Button
-            title={t('Удалить') ?? ''}
-            variant={'outline'}
-            color={'error'}
-            onClick={deleteHandler}
-        >
-          {t('Удалить')}
-        </Button>
-        <AppLink
-            to={getRoutePbxServers()}
-        >
-          <Button
-              title={t('Закрыть') ?? ''}
-              variant={'outline'}
-              color={'normal'}
-          >
-            {t('Закрыть')}
-          </Button>
-        </AppLink>
-        <Button
-            title={t('Сохранить') ?? ''}
-            variant={'outline'}
-            color={'success'}
-            onClick={onEdit}
-        >
-          {t('Сохранить')}
-        </Button>
-      </HStack>
-
+    <HStack gap="16">
+      <AppLink
+        to={getRoutePbxServers()}
+      >
+        <CloseIcon className={cls.close} />
+      </AppLink>
+    </HStack>
   )
 
   return (
+    <VStack max gap="16">
       <Card
-          className={classNames(cls.PbxServerEditCardHeader, {}, [className])}
-          padding={'8'}
-          border={'partial'}
-          max
-          variant={variant}
+        className={classNames(cls.PbxServerEditCardHeader, {}, [className])}
+        padding={'8'}
+        border={'partial'}
+        max
+        variant={variant}
       >
         {variant !== 'diviner-bottom'
           ? <HStack max justify={'between'} wrap={'wrap'}>
-              <Text title={t('Редактировать')}/>
-              {headerButtons}
-            </HStack>
+            <Text title={t('Редактировать')} />
+            {headerButtons}
+          </HStack>
           : <HStack max justify={'end'} wrap={'wrap'}>
-              {headerButtons}
-            </HStack>
+            {headerButtons}
+          </HStack>
         }
       </Card>
+      <HStack max justify={'between'}>
+        <DeleteIcon
+          className={cls.delete}
+          onClick={deleteHandler}
+        />
+        <SaveIcon
+          className={cls.save}
+          onClick={onEdit}
+        />
+      </HStack>
+    </VStack>
   )
 })

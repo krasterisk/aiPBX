@@ -8,6 +8,8 @@ import { Loader } from '@/shared/ui/Loader'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { balanceWarnings, UserCurrencyValues } from '../../model/consts/consts'
 import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
+import { AppLink } from '@/shared/ui/redesigned/AppLink'
+import { getRoutePayment } from '@/shared/const/router'
 
 interface UserBalanceProps {
   className?: string
@@ -42,10 +44,12 @@ export const UserBalance = memo((props: UserBalanceProps) => {
     : 'error'
 
   return (
-    <HStack max justify={'center'} className={classNames(cls.UserBalance, {}, [className])}>
-      {isLoading && <Loader />}
-      <Text text={t('Баланс') + ': '} />
-      <Text text={formattedBalance} bold variant={balanceWarning} />
-    </HStack>
+    <AppLink to={getRoutePayment()} className={classNames(cls.UserBalance, {}, [className])}>
+      <HStack max justify={'center'}>
+        {isLoading && <Loader />}
+        <Text text={t('Баланс') + ': '} />
+        <Text text={formattedBalance} bold variant={balanceWarning} />
+      </HStack>
+    </AppLink>
   )
 })

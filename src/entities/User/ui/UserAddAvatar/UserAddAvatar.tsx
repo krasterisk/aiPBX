@@ -18,13 +18,15 @@ interface UserAddAvatarProps {
   className?: string
   show: boolean
   onClose?: () => void
+  onAvatarUploaded?: (avatar: string) => void
 }
 
 export const UserAddAvatar = memo((props: UserAddAvatarProps) => {
   const {
     user,
     show,
-    onClose
+    onClose,
+    onAvatarUploaded
   } = props
 
   const { t } = useTranslation('profile')
@@ -33,7 +35,7 @@ export const UserAddAvatar = memo((props: UserAddAvatarProps) => {
 
   useEffect(() => {
     if (user?.avatar) {
-      const initImage = __STATIC__ + String(user.avatar)
+      const initImage = user.avatar.startsWith('http') ? user.avatar : `${__STATIC__}/${user.avatar}`
       setImage(initImage)
     }
   }, [user?.avatar])
@@ -44,33 +46,42 @@ export const UserAddAvatar = memo((props: UserAddAvatarProps) => {
   const onChangeUserAvatarHandler = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     const formData = new FormData()
-    if (file && user?.id) {
-      formData.append('id', user.id)
+    if (file) {
+      if (user?.id) {
+        formData.append('id', user.id)
+      }
       formData.append('image', file)
-      uploadAvatarUser({ formData, id: user.id }).unwrap()
-    }
-    if (user?.avatar) {
-      const initImage = __STATIC__ + String(user.avatar)
-      setImage(initImage)
+      uploadAvatarUser({ formData, id: user?.id })
+        .unwrap()
+        .then((res) => {
+          if (res.avatar) {
+            const initImage = res.avatar.startsWith('http') ? res.avatar : `${__STATIC__}/${res.avatar}`
+            setImage(initImage)
+            onAvatarUploaded?.(res.avatar)
+          }
+        })
     }
     // onClose?.(false)
-  }, [uploadAvatarUser, user?.avatar, user?.id])
+  }, [uploadAvatarUser, user?.id, onAvatarUploaded])
 
   const handleUserClearAvatar = useCallback((data: User) => {
-    const updatedUser = {
-      ...data,
-      avatar: ''
+    if (data.id) {
+      const updatedUser = {
+        ...data,
+        avatar: ''
+      }
+      userUpdateMutation(updatedUser).unwrap()
     }
-    userUpdateMutation(updatedUser).unwrap()
     setImage('')
-  }, [userUpdateMutation])
+    onAvatarUploaded?.('')
+  }, [userUpdateMutation, onAvatarUploaded])
 
   const handleOnClose = useCallback(() => {
     onClose?.()
   }, [onClose])
 
-  const errorFallback = <Icon width={128} height={128} Svg={noUser}/>
-  const fallback = <Skeleton width={128} height={128} border={'50%'}/>
+  const errorFallback = <Icon width={128} height={128} Svg={noUser} />
+  const fallback = <Skeleton width={128} height={128} border={'50%'} />
 
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -85,52 +96,52 @@ export const UserAddAvatar = memo((props: UserAddAvatarProps) => {
   })
 
   const AddToAvatarButton = (
-      <ButtonMui
-          component="label"
-          role={undefined}
-          variant="text"
-          size={'large'}
-          tabIndex={-1}
-          // startIcon={<Icon Svg={noUser} width={'50'} height={'50'}/>}
-      >{t('Добавить')}
-        <VisuallyHiddenInput
-            type="file"
-            multiple
-            accept={'image/*'}
-            name={'images[]'}
-            onChange={onChangeUserAvatarHandler}
-        />
-      </ButtonMui>
+    <ButtonMui
+      component="label"
+      role={undefined}
+      variant="text"
+      size={'large'}
+      tabIndex={-1}
+    // startIcon={<Icon Svg={noUser} width={'50'} height={'50'}/>}
+    >{t('Добавить')}
+      <VisuallyHiddenInput
+        type="file"
+        multiple
+        accept={'image/*'}
+        name={'images[]'}
+        onChange={onChangeUserAvatarHandler}
+      />
+    </ButtonMui>
   )
 
   return (
-        <Modal isOpen={show} onClose={onClose}>
-            <VStack gap={'24'} align={'center'}>
-                <Text title={user?.name}/>
-                {isLoading
-                  ? <Loader/>
-                  : <AppImage
-                        width={'100%'}
-                        height={300}
-                        fallback={fallback}
-                        errorFallback={errorFallback}
-                        src={image}
-                    />
-                }
-              {isError ? <Text text={t('Ошибка загрузки')} variant={'error'}/> : ''}
-              {AddToAvatarButton}
-              <HStack gap={'16'} justify={'start'}>
-                <Button onClick={() => {
-                  handleUserClearAvatar(user as User)
-                }} variant={'clear'}>
-                  {t('Убрать фото')}
-                </Button>
-                <Button onClick={handleOnClose} variant={'outline'} color={'error'}>
-                  {t('Закрыть')}
-                </Button>
-              </HStack>
-            </VStack>
-        </Modal>
+    <Modal isOpen={show} onClose={onClose}>
+      <VStack gap={'24'} align={'center'}>
+        <Text title={user?.name} />
+        {isLoading
+          ? <Loader />
+          : <AppImage
+            width={'100%'}
+            height={300}
+            fallback={fallback}
+            errorFallback={errorFallback}
+            src={image}
+          />
+        }
+        {isError ? <Text text={t('Ошибка загрузки')} variant={'error'} /> : ''}
+        {AddToAvatarButton}
+        <HStack gap={'16'} justify={'start'}>
+          <Button onClick={() => {
+            handleUserClearAvatar(user as User)
+          }} variant={'clear'}>
+            {t('Убрать фото')}
+          </Button>
+          <Button onClick={handleOnClose} variant={'outline'} color={'error'}>
+            {t('Закрыть')}
+          </Button>
+        </HStack>
+      </VStack>
+    </Modal>
 
   )
 })

@@ -20,6 +20,9 @@ import {
 import { UserEditCardHeader } from '../UserEditCardHeader/UserEditCardHeader'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { useSelector } from 'react-redux'
+import { Avatar } from '@/shared/ui/redesigned/Avatar'
+import { UserAddAvatar } from '@/entities/User'
+import { HStack } from '@/shared/ui/redesigned/Stack'
 
 interface UserEditCardProps {
   className?: string
@@ -55,6 +58,7 @@ export const UserEditCard = memo((props: UserEditCardProps) => {
   }
   const [formFields, setFormFields] = useState<User>(initUser)
   const isAdmin = useSelector(isUserAdmin)
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false)
 
   const { t } = useTranslation('profile')
 
@@ -93,97 +97,99 @@ export const UserEditCard = memo((props: UserEditCardProps) => {
 
   if (isError) {
     return (
-            <ErrorGetData/>
+      <ErrorGetData />
     )
   }
 
-  if (isLoading) {
+  if (isLoading || (!data && userId)) {
     return (
-            <VStack gap={'16'} max>
-                <Card max>
-                    <Skeleton width='100%' border='8px' height='44px'/>
-                </Card>
-                <Skeleton width='100%' border='8px' height='80px'/>
-                <Skeleton width='100%' border='8px' height='80px'/>
-                <Skeleton width='100%' border='8px' height='80px'/>
-            </VStack>
+      <VStack gap={'16'} max>
+        <Card max>
+          <Skeleton width='100%' border='8px' height='44px' />
+        </Card>
+        <Skeleton width='100%' border='8px' height='80px' />
+        <Skeleton width='100%' border='8px' height='80px' />
+        <Skeleton width='100%' border='8px' height='80px' />
+      </VStack>
     )
   }
+
+  const avatarSrc = formFields.avatar
+    ? (formFields.avatar.startsWith('http') ? formFields.avatar : `${__STATIC__}/${formFields.avatar}`)
+    : ''
 
   return (
-        <VStack gap={'8'} max className={classNames(cls.UserEditCard, {}, [className])}>
-            <UserEditCardHeader onEdit={editHandler} onDelete={onDelete} userId={userId}/>
-            {isError
-              ? <ErrorGetData
-                    title={t('Ошибка при сохранении пользователя') || ''}
-                    text={
-                        error &&
-                        String(t('Проверьте заполняемые поля и повторите ещё раз'))
-                    }
-                />
-              : ''}
-            <Card
-                max
-                padding={'8'}
-                border={'partial'}
-            >
-                <VStack
-                    gap={'8'}
-                    max
-                >
-                    <Textarea
-                        fullWidth
-                        // className={classNames(cls.UserCreateCard, {}, [className])}
-                        label={t('Наименование клиента') ?? ''}
-                        onChange={editTextChangeHandler('name')}
-                        data-testid={'UserCard.name'}
-                        value={formFields.name || ''}
-                    />
-                    <Textarea
-                        fullWidth
-                        label={t('Логин / имя пользователя') ?? ''}
-                        onChange={editTextChangeHandler('username')}
-                        data-testid={'UserCard.username'}
-                        value={formFields.username || ''}
-                    />
-                    {/* <Textarea */}
-                    {/*    label={t('Пароль') ?? ''} */}
-                    {/*    onChange={editTextChangeHandler('password')} */}
-                    {/*    data-testid={'UserCard.password'} */}
-                    {/*    value={formFields.password} */}
-                    {/* /> */}
-                    <Textarea
-                        fullWidth
-                        label={t('Реквизиты') ?? ''}
-                        onChange={editTextChangeHandler('clientData')}
-                        data-testid={'UserCard.RepairCost'}
-                        value={formFields.clientData || ''}
-                    />
+    <VStack gap={'8'} max className={classNames(cls.UserEditCard, {}, [className])}>
+      <UserEditCardHeader onEdit={editHandler} onDelete={onDelete} userId={userId} />
+      {isError
+        ? <ErrorGetData
+          title={t('Ошибка при сохранении пользователя') || ''}
+          text={
+            error &&
+            String(t('Проверьте заполняемые поля и повторите ещё раз'))
+          }
+        />
+        : ''}
+      <Card
+        max
+        padding={'8'}
+        border={'partial'}
+      >
+        <VStack
+          gap={'16'}
+          max
+        >
+          <HStack justify={'center'} max>
+            <div onClick={() => setIsAvatarModalOpen(true)} style={{ cursor: 'pointer', display: 'flex' }}>
+              <Avatar size={100} src={avatarSrc} />
+            </div>
+          </HStack>
+          <UserAddAvatar
+            show={isAvatarModalOpen}
+            onClose={() => setIsAvatarModalOpen(false)}
+            user={formFields}
+          />
 
-                    <Textarea
-                        label={t('Email') ?? ''}
-                        onChange={editTextChangeHandler('email')}
-                        data-testid={'UserCard.email'}
-                        value={formFields.email || ''}
-                    />
-                    <CurrencySelect
-                        value={formFields.currency}
-                        label={t('Валюта') || ''}
-                        data-testid={'UserCard.CurrencySelect'}
-                        onChange={editChangeCurrencyHandler('currency')}
-                    />
-                    {isAdmin &&
-                        <>
-                            <RoleSelect
-                                value={formFields.roles?.[0]}
-                                label={t('Уровень доступа') || ''}
-                                data-testid={'UserCard.RoleSelect'}
-                                onChange={editChangeRolesHandler('roles')}
-                            />
-                        </>
-                    }
-                </VStack>
-            </Card>
+
+          <Textarea
+            fullWidth
+            // className={classNames(cls.UserCreateCard, {}, [className])}
+            label={t('Наименование клиента') ?? ''}
+            onChange={editTextChangeHandler('name')}
+            data-testid={'UserCard.name'}
+            value={formFields.name || ''}
+          />
+
+          {/* <Textarea */}
+          {/*    label={t('Пароль') ?? ''} */}
+          {/*    onChange={editTextChangeHandler('password')} */}
+          {/*    data-testid={'UserCard.password'} */}
+          {/*    value={formFields.password} */}
+          {/* /> */}
+          <Textarea
+            label={t('Email') ?? ''}
+            onChange={editTextChangeHandler('email')}
+            data-testid={'UserCard.email'}
+            value={formFields.email || ''}
+          />
+          <CurrencySelect
+            value={formFields.currency}
+            label={t('Валюта') || ''}
+            data-testid={'UserCard.CurrencySelect'}
+            onChange={editChangeCurrencyHandler('currency')}
+          />
+          {isAdmin &&
+            <>
+              <RoleSelect
+                value={formFields.roles?.[0]}
+                label={t('Уровень доступа') || ''}
+                data-testid={'UserCard.RoleSelect'}
+                onChange={editChangeRolesHandler('roles')}
+              />
+            </>
+          }
         </VStack>
+      </Card>
+    </VStack>
   )
 })

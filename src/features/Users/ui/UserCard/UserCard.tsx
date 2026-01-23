@@ -96,52 +96,52 @@ export const UserCard = memo((props: UserCardProps) => {
 
   if (!userId && isEdit) {
     return (
-            <ErrorGetData/>
+      <ErrorGetData />
     )
   }
 
   if (isDeleteError || isUpdateError) {
     return (
-            <ErrorGetData />
+      <ErrorGetData />
     )
   }
 
   if (isLoading || isDeleteLoading || isUpdateLoading) {
     return (
-            <Card padding="24" max>
-                <VStack gap="32">
-                    <HStack gap="32" max>
-                        <VStack gap="16" max>
-                            <Skeleton width="100%" height={38}/>
-                            <Skeleton width="100%" height={38}/>
-                            <Skeleton width="100%" height={38}/>
-                            <Skeleton width="100%" height={38}/>
-                            <Skeleton width="100%" height={38}/>
-                            <Skeleton width="100%" height={38}/>
-                        </VStack>
-                    </HStack>
-                </VStack>
-            </Card>
+      <Card padding="24" max>
+        <VStack gap="32">
+          <HStack gap="32" max>
+            <VStack gap="16" max>
+              <Skeleton width="100%" height={38} />
+              <Skeleton width="100%" height={38} />
+              <Skeleton width="100%" height={38} />
+              <Skeleton width="100%" height={38} />
+              <Skeleton width="100%" height={38} />
+              <Skeleton width="100%" height={38} />
+            </VStack>
+          </HStack>
+        </VStack>
+      </Card>
     )
   }
 
   return (
-        <VStack gap={'8'} max className={classNames(cls.EndpointCard, {}, [className])}>
-            {
-                isEdit
-                  ? <UserEditCard
-                        onEdit={onEdit}
-                        isError={isError}
-                        userId={userId}
-                        onDelete={onDelete}
-                    />
-                  : <UserCreateCard
-                        onCreate={onCreate}
-                        isError={isError}
-                        error={error}
-                    />
+    <VStack gap={'8'} max className={classNames(cls.EndpointCard, {}, [className])}>
+      {
+        isEdit
+          ? <UserEditCard
+            onEdit={onEdit}
+            isError={isError}
+            userId={userId}
+            onDelete={onDelete}
+          />
+          : <UserCreateCard
+            onCreate={onCreate}
+            isError={isError}
+            error={error}
+          />
 
-            }
-        </VStack>
+      }
+    </VStack>
   )
 })

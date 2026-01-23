@@ -73,6 +73,12 @@
 
 
     }
+
+    @media (hover: none) {
+        .uncheck {
+            display: flex;
+        }
+    }
 }
 
 .avatar {
@@ -86,4 +92,3 @@
 .isClient {
     border: 2px solid var(--accent-redesigned);
 }
-

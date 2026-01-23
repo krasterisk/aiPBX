@@ -30,7 +30,8 @@ import {
   getRoutePbxServerCreate,
   getRoutePbxServerEdit,
   getRoutePlayground,
-  getRouteBilling
+  getRouteBilling,
+  getRoutePaymentDetails
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 import { SettingPage } from '@/pages/SettingsPage'
@@ -43,9 +44,14 @@ import { DashboardPage } from '@/pages/DashboardPage'
 import { PaymentPage } from '@/pages/PaymentPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { SignupPage } from '@/pages/SignupPage'
-import { PbxServerCreatePage, PbxServerEditPage, PbxServersPage } from '@/pages/PbxServersPage'
+import {
+  PbxServerCreatePage,
+  PbxServerEditPage,
+  PbxServersPage
+} from '@/pages/PbxServersPage'
 import { PlaygroundPage } from '@/pages/Playground'
 import { BillingPage } from '@/pages/BillingPage'
+import { PaymentDetailsPage } from '@/pages/PaymentDetailsPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -168,6 +174,11 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.BILLING]: {
     path: getRouteBilling(),
     element: <BillingPage />,
+    authOnly: true
+  },
+  [AppRoutes.PAYMENT_DETAILS]: {
+    path: getRoutePaymentDetails(),
+    element: <PaymentDetailsPage />,
     authOnly: true
   },
   [AppRoutes.ERROR]: {

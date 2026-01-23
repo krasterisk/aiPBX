@@ -13,6 +13,8 @@ import { UserItem } from '../UserItem/UserItem'
 import { useDeleteUser } from '../../api/usersApi'
 import { useTranslation } from 'react-i18next'
 import { UsersListHeader } from '../UsersListHeader/UsersListHeader'
+import { useNavigate } from 'react-router-dom'
+import { getRouteUserEdit } from '@/shared/const/router'
 import { Loader } from '@/shared/ui/Loader'
 
 export const UsersList = (props: UsersListProps) => {
@@ -26,6 +28,7 @@ export const UsersList = (props: UsersListProps) => {
   } = props
 
   const { t } = useTranslation('profile')
+  const navigate = useNavigate()
 
   const [checkedBox, setCheckedBox] = useState<string[]>([])
   const [indeterminateBox, setIndeterminateBox] = useState<boolean>(false)
@@ -69,7 +72,7 @@ export const UsersList = (props: UsersListProps) => {
     return new Array(view === 'SMALL' ? 9 : 4)
       .fill(0)
       .map((item, index) => (
-                <ContentListItemSkeleton className={cls.card} key={index} view={view}/>
+        <ContentListItemSkeleton className={cls.card} key={index} view={view} />
       ))
   }
 
@@ -83,97 +86,98 @@ export const UsersList = (props: UsersListProps) => {
 
   if (isError) {
     return (
-            <ErrorGetData />
+      <ErrorGetData />
     )
   }
 
   if (isDeleteError) {
     return (
-            <ErrorGetData
-                title={String(t('Произошла ошибка при удалении пользователя!'))}
-                text={String(t('Проверьте, чтобы у пользователя не было связанных ассистентов или функций!'))}
-            />
+      <ErrorGetData
+        title={String(t('Произошла ошибка при удалении пользователя!'))}
+        text={String(t('Проверьте, чтобы у пользователя не было связанных ассистентов или функций!'))}
+      />
     )
   }
 
   if (isLoading || isDeleteLoading) {
     return (
-            <Loader className={cls.loader} />
+      <Loader className={cls.loader} />
     )
   }
 
   const checkedButtons = (
-        <HStack
-            gap={'16'}
-            wrap={'wrap'}
-            className={classNames(cls.CasksList, {
-              [cls.uncheckButtons]: checkedBox.length === 0,
-              [cls.checkButton]: checkedBox.length > 0
-            }, [])}
-        >
-            <Button
-                variant={'clear'}
-                onClick={handlerDeleteAll}
-            >
-                <Text text={t('Удалить выбранные')} variant={'error'}/>
-            </Button>
-            {/* <Button */}
-            {/*    variant={'clear'} */}
-            {/*    onClick={exportToExcel}> */}
-            {/*    <Text text={t('Экспорт в Excel')} variant={'success'}/> */}
-            {/* </Button> */}
-        </HStack>
+    <HStack
+      gap={'16'}
+      wrap={'wrap'}
+      className={classNames(cls.CasksList, {
+        [cls.uncheckButtons]: checkedBox.length === 0,
+        [cls.checkButton]: checkedBox.length > 0
+      }, [])}
+    >
+      <Button
+        variant={'clear'}
+        onClick={handlerDeleteAll}
+      >
+        <Text text={t('Удалить выбранные')} variant={'error'} />
+      </Button>
+      {/* <Button */}
+      {/*    variant={'clear'} */}
+      {/*    onClick={exportToExcel}> */}
+      {/*    <Text text={t('Экспорт в Excel')} variant={'success'}/> */}
+      {/* </Button> */}
+    </HStack>
   )
 
   const renderContent = (user: User) => {
     return (
-            <UserItem
-                key={user.id}
-                user={user}
-                checkedItems={checkedBox}
-                onChangeChecked={handleCheckChange}
-                target={target}
-                view={view}
-                className={cls.userItem}
-            />
+      <UserItem
+        key={user.id}
+        user={user}
+        checkedItems={checkedBox}
+        onChangeChecked={handleCheckChange}
+        target={target}
+        view={view}
+        className={cls.userItem}
+        onEdit={(id) => navigate(getRouteUserEdit(id))}
+      />
     )
   }
 
   return (
-      <VStack gap={'16'} max>
-          <UsersListHeader />
-          <Card max className={classNames(cls.UsersList, {}, [className])}>
-              <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
-                  <Check
-                      className={classNames(cls.UsersList, {
-                        [cls.uncheck]: checkedBox.length === 0,
-                        [cls.check]: checkedBox.length > 0
-                      }, [])}
-                      indeterminate={indeterminateBox}
-                      checked={checkedBox.length === users?.count}
-                      onChange={handleCheckAll}
-                  />
-                  {checkedButtons}
-                  {
-                      checkedBox.length > 0
-                        ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(users?.count)}/>
-                        : <Text text={t('Всего') + ': ' + String(users?.count || 0)}/>
-                  }
-
-              </HStack>
-          </Card>
-          {users?.rows.length
-            ? <HStack gap={'16'} align={'start'} wrap={'wrap'} max>
-                  {users.rows.map(renderContent)}
-              </HStack>
-            : <HStack
-                  justify={'center'} max
-                  className={classNames('', {}, [className, cls[view]])}
-              >
-                  <Text align={'center'} text={t('Данные не найдены')}/>
-              </HStack>
+    <VStack gap={'16'} max>
+      <UsersListHeader />
+      <Card max className={classNames(cls.UsersList, {}, [className])}>
+        <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
+          <Check
+            className={classNames(cls.UsersList, {
+              [cls.uncheck]: checkedBox.length === 0,
+              [cls.check]: checkedBox.length > 0
+            }, [])}
+            indeterminate={indeterminateBox}
+            checked={checkedBox.length === users?.count}
+            onChange={handleCheckAll}
+          />
+          {checkedButtons}
+          {
+            checkedBox.length > 0
+              ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(users?.count)} />
+              : <Text text={t('Всего') + ': ' + String(users?.count || 0)} />
           }
-          {isLoading && getSkeletons(view)}
-      </VStack>
+
+        </HStack>
+      </Card>
+      {users?.rows.length
+        ? <HStack gap={'16'} align={'start'} wrap={'wrap'} max>
+          {users.rows.map(renderContent)}
+        </HStack>
+        : <HStack
+          justify={'center'} max
+          className={classNames('', {}, [className, cls[view]])}
+        >
+          <Text align={'center'} text={t('Данные не найдены')} />
+        </HStack>
+      }
+      {isLoading && getSkeletons(view)}
+    </VStack>
   )
 }

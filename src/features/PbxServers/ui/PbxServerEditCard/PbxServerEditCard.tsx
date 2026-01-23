@@ -68,15 +68,15 @@ export const PbxServerEditCard = memo((props: UserEditCardProps) => {
     }
 
   const IsAdminOptions = (
-      <>
-        <ClientSelect
-            value={pbxServer?.user as ClientOptions}
-            onChangeClient={onChangeClientHandler}
-            label={String(t('Клиент'))}
-            className={cls.client}
-            data-testid={'PbxServerEditCard.ClientSelect'}
-        />
-      </>
+    <>
+      <ClientSelect
+        value={pbxServer?.user as ClientOptions}
+        onChangeClient={onChangeClientHandler}
+        label={String(t('Клиент'))}
+        className={cls.client}
+        data-testid={'PbxServerEditCard.ClientSelect'}
+      />
+    </>
   )
 
   const editHandler = useCallback(() => {
@@ -87,85 +87,84 @@ export const PbxServerEditCard = memo((props: UserEditCardProps) => {
 
   if (isError) {
     return (
-        <ErrorGetData/>
+      <ErrorGetData />
     )
   }
 
   if (isLoading) {
     return (
-        <VStack gap={'16'} max>
-          <Card max>
-            <Skeleton width='100%' border='8px' height='44px'/>
-          </Card>
-          <Skeleton width='100%' border='8px' height='80px'/>
-          <Skeleton width='100%' border='8px' height='80px'/>
-          <Skeleton width='100%' border='8px' height='80px'/>
-        </VStack>
+      <VStack gap={'16'} max>
+        <Card max>
+          <Skeleton width='100%' border='8px' height='44px' />
+        </Card>
+        <Skeleton width='100%' border='8px' height='80px' />
+        <Skeleton width='100%' border='8px' height='80px' />
+        <Skeleton width='100%' border='8px' height='80px' />
+      </VStack>
     )
   }
 
   return (
-      <VStack
-          gap={'8'}
-          max
-          className={classNames(cls.PbxServerEditCard, {}, [className])}
+    <VStack
+      gap={'8'}
+      max
+      className={classNames(cls.PbxServerEditCard, {}, [className])}
+    >
+      <PbxServerEditCardHeader onEdit={editHandler} onDelete={onDelete} />
+      <Card
+        max
+        padding={'16'}
+        border={'partial'}
       >
-        <PbxServerEditCardHeader onEdit={editHandler} onDelete={onDelete}/>
-        <Card
-            max
-            padding={'16'}
-            border={'partial'}
-        >
-          <VStack gap={'16'} max>
-            {!isAdmin ? <Text title={clientData?.name}/> : IsAdminOptions}
+        <VStack gap={'16'} max>
+          {!isAdmin ? <Text title={clientData?.name} /> : IsAdminOptions}
 
-            <Textarea
-                label={t('Наименование сервера') ?? ''}
-                onChange={editTextChangeHandler('name')}
-                data-testid={'PbxServerCardEdit.name'}
-                value={formFields?.name || ''}
-            />
-            <Textarea
-                label={t('Локация') ?? ''}
-                onChange={editTextChangeHandler('location')}
-                data-testid={'PbxServerCardEdit.location'}
-                value={formFields?.location || ''}
-                minRows={3}
-                multiline
-            />
-            <Textarea
-                label={t('Адрес сервера') ?? ''}
-                onChange={editTextChangeHandler('sip_host')}
-                data-testid={'PbxServerCardEdit.host'}
-                value={formFields?.sip_host || ''}
-            />
-            <Textarea
-                label={t('ARI URL') ?? ''}
-                onChange={editTextChangeHandler('ari_url')}
-                data-testid={'PbxServerCardEdit.ari_url'}
-                value={formFields?.ari_url || ''}
-            />
-            <Textarea
-                label={t('ARI USER') ?? ''}
-                onChange={editTextChangeHandler('ari_user')}
-                data-testid={'PbxServerCardEdit.ari_user'}
-                value={formFields?.ari_user || ''}
-            />
-            <Textarea
-                label={t('ARI PASSWORD') ?? ''}
-                onChange={editTextChangeHandler('password')}
-                data-testid={'PbxServerCardEdit.password'}
-                value={formFields?.password || ''}
-            />
-            <Textarea
-                label={t('Комментарий') ?? ''}
-                onChange={editTextChangeHandler('comment')}
-                data-testid={'PbxServerCardEdit.comment'}
-                value={formFields?.comment || ''}
-            />
-          </VStack>
-        </Card>
-        <PbxServerEditCardHeader onEdit={editHandler} variant={'diviner-bottom'}/>
-      </VStack>
+          <Textarea
+            label={t('Наименование сервера') ?? ''}
+            onChange={editTextChangeHandler('name')}
+            data-testid={'PbxServerCardEdit.name'}
+            value={formFields?.name || ''}
+          />
+          <Textarea
+            label={t('Локация') ?? ''}
+            onChange={editTextChangeHandler('location')}
+            data-testid={'PbxServerCardEdit.location'}
+            value={formFields?.location || ''}
+            minRows={3}
+            multiline
+          />
+          <Textarea
+            label={t('Адрес сервера') ?? ''}
+            onChange={editTextChangeHandler('sip_host')}
+            data-testid={'PbxServerCardEdit.host'}
+            value={formFields?.sip_host || ''}
+          />
+          <Textarea
+            label={t('ARI URL') ?? ''}
+            onChange={editTextChangeHandler('ari_url')}
+            data-testid={'PbxServerCardEdit.ari_url'}
+            value={formFields?.ari_url || ''}
+          />
+          <Textarea
+            label={t('ARI USER') ?? ''}
+            onChange={editTextChangeHandler('ari_user')}
+            data-testid={'PbxServerCardEdit.ari_user'}
+            value={formFields?.ari_user || ''}
+          />
+          <Textarea
+            label={t('ARI PASSWORD') ?? ''}
+            onChange={editTextChangeHandler('password')}
+            data-testid={'PbxServerCardEdit.password'}
+            value={formFields?.password || ''}
+          />
+          <Textarea
+            label={t('Комментарий') ?? ''}
+            onChange={editTextChangeHandler('comment')}
+            data-testid={'PbxServerCardEdit.comment'}
+            value={formFields?.comment || ''}
+          />
+        </VStack>
+      </Card>
+    </VStack>
   )
 })

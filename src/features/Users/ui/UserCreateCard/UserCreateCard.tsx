@@ -4,6 +4,7 @@ import React, { ChangeEvent, memo, useCallback, useEffect, useState } from 'reac
 import { Card } from '@/shared/ui/redesigned/Card'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { ErrorGetData } from '@/entities/ErrorGetData'
+import { Avatar } from '@/shared/ui/redesigned/Avatar'
 import {
   ClientOptions,
   ClientSelect,
@@ -67,21 +68,21 @@ export const UserCreateCard = memo((props: UserCreateCardProps) => {
   const [client, setClient] = useState<ClientOptions>(
     !isAdmin
       ? {
-          id: clientData?.id || '',
-          name: clientData?.name || ''
-        }
+        id: clientData?.id || '',
+        name: clientData?.name || ''
+      }
       : {
-          id: '',
-          name: ''
-        }
+        id: '',
+        name: ''
+      }
   )
 
   const { t } = useTranslation('profile')
 
   useEffect(() => {
     if (!isAdmin) {
-      setFormFields({
-        ...formFields,
+      setFormFields((prev) => ({
+        ...prev,
         vpbx_user_id: clientData?.id,
         vpbxUser: {
           id: clientData?.id || '',
@@ -93,9 +94,9 @@ export const UserCreateCard = memo((props: UserCreateCardProps) => {
             descriptions: ''
           }
         ]
-      })
+      }))
     }
-  }, [clientData, formFields, isAdmin])
+  }, [clientData, isAdmin])
 
   const createTextChangeHandler = (field: keyof User) =>
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -155,100 +156,79 @@ export const UserCreateCard = memo((props: UserCreateCardProps) => {
   }, [formFields, onCreate, t])
 
   return (
-            <VStack
-                gap={'8'}
-                max
-                className={classNames(cls.UserCreateCard, {}, [className])}
-            >
-                <UserCreateCardHeader onCreate={createHandler} isAdmin={isAdmin}/>
-                {userError &&
-                    <HStack max justify={'center'}>
-                        <Text
-                            text={userError.message}
-                            variant={'error'}
-                        />
-                    </HStack>
-                }
-                {isError
-                  ? <ErrorGetData
-                        title={t('Ошибка при создании пользователя') || ''}
-                        text={
-                            error && 'data' in error
-                              ? String(t((error.data as { message: string }).message))
-                              : String(t('Проверьте заполняемые поля и повторите ещё раз'))
-                        }
-                    />
-                  : ''}
-                <Card
-                    max
-                    padding={'8'}
-                    border={'partial'}
-                >
-                    <VStack
-                        gap={'8'}
-                        max
-                    >
-                        <Textarea
-                            // className={classNam  es(cls.UserCreateCard, {}, [className])}
-                            label={t('Наименование') + '*' ?? ''}
-                            onChange={createTextChangeHandler('name')}
-                            data-testid={'UserCard.name'}
-                            value={formFields.name}
-                        />
-                        <Textarea
-                            label={t('Логин / имя пользователя') + '*' ?? ''}
-                            onChange={createTextChangeHandler('username')}
-                            data-testid={'UserCard.username'}
-                            value={formFields.username}
-                        />
-                        <Textarea
-                            label={t('Пароль')}
-                            onChange={createTextChangeHandler('password')}
-                            data-testid={'UserCard.password'}
-                            value={formFields.password}
-                            required
-                        />
-                        <Textarea
-                            label={t('Реквизиты') ?? ''}
-                            onChange={createTextChangeHandler('clientData')}
-                            data-testid={'UserCard.RepairCost'}
-                            value={formFields.clientData}
-                        />
-                        <Textarea
-                            label={t('Email') + '*' ?? ''}
-                            onChange={createTextChangeHandler('email')}
-                            data-testid={'UserCard.email'}
-                            value={formFields.email}
-                        />
-                      <CurrencySelect
-                          label={t('Валюта') ?? ''}
-                          data-testid={'UserCard.CurrencySelect'}
-                          onChange={createChangeCurrencyHandler('currency')}
-                          value={formFields?.currency}
-                      />
+    <VStack
+      gap={'8'}
+      max
+      className={classNames(cls.UserCreateCard, {}, [className])}
+    >
+      <UserCreateCardHeader onCreate={createHandler} isAdmin={isAdmin} />
+      {userError &&
+        <HStack max justify={'center'}>
+          <Text
+            text={userError.message}
+            variant={'error'}
+          />
+        </HStack>
+      }
+      {isError
+        ? <ErrorGetData
+          title={t('Ошибка при создании пользователя') || ''}
+          text={
+            error && 'data' in error
+              ? String(t((error.data as { message: string }).message))
+              : String(t('Проверьте заполняемые поля и повторите ещё раз'))
+          }
+        />
+        : ''}
+      <Card
+        max
+        padding={'8'}
+        border={'partial'}
+      >
+        <VStack
+          gap={'16'}
+          max
+        >
+          <Textarea
+            // className={classNam  es(cls.UserCreateCard, {}, [className])}
+            label={(t('Наименование') ?? '') + '*'}
+            onChange={createTextChangeHandler('name')}
+            data-testid={'UserCard.name'}
+            value={formFields.name}
+          />
+          <Textarea
+            label={t('Реквизиты') ?? ''}
+            onChange={createTextChangeHandler('clientData')}
+            data-testid={'UserCard.RepairCost'}
+            value={formFields.clientData}
+          />
+          <Textarea
+            label={t('Email') ?? ''}
+            onChange={createTextChangeHandler('email')}
+            data-testid={'UserCard.email'}
+            value={formFields.email}
+            required
+          />
+          <CurrencySelect
+            label={t('Валюта') ?? ''}
+            data-testid={'UserCard.CurrencySelect'}
+            onChange={createChangeCurrencyHandler('currency')}
+            value={formFields?.currency}
+          />
 
-                      {isAdmin &&
-                            <>
-                                <RoleSelect
-                                    label={t('Уровень доступа') + '*' || ''}
-                                    data-testid={'UserCard.RoleSelect'}
-                                    onChange={createChangeRolesHandler('roles')}
-                                    value={formFields.roles?.[0]}
-                                />
-                                <ClientSelect
-                                    value={client}
-                                    onChangeClient={onChangeClientHandler}
-                                    label={String(t('Клиент') + '**')}
-                                    className={cls.client}
-                                    data-testid={'UserCard.ClientSelect'}
-                                />
-                                <Text
-                                    text={'**' + t('Если создаёте пользователя для клиента, то укажите его, если нового клиента, то оставьте поле пустым')}/>
-                            </>
-                        }
-                    </VStack>
-                </Card>
-            </VStack>
+          {isAdmin &&
+            <>
+              <RoleSelect
+                label={t('Уровень доступа') || ''}
+                data-testid={'UserCard.RoleSelect'}
+                onChange={createChangeRolesHandler('roles')}
+                value={formFields.roles?.[0]}
+              />
+            </>
+          }
+        </VStack>
+      </Card >
+    </VStack >
   )
 }
 )

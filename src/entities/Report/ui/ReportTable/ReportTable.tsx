@@ -88,25 +88,25 @@ export const ReportTable = memo((props: ReportTableProps) => {
             onChange={onChangeChecked}
           />
         </td>
-        <td>
+        <td data-label={t('Дата')}>
           {report.createdAt ? <Text text={formattedDate} /> : ''}
         </td>
-        <td>
+        <td data-label={t('Ассистент')}>
           {report.assistantName ? <Text text={report.assistantName} /> : ''}
         </td>
-        <td>
+        <td data-label={t('Звонивший')}>
           {report.callerId ? <Text text={report.callerId} /> : ''}
         </td>
-        <td>
+        <td data-label={t('Длительность')}>
           <Text text={String(duration)} />
         </td>
-        <td>
+        <td data-label={t('Токены')}>
           {report.tokens ? <Text text={String(report.tokens)} /> : ''}
         </td>
-        <td>
+        <td data-label={t('Стоимость')}>
           {report.cost ? <Text text={formatCurrency(report.cost, userCurrency, 4)} bold /> : ''}
         </td>
-        <td>
+        <td className={cls.actionsTd}>
           <Button
             variant={'clear'}
             addonRight={
@@ -119,8 +119,8 @@ export const ReportTable = memo((props: ReportTableProps) => {
         </td>
       </tr>
       {showDialog && (
-        <tr>
-          <td colSpan={7}>
+        <tr className={cls.DialogRow}>
+          <td colSpan={8}>
             <ReportShowDialog
               Dialogs={Dialogs}
               isDialogLoading={isDialogLoading}

@@ -27,6 +27,8 @@ export const AppImage = memo((props: AppImageProps) => {
 
   useLayoutEffect(() => {
     const img = new Image()
+    setIsLoading(true)
+    setHasError(false)
     img.src = src ?? ''
     img.onload = () => {
       setIsLoading(false)
@@ -34,6 +36,10 @@ export const AppImage = memo((props: AppImageProps) => {
     img.onerror = () => {
       setIsLoading(false)
       setHasError(true)
+    }
+    return () => {
+      img.onload = null
+      img.onerror = null
     }
   }, [src])
 
@@ -46,11 +52,11 @@ export const AppImage = memo((props: AppImageProps) => {
   }
 
   return (
-        <img
-            className={className}
-            src={src}
-            alt={alt}
-            {...otherProps}
-        />
+    <img
+      className={className}
+      src={src}
+      alt={alt}
+      {...otherProps}
+    />
   )
 })

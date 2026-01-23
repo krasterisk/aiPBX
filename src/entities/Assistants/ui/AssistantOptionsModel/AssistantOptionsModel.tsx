@@ -10,22 +10,22 @@ import { ModelSelect } from '../ModelSelect/ModelSelect'
 import { getAssistantFormData } from '../../model/selectors/assistantFormSelectors'
 
 interface AssistantOptionsModelProps {
-  className?: string
-  onTextChangeHandler?: (field: keyof Assistant) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
-  onChangeSelectHandler?: (field: keyof Assistant) => (event: any, newValue: string) => void
+    className?: string
+    onTextChangeHandler?: (field: keyof Assistant) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+    onChangeSelectHandler?: (field: keyof Assistant) => (event: any, newValue: string) => void
 }
 
 export const AssistantOptionsModel = memo((props: AssistantOptionsModelProps) => {
-  const {
-    className,
-    onTextChangeHandler,
-    onChangeSelectHandler
-  } = props
+    const {
+        className,
+        onTextChangeHandler,
+        onChangeSelectHandler
+    } = props
 
-  const { t } = useTranslation('assistants')
-  const formFields = useSelector(getAssistantFormData)
+    const { t } = useTranslation('assistants')
+    const formFields = useSelector(getAssistantFormData)
 
-  return (
+    return (
         <VStack max gap={'16'} className={className}>
             <ModelSelect
                 label={String(t('Модель'))}
@@ -44,7 +44,7 @@ export const AssistantOptionsModel = memo((props: AssistantOptionsModelProps) =>
                 data-testid={'AssistantCard.max_response_output_tokens'}
                 value={formFields?.max_response_output_tokens || ''}
             />
-            <Text text={'Синтез и распознавание речи'} bold/>
+            <Text text={t('Синтез и распознавание речи') || ''} bold />
             <Textarea
                 label={t('Модель распознавания речи') ?? ''}
                 onChange={onTextChangeHandler?.('input_audio_transcription_model')}
@@ -63,7 +63,7 @@ export const AssistantOptionsModel = memo((props: AssistantOptionsModelProps) =>
                 data-testid={'AssistantCard.output_audio_transcription_model'}
                 value={formFields?.output_audio_transcription_model || ''}
             />
-            <Text text={'Аудио потоки'} bold/>
+            <Text text={t('Аудио потоки') || ''} bold />
             <Textarea
                 label={t('Формат входящего аудио') ?? ''}
                 onChange={onTextChangeHandler?.('input_audio_format')}
@@ -82,7 +82,7 @@ export const AssistantOptionsModel = memo((props: AssistantOptionsModelProps) =>
                 data-testid={'AssistantCardCreate.input_audio_noise_reduction'}
                 value={formFields?.input_audio_noise_reduction || ''}
             />
-            <Text text={t('Автоматическое обнаружение голоса (VAD)')} bold/>
+            <Text text={t('Автоматическое обнаружение голоса (VAD)')} bold />
             <Textarea
                 label={t('Тип VAD') ?? ''}
                 onChange={onTextChangeHandler?.('turn_detection_type')}
@@ -120,5 +120,5 @@ export const AssistantOptionsModel = memo((props: AssistantOptionsModelProps) =>
                 value={formFields?.semantic_eagerness || ''}
             />
         </VStack>
-  )
+    )
 })

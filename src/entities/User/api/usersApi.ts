@@ -29,15 +29,15 @@ export const usersApi = rtkApi.injectEndpoints({
         }
       },
       // Refetch when the page arg changes
-      forceRefetch ({ currentArg, previousArg }) {
+      forceRefetch({ currentArg, previousArg }) {
         return JSON.stringify(currentArg) !== JSON.stringify(previousArg)
       },
       providesTags: (result) =>
         result?.rows?.length
           ? [
-              ...result.rows.map(({ id }) => ({ type: 'Users', id } as const)),
-              { type: 'Users', id: 'LIST' }
-            ]
+            ...result.rows.map(({ id }) => ({ type: 'Users', id } as const)),
+            { type: 'Users', id: 'LIST' }
+          ]
           : [{ type: 'Users', id: 'LIST' }]
     }),
     getAllUsers: build.query<User[], null>({
@@ -47,9 +47,9 @@ export const usersApi = rtkApi.injectEndpoints({
       providesTags: (result) =>
         result?.length
           ? [
-              ...result.map(({ id }) => ({ type: 'Users', id } as const)),
-              { type: 'Users', id: 'LIST' }
-            ]
+            ...result.map(({ id }) => ({ type: 'Users', id } as const)),
+            { type: 'Users', id: 'LIST' }
+          ]
           : [{ type: 'Users', id: 'LIST' }]
     }),
     getUserBalance: build.query<{ balance: number, currency: string }, null>({
@@ -135,13 +135,14 @@ export const usersApi = rtkApi.injectEndpoints({
     getMe: build.query<User, null>({
       query: (id) => '/users/me'
     }),
-    uploadAvatarUser: build.mutation<User, { formData: FormData, id: string }>({
+    uploadAvatarUser: build.mutation<User, { formData: FormData, id?: string }>({
       query: ({ formData }) => ({
         url: '/users/avatar',
         method: 'PATCH',
         body: formData
       }),
-      async onQueryStarted ({ id, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+        if (!id) return
         const patchResult = dispatch(
           usersApi.util.updateQueryData('getUser', id, (draft) => {
             Object.assign(draft, patch)
@@ -149,7 +150,7 @@ export const usersApi = rtkApi.injectEndpoints({
         )
         queryFulfilled.catch(patchResult.undo)
       },
-      invalidatesTags: (result, error, { id }) => [{ type: 'Users', id }]
+      invalidatesTags: (result, error, { id }) => (id ? [{ type: 'Users', id }] : [])
     }),
     updateUser: build.mutation<User, Pick<User, 'id'> & Partial<User>>({
       query: ({ id, ...patch }) => ({
@@ -157,7 +158,7 @@ export const usersApi = rtkApi.injectEndpoints({
         method: 'PATCH',
         body: { id, ...patch }
       }),
-      async onQueryStarted ({ id, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           usersApi.util.updateQueryData('getUser', id, (draft) => {
             Object.assign(draft, patch)
@@ -168,7 +169,7 @@ export const usersApi = rtkApi.injectEndpoints({
       invalidatesTags: (result, error, { id }) => [{ type: 'Users', id }]
     }),
     deleteUser: build.mutation<{ success: boolean, id: string }, string>({
-      query (id) {
+      query(id) {
         return {
           url: `/users/${id}`,
           method: 'DELETE'

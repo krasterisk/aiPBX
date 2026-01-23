@@ -11,6 +11,9 @@ interface CreateIntentResponse {
     id: string
 }
 
+// @ts-ignore
+import { PaymentListResponse } from '../model/types/payment'
+
 const paymentApi = rtkApi.injectEndpoints({
     endpoints: (build) => ({
         createIntent: build.mutation<CreateIntentResponse, CreateIntentArgs>({
@@ -19,8 +22,15 @@ const paymentApi = rtkApi.injectEndpoints({
                 method: 'POST',
                 body: args
             })
+        }),
+        getPayments: build.query<PaymentListResponse, any>({
+            query: (params) => ({
+                url: '/payments',
+                method: 'GET',
+                params
+            })
         })
     })
 })
 
-export const { useCreateIntentMutation } = paymentApi
+export const { useCreateIntentMutation, useGetPaymentsQuery } = paymentApi

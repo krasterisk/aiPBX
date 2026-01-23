@@ -1,21 +1,12 @@
 .AssistantsToolBar {
     position: relative;
 
-    &:hover {
-        .uncheck {
-            position: absolute;
-            left: 0;
-            top: 0;
-            display: flex;
-            color: var(--icon-redesigned);
-        }
 
-    }
 
 
     .uncheck {
         position: absolute;
-        display: none;
+        display: flex;
         color: var(--icon-redesigned);
         left: 0;
         top: 0;
@@ -39,4 +30,3 @@
 
 
 }
-

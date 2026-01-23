@@ -7,9 +7,6 @@
         cursor: pointer;
 
         .uncheck {
-            //position: absolute;
-            //left: 0;
-            //top: 0;
             display: flex;
             color: var(--icon-redesigned);
         }
@@ -20,64 +17,108 @@
             right: 0;
             top: 0;
         }
-
     }
 
     .uncheck {
-        //        position: absolute;
         display: flex;
         color: var(--icon-redesigned);
-        //left: 0;
-        //top: 0;
     }
 
     .check {
-        //        position: absolute;
         display: flex;
         color: var(--icon-redesigned);
         width: 40px;
-        //        left: 0;
-        //        top: 0;
     }
 
     .tdCheck {
         width: 20px;
     }
 
-    .menu {
-        position: absolute;
-        display: none;
-        right: 0;
-        top: 0;
+    .actionsTd {
+        width: 40px;
+        text-align: right;
     }
 
+    @media screen and (max-width: 800px) {
+        display: block;
+        margin-bottom: 16px;
+        border-radius: 12px;
+        background-color: var(--dark-bg-redesigned);
+        padding: 8px 0;
+        border: 1px solid var(--light-bg-redesigned);
 
-    &.BIG {
-        width: 100%;
+        td {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 8px 16px !important;
+            min-height: 40px;
+            border: none !important;
+            border-bottom: 1px dashed var(--light-bg-redesigned) !important;
+            position: relative;
+            text-align: right !important;
+            padding-left: 50% !important;
 
+            &::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 16px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: 600;
+                color: var(--text-redesigned);
+                opacity: 0.6;
+            }
+
+            &:last-child,
+            &.actionsTd {
+                border-bottom: none !important;
+            }
+        }
+
+        .tdCheck {
+            justify-content: flex-start;
+            padding-left: 16px !important;
+
+            &::before {
+                display: none;
+            }
+        }
+
+        .actionsTd {
+            justify-content: center;
+            padding-left: 16px !important;
+
+            &::before {
+                display: none;
+            }
+        }
+    }
+}
+
+.DialogRow {
+    background: var(--dark-bg-redesigned);
+
+    td {
+        padding: 0;
+        border: none;
     }
 
-    &.SMALL {
-        width: 260px;
-        height: 100%;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
+    @media screen and (max-width: 800px) {
+        display: block;
+        margin-bottom: 8px;
+        margin-top: -16px;
+        border-radius: 0 0 12px 12px;
+        border: 1px solid var(--light-bg-redesigned);
+        border-top: none;
 
-
-        .img {
+        td {
+            display: block;
             width: 100%;
-            object-fit: cover;
-            min-height: 140px;
-            max-height: 140px;
+            padding: 16px !important;
         }
-
-        .info {
-            padding: 8px;
-        }
-
-
     }
 }
 

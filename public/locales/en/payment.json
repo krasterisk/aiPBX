@@ -11,5 +11,15 @@
   "Processing...": "Processing...",
   "An unexpected error occurred.": "An unexpected error occurred.",
   "Back": "Back",
-  "Loading...": "Loading..."
+  "Loading...": "Loading...",
+  "История платежей": "Payment History",
+  "Экспорт в Excel": "Export to Excel",
+  "Дата": "Date",
+  "Сумма": "Amount",
+  "Валюта": "Currency",
+  "Статус": "Status",
+  "Метод": "Method",
+  "История платежей пуста": "Payment history is empty",
+  "Ошибка при загрузке платежей": "Error loading payments",
+  "Здесь будет отображаться история ваших платежей": "Your payment history will be displayed here"
 }

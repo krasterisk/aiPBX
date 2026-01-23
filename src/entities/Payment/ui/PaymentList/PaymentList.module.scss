@@ -1,0 +1,39 @@
+.paymentCard {
+    background-color: var(--bg-redesigned);
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--light-bg-redesigned);
+}
+
+.cardHeader {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--light-bg-redesigned);
+}
+
+.row {
+    width: 100%;
+}
+
+.label {
+    color: var(--text-redesigned);
+    opacity: 0.6;
+    font-size: 14px;
+}
+
+.value {
+    color: var(--text-redesigned);
+    font-weight: 500;
+}
+
+.succeeded {
+    color: #4caf50;
+}
+
+.pending {
+    color: #ff9800;
+}
+
+.failed {
+    color: #f44336;
+}

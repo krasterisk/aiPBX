@@ -63,8 +63,8 @@
   "Создать SIP аккаунт": "Create SIP account",
   "Создать WebRTC скрипт для сайта": "Create a WebRTC script for a website",
   "Создать переадресацию с внешнего номера": "Create a redirect from an external number",
-  "Выберите сервер": "Выберите сервер",
-  "Публикация агента через SIP-транк": "Публикация агента через SIP-транк",
+  "Выберите сервер": "Select Server",
+  "Публикация агента через SIP-транк": "Agent publication via SIP trunk",
   "Продолжительность простоя, мс": "Idle timeout, ms",
   "Сохранено успешно": "Saved successfully",
   "Сгенерировать": "Generate",
@@ -76,5 +76,10 @@
   "SIP URI удален": "SIP URI deleted",
   "Вы уверены, что хотите удалить SIP URI?": "Are you sure you want to delete SIP URI?",
   "Скопировано в буфер обмена": "Copied to clipboard",
-  "IP Адрес": "IP Address"
+  "IP Адрес": "IP Address",
+  "Синтез и распознавание речи": "Speech Synthesis and Recognition",
+  "Аудио потоки": "Audio Streams",
+  "Создать SIP URI": "Create SIP URI",
+  "Ваш IP Адрес": "Your IP Address",
+  "Ваш SIP URI:": "Your SIP URI:"
 }

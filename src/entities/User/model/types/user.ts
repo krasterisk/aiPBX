@@ -9,12 +9,12 @@ export interface ResetUserPasswordProps {
 
 export interface UserRoles {
   value: UserRolesValues
-  descriptions: string
+  description?: string
 }
 
 export interface UserCurrency {
   value: UserCurrencyValues
-  descriptions?: string
+  description?: string
 }
 
 export interface ClientOptions {

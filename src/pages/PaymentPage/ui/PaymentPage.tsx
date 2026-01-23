@@ -3,8 +3,12 @@ import { Page } from '@/widgets/Page'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { TopUpBalance } from '@/features/TopUpBalance'
 import { StripeContainer } from '@/features/CheckoutByStripe'
+import { AppLink } from '@/shared/ui/redesigned/AppLink'
+import { getRoutePaymentDetails } from '@/shared/const/router'
+import { useTranslation } from 'react-i18next'
 
 const PaymentPage = memo(() => {
+  const { t } = useTranslation('payment')
   const [clientSecret, setClientSecret] = useState<string | null>(null)
 
   const onIntentCreated = useCallback((secret: string) => {
@@ -28,6 +32,11 @@ const PaymentPage = memo(() => {
             />
           )}
         </div>
+        {!clientSecret && (
+          <AppLink to={getRoutePaymentDetails()} variant="primary">
+            {t('История платежей')}
+          </AppLink>
+        )}
       </VStack>
     </Page>
   )

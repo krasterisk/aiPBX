@@ -32,21 +32,26 @@ export const RoleSelect = memo((props: RoleSelectProps) => {
     }
   ]
 
-  const onChangeHandler = (event: any, newValue: UserRoles) => {
-    onChange?.(event, newValue)
+  const onChangeHandler = (event: any, newValue: UserRoles | null) => {
+    if (newValue) {
+      onChange?.(event, newValue)
+    }
   }
 
   return (
-      <Combobox
-          label={label}
-          autoComplete={true}
-          options={roleItems}
-          // value={value}
-          onChange={onChangeHandler}
-          getOptionKey={option => option.value}
-          isOptionEqualToValue={(option, value) => value === undefined || value === '' || option.value === value.value}
-          getOptionLabel={(option) => option.value ? option.descriptions : ''}
-          {...otherProps}
-      />
+    <Combobox
+      label={label}
+      autoComplete={true}
+      options={roleItems}
+      value={value ?? null}
+      onChange={onChangeHandler}
+      getOptionKey={option => option?.value}
+      isOptionEqualToValue={(option, value) => option.value === value?.value}
+      getOptionLabel={(option) => {
+        const found = roleItems.find(item => item.value === option?.value)
+        return found ? found.descriptions : (option?.descriptions || '')
+      }}
+      {...otherProps}
+    />
   )
 })

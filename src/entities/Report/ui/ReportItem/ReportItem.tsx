@@ -82,14 +82,14 @@ export const ReportItem = memo((props: ReportItemProps) => {
       className={classNames(cls.ReportItem, {}, [className, viewMode])}
     >
       <Check
-        key={report.channelId}
+        key={report.id}
         className={classNames('', {
-          [cls.uncheck]: !checkedItems?.includes(report.channelId),
-          [cls.check]: checkedItems?.includes(report.channelId)
+          [cls.uncheck]: !checkedItems?.includes(String(report.id)),
+          [cls.check]: checkedItems?.includes(String(report.id))
         }, [])}
-        value={report.channelId}
+        value={report.id}
         size={'small'}
-        checked={checkedItems?.includes(report.channelId)}
+        checked={checkedItems?.includes(String(report.id))}
         onChange={onChangeChecked}
       />
       <VStack gap={'8'} wrap={'wrap'} justify={'between'} max>
