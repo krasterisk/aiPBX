@@ -1,7 +1,9 @@
 import React, { memo } from 'react'
 import { useTheme } from '@/shared/lib/hooks/useTheme/useTheme'
-import ThemeIcon from '@/shared/assets/icons/theme.svg'
-import { Icon } from '@/shared/ui/redesigned/Icon'
+import { Theme } from '@/shared/const/theme'
+import LightModeIcon from '@mui/icons-material/LightMode'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import { IconButton } from '@mui/material'
 
 interface ThemeSwitcherProps {
   className?: string
@@ -9,13 +11,11 @@ interface ThemeSwitcherProps {
 }
 
 export const ThemeSwitcher = memo(({ className }: ThemeSwitcherProps) => {
-  const { toggleTheme } = useTheme()
+  const { theme, toggleTheme } = useTheme()
 
   return (
-        <Icon
-            Svg={ThemeIcon}
-            onClick={toggleTheme}
-            clickable
-        />
+    <IconButton onClick={toggleTheme} color="inherit" className={className}>
+      {theme === Theme.DARK ? <LightModeIcon /> : <DarkModeIcon />}
+    </IconButton>
   )
 })

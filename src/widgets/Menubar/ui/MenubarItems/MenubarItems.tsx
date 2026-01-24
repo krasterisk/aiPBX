@@ -31,16 +31,7 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
 
     const renderTree = (nodes: MenubarItemType[]) => (
         <SimpleTreeView className={cls.menuContainer}>
-            {isMobile && (
-                <>
-                    <AppLogo
-                        size={60}
-                        variant="3"
-                        className={cls.appLogo}
-                    />
-                    <div className={cls.brandText}>AI PBX</div>
-                </>
-            )}
+
             {nodes.map((node) => (
                 <AppLink
                     key={node.path}
@@ -67,6 +58,12 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
         return (
             <Drawer isOpen={openDrawer} onClose={onDrawerClose}>
                 <VStack max style={{ height: '100%' }}>
+                    <AppLogo
+                        size={60}
+                        variant="3"
+                        className={cls.appLogo}
+                    />
+                    <div className={cls.brandText}>AI PBX</div>
                     {renderTree(menubarItemList)}
                     <HStack className={cls.switchers} justify="center" gap="16" wrap="wrap">
                         <LangSwitcher short />

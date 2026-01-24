@@ -31,7 +31,7 @@ export const Drawer = memo((props: DrawerProps) => {
           maxWidth: '50vw',
           padding: '16px',
           boxSizing: 'border-box',
-          overflowX: 'hidden',
+          overflowX: 'visible',
           overflowY: 'auto',
           backgroundColor: '#fff',
           color: '#000',
