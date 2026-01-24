@@ -59,5 +59,6 @@ export {
   useGoogleSignupUser,
   useTelegramLoginUser,
   useTelegramSignupUser,
+  useGetUserBalance,
   useGetMe
 } from './api/usersApi'

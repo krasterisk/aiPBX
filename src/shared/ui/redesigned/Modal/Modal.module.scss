@@ -21,6 +21,8 @@
     transform: scale(0.5);
     max-width: 60%;
     z-index: var(--modal-z-index);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
 }
 
 .modalNew {

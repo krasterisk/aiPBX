@@ -22,21 +22,21 @@ interface CustomTabPanelProps {
   index: number
 }
 
-function CustomTabPanel ({ children, value, index, ...other }: CustomTabPanelProps) {
+function CustomTabPanel({ children, value, index, ...other }: CustomTabPanelProps) {
   return (
-            <div
-                role="tabpanel"
-                hidden={value !== index}
-                id={`simple-tabpanel-${index}`}
-                aria-labelledby={`simple-tab-${index}`}
-                {...other}
-            >
-                {value === index && (
-                    <Box sx={{ p: 3 }}>
-                        <div>{children}</div>
-                    </Box>
-                )}
-            </div>
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <div>{children}</div>
+        </Box>
+      )}
+    </div>
   )
 }
 
@@ -54,7 +54,7 @@ export const TabsPanel = memo((props: TabsPanelProps) => {
     [cls.TabsMobile]: isMobile
   }
 
-  function a11yProps (index: number) {
+  function a11yProps(index: number) {
     return {
       id: `simple-tab-${index}`,
       'aria-controls': `simple-tabpanel-${index}`
@@ -62,34 +62,39 @@ export const TabsPanel = memo((props: TabsPanelProps) => {
   }
 
   return (
-            <Card
-                className={classNames(cls.TabsPanelMain, mods, [className])}
-                max
-                border={'partial'}
-            >
-                    <Tabs
-                        value={value}
-                        onChange={onChange}
-                        aria-label="endpoints options"
-                        variant="scrollable"
-                        scrollButtons={'auto'}
-                        allowScrollButtonsMobile={isMobile}
-                        textColor={'inherit'}
-                    >
-                        {tabItems.map((item, index) => (
-                            <Tab
-                                key={index}
-                                label={item.label}
-                                {...a11yProps(index)}
+    <Card
+      className={classNames(cls.TabsPanelMain, mods, [className])}
+      max
+      border={'partial'}
+    >
+      <Tabs
+        value={value}
+        onChange={onChange}
+        aria-label="endpoints options"
+        variant="scrollable"
+        scrollButtons={'auto'}
+        allowScrollButtonsMobile={isMobile}
+        textColor={'inherit'}
+        sx={{
+          '& .MuiTabs-indicator': {
+            backgroundColor: 'var(--text-redesigned)'
+          }
+        }}
+      >
+        {tabItems.map((item, index) => (
+          <Tab
+            key={index}
+            label={item.label}
+            {...a11yProps(index)}
 
-                            />
-                        ))}
-                    </Tabs>
-                 {tabItems.map((item, index) => (
-                    <CustomTabPanel key={index} value={value} index={index}>
-                        {item.content}
-                    </CustomTabPanel>
-                 ))}
-            </Card>
+          />
+        ))}
+      </Tabs>
+      {tabItems.map((item, index) => (
+        <CustomTabPanel key={index} value={value} index={index}>
+          {item.content}
+        </CustomTabPanel>
+      ))}
+    </Card>
   )
 })

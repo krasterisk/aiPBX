@@ -1,42 +1,48 @@
-import React, { memo, useState, useCallback } from 'react'
+import React, { memo, useState, useMemo, useCallback } from 'react'
 import { Page } from '@/widgets/Page'
 import { VStack } from '@/shared/ui/redesigned/Stack'
-import { TopUpBalance } from '@/features/TopUpBalance'
-import { StripeContainer } from '@/features/CheckoutByStripe'
-import { AppLink } from '@/shared/ui/redesigned/AppLink'
-import { getRoutePaymentDetails } from '@/shared/const/router'
 import { useTranslation } from 'react-i18next'
+import { TabsPanel, TabPanelItem } from '@/shared/ui/mui/TabsPanel'
+import { PaymentList } from '@/entities/Payment'
+import { UsageLimitsForm } from '@/features/UsageLimits'
+import { useSelector } from 'react-redux'
+import { getUserAuthData } from '@/entities/User'
+import { Text } from '@/shared/ui/redesigned/Text'
+import { PaymentOverview } from './PaymentOverview/PaymentOverview'
+import { PaymentOrganizations } from './PaymentOrganizations/PaymentOrganizations'
 
 const PaymentPage = memo(() => {
   const { t } = useTranslation('payment')
-  const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const authData = useSelector(getUserAuthData)
+  const userId = authData?.id || ''
 
-  const onIntentCreated = useCallback((secret: string) => {
-    setClientSecret(secret)
+  const [tabIndex, setTabIndex] = useState(0)
+
+  const handleTabChange = useCallback((_: React.SyntheticEvent, newValue: number) => {
+    setTabIndex(newValue)
   }, [])
 
-  const onCancel = useCallback(() => {
-    setClientSecret(null)
+  // Helper to switch tab from button
+  const onTabChangeByIndex = useCallback((index: number) => {
+    setTabIndex(index)
   }, [])
+
+  const tabs: TabPanelItem[] = useMemo(() => [
+    { label: t('Обзор'), content: <PaymentOverview onTabChange={onTabChangeByIndex} /> },
+    { label: t('История платежей'), content: <PaymentList /> },
+    { label: t('Лимиты'), content: <UsageLimitsForm /> },
+    { label: t('Организации'), content: <PaymentOrganizations userId={userId} /> }
+  ], [t, userId, onTabChangeByIndex])
 
   return (
     <Page data-testid={'PaymentPage'}>
-      <VStack gap="32" max align="center" justify="center" style={{ minHeight: '60vh' }}>
-        <div style={{ maxWidth: 450, width: '100%' }}>
-          {!clientSecret ? (
-            <TopUpBalance onSuccess={onIntentCreated} />
-          ) : (
-            <StripeContainer
-              clientSecret={clientSecret}
-              onCancel={onCancel}
-            />
-          )}
-        </div>
-        {!clientSecret && (
-          <AppLink to={getRoutePaymentDetails()} variant="primary">
-            {t('История платежей')}
-          </AppLink>
-        )}
+      <VStack gap="24" max>
+        <Text title={t('Оплата')} />
+        <TabsPanel
+          tabItems={tabs}
+          value={tabIndex}
+          onChange={handleTabChange}
+        />
       </VStack>
     </Page>
   )
