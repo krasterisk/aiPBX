@@ -17,12 +17,13 @@ export function Popover(props: PopoverProps) {
   const {
     className,
     trigger,
-    direction = 'bottom-left',
+    direction: baseDirection = 'bottom-left',
     children
   } = props
 
   const buttonRef = useRef<HTMLElement | null>(null)
   const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({})
+  const [direction, setDirection] = useState<DropdownDirection>(baseDirection)
 
   const menuClasses = [mapDirectionClass[direction], popupCls.menu]
 
@@ -30,16 +31,31 @@ export function Popover(props: PopoverProps) {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect()
       const style: React.CSSProperties = {}
+      const viewportHeight = window.innerHeight
+      const spaceBelow = viewportHeight - rect.bottom
+      const spaceAbove = rect.top
+
+      let finalDirection = baseDirection
+
+      if (baseDirection.startsWith('bottom') && spaceBelow < 250 && spaceAbove > spaceBelow) {
+        finalDirection = baseDirection.replace('bottom', 'top') as DropdownDirection
+      } else if (baseDirection.startsWith('top') && spaceAbove < 250 && spaceBelow > spaceAbove) {
+        finalDirection = baseDirection.replace('top', 'bottom') as DropdownDirection
+      }
+
+      if (finalDirection !== direction) {
+        setDirection(finalDirection)
+      }
 
       // Vertical positioning
-      if (direction.startsWith('bottom')) {
+      if (finalDirection.startsWith('bottom')) {
         style.top = rect.bottom + 4
       } else {
         style.bottom = window.innerHeight - rect.top + 4
       }
 
       // Horizontal positioning
-      if (direction.endsWith('right')) {
+      if (finalDirection.endsWith('right')) {
         style.left = rect.left
       } else {
         style.right = window.innerWidth - rect.right
@@ -50,7 +66,7 @@ export function Popover(props: PopoverProps) {
   }
 
   return (
-    <HPopover className={classNames(cls.Popover, {}, [className, popupCls.popup])}>
+    <HPopover className={classNames(cls.Popover, {}, [className, popupCls.popup, 'popup-z-index'])}>
       {({ open }) => {
         if (open) {
           setTimeout(updatePosition, 0)
@@ -68,7 +84,7 @@ export function Popover(props: PopoverProps) {
 
             {open && (
               <HPopover.Panel
-                className={classNames(cls.panel, {}, menuClasses)}
+                className={classNames(cls.panel, {}, [...menuClasses, 'popup-z-index'])}
                 style={panelStyle}
                 static
               >

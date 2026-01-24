@@ -23,6 +23,17 @@ body {
     color: var(--text-redesigned);
 }
 
+.popup-z-index {
+    z-index: var(--popup-z-index) !important;
+}
+
+// Обеспечиваем, что MUI Drawer не обрезает popup элементы
+:global(.MuiDrawer-root) {
+    :global(.MuiDrawer-paper) {
+        overflow: visible !important;
+    }
+}
+
 .content-page {
     display: flex;
 }

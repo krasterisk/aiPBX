@@ -54,7 +54,7 @@ export const ReportList = (props: ReportsListProps) => {
 
     if (reports) {
       const exportData = reports.rows.map((report, index) => ({
-        '№п/п': index + 1,
+        '№': index + 1,
         Date: report.createdAt ? formatDate(report.createdAt) : '',
         'Assistant:': report.assistantName,
         'CallerId:': report.callerId ? report.callerId : '',

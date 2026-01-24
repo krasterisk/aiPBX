@@ -1,9 +1,12 @@
 .menu {
-    background: var(--dark-bg-redesigned);
-    position: absolute;
-    z-index: 999999;
+    background: var(--bg-redesigned);
     display: flex;
-    flex-direction: column; // размеры пунктов по содержимому
+    flex-direction: column;
+    border-radius: 8px;
+    outline: none;
+    border: 1px solid var(--accent-redesigned);
+    min-height: auto !important;
+    width: max-content;
 }
 
 .item {

@@ -9,11 +9,9 @@
 .options {
     position: absolute;
     background: var(--dark-bg-redesigned);
-    z-index: 10000;
     border-radius: 12px; // скругление углов
     // тень сдвиг 4 справа, 4 слева, 8 - размытие, цвет из переменной
     box-shadow: 4px 4px 8px var(--listbox-bg);
-
     // padding: 10px;
 }
 

@@ -1,0 +1,21 @@
+{
+  "Серверы IP ATC": "IP-PBX-Server",
+  "Клиент": "Kunde",
+  "Удалить": "Löschen",
+  "Закрыть": "Schließen",
+  "Сохранить": "Speichern",
+  "Редактировать": "Bearbeiten",
+  "Наименование сервера": "Servername",
+  "Локация": "Standort",
+  "Адрес сервера": "Serveradresse",
+  "ARI URL": "ARI-URL",
+  "ARI USER": "ARI-BENUTZER",
+  "ARI PASSWORD": "ARI-PASSWORT",
+  "Комментарий": "Kommentar",
+  "Создать": "Erstellen",
+  "Новый сервер": "Neuer Server",
+  "Ошибка при создании сервера": "Fehler beim Erstellen des Servers",
+  "Удалить выбранные": "Ausgewählte löschen",
+  "Поиск": "Suche",
+  "Проверка": "Prüfung"
+}

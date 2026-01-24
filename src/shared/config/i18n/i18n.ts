@@ -10,9 +10,9 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'en',
-    supportedLngs: ['ru', 'en'],
+    supportedLngs: ['ru', 'en', 'de', 'zh'],
     load: 'languageOnly',
-    // lng: 'en',
+    lng: 'en',
     //        debug: __IS_DEV__,
     interpolation: {
       escapeValue: false // not needed for react as it escapes by default

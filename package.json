@@ -1,6 +1,6 @@
 {
   "name": "ai_pbx",
-  "version": "1.8.5",
+  "version": "1.8.6",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -121,8 +121,9 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@floating-ui/react": "^0.27.16",
     "@fontsource/roboto": "^5.0.8",
-    "@headlessui/react": "^1.7.13",
+    "@headlessui/react": "^2.2.9",
     "@mui/icons-material": "^7.3.0",
     "@mui/material": "^7.3.0",
     "@mui/system": "^7.3.0",

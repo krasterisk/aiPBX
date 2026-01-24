@@ -1,0 +1,20 @@
+{
+    "Playground": "Playground",
+    "Настройка сессии": "Sitzungseinrichtung",
+    "Выберите ассистента": "Assistenten auswählen",
+    "Микрофон": "Mikrofon",
+    "Микрофон ": "Mikrofon ",
+    "Начать сессию": "Sitzung starten",
+    "Завершить сессию": "Sitzung beenden",
+    "Загрузка...": "Laden...",
+    "Подключение к ассистенту...": "Verbindung zum Assistenten...",
+    "Сессия завершена": "Sitzung beendet",
+    "Идет разговор с ": "Gespräch mit ",
+    "Сессия успешно запущена": "Sitzung erfolgreich gestartet",
+    "Ошибка при запуске сессии: ": "Fehler beim Starten der Sitzung: ",
+    "Не удалось получить токен доступа": "Zugriffstoken konnte nicht abgerufen werden",
+    "connecting": "Verbinden...",
+    "liveSession": "Live-Sitzung",
+    "disconnected": "Getrennt",
+    "with": "mit {{name}}"
+}

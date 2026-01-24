@@ -25,6 +25,7 @@
     gap: 8px;
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .switchers {
@@ -32,4 +33,5 @@
     margin-top: auto;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
     width: 100%;
+    overflow-x: hidden;
 }

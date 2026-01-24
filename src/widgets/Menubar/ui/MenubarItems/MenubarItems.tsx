@@ -68,7 +68,7 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
             <Drawer isOpen={openDrawer} onClose={onDrawerClose}>
                 <VStack max style={{ height: '100%' }}>
                     {renderTree(menubarItemList)}
-                    <HStack className={cls.switchers} justify="center" gap="16">
+                    <HStack className={cls.switchers} justify="center" gap="16" wrap="wrap">
                         <LangSwitcher short />
                         <ThemeSwitcher />
                     </HStack>
