@@ -34,7 +34,8 @@ const config: StorybookConfig = {
       entry: '',
       src: path.resolve(__dirname, '..', '..', 'src'),
       locales: path.resolve(__dirname, '..', '..', 'public', 'locales'),
-      buildLocales: path.resolve(__dirname, '..', '..', 'build', 'locales')
+      buildLocales: path.resolve(__dirname, '..', '..', 'build', 'locales'),
+      favicon: path.resolve(__dirname, '..', '..', 'public', 'favicon.ico')
     }
 
     config.resolve!.modules!.push(paths.src)
