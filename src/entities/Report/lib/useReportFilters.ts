@@ -10,24 +10,21 @@ import {
   getReportsPageNum,
   getReportsPageSearch,
   getReportsPageView,
-  getReportsPageManualView,
   getReportsTab,
   getReportStartDate,
   getReportUserId
 } from '../model/selectors/reportSelectors'
 import { reportsPageActions } from '../model/slices/reportsPageSlice'
-import { ContentView } from '../../Content'
 import { useGetReports } from '../api/reportApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
 import { ClientOptions, getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 
-export function useReportFilters () {
+export function useReportFilters() {
   const page = useSelector(getReportsPageNum)
   const limit = useSelector(getReportsPageLimit)
   const hasMore = useSelector(getReportsHasMore)
   const view = useSelector(getReportsPageView)
-  const manualView = useSelector(getReportsPageManualView)
   const tab = useSelector(getReportsTab)
   const search = useSelector(getReportsPageSearch)
   const startDate = useSelector(getReportStartDate)
@@ -87,11 +84,6 @@ export function useReportFilters () {
     }
   }, [data, dispatch, hasMore, isFetching, isLoading, limit, page])
 
-  const onChangeView = useCallback((view: ContentView) => {
-    dispatch(reportsPageActions.setView(view))
-    dispatch(reportsPageActions.setManualView(true))
-  }, [dispatch])
-
   const debouncedSearch = useDebounce((search: string) => { setNewSearch(search) }, 500)
 
   const onChangeSearch = useCallback((search: string) => {
@@ -145,7 +137,6 @@ export function useReportFilters () {
     page,
     limit,
     view,
-    manualView,
     search,
     startDate,
     endDate,
@@ -161,7 +152,6 @@ export function useReportFilters () {
     onChangeUserId,
     onChangeStartDate,
     onChangeEndDate,
-    onChangeView,
     onChangeTab,
     onChangeSearch,
     onChangeHasMore,

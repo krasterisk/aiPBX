@@ -1,6 +1,5 @@
 import { User } from '../../../User'
 import { HTMLAttributeAnchorTarget } from 'react'
-import { ContentView } from '@/entities/Content'
 import { ToolTypesValues } from '../consts/consts'
 
 export interface AllTools {
@@ -40,7 +39,6 @@ export interface ToolsListProps {
   target?: HTMLAttributeAnchorTarget
   isToolsLoading?: boolean
   isToolsError?: boolean
-  view?: ContentView
   tools?: AllTools
   onDelete?: (id: string) => void
 }

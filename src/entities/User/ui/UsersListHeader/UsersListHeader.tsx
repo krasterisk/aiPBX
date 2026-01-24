@@ -6,7 +6,6 @@ import { getRouteUserCreate } from '@/shared/const/router'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { IconButton, useMediaQuery } from '@mui/material'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
-import { ContentViewSelector } from '../../../Content'
 import { useUserFilters } from '../../lib/hooks/useUserFilters'
 import { UsersFilters } from '../UsersFilters/UsersFilters'
 import { useTranslation } from 'react-i18next'
@@ -22,9 +21,7 @@ export const UsersListHeader = memo((props: UsersListHeaderProps) => {
 
   const {
     search,
-    view,
     sort,
-    onChangeView,
     onChangeSearch,
     onChangeSort
   } = useUserFilters()
@@ -34,27 +31,26 @@ export const UsersListHeader = memo((props: UsersListHeaderProps) => {
   const isMobile = useMediaQuery('(max-width:800px)')
 
   return (
-        <HStack
-            className={classNames(cls.UsersListHeader, { [cls.mobileHeader]: isMobile }, [className])}
-            justify={'start'}
-            gap={'8'}
-        >
-            <ContentViewSelector view={view} onViewClick={onChangeView}/>
-            <UsersFilters
-                search={search}
-                sort={sort}
-                onChangeSort={onChangeSort}
-                onChangeSearch={onChangeSearch}
-            />
-            <AppLink
-                title={String(t('Добавить клиента'))}
-                to={getRouteUserCreate()}
-            >
-                <IconButton>
-                    <PersonAddIcon className={cls.icon} fontSize={'large'}/>
-                </IconButton>
-            </AppLink>
+    <HStack
+      className={classNames(cls.UsersListHeader, { [cls.mobileHeader]: isMobile }, [className])}
+      justify={'start'}
+      gap={'8'}
+    >
+      <UsersFilters
+        search={search}
+        sort={sort}
+        onChangeSort={onChangeSort}
+        onChangeSearch={onChangeSearch}
+      />
+      <AppLink
+        title={String(t('Добавить клиента'))}
+        to={getRouteUserCreate()}
+      >
+        <IconButton>
+          <PersonAddIcon className={cls.icon} fontSize={'large'} />
+        </IconButton>
+      </AppLink>
 
-        </HStack>
+    </HStack>
   )
 })

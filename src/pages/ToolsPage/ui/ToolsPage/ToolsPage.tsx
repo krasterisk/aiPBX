@@ -41,20 +41,19 @@ const ToolsPage = ({ className }: ToolsPageProps) => {
   })
 
   const content = (
-      <Page
-          data-testid={'ToolsPage'}
-          onScrollEnd={onLoadNextPart}
-          className={classNames(cls.ToolsPage, {}, [className])}
-          isSaveScroll={true}
-      >
-        <ToolsList
-            view={view}
-            className={className}
-            isToolsLoading={isLoading}
-            tools={data}
-            isToolsError={isError}
-        />
-      </Page>
+    <Page
+      data-testid={'ToolsPage'}
+      onScrollEnd={onLoadNextPart}
+      className={classNames(cls.ToolsPage, {}, [className])}
+      isSaveScroll={true}
+    >
+      <ToolsList
+        className={className}
+        isToolsLoading={isLoading}
+        tools={data}
+        isToolsError={isError}
+      />
+    </Page>
   )
 
   if (isError) {
@@ -63,17 +62,17 @@ const ToolsPage = ({ className }: ToolsPageProps) => {
       : ''
 
     return (
-        <ErrorGetData
-            text={errMsg}
-            onRefetch={onRefetch}
-        />
+      <ErrorGetData
+        text={errMsg}
+        onRefetch={onRefetch}
+      />
     )
   }
 
   return (
-      <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
-        {content}
-      </DynamicModuleLoader>
+    <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
+      {content}
+    </DynamicModuleLoader>
   )
 }
 

@@ -1,7 +1,7 @@
 import { StateSchema } from '@/app/providers/StoreProvider'
 import { UserSortField } from '../consts/consts'
 
-export const getUsersPageView = (state: StateSchema) => state.usersPage?.view || 'SMALL'
+export const getUsersPageView = (state: StateSchema) => 'BIG'
 export const getUsersPageNum = (state: StateSchema) => state.usersPage?.page || 1
 export const getUsersPageLimit = (state: StateSchema) => state.usersPage?.limit || 25
 export const getUsersHasMore = (state: StateSchema) => state.usersPage?.hasMore

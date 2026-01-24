@@ -1,5 +1,4 @@
 import { HTMLAttributeAnchorTarget } from 'react'
-import { ContentView } from '@/entities/Content'
 
 export interface AllReports {
   count: number
@@ -27,7 +26,6 @@ export interface ReportsListProps {
   target?: HTMLAttributeAnchorTarget
   isReportsLoading?: boolean
   isReportsError?: boolean
-  view?: ContentView
   reports?: AllReports
 }
 

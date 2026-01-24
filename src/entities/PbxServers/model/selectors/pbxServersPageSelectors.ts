@@ -1,6 +1,6 @@
 import { StateSchema } from '@/app/providers/StoreProvider'
 
-export const getPbxServersPageView = (state: StateSchema) => state.pbxServersPage?.view || 'SMALL'
+export const getPbxServersPageView = (state: StateSchema) => 'BIG'
 export const getPbxServersPageNum = (state: StateSchema) => state.pbxServersPage?.page || 1
 export const getPbxServersPageLimit = (state: StateSchema) => state.pbxServersPage?.limit || 250
 export const getPbxServersHasMore = (state: StateSchema) => state.pbxServersPage?.hasMore

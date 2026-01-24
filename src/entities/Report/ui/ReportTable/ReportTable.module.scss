@@ -3,6 +3,23 @@
     background: var(--light-bg-redesigned);
     width: 100%;
 
+    td {
+        border-top: 0.5px solid var(--accent-redesigned);
+        border-bottom: 0.5px solid var(--accent-redesigned);
+
+        &:first-child {
+            border-left: 0.5px solid var(--accent-redesigned);
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        &:last-child {
+            border-right: 0.5px solid var(--accent-redesigned);
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+    }
+
     &:hover {
         cursor: pointer;
 
@@ -39,13 +56,13 @@
         text-align: right;
     }
 
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 1100px) {
         display: block;
         margin-bottom: 16px;
         border-radius: 12px;
         background-color: var(--dark-bg-redesigned);
         padding: 8px 0;
-        border: 1px solid var(--light-bg-redesigned);
+        border: 0.5px solid var(--accent-redesigned);
 
         td {
             display: flex;
@@ -54,7 +71,6 @@
             padding: 8px 16px !important;
             min-height: 40px;
             border: none !important;
-            border-bottom: 1px dashed var(--light-bg-redesigned) !important;
             position: relative;
             text-align: right !important;
             padding-left: 50% !important;
@@ -106,12 +122,12 @@
         border: none;
     }
 
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 1100px) {
         display: block;
         margin-bottom: 8px;
         margin-top: -16px;
         border-radius: 0 0 12px 12px;
-        border: 1px solid var(--light-bg-redesigned);
+        border: 0.5px solid var(--light-bg-redesigned);
         border-top: none;
 
         td {
@@ -127,9 +143,9 @@
 }
 
 .isAdmin {
-    border: 2px solid var(--save-redesigned);
+    border: 0.5px solid var(--save-redesigned);
 }
 
 .isClient {
-    border: 2px solid var(--accent-redesigned);
+    border: 0.5px solid var(--accent-redesigned);
 }

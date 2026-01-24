@@ -38,26 +38,25 @@ const PbxServersPage = ({ className }: PbxServersPageProps) => {
   })
 
   const content = (
-        <Page
-            data-testid={'PbxServersPage'}
-            onScrollEnd={onLoadNextPart}
-            className={classNames(cls.PbxServersPage, {}, [className])}
-            isSaveScroll={true}
-        >
-            <PbxServersList
-                view={view}
-                className={className}
-                isPbxServersLoading={isLoading}
-                pbxServers={data}
-                isPbxServersError={isError}
-            />
-        </Page>
+    <Page
+      data-testid={'PbxServersPage'}
+      onScrollEnd={onLoadNextPart}
+      className={classNames(cls.PbxServersPage, {}, [className])}
+      isSaveScroll={true}
+    >
+      <PbxServersList
+        className={className}
+        isPbxServersLoading={isLoading}
+        pbxServers={data}
+        isPbxServersError={isError}
+      />
+    </Page>
   )
 
   return (
-        <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
-            {content}
-        </DynamicModuleLoader>
+    <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
+      {content}
+    </DynamicModuleLoader>
   )
 }
 

@@ -1,8 +1,7 @@
 import { StateSchema } from '@/app/providers/StoreProvider'
 import dayjs from 'dayjs'
 
-export const getReportsPageView = (state: StateSchema) => state.reportsPage?.view || 'BIG'
-export const getReportsPageManualView = (state: StateSchema) => state.reportsPage?.manualView || false
+export const getReportsPageView = (state: StateSchema) => 'BIG'
 export const getReportsPageNum = (state: StateSchema) => state.reportsPage?.page || 1
 export const getReportsPageLimit = (state: StateSchema) => state.reportsPage?.limit || 25
 export const getReportsHasMore = (state: StateSchema) => state.reportsPage?.hasMore

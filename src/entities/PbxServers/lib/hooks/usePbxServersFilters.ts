@@ -13,10 +13,9 @@ import {
 import { pbxServersPageActions } from '../../model/slices/pbxServersPageSlice'
 import { usePbxServers } from '../../api/pbxServersApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
-import { ContentView } from '../../../Content'
 import { ClientOptions } from '../../../User/model/types/user'
 
-export function usePbxServersFilters () {
+export function usePbxServersFilters() {
   const page = useSelector(getPbxServersPageNum)
   const limit = useSelector(getPbxServersPageLimit)
   const hasMore = useSelector(getPbxServersHasMore)
@@ -63,10 +62,6 @@ export function usePbxServersFilters () {
     }
   }, [data, dispatch, hasMore, isFetching, isLoading, limit, page])
 
-  const onChangeView = useCallback((view: ContentView) => {
-    dispatch(pbxServersPageActions.setView(view))
-  }, [dispatch])
-
   const onChangeUserId = useCallback((event: any, client: ClientOptions) => {
     // const newUserId = client ? client.id || userId || '' : ''
     dispatch(pbxServersPageActions.setUser(client))
@@ -100,7 +95,6 @@ export function usePbxServersFilters () {
     error,
     data,
     clientId,
-    onChangeView,
     onChangeSearch,
     onChangeHasMore,
     onChangePage,

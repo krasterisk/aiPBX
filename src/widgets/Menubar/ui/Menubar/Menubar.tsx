@@ -5,6 +5,9 @@ import React, { memo } from 'react'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { AppLogo } from '@/shared/ui/redesigned/AppLogo'
 import { MenubarItems } from '../MenubarItems/MenubarItems'
+import { LangSwitcher } from '@/entities/LangSwitcher'
+import { ThemeSwitcher } from '@/entities/ThemeSwitcher'
+import { HStack } from '@/shared/ui/redesigned/Stack'
 
 interface MenubarProps {
   className?: string
@@ -27,7 +30,10 @@ export const Menubar = memo((props: MenubarProps) => {
       >
         <MenubarItems />
       </VStack>
-
+      <HStack className={cls.switchers}>
+        <LangSwitcher />
+        <ThemeSwitcher />
+      </HStack>
     </section>
   )
 })

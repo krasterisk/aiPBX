@@ -1,6 +1,5 @@
 import { User } from '../../../User'
 import { HTMLAttributeAnchorTarget } from 'react'
-import { ContentView } from '@/entities/Content'
 import { Tool } from '@/entities/Tools'
 
 export interface AllAssistants {
@@ -54,7 +53,6 @@ export interface AssistantsListProps {
   target?: HTMLAttributeAnchorTarget
   isAssistantsLoading?: boolean
   isAssistantsError?: boolean
-  view?: ContentView
   assistants?: AllAssistants
   onDelete?: (id: string) => void
 }

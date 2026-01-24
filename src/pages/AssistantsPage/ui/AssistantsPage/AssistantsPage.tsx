@@ -41,20 +41,19 @@ const AssistantsPage = ({ className }: AssistantsPageProps) => {
   })
 
   const content = (
-      <Page
-          data-testid={'AssistantsPage'}
-          onScrollEnd={onLoadNextPart}
-          className={classNames(cls.AssistantsPage, {}, [className])}
-          isSaveScroll={true}
-      >
-        <AssistantsList
-            view={view}
-            className={className}
-            isAssistantsLoading={isLoading}
-            assistants={data}
-            isAssistantsError={isError}
-        />
-      </Page>
+    <Page
+      data-testid={'AssistantsPage'}
+      onScrollEnd={onLoadNextPart}
+      className={classNames(cls.AssistantsPage, {}, [className])}
+      isSaveScroll={true}
+    >
+      <AssistantsList
+        className={className}
+        isAssistantsLoading={isLoading}
+        assistants={data}
+        isAssistantsError={isError}
+      />
+    </Page>
   )
 
   if (isError) {
@@ -63,17 +62,17 @@ const AssistantsPage = ({ className }: AssistantsPageProps) => {
       : ''
 
     return (
-        <ErrorGetData
-            text={errMsg}
-            onRefetch={onRefetch}
-        />
+      <ErrorGetData
+        text={errMsg}
+        onRefetch={onRefetch}
+      />
     )
   }
 
   return (
-      <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
-        {content}
-      </DynamicModuleLoader>
+    <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
+      {content}
+    </DynamicModuleLoader>
   )
 }
 

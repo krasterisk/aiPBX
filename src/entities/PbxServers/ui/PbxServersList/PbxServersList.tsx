@@ -5,7 +5,7 @@ import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { PbxServer, PbxServerListProps } from '../../model/types/pbxServers'
 import { PbxServersListHeader } from '../PbxServersListHeader/PbxServersListHeader'
 import { ErrorGetData } from '../../../ErrorGetData'
-import { ContentView, ContentListItemSkeleton } from '../../../Content'
+import { ContentListItemSkeleton } from '../../../Content'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { useTranslation } from 'react-i18next'
 import { PbxServerItem } from '../PbxServerItem/PbxServerItem'
@@ -21,8 +21,7 @@ export const PbxServersList = (props: PbxServerListProps) => {
     isPbxServersError,
     isPbxServersLoading,
     pbxServers,
-    target,
-    view = 'BIG'
+    target
   } = props
 
   const { t } = useTranslation('pbx')
@@ -65,11 +64,11 @@ export const PbxServersList = (props: PbxServerListProps) => {
     }
   }, [pbxServers?.count, pbxServers?.rows, checkedBox.length, indeterminateBox])
 
-  const getSkeletons = (view: ContentView) => {
-    return new Array(view === 'SMALL' ? 9 : 4)
+  const getSkeletons = () => {
+    return new Array(4)
       .fill(0)
       .map((item, index) => (
-                <ContentListItemSkeleton className={cls.card} key={index} view={view}/>
+        <ContentListItemSkeleton className={cls.card} key={index} view={'BIG'} />
       ))
   }
 
@@ -83,85 +82,85 @@ export const PbxServersList = (props: PbxServerListProps) => {
 
   if (isPbxServersError && isError) {
     return (
-            <ErrorGetData/>
+      <ErrorGetData />
     )
   }
 
   if (isLoading) {
     return (
-            <VStack gap={'16'} align={'center'} className={cls.loader}>
-                <Loader/>
-            </VStack>
+      <VStack gap={'16'} align={'center'} className={cls.loader}>
+        <Loader />
+      </VStack>
     )
   }
 
   const checkedButtons = (
-        <HStack
-            gap={'16'}
-            wrap={'wrap'}
-            className={classNames('', {
-              [cls.uncheckButtons]: checkedBox.length === 0,
-              [cls.checkButton]: checkedBox.length > 0
-            }, [])}
-        >
-            <Button
-                variant={'clear'}
-                onClick={handlerDeleteAll}
-            >
-                <Text text={t('Удалить выбранные')} variant={'error'}/>
-            </Button>
-        </HStack>
+    <HStack
+      gap={'16'}
+      wrap={'wrap'}
+      className={classNames('', {
+        [cls.uncheckButtons]: checkedBox.length === 0,
+        [cls.checkButton]: checkedBox.length > 0
+      }, [])}
+    >
+      <Button
+        variant={'clear'}
+        onClick={handlerDeleteAll}
+      >
+        <Text text={t('Удалить выбранные')} variant={'error'} />
+      </Button>
+    </HStack>
   )
 
   const renderContent = (pbxServer: PbxServer) => {
     return (
-            <PbxServerItem
-                key={pbxServer.id}
-                pbxServer={pbxServer}
-                checkedItems={checkedBox}
-                onChangeChecked={handleCheckChange}
-                view={view}
-                target={target}
-                className={cls.caskItem}
-            />
+      <PbxServerItem
+        key={pbxServer.id}
+        pbxServer={pbxServer}
+        checkedItems={checkedBox}
+        onChangeChecked={handleCheckChange}
+        view={'BIG'}
+        target={target}
+        className={cls.caskItem}
+      />
     )
   }
 
   return (
-        <VStack gap={'16'} max>
-            <PbxServersListHeader />
-            <Card max className={classNames(cls.PbxServersList, {}, [className])}>
-                <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
-                    <Check
-                        className={classNames(cls.PbxServersList, {
-                          [cls.uncheck]: checkedBox.length === 0,
-                          [cls.check]: checkedBox.length > 0
-                        }, [])}
-                        indeterminate={indeterminateBox}
-                        checked={checkedBox.length === pbxServers?.count}
-                        onChange={handleCheckAll}
-                    />
-                    {checkedButtons}
-                    {
-                        checkedBox.length > 0
-                          ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(pbxServers?.count)}/>
-                          : <Text text={t('Всего') + ': ' + String(pbxServers?.count || 0)}/>
-                    }
-                </HStack>
-            </Card>
+    <VStack gap={'16'} max>
+      <PbxServersListHeader />
+      <Card max className={classNames(cls.PbxServersList, {}, [className])}>
+        <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
+          <Check
+            className={classNames(cls.PbxServersList, {
+              [cls.uncheck]: checkedBox.length === 0,
+              [cls.check]: checkedBox.length > 0
+            }, [])}
+            indeterminate={indeterminateBox}
+            checked={checkedBox.length === pbxServers?.count}
+            onChange={handleCheckAll}
+          />
+          {checkedButtons}
+          {
+            checkedBox.length > 0
+              ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(pbxServers?.count)} />
+              : <Text text={t('Всего') + ': ' + String(pbxServers?.count || 0)} />
+          }
+        </HStack>
+      </Card>
 
-            {pbxServers?.rows.length
-              ? <HStack wrap={'wrap'} gap={'16'} align={'start'} max>
-                    {pbxServers.rows.map(renderContent)}
-                </HStack>
-              : <HStack
-                    justify={'center'} max
-                    className={classNames('', {}, [className, cls[view]])}
-                >
-                    <Text align={'center'} text={t('Данные не найдены')}/>
-                </HStack>
-            }
-            {isPbxServersLoading && getSkeletons(view)}
-        </VStack>
+      {pbxServers?.rows.length
+        ? <HStack wrap={'wrap'} gap={'16'} align={'start'} max>
+          {pbxServers.rows.map(renderContent)}
+        </HStack>
+        : <HStack
+          justify={'center'} max
+          className={classNames('', {}, [className, cls.BIG])}
+        >
+          <Text align={'center'} text={t('Данные не найдены')} />
+        </HStack>
+      }
+      {isPbxServersLoading && getSkeletons()}
+    </VStack>
   )
 }

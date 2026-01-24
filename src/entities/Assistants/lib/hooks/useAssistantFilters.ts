@@ -13,10 +13,9 @@ import {
 import { assistantsPageActions } from '../../model/slices/assistantsPageSlice'
 import { useAssistants } from '../../api/assistantsApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
-import { ContentView } from '../../../Content'
 import { User } from '@/entities/User'
 
-export function useAssistantFilters () {
+export function useAssistantFilters() {
   const page = useSelector(getAssistantsPageNum)
   const limit = useSelector(getAssistantsPageLimit)
   const hasMore = useSelector(getAssistantsHasMore)
@@ -63,10 +62,6 @@ export function useAssistantFilters () {
     }
   }, [data, dispatch, hasMore, isFetching, isLoading, limit, page])
 
-  const onChangeView = useCallback((view: ContentView) => {
-    dispatch(assistantsPageActions.setView(view))
-  }, [dispatch])
-
   const onChangeUserId = useCallback((event: any, client: User) => {
     // const newUserId = client ? client.id || userId || '' : ''
     dispatch(assistantsPageActions.setUserId(client.id))
@@ -100,7 +95,6 @@ export function useAssistantFilters () {
     error,
     data,
     clientId,
-    onChangeView,
     onChangeSearch,
     onChangeHasMore,
     onChangePage,

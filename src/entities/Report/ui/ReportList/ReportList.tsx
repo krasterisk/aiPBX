@@ -4,10 +4,9 @@ import React, { useCallback, useState } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Report, ReportsListProps } from '../../model/types/report'
 import { ErrorGetData } from '../../../ErrorGetData'
-import { ContentView, ContentListItemSkeleton } from '../../../Content'
+import { ContentListItemSkeleton } from '../../../Content'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { useTranslation } from 'react-i18next'
-import { ReportItem } from '../ReportItem/ReportItem'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Check } from '@/shared/ui/mui/Check'
 import { Button } from '@/shared/ui/redesigned/Button'
@@ -24,8 +23,7 @@ export const ReportList = (props: ReportsListProps) => {
     isReportsError,
     isReportsLoading,
     reports,
-    target,
-    view = 'BIG'
+    target
   } = props
 
   const { t } = useTranslation('reports')
@@ -91,11 +89,11 @@ export const ReportList = (props: ReportsListProps) => {
     }
   }, [checkedBox.length, reports, indeterminateBox])
 
-  const getSkeletons = (view: ContentView) => {
-    return new Array(view === 'SMALL' ? 9 : 4)
+  const getSkeletons = () => {
+    return new Array(4)
       .fill(0)
       .map((item, index) => (
-        <ContentListItemSkeleton className={cls.card} key={index} view={view} />
+        <ContentListItemSkeleton className={cls.card} key={index} view={'BIG'} />
       ))
   }
 
@@ -123,20 +121,6 @@ export const ReportList = (props: ReportsListProps) => {
     </HStack>
   )
 
-  const renderContent = (report: Report) => {
-    return (
-      <ReportItem
-        key={report.id}
-        report={report}
-        checkedItems={checkedBox}
-        onChangeChecked={handleCheckChange}
-        view={view}
-        target={target}
-        className={cls.reportItem}
-      />
-    )
-  }
-
   const renderTableContent = (report: Report) => {
     return (
       <ReportTable
@@ -144,7 +128,6 @@ export const ReportList = (props: ReportsListProps) => {
         report={report}
         checkedItems={checkedBox}
         onChangeChecked={handleCheckChange}
-        view={view}
         target={target}
         className={cls.TableItem}
       />
@@ -179,38 +162,33 @@ export const ReportList = (props: ReportsListProps) => {
       </Card>
 
       {reports?.rows.length
-        ? <>
-          {view === 'BIG'
-            ? <table className={cls.Table}>
-              <thead className={cls.TableHeader}>
-                <tr>
-                  <th className={cls.tdCheck}></th>
-                  <th>{t('Дата')}</th>
-                  <th>{t('Ассистент')}</th>
-                  <th>{t('Звонивший')}</th>
-                  <th>{t('Длительность')}</th>
-                  <th>{t('Токены')}</th>
-                  <th>{t('Стоимость')}</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {reports.rows.map(renderTableContent)}
-              </tbody>
-            </table>
-            : <HStack wrap={'wrap'} gap={'4'} align={'start'} max>
-              {reports.rows.map(renderContent)}
-            </HStack>
-          }
-        </>
+        ? <div className={cls.TableWrapper}>
+          <table className={cls.Table}>
+            <thead className={cls.TableHeader}>
+              <tr>
+                <th className={cls.tdCheck}></th>
+                <th>{t('Дата')}</th>
+                <th>{t('Ассистент')}</th>
+                <th>{t('Звонивший')}</th>
+                <th>{t('Длительность')}</th>
+                <th>{t('Токены')}</th>
+                <th>{t('Стоимость')}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {reports.rows.map(renderTableContent)}
+            </tbody>
+          </table>
+        </div>
         : <HStack
           justify={'center'} max
-          className={classNames('', {}, [className, cls[view]])}
+          className={classNames('', {}, [className, cls.BIG])}
         >
           <Text align={'center'} text={t('Данные не найдены')} />
         </HStack>
       }
-      {isReportsLoading && getSkeletons(view)}
+      {isReportsLoading && getSkeletons()}
     </VStack>
   )
 }

@@ -18,7 +18,6 @@ const reducers: ReducersList = {
 
 const UsersPage = ({ className }: UsersPageProps) => {
   const {
-    view,
     isError,
     isLoading,
     error,
@@ -45,20 +44,19 @@ const UsersPage = ({ className }: UsersPageProps) => {
   // left={<ContentViewSelector view={view} onViewClick={onChangeView}/>}
   // right={<EndpointFiltersContainer />}
   const content = (
-            <Page
-                data-testid={'UsersPage'}
-                onScrollEnd={onLoadNextPart}
-                className={classNames(cls.UsersPage, {}, [className])}
-                isSaveScroll={true}
-            >
-                <UsersList
-                    view={view}
-                    className={className}
-                    isLoading={isLoading}
-                    users={data}
-                    isError={isError}
-                />
-            </Page>
+    <Page
+      data-testid={'UsersPage'}
+      onScrollEnd={onLoadNextPart}
+      className={classNames(cls.UsersPage, {}, [className])}
+      isSaveScroll={true}
+    >
+      <UsersList
+        className={className}
+        isLoading={isLoading}
+        users={data}
+        isError={isError}
+      />
+    </Page>
   )
 
   // if (!isAdmin) {
@@ -76,10 +74,10 @@ const UsersPage = ({ className }: UsersPageProps) => {
       : ''
 
     return (
-            <ErrorGetData
-                text={errMsg}
-                onRefetch={onRefetch}
-            />
+      <ErrorGetData
+        text={errMsg}
+        onRefetch={onRefetch}
+      />
     )
   }
 
@@ -96,9 +94,9 @@ const UsersPage = ({ className }: UsersPageProps) => {
   //
 
   return (
-        <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
-            {content}
-        </DynamicModuleLoader>
+    <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
+      {content}
+    </DynamicModuleLoader>
   )
 }
 

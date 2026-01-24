@@ -13,10 +13,9 @@ import {
 import { toolsPageActions } from '../../model/slices/toolsPageSlice'
 import { useTools } from '../../api/toolsApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
-import { ContentView } from '../../../Content'
 import { ClientOptions } from '../../../User/model/types/user'
 
-export function useToolsFilters () {
+export function useToolsFilters() {
   const page = useSelector(getToolsPageNum)
   const limit = useSelector(getToolsPageLimit)
   const hasMore = useSelector(getToolsHasMore)
@@ -63,10 +62,6 @@ export function useToolsFilters () {
     }
   }, [data, dispatch, hasMore, isFetching, isLoading, limit, page])
 
-  const onChangeView = useCallback((view: ContentView) => {
-    dispatch(toolsPageActions.setView(view))
-  }, [dispatch])
-
   const onChangeUserId = useCallback((event: any, client: ClientOptions) => {
     // const newUserId = client ? client.id || userId || '' : ''
     dispatch(toolsPageActions.setUser(client))
@@ -100,7 +95,6 @@ export function useToolsFilters () {
     error,
     data,
     clientId,
-    onChangeView,
     onChangeSearch,
     onChangeHasMore,
     onChangePage,

@@ -1,6 +1,6 @@
 import { StateSchema } from '@/app/providers/StoreProvider'
 
-export const getToolsPageView = (state: StateSchema) => state.toolsPage?.view || 'SMALL'
+export const getToolsPageView = (state: StateSchema) => 'BIG'
 export const getToolsPageNum = (state: StateSchema) => state.toolsPage?.page || 1
 export const getToolsPageLimit = (state: StateSchema) => state.toolsPage?.limit || 250
 export const getToolsHasMore = (state: StateSchema) => state.toolsPage?.hasMore

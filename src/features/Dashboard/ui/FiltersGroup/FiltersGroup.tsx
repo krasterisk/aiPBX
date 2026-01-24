@@ -9,7 +9,7 @@ import { AssistantOptions } from '@/entities/Assistants'
 import { BarsChart } from '@/shared/ui/mui/BarsChart'
 import { PeriodPicker } from '@/entities/PeriodPicker'
 import { SummaryCard } from '../SummaryCard/SummaryCard'
-import { PeriodExtendedFilters } from '../PeriodExtendedFilter/PeriodExtendedFilter'
+import { PeriodExtendedFilters } from '@/features/PeriodExtendedFilter'
 import { useSelector } from 'react-redux'
 import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
 import { currencySymbols } from "@/entities/User/model/consts/consts"

@@ -11,8 +11,6 @@ import { AvatarDropdown } from '@/features/avatarDropdown'
 import { IconButton, useMediaQuery } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { MenubarItems } from '../../Menubar/ui/MenubarItems/MenubarItems'
-import { LangSwitcher } from '@/entities/LangSwitcher'
-import { ThemeSwitcher } from '@/entities/ThemeSwitcher'
 
 interface NavbarProps {
   className?: string
@@ -39,47 +37,45 @@ export const Navbar = memo(({ className }: NavbarProps) => {
 
   if (authData) {
     return (
-            <header className={classNames(cls.Navbar, {}, [className])}>
-                <HStack gap="16" justify={'start'}>
-                    {isMobile && (
-                        <>
-                            <IconButton onClick={() => { toggleDrawer(true) }}>
-                                <MenuIcon className={cls.menuButton}/>
-                            </IconButton>
-                            <MenubarItems
-                                isMobile={isMobile}
-                                openDrawer={openDrawer}
-                                onDrawerClose={() => { toggleDrawer(false) }}
-                            />
-                        </>
-                    )}
-                     <LangSwitcher short={isMobile} />
-                     <ThemeSwitcher />
-                </HStack>
+      <header className={classNames(cls.Navbar, {}, [className])}>
+        <HStack gap="16" justify={'start'}>
+          {isMobile && (
+            <>
+              <IconButton onClick={() => { toggleDrawer(true) }}>
+                <MenuIcon className={cls.menuButton} />
+              </IconButton>
+              <MenubarItems
+                isMobile={isMobile}
+                openDrawer={openDrawer}
+                onDrawerClose={() => { toggleDrawer(false) }}
+              />
+            </>
+          )}
+        </HStack>
 
-                <HStack gap="16" className={cls.actions}>
-                    {/* <NotificationButton/> */}
-                    <UserBalance />
-                    <AvatarDropdown/>
-                </HStack>
-            </header>
+        <HStack gap="16" className={cls.actions}>
+          {/* <NotificationButton/> */}
+          <UserBalance />
+          <AvatarDropdown />
+        </HStack>
+      </header>
     )
   }
   return (
-        <header className={classNames(cls.Navbar, {}, [className])}>
-            <Button
-                variant={'clear'}
-                className={cls.links}
-                onClick={onShowModal}
-            >
-                {t('Вход')}
-            </Button>
-            {isAuthModal && (
-                <LoginModal
-                    isOpen={isAuthModal}
-                    onClose={onCloseModal}
-                />
-            )}
-        </header>
+    <header className={classNames(cls.Navbar, {}, [className])}>
+      <Button
+        variant={'clear'}
+        className={cls.links}
+        onClick={onShowModal}
+      >
+        {t('Вход')}
+      </Button>
+      {isAuthModal && (
+        <LoginModal
+          isOpen={isAuthModal}
+          onClose={onCloseModal}
+        />
+      )}
+    </header>
   )
 })

@@ -1,5 +1,4 @@
 import { UserCurrencyValues, UserRolesValues } from '../consts/consts'
-import { ContentView } from '../../../Content'
 import { HTMLAttributeAnchorTarget } from 'react'
 
 export interface ResetUserPasswordProps {
@@ -56,7 +55,6 @@ export interface UsersListProps {
   target?: HTMLAttributeAnchorTarget
   isLoading?: boolean
   isError?: boolean
-  view?: ContentView
   users?: AllUsers
   onDelete?: (id: string) => void
 }

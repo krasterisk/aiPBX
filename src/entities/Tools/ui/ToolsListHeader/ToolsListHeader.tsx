@@ -6,7 +6,6 @@ import { getRouteToolsCreate } from '@/shared/const/router'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { IconButton, useMediaQuery } from '@mui/material'
 import AddBox from '@mui/icons-material/AddBox'
-import { ContentViewSelector } from '../../../Content'
 import { useTranslation } from 'react-i18next'
 import { Input } from '@/shared/ui/redesigned/Input'
 import { Icon } from '@/shared/ui/redesigned/Icon'
@@ -17,28 +16,26 @@ import { ClientSelect, isUserAdmin } from '@/entities/User'
 import { useSelector } from 'react-redux'
 
 interface ToolsListHeaderProps {
-  className?: string
+    className?: string
 }
 
 export const ToolsListHeader = memo((props: ToolsListHeaderProps) => {
-  const {
-    className
-  } = props
+    const {
+        className
+    } = props
 
-  const {
-    search,
-    view,
-    clientId,
-    onChangeUserId,
-    onChangeSearch,
-    onChangeView
-  } = useToolsFilters()
+    const {
+        search,
+        clientId,
+        onChangeUserId,
+        onChangeSearch
+    } = useToolsFilters()
 
-  const { t } = useTranslation('tools')
-  const isMobile = useMediaQuery('(max-width:800px)')
-  const isAdmin = useSelector(isUserAdmin)
+    const { t } = useTranslation('tools')
+    const isMobile = useMediaQuery('(max-width:800px)')
+    const isAdmin = useSelector(isUserAdmin)
 
-  return (
+    return (
         <VStack max>
             <HStack
                 className={classNames(cls.ToolsListHeader, { [cls.mobileHeader]: isMobile }, [className])}
@@ -46,14 +43,13 @@ export const ToolsListHeader = memo((props: ToolsListHeaderProps) => {
                 max
             >
                 <HStack gap={'8'} justify={'start'}>
-                    <ContentViewSelector view={view} onViewClick={onChangeView}/>
                     <Input
                         data-testid={'ToolSearch'}
                         className={cls.searchInput}
                         placeholder={t('Поиск') ?? ''}
                         size={'s'}
                         onChange={onChangeSearch}
-                        addonLeft={<Icon Svg={SearchIcon}/>}
+                        addonLeft={<Icon Svg={SearchIcon} />}
                         value={search}
                     />
 
@@ -65,8 +61,8 @@ export const ToolsListHeader = memo((props: ToolsListHeaderProps) => {
                         to={getRouteToolsCreate()}
                     >
                         <IconButton>
-                            <AddBox className={cls.icon} fontSize={'large'}/>
-                            <Text text={t('Создать функцию')}/>
+                            <AddBox className={cls.icon} fontSize={'large'} />
+                            <Text text={t('Создать функцию')} />
                         </IconButton>
                     </AppLink>
                 </HStack>
@@ -80,5 +76,5 @@ export const ToolsListHeader = memo((props: ToolsListHeaderProps) => {
                 />
             }
         </VStack>
-  )
+    )
 })

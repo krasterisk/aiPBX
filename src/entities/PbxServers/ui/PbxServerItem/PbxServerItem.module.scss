@@ -1,6 +1,7 @@
 .PbxServerItem {
     position: relative;
     background: var(--light-bg-redesigned);
+    border: 0.5px solid var(--accent-redesigned);
 
     &:hover {
         cursor: pointer;

@@ -1,17 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ContentView } from '../../../Content'
 import { ReportsPageSchema } from '../types/reportsPageSchema'
-import { REPORTS_VIEW_LOCALSTORAGE_KEY } from '@/shared/const/localstorage'
 import { ClientOptions } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 
 const initialState: ReportsPageSchema = {
   page: 1,
-  limit: 250,
+  limit: 25,
   hasMore: true,
   // filters
-  view: 'BIG',
-  manualView: false,
   _inited: false,
   search: '',
   userId: ''
@@ -21,14 +17,6 @@ export const reportsPageSlice = createSlice({
   name: 'reportsPageSlice',
   initialState,
   reducers: {
-    setView: (state, action: PayloadAction<ContentView>) => {
-      state.view = action.payload
-      localStorage.setItem(REPORTS_VIEW_LOCALSTORAGE_KEY, action.payload)
-    },
-    setManualView: (state, action: PayloadAction<boolean>) => {
-      state.manualView = action.payload
-    },
-
     setPage: (state, action: PayloadAction<number>) => {
       state.page = action.payload
     },
@@ -64,10 +52,7 @@ export const reportsPageSlice = createSlice({
       state.userId = action.payload.id
     },
     initState: (state) => {
-      const view = localStorage.getItem(REPORTS_VIEW_LOCALSTORAGE_KEY) as ContentView
-      state.view = view
-      state.manualView = false
-      state.limit = view === 'BIG' ? 25 : 25
+      state.limit = 25
       state._inited = true
     }
   }

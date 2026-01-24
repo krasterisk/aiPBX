@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ContentView } from '../../../Content'
 import { PbxServer } from '../types/pbxServers'
 import { PbxServersPageSchema } from '../types/pbxServersPageSchema'
-import { PBX_VIEW_LOCALSTORAGE_KEY } from '@/shared/const/localstorage'
 import { ClientOptions } from '@/entities/User'
 
 const initialState: PbxServersPageSchema = {
@@ -10,7 +8,7 @@ const initialState: PbxServersPageSchema = {
   limit: 250,
   hasMore: true,
   // filters
-  view: 'SMALL',
+  view: 'BIG',
   _inited: false,
   search: '',
   userId: '',
@@ -45,10 +43,6 @@ export const pbxServersPageSlice = createSlice({
         userId: ''
       }
     },
-    setView: (state, action: PayloadAction<ContentView>) => {
-      state.view = action.payload
-      localStorage.setItem(PBX_VIEW_LOCALSTORAGE_KEY, action.payload)
-    },
     setPage: (state, action: PayloadAction<number>) => {
       state.page = action.payload
     },
@@ -79,9 +73,8 @@ export const pbxServersPageSlice = createSlice({
     },
 
     initState: (state) => {
-      const view = localStorage.getItem(PBX_VIEW_LOCALSTORAGE_KEY) as ContentView
-      state.view = view
-      state.limit = view === 'BIG' ? 250 : 250
+      state.view = 'BIG'
+      state.limit = 250
       state._inited = true
     }
   }

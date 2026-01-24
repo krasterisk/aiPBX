@@ -1,6 +1,5 @@
 import { User } from '@/entities/User'
 import { HTMLAttributeAnchorTarget } from 'react'
-import { ContentView } from '@/entities/Content'
 import { AllTools } from '@/entities/Tools'
 
 export interface AllPbxServers {
@@ -31,7 +30,6 @@ export interface PbxServerListProps {
   target?: HTMLAttributeAnchorTarget
   isPbxServersLoading?: boolean
   isPbxServersError?: boolean
-  view?: ContentView
-  pbxServers?: AllTools
+  pbxServers?: AllPbxServers
   onDelete?: (id: string) => void
 }

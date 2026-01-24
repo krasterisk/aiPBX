@@ -5,7 +5,7 @@ import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Assistant, AssistantsListProps } from '../../model/types/assistants'
 import { AssistantsListHeader } from '../AssistantsListHeader/AssistantsListHeader'
 import { ErrorGetData } from '../../../ErrorGetData'
-import { ContentView, ContentListItemSkeleton } from '../../../Content'
+import { ContentListItemSkeleton } from '../../../Content'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { useTranslation } from 'react-i18next'
 import { AssistantItem } from '../AssistantItem/AssistantItem'
@@ -21,8 +21,7 @@ export const AssistantsList = (props: AssistantsListProps) => {
     isAssistantsError,
     isAssistantsLoading,
     assistants,
-    target,
-    view = 'BIG'
+    target
   } = props
 
   const { t } = useTranslation('assistants')
@@ -65,11 +64,11 @@ export const AssistantsList = (props: AssistantsListProps) => {
     }
   }, [assistants?.count, assistants?.rows, checkedBox.length, indeterminateBox])
 
-  const getSkeletons = (view: ContentView) => {
-    return new Array(view === 'SMALL' ? 9 : 4)
+  const getSkeletons = () => {
+    return new Array(4)
       .fill(0)
       .map((item, index) => (
-                <ContentListItemSkeleton className={cls.card} key={index} view={view}/>
+        <ContentListItemSkeleton className={cls.card} key={index} view={'BIG'} />
       ))
   }
 
@@ -83,85 +82,85 @@ export const AssistantsList = (props: AssistantsListProps) => {
 
   if (isAssistantsError && isError) {
     return (
-            <ErrorGetData/>
+      <ErrorGetData />
     )
   }
 
   if (isLoading) {
     return (
-            <VStack gap={'16'} align={'center'} className={cls.loader}>
-                <Loader/>
-            </VStack>
+      <VStack gap={'16'} align={'center'} className={cls.loader}>
+        <Loader />
+      </VStack>
     )
   }
 
   const checkedButtons = (
-        <HStack
-            gap={'16'}
-            wrap={'wrap'}
-            className={classNames('', {
-              [cls.uncheckButtons]: checkedBox.length === 0,
-              [cls.checkButton]: checkedBox.length > 0
-            }, [])}
-        >
-            <Button
-                variant={'clear'}
-                onClick={handlerDeleteAll}
-            >
-                <Text text={t('Удалить выбранные')} variant={'error'}/>
-            </Button>
-        </HStack>
+    <HStack
+      gap={'16'}
+      wrap={'wrap'}
+      className={classNames('', {
+        [cls.uncheckButtons]: checkedBox.length === 0,
+        [cls.checkButton]: checkedBox.length > 0
+      }, [])}
+    >
+      <Button
+        variant={'clear'}
+        onClick={handlerDeleteAll}
+      >
+        <Text text={t('Удалить выбранные')} variant={'error'} />
+      </Button>
+    </HStack>
   )
 
   const renderContent = (assistant: Assistant) => {
     return (
-            <AssistantItem
-                key={assistant.id}
-                assistant={assistant}
-                checkedItems={checkedBox}
-                onChangeChecked={handleCheckChange}
-                view={view}
-                target={target}
-                className={cls.caskItem}
-            />
+      <AssistantItem
+        key={assistant.id}
+        assistant={assistant}
+        checkedItems={checkedBox}
+        onChangeChecked={handleCheckChange}
+        view={'BIG'}
+        target={target}
+        className={cls.caskItem}
+      />
     )
   }
 
   return (
-        <VStack gap={'16'} max>
-            <AssistantsListHeader />
-            <Card max className={classNames(cls.AssistantsToolBar, {}, [className])}>
-                <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
-                    <Check
-                        className={classNames(cls.AssistantsList, {
-                          [cls.uncheck]: checkedBox.length === 0,
-                          [cls.check]: checkedBox.length > 0
-                        }, [])}
-                        indeterminate={indeterminateBox}
-                        checked={checkedBox.length === assistants?.count}
-                        onChange={handleCheckAll}
-                    />
-                    {checkedButtons}
-                    {
-                        checkedBox.length > 0
-                          ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(assistants?.count)}/>
-                          : <Text text={t('Всего') + ': ' + String(assistants?.count || 0)}/>
-                    }
-                </HStack>
-            </Card>
+    <VStack gap={'16'} max>
+      <AssistantsListHeader />
+      <Card max className={classNames(cls.AssistantsToolBar, {}, [className])}>
+        <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
+          <Check
+            className={classNames(cls.AssistantsList, {
+              [cls.uncheck]: checkedBox.length === 0,
+              [cls.check]: checkedBox.length > 0
+            }, [])}
+            indeterminate={indeterminateBox}
+            checked={checkedBox.length === assistants?.count}
+            onChange={handleCheckAll}
+          />
+          {checkedButtons}
+          {
+            checkedBox.length > 0
+              ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(assistants?.count)} />
+              : <Text text={t('Всего') + ': ' + String(assistants?.count || 0)} />
+          }
+        </HStack>
+      </Card>
 
-            {assistants?.rows.length
-              ? <HStack wrap={'wrap'} gap={'16'} align={'start'} max>
-                    {assistants.rows.map(renderContent)}
-                </HStack>
-              : <HStack
-                    justify={'center'} max
-                    className={classNames('', {}, [className, cls[view]])}
-                >
-                    <Text align={'center'} text={t('Данные не найдены')}/>
-                </HStack>
-            }
-            {isAssistantsLoading && getSkeletons(view)}
-        </VStack>
+      {assistants?.rows.length
+        ? <HStack wrap={'wrap'} gap={'16'} align={'start'} max>
+          {assistants.rows.map(renderContent)}
+        </HStack>
+        : <HStack
+          justify={'center'} max
+          className={classNames('', {}, [className, cls.BIG])}
+        >
+          <Text align={'center'} text={t('Данные не найдены')} />
+        </HStack>
+      }
+      {isAssistantsLoading && getSkeletons()}
+    </VStack>
   )
 }

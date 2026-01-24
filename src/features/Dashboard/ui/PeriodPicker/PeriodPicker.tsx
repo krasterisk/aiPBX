@@ -11,7 +11,7 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { PeriodTabs } from '@/entities/Filters'
 import quarterOfYear from 'dayjs/plugin/quarterOfYear'
 import TuneIcon from '@mui/icons-material/Tune'
-import { PeriodExtendedFilters } from '../PeriodExtendedFilter/PeriodExtendedFilter'
+import { PeriodExtendedFilters } from '@/features/PeriodExtendedFilter'
 import { ClientOptions } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 
@@ -79,51 +79,51 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
   }, [date, onChangeEndDate, onChangeStartDate, tab])
 
   return (
-        <VStack gap={'16'}>
-            <HStack gap={'8'} wrap={'nowrap'}>
-                <PeriodExtendedFilters
-                    assistantId={assistantId}
-                    userId={userId}
-                    startDate={startDate}
-                    endDate={endDate}
-                    onChangeUserId={onChangeUserId}
-                    onChangeAssistant={onChangeAssistant}
-                    onChangeStartDate={onChangeStartDate}
-                    onChangeEndDate={onChangeEndDate}
-                    show={filterShow} onClose={() => {
-                      setFilterShow(false)
-                    }}/>
-                <PeriodTabs tab={tab} onChangeTab={onChangeTab} />
-                <Button variant={'clear'} onClick={() => {
-                  setFilterShow(true)
-                }}>
-                    <TuneIcon fontSize={'large'} />
-                </Button>
-            </HStack>
-            <HStack gap={'8'} max>
-                <Button
-                    variant={'clear'}
-                    onClick={() => {
-                      handleDateChange('left')
-                    }}
-                >
-                    <Icon Svg={Left} width={16} height={16}/>
-                </Button>
-                <Input
-                    readonly
-                    data-testid={'PeriodPicker.period'}
-                    onChange={handlerChangeDate}
-                    value={String(startDate) + ' - ' + String(endDate)}
-                />
-                <Button
-                    variant={'clear'}
-                    onClick={() => {
-                      handleDateChange('right')
-                    }}
-                >
-                    <Icon Svg={Right} width={16} height={16}/>
-                </Button>
-            </HStack>
-        </VStack>
+    <VStack gap={'16'}>
+      <HStack gap={'8'} wrap={'nowrap'}>
+        <PeriodExtendedFilters
+          assistantId={assistantId}
+          userId={userId}
+          startDate={startDate}
+          endDate={endDate}
+          onChangeUserId={onChangeUserId}
+          onChangeAssistant={onChangeAssistant}
+          onChangeStartDate={onChangeStartDate}
+          onChangeEndDate={onChangeEndDate}
+          show={filterShow} onClose={() => {
+            setFilterShow(false)
+          }} />
+        <PeriodTabs tab={tab} onChangeTab={onChangeTab} />
+        <Button variant={'clear'} onClick={() => {
+          setFilterShow(true)
+        }}>
+          <TuneIcon fontSize={'large'} />
+        </Button>
+      </HStack>
+      <HStack gap={'8'} max>
+        <Button
+          variant={'clear'}
+          onClick={() => {
+            handleDateChange('left')
+          }}
+        >
+          <Icon Svg={Left} width={16} height={16} />
+        </Button>
+        <Input
+          readonly
+          data-testid={'PeriodPicker.period'}
+          onChange={handlerChangeDate}
+          value={String(startDate) + ' - ' + String(endDate)}
+        />
+        <Button
+          variant={'clear'}
+          onClick={() => {
+            handleDateChange('right')
+          }}
+        >
+          <Icon Svg={Right} width={16} height={16} />
+        </Button>
+      </HStack>
+    </VStack>
   )
 })

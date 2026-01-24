@@ -8,33 +8,41 @@ interface DateSelectorProps extends DatePickerProps<any> {
 }
 
 const acStyles = {
+  '& .MuiInputBase-root': {
+    color: 'var(--text-redesigned) !important'
+  },
+  '& .MuiPickersOutlinedInput-root': {
+    color: 'var(--text-redesigned) !important',
+    WebkitTextFillColor: 'var(--text-redesigned) !important'
+  },
+  '& input': {
+    color: 'var(--text-redesigned) !important',
+    WebkitTextFillColor: 'var(--text-redesigned) !important'
+  },
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
-      border: '2px solid var(--icon-redesigned)', // Цвет по умолчанию
+      border: '2px solid var(--icon-redesigned)',
       borderRadius: '48px'
     },
     '&:hover fieldset': {
-      borderColor: 'var(--accent-redesigned)' // Цвет рамки при наведении
+      borderColor: 'var(--accent-redesigned)'
     },
     '&.Mui-focused fieldset': {
-      borderColor: 'var(--accent-redesigned)' // Цвет рамки при фокусировке
+      borderColor: 'var(--accent-redesigned)'
     }
   },
-  '& .MuiInputBase-input': {
-    color: 'var(--text-redesigned)'
+  '& .MuiFormLabel-root': {
+    color: 'var(--text-redesigned) !important'
+  },
+  '& .MuiInputLabel-root': {
+    color: 'var(--text-redesigned) !important'
+  },
+  '& .MuiSvgIcon-root': {
+    color: 'var(--icon-redesigned)'
   },
   '& .MuiInputBase-input::placeholder': {
     color: 'var(--text-redesigned)'
   },
-  '& .MuiInputLabel-root': {
-    color: 'var(--text-redesigned)'
-  },
-  '& .MuiInputLabel-root.Mui-focused': {
-    color: 'var(--text-redesigned)'
-  },
-  '& .MuiSvgIcon-root': {
-    color: 'var(--icon-redesigned)'
-  }
 }
 
 export const DateSelector = memo((props: DateSelectorProps) => {
@@ -53,11 +61,35 @@ export const DateSelector = memo((props: DateSelectorProps) => {
         sx={acStyles}
         closeOnSelect
         slotProps={{
+          textField: {
+            sx: acStyles
+          },
           actionBar: {
             actions: ['clear']
           },
           popper: {
-            sx: { zIndex: 12000 }
+            sx: {
+              zIndex: 12000,
+              '& .MuiPaper-root': {
+                backgroundColor: 'var(--bg-redesigned)',
+                color: 'var(--text-redesigned)'
+              },
+              '& .MuiPickersDay-root': {
+                color: 'var(--text-redesigned)'
+              },
+              '& .MuiDayCalendar-weekDayLabel': {
+                color: 'var(--text-redesigned)'
+              },
+              '& .MuiPickersCalendarHeader-label': {
+                color: 'var(--text-redesigned)'
+              },
+              '& .MuiTypography-root': {
+                color: 'var(--text-redesigned)'
+              },
+              '& .MuiSvgIcon-root': {
+                color: 'var(--icon-redesigned)'
+              }
+            }
           }
         }}
         {...otherProps}

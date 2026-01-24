@@ -2,7 +2,6 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ReportTable.module.scss'
 import React, { HTMLAttributeAnchorTarget, memo, useCallback, useState } from 'react'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { ContentView } from '@/entities/Content'
 import { Check } from '@/shared/ui/mui/Check'
 import { Report } from '../../model/types/report'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +19,6 @@ import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
 interface ReportTableProps {
   className?: string
   report: Report
-  view?: ContentView
   target?: HTMLAttributeAnchorTarget
   checkedItems?: string[]
   onChangeChecked?: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -30,7 +28,6 @@ export const ReportTable = memo((props: ReportTableProps) => {
   const {
     className,
     report,
-    view = 'SMALL',
     checkedItems,
     onChangeChecked
   } = props
@@ -70,7 +67,7 @@ export const ReportTable = memo((props: ReportTableProps) => {
   const duration = report.duration ? formatTime(report.duration, t) : ''
   const isMobile = useMediaQuery('(max-width:800px)')
 
-  const viewMode = isMobile ? 'SMALL' : cls[view]
+  const viewMode = isMobile ? 'SMALL' : cls.BIG
 
   return (
     <>

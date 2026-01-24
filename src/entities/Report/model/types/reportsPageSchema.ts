@@ -1,4 +1,3 @@
-import { ContentView } from '@/entities/Content'
 import { ClientOptions } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 
@@ -13,8 +12,6 @@ export interface ReportsPageSchema {
   assistants?: AssistantOptions[]
   startDate?: string
   endDate?: string
-  view: ContentView
-  manualView: boolean
   _inited?: boolean
   refreshOnFocus?: boolean
   search: string

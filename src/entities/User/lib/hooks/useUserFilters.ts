@@ -12,12 +12,11 @@ import {
   getUsersTab
 } from '../../model/selectors/usersPageSelectors'
 import { usersPageActions } from '../../model/slice/usersPageSlice'
-import { ContentView } from '../../../Content'
 import { useGetUsers } from '../../api/usersApi'
 import { UserSortField } from '../../model/consts/consts'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
 
-export function useUserFilters () {
+export function useUserFilters() {
   const page = useSelector(getUsersPageNum)
   const limit = useSelector(getUsersPageLimit)
   const order = useSelector(getUsersPageOrder)
@@ -59,10 +58,6 @@ export function useUserFilters () {
       }
     }
   }, [data, dispatch, hasMore, isFetching, isLoading, limit, page])
-
-  const onChangeView = useCallback((view: ContentView) => {
-    dispatch(usersPageActions.setView(view))
-  }, [dispatch])
 
   const onChangeSort = useCallback((sort: UserSortField) => {
     dispatch(usersPageActions.setSort(sort))
@@ -108,7 +103,6 @@ export function useUserFilters () {
     isLoading,
     error,
     data,
-    onChangeView,
     onChangeSort,
     onChangeTab,
     onChangeSearch,

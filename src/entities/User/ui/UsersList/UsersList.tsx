@@ -3,7 +3,7 @@ import cls from './UsersList.module.scss'
 import React, { useCallback, useState } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { ErrorGetData } from '../../../ErrorGetData'
-import { ContentListItemSkeleton, ContentView } from '../../../Content'
+import { ContentListItemSkeleton } from '../../../Content'
 import { User, UsersListProps } from '../../model/types/user'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
@@ -19,7 +19,6 @@ import { Loader } from '@/shared/ui/Loader'
 
 export const UsersList = (props: UsersListProps) => {
   const {
-    view = 'SMALL',
     className,
     isLoading,
     target,
@@ -68,11 +67,11 @@ export const UsersList = (props: UsersListProps) => {
     }
   }, [users?.count, users?.rows, checkedBox.length, indeterminateBox])
 
-  const getSkeletons = (view: ContentView) => {
-    return new Array(view === 'SMALL' ? 9 : 4)
+  const getSkeletons = () => {
+    return new Array(4)
       .fill(0)
       .map((item, index) => (
-        <ContentListItemSkeleton className={cls.card} key={index} view={view} />
+        <ContentListItemSkeleton className={cls.card} key={index} view={'BIG'} />
       ))
   }
 
@@ -120,11 +119,6 @@ export const UsersList = (props: UsersListProps) => {
       >
         <Text text={t('Удалить выбранные')} variant={'error'} />
       </Button>
-      {/* <Button */}
-      {/*    variant={'clear'} */}
-      {/*    onClick={exportToExcel}> */}
-      {/*    <Text text={t('Экспорт в Excel')} variant={'success'}/> */}
-      {/* </Button> */}
     </HStack>
   )
 
@@ -136,7 +130,7 @@ export const UsersList = (props: UsersListProps) => {
         checkedItems={checkedBox}
         onChangeChecked={handleCheckChange}
         target={target}
-        view={view}
+        view={'BIG'}
         className={cls.userItem}
         onEdit={(id) => navigate(getRouteUserEdit(id))}
       />
@@ -172,12 +166,12 @@ export const UsersList = (props: UsersListProps) => {
         </HStack>
         : <HStack
           justify={'center'} max
-          className={classNames('', {}, [className, cls[view]])}
+          className={classNames('', {}, [className, cls.BIG])}
         >
           <Text align={'center'} text={t('Данные не найдены')} />
         </HStack>
       }
-      {isLoading && getSkeletons(view)}
+      {isLoading && getSkeletons()}
     </VStack>
   )
 }

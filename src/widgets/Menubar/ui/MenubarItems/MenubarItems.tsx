@@ -7,6 +7,9 @@ import { SimpleTreeView, TreeItem } from '@mui/x-tree-view'
 import { useMenubarItems } from '../../model/selectors/getMenubarItems'
 import { Drawer } from '@/shared/ui/mui/Drawer'
 import { AppLogo } from '@/shared/ui/redesigned/AppLogo'
+import { LangSwitcher } from '@/entities/LangSwitcher'
+import { ThemeSwitcher } from '@/entities/ThemeSwitcher'
+import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 
 interface MenubarItemProps {
     className?: string
@@ -63,7 +66,13 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
     if (isMobile) {
         return (
             <Drawer isOpen={openDrawer} onClose={onDrawerClose}>
-                {renderTree(menubarItemList)}
+                <VStack max style={{ height: '100%' }}>
+                    {renderTree(menubarItemList)}
+                    <HStack className={cls.switchers} justify="center" gap="16">
+                        <LangSwitcher short />
+                        <ThemeSwitcher />
+                    </HStack>
+                </VStack>
             </Drawer>
         )
     }

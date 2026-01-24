@@ -7,8 +7,7 @@ export {
   getReportsPageNum,
   getReportsTab,
   getReportsPageSearch,
-  getReportsPageView,
-  getReportsPageManualView
+  getReportsPageView
 } from './model/selectors/reportSelectors'
 
 export { initReportsPage } from './model/service/initReportsPage/initReportsPage'

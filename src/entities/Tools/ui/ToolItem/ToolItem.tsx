@@ -32,64 +32,65 @@ export const ToolItem = memo((props: ToolItemProps) => {
 
   if (view === 'BIG') {
     return (
-                <Card
-                    padding={'16'}
-                    max
-                    className={classNames(cls.ToolItem, {}, [className, cls[view]])}
-                >
-                    <HStack gap={'24'} wrap={'wrap'} justify={'start'}>
-                        <Check
-                            key={String(tool.id)}
-                            className={classNames('', {
-                              [cls.uncheck]: !checkedItems?.includes(String(tool.id)),
-                              [cls.check]: checkedItems?.includes(String(tool.id))
-                            }, [])}
-                            value={String(tool.id)}
-                            size={'small'}
-                            checked={checkedItems?.includes(String(tool.id))}
-                            onChange={onChangeChecked}
-                        />
-                        <AppLink to={getRouteToolsEdit(tool.id || '')}>
-                            <VStack max>
-                                <Text title={tool.name}/>
-                                {tool.comment ? <HStack><Text text={tool.comment}/></HStack> : ''}
-                            </VStack>
-                        </AppLink>
-                    </HStack>
-                    <ToolMenu id={tool.id || ''} className={cls.menu}/>
-                </Card>
+      <Card
+        padding={'16'}
+        max
+        border={'partial'}
+        className={classNames(cls.ToolItem, {}, [className, cls[view]])}
+      >
+        <HStack gap={'24'} wrap={'wrap'} justify={'start'}>
+          <Check
+            key={String(tool.id)}
+            className={classNames('', {
+              [cls.uncheck]: !checkedItems?.includes(String(tool.id)),
+              [cls.check]: checkedItems?.includes(String(tool.id))
+            }, [])}
+            value={String(tool.id)}
+            size={'small'}
+            checked={checkedItems?.includes(String(tool.id))}
+            onChange={onChangeChecked}
+          />
+          <AppLink to={getRouteToolsEdit(tool.id || '')}>
+            <VStack max>
+              <Text title={tool.name} />
+              {tool.comment ? <HStack><Text text={tool.comment} /></HStack> : ''}
+            </VStack>
+          </AppLink>
+        </HStack>
+        {/* <ToolMenu id={tool.id || ''} className={cls.menu} /> */}
+      </Card>
     )
   }
 
   return (
-            <Card
-                padding={'24'}
-                border={'partial'}
-                className={classNames(cls.ToolItem, {}, [className, cls[view]])}
-            >
-                <VStack
-                    gap={'8'}
-                    justify={'start'}
-                >
+    <Card
+      padding={'24'}
+      border={'partial'}
+      className={classNames(cls.ToolItem, {}, [className, cls[view]])}
+    >
+      <VStack
+        gap={'8'}
+        justify={'start'}
+      >
 
-                    <Check
-                        key={String(tool.id)}
-                        className={classNames('', {
-                          [cls.uncheck]: !checkedItems?.includes(String(tool.id)),
-                          [cls.check]: checkedItems?.includes(String(tool.id))
-                        }, [])}
-                        value={String(tool.id)}
-                        size={'small'}
-                        checked={checkedItems?.includes(String(tool.id))}
-                        onChange={onChangeChecked}
-                    />
-                    <AppLink to={getRouteToolsEdit(tool.id || '')}>
-                        <Text title={tool.name}/>
-                        {tool.comment ? <HStack><Text text={tool.comment}/></HStack> : ''}
-                    </AppLink>
-                </VStack>
-                <ToolMenu id={tool?.id || ''} className={cls.menu}/>
-            </Card>
+        <Check
+          key={String(tool.id)}
+          className={classNames('', {
+            [cls.uncheck]: !checkedItems?.includes(String(tool.id)),
+            [cls.check]: checkedItems?.includes(String(tool.id))
+          }, [])}
+          value={String(tool.id)}
+          size={'small'}
+          checked={checkedItems?.includes(String(tool.id))}
+          onChange={onChangeChecked}
+        />
+        <AppLink to={getRouteToolsEdit(tool.id || '')}>
+          <Text title={tool.name} />
+          {tool.comment ? <HStack><Text text={tool.comment} /></HStack> : ''}
+        </AppLink>
+      </VStack>
+      <ToolMenu id={tool?.id || ''} className={cls.menu} />
+    </Card>
   )
 }
 )

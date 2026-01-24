@@ -6,7 +6,6 @@ import { getRouteAssistantCreate } from '@/shared/const/router'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { IconButton, useMediaQuery } from '@mui/material'
 import AddBox from '@mui/icons-material/AddBox'
-import { ContentViewSelector } from '../../../Content'
 import { useTranslation } from 'react-i18next'
 import { Input } from '@/shared/ui/redesigned/Input'
 import { Icon } from '@/shared/ui/redesigned/Icon'
@@ -17,28 +16,26 @@ import { ClientSelect, isUserAdmin } from '@/entities/User'
 import { useSelector } from 'react-redux'
 
 interface AssistantsListHeaderProps {
-  className?: string
+    className?: string
 }
 
 export const AssistantsListHeader = memo((props: AssistantsListHeaderProps) => {
-  const {
-    className
-  } = props
+    const {
+        className
+    } = props
 
-  const {
-    search,
-    view,
-    clientId,
-    onChangeUserId,
-    onChangeSearch,
-    onChangeView
-  } = useAssistantFilters()
+    const {
+        search,
+        clientId,
+        onChangeUserId,
+        onChangeSearch
+    } = useAssistantFilters()
 
-  const { t } = useTranslation('assistants')
-  const isMobile = useMediaQuery('(max-width:800px)')
-  const isAdmin = useSelector(isUserAdmin)
+    const { t } = useTranslation('assistants')
+    const isMobile = useMediaQuery('(max-width:800px)')
+    const isAdmin = useSelector(isUserAdmin)
 
-  return (
+    return (
         <VStack max>
             <HStack
                 className={classNames(cls.AssistantsListHeader, { [cls.mobileHeader]: isMobile }, [className])}
@@ -46,14 +43,13 @@ export const AssistantsListHeader = memo((props: AssistantsListHeaderProps) => {
                 max
             >
                 <HStack gap={'8'} justify={'start'}>
-                    <ContentViewSelector view={view} onViewClick={onChangeView}/>
                     <Input
                         data-testid={'AssistantSearch'}
                         className={cls.searchInput}
                         placeholder={t('Поиск') ?? ''}
                         size={'s'}
                         onChange={onChangeSearch}
-                        addonLeft={<Icon Svg={SearchIcon}/>}
+                        addonLeft={<Icon Svg={SearchIcon} />}
                         value={search}
                     />
                 </HStack>
@@ -64,8 +60,8 @@ export const AssistantsListHeader = memo((props: AssistantsListHeaderProps) => {
                         to={getRouteAssistantCreate()}
                     >
                         <IconButton>
-                            <AddBox className={cls.icon} fontSize={'large'}/>
-                            <Text text={t('Создать ассистента')}/>
+                            <AddBox className={cls.icon} fontSize={'large'} />
+                            <Text text={t('Создать ассистента')} />
                         </IconButton>
                     </AppLink>
                 </HStack>
@@ -79,5 +75,5 @@ export const AssistantsListHeader = memo((props: AssistantsListHeaderProps) => {
                 />
             }
         </VStack>
-  )
+    )
 })
