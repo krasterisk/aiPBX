@@ -4,12 +4,15 @@ import { memo, useCallback } from 'react'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
 import { useTranslation } from 'react-i18next'
-import { Card, CardVariant } from '@/shared/ui/redesigned/Card'
+import { CardVariant } from '@/shared/ui/redesigned/Card'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { getRouteTools } from '@/shared/const/router'
+import DeleteIcon from '@mui/icons-material/Delete'
+import CloseIcon from '@mui/icons-material/Close'
+import SaveIcon from '@mui/icons-material/Save'
 
 interface ToolEditCardHeaderProps {
   className?: string
@@ -36,58 +39,44 @@ export const ToolEditCardHeader = memo((props: ToolEditCardHeaderProps) => {
     }
   }, [toolId, onDelete])
 
-  const headerButtons = (
-      <HStack gap="8">
-          {variant !== 'diviner-bottom' &&
-              <Button
-                  title={t('Удалить') ?? ''}
-                  variant={'outline'}
-                  color={'error'}
-                  onClick={deleteHandler}
-              >
-                  {t('Удалить')}
-              </Button>
-          }
-
-        <AppLink
-            to={getRouteTools()}
-        >
-          <Button
-              title={t('Закрыть') ?? ''}
-              variant={'outline'}
-              color={'normal'}
-          >
-            {t('Закрыть')}
-          </Button>
-        </AppLink>
+  const actions = (
+    <HStack gap="8" justify="end" wrap="wrap">
+      {variant !== 'diviner-bottom' && onDelete &&
         <Button
-            title={t('Сохранить') ?? ''}
-            variant={'outline'}
-            color={'success'}
-            onClick={onEdit}
+          variant={'outline'}
+          color={'error'}
+          onClick={deleteHandler}
+          addonLeft={<DeleteIcon />}
         >
-          {t('Сохранить')}
+          {t('Удалить')}
         </Button>
-      </HStack>
+      }
+
+      <Button
+        variant={'outline'}
+        color={'success'}
+        onClick={onEdit}
+        addonLeft={<SaveIcon />}
+      >
+        {t('Сохранить')}
+      </Button>
+      <AppLink
+        to={getRouteTools()}
+      >
+        <Button
+          variant={'outline'}
+          addonLeft={<CloseIcon />}
+        >
+          {t('Закрыть')}
+        </Button>
+      </AppLink>
+    </HStack>
   )
 
   return (
-      <Card
-          className={classNames(cls.ToolEditCardHeader, {}, [className])}
-          padding={'8'}
-          border={'partial'}
-          max
-          variant={variant}
-      >
-          {variant !== 'diviner-bottom'
-            ? <HStack max justify={'between'} wrap={'wrap'}>
-                  <Text title={t('Редактировать')}/>
-                  {headerButtons}
-              </HStack>
-            : <HStack max justify={'end'} wrap={'wrap'}>
-                  {headerButtons}
-              </HStack>
-          }
-      </Card>
+    <HStack max justify={'between'} wrap={'wrap'} gap={'8'} className={classNames(cls.ToolEditCardHeader, {}, [className])}>
+      {variant !== 'diviner-bottom' && <Text title={t('Редактировать')} />}
+      {actions}
+    </HStack>
   )
 })

@@ -39,45 +39,41 @@ export const PbxServerEditCardHeader = memo((props: PbxServerEditCardHeaderProps
     }
   }, [pbxServerId, onDelete])
 
-  const headerButtons = (
-    <HStack gap="16">
-      <AppLink
-        to={getRoutePbxServers()}
+  const actions = (
+    <HStack gap="8" justify="end" wrap="wrap">
+      {onDelete && (
+        <Button
+          variant="outline"
+          color="error"
+          onClick={deleteHandler}
+          addonLeft={<DeleteIcon />}
+        >
+          {t('Удалить')}
+        </Button>
+      )}
+      <Button
+        variant="outline"
+        color="success"
+        onClick={onEdit}
+        addonLeft={<SaveIcon />}
       >
-        <CloseIcon className={cls.close} />
+        {t('Сохранить')}
+      </Button>
+      <AppLink to={getRoutePbxServers()}>
+        <Button
+          variant="outline"
+          addonLeft={<CloseIcon />}
+        >
+          {t('Закрыть')}
+        </Button>
       </AppLink>
     </HStack>
   )
 
   return (
-    <VStack max gap="16">
-      <Card
-        className={classNames(cls.PbxServerEditCardHeader, {}, [className])}
-        padding={'8'}
-        border={'partial'}
-        max
-        variant={variant}
-      >
-        {variant !== 'diviner-bottom'
-          ? <HStack max justify={'between'} wrap={'wrap'}>
-            <Text title={t('Редактировать')} />
-            {headerButtons}
-          </HStack>
-          : <HStack max justify={'end'} wrap={'wrap'}>
-            {headerButtons}
-          </HStack>
-        }
-      </Card>
-      <HStack max justify={'between'}>
-        <DeleteIcon
-          className={cls.delete}
-          onClick={deleteHandler}
-        />
-        <SaveIcon
-          className={cls.save}
-          onClick={onEdit}
-        />
-      </HStack>
-    </VStack>
+    <HStack max justify={'between'} wrap={'wrap'} gap={'8'}>
+      <Text title={t('Редактировать')} />
+      {actions}
+    </HStack>
   )
 })

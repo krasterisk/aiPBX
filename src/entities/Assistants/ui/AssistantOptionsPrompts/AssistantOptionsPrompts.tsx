@@ -39,13 +39,12 @@ export const AssistantOptionsPrompts = memo((props: AssistantOptionsPromptsProps
   }, [])
 
   const handleGenerate = useCallback(async () => {
-    if (!formFields?.id || !userPrompt.trim()) {
+    if (!userPrompt.trim()) {
       return
     }
 
     try {
       const result = await generatePrompt({
-        assistantId: formFields.id,
         prompt: userPrompt
       }).unwrap()
 
@@ -64,18 +63,20 @@ export const AssistantOptionsPrompts = memo((props: AssistantOptionsPromptsProps
     } catch (e) {
       toast.error(getErrorMessage(e))
     }
-  }, [formFields?.id, userPrompt, generatePrompt, onTextChangeHandler, t, handleClosePopover])
+  }, [userPrompt, generatePrompt, onTextChangeHandler, t, handleClosePopover])
 
   const open = Boolean(anchorEl)
+  const id = open ? 'assistant-prompts-popover' : undefined
 
   return (
     <>
       <VStack max gap={'16'} className={className}>
         <HStack max justify={'end'} align={'end'}>
           <Button
+            aria-describedby={id}
             onClick={handleOpenPopover}
             variant={'clear'}
-            disabled={!formFields?.id}
+            disabled={false}
           >
             <HStack gap={'8'} align={'center'}>
               <AutoAwesomeIcon fontSize={'small'} />
@@ -105,6 +106,7 @@ export const AssistantOptionsPrompts = memo((props: AssistantOptionsPromptsProps
       </VStack>
 
       <Popover
+        id={id}
         open={open}
         anchorEl={anchorEl}
         onClose={handleClosePopover}

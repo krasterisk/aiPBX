@@ -4,12 +4,14 @@ import { memo, useCallback } from 'react'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
 import { useTranslation } from 'react-i18next'
-import { Card } from '@/shared/ui/redesigned/Card'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { getRouteAssistants } from '@/shared/const/router'
+import DeleteIcon from '@mui/icons-material/Delete'
+import CloseIcon from '@mui/icons-material/Close'
+import SaveIcon from '@mui/icons-material/Save'
 
 interface AssistantEditCardHeaderProps {
   className?: string
@@ -36,50 +38,43 @@ export const AssistantEditCardHeader = memo((props: AssistantEditCardHeaderProps
     }
   }, [assistantId, onDelete])
 
-  const headerButtons = (
-      <HStack gap="8">
+  const actions = (
+    <HStack gap="8" justify="end" wrap="wrap">
+      {onDelete && (
         <Button
-            title={t('Удалить') ?? ''}
-            variant={'outline'}
-            color={'error'}
-            onClick={deleteHandler}
+          variant={'outline'}
+          color={'error'}
+          onClick={deleteHandler}
+          addonLeft={<DeleteIcon />}
         >
           {t('Удалить')}
         </Button>
-        <AppLink
-            to={getRouteAssistants()}
-        >
-          <Button
-              title={t('Закрыть') ?? ''}
-              variant={'outline'}
-              color={'normal'}
-          >
-            {t('Закрыть')}
-          </Button>
-        </AppLink>
+      )}
+      <Button
+        variant={'outline'}
+        color={'success'}
+        onClick={onEdit}
+        addonLeft={<SaveIcon />}
+      >
+        {t('Сохранить')}
+      </Button>
+      <AppLink
+        to={getRouteAssistants()}
+      >
         <Button
-            title={t('Сохранить') ?? ''}
-            variant={'outline'}
-            color={'success'}
-            onClick={onEdit}
+          variant={'outline'}
+          addonLeft={<CloseIcon />}
         >
-          {t('Сохранить')}
+          {t('Закрыть')}
         </Button>
-      </HStack>
-
+      </AppLink>
+    </HStack>
   )
 
   return (
-      <Card
-          className={classNames(cls.AssistantEditCardHeader, {}, [className])}
-          padding={'8'}
-          border={'partial'}
-          max
-      >
-        <HStack max justify={'between'} wrap={'wrap'}>
-          <Text title={assistantName || t('Редактировать')}/>
-          {headerButtons}
-        </HStack>
-      </Card>
+    <HStack max justify={'between'} wrap={'wrap'} gap={'8'} className={classNames(cls.AssistantEditCardHeader, {}, [className])}>
+      <Text title={assistantName || t('Редактировать')} />
+      {actions}
+    </HStack>
   )
 })

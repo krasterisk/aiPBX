@@ -2,7 +2,7 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './UserEditCardHeader.module.scss'
 import { useTranslation } from 'react-i18next'
 import { memo, useCallback } from 'react'
-import { Card } from '@/shared/ui/redesigned/Card'
+
 import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { getRouteUsers } from '@/shared/const/router'
 import { Button } from '@/shared/ui/redesigned/Button'
@@ -10,6 +10,9 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { SerializedError } from '@reduxjs/toolkit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import CloseIcon from '@mui/icons-material/Close'
+import SaveIcon from '@mui/icons-material/Save'
 
 interface UserEditCardHeaderProps {
   className?: string
@@ -34,49 +37,43 @@ export const UserEditCardHeader = memo((props: UserEditCardHeaderProps) => {
     }
   }, [userId, onDelete])
 
-  const headerButtons = (
-      <HStack gap="8">
+  const actions = (
+    <HStack gap="8" justify="end" wrap="wrap">
+      {onDelete && (
         <Button
-            title={t('Удалить') ?? ''}
-            variant={'outline'}
-            color={'error'}
-            onClick={deleteHandler}
+          variant={'outline'}
+          color={'error'}
+          onClick={deleteHandler}
+          addonLeft={<DeleteIcon />}
         >
           {t('Удалить')}
         </Button>
-        <AppLink
-            to={getRouteUsers()}
-        >
-          <Button
-              title={t('Закрыть') ?? ''}
-              variant={'outline'}
-              color={'normal'}
-          >
-            {t('Закрыть')}
-          </Button>
-        </AppLink>
+      )}
+      <Button
+        variant={'outline'}
+        color={'success'}
+        onClick={onEdit}
+        addonLeft={<SaveIcon />}
+      >
+        {t('Сохранить')}
+      </Button>
+      <AppLink
+        to={getRouteUsers()}
+      >
         <Button
-            title={t('Сохранить') ?? ''}
-            variant={'outline'}
-            color={'success'}
-            onClick={onEdit}
+          variant={'outline'}
+          addonLeft={<CloseIcon />}
         >
-          {t('Сохранить')}
+          {t('Закрыть')}
         </Button>
-      </HStack>
+      </AppLink>
+    </HStack>
   )
 
   return (
-      <Card
-          className={classNames(cls.UserEditCardHeader, {}, [className])}
-          padding={'8'}
-          border={'partial'}
-          max
-      >
-        <HStack max justify={'between'} wrap={'wrap'}>
-          <Text title={t('Редактировать')}/>
-          {headerButtons}
-        </HStack>
-      </Card>
+    <HStack max justify={'between'} wrap={'wrap'} gap={'8'} className={classNames(cls.UserEditCardHeader, {}, [className])}>
+      <Text title={t('Редактировать')} />
+      {actions}
+    </HStack>
   )
 })

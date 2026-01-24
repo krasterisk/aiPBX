@@ -5,9 +5,12 @@ import { memo } from 'react'
 import { Card, CardVariant } from '@/shared/ui/redesigned/Card'
 import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { getRoutePbxServers } from '@/shared/const/router'
-import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { HStack } from '@/shared/ui/redesigned/Stack'
+import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import CloseIcon from '@mui/icons-material/Close'
+import SaveIcon from '@mui/icons-material/Save'
+
+import { Button } from '@/shared/ui/redesigned/Button'
 
 interface PbxServerCreateCardHeaderProps {
   className?: string
@@ -23,45 +26,44 @@ export const PbxServerCreateCardHeader = memo((props: PbxServerCreateCardHeaderP
   } = props
   const { t } = useTranslation('pbx')
 
-  const headerButtons = (
-      <HStack gap="8" align={'end'}>
-        <AppLink to={getRoutePbxServers()}>
-          <Button
-              title={t('Закрыть') ?? ''}
-              variant={'outline'}
-              color={'error'}
-          >
-            {t('Закрыть')}
-          </Button>
-        </AppLink>
+  const actions = (
+    <HStack gap="8" justify="end" wrap="wrap">
+      <Button
+        variant="outline"
+        color="success"
+        onClick={onCreate}
+        addonLeft={<SaveIcon />}
+      >
+        {t('Создать')}
+      </Button>
+      <AppLink to={getRoutePbxServers()}>
         <Button
-            title={t('Создать') ?? ''}
-            variant={'outline'}
-            color={'success'}
-            onClick={onCreate}
+          variant="outline"
+          addonLeft={<CloseIcon />}
         >
-          {t('Создать')}
+          {t('Закрыть')}
         </Button>
-      </HStack>
+      </AppLink>
+    </HStack>
   )
 
   return (
-      <Card
-          className={classNames(cls.PbxServerCreateCardHeader, {}, [className])}
-          variant={variant}
-          padding={'8'}
-          border={'partial'}
-          max
-      >
-        {variant !== 'diviner-bottom'
-          ? <HStack max justify={'between'} wrap={'wrap'}>
-              <Text title={t('Новый сервер')}/>
-              {headerButtons}
-            </HStack>
-          : <HStack max justify={'end'} wrap={'wrap'}>
-              {headerButtons}
-            </HStack>
-        }
-      </Card>
+    <Card
+      className={classNames(cls.PbxServerCreateCardHeader, {}, [className])}
+      variant={variant}
+      padding={'8'}
+      border={'partial'}
+      max
+    >
+      {variant !== 'diviner-bottom'
+        ? <HStack max justify={'between'} wrap={'wrap'} gap={'8'}>
+          <Text title={t('Новый сервер')} />
+          {actions}
+        </HStack>
+        : <HStack max justify={'end'} wrap={'wrap'}>
+          {actions}
+        </HStack>
+      }
+    </Card>
   )
 })

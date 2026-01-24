@@ -122,15 +122,15 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
   }, [dispatch, formFields])
 
   const IsAdminOptions = (
-            <>
-                <ClientSelect
-                    value={clientValues}
-                    onChangeClient={onChangeClientHandler}
-                    label={String(t('Клиент'))}
-                    className={cls.client}
-                    data-testid={'ToolCreateCard.ClientSelect'}
-                />
-            </>
+    <>
+      <ClientSelect
+        value={clientValues}
+        onChangeClient={onChangeClientHandler}
+        label={String(t('Клиент'))}
+        className={cls.client}
+        data-testid={'ToolCreateCard.ClientSelect'}
+      />
+    </>
   )
 
   const createHandler = useCallback(() => {
@@ -140,95 +140,94 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
   }, [formFields, onCreate])
 
   const functionType = (
-            <>
-                <Textarea
-                    label={t('Описание') ?? ''}
-                    onChange={createTextChangeHandler('description')}
-                    data-testid={'ToolCardCreate.description'}
-                    value={formFields?.description || ''}
-                    minRows={3}
-                    multiline
-                />
-                <Check
-                    label={t('Строгий режим вызова') || ''}
-                    onChange={toggleStrictHandler}
-                    checked={formFields?.strict || false}
-                />
-                <ToolAddParam
-                    parameters={formFields?.parameters}
-                    toolName={formFields?.name || ''}
-                />
-                <Textarea
-                    label={t('Адрес вебхука') ?? ''}
-                    onChange={createTextChangeHandler('webhook')}
-                    data-testid={'ToolCardCreate.webhook'}
-                    value={formFields?.webhook || ''}
-                />
-            </>
+    <>
+      <Textarea
+        label={t('Описание') ?? ''}
+        onChange={createTextChangeHandler('description')}
+        data-testid={'ToolCardCreate.description'}
+        value={formFields?.description || ''}
+        minRows={3}
+        multiline
+      />
+      <Check
+        label={t('Строгий режим вызова') || ''}
+        onChange={toggleStrictHandler}
+        checked={formFields?.strict || false}
+      />
+      <ToolAddParam
+        parameters={formFields?.parameters}
+        toolName={formFields?.name || ''}
+      />
+      <Textarea
+        label={t('Адрес вебхука') ?? ''}
+        onChange={createTextChangeHandler('webhook')}
+        data-testid={'ToolCardCreate.webhook'}
+        value={formFields?.webhook || ''}
+      />
+    </>
   )
 
   const toolType = (
-            <>
-                <Textarea
-                    label={t('Параметры') ?? ''}
-                    onChange={onJsonChangeHandler}
-                    data-testid={'ToolCardCreate.mcp'}
-                    value={jsonText}
-                    minRows={3}
-                    multiline
-                />
-            </>
+    <>
+      <Textarea
+        label={t('Параметры') ?? ''}
+        onChange={onJsonChangeHandler}
+        data-testid={'ToolCardCreate.mcp'}
+        value={jsonText}
+        minRows={3}
+        multiline
+      />
+    </>
   )
 
   return (
-            <VStack
-                gap={'8'}
-                max
-                className={classNames(cls.ToolCreateCard, {}, [className])}
-            >
-                <ToolCreateCardHeader onCreate={createHandler} variant={'diviner-top'}/>
-                {isError
-                  ? <ErrorGetData
-                        title={t('Ошибка при создании функции') || ''}
-                        text={
-                            error && 'data' in error
-                              ? String(t((error.data as { message: string }).message))
-                              : String(t('Проверьте заполняемые поля и повторите ещё раз'))
-                        }
-                    />
-                  : ''}
-                <Card
-                    max
-                    padding={'16'}
-                    border={'partial'}
-                >
-                    <VStack gap={'16'} max>
-                        {!isAdmin && IsAdminOptions}
+    <VStack
+      gap={'8'}
+      max
+      className={classNames(cls.ToolCreateCard, {}, [className])}
+    >
+      <ToolCreateCardHeader onCreate={createHandler} variant={'diviner-top'} />
+      {isError
+        ? <ErrorGetData
+          title={t('Ошибка при создании функции') || ''}
+          text={
+            error && 'data' in error
+              ? String(t((error.data as { message: string }).message))
+              : String(t('Проверьте заполняемые поля и повторите ещё раз'))
+          }
+        />
+        : ''}
+      <Card
+        max
+        padding={'16'}
+        border={'partial'}
+      >
+        <VStack gap={'16'} max>
+          {!isAdmin && IsAdminOptions}
 
-                        <Textarea
-                            label={t('Наименование') ?? ''}
-                            onChange={createTextChangeHandler('name')}
-                            data-testid={'ToolCardCreate.name'}
-                            value={formFields?.name || ''}
-                        />
-                        <ToolTypeSelect
-                            label={t('Тип') ?? ''}
-                            value={formFields?.type}
-                            onChangeToolType={createChangeTypeHandler}
-                            data-testid={'ToolCardCreate.type'}
-                        />
-                        {formFields?.type && formFields?.type === 'function' && functionType}
-                        {formFields?.type && formFields?.type !== 'function' && toolType}
-                        <Textarea
-                            label={t('Комментарий') ?? ''}
-                            onChange={createTextChangeHandler('comment')}
-                            data-testid={'ToolCardCreate.comment'}
-                            value={formFields?.comment || ''}
-                        />
-                    </VStack>
-                </Card>
-                <ToolCreateCardHeader onCreate={createHandler} variant={'diviner-bottom'}/>
-            </VStack>
+          <Textarea
+            label={t('Наименование') ?? ''}
+            onChange={createTextChangeHandler('name')}
+            data-testid={'ToolCardCreate.name'}
+            value={formFields?.name || ''}
+          />
+          <ToolTypeSelect
+            label={t('Тип') ?? ''}
+            value={formFields?.type}
+            onChangeToolType={createChangeTypeHandler}
+            data-testid={'ToolCardCreate.type'}
+          />
+          {formFields?.type && formFields?.type === 'function' && functionType}
+          {formFields?.type && formFields?.type !== 'function' && toolType}
+          <Textarea
+            label={t('Комментарий') ?? ''}
+            onChange={createTextChangeHandler('comment')}
+            data-testid={'ToolCardCreate.comment'}
+            value={formFields?.comment || ''}
+          />
+        </VStack>
+      </Card>
+    </VStack>
   )
 }
 )

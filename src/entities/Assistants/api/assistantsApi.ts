@@ -103,7 +103,7 @@ export const assistantsApi = rtkApi.injectEndpoints({
       },
       invalidatesTags: (result, error, id) => [{ type: 'Assistants', id }]
     }),
-    generatePrompt: build.mutation<{ success: boolean, instruction: string }, { assistantId: string, prompt: string }>({
+    generatePrompt: build.mutation<{ success: boolean, instruction: string }, { prompt: string }>({
       query: (arg) => ({
         url: '/assistants/generate-prompt',
         method: 'POST',
