@@ -60,5 +60,7 @@ export {
   useTelegramLoginUser,
   useTelegramSignupUser,
   useGetUserBalance,
-  useGetMe
+  useGetMe,
+  useSetUsageLimit,
+  useGetUsageLimit
 } from './api/usersApi'

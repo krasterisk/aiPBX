@@ -52,7 +52,7 @@ export const ReportShowDialog = memo((props: ReportShowDialogProps) => {
         ? <HStack max justify={'center'}>
           <Text text={t('Диалог отсутствует')} />
         </HStack>
-        : <MediaPlayer src={mediaUrl} />
+        : mediaUrl ? <MediaPlayer src={mediaUrl} /> : null
       }
 
       {Dialogs?.map((dialog, index) => (

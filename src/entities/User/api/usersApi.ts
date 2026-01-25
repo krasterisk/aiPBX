@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { User, AllUsers, ResetUserPasswordProps, AuthData } from '../model/types/user'
+import { User, AllUsers, ResetUserPasswordProps, AuthData, UsageLimitProps } from '../model/types/user'
 
 interface QueryArgs {
   page?: number
@@ -152,6 +152,21 @@ export const usersApi = rtkApi.injectEndpoints({
       },
       invalidatesTags: (result, error, { id }) => (id ? [{ type: 'Users', id }] : [])
     }),
+    getUsageLimit: build.query<UsageLimitProps, string>({
+      query: (userId) => ({
+        url: `/users/limits/${userId}`,
+        method: 'GET'
+      }),
+      providesTags: (result, error, id) => [{ type: 'Users', id: `LIMITS_${id}` }]
+    }),
+    setUsageLimit: build.mutation<void, UsageLimitProps>({
+      query: (arg) => ({
+        url: '/users/limits',
+        method: 'POST',
+        body: arg
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: 'Users', id: `LIMITS_${arg.userId}` }]
+    }),
     updateUser: build.mutation<User, Pick<User, 'id'> & Partial<User>>({
       query: ({ id, ...patch }) => ({
         url: '/users',
@@ -198,4 +213,6 @@ export const useUpdateUserPassword = usersApi.useUpdateUserPasswordMutation
 export const useGetUser = usersApi.useGetUserQuery
 export const useUpdateUser = usersApi.useUpdateUserMutation
 export const useUploadAvatarUser = usersApi.useUploadAvatarUserMutation
+export const useSetUsageLimit = usersApi.useSetUsageLimitMutation
+export const useGetUsageLimit = usersApi.useGetUsageLimitQuery
 export const useDeleteUser = usersApi.useDeleteUserMutation

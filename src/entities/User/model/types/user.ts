@@ -63,3 +63,9 @@ export interface AuthData {
   token: string
   user: User
 }
+
+export interface UsageLimitProps {
+  userId: string
+  limitAmount: number
+  emails: string[]
+}

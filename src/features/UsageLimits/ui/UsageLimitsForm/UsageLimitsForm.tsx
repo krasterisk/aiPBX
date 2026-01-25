@@ -1,5 +1,8 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+import { getUserAuthData, useGetUsageLimit, useSetUsageLimit } from '@/entities/User'
+import { toast } from 'react-toastify'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
@@ -14,14 +17,42 @@ export const UsageLimitsForm = memo((props: UsageLimitsFormProps) => {
     const { className } = props
     const { t } = useTranslation('payment')
 
+    const authData = useSelector(getUserAuthData)
+    const [setUsageLimit, { isLoading }] = useSetUsageLimit()
+    const { data: usageLimitData, isLoading: isFetching } = useGetUsageLimit(authData?.id || '', { skip: !authData?.id })
+
     const [limitAmount, setLimitAmount] = useState('')
     const [emails, setEmails] = useState('')
 
-    const handleSave = useCallback(() => {
-        // Mock save
-        console.log('Sending limit:', limitAmount, emails)
-        // Here you would dispatch an action or call a mutation
-    }, [limitAmount, emails])
+    useEffect(() => {
+        if (usageLimitData) {
+            setLimitAmount(String(usageLimitData.limitAmount || ''))
+            setEmails(usageLimitData.emails?.join('\n') || '')
+        }
+    }, [usageLimitData])
+
+    const handleSave = useCallback(async () => {
+        if (!authData?.id) return
+
+        const emailList = emails.split(/[\n,]+/).map(e => e.trim()).filter(Boolean)
+        const amount = Number(limitAmount)
+
+        if (isNaN(amount)) {
+            toast.error(t('Некорректная сумма'))
+            return
+        }
+
+        try {
+            await setUsageLimit({
+                userId: String(authData.id),
+                limitAmount: amount,
+                emails: emailList
+            }).unwrap()
+            toast.success(t('Настройки сохранены'))
+        } catch (e) {
+            toast.error(t('Ошибка сохранения'))
+        }
+    }, [authData?.id, emails, limitAmount, setUsageLimit, t])
 
     return (
         <VStack gap="16" max className={classNames('', {}, [className])}>
@@ -42,8 +73,11 @@ export const UsageLimitsForm = memo((props: UsageLimitsFormProps) => {
                 multiline
                 minRows={3}
             />
-
-            <Button onClick={handleSave}>
+            <Button
+                onClick={handleSave}
+                disabled={isLoading}
+                variant="filled"
+            >
                 {t('Сохранить')}
             </Button>
         </VStack>
