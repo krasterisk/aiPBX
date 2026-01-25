@@ -103,16 +103,32 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
     }, [])
 
     // Process Events to determine current text
+    // Optimization: Use incremental processing to avoid O(N) iteration on every render
+    const cacheRef = useRef<{
+        itemsMap: Map<string, { role: string, text: string }>
+        lastItemId: string | null
+        processedCount: number
+    }>({
+        itemsMap: new Map(),
+        lastItemId: null,
+        processedCount: 0
+    })
+
     const { currentText, currentRole } = useMemo(() => {
-        if (!events.length) {
-            return { currentText: '', currentRole: 'system' }
+        const cache = cacheRef.current
+
+        // Check if events array was reset/cleared
+        if (events.length < cache.processedCount) {
+            cache.itemsMap.clear()
+            cache.lastItemId = null
+            cache.processedCount = 0
         }
 
-        // Map items by ID to handle updates
-        const itemsMap = new Map<string, { role: string, text: string }>()
-        let lastItemId: string | null = null
+        // Process only new events
+        for (let i = cache.processedCount; i < events.length; i++) {
+            const e = events[i]
+            const itemsMap = cache.itemsMap
 
-        events.forEach(e => {
             // User Item Creation
             if (e.type === 'conversation.item.created') {
                 const item = e.item
@@ -121,7 +137,7 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
                         role: 'user',
                         text: item.content?.[0]?.text || item.content?.[0]?.transcript || '',
                     })
-                    lastItemId = item.id
+                    cache.lastItemId = item.id
                 }
             }
 
@@ -133,7 +149,7 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
                         itemsMap.get(e.item_id)!.text = text
                     } else {
                         itemsMap.set(e.item_id, { role: 'user', text })
-                        lastItemId = e.item_id
+                        cache.lastItemId = e.item_id
                     }
                 }
             }
@@ -144,7 +160,7 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
                     // Create placeholder for user text while waiting for transcription
                     if (!itemsMap.has(e.item_id)) {
                         itemsMap.set(e.item_id, { role: 'user', text: '' })
-                        lastItemId = e.item_id
+                        cache.lastItemId = e.item_id
                     }
                 }
             }
@@ -157,7 +173,7 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
                         itemsMap.get(e.item_id)!.text += delta
                     } else {
                         itemsMap.set(e.item_id, { role: 'user', text: delta })
-                        lastItemId = e.item_id
+                        cache.lastItemId = e.item_id
                     }
                 }
             }
@@ -170,7 +186,7 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
                         role: item.type === 'function_call' ? 'function' : (item.role || 'assistant'),
                         text: item.content?.[0]?.text || '',
                     })
-                    lastItemId = item.id
+                    cache.lastItemId = item.id
                 }
             }
 
@@ -182,7 +198,7 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
                         itemsMap.get(e.item_id)!.text += delta
                     } else {
                         itemsMap.set(e.item_id, { role: 'assistant', text: delta })
-                        lastItemId = e.item_id
+                        cache.lastItemId = e.item_id
                     }
                 }
             }
@@ -197,22 +213,24 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
                         item.text += delta
                     } else {
                         itemsMap.set(e.item_id, { role: 'function', text: delta })
-                        lastItemId = e.item_id
+                        cache.lastItemId = e.item_id
                     }
                 }
             }
-        })
+        }
+
+        cache.processedCount = events.length
 
         // Show Active Item if exists
-        if (lastItemId && itemsMap.has(lastItemId)) {
-            const item = itemsMap.get(lastItemId)!
+        if (cache.lastItemId && cache.itemsMap.has(cache.lastItemId)) {
+            const item = cache.itemsMap.get(cache.lastItemId)!
             return { currentText: item.text || '', currentRole: item.role as any }
         }
 
         // Default - empty
         return { currentText: '', currentRole: 'system' }
 
-    }, [events, status])
+    }, [events])
 
     // Status text
     const statusText = useMemo(() => {
@@ -220,6 +238,20 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
         if (status === 'connected') return t('liveSession')
         return t('disconnected')
     }, [status, t])
+
+    // Format text to show only a window of the last characters if too long
+    const displayedText = useMemo(() => {
+        const maxLength = 200
+        if (currentText.length <= maxLength) return currentText
+
+        const tail = currentText.slice(-maxLength)
+        // Try to cut at the first space to avoid chopping words
+        const firstSpace = tail.indexOf(' ')
+        if (firstSpace > 0 && firstSpace < 50) {
+            return '...' + tail.slice(firstSpace + 1)
+        }
+        return '...' + tail
+    }, [currentText])
 
     return (
         <div className={classNames(cls.PlaygroundCall, {}, [className])}>
@@ -229,7 +261,7 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
 
             <div className={cls.content}>
                 <div className={classNames(cls.text, {}, [cls[currentRole]])}>
-                    {currentText}
+                    {displayedText}
                 </div>
             </div>
 

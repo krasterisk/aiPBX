@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import { io, Socket } from 'socket.io-client'
 import { toast } from 'react-toastify'
 import { AUDIO_WORKLET_CODE } from '../lib/audioWorklet'
@@ -25,10 +25,40 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
     const audioWorkletNodeRef = useRef<AudioWorkletNode | null>(null)
     const mediaStreamRef = useRef<MediaStream | null>(null)
 
+    // Event batching to prevent main thread blocking on high load
+    const eventBufferRef = useRef<any[]>([])
+
+    // Keep refs to props to avoid stale closures in socket listeners
+    const propsRef = useRef(props)
+    useEffect(() => {
+        propsRef.current = props
+    }, [props])
+
     // Playback state
     const nextStartTimeRef = useRef<number>(0)
     const activeSourcesRef = useRef<AudioBufferSourceNode[]>([])
     const isPlayingRef = useRef<boolean>(false)
+
+    // Flush events periodically
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (eventBufferRef.current.length > 0) {
+                const batch = eventBufferRef.current
+                eventBufferRef.current = []
+
+                setEvents(prev => {
+                    // Limit history to last 500 events to prevent memory leak
+                    const MAX_EVENTS = 500
+                    const next = [...prev, ...batch]
+                    if (next.length > MAX_EVENTS) {
+                        return next.slice(next.length - MAX_EVENTS)
+                    }
+                    return next
+                })
+            }
+        }, 100) // Update UI at 10fps max
+        return () => clearInterval(interval)
+    }, [])
 
     // Helper to stop all audio
     const interruptPlayback = useCallback(() => {
@@ -66,6 +96,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         interruptPlayback()
         setIsMicAccessGranted(false)
         setEvents([])
+        eventBufferRef.current = []
     }, [interruptPlayback])
 
     const playAudioChunk = useCallback((arrayBuffer: ArrayBuffer) => {
@@ -220,7 +251,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             setStatus('connected')
             try {
                 await initAudioInput(socket, micDeviceId)
-                props?.onConnect?.()
+                propsRef.current?.onConnect?.()
                 toast.success('Сессия установлена')
             } catch (e) {
                 // If audio fails, we should disconnect
@@ -233,13 +264,14 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         })
 
         socket.on('playground.event', (event: any) => {
-            setEvents(prev => [...prev, event])
+            // Send to buffer instead of direct state update
+            eventBufferRef.current.push(event)
         })
 
         socket.on('playground.interrupt', () => {
             console.warn('AI Interrupt')
             interruptPlayback()
-            props?.onError?.('AI Interrupt')
+            propsRef.current?.onError?.('AI Interrupt')
         })
 
         socket.on('disconnect', () => {
@@ -247,7 +279,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             cleanupAudio()
             setStatus('idle')
             socketRef.current = null
-            props?.onDisconnect?.()
+            propsRef.current?.onDisconnect?.()
         })
 
         socket.on('connect_error', (err) => {
@@ -256,7 +288,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             // toast.error('Connection error')
         })
 
-    }, [cleanupAudio, initAudioInput, interruptPlayback, playAudioChunk, props])
+    }, [cleanupAudio, initAudioInput, interruptPlayback, playAudioChunk])
 
     const disconnect = useCallback(() => {
         if (socketRef.current) {
@@ -273,12 +305,13 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         }
     }, [disconnect])
 
-    return {
+    // Memoize return value to allow optimization in parent
+    return useMemo(() => ({
         status,
         connect,
         disconnect,
         isMicAccessGranted,
         events,
         analyserNode
-    }
+    }), [status, connect, disconnect, isMicAccessGranted, events, analyserNode])
 }
