@@ -241,7 +241,7 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
 
     // Format text to show only a window of the last characters if too long
     const displayedText = useMemo(() => {
-        const maxLength = 200
+        const maxLength = 50
         if (currentText.length <= maxLength) return currentText
 
         const tail = currentText.slice(-maxLength)
