@@ -1,14 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import React, { memo, useState } from 'react'
-import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
-import { LinesChart } from '@/shared/ui/mui/LinesChart'
 import { ClientOptions } from '@/entities/User'
 import { ReportFilters } from '@/entities/Report'
 import { AssistantOptions } from '@/entities/Assistants'
-import { BarsChart } from '@/shared/ui/mui/BarsChart'
 import { PeriodPicker } from '@/entities/PeriodPicker'
-import { SummaryCard } from '../SummaryCard/SummaryCard'
 import { PeriodExtendedFilters } from '@/features/PeriodExtendedFilter'
 import { useSelector } from 'react-redux'
 import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
@@ -54,12 +51,6 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
 
   const [filterShow, setFilterShow] = useState<boolean>(false)
 
-  const ringsCount = dashboardData?.chartData?.map(item => Number(item.allCount)) || []
-  const tokensCount = dashboardData?.chartData?.map(item => Number(item.tokensCount)) || []
-  const durationCount = dashboardData?.chartData?.map(item => Number(item.durationCount) / 60) || []
-  const amount = dashboardData?.chartData?.map(item => Number(item.amount)) || []
-  const label = dashboardData?.chartData?.map(item => String(item.label)) || []
-
   return (
     <VStack gap={'32'} max>
       <Card
@@ -94,45 +85,6 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
             onOpenFilters={() => setFilterShow(true)}
           />
         </VStack>
-      </Card>
-      <SummaryCard graphData={dashboardData} />
-      <Card max border={'partial'} padding={'16'}>
-        <BarsChart
-          xAxis={[{ scaleType: 'band', data: label }]}
-          series={[
-            { data: ringsCount, label: String(t('Звонки')) },
-            { data: durationCount, label: String(t('Длительность')) },
-            { data: amount, label: String(t('Стоимость')) + `, ${currencySymbol}` }
-          ]}
-          height={300}
-        />
-      </Card>
-      <Card max border={'partial'} padding={'16'}>
-        <LinesChart
-          height={300}
-          series={[
-            { data: tokensCount, label: String(t('Токены')) },
-          ]}
-          xAxis={[{ scaleType: 'point', data: label }]}
-        />
-      </Card>
-      <Card max border={'partial'} padding={'16'}>
-        <LinesChart
-          height={300}
-          series={[
-            { data: ringsCount, label: String(t('Звонки')) },
-          ]}
-          xAxis={[{ scaleType: 'point', data: label }]}
-        />
-      </Card>
-      <Card max border={'partial'} padding={'16'}>
-        <LinesChart
-          height={300}
-          series={[
-            { data: amount, label: String(t('Стоимость')) + `, ${currencySymbol}` },
-          ]}
-          xAxis={[{ scaleType: 'point', data: label }]}
-        />
       </Card>
     </VStack>
   )

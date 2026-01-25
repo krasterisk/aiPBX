@@ -47,6 +47,7 @@ export const BarsChart = memo((props: BarsChartsProps) => {
   return (
     <BarChart
       sx={{
+        width: '100%',
         '--ChartsLegend-itemColor': 'var(--text-redesigned)',
         '--ChartsLegend-label-color': 'var(--text-redesigned)',
         '--ChartsLegend-root-color': 'var(--text-redesigned)',

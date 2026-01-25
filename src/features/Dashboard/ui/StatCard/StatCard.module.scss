@@ -1,0 +1,43 @@
+.StatCard {
+    height: 100%;
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.title {
+    color: var(--hint-redesigned, #8b96a5);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.value {
+    font-size: 28px;
+    line-height: 32px;
+    font-weight: 700;
+    color: var(--text-redesigned, #fff);
+}
+
+.description {
+    color: var(--hint-redesigned, #8b96a5);
+    opacity: 0.8;
+}
+
+.iconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--light-bg-redesigned, rgba(255, 255, 255, 0.05));
+    color: var(--icon-redesigned);
+
+    svg {
+        width: 48px;
+        height: 48px;
+    }
+}

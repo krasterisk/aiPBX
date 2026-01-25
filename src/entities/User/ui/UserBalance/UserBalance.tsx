@@ -36,7 +36,7 @@ export const UserBalance = memo((props: UserBalanceProps) => {
   const balanceWarningCount = balanceWarnings[userCurrency] || 0
 
   const formattedBalance = balance
-    ? formatCurrency(balance.balance, userCurrency, 2)
+    ? formatCurrency(balance.balance, UserCurrencyValues.USD, 2)
     : ''
 
   const balanceWarning = balance && balance?.balance > balanceWarningCount

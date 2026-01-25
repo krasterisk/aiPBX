@@ -41,5 +41,15 @@
   "Наименование": "Name",
   "Описание": "Beschreibung",
   "Строгий режим вызова": "Strikter Modus",
-  "Параметры MCP сервера": "MCP-Serverparameter"
+  "Параметры MCP сервера": "MCP-Serverparameter",
+  "Метод запроса": "Anforderungsmethode",
+  "Тип авторизации": "Authentifizierungstyp",
+  "Нет": "Keine",
+  "Bearer Token": "Bearer Token",
+  "Basic Auth": "Basic Auth",
+  "Токен": "Token",
+  "Логин": "Login",
+  "Пароль": "Passwort",
+  "Заголовки (JSON)": "Header (JSON)",
+  "Вебхук": "Webhook"
 }

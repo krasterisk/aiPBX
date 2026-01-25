@@ -1,0 +1,11 @@
+.modalContent {
+    padding: 20px;
+    min-width: 500px;
+    background-color: var(--bg-redesigned);
+
+    @media (max-width: 768px) {
+        min-width: unset;
+        width: 100%;
+        padding: 16px;
+    }
+}

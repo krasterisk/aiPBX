@@ -5,10 +5,11 @@ import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './UserCard.module.scss'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { getRouteUsers } from '@/shared/const/router'
+import { getRouteMain, getRouteUsers } from '@/shared/const/router'
 import { useNavigate } from 'react-router-dom'
 import { ErrorGetData } from '@/entities/ErrorGetData'
-import { useDeleteUser, User, usersApi, useSetUsers, useUpdateUser } from '@/entities/User'
+import { isUserAdmin, useDeleteUser, User, usersApi, useSetUsers, useUpdateUser } from '@/entities/User'
+import { useSelector } from 'react-redux'
 import { UserEditCard } from '../UserEditCard/UserEditCard'
 import { UserCreateCard } from '../UserCreateCard/UserCreateCard'
 
@@ -32,6 +33,7 @@ export const UserCard = memo((props: UserCardProps) => {
   const [userMutation, { isError, error }] = useSetUsers()
   const [userUpdateMutation, { isError: isUpdateError, isLoading: isUpdateLoading }] = useUpdateUser()
   const [userDeleteMutation, { isError: isDeleteError, isLoading: isDeleteLoading }] = useDeleteUser()
+  const isAdmin = useSelector(isUserAdmin)
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -60,7 +62,7 @@ export const UserCard = memo((props: UserCardProps) => {
     try {
       await userUpdateMutation(data).unwrap()
     } finally {
-      navigate(getRouteUsers())
+      navigate(isAdmin ? getRouteUsers() : getRouteMain())
     }
 
     // .unwrap()
@@ -82,7 +84,7 @@ export const UserCard = memo((props: UserCardProps) => {
     try {
       await userDeleteMutation(id).unwrap()
     } finally {
-      navigate(getRouteUsers())
+      navigate(isAdmin ? getRouteUsers() : getRouteMain())
     }
   }, [userDeleteMutation, navigate])
 
@@ -133,7 +135,7 @@ export const UserCard = memo((props: UserCardProps) => {
             onEdit={onEdit}
             isError={isError}
             userId={userId}
-            onDelete={onDelete}
+            onDelete={isAdmin ? onDelete : undefined}
           />
           : <UserCreateCard
             onCreate={onCreate}

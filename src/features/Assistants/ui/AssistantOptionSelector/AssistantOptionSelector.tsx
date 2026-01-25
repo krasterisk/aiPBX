@@ -67,27 +67,33 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
 
   // Init form effect
   useEffect(() => {
+    if (formFields === undefined) return
+
     if (!isEdit && !assistant && !isFormInited.current) {
       dispatch(assistantFormActions.initCreate())
       isFormInited.current = true
     }
-  }, [assistant, dispatch, isEdit])
+  }, [assistant, dispatch, isEdit, formFields])
 
   // Set user data effect
   useEffect(() => {
-    if (!isEdit && !assistant && !isAdmin && clientData) {
-      dispatch(assistantFormActions.updateForm({
-        userId: clientData.id,
-        user: {
-          id: clientData.id,
-          name: clientData.name
-        }
-      }))
+    if (formFields && !isEdit && !assistant && !isAdmin && clientData) {
+      if (formFields.userId !== clientData.id) {
+        dispatch(assistantFormActions.updateForm({
+          userId: clientData.id,
+          user: {
+            id: clientData.id,
+            name: clientData.name
+          }
+        }))
+      }
     }
-  }, [assistant, dispatch, isEdit, isAdmin, clientData])
+  }, [assistant, dispatch, isEdit, isAdmin, clientData, formFields])
 
   useEffect(() => {
-    if (isEdit && assistant) {
+    if (formFields === undefined) return
+
+    if (isEdit && assistant && !isFormInited.current) {
       dispatch(assistantFormActions.initEdit(assistant))
       if (!isAdmin && clientData) {
         dispatch(assistantFormActions.updateForm({
@@ -98,8 +104,9 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
           }
         }))
       }
+      isFormInited.current = true
     }
-  }, [assistant, isEdit, dispatch, isAdmin, clientData])
+  }, [assistant, isEdit, dispatch, isAdmin, clientData, formFields])
 
   const onChangeToolsHandler = useCallback((
     event: any,

@@ -42,6 +42,8 @@ export const toolsPageSlice = createSlice({
           server_url: 'https://mymcpserver.dev/sse',
           require_approval: 'never'
         },
+        method: 'GET',
+        headers: {},
         comment: '',
         userId: ''
       }
@@ -57,6 +59,8 @@ export const toolsPageSlice = createSlice({
           server_url: 'https://mymcpserver.dev/sse',
           require_approval: 'never'
         },
+        method: 'GET',
+        headers: {},
         comment: '',
         userId: ''
       }

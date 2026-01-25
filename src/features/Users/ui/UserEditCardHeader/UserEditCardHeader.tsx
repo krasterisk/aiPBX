@@ -13,6 +13,9 @@ import { SerializedError } from '@reduxjs/toolkit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import CloseIcon from '@mui/icons-material/Close'
 import SaveIcon from '@mui/icons-material/Save'
+import { useSelector } from 'react-redux'
+import { isUserAdmin } from '@/entities/User'
+import { getRouteMain } from '@/shared/const/router'
 
 interface UserEditCardHeaderProps {
   className?: string
@@ -30,6 +33,7 @@ export const UserEditCardHeader = memo((props: UserEditCardHeaderProps) => {
     onDelete
   } = props
   const { t } = useTranslation('profile')
+  const isAdmin = useSelector(isUserAdmin)
 
   const deleteHandler = useCallback(() => {
     if (userId) {
@@ -58,7 +62,7 @@ export const UserEditCardHeader = memo((props: UserEditCardHeaderProps) => {
         {t('Сохранить')}
       </Button>
       <AppLink
-        to={getRouteUsers()}
+        to={isAdmin ? getRouteUsers() : getRouteMain()}
       >
         <Button
           variant={'outline'}

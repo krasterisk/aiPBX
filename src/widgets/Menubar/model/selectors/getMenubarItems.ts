@@ -3,20 +3,21 @@ import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import {
   getRouteAssistants,
   getRouteDashboard,
-  getRouteOnline, getRoutePbxServers,
+  getRoutePbxServers,
   getRoutePlayground,
   getRouteReports,
   getRouteTools,
-  getRouteUsers
+  getRouteUsers,
+  getRoutePayment
 } from '@/shared/const/router'
 import DashboardIcon from '@mui/icons-material/Dashboard'
-import WifiTetheringIcon from '@mui/icons-material/WifiTethering'
 import ScienceIcon from '@mui/icons-material/Science'
 import SmartToyIcon from '@mui/icons-material/SmartToy'
 import BuildIcon from '@mui/icons-material/Build'
 import AssessmentIcon from '@mui/icons-material/Assessment'
 import DnsIcon from '@mui/icons-material/Dns'
 import PeopleIcon from '@mui/icons-material/People'
+import PaymentsIcon from '@mui/icons-material/Payments'
 import { MenubarItemType } from '../types/menubar'
 import { useTranslation } from 'react-i18next'
 
@@ -40,18 +41,12 @@ export const useMenubarItems = () => {
         text: t('Дашбоард'),
         authOnly: true
       },
-      {
-        path: getRouteOnline(),
-        Icon: WifiTetheringIcon,
-        text: t('Онлайн'),
-        authOnly: true
-      },
-      {
-        path: getRoutePlayground(),
-        Icon: ScienceIcon,
-        text: t('Playground'),
-        authOnly: true
-      },
+      // {
+      //   path: getRouteOnline(),
+      //   Icon: WifiTetheringIcon,
+      //   text: t('Онлайн'),
+      //   authOnly: true
+      // },
       {
         path: getRouteAssistants(),
         Icon: SmartToyIcon,
@@ -65,9 +60,21 @@ export const useMenubarItems = () => {
         authOnly: true
       },
       {
+        path: getRoutePlayground(),
+        Icon: ScienceIcon,
+        text: t('Playground'),
+        authOnly: true
+      },
+      {
         path: getRouteReports(),
         Icon: AssessmentIcon,
         text: t('Отчёт'),
+        authOnly: true
+      },
+      {
+        path: getRoutePayment(),
+        Icon: PaymentsIcon,
+        text: t('Оплата'),
         authOnly: true
       },
       ...(isAdmin

@@ -31,5 +31,21 @@
   "час": "hour",
   "мин": "min",
   "сек": "sec",
-  "Звонки": "Calls"
+  "Звонки": "Calls",
+  "Количество совершенных звонков": "Total number of calls",
+  "Общая стоимость": "Total Cost",
+  "Суммарные расходы за период": "Total expenses for the period",
+  "Средняя длительность": "Average Duration",
+  "Среднее время разговора": "Average talk time",
+  "Всего токенов": "Total Tokens",
+  "Использовано AI токенов": "AI tokens used",
+  "Средняя стоимость": "Average Cost",
+  "Средняя стоимость разговора": "Average cost call",
+  "Среднее количество токенов": "Average tokens",
+  "Среднее потребление токенов за звонок": "Average tokens per call",
+  "Активность звонков": "Call Activity",
+  "Длительность (мин)": "Duration (min)",
+  "Расходы": "Expenses",
+  "Использование токенов": "Token Usage",
+  "Динамика звонков": "Call Trends"
 }

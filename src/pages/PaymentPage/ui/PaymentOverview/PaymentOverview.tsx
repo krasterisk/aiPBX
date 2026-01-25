@@ -1,3 +1,5 @@
+import { classNames } from '@/shared/lib/classNames/classNames'
+import cls from './PaymentOverview.module.scss'
 import { memo, useState, useCallback } from 'react'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { TopUpBalance } from '@/features/TopUpBalance'
@@ -95,7 +97,7 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
 
             {isTopUpModalOpen && (
                 <Modal isOpen={isTopUpModalOpen} onClose={handleCloseModal}>
-                    <div style={{ padding: 20, minWidth: 300 }}>
+                    <div className={cls.modalContent}>
                         {!clientSecret ? (
                             <TopUpBalance onSuccess={onIntentCreated} />
                         ) : (

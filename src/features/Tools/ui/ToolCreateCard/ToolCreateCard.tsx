@@ -16,12 +16,13 @@ import {
   ToolType
 } from '@/entities/Tools'
 import { useSelector } from 'react-redux'
-import { ClientOptions, ClientSelect, isUserAdmin } from '@/entities/User'
+import { ClientOptions, ClientSelect, getUserAuthData, isUserAdmin } from '@/entities/User'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { ToolCreateCardHeader } from '../ToolCreateCardHeader/ToolCreateCardHeader'
 import { Check } from '@/shared/ui/mui/Check'
 import { ToolAddParam } from '../ToolAddParam/ToolAddParam'
+import { Combobox } from '@/shared/ui/mui/Combobox'
 
 interface ToolCreateCardProps {
   className?: string
@@ -40,11 +41,15 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
 
   const { t } = useTranslation('tools')
   const isAdmin = useSelector(isUserAdmin)
+  const authData = useSelector(getUserAuthData)
   const clientValues = useSelector(getToolsUser)
   const dispatch = useAppDispatch()
   const formFields = useSelector(getToolsCreateForm)
   const [jsonText, setJsonText] = useState(() =>
     formFields?.toolData ? JSON.stringify(formFields.toolData, null, 2) : ''
+  )
+  const [headersText, setHeadersText] = useState(() =>
+    formFields?.headers ? JSON.stringify(formFields.headers, null, 2) : ''
   )
 
   useEffect(() => {
@@ -57,6 +62,23 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
     }
   }, [formFields?.toolData])
 
+  useEffect(() => {
+    if (formFields?.headers) {
+      setHeadersText(JSON.stringify(formFields.headers, null, 2))
+    }
+  }, [formFields?.headers])
+
+  useEffect(() => {
+    if (!isAdmin && authData && formFields?.userId !== authData.id) {
+      const updatedForm = {
+        ...formFields,
+        user: { id: authData.id, name: authData.username || authData.name || '' },
+        userId: authData.id
+      }
+      dispatch(toolsPageActions.updateToolsCreateForm(updatedForm))
+    }
+  }, [authData, dispatch, formFields, isAdmin])
+
   const onJsonChangeHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const text = event.target.value
@@ -68,13 +90,94 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
           ...formFields,
           toolData: parsed
         }
-        dispatch(toolsPageActions.updateToolEditForm(updatedForm))
+        dispatch(toolsPageActions.updateToolsCreateForm(updatedForm))
       } catch {
         // невалидный JSON — просто не трогаем store
       }
     },
     [dispatch, formFields]
   )
+
+  const onHeadersChangeHandler = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const text = event.target.value
+      setHeadersText(text)
+
+      try {
+        const parsed = JSON.parse(text)
+        const updatedForm = {
+          ...formFields,
+          headers: parsed
+        }
+        dispatch(toolsPageActions.updateToolsCreateForm(updatedForm))
+      } catch {
+        // невалидный JSON
+      }
+    },
+    [dispatch, formFields]
+  )
+
+  const [hasWebhook, setHasWebhook] = useState(false)
+
+  const onToggleWebhookHandler = useCallback(() => {
+    setHasWebhook(prev => {
+      const newVal = !prev
+      if (!newVal) {
+        dispatch(toolsPageActions.updateToolsCreateForm({
+          ...formFields,
+          webhook: ''
+        }))
+      }
+      return newVal
+    })
+  }, [dispatch, formFields])
+
+  const onChangeMethodHandler = useCallback((event: any, newValue: { value: string, descriptions: string } | null) => {
+    if (newValue) {
+      const updatedForm = {
+        ...formFields,
+        method: newValue.value
+      }
+      dispatch(toolsPageActions.updateToolsCreateForm(updatedForm))
+    }
+  }, [dispatch, formFields])
+
+  const authHeader = (formFields?.headers as Record<string, string>)?.Authorization || ''
+  let currentAuthType = 'none'
+  let currentToken = ''
+  let currentUsername = ''
+  let currentPassword = ''
+
+  if (authHeader.startsWith('Bearer ')) {
+    currentAuthType = 'bearer'
+    currentToken = authHeader.substring(7)
+  } else if (authHeader.startsWith('Basic ')) {
+    currentAuthType = 'basic'
+    try {
+      const decoded = atob(authHeader.substring(6))
+      const [u, p] = decoded.split(':')
+      currentUsername = u || ''
+      currentPassword = p || ''
+    } catch (e) { }
+  }
+
+  const updateAuthHeader = useCallback((type: string, data: { token?: string, username?: string, password?: string }) => {
+    const newHeaders = { ...(formFields?.headers || {}) } as Record<string, string>
+    if (type === 'none') {
+      delete newHeaders.Authorization
+    } else if (type === 'bearer') {
+      newHeaders.Authorization = `Bearer ${data.token ?? currentToken}`
+    } else if (type === 'basic') {
+      const u = data.username ?? currentUsername
+      const p = data.password ?? currentPassword
+      newHeaders.Authorization = `Basic ${btoa(`${u}:${p}`)}`
+    }
+
+    dispatch(toolsPageActions.updateToolsCreateForm({
+      ...formFields,
+      headers: newHeaders
+    }))
+  }, [dispatch, formFields, currentToken, currentUsername, currentPassword])
 
   const onChangeClientHandler = useCallback((
     event: any,
@@ -139,6 +242,20 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
     }
   }, [formFields, onCreate])
 
+  const methods = [
+    { value: 'GET', descriptions: 'GET' },
+    { value: 'POST', descriptions: 'POST' },
+    { value: 'PUT', descriptions: 'PUT' },
+    { value: 'PATCH', descriptions: 'PATCH' },
+    { value: 'DELETE', descriptions: 'DELETE' }
+  ]
+
+  const authTypes = [
+    { value: 'none', descriptions: t('Нет') },
+    { value: 'bearer', descriptions: t('Bearer Token') },
+    { value: 'basic', descriptions: t('Basic Auth') }
+  ]
+
   const functionType = (
     <>
       <Textarea
@@ -158,12 +275,68 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
         parameters={formFields?.parameters}
         toolName={formFields?.name || ''}
       />
-      <Textarea
-        label={t('Адрес вебхука') ?? ''}
-        onChange={createTextChangeHandler('webhook')}
-        data-testid={'ToolCardCreate.webhook'}
-        value={formFields?.webhook || ''}
+      <Check
+        label={t('Вебхук') || ''}
+        onChange={onToggleWebhookHandler}
+        checked={hasWebhook}
       />
+      {hasWebhook && (
+        <>
+          <Textarea
+            label={t('Адрес вебхука') ?? ''}
+            onChange={createTextChangeHandler('webhook')}
+            data-testid={'ToolCardCreate.webhook'}
+            value={formFields?.webhook || ''}
+          />
+          <Combobox
+            label={t('Метод запроса') ?? ''}
+            options={methods}
+            value={methods.find(m => m.value === (formFields?.method || 'GET')) || methods[0]}
+            onChange={onChangeMethodHandler}
+            getOptionLabel={(option) => option.descriptions}
+            getOptionKey={(option) => option.value}
+            disableClearable
+          />
+          <Combobox
+            label={t('Тип авторизации') ?? ''}
+            options={authTypes}
+            value={authTypes.find(a => a.value === currentAuthType) || authTypes[0]}
+            onChange={(e, v) => v && updateAuthHeader(v.value, {})}
+            getOptionLabel={(option) => option.descriptions}
+            getOptionKey={(option) => option.value}
+            disableClearable
+          />
+          {currentAuthType === 'bearer' && (
+            <Textarea
+              label={t('Токен') ?? ''}
+              onChange={(e) => updateAuthHeader('bearer', { token: e.target.value })}
+              value={currentToken}
+            />
+          )}
+          {currentAuthType === 'basic' && (
+            <>
+              <Textarea
+                label={t('Логин') ?? ''}
+                onChange={(e) => updateAuthHeader('basic', { username: e.target.value })}
+                value={currentUsername}
+              />
+              <Textarea
+                label={t('Пароль') ?? ''}
+                onChange={(e) => updateAuthHeader('basic', { password: e.target.value })}
+                value={currentPassword}
+              />
+            </>
+          )}
+          <Textarea
+            label={t('Заголовки (JSON)') ?? ''}
+            onChange={onHeadersChangeHandler}
+            data-testid={'ToolCardCreate.headers'}
+            value={headersText}
+            minRows={3}
+            multiline
+          />
+        </>
+      )}
     </>
   )
 
@@ -203,7 +376,7 @@ export const ToolCreateCard = memo((props: ToolCreateCardProps) => {
         border={'partial'}
       >
         <VStack gap={'16'} max>
-          {!isAdmin && IsAdminOptions}
+          {isAdmin && IsAdminOptions}
 
           <Textarea
             label={t('Наименование') ?? ''}

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { memo } from 'react'
 
 import { AppLink } from '@/shared/ui/redesigned/AppLink'
-import { getRouteUsers } from '@/shared/const/router'
+import { getRouteMain, getRouteUsers } from '@/shared/const/router'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack } from '@/shared/ui/redesigned/Stack'
@@ -36,7 +36,7 @@ export const UserCreateCardHeader = memo((props: UserCreateCardHeaderProps) => {
         {t('Создать')}
       </Button>
       <AppLink
-        to={getRouteUsers()}
+        to={isAdmin ? getRouteUsers() : getRouteMain()}
       >
         <Button
           variant={'outline'}

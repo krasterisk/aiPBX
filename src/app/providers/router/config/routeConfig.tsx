@@ -139,12 +139,14 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.USERS]: {
     path: getRouteUsers(),
     authOnly: true,
-    element: <UsersPage />
+    element: <UsersPage />,
+    roles: [UserRolesValues.ADMIN]
   },
   [AppRoutes.USER_CREATE]: {
     path: getRouteUserCreate(),
     authOnly: true,
-    element: <UsersCreatePage />
+    element: <UsersCreatePage />,
+    roles: [UserRolesValues.ADMIN]
   },
   [AppRoutes.USER_EDIT]: {
     path: getRouteUserEdit(':id'),

@@ -16,6 +16,8 @@ export interface Tool {
   toolData?: object
   strict?: boolean
   webhook?: string
+  method?: string
+  headers?: Record<string, string>
   user?: User
   userId?: string
   comment?: string
