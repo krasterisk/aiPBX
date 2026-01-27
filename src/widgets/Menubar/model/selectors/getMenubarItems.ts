@@ -8,7 +8,8 @@ import {
   getRouteReports,
   getRouteTools,
   getRouteUsers,
-  getRoutePayment
+  getRoutePayment,
+  getRouteDocs
 } from '@/shared/const/router'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import ScienceIcon from '@mui/icons-material/Science'
@@ -18,6 +19,7 @@ import AssessmentIcon from '@mui/icons-material/Assessment'
 import DnsIcon from '@mui/icons-material/Dns'
 import PeopleIcon from '@mui/icons-material/People'
 import PaymentsIcon from '@mui/icons-material/Payments'
+import MenuBookIcon from '@mui/icons-material/MenuBook'
 import { MenubarItemType } from '../types/menubar'
 import { useTranslation } from 'react-i18next'
 
@@ -75,6 +77,12 @@ export const useMenubarItems = () => {
         path: getRoutePayment(),
         Icon: PaymentsIcon,
         text: t('Оплата'),
+        authOnly: true
+      },
+      {
+        path: getRouteDocs(),
+        Icon: MenuBookIcon,
+        text: t('Документация'),
         authOnly: true
       },
       ...(isAdmin

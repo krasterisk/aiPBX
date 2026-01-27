@@ -1,6 +1,10 @@
-import { memo } from 'react'
+import { memo, useCallback, useRef, useState } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { AutocompleteInputChangeReason } from '@mui/material'
+import { IconButton } from '@mui/material'
+import PlayArrowIcon from '@mui/icons-material/PlayArrow'
+import StopIcon from '@mui/icons-material/Stop'
+import cls from './VoiceSelect.module.scss'
 
 interface VoiceSelectProps {
   label?: string
@@ -26,6 +30,14 @@ const QWEN_VOICES = [
   'Radio Gol', 'Jada', 'Dylan', 'Li', 'Marcus', 'Roy', 'Peter', 'Sunny', 'Eric', 'Rocky', 'Kiki'
 ]
 
+const getVoicePreviewUrl = (voice: string, model?: string): string => {
+  if (model?.startsWith('qwen')) {
+    return `https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/en-US/20250804/beuyzk/${voice}.wav`
+  }
+  // Default to GPT
+  return `https://cdn.openai.com/API/voice-previews/${voice}.flac`
+}
+
 export const VoiceSelect = memo((props: VoiceSelectProps) => {
   const {
     className,
@@ -37,6 +49,9 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
     onInputChange,
     ...otherProps
   } = props
+
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [playingVoice, setPlayingVoice] = useState<string | null>(null)
 
   let topics: string[] = []
 
@@ -54,6 +69,37 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
     onChangeValue?.(event, newValue)
   }
 
+  const handlePlayStop = useCallback((voice: string, event: React.MouseEvent) => {
+    event.stopPropagation()
+
+    if (playingVoice === voice && audioRef.current) {
+      // Stop playing
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+      setPlayingVoice(null)
+    } else {
+      // Start playing
+      if (audioRef.current) {
+        audioRef.current.pause()
+      }
+
+      const url = getVoicePreviewUrl(voice, model)
+      const audio = new Audio(url)
+      audioRef.current = audio
+
+      audio.play().catch(error => {
+        console.error('Error playing audio:', error)
+        setPlayingVoice(null)
+      })
+
+      audio.onended = () => {
+        setPlayingVoice(null)
+      }
+
+      setPlayingVoice(voice)
+    }
+  }, [playingVoice, model])
+
   return (
     <Combobox
       label={label}
@@ -65,6 +111,26 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
       inputValue={inputValue}
       onInputChange={onInputChange}
       freeSolo={false}
+      className={className}
+      renderOption={(props, option) => {
+        const isPlaying = playingVoice === option
+        return (
+          <li {...props} className={cls.option}>
+            <span className={cls.voiceName}>{option}</span>
+            <IconButton
+              size="small"
+              onClick={(e) => handlePlayStop(option, e)}
+              className={cls.playButton}
+            >
+              {isPlaying ? (
+                <StopIcon fontSize="small" className={cls.icon} />
+              ) : (
+                <PlayArrowIcon fontSize="small" className={cls.icon} />
+              )}
+            </IconButton>
+          </li>
+        )
+      }}
       {...otherProps}
     />
   )

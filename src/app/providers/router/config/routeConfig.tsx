@@ -31,7 +31,8 @@ import {
   getRoutePbxServerEdit,
   getRoutePlayground,
   getRouteBilling,
-  getRoutePaymentDetails
+  getRoutePaymentDetails,
+  getRouteDocs
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 import { SettingPage } from '@/pages/SettingsPage'
@@ -52,6 +53,7 @@ import {
 import { PlaygroundPage } from '@/pages/Playground'
 import { BillingPage } from '@/pages/BillingPage'
 import { PaymentDetailsPage } from '@/pages/PaymentDetailsPage'
+import { DocsPage } from '@/pages/DocsPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -181,6 +183,11 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.PAYMENT_DETAILS]: {
     path: getRoutePaymentDetails(),
     element: <PaymentDetailsPage />,
+    authOnly: true
+  },
+  [AppRoutes.DOCS]: {
+    path: getRouteDocs(),
+    element: <DocsPage />,
     authOnly: true
   },
   [AppRoutes.ERROR]: {

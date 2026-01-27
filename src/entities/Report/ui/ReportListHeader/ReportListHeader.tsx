@@ -47,6 +47,7 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
       justify={'center'}
       align={'center'}
       max
+      gap={'16'}
     >
       <Input
         data-testid={'ReportSearch'}

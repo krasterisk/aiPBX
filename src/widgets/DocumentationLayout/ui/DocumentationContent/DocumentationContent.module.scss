@@ -1,0 +1,93 @@
+.DocumentationContent {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.title {
+    margin-bottom: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.contentBody {
+    line-height: 1.8;
+}
+
+.section {
+    margin-bottom: 32px;
+}
+
+.heading {
+    margin-top: 32px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.subheading {
+    margin-top: 24px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.paragraph {
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+.list {
+    margin: 16px 0;
+    padding-left: 24px;
+
+    li {
+        margin-bottom: 8px;
+        color: var(--text-secondary);
+    }
+}
+
+.steps {
+    margin: 16px 0;
+    padding-left: 24px;
+    counter-reset: step-counter;
+
+    li {
+        margin-bottom: 16px;
+        color: var(--text-secondary);
+        padding-left: 8px;
+    }
+}
+
+.imageContainer {
+    margin: 24px 0;
+    text-align: center;
+}
+
+.image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.imageCaption {
+    display: block;
+    margin-top: 8px;
+    color: var(--text-tertiary);
+    font-style: italic;
+}
+
+.note {
+    margin: 16px 0;
+    padding: 16px;
+    background: var(--bg-info, rgba(33, 150, 243, 0.1));
+    border-left: 4px solid var(--info-color, #2196f3);
+    border-radius: 4px;
+
+    p {
+        margin: 0;
+        color: var(--text-secondary);
+    }
+}

@@ -1,17 +1,20 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { useTranslation } from 'react-i18next'
 import cls from './PlaygroundSession.module.scss'
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useState, useEffect } from 'react'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { AssistantSelectSingle } from '@/entities/Assistants'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 import { usePlaygroundSession } from '../../model/usePlaygroundSession'
 import { PlaygroundCall } from '../../ui/PlaygroundCall/PlaygroundCall'
+import { PlaygroundAssistantSettings } from '../PlaygroundAssistantSettings/PlaygroundAssistantSettings'
+import { playgroundAssistantFormActions } from '@/pages/Playground'
+import { useAssistant } from '@/entities/Assistants/api/assistantsApi'
 
 interface PlaygroundSessionProps {
     className?: string
@@ -20,16 +23,30 @@ interface PlaygroundSessionProps {
 export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
     const { className } = props
     const { t } = useTranslation('playground')
+    const dispatch = useDispatch()
     const userData = useSelector(getUserAuthData)
     const isAdmin = useSelector(isUserAdmin)
 
     const [selectedAssistant, setSelectedAssistant] = useState<AssistantOptions | null>(null)
+
+    const { data: assistantData } = useAssistant(selectedAssistant?.id || '', {
+        skip: !selectedAssistant?.id
+    })
 
     const { status, connect, disconnect, events, analyserNode } = usePlaygroundSession()
 
     // Status derivatives
     const isSessionActive = status === 'connected'
     const isLoading = status === 'connecting'
+
+    // Initialize form when assistant is selected
+    useEffect(() => {
+        if (assistantData && selectedAssistant) {
+            dispatch(playgroundAssistantFormActions.initForm(assistantData))
+        } else {
+            dispatch(playgroundAssistantFormActions.resetForm())
+        }
+    }, [assistantData, selectedAssistant, dispatch])
 
     const handleStartSession = useCallback(() => {
         if (selectedAssistant) {
@@ -68,7 +85,7 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
                     <HStack justify={'end'} max>
                         {!isSessionActive ? (
                             <Button
-                                variant={'outline'}
+                                variant={'filled'}
                                 color={'success'}
                                 disabled={!selectedAssistant || isLoading || !navigator.mediaDevices}
                                 onClick={handleStartSession}
@@ -87,6 +104,11 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
                     </HStack>
                 </VStack>
             </Card>
+
+            {/* Show settings when assistant is selected but session is not active */}
+            {selectedAssistant && !isSessionActive && assistantData && (
+                <PlaygroundAssistantSettings />
+            )}
 
             {isSessionActive && (
                 <PlaygroundCall

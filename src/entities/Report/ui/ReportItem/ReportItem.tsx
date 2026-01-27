@@ -39,7 +39,7 @@ export const ReportItem = memo((props: ReportItemProps) => {
 
   const { t } = useTranslation(['reports', 'translation'])
   const authData = useSelector(getUserAuthData)
-  const userCurrency = authData?.currency || UserCurrencyValues.USD
+  const userCurrency = UserCurrencyValues.USD || authData?.currency
 
   const [showDialog, setShowDialog] = useState(false)
 

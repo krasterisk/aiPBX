@@ -9,10 +9,12 @@ import { ReportsPageSchema } from '@/entities/Report'
 import { DashboardPageSchema } from '@/widgets/Dashboard'
 import { LoginSchema, SignupSchema } from '@/features/Auth'
 import { PbxServersPageSchema } from '@/entities/PbxServers'
+import { PlaygroundAssistantFormSchema } from '@/pages/Playground'
 
 export interface StateSchema {
   user: UserSchema
   saveScroll: ScrollSaveSchema
+  playgroundAssistantForm: PlaygroundAssistantFormSchema
   [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>
 
   // Async reducers

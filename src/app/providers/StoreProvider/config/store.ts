@@ -7,8 +7,9 @@ import { scrollSaveReducer } from '@/features/ScrollSave'
 import { rtkApi } from '@/shared/api/rtkApi'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { toastMiddleware } from '@/app/middleware/toastMiddleware'
+import { playgroundAssistantFormReducer } from '@/pages/Playground'
 
-export function createReduxStore (
+export function createReduxStore(
   initialState?: StateSchema,
   asyncReducers?: ReducersMapObject<StateSchema>
 ) {
@@ -16,6 +17,7 @@ export function createReduxStore (
     ...asyncReducers,
     user: userReducer,
     saveScroll: scrollSaveReducer,
+    playgroundAssistantForm: playgroundAssistantFormReducer,
     [rtkApi.reducerPath]: rtkApi.reducer
   }
 

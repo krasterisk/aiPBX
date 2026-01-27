@@ -1,3 +1,26 @@
-.VoiceSelect {
+.option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 12px;
+    gap: 8px;
+}
 
+.voiceName {
+    flex: 1;
+}
+
+.playButton {
+    flex-shrink: 0;
+    padding: 4px;
+
+    &:hover {
+        background-color: var(--hint-redesigned);
+    }
+}
+
+.icon {
+    color: var(--icon-redesigned);
+    font-size: 18px;
 }
