@@ -6,20 +6,17 @@ import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Assistant } from '../../model/types/assistants'
-import { ModelSelect } from '../ModelSelect/ModelSelect'
 import { getAssistantFormData } from '../../model/selectors/assistantFormSelectors'
 
 interface AssistantOptionsModelProps {
     className?: string
     onTextChangeHandler?: (field: keyof Assistant) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
-    onChangeSelectHandler?: (field: keyof Assistant) => (event: any, newValue: string) => void
 }
 
 export const AssistantOptionsModel = memo((props: AssistantOptionsModelProps) => {
     const {
         className,
         onTextChangeHandler,
-        onChangeSelectHandler
     } = props
 
     const { t } = useTranslation('assistants')
@@ -27,11 +24,6 @@ export const AssistantOptionsModel = memo((props: AssistantOptionsModelProps) =>
 
     return (
         <VStack max gap={'16'} className={className}>
-            <ModelSelect
-                label={String(t('Модель'))}
-                value={formFields?.model || ''}
-                onChangeValue={onChangeSelectHandler?.('model')}
-            />
             <Textarea
                 label={t('Температура') ?? ''}
                 onChange={onTextChangeHandler?.('temperature')}

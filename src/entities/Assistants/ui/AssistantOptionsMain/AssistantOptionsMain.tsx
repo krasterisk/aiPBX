@@ -14,6 +14,7 @@ import { Tool, ToolsSelect } from '@/entities/Tools'
 import { VoiceSelect } from '../VoiceSelect/VoiceSelect'
 import { Assistant } from '../../model/types/assistants'
 import { getAssistantFormData } from '../../model/selectors/assistantFormSelectors'
+import { ModelSelect } from '../ModelSelect/ModelSelect'
 
 interface AssistantOptionsMainProps {
   className?: string
@@ -40,41 +41,47 @@ export const AssistantOptionsMain = memo((props: AssistantOptionsMainProps) => {
   const userId = isAdmin ? formFields?.userId : clientData?.id
 
   return (
-        <VStack max gap={'16'} className={className}>
-            {isAdmin &&
-              <ClientSelect
-                    value={formFields?.user as ClientOptions}
-                    onChangeClient={onChangeClientHandler}
-                    label={String(t('Клиент'))}
-                    className={cls.client}
-                    data-testid={'AssistantCard.ClientSelect'}
-                />
-            }
+    <VStack max gap={'16'} className={className}>
+      {isAdmin &&
+        <ClientSelect
+          value={formFields?.user as ClientOptions}
+          onChangeClient={onChangeClientHandler}
+          label={String(t('Клиент'))}
+          className={cls.client}
+          data-testid={'AssistantCard.ClientSelect'}
+        />
+      }
 
-            <Textarea
-                label={t('Наименование ассистента') ?? ''}
-                onChange={onChangeTextHandler?.('name')}
-                data-testid={'AssistantCard.name'}
-                value={formFields?.name || ''}
-                required
-            />
-            <VoiceSelect
-                label={String(t('Голос'))}
-                value={formFields?.voice ?? ''}
-                onChangeValue={onChangeSelectHandler?.('voice')}
-            />
-            <ToolsSelect
-                label={t('Функции') || ''}
-                value={formFields?.tools || []}
-                userId={userId}
-                onChangeTool={onChangeToolsHandler}
-            />
-          <Textarea
-              label={t('Комментарий') ?? ''}
-              onChange={onChangeTextHandler?.('comment')}
-              data-testid={'AssistantCardCreate.comment'}
-              value={formFields?.comment || ''}
-          />
-        </VStack>
+      <Textarea
+        label={t('Наименование ассистента') ?? ''}
+        onChange={onChangeTextHandler?.('name')}
+        data-testid={'AssistantCard.name'}
+        value={formFields?.name || ''}
+        required
+      />
+      <ModelSelect
+        label={String(t('Модель'))}
+        value={formFields?.model || ''}
+        onChangeValue={onChangeSelectHandler?.('model')}
+      />
+      <VoiceSelect
+        label={String(t('Голос'))}
+        value={formFields?.voice ?? ''}
+        model={formFields?.model}
+        onChangeValue={onChangeSelectHandler?.('voice')}
+      />
+      <ToolsSelect
+        label={t('Функции') || ''}
+        value={formFields?.tools || []}
+        userId={userId}
+        onChangeTool={onChangeToolsHandler}
+      />
+      <Textarea
+        label={t('Комментарий') ?? ''}
+        onChange={onChangeTextHandler?.('comment')}
+        data-testid={'AssistantCardCreate.comment'}
+        value={formFields?.comment || ''}
+      />
+    </VStack>
   )
 })

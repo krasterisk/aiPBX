@@ -154,6 +154,19 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
       ...formFields,
       [field]: newValue
     }
+
+    if (field === 'model') {
+      updatedFields.voice = ''
+
+      if (newValue.startsWith('qwen')) {
+        updatedFields.input_audio_format = 'pcm16'
+        updatedFields.output_audio_format = 'pcm16'
+      } else if (newValue.startsWith('gpt')) {
+        updatedFields.input_audio_format = 'g711_alaw'
+        updatedFields.output_audio_format = 'g711_alaw'
+      }
+    }
+
     dispatch(assistantFormActions.updateForm(updatedFields))
   }, [dispatch, formFields])
 
@@ -191,7 +204,6 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
         content:
           <AssistantOptionsModel
             onTextChangeHandler={onChangeTextHandler}
-            onChangeSelectHandler={onChangeSelectHandler}
           />
       }]
       : []

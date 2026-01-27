@@ -41,19 +41,20 @@ export const ModelSelect = memo((props: ModelSelectProps) => {
   }
 
   return (
-      <Combobox
-          label={label}
-          autoComplete={true}
-          clearOnBlur={false}
-          options={modelItems}
-          value={selectedValue}
-          onChange={onChangeHandler}
-          inputValue={inputValue}
-          getOptionKey={option => option.name}
-          isOptionEqualToValue={(option, value) => option.name === value?.name}
-          getOptionLabel={option => option.name || ''}
-          onInputChange={onInputChange}
-          {...otherProps}
-      />
+    <Combobox
+      label={label}
+      autoComplete={true}
+      clearOnBlur={false}
+      options={modelItems}
+      value={selectedValue}
+      onChange={onChangeHandler}
+      inputValue={inputValue}
+      getOptionKey={option => option.name}
+      isOptionEqualToValue={(option, value) => option.name === value?.name}
+      getOptionLabel={option => option.name || ''}
+      onInputChange={onInputChange}
+      freeSolo={false}
+      {...otherProps}
+    />
   )
 })

@@ -18,7 +18,7 @@ interface DashboardChartsProps {
 export const DashboardCharts = memo(({ data }: DashboardChartsProps) => {
     const { t } = useTranslation('reports')
     const authData = useSelector(getUserAuthData)
-    const userCurrency = authData?.currency || UserCurrencyValues.USD
+    const userCurrency = UserCurrencyValues.USD || authData?.currency
     const currencySymbol = currencySymbols[userCurrency] || '$'
 
     const ringsCount = data?.chartData?.map(item => Number(item.allCount)) || []

@@ -23,7 +23,7 @@ interface DashboardStatisticsProps {
 export const DashboardStatistics = memo(({ data, isLoading }: DashboardStatisticsProps) => {
     const { t } = useTranslation('reports')
     const authData = useSelector(getUserAuthData)
-    const userCurrency = authData?.currency || UserCurrencyValues.USD
+    const userCurrency = UserCurrencyValues.USD || authData?.currency
 
     const stats = useMemo(() => {
         const totalCalls = data?.allCount || 0
