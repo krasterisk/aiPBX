@@ -6,10 +6,9 @@ import { Card } from '@/shared/ui/redesigned/Card'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { AssistantSelectSingle } from '@/entities/Assistants'
 import { useSelector, useDispatch } from 'react-redux'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
-import { AssistantOptions } from '@/entities/Assistants'
+import { AssistantOptions, AssistantSelect } from '@/entities/Assistants'
 import { usePlaygroundSession } from '../../model/usePlaygroundSession'
 import { PlaygroundCall } from '../../ui/PlaygroundCall/PlaygroundCall'
 import { PlaygroundAssistantSettings } from '../PlaygroundAssistantSettings/PlaygroundAssistantSettings'
@@ -66,7 +65,7 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
                     <Text title={t('Настройка сессии')} />
 
                     <HStack gap={'16'} max wrap={'wrap'}>
-                        <AssistantSelectSingle
+                        <AssistantSelect
                             label={t('Выберите ассистента') || 'Assistant'}
                             value={selectedAssistant}
                             onChangeAssistant={(_, newValue) => setSelectedAssistant(newValue)}

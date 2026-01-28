@@ -61,5 +61,8 @@
   "мин": "分",
   "сек": "秒",
   "VoIP Серверы": "VoIP 服务器",
-  "Playground": "Playground"
+  "Playground": "Playground",
+  "Публикация": "发布",
+  "Виджеты": "小部件",
+  "SIP URIs": "SIP URI"
 }

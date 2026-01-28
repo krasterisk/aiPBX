@@ -10,7 +10,7 @@ export default {
   }
 } as ComponentMeta<typeof AssistantSelect>
 
-const Template: ComponentStory<typeof AssistantSelect> = (args) => <AssistantSelect {...args} />
+const Template: ComponentStory<typeof AssistantSelect> = (args: any) => <AssistantSelect {...args} />
 
 export const Normal = Template.bind({})
 Normal.args = {}

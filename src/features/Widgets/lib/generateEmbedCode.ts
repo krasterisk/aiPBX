@@ -1,0 +1,43 @@
+import { WidgetKey, WidgetAppearanceSettings } from '@/entities/WidgetKeys'
+
+export function generateEmbedCode(
+    widget: WidgetKey,
+    settings: WidgetAppearanceSettings
+): string {
+    const attributes = [
+        `src="https://cdn.yourdomain.com/widget.js"`,
+        `data-key="${widget.publicKey}"`,
+        `data-api="https://api.yourdomain.com"`
+    ]
+
+    // Добавляем опциональные атрибуты только если они отличаются от defaults
+    if (settings.buttonPosition !== 'bottom-right') {
+        attributes.push(`data-position="${settings.buttonPosition}"`)
+    }
+
+    if (settings.theme !== 'light') {
+        attributes.push(`data-theme="${settings.theme}"`)
+    }
+
+    if (settings.primaryColor !== '#667eea') {
+        attributes.push(`data-primary-color="${settings.primaryColor}"`)
+    }
+
+    if (settings.accentColor !== '#764ba2') {
+        attributes.push(`data-accent-color="${settings.accentColor}"`)
+    }
+
+    if (settings.language !== 'en') {
+        attributes.push(`data-language="${settings.language}"`)
+    }
+
+    if (!settings.showBranding) {
+        attributes.push(`data-hide-branding="true"`)
+    }
+
+    if (settings.buttonColor !== '#667eea') {
+        attributes.push(`data-button-color="${settings.buttonColor}"`)
+    }
+
+    return `<!-- AI Voice Widget -->\n<script\n  ${attributes.join('\n  ')}\n></script>`
+}

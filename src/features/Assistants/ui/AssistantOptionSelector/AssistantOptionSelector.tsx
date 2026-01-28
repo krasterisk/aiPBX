@@ -25,7 +25,6 @@ import { TabPanelItem, TabsPanel } from '@/shared/ui/mui/TabsPanel'
 import { AssistantCreateCardHeader } from '../AssistantCreateCardHeader/AssistantCreateCardHeader'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { AssistantEditCardHeader } from '../AssistantEditCardHeader/AssistantEditCardHeader'
-import { AssistantOptionsPublication } from '../AssistantOptionsPublication/AssistantOptionsPublication'
 
 interface AssistantOptionsSelectorProps {
   className?: string
@@ -207,12 +206,7 @@ export const AssistantOptionSelector = memo((props: AssistantOptionsSelectorProp
           />
       }]
       : []
-    ),
-    {
-      label: t('Публикация'),
-      content:
-        <AssistantOptionsPublication isEdit={isEdit} assistantId={assistantId} />
-    }
+    )
   ]
 
   const actionHandler = useCallback(() => {

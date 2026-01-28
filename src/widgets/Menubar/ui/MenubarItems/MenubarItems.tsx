@@ -29,28 +29,43 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
     // const isAuth = useSelector(getUserAuthData)
     const menubarItemList = useMenubarItems()
 
-    const renderTree = (nodes: MenubarItemType[]) => (
-        <SimpleTreeView className={cls.menuContainer}>
+    const renderNodes = (nodes: MenubarItemType[]) => (
+        nodes.map((node) => {
+            const content = (
+                <TreeItem
+                    key={node.path}
+                    itemId={node.path}
+                    label={t(node.text)}
+                    onClick={(e) => {
+                        if (!node.subItems && onDrawerClose) onDrawerClose()
+                        if (node.subItems) e.stopPropagation()
+                    }}
+                    slots={{
+                        icon: () => <node.Icon />
+                    }}
+                >
+                    {node.subItems ? renderNodes(node.subItems) : null}
+                </TreeItem>
+            )
 
-            {nodes.map((node) => (
+            if (node.subItems) {
+                return content
+            }
+
+            return (
                 <AppLink
                     key={node.path}
                     to={node.path}
-                // activeClassName={cls.active}
                 >
-                    <TreeItem
-                        key={node.path}
-                        itemId={node.path}
-                        label={t(node.text)}
-                        onClick={!node.subItems ? () => { if (onDrawerClose) onDrawerClose() } : undefined}
-                        slots={{
-                            icon: () => <node.Icon />
-                        }}
-                    >
-                        {node.subItems ? renderTree(node.subItems) : null}
-                    </TreeItem>
+                    {content}
                 </AppLink>
-            ))}
+            )
+        })
+    )
+
+    const tree = (
+        <SimpleTreeView className={cls.menuContainer}>
+            {renderNodes(menubarItemList)}
         </SimpleTreeView>
     )
 
@@ -64,7 +79,7 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
                         className={cls.appLogo}
                     />
                     <div className={cls.brandText}>AI PBX</div>
-                    {renderTree(menubarItemList)}
+                    {tree}
                     <HStack className={cls.switchers} justify="center" gap="16" wrap="wrap">
                         <LangSwitcher short />
                         <ThemeSwitcher />
@@ -76,7 +91,7 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
 
     return (
         <>
-            {renderTree(menubarItemList)}
+            {tree}
         </>
     )
 })

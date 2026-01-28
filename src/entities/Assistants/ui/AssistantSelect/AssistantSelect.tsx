@@ -1,17 +1,30 @@
 import { memo } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
-import { Checkbox } from '@mui/material'
+import { Checkbox, TextField } from '@mui/material'
 import { AssistantOptions } from '../../model/types/assistants'
 import { useAssistantsAll } from '../../api/assistantsApi'
 
-interface AssistantSelectProps {
+interface BaseAssistantSelectProps {
   label?: string
-  value?: AssistantOptions[]
-  assistantId?: string[]
   className?: string
-  onChangeAssistant?: (event: any, newValue: AssistantOptions[]) => void
   userId?: string
+  error?: boolean
+  helperText?: string
 }
+
+interface SingleAssistantSelectProps extends BaseAssistantSelectProps {
+  multiple?: false
+  value?: AssistantOptions | null
+  onChangeAssistant?: (event: any, newValue: AssistantOptions | null) => void
+}
+
+interface MultipleAssistantSelectProps extends BaseAssistantSelectProps {
+  multiple: true
+  value?: AssistantOptions[]
+  onChangeAssistant?: (event: any, newValue: AssistantOptions[]) => void
+}
+
+export type AssistantSelectProps = SingleAssistantSelectProps | MultipleAssistantSelectProps
 
 export const AssistantSelect = memo((props: AssistantSelectProps) => {
   const {
@@ -20,7 +33,9 @@ export const AssistantSelect = memo((props: AssistantSelectProps) => {
     value,
     onChangeAssistant,
     userId,
-    assistantId,
+    multiple,
+    error,
+    helperText,
     ...otherProps
   } = props
 
@@ -30,38 +45,47 @@ export const AssistantSelect = memo((props: AssistantSelectProps) => {
     { userId }
   )
 
-  const onChangeMultipleHandler = (event: any, newValue: AssistantOptions[]) => {
-    onChangeAssistant?.(event, newValue)
+  const onChangeHandler = (event: any, newValue: any) => {
+    if (multiple) {
+      (onChangeAssistant as MultipleAssistantSelectProps['onChangeAssistant'])?.(event, newValue)
+    } else {
+      (onChangeAssistant as SingleAssistantSelectProps['onChangeAssistant'])?.(event, newValue)
+    }
   }
 
   return (
-      <Combobox
-          id={'assistantSelectBox'}
-          multiple
+    <Combobox
+      id={'assistantSelectBox'}
+      multiple={multiple}
+      label={label}
+      autoComplete
+      options={assistants || []}
+      value={value}
+      isOptionEqualToValue={(option, value) => String(option.id) === String(value.id)}
+      onChange={onChangeHandler}
+      getOptionLabel={(option) => option.name}
+      disableCloseOnSelect={multiple}
+      renderInput={(params) => (
+        <TextField
+          {...params}
           label={label}
-          autoComplete
-          groupBy={(option) => option.group || ''}
-          options={assistants || []}
-          disableCloseOnSelect
-          value={value}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-          renderOption={(props, option, { selected, inputValue, index }) => {
-            const { ...otherProps } = props
-            return (
-                <li {...otherProps}>
-                  <Checkbox
-                      // icon={icon}
-                      // checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                  />
-                  {String(option.name)}
-                </li>
-            )
-          }}
-          onChange={onChangeMultipleHandler}
-          getOptionLabel={(option) => option.name}
-          {...otherProps}
-      />
+          error={error}
+          helperText={helperText}
+        />
+      )}
+      renderOption={multiple ? (props, option, { selected }) => {
+        const { ...otherProps } = props
+        return (
+          <li {...otherProps}>
+            <Checkbox
+              style={{ marginRight: 8 }}
+              checked={selected}
+            />
+            {String(option.name)}
+          </li>
+        )
+      } : undefined}
+      {...otherProps}
+    />
   )
 })

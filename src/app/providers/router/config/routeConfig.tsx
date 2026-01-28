@@ -32,7 +32,13 @@ import {
   getRoutePlayground,
   getRouteBilling,
   getRoutePaymentDetails,
-  getRouteDocs
+  getRouteDocs,
+  getRoutePublishSipUris,
+  getRoutePublishSipUrisCreate,
+  getRoutePublishSipUrisEdit,
+  getRoutePublishWidgets,
+  getRoutePublishWidgetsCreate,
+  getRoutePublishWidgetsEdit
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 import { SettingPage } from '@/pages/SettingsPage'
@@ -54,6 +60,14 @@ import { PlaygroundPage } from '@/pages/Playground'
 import { BillingPage } from '@/pages/BillingPage'
 import { PaymentDetailsPage } from '@/pages/PaymentDetailsPage'
 import { DocsPage } from '@/pages/DocsPage'
+import {
+  PublishSipUrisPage,
+  PublishSipUriCreatePage,
+  PublishSipUriEditPage,
+  PublishWidgetsPage,
+  PublishWidgetCreatePage,
+  PublishWidgetEditPage
+} from '@/pages/PublishPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -188,6 +202,36 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.DOCS]: {
     path: getRouteDocs(),
     element: <DocsPage />,
+    authOnly: true
+  },
+  [AppRoutes.PUBLISH_SIP_URIS]: {
+    path: getRoutePublishSipUris(),
+    element: <PublishSipUrisPage />,
+    authOnly: true
+  },
+  [AppRoutes.PUBLISH_SIP_URIS_CREATE]: {
+    path: getRoutePublishSipUrisCreate(),
+    element: <PublishSipUriCreatePage />,
+    authOnly: true
+  },
+  [AppRoutes.PUBLISH_SIP_URIS_EDIT]: {
+    path: getRoutePublishSipUrisEdit(':id'),
+    element: <PublishSipUriEditPage />,
+    authOnly: true
+  },
+  [AppRoutes.PUBLISH_WIDGETS]: {
+    path: getRoutePublishWidgets(),
+    element: <PublishWidgetsPage />,
+    authOnly: true
+  },
+  [AppRoutes.PUBLISH_WIDGETS_CREATE]: {
+    path: getRoutePublishWidgetsCreate(),
+    element: <PublishWidgetCreatePage />,
+    authOnly: true
+  },
+  [AppRoutes.PUBLISH_WIDGETS_EDIT]: {
+    path: getRoutePublishWidgetsEdit(':id'),
+    element: <PublishWidgetEditPage />,
     authOnly: true
   },
   [AppRoutes.ERROR]: {

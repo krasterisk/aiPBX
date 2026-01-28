@@ -26,7 +26,13 @@ export enum AppRoutes {
   PLAYGROUND = 'playground',
   BILLING = 'billing',
   PAYMENT_DETAILS = 'payment_details',
-  DOCS = 'docs'
+  DOCS = 'docs',
+  PUBLISH_SIP_URIS = 'publish_sip_uris',
+  PUBLISH_SIP_URIS_CREATE = 'publish_sip_uris_create',
+  PUBLISH_SIP_URIS_EDIT = 'publish_sip_uris_edit',
+  PUBLISH_WIDGETS = 'publish_widgets',
+  PUBLISH_WIDGETS_CREATE = 'publish_widgets_create',
+  PUBLISH_WIDGETS_EDIT = 'publish_widgets_edit'
 }
 
 export const getRouteMain = () => '/'
@@ -59,6 +65,13 @@ export const getRoutePlayground = () => '/playground'
 export const getRouteBilling = () => '/billing'
 export const getRoutePaymentDetails = () => '/payment-history'
 export const getRouteDocs = () => '/docs'
+export const getRoutePublishSipUris = () => '/publish/sip-uris'
+export const getRoutePublishSipUrisCreate = () => '/publish/sip-uris/create'
+export const getRoutePublishSipUrisEdit = (id: string) => `/publish/sip-uris/${id}`
+export const getRoutePublishWidgets = () => '/publish/widgets'
+export const getRoutePublishWidgetsCreate = () => '/publish/widgets/create'
+export const getRoutePublishWidgetsEdit = (id: string) => `/publish/widgets/${id}`
+
 
 export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteMain()]: AppRoutes.MAIN,
@@ -87,5 +100,11 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRoutePlayground()]: AppRoutes.PLAYGROUND,
   [getRouteBilling()]: AppRoutes.BILLING,
   [getRoutePaymentDetails()]: AppRoutes.PAYMENT_DETAILS,
-  [getRouteDocs()]: AppRoutes.DOCS
+  [getRouteDocs()]: AppRoutes.DOCS,
+  [getRoutePublishSipUris()]: AppRoutes.PUBLISH_SIP_URIS,
+  [getRoutePublishSipUrisCreate()]: AppRoutes.PUBLISH_SIP_URIS_CREATE,
+  [getRoutePublishSipUrisEdit(':id')]: AppRoutes.PUBLISH_SIP_URIS_EDIT,
+  [getRoutePublishWidgets()]: AppRoutes.PUBLISH_WIDGETS,
+  [getRoutePublishWidgetsCreate()]: AppRoutes.PUBLISH_WIDGETS_CREATE,
+  [getRoutePublishWidgetsEdit(':id')]: AppRoutes.PUBLISH_WIDGETS_EDIT
 }

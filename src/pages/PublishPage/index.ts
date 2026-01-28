@@ -1,0 +1,6 @@
+export { default as PublishSipUrisPage } from './ui/PublishSipUrisPage/PublishSipUrisPage'
+export { default as PublishSipUriCreatePage } from './ui/PublishSipUriCreatePage/PublishSipUriCreatePage'
+export { default as PublishSipUriEditPage } from './ui/PublishSipUriEditPage/PublishSipUriEditPage'
+export { default as PublishWidgetsPage } from './ui/PublishWidgetsPage/PublishWidgetsPage'
+export { default as PublishWidgetCreatePage } from './ui/PublishWidgetCreatePage/PublishWidgetCreatePage'
+export { default as PublishWidgetEditPage } from './ui/PublishWidgetEditPage/PublishWidgetEditPage'

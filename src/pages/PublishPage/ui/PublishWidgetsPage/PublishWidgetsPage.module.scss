@@ -1,0 +1,23 @@
+.PublishWidgetsPage {
+    .formGrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        width: 100%;
+
+        @media screen and (max-width: 1024px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .accordion {
+        background: transparent !important;
+        box-shadow: none !important;
+        border: 1px solid var(--border-redesigned);
+        border-radius: 8px !important;
+
+        &:before {
+            display: none;
+        }
+    }
+}

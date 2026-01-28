@@ -61,5 +61,8 @@
   "мин": "Min",
   "сек": "Sek",
   "VoIP Серверы": "VoIP-Server",
-  "Playground": "Playground"
+  "Playground": "Playground",
+  "Публикация": "Veröffentlichen",
+  "Виджеты": "Widgets",
+  "SIP URIs": "SIP-URIs"
 }

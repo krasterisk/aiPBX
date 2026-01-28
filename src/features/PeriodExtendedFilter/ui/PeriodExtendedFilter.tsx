@@ -84,9 +84,9 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
                     : ''
                 }
                 <AssistantSelect
+                    multiple={true}
                     label={t('Ассистент') || ''}
                     className={cls.clientSelect}
-                    assistantId={assistantId}
                     onChangeAssistant={onChangeAssistant}
                 />
                 <HStack gap={'16'} justify={'end'} max wrap={'wrap'}>

@@ -1,0 +1,15 @@
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.accordion {
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+
+    &::before {
+        display: none;
+    }
+}

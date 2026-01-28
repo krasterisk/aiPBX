@@ -10,6 +10,7 @@ export interface AllAssistants {
 export interface AssistantOptions {
   id: string
   name: string
+  userId?: string
 }
 
 export interface AssistantSipAccount {

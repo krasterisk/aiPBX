@@ -1,0 +1,23 @@
+{
+    "SIP URIs": "SIP-URIs",
+    "Создать SIP URI": "SIP-URI erstellen",
+    "Создание SIP URI": "SIP-URI erstellen",
+    "Редактирование SIP URI": "SIP-URI bearbeiten",
+    "AI Ассистент": "AI-Assistent",
+    "Выберите ассистента": "Assistenten auswählen",
+    "Выберите VoIP сервер": "VoIP-Server auswählen",
+    "Выберите сервер": "Server auswählen",
+    "Ваш IP Адрес": "Ihre IP-Adresse",
+    "Введите IP адрес": "IP-Adresse eingeben",
+    "IP": "IP",
+    "Отмена": "Abbrechen",
+    "Сохранить изменения": "Änderungen speichern",
+    "Пожалуйста заполни все поля": "Bitte füllen Sie alle Felder aus",
+    "SIP URI успешно создан": "SIP-URI erfolgreich erstellt",
+    "SIP URI успешно обновлен": "SIP-URI erfolgreich aktualisiert",
+    "SIP URI успешно удален": "SIP-URI erfolgreich gelöscht",
+    "Вы уверены, что хотите удалить SIP URI?": "Sind Sie sicher, dass Sie diese SIP-URI löschen möchten?",
+    "У вас пока нет активных SIP URIs": "Sie haben noch keine aktiven SIP-URIs",
+    "Скопировано в буфер обмена": "In die Zwischenablage kopiert",
+    "Нет данных": "Keine Daten"
+}

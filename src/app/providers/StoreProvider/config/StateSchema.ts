@@ -10,6 +10,8 @@ import { DashboardPageSchema } from '@/widgets/Dashboard'
 import { LoginSchema, SignupSchema } from '@/features/Auth'
 import { PbxServersPageSchema } from '@/entities/PbxServers'
 import { PlaygroundAssistantFormSchema } from '@/pages/Playground'
+import { PublishSipUrisFormSchema } from '@/features/PublishSipUris'
+import { PublishWidgetsFormSchema } from '@/features/PublishWidgets'
 
 export interface StateSchema {
   user: UserSchema
@@ -27,6 +29,8 @@ export interface StateSchema {
   reportsPage?: ReportsPageSchema
   dashboardPage?: DashboardPageSchema
   pbxServersPage?: PbxServersPageSchema
+  publishSipUrisForm?: PublishSipUrisFormSchema
+  publishWidgetsForm?: PublishWidgetsFormSchema
 }
 
 export type StateSchemaKey = keyof StateSchema

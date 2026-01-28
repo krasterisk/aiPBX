@@ -20,8 +20,11 @@ import DnsIcon from '@mui/icons-material/Dns'
 import PeopleIcon from '@mui/icons-material/People'
 import PaymentsIcon from '@mui/icons-material/Payments'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
+import PublicIcon from '@mui/icons-material/Public'
+import SendIcon from '@mui/icons-material/Send'
 import { MenubarItemType } from '../types/menubar'
 import { useTranslation } from 'react-i18next'
+import { getRoutePublishSipUris, getRoutePublishWidgets } from '@/shared/const/router'
 
 export const useMenubarItems = () => {
   const userData = useSelector(getUserAuthData)
@@ -66,6 +69,26 @@ export const useMenubarItems = () => {
         Icon: ScienceIcon,
         text: t('Playground'),
         authOnly: true
+      },
+      {
+        path: '/publish',
+        Icon: PublicIcon,
+        text: t('Публикация'),
+        authOnly: true,
+        subItems: [
+          {
+            path: getRoutePublishSipUris(),
+            Icon: SendIcon,
+            text: t('SIP URIs'),
+            authOnly: true
+          },
+          {
+            path: getRoutePublishWidgets(),
+            Icon: SmartToyIcon,
+            text: t('Виджеты'),
+            authOnly: true
+          }
+        ]
       },
       {
         path: getRouteReports(),

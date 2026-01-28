@@ -29,20 +29,20 @@ export const PbxServerSelect = memo((props: PbxServerSelectProps) => {
   }
 
   return (
-        <Combobox
-            id="PbxServerSelectBox"
-            label={label}
-            autoComplete
-            options={PbxServers || []}
-            value={value}
-            groupBy={(option) => option.location || ''}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            renderOption={(props, option) => (
-                <li {...props}>{option.name}</li>
-            )}
-            onChange={onChangeHandler}
-            getOptionLabel={(option) => option.name}
-            {...otherProps}
-        />
+    <Combobox
+      id="PbxServerSelectBox"
+      label={label}
+      autoComplete
+      options={PbxServers || []}
+      value={value}
+      groupBy={(option) => option.location || ''}
+      isOptionEqualToValue={(option, value) => String(option.id) === String(value.id)}
+      renderOption={(props, option) => (
+        <li {...props}>{option.name}</li>
+      )}
+      onChange={onChangeHandler}
+      getOptionLabel={(option) => option.name}
+      {...otherProps}
+    />
   )
 })
