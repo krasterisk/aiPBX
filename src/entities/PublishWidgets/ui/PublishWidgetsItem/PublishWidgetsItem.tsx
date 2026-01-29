@@ -9,9 +9,9 @@ import { Check } from '@/shared/ui/mui/Check'
 import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { getRoutePublishWidgetsEdit } from '@/shared/const/router'
 import { WidgetKey } from '@/entities/WidgetKeys'
-import { GetCodeDialog } from '@/features/Widgets/ui/GetCodeDialog/GetCodeDialog'
 import { Button } from '@/shared/ui/redesigned/Button'
 import CodeIcon from '@mui/icons-material/Code'
+import { GetCodeDialog } from '../GetCodeDialog/GetCodeDialog'
 
 interface PublishWidgetsItemProps {
     className?: string

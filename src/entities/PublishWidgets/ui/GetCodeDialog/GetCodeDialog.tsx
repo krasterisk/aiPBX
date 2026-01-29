@@ -7,7 +7,7 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { Modal } from '@/shared/ui/redesigned/Modal'
 import { CodeBlock } from '@/shared/ui/redesigned/CodeBlock'
 import { WidgetKey, WidgetAppearanceSettings, DEFAULT_APPEARANCE_SETTINGS } from '@/entities/WidgetKeys'
-import { generateEmbedCode } from '../../lib/generateEmbedCode'
+import { generateEmbedCode } from '../../../PublishWidgets/lib/generateEmbedCode'
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
