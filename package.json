@@ -1,6 +1,6 @@
 {
   "name": "ai_pbx",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -152,8 +152,7 @@
     "react-router-dom": "^6.8.0",
     "react-toastify": "^11.0.5",
     "socket.io-client": "^4.8.1",
-    "xlsx": "^0.18.5",
-    "zod": "^3.25.76"
+    "xlsx": "^0.18.5"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [
