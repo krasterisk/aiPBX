@@ -57,6 +57,7 @@ export const PublishWidgetsItem = memo((props: PublishWidgetsItemProps) => {
                 <AppLink to={getRoutePublishWidgetsEdit(String(widget.id))} className={cls.link}>
                     <Text title={widget.name} text={widget.assistant?.name || ''} />
                 </AppLink>
+                <div className={classNames(cls.status, { [cls.active]: widget.isActive }, [])} />
                 <Button
                     variant={'outline'}
                     onClick={onShowCode}

@@ -15,6 +15,7 @@ import {
     getPublishWidgetsFormSelectedAssistant,
     getPublishWidgetsFormAllowedDomains,
     getPublishWidgetsFormMaxSessions,
+    getPublishWidgetsFormIsActive,
     getPublishWidgetsFormAppearance
 } from '../../model/selectors/publishWidgetsFormSelectors'
 import { publishWidgetsFormActions } from '../../model/slices/publishWidgetsFormSlice'
@@ -124,6 +125,7 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
     const selectedAssistant = useSelector(getPublishWidgetsFormSelectedAssistant)
     const allowedDomains = useSelector(getPublishWidgetsFormAllowedDomains)
     const maxSessions = useSelector(getPublishWidgetsFormMaxSessions)
+    const isActive = useSelector(getPublishWidgetsFormIsActive)
     const appearance = useSelector(getPublishWidgetsFormAppearance)
     const isAdmin = useSelector(isUserAdmin)
     const userData = useSelector(getUserAuthData)
@@ -157,6 +159,11 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
         [dispatch]
     )
 
+    const onChangeIsActive = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => dispatch(publishWidgetsFormActions.setIsActive(e.target.checked)),
+        [dispatch]
+    )
+
     const onChangeAppearance = useCallback(
         (field: string, value: unknown) => dispatch(publishWidgetsFormActions.setAppearance({ [field]: value })),
         [dispatch]
@@ -177,7 +184,8 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
             name,
             assistantId: Number(selectedAssistant.id),
             allowedDomains: JSON.stringify(domainsArray),
-            maxConcurrentSessions: maxSessions
+            maxConcurrentSessions: maxSessions,
+            isActive
         }
 
         try {
@@ -193,7 +201,7 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
         } catch (e) {
             toast.error(getErrorMessage(e))
         }
-    }, [name, selectedAssistant, allowedDomains, maxSessions, isEdit, widgetId, updateWidget, createWidget, navigate, dispatch, t])
+    }, [name, selectedAssistant, allowedDomains, maxSessions, isActive, isEdit, widgetId, updateWidget, createWidget, navigate, dispatch, t])
 
     useEffect(() => {
         if (showPreview && appearance) {
@@ -255,6 +263,12 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
                                 onChange={onChangeDomains}
                                 placeholder={'example.com\nwww.example.com\n*.example.com'}
                                 helperText={t('По одному домену на строку. Можно вводить через запятую или с новой строки') || ''}
+                            />
+
+                            <Check
+                                label={t('Виджет активен') || ''}
+                                checked={isActive}
+                                onChange={onChangeIsActive}
                             />
                         </VStack>
 

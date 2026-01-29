@@ -6,6 +6,7 @@ export interface PublishWidgetsFormSchema {
     selectedAssistant: AssistantOptions | null
     allowedDomains: string // Changed from string[] to string for direct textarea input
     maxConcurrentSessions: number
+    isActive: boolean
     appearance: WidgetAppearanceSettings
     isLoading: boolean
     error?: string

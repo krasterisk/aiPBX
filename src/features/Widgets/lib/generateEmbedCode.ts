@@ -5,9 +5,9 @@ export function generateEmbedCode(
     settings: WidgetAppearanceSettings
 ): string {
     const attributes = [
-        `src="https://cdn.yourdomain.com/widget.js"`,
+        `src="https://cdn.jsdelivr.net/gh/krasterisk/aipbx_widget@latest/dist/widget.min.js"`,
         `data-key="${widget.publicKey}"`,
-        `data-api="https://api.yourdomain.com"`
+        `data-api="${__API__}"`
     ]
 
     // Добавляем опциональные атрибуты только если они отличаются от defaults

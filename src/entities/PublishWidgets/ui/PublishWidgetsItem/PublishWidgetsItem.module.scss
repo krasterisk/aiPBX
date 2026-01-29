@@ -43,3 +43,16 @@
         }
     }
 }
+
+.status {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--cancel-redesigned);
+    flex-shrink: 0;
+}
+
+.active {
+    background: var(--save-redesigned);
+    box-shadow: 0 0 8px var(--save-redesigned);
+}

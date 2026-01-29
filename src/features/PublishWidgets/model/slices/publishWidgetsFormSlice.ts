@@ -8,6 +8,7 @@ const initialState: PublishWidgetsFormSchema = {
     selectedAssistant: null,
     allowedDomains: '',
     maxConcurrentSessions: 10,
+    isActive: true,
     appearance: DEFAULT_APPEARANCE_SETTINGS,
     isLoading: false
 }
@@ -27,6 +28,9 @@ export const publishWidgetsFormSlice = createSlice({
         },
         setMaxConcurrentSessions: (state, action: PayloadAction<number>) => {
             state.maxConcurrentSessions = action.payload
+        },
+        setIsActive: (state, action: PayloadAction<boolean>) => {
+            state.isActive = action.payload
         },
         setAppearance: (state, action: PayloadAction<Partial<PublishWidgetsFormSchema['appearance']>>) => {
             state.appearance = { ...state.appearance, ...action.payload }
@@ -58,6 +62,7 @@ export const publishWidgetsFormSlice = createSlice({
             }
 
             state.maxConcurrentSessions = widget.maxConcurrentSessions
+            state.isActive = widget.isActive
             // Assuming appearance comes from widget.settings or similar
             // If the API doesn't return it yet, keep defaults
         }
