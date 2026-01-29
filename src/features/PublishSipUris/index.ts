@@ -1,5 +1,7 @@
-export { PublishSipUrisHeader } from './ui/PublishSipUrisHeader/PublishSipUrisHeader'
 export { PublishSipUrisList } from './ui/PublishSipUrisList/PublishSipUrisList'
 export { PublishSipUrisForm } from './ui/PublishSipUrisForm/PublishSipUrisForm'
 export { publishSipUrisFormReducer, publishSipUrisFormActions } from './model/slices/publishSipUrisFormSlice'
+export { publishSipUrisPageReducer, publishSipUrisPageActions } from './model/slices/publishSipUrisPageSlice'
+export { usePublishSipUrisFilters } from './model/hooks/usePublishSipUrisFilters'
 export type { PublishSipUrisFormSchema } from './model/types/publishSipUrisFormSchema'
+export type { PublishSipUrisPageSchema } from './model/slices/publishSipUrisPageSlice'

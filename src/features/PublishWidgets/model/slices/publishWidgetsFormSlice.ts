@@ -6,7 +6,7 @@ import { DEFAULT_APPEARANCE_SETTINGS, WidgetKey } from '@/entities/WidgetKeys'
 const initialState: PublishWidgetsFormSchema = {
     name: '',
     selectedAssistant: null,
-    allowedDomains: [],
+    allowedDomains: '',
     maxConcurrentSessions: 10,
     appearance: DEFAULT_APPEARANCE_SETTINGS,
     isLoading: false
@@ -22,7 +22,7 @@ export const publishWidgetsFormSlice = createSlice({
         setSelectedAssistant: (state, action: PayloadAction<AssistantOptions | null>) => {
             state.selectedAssistant = action.payload
         },
-        setAllowedDomains: (state, action: PayloadAction<string[]>) => {
+        setAllowedDomains: (state, action: PayloadAction<string>) => {
             state.allowedDomains = action.payload
         },
         setMaxConcurrentSessions: (state, action: PayloadAction<number>) => {
@@ -41,11 +41,22 @@ export const publishWidgetsFormSlice = createSlice({
                 id: String(widget.assistant.id),
                 name: widget.assistant.name || ''
             } : null
+
+            // Parse allowedDomains - handle multiple formats and convert to newline-separated string
             try {
-                state.allowedDomains = JSON.parse(widget.allowedDomains)
+                const parsed = JSON.parse(widget.allowedDomains)
+                // Convert array to newline-separated string
+                const domainsArray = Array.isArray(parsed) ? parsed : [parsed]
+                state.allowedDomains = domainsArray.join('\n')
             } catch (e) {
-                state.allowedDomains = []
+                // If parsing fails, use the value as-is or try to split
+                if (widget.allowedDomains && typeof widget.allowedDomains === 'string') {
+                    state.allowedDomains = widget.allowedDomains
+                } else {
+                    state.allowedDomains = ''
+                }
             }
+
             state.maxConcurrentSessions = widget.maxConcurrentSessions
             // Assuming appearance comes from widget.settings or similar
             // If the API doesn't return it yet, keep defaults

@@ -1,45 +1,85 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './PublishWidgetsPage.module.scss'
-import { memo } from 'react'
-import { useTranslation } from 'react-i18next'
+import React, { memo, useCallback } from 'react'
+import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
+import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitialEffect'
 import { Page } from '@/widgets/Page'
-import { VStack } from '@/shared/ui/redesigned/Stack'
-import { useWidgetKeys } from '@/entities/WidgetKeys'
-import { useSelector } from 'react-redux'
-import { getUserAuthData, isUserAdmin } from '@/entities/User'
-import { PublishWidgetsHeader, PublishWidgetsList } from '@/features/PublishWidgets'
-import { useAssistantsAll } from '@/entities/Assistants'
+import { ErrorGetData } from '@/entities/ErrorGetData'
+import {
+    PublishWidgetsList,
+    PublishWidgetsListHeader,
+    publishWidgetsPageReducer,
+    usePublishWidgetsFilters,
+    initPublishWidgetsPage
+} from '@/entities/PublishWidgets'
 
 interface PublishWidgetsPageProps {
     className?: string
 }
 
+const reducers: ReducersList = {
+    publishWidgetsPage: publishWidgetsPageReducer
+}
+
 const PublishWidgetsPage = memo((props: PublishWidgetsPageProps) => {
     const { className } = props
-    const { t } = useTranslation('publish-widgets')
-    const userData = useSelector(getUserAuthData)
-    const isAdmin = useSelector(isUserAdmin)
+    const {
+        isError,
+        isLoading,
+        error,
+        data,
+        hasMore,
+        onRefetch,
+        onLoadNext,
+        search,
+        onSearchChange
+    } = usePublishWidgetsFilters()
 
-    const { data: widgets = [], isLoading } = useWidgetKeys()
-    const { data: assistants = [] } = useAssistantsAll({})
+    const dispatch = useAppDispatch()
 
-    const filteredWidgets = isAdmin
-        ? widgets
-        : widgets.filter(w => {
-            const assistant = assistants.find(a => a.id === String(w.assistantId))
-            return assistant?.userId === userData?.id
-        })
+    const onLoadNextPart = useCallback(() => {
+        if (hasMore) {
+            onLoadNext()
+        }
+    }, [hasMore, onLoadNext])
+
+    useInitialEffect(() => {
+        dispatch(initPublishWidgetsPage())
+    })
+
+    const content = (
+        <Page
+            data-testid={'PublishWidgetsPage'}
+            onScrollEnd={onLoadNextPart}
+            className={classNames(cls.PublishWidgetsPage, {}, [className])}
+            isSaveScroll={true}
+        >
+            <PublishWidgetsList
+                isWidgetsLoading={isLoading}
+                widgets={data}
+                isWidgetsError={isError}
+            />
+        </Page>
+    )
+
+    if (isError) {
+        const errMsg = error && typeof error === 'object' && 'data' in error
+            ? String((error.data as { message: string }).message)
+            : ''
+
+        return (
+            <ErrorGetData
+                text={errMsg}
+                onRefetch={onRefetch}
+            />
+        )
+    }
 
     return (
-        <Page className={classNames(cls.PublishWidgetsPage, {}, [className])}>
-            <VStack gap="24" max>
-                <PublishWidgetsHeader />
-                <PublishWidgetsList
-                    widgets={filteredWidgets}
-                    isLoading={isLoading}
-                />
-            </VStack>
-        </Page>
+        <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
+            {content}
+        </DynamicModuleLoader>
     )
 })
 

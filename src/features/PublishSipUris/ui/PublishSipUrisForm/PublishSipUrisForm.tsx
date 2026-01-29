@@ -4,11 +4,10 @@ import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { AssistantSelect, AssistantOptions } from '@/entities/Assistants'
 import { PbxServerSelect, useCreateSipUri, PbxServerOptions } from '@/entities/PbxServers'
 import { Textarea } from '@/shared/ui/mui/Textarea'
-import { Button } from '@/shared/ui/redesigned/Button'
 import { Card } from '@/shared/ui/redesigned/Card'
 import {
     getPublishSipUrisFormSelectedAssistant,
@@ -21,6 +20,7 @@ import { toast } from 'react-toastify'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { useNavigate } from 'react-router-dom'
 import { getRoutePublishSipUris } from '@/shared/const/router'
+import { PublishSipUrisFormHeader } from '../PublishSipUrisFormHeader/PublishSipUrisFormHeader'
 
 interface PublishSipUrisFormProps {
     className?: string
@@ -53,10 +53,6 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
         dispatch(publishSipUrisFormActions.setIpAddress(e.target.value))
     }, [dispatch])
 
-    const onCancel = useCallback(() => {
-        navigate(getRoutePublishSipUris())
-    }, [navigate])
-
     const onSave = useCallback(async () => {
         if (!selectedAssistant || !selectedPbx || !ipAddress) {
             toast.error(t('Пожалуйста заполни все поля'))
@@ -79,39 +75,45 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
     }, [selectedAssistant, selectedPbx, ipAddress, createSip, t, isEdit, navigate, dispatch])
 
     return (
-        <Card padding={'24'} max className={classNames(cls.PublishSipUrisForm, {}, [className])}>
-            <VStack gap={'16'} max>
-                <AssistantSelect
-                    key={selectedAssistant?.id}
-                    label={t('AI Ассистент') || ''}
-                    value={selectedAssistant}
-                    onChangeAssistant={onChangeAssistant}
-                    userId={isEdit ? selectedAssistant?.userId : (isAdmin ? undefined : userData?.id)}
-                />
+        <VStack gap={'8'} max className={classNames(cls.PublishSipUrisForm, {}, [className])}>
+            <PublishSipUrisFormHeader
+                onSave={onSave}
+                isEdit={isEdit}
+                isLoading={isLoading}
+            />
 
-                <PbxServerSelect
-                    key={selectedPbx?.id}
-                    label={t('Выберите VoIP сервер') || ''}
-                    value={selectedPbx}
-                    onChangePbxServer={onChangePbx}
-                />
+            <Card padding={'24'} max border={'partial'}>
+                <VStack gap={'16'} max>
+                    <AssistantSelect
+                        key={selectedAssistant?.id}
+                        label={t('AI Ассистент') || ''}
+                        value={selectedAssistant}
+                        onChangeAssistant={onChangeAssistant}
+                        userId={isEdit ? selectedAssistant?.userId : (isAdmin ? undefined : userData?.id)}
+                    />
 
-                <Textarea
-                    label={t('Ваш IP Адрес') || ''}
-                    value={ipAddress}
-                    onChange={onChangeIp}
-                    placeholder={'1.2.3.4'}
-                />
+                    <PbxServerSelect
+                        key={selectedPbx?.id}
+                        label={t('Выберите VoIP сервер') || ''}
+                        value={selectedPbx}
+                        onChangePbxServer={onChangePbx}
+                    />
 
-                <HStack justify={'end'} gap={'8'} max>
-                    <Button variant={'outline'} onClick={onCancel}>
-                        {t('Отмена')}
-                    </Button>
-                    <Button onClick={onSave} disabled={isLoading}>
-                        {isEdit ? t('Сохранить изменения') : t('Создать SIP URI')}
-                    </Button>
-                </HStack>
-            </VStack>
-        </Card>
+                    <Textarea
+                        label={t('Ваш IP Адрес') || ''}
+                        value={ipAddress}
+                        onChange={onChangeIp}
+                        placeholder={t('Введите IP адрес') || '1.2.3.4'}
+                    />
+                </VStack>
+            </Card>
+
+            <PublishSipUrisFormHeader
+                onSave={onSave}
+                isEdit={isEdit}
+                isLoading={isLoading}
+                variant={'diviner-bottom'}
+            />
+        </VStack>
     )
 })

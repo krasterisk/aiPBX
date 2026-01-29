@@ -1,0 +1,39 @@
+.PublishWidgetsList {
+    position: relative;
+
+    .uncheck {
+        position: absolute;
+        display: flex;
+        color: var(--icon-redesigned);
+        left: 0;
+        top: 0;
+    }
+
+    .check {
+        position: absolute;
+        display: flex;
+        color: var(--icon-redesigned);
+        left: 0;
+        top: 0;
+    }
+
+    .uncheckButtons {
+        display: none;
+    }
+
+    .checkButton {
+        display: flex;
+    }
+
+    .controlsCard {
+        position: relative;
+    }
+}
+
+.loader {
+    padding: 40px;
+}
+
+.emptyState {
+    padding: 40px;
+}

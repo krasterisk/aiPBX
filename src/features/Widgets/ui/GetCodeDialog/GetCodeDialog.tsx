@@ -28,7 +28,7 @@ export const GetCodeDialog = memo((props: GetCodeDialogProps) => {
         initialAppearance
     } = props
 
-    const { t } = useTranslation('assistants')
+    const { t } = useTranslation('publish-widgets')
     const [appearance] = useState<WidgetAppearanceSettings>(
         initialAppearance || DEFAULT_APPEARANCE_SETTINGS
     )
@@ -87,13 +87,11 @@ export const GetCodeDialog = memo((props: GetCodeDialogProps) => {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <VStack gap="8">
-                                    <p>1. Go to <strong>Appearance → Theme Editor</strong></p>
-                                    <p>2. Select <strong>footer.php</strong> or <strong>Theme Footer</strong></p>
-                                    <p>3. Paste code before <code>&lt;/body&gt;</code></p>
-                                    <p>4. Click <strong>Update File</strong></p>
-                                    <p style={{ marginTop: '12px', padding: '12px', background: 'var(--card-bg)', borderRadius: '6px' }}>
-                                        💡 <strong>Alternative:</strong> Use a plugin like "Insert Headers and Footers" to add the code without editing theme files.
-                                    </p>
+                                    <p dangerouslySetInnerHTML={{ __html: t('WordPress_Step1') }} />
+                                    <p dangerouslySetInnerHTML={{ __html: t('WordPress_Step2') }} />
+                                    <p dangerouslySetInnerHTML={{ __html: t('WordPress_Step3') }} />
+                                    <p dangerouslySetInnerHTML={{ __html: t('WordPress_Step4') }} />
+                                    <p style={{ marginTop: '12px', padding: '12px', background: 'var(--card-bg)', borderRadius: '6px' }} dangerouslySetInnerHTML={{ __html: t('WordPress_Alternative') }} />
                                 </VStack>
                             </AccordionDetails>
                         </Accordion>
@@ -104,11 +102,11 @@ export const GetCodeDialog = memo((props: GetCodeDialogProps) => {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <VStack gap="8">
-                                    <p>1. Go to <strong>Online Store → Themes</strong></p>
-                                    <p>2. Click <strong>Actions → Edit code</strong></p>
-                                    <p>3. Open <strong>Layout → theme.liquid</strong></p>
-                                    <p>4. Paste code before <code>&lt;/body&gt;</code></p>
-                                    <p>5. Click <strong>Save</strong></p>
+                                    <p dangerouslySetInnerHTML={{ __html: t('Shopify_Step1') }} />
+                                    <p dangerouslySetInnerHTML={{ __html: t('Shopify_Step2') }} />
+                                    <p dangerouslySetInnerHTML={{ __html: t('Shopify_Step3') }} />
+                                    <p dangerouslySetInnerHTML={{ __html: t('Shopify_Step4') }} />
+                                    <p dangerouslySetInnerHTML={{ __html: t('Shopify_Step5') }} />
                                 </VStack>
                             </AccordionDetails>
                         </Accordion>
@@ -119,12 +117,12 @@ export const GetCodeDialog = memo((props: GetCodeDialogProps) => {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <VStack gap="8">
-                                    <p>1. Go to <strong>Settings → Custom Code</strong></p>
-                                    <p>2. Click <strong>+ Add Custom Code</strong></p>
-                                    <p>3. Paste the code</p>
-                                    <p>4. Select <strong>Body - end</strong> as placement</p>
-                                    <p>5. Apply to <strong>All Pages</strong></p>
-                                    <p>6. Click <strong>Apply</strong></p>
+                                    <p dangerouslySetInnerHTML={{ __html: t('Wix_Step1') }} />
+                                    <p dangerouslySetInnerHTML={{ __html: t('Wix_Step2') }} />
+                                    <p dangerouslySetInnerHTML={{ __html: t('Wix_Step3') }} />
+                                    <p dangerouslySetInnerHTML={{ __html: t('Wix_Step4') }} />
+                                    <p dangerouslySetInnerHTML={{ __html: t('Wix_Step5') }} />
+                                    <p dangerouslySetInnerHTML={{ __html: t('Wix_Step6') }} />
                                 </VStack>
                             </AccordionDetails>
                         </Accordion>

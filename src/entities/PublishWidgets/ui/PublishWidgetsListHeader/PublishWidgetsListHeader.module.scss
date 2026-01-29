@@ -1,0 +1,22 @@
+.icon {
+    color: var(--icon-redesigned);
+}
+
+.mobileHeader {
+    flex-wrap: wrap;
+}
+
+.searchInput {
+    width: 200px;
+}
+
+.CreateButton {
+    text-decoration: none;
+
+    button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+    }
+}

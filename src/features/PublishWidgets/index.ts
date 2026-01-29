@@ -1,5 +1,3 @@
-export { PublishWidgetsHeader } from './ui/PublishWidgetsHeader/PublishWidgetsHeader'
-export { PublishWidgetsList } from './ui/PublishWidgetsList/PublishWidgetsList'
 export { PublishWidgetsForm } from './ui/PublishWidgetsForm/PublishWidgetsForm'
 export { publishWidgetsFormReducer, publishWidgetsFormActions } from './model/slices/publishWidgetsFormSlice'
 export type { PublishWidgetsFormSchema } from './model/types/publishWidgetsFormSchema'

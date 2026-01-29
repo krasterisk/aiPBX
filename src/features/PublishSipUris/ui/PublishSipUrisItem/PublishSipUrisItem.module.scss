@@ -1,6 +1,50 @@
 .PublishSipUrisItem {
+    position: relative;
+    background: var(--light-bg-redesigned);
+    border: 0.5px solid var(--accent-redesigned);
+    width: 100%;
+
+    &:hover {
+        cursor: pointer;
+
+        .uncheck {
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: flex;
+            color: var(--icon-redesigned);
+        }
+    }
+
+    .uncheck {
+        position: absolute;
+        display: none;
+        color: var(--icon-redesigned);
+        left: 0;
+        top: 0;
+    }
+
+    .check {
+        position: absolute;
+        display: flex;
+        color: var(--icon-redesigned);
+        left: 0;
+        top: 0;
+    }
+
+    .link {
+        flex: 1;
+        min-width: 150px;
+    }
+
     .sipUri {
         word-break: break-all;
         white-space: normal;
+    }
+
+    @media (hover: none) {
+        .uncheck {
+            display: flex;
+        }
     }
 }

@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
-import { Checkbox, TextField } from '@mui/material'
+import { Check } from '@/shared/ui/mui/Check'
+import { Textarea } from '@/shared/ui/mui/Textarea'
 import { AssistantOptions } from '../../model/types/assistants'
 import { useAssistantsAll } from '../../api/assistantsApi'
 
@@ -58,7 +59,6 @@ export const AssistantSelect = memo((props: AssistantSelectProps) => {
       id={'assistantSelectBox'}
       multiple={multiple}
       label={label}
-      autoComplete
       options={assistants || []}
       value={value}
       isOptionEqualToValue={(option, value) => String(option.id) === String(value.id)}
@@ -66,18 +66,22 @@ export const AssistantSelect = memo((props: AssistantSelectProps) => {
       getOptionLabel={(option) => option.name}
       disableCloseOnSelect={multiple}
       renderInput={(params) => (
-        <TextField
+        <Textarea
           {...params}
           label={label}
           error={error}
           helperText={helperText}
+          inputProps={{
+            ...params.inputProps,
+            readOnly: true
+          }}
         />
       )}
       renderOption={multiple ? (props, option, { selected }) => {
         const { ...otherProps } = props
         return (
           <li {...otherProps}>
-            <Checkbox
+            <Check
               style={{ marginRight: 8 }}
               checked={selected}
             />
