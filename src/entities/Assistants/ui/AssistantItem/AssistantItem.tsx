@@ -1,15 +1,14 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './AssistantItem.module.scss'
-import React, { HTMLAttributeAnchorTarget, memo } from 'react'
+import React, { HTMLAttributeAnchorTarget, memo, useCallback } from 'react'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Check } from '@/shared/ui/mui/Check'
 import { Assistant } from '../../model/types/assistants'
-import { AssistantMenu } from '../AssistantMenu/AssistantMenu'
 import { getRouteAssistantEdit } from '@/shared/const/router'
-import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { ContentView } from '@/entities/Content'
+import { useNavigate } from 'react-router-dom'
 
 interface AssistantItemProps {
     className?: string
@@ -28,8 +27,17 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
         view = 'SMALL',
         checkedItems,
         onChangeChecked,
-        target
     } = props
+
+    const navigate = useNavigate()
+
+    const onOpenEdit = useCallback(() => {
+        navigate(getRouteAssistantEdit(assistant.id || ''))
+    }, [assistant.id, navigate])
+
+    const onCheckClick = useCallback((e: React.MouseEvent) => {
+        e.stopPropagation()
+    }, [])
 
     if (view === 'BIG') {
         return (
@@ -38,6 +46,7 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
                 max
                 border={'partial'}
                 className={classNames(cls.AssistantItem, {}, [className, cls[view]])}
+                onClick={onOpenEdit}
             >
                 <HStack
                     max
@@ -45,6 +54,40 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
                     wrap={'wrap'}
                     justify={'start'}
                 >
+                    <div onClick={onCheckClick}>
+                        <Check
+                            key={String(assistant.id)}
+                            className={classNames('', {
+                                [cls.uncheck]: !checkedItems?.includes(String(assistant.id)),
+                                [cls.check]: checkedItems?.includes(String(assistant.id))
+                            }, [])}
+                            value={String(assistant.id)}
+                            size={'small'}
+                            checked={checkedItems?.includes(String(assistant.id))}
+                            onChange={onChangeChecked}
+                        />
+                    </div>
+                    <VStack max>
+                        <Text title={assistant.name} />
+                        {assistant.comment ? <HStack><Text text={assistant.comment} /></HStack> : ''}
+                    </VStack>
+                </HStack>
+            </Card>
+        )
+    }
+
+    return (
+        <Card
+            padding={'24'}
+            border={'partial'}
+            className={classNames(cls.AssistantItem, {}, [className, cls[view]])}
+            onClick={onOpenEdit}
+        >
+            <VStack
+                gap={'8'}
+                justify={'start'}
+            >
+                <div onClick={onCheckClick}>
                     <Check
                         key={String(assistant.id)}
                         className={classNames('', {
@@ -56,45 +99,12 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
                         checked={checkedItems?.includes(String(assistant.id))}
                         onChange={onChangeChecked}
                     />
-                    <AppLink target={target} to={getRouteAssistantEdit(assistant.id || '')}>
-                        <VStack max>
-                            <Text title={assistant.name} />
-                            {assistant.comment ? <HStack><Text text={assistant.comment} /></HStack> : ''}
-                        </VStack>
-                    </AppLink>
-                </HStack>
-                <AssistantMenu id={assistant.id || ''} className={cls.menu} />
-            </Card>
-        )
-    }
-
-    return (
-        <Card
-            padding={'24'}
-            border={'partial'}
-            className={classNames(cls.AssistantItem, {}, [className, cls[view]])}
-        >
-            <VStack
-                gap={'8'}
-                justify={'start'}
-            >
-                <Check
-                    key={String(assistant.id)}
-                    className={classNames('', {
-                        [cls.uncheck]: !checkedItems?.includes(String(assistant.id)),
-                        [cls.check]: checkedItems?.includes(String(assistant.id))
-                    }, [])}
-                    value={String(assistant.id)}
-                    size={'small'}
-                    checked={checkedItems?.includes(String(assistant.id))}
-                    onChange={onChangeChecked}
-                />
-                <AppLink target={target} to={getRouteAssistantEdit(assistant.id || '')}>
+                </div>
+                <VStack gap={'4'}>
                     <Text title={assistant.name} />
                     {assistant.comment ? <HStack><Text text={assistant.comment} /></HStack> : ''}
-                </AppLink>
+                </VStack>
             </VStack>
-            <AssistantMenu id={assistant.id || ''} className={cls.menu} />
         </Card>
     )
 })

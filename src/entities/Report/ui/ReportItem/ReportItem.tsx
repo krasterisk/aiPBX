@@ -73,6 +73,10 @@ export const ReportItem = memo((props: ReportItemProps) => {
   const isMobile = useMediaQuery('(max-width:800px)')
   const viewMode = isMobile ? 'MOBILE' : cls[view]
 
+  const onCheckClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+  }, [])
+
   return (
     <Card
       border={'partial'}
@@ -80,18 +84,21 @@ export const ReportItem = memo((props: ReportItemProps) => {
       padding={'16'}
       max
       className={classNames(cls.ReportItem, {}, [className, viewMode])}
+      onClick={onHistoryHandle}
     >
-      <Check
-        key={report.id}
-        className={classNames('', {
-          [cls.uncheck]: !checkedItems?.includes(String(report.id)),
-          [cls.check]: checkedItems?.includes(String(report.id))
-        }, [])}
-        value={report.id}
-        size={'small'}
-        checked={checkedItems?.includes(String(report.id))}
-        onChange={onChangeChecked}
-      />
+      <div onClick={onCheckClick}>
+        <Check
+          key={report.id}
+          className={classNames('', {
+            [cls.uncheck]: !checkedItems?.includes(String(report.id)),
+            [cls.check]: checkedItems?.includes(String(report.id))
+          }, [])}
+          value={report.id}
+          size={'small'}
+          checked={checkedItems?.includes(String(report.id))}
+          onChange={onChangeChecked}
+        />
+      </div>
       <VStack gap={'8'} wrap={'wrap'} justify={'between'} max>
         {report.createdAt ? <Text text={formattedDate} bold /> : ''}
         {report.assistantName ? <Text text={report.assistantName} /> : ''}
@@ -121,15 +128,10 @@ export const ReportItem = memo((props: ReportItemProps) => {
           </HStack>
         }
         <HStack max justify={'end'}>
-          <Button
-            variant={'clear'}
-            addonRight={
-              showDialog
-                ? <ExpandLessIcon fontSize={'large'} />
-                : <ExpandMoreIcon fontSize={'large'} />
-            }
-            onClick={onHistoryHandle}
-          />
+          {showDialog
+            ? <ExpandLessIcon fontSize={'large'} />
+            : <ExpandMoreIcon fontSize={'large'} />
+          }
         </HStack>
       </VStack>
       {showDialog &&

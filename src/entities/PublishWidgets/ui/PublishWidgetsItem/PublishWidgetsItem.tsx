@@ -6,12 +6,12 @@ import { Card } from '@/shared/ui/redesigned/Card'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Check } from '@/shared/ui/mui/Check'
-import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { getRoutePublishWidgetsEdit } from '@/shared/const/router'
 import { WidgetKey } from '@/entities/WidgetKeys'
 import { Button } from '@/shared/ui/redesigned/Button'
 import CodeIcon from '@mui/icons-material/Code'
 import { GetCodeDialog } from '../GetCodeDialog/GetCodeDialog'
+import { useNavigate } from 'react-router-dom'
 
 interface PublishWidgetsItemProps {
     className?: string
@@ -23,15 +23,25 @@ interface PublishWidgetsItemProps {
 export const PublishWidgetsItem = memo((props: PublishWidgetsItemProps) => {
     const { className, widget, checkedItems, onChangeChecked } = props
     const { t } = useTranslation('publish-widgets')
+    const navigate = useNavigate()
 
     const [isCodeModalOpen, setIsCodeModalOpen] = useState(false)
 
-    const onShowCode = useCallback(() => {
+    const onShowCode = useCallback((e: React.MouseEvent) => {
+        e.stopPropagation()
         setIsCodeModalOpen(true)
     }, [])
 
     const onCloseCodeModal = useCallback(() => {
         setIsCodeModalOpen(false)
+    }, [])
+
+    const onOpenEdit = useCallback(() => {
+        navigate(getRoutePublishWidgetsEdit(String(widget.id)))
+    }, [navigate, widget.id])
+
+    const onCheckClick = useCallback((e: React.MouseEvent) => {
+        e.stopPropagation()
     }, [])
 
     return (
@@ -40,23 +50,26 @@ export const PublishWidgetsItem = memo((props: PublishWidgetsItemProps) => {
             max
             border={'partial'}
             className={classNames(cls.PublishWidgetsItem, {}, [className])}
+            onClick={onOpenEdit}
         >
-            <Check
-                key={String(widget.id)}
-                className={classNames('', {
-                    [cls.uncheck]: !checkedItems?.includes(String(widget.id)),
-                    [cls.check]: checkedItems?.includes(String(widget.id))
-                }, [])}
-                value={String(widget.id)}
-                size={'small'}
-                checked={checkedItems?.includes(String(widget.id))}
-                onChange={onChangeChecked}
-            />
+            <div onClick={onCheckClick}>
+                <Check
+                    key={String(widget.id)}
+                    className={classNames('', {
+                        [cls.uncheck]: !checkedItems?.includes(String(widget.id)),
+                        [cls.check]: checkedItems?.includes(String(widget.id))
+                    }, [])}
+                    value={String(widget.id)}
+                    size={'small'}
+                    checked={checkedItems?.includes(String(widget.id))}
+                    onChange={onChangeChecked}
+                />
+            </div>
 
             <HStack gap={'24'} justify={'between'} max>
-                <AppLink to={getRoutePublishWidgetsEdit(String(widget.id))} className={cls.link}>
+                <VStack max>
                     <Text title={widget.name} text={widget.assistant?.name || ''} />
-                </AppLink>
+                </VStack>
                 <div className={classNames(cls.status, { [cls.active]: widget.isActive }, [])} />
                 <Button
                     variant={'outline'}

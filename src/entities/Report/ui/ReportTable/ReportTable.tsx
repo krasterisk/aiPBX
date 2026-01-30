@@ -69,10 +69,17 @@ export const ReportTable = memo((props: ReportTableProps) => {
 
   const viewMode = isMobile ? 'SMALL' : cls.BIG
 
+  const onCheckClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+  }, [])
+
   return (
     <>
-      <tr className={classNames(cls.ReportTableItem, {}, [className, viewMode])}>
-        <td className={cls.tdCheck}>
+      <tr
+        className={classNames(cls.ReportTableItem, {}, [className, viewMode])}
+        onClick={onHistoryHandle}
+      >
+        <td className={cls.tdCheck} onClick={onCheckClick}>
           <Check
             key={report.id}
             className={classNames('', {
@@ -104,15 +111,10 @@ export const ReportTable = memo((props: ReportTableProps) => {
           {report.cost ? <Text text={formatCurrency(report.cost, userCurrency, 4)} bold /> : ''}
         </td>
         <td className={cls.actionsTd}>
-          <Button
-            variant={'clear'}
-            addonRight={
-              showDialog
-                ? <ExpandLessIcon fontSize={'large'} />
-                : <ExpandMoreIcon fontSize={'large'} />
-            }
-            onClick={onHistoryHandle}
-          />
+          {showDialog
+            ? <ExpandLessIcon fontSize={'large'} />
+            : <ExpandMoreIcon fontSize={'large'} />
+          }
         </td>
       </tr>
       {showDialog && (

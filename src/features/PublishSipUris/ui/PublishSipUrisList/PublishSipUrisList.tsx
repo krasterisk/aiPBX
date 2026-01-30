@@ -62,16 +62,6 @@ export const PublishSipUrisList = memo((props: PublishSipUrisListProps) => {
         }
     }, [assistants, checkedBox.length, indeterminateBox])
 
-    const handleDelete = useCallback(async (assistantId: string) => {
-        if (!window.confirm(t('Вы уверены, что хотите удалить SIP URI?') ?? '')) return
-        try {
-            await deleteSip({ assistantId }).unwrap()
-            toast.success(t('SIP URI успешно удален'))
-        } catch (e) {
-            toast.error(getErrorMessage(e))
-        }
-    }, [deleteSip, t])
-
     const handleDeleteAll = useCallback(async () => {
         if (!window.confirm(t('Вы уверены, что хотите удалить выбранные SIP URIs?') ?? '')) return
 
@@ -149,7 +139,6 @@ export const PublishSipUrisList = memo((props: PublishSipUrisListProps) => {
                         <PublishSipUrisItem
                             key={assistant.id}
                             assistant={assistant}
-                            onDelete={handleDelete}
                             checkedItems={checkedBox}
                             onChangeChecked={handleCheckChange}
                         />

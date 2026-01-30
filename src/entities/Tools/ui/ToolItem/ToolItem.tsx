@@ -1,15 +1,14 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ToolItem.module.scss'
-import React, { HTMLAttributeAnchorTarget, memo } from 'react'
+import React, { HTMLAttributeAnchorTarget, memo, useCallback } from 'react'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { ContentView } from '@/entities/Content'
 import { Check } from '@/shared/ui/mui/Check'
 import { Tool } from '../../model/types/tools'
-import { ToolMenu } from '../ToolMenu/ToolMenu'
 import { getRouteToolsEdit } from '@/shared/const/router'
-import { AppLink } from '@/shared/ui/redesigned/AppLink'
+import { useNavigate } from 'react-router-dom'
 
 interface ToolItemProps {
   className?: string
@@ -30,6 +29,16 @@ export const ToolItem = memo((props: ToolItemProps) => {
     onChangeChecked
   } = props
 
+  const navigate = useNavigate()
+
+  const onOpenEdit = useCallback(() => {
+    navigate(getRouteToolsEdit(tool.id || ''))
+  }, [tool.id, navigate])
+
+  const onCheckClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+  }, [])
+
   if (view === 'BIG') {
     return (
       <Card
@@ -37,8 +46,43 @@ export const ToolItem = memo((props: ToolItemProps) => {
         max
         border={'partial'}
         className={classNames(cls.ToolItem, {}, [className, cls[view]])}
+        onClick={onOpenEdit}
       >
         <HStack gap={'24'} wrap={'wrap'} justify={'start'}>
+          <div onClick={onCheckClick}>
+            <Check
+              key={String(tool.id)}
+              className={classNames('', {
+                [cls.uncheck]: !checkedItems?.includes(String(tool.id)),
+                [cls.check]: checkedItems?.includes(String(tool.id))
+              }, [])}
+              value={String(tool.id)}
+              size={'small'}
+              checked={checkedItems?.includes(String(tool.id))}
+              onChange={onChangeChecked}
+            />
+          </div>
+          <VStack max>
+            <Text title={tool.name} />
+            {tool.comment ? <HStack><Text text={tool.comment} /></HStack> : ''}
+          </VStack>
+        </HStack>
+      </Card>
+    )
+  }
+
+  return (
+    <Card
+      padding={'24'}
+      border={'partial'}
+      className={classNames(cls.ToolItem, {}, [className, cls[view]])}
+      onClick={onOpenEdit}
+    >
+      <VStack
+        gap={'8'}
+        justify={'start'}
+      >
+        <div onClick={onCheckClick}>
           <Check
             key={String(tool.id)}
             className={classNames('', {
@@ -50,47 +94,12 @@ export const ToolItem = memo((props: ToolItemProps) => {
             checked={checkedItems?.includes(String(tool.id))}
             onChange={onChangeChecked}
           />
-          <AppLink to={getRouteToolsEdit(tool.id || '')}>
-            <VStack max>
-              <Text title={tool.name} />
-              {tool.comment ? <HStack><Text text={tool.comment} /></HStack> : ''}
-            </VStack>
-          </AppLink>
-        </HStack>
-        {/* <ToolMenu id={tool.id || ''} className={cls.menu} /> */}
-      </Card>
-    )
-  }
-
-  return (
-    <Card
-      padding={'24'}
-      border={'partial'}
-      className={classNames(cls.ToolItem, {}, [className, cls[view]])}
-    >
-      <VStack
-        gap={'8'}
-        justify={'start'}
-      >
-
-        <Check
-          key={String(tool.id)}
-          className={classNames('', {
-            [cls.uncheck]: !checkedItems?.includes(String(tool.id)),
-            [cls.check]: checkedItems?.includes(String(tool.id))
-          }, [])}
-          value={String(tool.id)}
-          size={'small'}
-          checked={checkedItems?.includes(String(tool.id))}
-          onChange={onChangeChecked}
-        />
-        <AppLink to={getRouteToolsEdit(tool.id || '')}>
+        </div>
+        <VStack gap={'4'}>
           <Text title={tool.name} />
           {tool.comment ? <HStack><Text text={tool.comment} /></HStack> : ''}
-        </AppLink>
+        </VStack>
       </VStack>
-      <ToolMenu id={tool?.id || ''} className={cls.menu} />
     </Card>
   )
-}
-)
+})

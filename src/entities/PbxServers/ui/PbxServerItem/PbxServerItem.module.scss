@@ -13,14 +13,6 @@
             display: flex;
             color: var(--icon-redesigned);
         }
-
-        .menu {
-            position: absolute;
-            display: flex;
-            right: 0;
-            top: 0;
-        }
-
     }
 
     .uncheck {
@@ -39,12 +31,6 @@
         top: 0;
     }
 
-    .menu {
-        position: absolute;
-        display: none;
-        right: 0;
-        top: 0;
-    }
 
 
     &.BIG {
