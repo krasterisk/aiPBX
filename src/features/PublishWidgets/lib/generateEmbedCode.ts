@@ -2,12 +2,14 @@ import { WidgetKey, WidgetAppearanceSettings } from '@/entities/WidgetKeys'
 
 export function generateEmbedCode(
     widget: WidgetKey,
-    settings: WidgetAppearanceSettings
+    settings: WidgetAppearanceSettings,
+    wssUrl: string
 ): string {
     const attributes = [
         `src="https://cdn.jsdelivr.net/gh/krasterisk/aipbx_widget@latest/dist/widget.min.js"`,
         `data-key="${widget.publicKey}"`,
-        `data-api="${__API__}"`
+        `data-api="${__API__}"`,
+        `data-wss="${wssUrl}"`
     ]
 
     // Добавляем опциональные атрибуты только если они отличаются от defaults
@@ -39,5 +41,8 @@ export function generateEmbedCode(
         attributes.push(`data-button-color="${settings.buttonColor}"`)
     }
 
-    return `<!-- AI Voice Widget -->\n<script\n  ${attributes.join('\n  ')}\n></script>`
+    return `<!-- AI PPBX Voice Widget -->
+<script 
+    ${attributes.join('\n    ')}
+></script>`
 }

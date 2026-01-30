@@ -77,18 +77,16 @@ export const LangSwitcher = memo(({ className, short }: LangSwitcherProps) => {
       className={classNames('', {}, [className])}
       items={items}
       trigger={
-        <Button variant="clear">
-          {short
-            ? (
-              <Icon Svg={currentConfig.icon} width={24} height={24} />
-            )
-            : (
-              <HStack gap="8">
-                <Icon Svg={currentConfig.icon} width={20} height={20} />
-                <span>{currentConfig.label}</span>
-              </HStack>
-            )}
-        </Button>
+        short
+          ? (
+            <Icon Svg={currentConfig.icon} width={24} height={24} />
+          )
+          : (
+            <HStack gap="8">
+              <Icon Svg={currentConfig.icon} width={20} height={20} />
+              <span>{currentConfig.label}</span>
+            </HStack>
+          )
       }
     />
   )

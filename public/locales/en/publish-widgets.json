@@ -72,5 +72,8 @@
     "Wix_Step3": "3. Paste the code",
     "Wix_Step4": "4. Select <strong>Body - end</strong> as placement",
     "Wix_Step5": "5. Apply to <strong>All Pages</strong>",
-    "Wix_Step6": "6. Click <strong>Apply</strong>"
+    "Wix_Step6": "6. Click <strong>Apply</strong>",
+    "PBX Сервер": "PBX Server",
+    "Пожалуйста выберите PBX сервер": "Please select a PBX server",
+    "У выбранного PBX сервера не указан WSS URL": "Selected PBX server has no WSS URL specified"
 }

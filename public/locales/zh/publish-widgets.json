@@ -72,5 +72,8 @@
     "Wix_Step3": "3. 粘贴代码",
     "Wix_Step4": "4. 选择 <strong>Body - end</strong> 作为位置",
     "Wix_Step5": "5. 应用于 <strong>所有页面</strong>",
-    "Wix_Step6": "6. 点击 <strong>应用</strong>"
+    "Wix_Step6": "6. 点击 <strong>应用</strong>",
+    "PBX Сервер": "PBX 服务器",
+    "Пожалуйста выберите PBX сервер": "请选择 PBX 服务器",
+    "У выбранного PBX сервера не указан WSS URL": "所选 PBX 服务器未指定 WSS URL"
 }

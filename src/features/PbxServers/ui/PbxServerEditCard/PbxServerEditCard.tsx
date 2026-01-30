@@ -140,6 +140,12 @@ export const PbxServerEditCard = memo((props: UserEditCardProps) => {
             value={formFields?.sip_host || ''}
           />
           <Textarea
+            label={t('WSS URL (WebRTC)') ?? ''}
+            onChange={editTextChangeHandler('wss_url')}
+            data-testid={'PbxServerCardEdit.wss_url'}
+            value={formFields?.wss_url || ''}
+          />
+          <Textarea
             label={t('ARI URL') ?? ''}
             onChange={editTextChangeHandler('ari_url')}
             data-testid={'PbxServerCardEdit.ari_url'}

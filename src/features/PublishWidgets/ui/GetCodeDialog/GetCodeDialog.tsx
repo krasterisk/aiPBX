@@ -10,6 +10,7 @@ import { WidgetKey, WidgetAppearanceSettings, DEFAULT_APPEARANCE_SETTINGS } from
 import { generateEmbedCode } from '../../../PublishWidgets/lib/generateEmbedCode'
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { usePbxServer } from '@/entities/PbxServers'
 
 interface GetCodeDialogProps {
     className?: string
@@ -33,16 +34,24 @@ export const GetCodeDialog = memo((props: GetCodeDialogProps) => {
         initialAppearance || DEFAULT_APPEARANCE_SETTINGS
     )
 
+    const { data: pbxServer } = usePbxServer(String(widget?.pbxServerId), {
+        skip: !widget?.pbxServerId
+    })
+
     const embedCode = useMemo(() => {
         if (!widget) return ''
-        return generateEmbedCode(widget, appearance)
-    }, [widget, appearance])
+        return generateEmbedCode(widget, appearance, pbxServer?.wss_url || '')
+    }, [widget, appearance, pbxServer?.wss_url])
 
     if (!widget) return null
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} lazy>
-            <VStack className={classNames(cls.GetCodeDialog, {}, [className])} max>
+            <VStack
+                className={classNames(cls.GetCodeDialog, {}, [className])}
+                max
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className={cls.content}>
                     <h2 className={cls.title}>
                         {t('Код для встраивания')} "{widget.name}"

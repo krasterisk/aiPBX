@@ -2,12 +2,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { PublishWidgetsFormSchema } from '../types/publishWidgetsFormSchema'
 import { AssistantOptions } from '@/entities/Assistants'
 import { DEFAULT_APPEARANCE_SETTINGS, WidgetKey } from '@/entities/WidgetKeys'
+import { PbxServerOptions } from '@/entities/PbxServers'
 
 const initialState: PublishWidgetsFormSchema = {
     name: '',
     selectedAssistant: null,
+    selectedPbxServer: null,
     allowedDomains: '',
     maxConcurrentSessions: 10,
+    maxSessionDuration: 600,
     isActive: true,
     appearance: DEFAULT_APPEARANCE_SETTINGS,
     isLoading: false
@@ -23,11 +26,17 @@ export const publishWidgetsFormSlice = createSlice({
         setSelectedAssistant: (state, action: PayloadAction<AssistantOptions | null>) => {
             state.selectedAssistant = action.payload
         },
+        setSelectedPbxServer: (state, action: PayloadAction<PbxServerOptions | null>) => {
+            state.selectedPbxServer = action.payload
+        },
         setAllowedDomains: (state, action: PayloadAction<string>) => {
             state.allowedDomains = action.payload
         },
         setMaxConcurrentSessions: (state, action: PayloadAction<number>) => {
             state.maxConcurrentSessions = action.payload
+        },
+        setMaxSessionDuration: (state, action: PayloadAction<number>) => {
+            state.maxSessionDuration = action.payload
         },
         setIsActive: (state, action: PayloadAction<boolean>) => {
             state.isActive = action.payload
@@ -46,6 +55,11 @@ export const publishWidgetsFormSlice = createSlice({
                 name: widget.assistant.name || ''
             } : null
 
+            state.selectedPbxServer = widget.pbxServer ? {
+                id: String(widget.pbxServer.id),
+                name: widget.pbxServer.name || ''
+            } : null
+
             // Parse allowedDomains - handle multiple formats and convert to newline-separated string
             try {
                 const parsed = JSON.parse(widget.allowedDomains)
@@ -62,6 +76,7 @@ export const publishWidgetsFormSlice = createSlice({
             }
 
             state.maxConcurrentSessions = widget.maxConcurrentSessions
+            state.maxSessionDuration = widget.maxSessionDuration
             state.isActive = widget.isActive
             // Assuming appearance comes from widget.settings or similar
             // If the API doesn't return it yet, keep defaults

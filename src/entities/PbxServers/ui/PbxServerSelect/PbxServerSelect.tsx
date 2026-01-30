@@ -19,6 +19,7 @@ export const PbxServerSelect = memo((props: PbxServerSelectProps) => {
     value,
     onChangePbxServer,
     PbxServerId,
+    userId,
     ...otherProps
   } = props
 
@@ -34,7 +35,7 @@ export const PbxServerSelect = memo((props: PbxServerSelectProps) => {
       label={label}
       autoComplete
       options={PbxServers || []}
-      value={value}
+      value={value || null}
       groupBy={(option) => option.location || ''}
       isOptionEqualToValue={(option, value) => String(option.id) === String(value.id)}
       renderOption={(props, option) => (

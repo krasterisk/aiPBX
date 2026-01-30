@@ -10,6 +10,7 @@ export interface AllPbxServers {
 export interface PbxServerOptions {
   id: string
   name: string
+  wss_url?: string
 }
 
 export interface PbxServer {
@@ -17,6 +18,7 @@ export interface PbxServer {
   name?: string
   location?: string
   sip_host?: string
+  wss_url?: string
   ari_url?: string
   ari_user?: string
   password?: string

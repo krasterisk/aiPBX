@@ -4,8 +4,10 @@ export interface WidgetKey {
     name: string
     userId: number
     assistantId: number
+    pbxServerId?: number
     allowedDomains: string // JSON: '["example.com"]'
     maxConcurrentSessions: number
+    maxSessionDuration: number
     isActive: boolean
     createdAt: string
     assistant?: {
@@ -13,20 +15,28 @@ export interface WidgetKey {
         name: string
         voice: string
     }
+    pbxServer?: {
+        id: number
+        name: string
+    }
 }
 
 export interface CreateWidgetDto {
     name: string
     assistantId: number
+    pbxServerId?: number
     allowedDomains: string // JSON string array
     maxConcurrentSessions?: number
+    maxSessionDuration?: number
 }
 
 export interface UpdateWidgetDto {
     name?: string
     assistantId?: number
+    pbxServerId?: number
     allowedDomains?: string // JSON string array
     maxConcurrentSessions?: number
+    maxSessionDuration?: number
     isActive?: boolean
 }
 

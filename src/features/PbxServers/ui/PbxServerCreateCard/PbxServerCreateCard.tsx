@@ -81,15 +81,15 @@ export const PbxServerCreateCard = memo((props: PbxServerCreateCardProps) => {
     }
 
   const IsAdminOptions = (
-          <>
-            <ClientSelect
-                value={clientValues}
-                onChangeClient={onChangeClientHandler}
-                label={String(t('Клиент'))}
-                className={cls.client}
-                data-testid={'PbxServerCreateCard.ClientSelect'}
-            />
-          </>
+    <>
+      <ClientSelect
+        value={clientValues}
+        onChangeClient={onChangeClientHandler}
+        label={String(t('Клиент'))}
+        className={cls.client}
+        data-testid={'PbxServerCreateCard.ClientSelect'}
+      />
+    </>
   )
 
   const createHandler = useCallback(() => {
@@ -99,67 +99,73 @@ export const PbxServerCreateCard = memo((props: PbxServerCreateCardProps) => {
   }, [formFields, onCreate])
 
   return (
-          <VStack
-              gap={'8'}
-              max
-              className={classNames(cls.PbxServerCreateCard, {}, [className])}
-          >
-            <PbxServerCreateCardHeader onCreate={createHandler} variant={'diviner-top'}/>
-            <Card
-                max
-                padding={'16'}
-                border={'partial'}
-            >
-              <VStack gap={'16'} max>
-                {!isAdmin ? <Text title={clientData?.name}/> : IsAdminOptions}
-                <Textarea
-                    label={t('Наименование сервера') ?? ''}
-                    onChange={createTextChangeHandler('name')}
-                    data-testid={'PbxServerCardCreate.name'}
-                    value={formFields?.name || ''}
-                />
-                <Textarea
-                    label={t('Локация') ?? ''}
-                    onChange={createTextChangeHandler('location')}
-                    data-testid={'PbxServerCardCreate.location'}
-                    value={formFields?.location || ''}
-                    minRows={3}
-                    multiline
-                />
-                <Textarea
-                    label={t('Адрес сервера') ?? ''}
-                    onChange={createTextChangeHandler('sip_host')}
-                    data-testid={'PbxServerCardCreate.host'}
-                    value={formFields?.sip_host || ''}
-                />
-                <Textarea
-                    label={t('ARI URL') ?? ''}
-                    onChange={createTextChangeHandler('ari_url')}
-                    data-testid={'PbxServerCardCreate.ari_url'}
-                    value={formFields?.ari_url || ''}
-                />
-                <Textarea
-                    label={t('ARI USER') ?? ''}
-                    onChange={createTextChangeHandler('ari_user')}
-                    data-testid={'PbxServerCardCreate.ari_user'}
-                    value={formFields?.ari_user || ''}
-                />
-                <Textarea
-                    label={t('ARI PASSWORD') ?? ''}
-                    onChange={createTextChangeHandler('password')}
-                    data-testid={'PbxServerCardCreate.password'}
-                    value={formFields?.password || ''}
-                />
-                <Textarea
-                    label={t('Комментарий') ?? ''}
-                    onChange={createTextChangeHandler('comment')}
-                    data-testid={'PbxServerCardCreate.comment'}
-                    value={formFields?.comment || ''}
-                />
-              </VStack>
-            </Card>
-            <PbxServerCreateCardHeader onCreate={createHandler} variant={'diviner-bottom'}/>
-          </VStack>
+    <VStack
+      gap={'8'}
+      max
+      className={classNames(cls.PbxServerCreateCard, {}, [className])}
+    >
+      <PbxServerCreateCardHeader onCreate={createHandler} variant={'diviner-top'} />
+      <Card
+        max
+        padding={'16'}
+        border={'partial'}
+      >
+        <VStack gap={'16'} max>
+          {!isAdmin ? <Text title={clientData?.name} /> : IsAdminOptions}
+          <Textarea
+            label={t('Наименование сервера') ?? ''}
+            onChange={createTextChangeHandler('name')}
+            data-testid={'PbxServerCardCreate.name'}
+            value={formFields?.name || ''}
+          />
+          <Textarea
+            label={t('Локация') ?? ''}
+            onChange={createTextChangeHandler('location')}
+            data-testid={'PbxServerCardCreate.location'}
+            value={formFields?.location || ''}
+            minRows={3}
+            multiline
+          />
+          <Textarea
+            label={t('Адрес сервера') ?? ''}
+            onChange={createTextChangeHandler('sip_host')}
+            data-testid={'PbxServerCardCreate.host'}
+            value={formFields?.sip_host || ''}
+          />
+          <Textarea
+            label={t('WSS URL (WebRTC)') ?? ''}
+            onChange={createTextChangeHandler('wss_url')}
+            data-testid={'PbxServerCardCreate.wss_url'}
+            value={formFields?.wss_url || ''}
+          />
+          <Textarea
+            label={t('ARI URL') ?? ''}
+            onChange={createTextChangeHandler('ari_url')}
+            data-testid={'PbxServerCardCreate.ari_url'}
+            value={formFields?.ari_url || ''}
+          />
+          <Textarea
+            label={t('ARI USER') ?? ''}
+            onChange={createTextChangeHandler('ari_user')}
+            data-testid={'PbxServerCardCreate.ari_user'}
+            value={formFields?.ari_user || ''}
+          />
+          <Textarea
+            label={t('ARI PASSWORD') ?? ''}
+            onChange={createTextChangeHandler('password')}
+            data-testid={'PbxServerCardCreate.password'}
+            value={formFields?.password || ''}
+          />
+          <Textarea
+            label={t('Комментарий') ?? ''}
+            onChange={createTextChangeHandler('comment')}
+            data-testid={'PbxServerCardCreate.comment'}
+            value={formFields?.comment || ''}
+          />
+        </VStack>
+      </Card>
+      <PbxServerCreateCardHeader onCreate={createHandler} variant={'diviner-bottom'} />
+    </VStack>
   )
 }
 )

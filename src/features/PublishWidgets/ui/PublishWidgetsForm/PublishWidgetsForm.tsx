@@ -10,11 +10,14 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Check } from '@/shared/ui/mui/Check'
+import { PbxServerSelect, PbxServerOptions, usePbxServersAll } from '@/entities/PbxServers'
 import {
     getPublishWidgetsFormName,
     getPublishWidgetsFormSelectedAssistant,
+    getPublishWidgetsFormSelectedPbxServer,
     getPublishWidgetsFormAllowedDomains,
     getPublishWidgetsFormMaxSessions,
+    getPublishWidgetsFormMaxSessionDuration,
     getPublishWidgetsFormIsActive,
     getPublishWidgetsFormAppearance
 } from '../../model/selectors/publishWidgetsFormSelectors'
@@ -123,8 +126,10 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
 
     const name = useSelector(getPublishWidgetsFormName)
     const selectedAssistant = useSelector(getPublishWidgetsFormSelectedAssistant)
+    const selectedPbxServer = useSelector(getPublishWidgetsFormSelectedPbxServer)
     const allowedDomains = useSelector(getPublishWidgetsFormAllowedDomains)
     const maxSessions = useSelector(getPublishWidgetsFormMaxSessions)
+    const maxSessionDuration = useSelector(getPublishWidgetsFormMaxSessionDuration)
     const isActive = useSelector(getPublishWidgetsFormIsActive)
     const appearance = useSelector(getPublishWidgetsFormAppearance)
     const isAdmin = useSelector(isUserAdmin)
@@ -136,6 +141,22 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
 
     const [showPreview, setShowPreview] = useState(false)
 
+    // Fetch servers to enrich the selected server data (e.g. wss_url) which might be missing in widget data
+    const { data: allPbxServers } = usePbxServersAll(null)
+
+    useEffect(() => {
+        if (selectedPbxServer && !selectedPbxServer.wss_url && allPbxServers) {
+            const fullServerData = allPbxServers.find(s => String(s.id) === String(selectedPbxServer.id))
+            if (fullServerData) {
+                dispatch(publishWidgetsFormActions.setSelectedPbxServer({
+                    id: String(fullServerData.id),
+                    name: fullServerData.name || '',
+                    wss_url: fullServerData.wss_url
+                }))
+            }
+        }
+    }, [selectedPbxServer, allPbxServers, dispatch])
+
     const onChangeName = useCallback(
         (e: React.ChangeEvent<HTMLTextAreaElement>) => dispatch(publishWidgetsFormActions.setName(e.target.value)),
         [dispatch]
@@ -143,6 +164,11 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
 
     const onChangeAssistant = useCallback(
         (_: unknown, v: AssistantOptions | null) => dispatch(publishWidgetsFormActions.setSelectedAssistant(v)),
+        [dispatch]
+    )
+
+    const onChangePbxServer = useCallback(
+        (_: unknown, v: PbxServerOptions | null) => dispatch(publishWidgetsFormActions.setSelectedPbxServer(v)),
         [dispatch]
     )
 
@@ -156,6 +182,12 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
     const onChangeMaxSessions = useCallback(
         (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
             dispatch(publishWidgetsFormActions.setMaxConcurrentSessions(Number(e.target.value))),
+        [dispatch]
+    )
+
+    const onChangeMaxSessionDuration = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+            dispatch(publishWidgetsFormActions.setMaxSessionDuration(Number(e.target.value))),
         [dispatch]
     )
 
@@ -175,6 +207,16 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
             return
         }
 
+        if (!selectedPbxServer) {
+            toast.error(t('Пожалуйста выберите PBX сервер'))
+            return
+        }
+
+        if (!selectedPbxServer.wss_url) {
+            toast.error(t('У выбранного PBX сервера не указан WSS URL'))
+            return
+        }
+
         const domainsArray = allowedDomains
             .split(/[\n,]/)
             .map(d => d.trim())
@@ -183,8 +225,10 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
         const data = {
             name,
             assistantId: Number(selectedAssistant.id),
+            pbxServerId: selectedPbxServer ? Number(selectedPbxServer.id) : undefined,
             allowedDomains: JSON.stringify(domainsArray),
             maxConcurrentSessions: maxSessions,
+            maxSessionDuration,
             isActive
         }
 
@@ -201,7 +245,7 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
         } catch (e) {
             toast.error(getErrorMessage(e))
         }
-    }, [name, selectedAssistant, allowedDomains, maxSessions, isActive, isEdit, widgetId, updateWidget, createWidget, navigate, dispatch, t])
+    }, [name, selectedAssistant, selectedPbxServer, allowedDomains, maxSessions, maxSessionDuration, isActive, isEdit, widgetId, updateWidget, createWidget, navigate, dispatch, t])
 
     useEffect(() => {
         if (showPreview && appearance) {
@@ -238,6 +282,13 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
                                 userId={isAdmin ? undefined : userData?.id}
                             />
 
+                            <PbxServerSelect
+                                label={t('PBX Сервер') || ''}
+                                value={selectedPbxServer}
+                                onChangePbxServer={onChangePbxServer}
+                                userId={isAdmin ? undefined : userData?.id}
+                            />
+
                             <Textarea
                                 label={t('Название виджета') || ''}
                                 value={name}
@@ -252,6 +303,16 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
                                 value={maxSessions}
                                 onChange={onChangeMaxSessions}
                                 helperText={t('Максимальное количество одновременных сессий')}
+                                inputProps={{ min: 1, max: 100 }}
+                            />
+
+                            <Textarea
+                                label={t('Длительность сессии (сек)') || ''}
+                                type="number"
+                                value={maxSessionDuration}
+                                onChange={onChangeMaxSessionDuration}
+                                helperText={t('Максимальная длительность сессии в секундах (60-3600)')}
+                                inputProps={{ min: 60, max: 3600 }}
                             />
 
                             <Textarea
