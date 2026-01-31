@@ -41,7 +41,7 @@ export function generateEmbedCode(
         attributes.push(`data-button-color="${settings.buttonColor}"`)
     }
 
-    return `<!-- AI PPBX Voice Widget -->
+    return `<!-- AI PBX Voice Widget -->
 <script 
     ${attributes.join('\n    ')}
 ></script>`

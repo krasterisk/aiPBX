@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { ClientOptions } from '../../model/types/user'
 import { useGetAllUsers } from '../../api/usersApi'
-import { AutocompleteInputChangeReason } from '@mui/material'
+import { AutocompleteInputChangeReason, TextField } from '@mui/material'
 
 interface ClientSelectProps {
   label?: string
@@ -48,19 +48,31 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
   }
 
   return (
-      <Combobox
+    <Combobox
+      label={label}
+      autoComplete={true}
+      clearOnBlur={false}
+      options={clientItems}
+      value={value || selectedUserValue || null}
+      onChange={onChangeHandler}
+      inputValue={inputValue}
+      getOptionKey={option => option.id}
+      isOptionEqualToValue={(option, value) => value === undefined || value === '' || option.id === value.id}
+      getOptionLabel={(option) => option.id ? option.name : ''}
+      onInputChange={onInputChange}
+      renderInput={(params) => (
+        <TextField
+          {...params}
           label={label}
-          autoComplete={true}
-          clearOnBlur={false}
-          options={clientItems}
-          value={value || selectedUserValue || null}
-          onChange={onChangeHandler}
-          inputValue={inputValue}
-          getOptionKey={option => option.id}
-          isOptionEqualToValue={(option, value) => value === undefined || value === '' || option.id === value.id}
-          getOptionLabel={(option) => option.id ? option.name : ''}
-          onInputChange={onInputChange}
-          {...otherProps}
-      />
+          slotProps={{
+            htmlInput: {
+              ...params.inputProps,
+              readOnly: true
+            }
+          }}
+        />
+      )}
+      {...otherProps}
+    />
   )
 })

@@ -6,13 +6,14 @@ import { ErrorGetData } from '@/entities/ErrorGetData'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
-import { getPbxServersEditForm, PbxServer, pbxServersPageActions, usePbxServer } from '@/entities/PbxServers'
+import { getPbxServersEditForm, PbxServer, pbxServersPageActions, usePbxServer, usePbxServerStatus } from '@/entities/PbxServers'
 import { PbxServerEditCardHeader } from '../PbxServerEditCardHeader/PbxServerEditCardHeader'
 import { useSelector } from 'react-redux'
 import { ClientOptions, ClientSelect, getUserAuthData, isUserAdmin } from '@/entities/User'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
+import { HStack } from '@/shared/ui/redesigned/Stack'
 
 interface UserEditCardProps {
   className?: string
@@ -35,6 +36,11 @@ export const PbxServerEditCard = memo((props: UserEditCardProps) => {
     skip: !pbxServerId
   })
 
+  const { data: statusData, isLoading: isStatusLoading } = usePbxServerStatus(pbxServer?.uniqueId!, {
+    skip: !pbxServer?.uniqueId,
+    pollingInterval: 30000,
+  })
+
   const dispatch = useAppDispatch()
   const clientData = useSelector(getUserAuthData)
   const isAdmin = useSelector(isUserAdmin)
@@ -49,11 +55,10 @@ export const PbxServerEditCard = memo((props: UserEditCardProps) => {
   const onChangeClientHandler = useCallback((
     event: any,
     newValue: ClientOptions | null) => {
-    if (newValue) {
-      dispatch(pbxServersPageActions.setUser(newValue))
-    } else {
-      dispatch(pbxServersPageActions.setUser({ id: '', name: '' }))
-    }
+    dispatch(pbxServersPageActions.updatePbxServerEditForm({
+      user: newValue || { id: '', name: '' },
+      userId: newValue?.id || ''
+    }))
   }, [dispatch])
 
   const editTextChangeHandler = (field: keyof PbxServer) =>
@@ -70,7 +75,8 @@ export const PbxServerEditCard = memo((props: UserEditCardProps) => {
   const IsAdminOptions = (
     <>
       <ClientSelect
-        value={pbxServer?.user as ClientOptions}
+        value={formFields?.user as ClientOptions}
+        clientId={formFields?.userId}
         onChangeClient={onChangeClientHandler}
         label={String(t('Клиент'))}
         className={cls.client}
@@ -117,6 +123,22 @@ export const PbxServerEditCard = memo((props: UserEditCardProps) => {
         border={'partial'}
       >
         <VStack gap={'16'} max>
+          {pbxServer?.uniqueId && (
+            <HStack justify="end" max>
+              <HStack gap="8">
+                <Text text={t('Статус') + ':'} />
+                <div
+                  className={classNames(cls.statusIndicator, {
+                    [cls.online]: statusData?.online,
+                    [cls.offline]: statusData && !statusData.online,
+                    [cls.loading]: isStatusLoading
+                  })}
+                />
+                <Text text={isStatusLoading ? t('Загрузка...') : (statusData?.online ? t('В сети') : t('Не в сети'))} />
+              </HStack>
+            </HStack>
+          )}
+
           {!isAdmin ? <Text title={clientData?.name} /> : IsAdminOptions}
 
           <Textarea

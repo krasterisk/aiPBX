@@ -57,7 +57,8 @@ export const publishWidgetsFormSlice = createSlice({
 
             state.selectedPbxServer = widget.pbxServer ? {
                 id: String(widget.pbxServer.id),
-                name: widget.pbxServer.name || ''
+                name: widget.pbxServer.name || '',
+                uniqueId: widget.pbxServer.uniqueId
             } : null
 
             // Parse allowedDomains - handle multiple formats and convert to newline-separated string

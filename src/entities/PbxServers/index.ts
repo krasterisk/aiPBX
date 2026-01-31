@@ -31,6 +31,7 @@ export {
   usePbxServersAll,
   usePbxServers,
   usePbxServer,
+  usePbxServerStatus,
   useSetPbxServers,
   useUpdatePbxServers,
   useCheckPbxServer,

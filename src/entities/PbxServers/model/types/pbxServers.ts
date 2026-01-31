@@ -9,12 +9,15 @@ export interface AllPbxServers {
 
 export interface PbxServerOptions {
   id: string
+  uniqueId?: string
   name: string
+  location?: string
   wss_url?: string
 }
 
 export interface PbxServer {
   id?: string
+  uniqueId?: string
   name?: string
   location?: string
   sip_host?: string

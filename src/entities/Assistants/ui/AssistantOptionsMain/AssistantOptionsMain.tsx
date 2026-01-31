@@ -45,6 +45,7 @@ export const AssistantOptionsMain = memo((props: AssistantOptionsMainProps) => {
       {isAdmin &&
         <ClientSelect
           value={formFields?.user as ClientOptions}
+          clientId={formFields?.userId}
           onChangeClient={onChangeClientHandler}
           label={String(t('Клиент'))}
           className={cls.client}

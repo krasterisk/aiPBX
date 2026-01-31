@@ -1,7 +1,8 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { PbxServerOptions } from '../../model/types/pbxServers'
 import { usePbxServersAll } from '../../api/pbxServersApi'
+import { TextField } from '@mui/material'
 
 interface PbxServerSelectProps {
   label?: string
@@ -29,15 +30,32 @@ export const PbxServerSelect = memo((props: PbxServerSelectProps) => {
     onChangePbxServer?.(event, newValue)
   }
 
+  const options = useMemo(() => {
+    if (!PbxServers) return []
+    return [...PbxServers].sort((a, b) => (a.location || '').localeCompare(b.location || ''))
+  }, [PbxServers])
+
   return (
     <Combobox
       id="PbxServerSelectBox"
       label={label}
       autoComplete
-      options={PbxServers || []}
+      options={options}
       value={value || null}
       groupBy={(option) => option.location || ''}
       isOptionEqualToValue={(option, value) => String(option.id) === String(value.id)}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          slotProps={{
+            htmlInput: {
+              ...params.inputProps,
+              readOnly: true // Disable keyboard on mobile
+            }
+          }}
+        />
+      )}
       renderOption={(props, option) => (
         <li {...props}>{option.name}</li>
       )}

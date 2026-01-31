@@ -1,7 +1,6 @@
 import { memo, useCallback, useRef, useState } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
-import { AutocompleteInputChangeReason } from '@mui/material'
-import { IconButton } from '@mui/material'
+import { AutocompleteInputChangeReason, IconButton, TextField } from '@mui/material'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import StopIcon from '@mui/icons-material/Stop'
 import cls from './VoiceSelect.module.scss'
@@ -131,6 +130,18 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
           </li>
         )
       }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          slotProps={{
+            htmlInput: {
+              ...params.inputProps,
+              readOnly: true
+            }
+          }}
+        />
+      )}
       {...otherProps}
     />
   )

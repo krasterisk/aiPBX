@@ -18,6 +18,7 @@ export interface WidgetKey {
     pbxServer?: {
         id: number
         name: string
+        uniqueId?: string
     }
 }
 

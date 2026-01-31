@@ -17,5 +17,11 @@
   "Ошибка при создании сервера": "Fehler beim Erstellen des Servers",
   "Удалить выбранные": "Ausgewählte löschen",
   "Поиск": "Suche",
-  "Проверка": "Prüfung"
+  "Проверка": "Prüfung",
+  "Unique ID": "Eindeutige ID",
+  "Статус": "Status",
+  "Загрузка...": "Laden...",
+  "Неизвестно": "Unbekannt",
+  "В сети": "Online",
+  "Не в сети": "Offline"
 }

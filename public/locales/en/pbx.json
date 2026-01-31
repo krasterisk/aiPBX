@@ -17,5 +17,11 @@
   "Ошибка при создании сервера": "Error creating server",
   "Удалить выбранные": "Delete selected",
   "Поиск": "Search",
-  "Проверка": "Check"
+  "Проверка": "Check",
+  "Unique ID": "Unique ID",
+  "Статус": "Status",
+  "Загрузка...": "Loading...",
+  "Неизвестно": "Unknown",
+  "В сети": "Online",
+  "Не в сети": "Offline"
 }

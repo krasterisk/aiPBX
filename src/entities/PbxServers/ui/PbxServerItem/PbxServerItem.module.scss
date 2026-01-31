@@ -79,3 +79,25 @@
 .isClient {
     border: 2px solid var(--accent-redesigned);
 }
+
+.statusIcon {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &.online {
+        background-color: #4caf50; // Green
+        box-shadow: 0 0 8px #4caf50;
+    }
+
+    &.offline {
+        background-color: #f44336; // Red
+        box-shadow: 0 0 8px #f44336;
+    }
+
+    &.loading {
+        background-color: #9e9e9e; // Grey
+        opacity: 0.5;
+    }
+}

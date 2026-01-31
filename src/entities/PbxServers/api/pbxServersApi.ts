@@ -112,6 +112,9 @@ export const pbxServersApi = rtkApi.injectEndpoints({
         method: 'DELETE',
         body: arg
       })
+    }),
+    getPbxServerStatus: build.query<{ online: boolean }, string>({
+      query: (uniqueId) => `/pbx-servers/${uniqueId}/status`,
     })
   })
 })
@@ -121,6 +124,7 @@ export const usePbxServersAll = pbxServersApi.useGetPbxServersAllQuery
 export const useSetPbxServers = pbxServersApi.useSetPbxServersMutation
 export const useCheckPbxServer = pbxServersApi.useCheckPbxServerMutation
 export const usePbxServer = pbxServersApi.useGetPbxServerQuery
+export const usePbxServerStatus = pbxServersApi.useGetPbxServerStatusQuery
 export const useUpdatePbxServers = pbxServersApi.useUpdatePbxServerMutation
 export const useDeletePbxServers = pbxServersApi.useDeletePbxServerMutation
 export const useCreateSipUri = pbxServersApi.useCreateSipUriMutation

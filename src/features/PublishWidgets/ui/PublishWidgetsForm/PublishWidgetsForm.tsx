@@ -151,7 +151,8 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
                 dispatch(publishWidgetsFormActions.setSelectedPbxServer({
                     id: String(fullServerData.id),
                     name: fullServerData.name || '',
-                    wss_url: fullServerData.wss_url
+                    wss_url: fullServerData.wss_url,
+                    uniqueId: fullServerData.uniqueId
                 }))
             }
         }
