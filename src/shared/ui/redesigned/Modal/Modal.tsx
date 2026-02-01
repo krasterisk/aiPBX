@@ -12,6 +12,7 @@ interface ModalProps {
   isOpen?: boolean
   onClose?: () => void
   lazy?: boolean
+  contentClassName?: string
 }
 
 export const Modal = (props: ModalProps) => {
@@ -20,7 +21,8 @@ export const Modal = (props: ModalProps) => {
     children,
     isOpen,
     onClose,
-    lazy
+    lazy,
+    contentClassName
   } = props
 
   const { close, isClosing, isMounted } = useModal({ animationDelay: 300, onClose, isOpen })
@@ -37,21 +39,21 @@ export const Modal = (props: ModalProps) => {
   }
 
   return (
-        <Portal element={document.getElementById('app') ?? document.body}>
-            <div className={classNames(cls.Modal, mods, [
-              className,
-              theme,
-              'app_modal',
-              cls.modalNew
-            ])}
-            >
-                <Overlay onClick={close}/>
-                <div
-                    className={cls.content}
-                >
-                    {children}
-                </div>
-            </div>
-        </Portal>
+    <Portal element={document.getElementById('app') ?? document.body}>
+      <div className={classNames(cls.Modal, mods, [
+        className,
+        theme,
+        'app_modal',
+        cls.modalNew
+      ])}
+      >
+        <Overlay onClick={close} />
+        <div
+          className={classNames(cls.content, { [cls.isClosing]: isClosing }, [contentClassName])}
+        >
+          {children}
+        </div>
+      </div>
+    </Portal>
   )
 }

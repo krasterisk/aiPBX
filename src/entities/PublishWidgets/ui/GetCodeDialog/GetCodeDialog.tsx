@@ -48,7 +48,12 @@ export const GetCodeDialog = memo((props: GetCodeDialogProps) => {
     if (!widget) return null
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} lazy>
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            lazy
+            contentClassName={cls.modalWrapper}
+        >
             <VStack
                 className={classNames(cls.GetCodeDialog, {}, [className])}
                 max

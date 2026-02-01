@@ -60,8 +60,8 @@ export const AssistantSelect = memo((props: AssistantSelectProps) => {
       multiple={multiple}
       label={label}
       options={assistants || []}
-      value={value}
-      isOptionEqualToValue={(option, value) => String(option.id) === String(value.id)}
+      value={value ?? (multiple ? [] : null)}
+      isOptionEqualToValue={(option, value) => value?.id !== undefined && String(option.id) === String(value.id)}
       onChange={onChangeHandler}
       getOptionLabel={(option) => option.name}
       disableCloseOnSelect={multiple}

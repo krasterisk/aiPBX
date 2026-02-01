@@ -60,7 +60,7 @@ export const CodeBlock = memo((props: CodeBlockProps) => {
                 )}
             </HStack>
             <div className={cls.codeWrapper}>
-                <pre className={cls.code}>
+                <pre className={cls.code} style={{ overflowWrap: 'anywhere' }}>
                     {code}
                 </pre>
             </div>

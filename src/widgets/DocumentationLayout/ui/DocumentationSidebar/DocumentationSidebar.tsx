@@ -14,6 +14,9 @@ import { ChevronDown, ChevronRight, ArrowLeft } from 'lucide-react'
 import { useSelector } from 'react-redux'
 import { getUserAuthData } from '@/entities/User'
 import { getRouteMain } from '@/shared/const/router'
+import { ThemeSwitcher } from '@/entities/ThemeSwitcher'
+import { LangSwitcher } from '@/entities/LangSwitcher'
+import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import cls from './DocumentationSidebar.module.scss'
 
 interface DocSection {
@@ -189,20 +192,27 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
                 ))}
             </List>
 
-            {userData && (
-                <Box className={cls.footer}>
-                    <ListItemButton
-                        onClick={() => navigate(getRouteMain())}
-                        className={cls.backButton}
-                    >
-                        <ArrowLeft size={20} className={cls.backIcon} />
-                        <ListItemText
-                            primary={t('Back to App')}
-                            className={cls.backText}
-                        />
-                    </ListItemButton>
-                </Box>
-            )}
+            <Box className={cls.footer}>
+                <VStack gap="16" max>
+                    <HStack gap="16" justify="between" max>
+                        <LangSwitcher short />
+                        <ThemeSwitcher />
+                    </HStack>
+
+                    {userData && (
+                        <ListItemButton
+                            onClick={() => navigate(getRouteMain())}
+                            className={cls.backButton}
+                        >
+                            <ArrowLeft size={20} className={cls.backIcon} />
+                            <ListItemText
+                                primary={t('Back to App')}
+                                className={cls.backText}
+                            />
+                        </ListItemButton>
+                    )}
+                </VStack>
+            </Box>
         </Box>
     )
 })

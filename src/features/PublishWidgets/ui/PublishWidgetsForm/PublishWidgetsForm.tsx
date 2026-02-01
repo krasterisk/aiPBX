@@ -66,7 +66,7 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
     useEffect(() => {
         if (selectedPbxServer && !selectedPbxServer.wss_url && allPbxServers) {
             const fullServerData = allPbxServers.find(s => String(s.id) === String(selectedPbxServer.id))
-            if (fullServerData) {
+            if (fullServerData && fullServerData.wss_url) {
                 dispatch(publishWidgetsFormActions.setSelectedPbxServer({
                     id: String(fullServerData.id),
                     name: fullServerData.name || '',
@@ -133,6 +133,11 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
         const domainsArray = allowedDomains
             ? allowedDomains.split(/[\n,]/).map(d => d.trim()).filter(Boolean)
             : []
+
+        if (domainsArray.length === 0) {
+            toast.error(t('Пожалуйста добавьте хотя бы один разрешенный домен'))
+            return
+        }
 
         const data = {
             name,

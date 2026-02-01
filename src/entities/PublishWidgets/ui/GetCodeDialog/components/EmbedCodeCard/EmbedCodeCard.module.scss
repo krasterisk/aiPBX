@@ -1,7 +1,7 @@
 .EmbedCodeCard {
     background: var(--card-bg-redesigned);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--bg-redesigned);
     transition: all 0.3s ease;
 
     width: 100%;
@@ -10,7 +10,6 @@
 
     &:hover {
         border-color: var(--accent-redesigned);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
 }
 

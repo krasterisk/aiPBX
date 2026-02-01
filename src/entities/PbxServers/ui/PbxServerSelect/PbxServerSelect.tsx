@@ -43,7 +43,7 @@ export const PbxServerSelect = memo((props: PbxServerSelectProps) => {
       options={options}
       value={value || null}
       groupBy={(option) => option.location || ''}
-      isOptionEqualToValue={(option, value) => String(option.id) === String(value.id)}
+      isOptionEqualToValue={(option, value) => value?.id !== undefined && String(option.id) === String(value.id)}
       renderInput={(params) => (
         <TextField
           {...params}

@@ -62,18 +62,19 @@ export const publishWidgetsFormSlice = createSlice({
             } : null
 
             // Parse allowedDomains - handle multiple formats and convert to newline-separated string
-            try {
-                const parsed = JSON.parse(widget.allowedDomains)
-                // Convert array to newline-separated string
-                const domainsArray = Array.isArray(parsed) ? parsed : [parsed]
-                state.allowedDomains = domainsArray.join('\n')
-            } catch (e) {
-                // If parsing fails, use the value as-is or try to split
-                if (widget.allowedDomains && typeof widget.allowedDomains === 'string') {
-                    state.allowedDomains = widget.allowedDomains
-                } else {
-                    state.allowedDomains = ''
+            if (widget.allowedDomains) {
+                try {
+                    const parsed = typeof widget.allowedDomains === 'string'
+                        ? JSON.parse(widget.allowedDomains)
+                        : widget.allowedDomains
+
+                    const domainsArray = Array.isArray(parsed) ? parsed : [parsed]
+                    state.allowedDomains = domainsArray.join('\n')
+                } catch (e) {
+                    state.allowedDomains = typeof widget.allowedDomains === 'string' ? widget.allowedDomains : ''
                 }
+            } else {
+                state.allowedDomains = ''
             }
 
             state.maxConcurrentSessions = widget.maxConcurrentSessions
@@ -84,7 +85,9 @@ export const publishWidgetsFormSlice = createSlice({
             state.appearance = { ...DEFAULT_APPEARANCE_SETTINGS }
             if (widget.appearance) {
                 try {
-                    const parsedAppearance = JSON.parse(widget.appearance)
+                    const parsedAppearance = typeof widget.appearance === 'string'
+                        ? JSON.parse(widget.appearance)
+                        : widget.appearance
                     state.appearance = { ...state.appearance, ...parsedAppearance }
                 } catch (e) {
                     console.error('Failed to parse appearance settings', e)

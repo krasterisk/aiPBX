@@ -20,10 +20,10 @@ export const DocumentationLayout = memo(() => {
             {isMobile && (
                 <Box className={cls.mobileHeader}>
                     <IconButton
-                        color="inherit"
                         aria-label="open drawer"
                         edge="start"
                         onClick={handleDrawerToggle}
+                        className={cls.menuButton}
                     >
                         <MenuIcon />
                     </IconButton>
@@ -41,7 +41,10 @@ export const DocumentationLayout = memo(() => {
                     sx={{
                         '& .MuiDrawer-paper': {
                             boxSizing: 'border-box',
-                            width: 280
+                            width: 280,
+                            background: 'var(--light-bg-redesigned)',
+                            color: 'var(--text-redesigned)',
+                            borderRight: '1px solid var(--bg-redesigned)'
                         }
                     }}
                 >

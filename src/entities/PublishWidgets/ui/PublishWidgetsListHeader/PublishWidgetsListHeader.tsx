@@ -11,6 +11,7 @@ import { Input } from '@/shared/ui/redesigned/Input'
 import { Icon } from '@/shared/ui/redesigned/Icon'
 import { Text } from '@/shared/ui/redesigned/Text'
 import SearchIcon from '@/shared/assets/icons/search.svg'
+import { Button } from '@/shared/ui/redesigned/Button'
 import { usePublishWidgetsFilters } from '../../model/hooks/usePublishWidgetsFilters'
 
 interface PublishWidgetsListHeaderProps {
@@ -47,13 +48,14 @@ export const PublishWidgetsListHeader = memo((props: PublishWidgetsListHeaderPro
                 </HStack>
                 <HStack max={isMobile} justify={isMobile ? 'center' : 'end'}>
                     <AppLink
-                        className={cls.CreateButton}
                         to={getRoutePublishWidgetsCreate()}
                     >
-                        <button type="button">
-                            <AddBox className={cls.icon} />
-                            <Text text={t('Создать виджет')} bold />
-                        </button>
+                        <Button
+                            variant={'clear'}
+                            addonLeft={<Icon Svg={AddBox} width={20} height={20} />}
+                        >
+                            {t('Создать виджет')}
+                        </Button>
                     </AppLink>
                 </HStack>
             </HStack>
