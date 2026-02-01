@@ -10,6 +10,8 @@ import { Menubar } from '@/widgets/Menubar'
 import { ToastContainer } from 'react-toastify'
 import { useTheme } from '@/shared/lib/hooks/useTheme/useTheme'
 import { Theme } from '@/shared/const/theme'
+import { useLocation } from 'react-router-dom'
+import { getRouteDocs } from '@/shared/const/router'
 
 const App = (): any => {
   const userData = useSelector(getUserAuthData)
@@ -18,6 +20,8 @@ const App = (): any => {
   // setFeatureFlags({ isAppRedesigned: redesigned })
 
   const { theme } = useTheme()
+  const { pathname } = useLocation()
+  const isDocsPage = pathname.startsWith(getRouteDocs())
 
   const mapThemeToToast = () => {
     switch (theme) {
@@ -36,19 +40,19 @@ const App = (): any => {
 
   return (
     <Suspense fallback={<PageLoader />}>
-      {userData
-        ? (
-          <div id='app' className={classNames('app_redesigned', {}, [])}>
+      <div id='app' className={classNames('app_redesigned', {}, [])}>
+        {(userData && !isDocsPage)
+          ? (
             <MainLayout
               header={<Navbar />}
               content={<AppRouter />}
               sidebar={<Menubar />}
             />
-          </div>
-        )
-        : (
-          <AppRouter />
-        )}
+          )
+          : (
+            <AppRouter />
+          )}
+      </div>
       <ToastContainer
         position="top-right"
         autoClose={3000} // 3 сек

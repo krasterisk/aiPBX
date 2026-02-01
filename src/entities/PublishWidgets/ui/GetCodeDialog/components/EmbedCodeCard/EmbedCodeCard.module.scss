@@ -1,0 +1,25 @@
+.EmbedCodeCard {
+    background: var(--card-bg-redesigned);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+
+    &:hover {
+        border-color: var(--accent-redesigned);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.icon {
+    color: var(--accent-redesigned);
+    min-width: 24px; // Prevent icon shrinking
+}
+
+.header {
+    overflow: hidden;
+    word-break: break-word;
+}

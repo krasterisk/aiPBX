@@ -202,7 +202,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.DOCS]: {
     path: getRouteDocs(),
     element: <DocsPage />,
-    authOnly: true
+    authOnly: false
   },
   [AppRoutes.PUBLISH_SIP_URIS]: {
     path: getRoutePublishSipUris(),

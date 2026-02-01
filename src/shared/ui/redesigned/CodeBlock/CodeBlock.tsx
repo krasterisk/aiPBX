@@ -1,10 +1,12 @@
 import { memo, useCallback } from 'react'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './CodeBlock.module.scss'
-import { Button } from '../Button'
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import { Icon } from '@/shared/ui/redesigned/Icon'
+import CopyIcon from '@/shared/assets/icons/copy.svg'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
+import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
+import { Text } from '@/shared/ui/redesigned/Text'
 
 interface CodeBlockProps {
     className?: string
@@ -35,19 +37,33 @@ export const CodeBlock = memo((props: CodeBlockProps) => {
     }, [code, t])
 
     return (
-        <div className={classNames(cls.CodeBlock, {}, [className])}>
-            <div className={cls.header}>
-                <span className={cls.language}>{language}</span>
+        <VStack
+            className={classNames(cls.CodeBlock, {}, [className])}
+            max
+        >
+            <HStack
+                justify="between"
+                align="center"
+                className={cls.header}
+                max
+            >
+                <Text
+                    text={language}
+                    className={cls.language}
+                    bold
+                />
                 {showCopyButton && (
                     <button className={cls.copyButton} onClick={handleCopy}>
-                        <ContentCopyIcon fontSize="small" />
-                        {t('Скопировать код')}
+                        <Icon Svg={CopyIcon} width={16} height={16} />
+                        {t('Копировать')}
                     </button>
                 )}
-            </div>
+            </HStack>
             <div className={cls.codeWrapper}>
-                <pre className={cls.code}>{code}</pre>
+                <pre className={cls.code}>
+                    {code}
+                </pre>
             </div>
-        </div>
+        </VStack>
     )
 })

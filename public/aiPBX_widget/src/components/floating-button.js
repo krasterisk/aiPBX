@@ -1,43 +1,64 @@
 import { EventEmitter } from '../utils/events.js';
 
 /**
- * Floating Button Component
+ * Floating action button to trigger the widget
  */
 export class FloatingButton extends EventEmitter {
     constructor() {
         super();
-        this.button = this.create();
+        this.button = this.createButton();
+        this.render();
     }
 
-    create() {
-        const btn = document.createElement('button');
-        btn.className = 'ai-widget-btn';
-        btn.setAttribute('aria-label', 'Open AI Assistant');
-        btn.innerHTML = `
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
-      </svg>
-    `;
+    createButton() {
+        const btn = document.createElement('div');
+        btn.id = 'aipbx-floating-button';
+        btn.className = 'ai-widget-btn'; // Use modern class
 
-        btn.addEventListener('click', () => this.emit('click'));
+        // Simplified icon from aipbx_logo
+        btn.innerHTML = `
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" fill="white" fill-opacity="0.15"/>
+                <g filter="url(#glow)">
+                    <circle cx="50" cy="30" r="5" fill="white"/>
+                    <circle cx="75" cy="45" r="5" fill="white"/>
+                    <circle cx="50" cy="70" r="5" fill="white"/>
+                    <circle cx="25" cy="45" r="5" fill="white"/>
+                    <line x1="50" y1="30" x2="75" y2="45" stroke="white" stroke-width="3"/>
+                    <line x1="75" y1="45" x2="50" y2="70" stroke="white" stroke-width="3"/>
+                    <line x1="50" y1="70" x2="25" y2="45" stroke="white" stroke-width="3"/>
+                    <line x1="25" y1="45" x2="50" y2="30" stroke="white" stroke-width="3"/>
+                    <circle cx="50" cy="50" r="8" fill="white"/>
+                </g>
+                <defs>
+                    <filter id="glow" x="0" y="0" width="100" height="100">
+                        <feGaussianBlur stdDeviation="3" result="blur"/>
+                        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                    </filter>
+                </defs>
+            </svg>
+        `;
+
+        btn.addEventListener('click', () => {
+            this.emit('click');
+        });
 
         return btn;
     }
 
-    show() {
-        if (!document.body.contains(this.button)) {
-            document.body.appendChild(this.button);
-        }
+    render() {
+        document.body.appendChild(this.button);
     }
 
     hide() {
-        if (document.body.contains(this.button)) {
-            this.button.remove();
-        }
+        this.button.classList.add('hidden');
+    }
+
+    show() {
+        this.button.classList.remove('hidden');
     }
 
     destroy() {
-        this.hide();
+        this.button.remove();
     }
 }

@@ -1,0 +1,69 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 60px);
+    grid-template-rows: repeat(2, 60px);
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    border-radius: 12px;
+    width: fit-content;
+}
+
+.item {
+    background: var(--light-bg-redesigned);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover {
+        background: var(--hint-redesigned);
+    }
+
+    &.active {
+        border-color: var(--accent-redesigned);
+        background: rgba(var(--accent-redesigned-rgb), 0.1);
+
+        .dot {
+            background: var(--accent-redesigned);
+            box-shadow: 0 0 8px var(--accent-redesigned);
+        }
+    }
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    background: var(--icon-redesigned);
+    border-radius: 50%;
+    position: absolute;
+    transition: all 0.2s ease;
+}
+
+/* Position dots in corners corresponding to the labels */
+.item:nth-child(1) .dot {
+    top: 6px;
+    left: 6px;
+}
+
+/* top-left */
+.item:nth-child(2) .dot {
+    top: 6px;
+    right: 6px;
+}
+
+/* top-right */
+.item:nth-child(3) .dot {
+    bottom: 6px;
+    left: 6px;
+}
+
+/* bottom-left */
+.item:nth-child(4) .dot {
+    bottom: 6px;
+    right: 6px;
+}
+
+/* bottom-right */

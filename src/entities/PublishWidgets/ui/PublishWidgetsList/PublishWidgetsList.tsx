@@ -16,6 +16,8 @@ import { WidgetKey, useDeleteWidgetKey } from '@/entities/WidgetKeys'
 import { toast } from 'react-toastify'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { PublishWidgetsListHeader } from '../PublishWidgetsListHeader/PublishWidgetsListHeader'
+import { Icon } from '@/shared/ui/redesigned/Icon'
+import SearchIcon from '@/shared/assets/icons/search.svg'
 
 export const PublishWidgetsList = memo((props: PublishWidgetsListProps) => {
     const {
@@ -122,34 +124,50 @@ export const PublishWidgetsList = memo((props: PublishWidgetsListProps) => {
     return (
         <VStack gap={'16'} max className={classNames(cls.PublishWidgetsList, {}, [className])}>
             <PublishWidgetsListHeader />
-            <Card max className={cls.controlsCard}>
-                <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
-                    <Check
-                        className={classNames(cls.checkbox, {
-                            [cls.uncheck]: checkedBox.length === 0,
-                            [cls.check]: checkedBox.length > 0
-                        }, [])}
-                        indeterminate={indeterminateBox}
-                        checked={widgets?.count ? checkedBox.length === widgets.count : false}
-                        onChange={handleCheckAll}
-                    />
-                    {checkedButtons}
-                    {checkedBox.length > 0
-                        ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(widgets?.count || 0)} />
-                        : <Text text={t('Всего') + ': ' + String(widgets?.count || 0)} />
-                    }
+
+            <Card max className={cls.controlsCard} padding={'0'}>
+                <HStack wrap={'nowrap'} justify={'between'} align={'center'} max className={cls.controls}>
+                    <HStack gap={'16'}>
+                        <Check
+                            className={classNames(cls.checkbox, {
+                                [cls.uncheck]: checkedBox.length === 0,
+                                [cls.check]: checkedBox.length > 0
+                            }, [])}
+                            indeterminate={indeterminateBox}
+                            checked={widgets?.count ? checkedBox.length === widgets.count : false}
+                            onChange={handleCheckAll}
+                        />
+                        {checkedBox.length > 0 ? (
+                            <HStack gap={'16'}>
+                                <Text
+                                    text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(widgets?.count || 0)}
+                                    bold
+                                />
+                                {checkedButtons}
+                            </HStack>
+                        ) : (
+                            <Text text={t('Всего') + ': ' + String(widgets?.count || 0)} variant={'accent'} />
+                        )}
+                    </HStack>
                 </HStack>
             </Card>
 
-            {widgets?.rows.length
-                ? <HStack wrap={'wrap'} gap={'16'} align={'start'} max>
+            {widgets?.rows.length ? (
+                <div className={cls.listWrapper}>
                     {widgets.rows.map(renderContent)}
-                </HStack>
-                : <HStack justify={'center'} max className={cls.emptyState}>
-                    <Text align={'center'} text={t('Данные не найдены')} />
-                </HStack>
-            }
-            {isWidgetsLoading && getSkeletons()}
+                </div>
+            ) : (
+                <VStack justify={'center'} align={'center'} max className={cls.emptyState} gap={'16'}>
+                    <Icon Svg={SearchIcon} width={48} height={48} />
+                    <Text align={'center'} text={t('Данные не найдены')} size={'l'} bold />
+                    <Text align={'center'} text={t('Попробуйте изменить параметры поиска или создайте новый виджет')} />
+                </VStack>
+            )}
+            {isWidgetsLoading && (
+                <div className={cls.listWrapper}>
+                    {getSkeletons()}
+                </div>
+            )}
         </VStack>
     )
 })

@@ -13,5 +13,6 @@ export {
     useWidgetKey,
     useCreateWidgetKey,
     useUpdateWidgetKey,
-    useDeleteWidgetKey
+    useDeleteWidgetKey,
+    useUploadWidgetLogo
 } from './api/widgetKeysApi'

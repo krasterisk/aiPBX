@@ -1,72 +1,93 @@
 .GetCodeDialog {
     width: 100%;
-}
-
-.content {
-    padding: 24px;
-    min-width: 700px;
-    max-width: 900px;
-}
-
-.title {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 24px;
-}
-
-.alert {
-    margin-bottom: 24px;
-    padding: 12px 16px;
-    background: #dbeafe;
-    border: 1px solid #3b82f6;
-    border-radius: 8px;
-    color: #1e40af;
-    font-size: 14px;
-}
-
-.section {
-    margin-bottom: 24px;
-}
-
-.sectionTitle {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
-
-.instructionsList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.instructionItem {
-    padding: 8px 0;
+    background: var(--card-bg-redesigned);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    max-height: 90vh;
     display: flex;
-    align-items: flex-start;
-    gap: 8px;
+    flex-direction: column;
 
     &::before {
-        content: '→';
-        color: var(--primary-color);
-        font-weight: bold;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(94, 211, 243, 0.3) 50%,
+                transparent 100%);
+        z-index: 1;
     }
 }
 
-.actions {
-    display: flex;
-    justify-content: flex-end;
-    padding-top: 16px;
-    border-top: 1px solid var(--border-color);
+.content {
+    padding: 32px;
+    width: 90vw;
+    max-width: 900px;
+    overflow-y: auto;
+
+    // Scrollbar styling if needed, usually handled globally
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+    }
 }
 
-.accordion {
-    margin-bottom: 12px;
+.header {
+    margin-bottom: 24px;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+
+    &:hover {
+        opacity: 1;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    svg {
+        width: 24px;
+        height: 24px;
+    }
 }
 
 @media (max-width: 768px) {
     .content {
         min-width: auto;
         padding: 16px;
+        width: 100%;
+        max-width: 100%;
     }
+
+    .actions {
+        padding: 20px;
+    }
+}
+
+.icon {
+    color: var(--text-redesigned);
 }

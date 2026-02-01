@@ -47,6 +47,13 @@ export const widgetKeysApi = rtkApi.injectEndpoints({
                 { type: 'WidgetKeys', id },
                 { type: 'WidgetKeys', id: 'LIST' }
             ]
+        }),
+        uploadWidgetLogo: build.mutation<{ logo: string }, FormData>({
+            query: (formData) => ({
+                url: '/widget-keys/logo',
+                method: 'POST',
+                body: formData
+            })
         })
     })
 })
@@ -56,3 +63,4 @@ export const useWidgetKey = widgetKeysApi.useGetWidgetKeyQuery
 export const useCreateWidgetKey = widgetKeysApi.useCreateWidgetKeyMutation
 export const useUpdateWidgetKey = widgetKeysApi.useUpdateWidgetKeyMutation
 export const useDeleteWidgetKey = widgetKeysApi.useDeleteWidgetKeyMutation
+export const useUploadWidgetLogo = widgetKeysApi.useUploadWidgetLogoMutation

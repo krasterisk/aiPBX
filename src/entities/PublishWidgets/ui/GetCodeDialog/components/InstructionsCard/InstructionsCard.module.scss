@@ -1,0 +1,76 @@
+.InstructionsCard {
+    background: var(--card-bg-redesigned);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: var(--accent-redesigned);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.icon {
+    color: var(--accent-redesigned);
+}
+
+.accordionContainer {
+    width: 100%;
+}
+
+.accordion {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 12px !important;
+    color: var(--text-redesigned) !important;
+    box-shadow: none !important;
+    margin-bottom: 12px !important;
+    transition: all 0.3s ease !important;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border-color: rgba(94, 211, 243, 0.2) !important;
+    }
+
+    &:before {
+        display: none !important;
+    }
+
+    svg {
+        color: var(--icon-redesigned);
+    }
+}
+
+.instructionsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.instructionItem {
+    padding: 8px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: var(--text-redesigned);
+    font-size: 14px;
+    line-height: 1.5;
+
+    &::before {
+        content: '•';
+        color: var(--accent-redesigned);
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 14px;
+    }
+}
+
+.alternative {
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 13px;
+    color: var(--hint-redesigned);
+}

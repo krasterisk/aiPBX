@@ -79,8 +79,26 @@ export const publishWidgetsFormSlice = createSlice({
             state.maxConcurrentSessions = widget.maxConcurrentSessions
             state.maxSessionDuration = widget.maxSessionDuration
             state.isActive = widget.isActive
-            // Assuming appearance comes from widget.settings or similar
-            // If the API doesn't return it yet, keep defaults
+
+            // Parse appearance if exists
+            state.appearance = { ...DEFAULT_APPEARANCE_SETTINGS }
+            if (widget.appearance) {
+                try {
+                    const parsedAppearance = JSON.parse(widget.appearance)
+                    state.appearance = { ...state.appearance, ...parsedAppearance }
+                } catch (e) {
+                    console.error('Failed to parse appearance settings', e)
+                }
+            }
+
+            // If widget has a top-level language field, sync it with appearance (source of truth)
+            if (widget.language) {
+                state.appearance.language = widget.language as any
+            }
+
+            if (widget.logo) {
+                state.appearance.logo = widget.logo
+            }
         }
     }
 })

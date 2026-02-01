@@ -28,32 +28,32 @@ export const PublishWidgetsListHeader = memo((props: PublishWidgetsListHeaderPro
     const isMobile = useMediaQuery('(max-width:800px)')
 
     return (
-        <VStack max>
+        <VStack max className={classNames(cls.PublishWidgetsListHeader, { [cls.mobileHeader]: isMobile }, [className])}>
             <HStack
-                className={classNames(cls.PublishWidgetsListHeader, { [cls.mobileHeader]: isMobile }, [className])}
                 justify={'between'}
                 max
+                gap={'16'}
+                wrap={isMobile ? 'wrap' : 'nowrap'}
             >
-                <HStack gap={'8'} justify={'start'}>
+                <HStack gap={'8'} justify={'start'} max={isMobile}>
                     <Input
                         className={cls.searchInput}
                         placeholder={t('Поиск') ?? ''}
                         size={'s'}
                         onChange={onSearchChange}
-                        addonLeft={<Icon Svg={SearchIcon} />}
+                        addonLeft={<Icon Svg={SearchIcon} width={20} height={20} />}
                         value={search}
                     />
                 </HStack>
-                <HStack>
+                <HStack max={isMobile} justify={isMobile ? 'center' : 'end'}>
                     <AppLink
-                        title={String(t('Создать виджет'))}
                         className={cls.CreateButton}
                         to={getRoutePublishWidgetsCreate()}
                     >
-                        <IconButton>
-                            <AddBox className={cls.icon} fontSize={'large'} />
-                            <Text text={t('Создать виджет')} />
-                        </IconButton>
+                        <button type="button">
+                            <AddBox className={cls.icon} />
+                            <Text text={t('Создать виджет')} bold />
+                        </button>
                     </AppLink>
                 </HStack>
             </HStack>

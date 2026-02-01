@@ -12,6 +12,7 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import CodeIcon from '@mui/icons-material/Code'
 import { GetCodeDialog } from '../GetCodeDialog/GetCodeDialog'
 import { useNavigate } from 'react-router-dom'
+import { Icon } from '@/shared/ui/redesigned/Icon'
 
 interface PublishWidgetsItemProps {
     className?: string
@@ -46,9 +47,10 @@ export const PublishWidgetsItem = memo((props: PublishWidgetsItemProps) => {
 
     return (
         <Card
-            padding={'16'}
+            padding={'0'}
             max
             border={'partial'}
+            variant={'outlined'}
             className={classNames(cls.PublishWidgetsItem, {}, [className])}
             onClick={onOpenEdit}
         >
@@ -66,19 +68,44 @@ export const PublishWidgetsItem = memo((props: PublishWidgetsItemProps) => {
                 />
             </div>
 
-            <HStack gap={'24'} justify={'between'} max>
-                <VStack max>
-                    <Text title={widget.name} text={widget.assistant?.name || ''} />
-                </VStack>
-                <div className={classNames(cls.status, { [cls.active]: widget.isActive }, [])} />
-                <Button
-                    variant={'outline'}
-                    onClick={onShowCode}
-                    addonLeft={<CodeIcon fontSize={'small'} />}
-                >
-                    {t('Получить код')}
-                </Button>
-            </HStack>
+            <VStack className={cls.content} max>
+                <HStack gap={'16'} justify={'between'} max>
+                    <HStack gap={'16'} max>
+                        <div className={cls.itemIcon}>
+                            <CodeIcon />
+                        </div>
+                        <VStack max>
+                            <Text title={widget.name} size={'m'} bold />
+                            <Text text={widget.assistant?.name || t('Без ассистента')} size={'s'} variant={'accent'} />
+                        </VStack>
+                    </HStack>
+                    <div className={cls.statusWrapper}>
+                        <div className={classNames(cls.statusDot, { [cls.active]: widget.isActive }, [])} />
+                        <Text text={widget.isActive ? t('Активен') : t('Неактивен')} size={'s'} />
+                    </div>
+                </HStack>
+
+                <HStack className={cls.footer} justify={'between'} max>
+                    <HStack gap={'8'}>
+                        {widget.allowedDomains && (
+                            <Text
+                                text={t('Домены') + ': ' + widget.allowedDomains.split(',').length}
+                                size={'s'}
+                                variant={'accent'}
+                            />
+                        )}
+                    </HStack>
+                    <Button
+                        variant={'outline'}
+                        onClick={onShowCode}
+                        addonLeft={<Icon Svg={CodeIcon} />}
+                        className={cls.getCodeBtn}
+                        size={'m'}
+                    >
+                        {t('Получить код')}
+                    </Button>
+                </HStack>
+            </VStack>
 
             <GetCodeDialog
                 isOpen={isCodeModalOpen}

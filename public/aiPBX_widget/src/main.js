@@ -7,13 +7,14 @@ import { Logger } from './utils/logger.js';
 
 /**
  * Main AI Voice Widget Class
+ * Version: 1.0.x
  */
 class AIVoiceWidget {
     constructor(publicKey, apiUrl) {
         this.publicKey = publicKey;
         this.apiUrl = apiUrl;
         this.config = null;
-        this.logger = new Logger('AIWidget');
+        this.logger = new Logger('aiPBX widget');
 
         // Components
         this.api = new ApiClient(apiUrl);
@@ -23,16 +24,22 @@ class AIVoiceWidget {
 
         // State
         this.isSessionActive = false;
+        this.isStopping = false;
     }
 
     async init() {
         try {
-            this.logger.log('Initializing widget with key:', this.publicKey);
+            if (process.env.NODE_ENV !== 'production') {
+                console.log('%c[aiPBX Widget] Version: 1.1.6', 'color: #06B6D4; font-weight: bold; font-size: 12px;');
+                this.logger.log('Initializing widget with key:', this.publicKey);
+            }
 
             // Fetch configuration
             this.config = await this.api.fetchConfig(this.publicKey);
-            this.logger.log('Configuration loaded:', this.config);
 
+            if (process.env.NODE_ENV !== 'production') {
+                this.logger.log('Configuration loaded:', this.config);
+            }
             // Create UI
             this.modal = new ModalWindow(this.config);
             this.setupEventListeners();
@@ -46,7 +53,13 @@ class AIVoiceWidget {
             this.logger.log('Widget initialized successfully');
         } catch (error) {
             this.logger.error('Failed to initialize widget:', error);
-            this.showError('Failed to initialize AI assistant. Please check your configuration.');
+
+            let message = 'Failed to initialize aiPBX widget. Please check your configuration.';
+            if (error.message === 'INVALID_KEY') message = 'Invalid widget key. Please check your public key.';
+            if (error.message === 'KEY_INACTIVE') message = 'This widget is inactive. Please contact support.';
+            if (error.message === 'NETWORK_ERROR') message = 'Network error. Please check your internet connection.';
+
+            this.showError(message);
         }
     }
 
@@ -55,14 +68,15 @@ class AIVoiceWidget {
         this.floatingButton.on('click', () => {
             if (!this.isSessionActive) {
                 this.modal.show();
+                this.floatingButton.hide(); // Скрыть кнопку при открытии модалки
             }
         });
 
         // Modal
         this.modal.on('close', () => {
-            if (this.isSessionActive) {
-                this.stopSession();
-            }
+            this.floatingButton.show(); // Показать кнопку при закрытии
+            // Always try to stop if there was an attempt to start
+            this.stopSession();
         });
 
         this.modal.on('start', () => {
@@ -111,18 +125,33 @@ class AIVoiceWidget {
 
     async startSession() {
         try {
-            const domain = window.location.hostname;
-            await this.webrtc.startSession(this.publicKey, domain);
+            await this.webrtc.startSession(this.publicKey, this.config);
         } catch (error) {
             this.logger.error('Failed to start session:', error);
         }
     }
 
     async stopSession() {
+        this.logger.log('Stop requested. Params:', { isStopping: this.isStopping, isActive: this.isSessionActive });
+
+        if (this.isStopping) return;
+        this.isStopping = true;
+
         try {
-            await this.webrtc.stopSession();
+            this.logger.log('Executing parallel hangup tasks...');
+            const stopTasks = [
+                this.webrtc.stopSession().then(() => this.logger.log('SIP stop done')),
+                this.api.sendHangup(this.publicKey).then(() => this.logger.log('HTTP wait finished'))
+            ];
+
+            await Promise.allSettled(stopTasks);
+            this.logger.log('All stop tasks completed');
         } catch (error) {
-            this.logger.error('Failed to stop session:', error);
+            this.logger.error('Error during stopSession:', error);
+        } finally {
+            this.isSessionActive = false;
+            this.isStopping = false;
+            this.logger.log('Session state reset');
         }
     }
 
@@ -169,6 +198,7 @@ class AIVoiceWidget {
 
     exposePublicAPI() {
         window.AIWidget = {
+            version: '1.1.6',
             show: () => this.modal.show(),
             hide: () => this.modal.hide(),
             start: () => this.startSession(),
@@ -192,7 +222,7 @@ class AIVoiceWidget {
 (function () {
     const scriptTag = document.currentScript;
     if (!scriptTag) {
-        console.error('[AI Widget] Could not find script tag');
+        console.error('[aiPBX widget] Could not find script tag');
         return;
     }
 
@@ -200,13 +230,15 @@ class AIVoiceWidget {
     const apiUrl = scriptTag.getAttribute('data-api') || 'http://localhost:3000';
 
     if (!publicKey) {
-        console.error('[AI Widget] Missing data-key attribute');
+        console.error('[aiPBX widget] Missing data-key attribute');
         return;
     }
 
     const initWidget = () => {
+        if (window.__aiPBXWidgetInstance) return;
         const widget = new AIVoiceWidget(publicKey, apiUrl);
         widget.init();
+        window.__aiPBXWidgetInstance = widget;
     };
 
     if (document.readyState === 'loading') {

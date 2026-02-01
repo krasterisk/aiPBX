@@ -75,5 +75,9 @@
     "Wix_Step6": "6. Klicken Sie auf <strong>Anwenden</strong>",
     "PBX Сервер": "PBX-Server",
     "Пожалуйста выберите PBX сервер": "Bitte wählen Sie einen PBX-Server",
-    "У выбранного PBX сервера не указан WSS URL": "Der ausgewählte PBX-Server hat keine WSS-URL angegeben"
+    "У выбранного PBX сервера не указан WSS URL": "Der ausgewählte PBX-Server hat keine WSS-URL angegeben",
+    "Без ассистента": "Kein Assistent",
+    "Активен": "Aktiv",
+    "Неактивен": "Inaktiv",
+    "Попробуйте изменить параметры поиска или создайте новый виджет": "Versuchen Sie, die Suchparameter zu ändern oder ein neues Widget zu erstellen"
 }

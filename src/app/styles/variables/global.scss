@@ -19,9 +19,14 @@
     --font-xl: var(--font-size-xl) / var(--font-line-xl) var(--font-family-main);
 
     // s
-    --font-size-s: 8px;
-    --font-line-s: 16px;
+    --font-size-s: 12px;
+    --font-line-s: 20px;
     --font-s: var(--font-size-s) / var(--font-line-s) var(--font-family-main);
+
+    // xs
+    --font-size-xs: 10px;
+    --font-line-xs: 14px;
+    --font-xs: var(--font-size-xs) / var(--font-line-xs) var(--font-family-main);
 
     // xxl
     --font-size-xxl: 40px;
@@ -45,6 +50,9 @@
     --red-dark: #af0606;
 
     // redesigned
+
+    // xs
+    --font-xs-redesigned: var(--font-size-xs) / var(--font-line-xs) var(--font-family-text-redesigned);
 
     // s
     --font-s-redesigned: var(--font-size-s) / var(--font-line-s) var(--font-family-text-redesigned);

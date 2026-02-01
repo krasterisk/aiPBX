@@ -1,16 +1,12 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './PublishWidgetsForm.module.scss'
-import { memo, useCallback, useState, useEffect } from 'react'
+import { memo, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
-import { AssistantSelect, AssistantOptions } from '@/entities/Assistants'
-import { Text } from '@/shared/ui/redesigned/Text'
-import { Textarea } from '@/shared/ui/mui/Textarea'
-import { Card } from '@/shared/ui/redesigned/Card'
-import { Check } from '@/shared/ui/mui/Check'
-import { PbxServerSelect, PbxServerOptions, usePbxServersAll } from '@/entities/PbxServers'
+import { AssistantOptions } from '@/entities/Assistants'
+import { PbxServerOptions, usePbxServersAll } from '@/entities/PbxServers'
 import {
     getPublishWidgetsFormName,
     getPublishWidgetsFormSelectedAssistant,
@@ -28,95 +24,19 @@ import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { useNavigate } from 'react-router-dom'
 import { getRoutePublishWidgets } from '@/shared/const/router'
 import { useCreateWidgetKey, useUpdateWidgetKey } from '@/entities/WidgetKeys'
-import { Combobox } from '@/shared/ui/mui/Combobox'
-import { useMemo } from 'react'
 import { PublishWidgetsFormHeader } from '../PublishWidgetsFormHeader/PublishWidgetsFormHeader'
+import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
+import { TelephonyAiCard } from './components/TelephonyAiCard/TelephonyAiCard'
+import { SecurityLimitsCard } from './components/SecurityLimitsCard/SecurityLimitsCard'
+import { StyleSettingsCard } from './components/StyleSettingsCard/StyleSettingsCard'
+import { WidgetPreviewCard } from './components/WidgetPreviewCard/WidgetPreviewCard'
+import { useMediaQuery } from '@mui/material'
 
 interface PublishWidgetsFormProps {
     className?: string
     isEdit?: boolean
     widgetId?: string
 }
-
-interface ListBoxItemsProps {
-    appearance: any
-    onChangeAppearance: (field: string, value: unknown) => void
-}
-
-const ListBoxItems = memo(({ appearance, onChangeAppearance }: ListBoxItemsProps) => {
-    const { t } = useTranslation('publish-widgets')
-
-    const positionOptions = useMemo(() => [
-        { label: t('Внизу справа'), value: 'bottom-right' },
-        { label: t('Внизу слева'), value: 'bottom-left' },
-        { label: t('Вверху справа'), value: 'top-right' },
-        { label: t('Вверху слева'), value: 'top-left' },
-    ], [t])
-
-    const themeOptions = useMemo(() => [
-        { label: t('Светлая'), value: 'light' },
-        { label: t('Темная'), value: 'dark' },
-        { label: t('Автоматически'), value: 'auto' },
-    ], [t])
-
-    return (
-        <VStack gap="16" max>
-            <Combobox
-                label={t('Позиция кнопки') || ''}
-                options={positionOptions}
-                getOptionLabel={(opt) => opt.label}
-                value={positionOptions.find(opt => opt.value === appearance.buttonPosition)}
-                onChange={(_, newValue) => newValue && onChangeAppearance('buttonPosition', newValue.value)}
-                isOptionEqualToValue={(opt, val) => opt.value === val.value}
-                disableClearable
-                renderInput={(params) => (
-                    <Textarea
-                        {...params}
-                        label={t('Позиция кнопки')}
-                        inputProps={{ ...params.inputProps, readOnly: true }}
-                    />
-                )}
-            />
-
-            <Textarea
-                label={t('Цвет кнопки') || ''}
-                type="color"
-                value={appearance.buttonColor}
-                onChange={(e) => onChangeAppearance('buttonColor', e.target.value)}
-            />
-
-            <Textarea
-                label={t('Основной цвет') || ''}
-                type="color"
-                value={appearance.primaryColor}
-                onChange={(e) => onChangeAppearance('primaryColor', e.target.value)}
-            />
-
-            <Combobox
-                label={t('Тема') || ''}
-                options={themeOptions}
-                getOptionLabel={(opt) => opt.label}
-                value={themeOptions.find(opt => opt.value === appearance.theme)}
-                onChange={(_, newValue) => newValue && onChangeAppearance('theme', newValue.value)}
-                isOptionEqualToValue={(opt, val) => opt.value === val.value}
-                disableClearable
-                renderInput={(params) => (
-                    <Textarea
-                        {...params}
-                        label={t('Тема')}
-                        inputProps={{ ...params.inputProps, readOnly: true }}
-                    />
-                )}
-            />
-
-            <Check
-                label={t('Показать брендинг') || ''}
-                checked={appearance.showBranding}
-                onChange={(e) => onChangeAppearance('showBranding', e.target.checked)}
-            />
-        </VStack>
-    )
-})
 
 export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
     const { className, isEdit, widgetId } = props
@@ -139,10 +59,9 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
     const [updateWidget, { isLoading: isUpdating }] = useUpdateWidgetKey()
     const isLoading = isCreating || isUpdating
 
-    const [showPreview, setShowPreview] = useState(false)
+    const isMobile = useMediaQuery('(max-width:800px)')
 
-    // Fetch servers to enrich the selected server data (e.g. wss_url) which might be missing in widget data
-    const { data: allPbxServers } = usePbxServersAll(null)
+    const { data: allPbxServers, isLoading: isServersLoading } = usePbxServersAll(null)
 
     useEffect(() => {
         if (selectedPbxServer && !selectedPbxServer.wss_url && allPbxServers) {
@@ -174,9 +93,7 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
     )
 
     const onChangeDomains = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-            dispatch(publishWidgetsFormActions.setAllowedDomains(e.target.value))
-        },
+        (val: string) => dispatch(publishWidgetsFormActions.setAllowedDomains(val)),
         [dispatch]
     )
 
@@ -213,15 +130,9 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
             return
         }
 
-        if (!selectedPbxServer.wss_url) {
-            toast.error(t('У выбранного PBX сервера не указан WSS URL'))
-            return
-        }
-
         const domainsArray = allowedDomains
-            .split(/[\n,]/)
-            .map(d => d.trim())
-            .filter(Boolean)
+            ? allowedDomains.split(/[\n,]/).map(d => d.trim()).filter(Boolean)
+            : []
 
         const data = {
             name,
@@ -230,7 +141,10 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
             allowedDomains: JSON.stringify(domainsArray),
             maxConcurrentSessions: maxSessions,
             maxSessionDuration,
-            isActive
+            isActive,
+            appearance: JSON.stringify(appearance),
+            language: appearance?.language,
+            logo: appearance?.logo
         }
 
         try {
@@ -246,164 +160,75 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
         } catch (e) {
             toast.error(getErrorMessage(e))
         }
-    }, [name, selectedAssistant, selectedPbxServer, allowedDomains, maxSessions, maxSessionDuration, isActive, isEdit, widgetId, updateWidget, createWidget, navigate, dispatch, t])
+    }, [name, selectedAssistant, selectedPbxServer, allowedDomains, maxSessions, maxSessionDuration, isActive, appearance, isEdit, widgetId, updateWidget, createWidget, navigate, dispatch, t])
 
-    useEffect(() => {
-        if (showPreview && appearance) {
-            const iframe = document.getElementById('widget-preview') as HTMLIFrameElement
-            if (iframe?.contentWindow) {
-                iframe.contentWindow.postMessage({
-                    type: 'UPDATE_APPEARANCE',
-                    appearance
-                }, '*')
-            }
-        }
-    }, [appearance, showPreview])
+    if ((isLoading || isServersLoading) && isEdit) {
+        return (
+            <VStack gap="16" max>
+                <Skeleton width="100%" height={100} border="12px" />
+                <HStack gap="24" max align="start" wrap={isMobile ? 'wrap' : 'nowrap'}>
+                    <VStack gap="16" style={{ flex: 1 }} max>
+                        <Skeleton width="100%" height={300} border="16px" />
+                        <Skeleton width="100%" height={200} border="16px" />
+                    </VStack>
+                    <VStack gap="16" style={{ width: isMobile ? '100%' : '400px' }} max>
+                        <Skeleton width="100%" height={250} border="16px" />
+                        <Skeleton width="100%" height={400} border="16px" />
+                    </VStack>
+                </HStack>
+            </VStack>
+        )
+    }
 
     return (
-        <VStack gap={'8'} max className={classNames(cls.PublishWidgetsForm, {}, [className])}>
+        <VStack gap="16" max className={classNames(cls.PublishWidgetsForm, {}, [className])}>
             <PublishWidgetsFormHeader
                 onSave={onSave}
                 isEdit={isEdit}
                 isLoading={isLoading}
             />
 
-            <Card padding={'24'} max border={'partial'}>
-                <VStack gap={'24'} max>
-                    <div className={cls.formGrid}>
-                        {/* Left Column - Main Settings */}
-                        <VStack gap="16" max>
-                            <Text text={t('Основные настройки')} bold />
+            {/* Content: Sections */}
+            <VStack gap="24" max align="center">
+                <HStack gap="24" max align="start" className={cls.contentWrapper}>
+                    {/* Left Column: Configuration */}
+                    <VStack gap="24" className={cls.leftColumn}>
+                        <TelephonyAiCard
+                            selectedAssistant={selectedAssistant}
+                            onChangeAssistant={onChangeAssistant}
+                            selectedPbxServer={selectedPbxServer}
+                            onChangePbxServer={onChangePbxServer}
+                            name={name}
+                            onChangeName={onChangeName}
+                            isActive={isActive}
+                            onChangeIsActive={onChangeIsActive}
+                            isAdmin={isAdmin}
+                            userId={userData?.id}
+                        />
 
-                            <AssistantSelect
-                                key={selectedAssistant?.id}
-                                label={t('AI Ассистент') || ''}
-                                value={selectedAssistant}
-                                onChangeAssistant={onChangeAssistant}
-                                userId={isAdmin ? undefined : userData?.id}
-                            />
+                        <SecurityLimitsCard
+                            allowedDomains={allowedDomains}
+                            onChangeDomains={onChangeDomains}
+                            maxSessions={maxSessions}
+                            onChangeMaxSessions={onChangeMaxSessions}
+                            maxSessionDuration={maxSessionDuration}
+                            onChangeMaxSessionDuration={onChangeMaxSessionDuration}
+                            isMobile={isMobile}
+                        />
+                    </VStack>
 
-                            <PbxServerSelect
-                                label={t('PBX Сервер') || ''}
-                                value={selectedPbxServer}
-                                onChangePbxServer={onChangePbxServer}
-                                userId={isAdmin ? undefined : userData?.id}
-                            />
+                    {/* Right Column: Style */}
+                    <VStack gap="24" className={cls.rightColumn}>
+                        <StyleSettingsCard
+                            appearance={appearance}
+                            onChangeAppearance={onChangeAppearance}
+                        />
+                    </VStack>
+                </HStack>
 
-                            <Textarea
-                                label={t('Название виджета') || ''}
-                                value={name}
-                                onChange={onChangeName}
-                                placeholder={t('Напр. Служба поддержки') || ''}
-                                rows={2}
-                            />
-
-                            <Textarea
-                                label={t('Максимум сессий') || ''}
-                                type="number"
-                                value={maxSessions}
-                                onChange={onChangeMaxSessions}
-                                helperText={t('Максимальное количество одновременных сессий')}
-                                inputProps={{ min: 1, max: 100 }}
-                            />
-
-                            <Textarea
-                                label={t('Длительность сессии (сек)') || ''}
-                                type="number"
-                                value={maxSessionDuration}
-                                onChange={onChangeMaxSessionDuration}
-                                helperText={t('Максимальная длительность сессии в секундах (60-3600)')}
-                                inputProps={{ min: 60, max: 3600 }}
-                            />
-
-                            <Textarea
-                                multiline
-                                minRows={3}
-                                maxRows={10}
-                                label={t('Разрешённые домены') || ''}
-                                value={allowedDomains}
-                                onChange={onChangeDomains}
-                                placeholder={'example.com\nwww.example.com\n*.example.com'}
-                                helperText={t('По одному домену на строку. Можно вводить через запятую или с новой строки') || ''}
-                            />
-
-                            <Check
-                                label={t('Виджет активен') || ''}
-                                checked={isActive}
-                                onChange={onChangeIsActive}
-                            />
-                        </VStack>
-
-                        {/* Right Column - Appearance Settings & Preview */}
-                        <VStack gap="16" max>
-                            <HStack justify={'between'} max>
-                                <Text text={t('Настройки внешнего вида')} bold />
-                                <Check
-                                    label={t('Показать превью') || ''}
-                                    checked={showPreview}
-                                    onChange={(e) => setShowPreview(e.target.checked)}
-                                />
-                            </HStack>
-
-                            {appearance && (
-                                <ListBoxItems appearance={appearance} onChangeAppearance={onChangeAppearance} />
-                            )}
-
-                            {/* Preview Panel */}
-                            {showPreview && (
-                                <Card padding={'16'} className={cls.previewCard}>
-                                    <VStack gap={'8'} max>
-                                        <Text text={t('Предпросмотр виджета')} size={'s'} bold />
-                                        <div className={cls.previewContainer}>
-                                            <iframe
-                                                id="widget-preview"
-                                                className={cls.previewIframe}
-                                                title={t('Предпросмотр виджета') || 'Widget Preview'}
-                                                srcDoc={`
-                                                    <!DOCTYPE html>
-                                                    <html>
-                                                    <head>
-                                                        <style>
-                                                            body { margin: 0; padding: 20px; background: #f5f5f5; font-family: sans-serif; }
-                                                            .preview-text { text-align: center; color: #666; margin-bottom: 20px; }
-                                                            .widget-button {
-                                                                position: fixed;
-                                                                ${appearance?.buttonPosition.includes('bottom') ? 'bottom: 20px;' : 'top: 20px;'}
-                                                                ${appearance?.buttonPosition.includes('right') ? 'right: 20px;' : 'left: 20px;'}
-                                                                width: 60px;
-                                                                height: 60px;
-                                                                border-radius: 50%;
-                                                                background: ${appearance?.buttonColor};
-                                                                border: none;
-                                                                cursor: pointer;
-                                                                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                                                                display: flex;
-                                                                align-items: center;
-                                                                justify-content: center;
-                                                                color: white;
-                                                                font-size: 24px;
-                                                                transition: transform 0.2s;
-                                                            }
-                                                            .widget-button:hover {
-                                                                transform: scale(1.1);
-                                                            }
-                                                        </style>
-                                                    </head>
-                                                    <body>
-                                                        <div class="preview-text">${t('Это предпросмотр виджета')}</div>
-                                                        <button class="widget-button">🎤</button>
-                                                    </body>
-                                                    </html>
-                                                `}
-                                            />
-                                        </div>
-                                    </VStack>
-                                </Card>
-                            )}
-                        </VStack>
-                    </div>
-                </VStack>
-            </Card>
+                {/* Preview: Centered Below */}
+                <WidgetPreviewCard appearance={appearance} name={name} />
+            </VStack>
 
             <PublishWidgetsFormHeader
                 onSave={onSave}

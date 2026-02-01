@@ -2,16 +2,17 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './GetCodeDialog.module.scss'
 import { memo, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { VStack } from '@/shared/ui/redesigned/Stack'
+import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Modal } from '@/shared/ui/redesigned/Modal'
-import { CodeBlock } from '@/shared/ui/redesigned/CodeBlock'
+import { Text } from '@/shared/ui/redesigned/Text'
+import { Icon } from '@/shared/ui/redesigned/Icon'
+import CloseIcon from '@/shared/assets/icons/close.svg'
 import { WidgetKey, WidgetAppearanceSettings, DEFAULT_APPEARANCE_SETTINGS } from '@/entities/WidgetKeys'
-import { generateEmbedCode } from '../../../PublishWidgets/lib/generateEmbedCode'
-import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-
+import { generateEmbedCode } from '../../lib/generateEmbedCode'
 import { usePbxServer } from '@/entities/PbxServers'
+import { EmbedCodeCard } from './components/EmbedCodeCard/EmbedCodeCard'
+import { InstructionsCard } from './components/InstructionsCard/InstructionsCard'
 
 interface GetCodeDialogProps {
     className?: string
@@ -53,96 +54,35 @@ export const GetCodeDialog = memo((props: GetCodeDialogProps) => {
                 max
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className={cls.content}>
-                    <h2 className={cls.title}>
-                        {t('Код для встраивания')} "{widget.name}"
-                    </h2>
-
-                    <div className={cls.alert}>
-                        {t('Скопируйте этот код и вставьте перед закрывающим тегом </body>')}
-                    </div>
-
-                    <CodeBlock
-                        code={embedCode}
-                        language="html"
-                        showCopyButton
+                <button className={cls.closeBtn} onClick={onClose}>
+                    <Icon
+                        Svg={CloseIcon}
+                        className={cls.icon}
                     />
+                </button>
 
-                    <div className={cls.section}>
-                        <Accordion className={cls.accordion}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                <strong>{t('Инструкции по установке')}</strong>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <ul className={cls.instructionsList}>
-                                    <li className={cls.instructionItem}>
-                                        {t('Скопируйте код выше')}
-                                    </li>
-                                    <li className={cls.instructionItem}>
-                                        {t('Откройте HTML вашего сайта')}
-                                    </li>
-                                    <li className={cls.instructionItem}>
-                                        {t('Вставьте перед </body>')}
-                                    </li>
-                                    <li className={cls.instructionItem}>
-                                        {t('Сохраните и обновите!')}
-                                    </li>
-                                </ul>
-                            </AccordionDetails>
-                        </Accordion>
-
-                        <Accordion className={cls.accordion}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                <strong>WordPress</strong>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <VStack gap="8">
-                                    <p dangerouslySetInnerHTML={{ __html: t('WordPress_Step1') }} />
-                                    <p dangerouslySetInnerHTML={{ __html: t('WordPress_Step2') }} />
-                                    <p dangerouslySetInnerHTML={{ __html: t('WordPress_Step3') }} />
-                                    <p dangerouslySetInnerHTML={{ __html: t('WordPress_Step4') }} />
-                                    <p style={{ marginTop: '12px', padding: '12px', background: 'var(--card-bg)', borderRadius: '6px' }} dangerouslySetInnerHTML={{ __html: t('WordPress_Alternative') }} />
-                                </VStack>
-                            </AccordionDetails>
-                        </Accordion>
-
-                        <Accordion className={cls.accordion}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                <strong>Shopify</strong>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <VStack gap="8">
-                                    <p dangerouslySetInnerHTML={{ __html: t('Shopify_Step1') }} />
-                                    <p dangerouslySetInnerHTML={{ __html: t('Shopify_Step2') }} />
-                                    <p dangerouslySetInnerHTML={{ __html: t('Shopify_Step3') }} />
-                                    <p dangerouslySetInnerHTML={{ __html: t('Shopify_Step4') }} />
-                                    <p dangerouslySetInnerHTML={{ __html: t('Shopify_Step5') }} />
-                                </VStack>
-                            </AccordionDetails>
-                        </Accordion>
-
-                        <Accordion className={cls.accordion}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                <strong>Wix</strong>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <VStack gap="8">
-                                    <p dangerouslySetInnerHTML={{ __html: t('Wix_Step1') }} />
-                                    <p dangerouslySetInnerHTML={{ __html: t('Wix_Step2') }} />
-                                    <p dangerouslySetInnerHTML={{ __html: t('Wix_Step3') }} />
-                                    <p dangerouslySetInnerHTML={{ __html: t('Wix_Step4') }} />
-                                    <p dangerouslySetInnerHTML={{ __html: t('Wix_Step5') }} />
-                                    <p dangerouslySetInnerHTML={{ __html: t('Wix_Step6') }} />
-                                </VStack>
-                            </AccordionDetails>
-                        </Accordion>
+                <div className={cls.content}>
+                    <div className={cls.header}>
+                        <VStack gap="4" max>
+                            <Text
+                                title={t('Установка виджета')}
+                                size={'l'}
+                                bold
+                            />
+                            <Text
+                                text={t('Скопируйте код и добавьте его на ваш сайт для начала работы')}
+                                variant={'accent'}
+                            />
+                        </VStack>
                     </div>
 
-                    <div className={cls.actions}>
-                        <Button onClick={onClose}>
-                            {t('Закрыть')}
-                        </Button>
-                    </div>
+                    <VStack gap="24" max>
+                        <EmbedCodeCard
+                            embedCode={embedCode}
+                            widgetName={widget.name}
+                        />
+                        <InstructionsCard />
+                    </VStack>
                 </div>
             </VStack>
         </Modal>

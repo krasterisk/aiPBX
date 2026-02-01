@@ -1,58 +1,116 @@
 .PublishWidgetsItem {
     position: relative;
-    background: var(--light-bg-redesigned);
-    border: 0.5px solid var(--accent-redesigned);
+    background: var(--card-bg-redesigned);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
     width: 100%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
 
     &:hover {
         cursor: pointer;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 15px rgba(94, 211, 243, 0.1);
+        filter: brightness(1.1);
 
         .uncheck {
-            position: absolute;
-            left: 0;
-            top: 0;
-            display: flex;
-            color: var(--icon-redesigned);
+            opacity: 1;
+        }
+
+        .itemIcon {
+            transform: scale(1.1) rotate(5deg);
+            color: var(--accent-redesigned);
+            background: rgba(94, 211, 243, 0.15);
         }
     }
 
     .uncheck {
         position: absolute;
-        display: none;
+        left: 8px;
+        top: 8px;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.2s ease;
         color: var(--icon-redesigned);
-        left: 0;
-        top: 0;
     }
 
     .check {
         position: absolute;
-        display: flex;
-        color: var(--icon-redesigned);
-        left: 0;
-        top: 0;
+        left: 8px;
+        top: 8px;
+        z-index: 10;
+        color: var(--accent-redesigned);
     }
 
-    .link {
-        flex: 1;
-        min-width: 150px;
+    .content {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        padding: 16px;
+    }
+
+    .itemIcon {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(94, 211, 243, 0.08);
+        border: 1px solid rgba(94, 211, 243, 0.1);
+        border-radius: 12px;
+        color: var(--icon-redesigned);
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .statusWrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .statusDot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--cancel-redesigned);
+        flex-shrink: 0;
+        box-shadow: 0 0 8px var(--cancel-redesigned);
+    }
+
+    .active {
+        background: var(--save-redesigned);
+        box-shadow: 0 0 12px var(--save-redesigned);
+    }
+
+    .footer {
+        width: 100%;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     @media (hover: none) {
         .uncheck {
-            display: flex;
+            opacity: 1;
         }
     }
 }
 
-.status {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--cancel-redesigned);
-    flex-shrink: 0;
-}
+.getCodeBtn {
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    border-color: rgba(94, 211, 243, 0.2);
 
-.active {
-    background: var(--save-redesigned);
-    box-shadow: 0 0 8px var(--save-redesigned);
+    &:hover {
+        background: rgba(94, 211, 243, 0.1);
+        border-color: var(--accent-redesigned);
+        transform: scale(1.02);
+    }
 }

@@ -10,7 +10,10 @@ import {
     Collapse,
     Typography
 } from '@mui/material'
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronRight, ArrowLeft } from 'lucide-react'
+import { useSelector } from 'react-redux'
+import { getUserAuthData } from '@/entities/User'
+import { getRouteMain } from '@/shared/const/router'
 import cls from './DocumentationSidebar.module.scss'
 
 interface DocSection {
@@ -95,6 +98,7 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
     const { t } = useTranslation('docs')
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
+    const userData = useSelector(getUserAuthData)
     const currentSection = searchParams.get('section') || 'getting-started'
 
     const [expandedSections, setExpandedSections] = useState<string[]>(() => {
@@ -184,6 +188,21 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
                     </Box>
                 ))}
             </List>
+
+            {userData && (
+                <Box className={cls.footer}>
+                    <ListItemButton
+                        onClick={() => navigate(getRouteMain())}
+                        className={cls.backButton}
+                    >
+                        <ArrowLeft size={20} className={cls.backIcon} />
+                        <ListItemText
+                            primary={t('Back to App')}
+                            className={cls.backText}
+                        />
+                    </ListItemButton>
+                </Box>
+            )}
         </Box>
     )
 })

@@ -17,11 +17,12 @@ interface TextProps {
 
 export type TextAlign = 'right' | 'left' | 'center'
 
-export type TextSize = 's' | 'm' | 'l' | 'xl'
+export type TextSize = 'xs' | 's' | 'm' | 'l' | 'xl'
 
 type HeaderTagType = 'h1' | 'h2' | 'h3' | 'h4'
 
 const mapSizeToClass: Record<TextSize, string> = {
+  xs: cls.size_xs,
   s: cls.size_s,
   m: cls.size_m,
   l: cls.size_l,
@@ -29,6 +30,7 @@ const mapSizeToClass: Record<TextSize, string> = {
 }
 
 const mapSizeToHeaderTag: Record<TextSize, HeaderTagType> = {
+  xs: 'h4',
   s: 'h4',
   m: 'h3',
   l: 'h2',

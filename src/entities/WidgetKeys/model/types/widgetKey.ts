@@ -9,6 +9,9 @@ export interface WidgetKey {
     maxConcurrentSessions: number
     maxSessionDuration: number
     isActive: boolean
+    appearance?: string // JSON string of WidgetAppearanceSettings
+    language?: string
+    logo?: string
     createdAt: string
     assistant?: {
         id: number
@@ -29,6 +32,9 @@ export interface CreateWidgetDto {
     allowedDomains: string // JSON string array
     maxConcurrentSessions?: number
     maxSessionDuration?: number
+    appearance?: string
+    language?: string
+    logo?: string
 }
 
 export interface UpdateWidgetDto {
@@ -39,6 +45,9 @@ export interface UpdateWidgetDto {
     maxConcurrentSessions?: number
     maxSessionDuration?: number
     isActive?: boolean
+    appearance?: string
+    language?: string
+    logo?: string
 }
 
 export interface WidgetAppearanceSettings {
@@ -49,6 +58,7 @@ export interface WidgetAppearanceSettings {
     accentColor: string
     language: 'en' | 'ru' | 'es' | 'de' | 'zh'
     showBranding: boolean
+    logo?: string
 }
 
 export const DEFAULT_APPEARANCE_SETTINGS: WidgetAppearanceSettings = {
