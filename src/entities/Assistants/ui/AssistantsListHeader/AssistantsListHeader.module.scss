@@ -1,19 +1,147 @@
 .AssistantsListHeader {
-    // display: flex;
+    width: 100%;
+    padding: 16px 0;
 }
 
-.icon {
-    color: var(--icon-redesigned);
-}
-
-.mobileHeader {
-    flex-wrap: wrap;
-}
-
-.clientSelect {
-    width: 200px;
+.searchRow {
+    width: 100%;
+    align-items: center;
 }
 
 .searchInput {
-    width: 200px;
+    max-width: 400px;
+    width: 100%;
+    background: var(--light-bg-redesigned) !important;
+    border: 1px solid rgba(94, 211, 243, 0.1) !important;
+    border-radius: 14px !important;
+    height: 42px !important;
+    padding: 0 16px !important;
+    transition: all 0.3s ease !important;
+
+    &:hover {
+        background: var(--card-bg) !important;
+        border-color: rgba(94, 211, 243, 0.3) !important;
+    }
+
+    &.focused {
+        background: var(--card-bg) !important;
+        border-color: var(--accent-redesigned) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
+        .searchIcon {
+            color: var(--accent-redesigned);
+            transform: scale(1.1);
+        }
+    }
+
+    @media (max-width: 600px) {
+        max-width: 100%;
+    }
+}
+
+.searchIcon {
+    color: var(--hint-redesigned);
+    transition: all 0.3s ease;
+}
+
+.clientSelectWrapper {
+    height: 42px;
+    background: var(--light-bg-redesigned);
+    border: 1px solid rgba(94, 211, 243, 0.1);
+    border-radius: 14px;
+    padding-left: 12px;
+    transition: all 0.3s ease;
+    min-width: 280px;
+
+    &:hover {
+        background: var(--card-bg);
+        border-color: rgba(94, 211, 243, 0.3);
+    }
+
+    @media (max-width: 600px) {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+.iconCircle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(94, 211, 243, 0.1);
+}
+
+.userIcon {
+    color: var(--accent-redesigned);
+}
+
+.clientSelect {
+    width: 100%;
+
+    :global(.MuiInputBase-root) {
+        height: 40px !important;
+        background: transparent !important;
+    }
+
+    :global(.MuiOutlinedInput-notchedOutline) {
+        border: none !important;
+        outline: none !important;
+    }
+
+    :global(.MuiAutocomplete-root .MuiOutlinedInput-root) {
+        padding: 0 !important;
+
+        fieldset {
+            border: none !important;
+        }
+
+        &:hover fieldset {
+            border: none !important;
+        }
+
+        &.Mui-focused fieldset {
+            border: none !important;
+        }
+    }
+
+    :global(.MuiInputLabel-root) {
+        display: none !important;
+    }
+}
+
+.plusIcon {
+    color: var(--accent-redesigned);
+    transition: transform 0.3s ease;
+}
+
+.createBtn {
+    border-radius: 12px !important;
+    height: 42px !important;
+    border: 1px solid rgba(94, 211, 243, 0.2) !important;
+    background: rgba(94, 211, 243, 0.05) !important;
+    color: var(--text-redesigned) !important;
+    font-weight: 600 !important;
+    padding: 0 20px !important;
+    transition: all 0.3s ease !important;
+
+    &:hover {
+        background: rgba(94, 211, 243, 0.1) !important;
+        border-color: var(--accent-redesigned) !important;
+        transform: translateY(-1px);
+
+        .plusIcon {
+            transform: rotate(90deg);
+        }
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    @media (max-width: 600px) {
+        width: 100%;
+    }
 }

@@ -1,4 +1,6 @@
 {
+  "Серверы АТС": "PBX Servers",
+  "Управление подключениями к телефонным серверам и их статусами": "Manage phone server connections and their statuses",
   "Серверы IP ATC": "IP ATC servers",
   "Клиент": "Customer",
   "Удалить": "Delete",

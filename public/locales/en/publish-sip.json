@@ -43,6 +43,7 @@
     "Скопировать": "Copy",
     "Имя ассистента": "Assistant Name",
     "SIP URI": "SIP URI",
+    "Настройка входящей связи через SIP протокол": "Configure incoming calls via SIP protocol",
     "IP Адрес": "IP Address",
     "Запись разговоров": "Call Recording",
     "TLS/SRTP Шифрование": "TLS/SRTP Encryption",

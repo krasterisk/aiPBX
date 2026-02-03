@@ -23,14 +23,7 @@ export const Combobox = memo((props: ComboBoxProps) => {
   const acStyles = {
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
-        border: '1px solid var(--icon-redesigned)', // Цвет по умолчанию
-        borderRadius: '8px'
-      },
-      '&:hover fieldset': {
-        borderColor: 'var(--accent-redesigned)' // Цвет рамки при наведении
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: 'var(--accent-redesigned)' // Цвет рамки при фокусировке
+        border: 'none',
       }
     },
     '& .MuiInputBase-input': {
@@ -69,14 +62,14 @@ export const Combobox = memo((props: ComboBoxProps) => {
   }
 
   return (
-        <Autocomplete
-            fullWidth
-            className={classNames(cls.Combobox, {}, [className])}
-            renderInput={renderInputProp}
-            sx={acStyles}
-            size={'medium'}
-            options={options}
-            {...otherProps}
-        />
+    <Autocomplete
+      fullWidth
+      className={classNames(cls.Combobox, {}, [className])}
+      renderInput={renderInputProp}
+      sx={acStyles}
+      size={'medium'}
+      options={options}
+      {...otherProps}
+    />
   )
 })

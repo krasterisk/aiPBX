@@ -10,7 +10,8 @@ import AddBox from '@mui/icons-material/AddBox'
 import { Input } from '@/shared/ui/redesigned/Input'
 import { Icon } from '@/shared/ui/redesigned/Icon'
 import { Text } from '@/shared/ui/redesigned/Text'
-import SearchIcon from '@/shared/assets/icons/search.svg'
+import { Plus, Search } from 'lucide-react'
+import { Button } from '@/shared/ui/redesigned/Button'
 import { usePublishSipUrisFilters } from '../../model/hooks/usePublishSipUrisFilters'
 
 interface PublishSipUrisListHeaderProps {
@@ -28,33 +29,32 @@ export const PublishSipUrisListHeader = memo((props: PublishSipUrisListHeaderPro
     } = usePublishSipUrisFilters()
 
     return (
-        <VStack max gap="16">
-            <HStack
-                className={classNames(cls.PublishSipUrisListHeader, { [cls.mobileHeader]: isMobile }, [className])}
-                justify={'between'}
-                max
-            >
-                <HStack gap={'8'} justify={'start'} max={isMobile}>
-                    <Input
-                        className={cls.searchInput}
-                        placeholder={t('Поиск') ?? ''}
-                        size={'s'}
-                        onChange={onSearchChange}
-                        addonLeft={<Icon Svg={SearchIcon} />}
-                        value={search}
-                    />
-                </HStack>
-                <HStack max={isMobile} justify={'end'}>
-                    <AppLink
-                        className={cls.CreateButton}
-                        to={getRoutePublishSipUrisCreate()}
+        <VStack gap="16" max className={classNames(cls.PublishSipUrisListHeader, {}, [className])}>
+            <HStack max justify="between" align="start" gap="16" wrap="wrap">
+                <VStack gap="4">
+                    <Text title={t('SIP URI')} size="l" bold />
+                    <Text text={t('Настройка входящей связи через SIP протокол')} size="s" variant="accent" />
+                </VStack>
+
+                <AppLink to={getRoutePublishSipUrisCreate()}>
+                    <Button
+                        variant="outline"
+                        className={cls.createBtn}
+                        addonLeft={<Plus size={20} className={cls.plusIcon} />}
                     >
-                        <IconButton>
-                            <AddBox className={cls.icon} fontSize={'large'} />
-                            <Text text={t('Создать SIP URI')} />
-                        </IconButton>
-                    </AppLink>
-                </HStack>
+                        {t('Создать SIP URI')}
+                    </Button>
+                </AppLink>
+            </HStack>
+
+            <HStack max gap="12" wrap="wrap" className={cls.searchRow}>
+                <Input
+                    className={cls.searchInput}
+                    placeholder={t('Поиск') ?? ''}
+                    onChange={onSearchChange}
+                    addonLeft={<Search size={18} className={cls.searchIcon} />}
+                    value={search}
+                />
             </HStack>
         </VStack>
     )

@@ -1,16 +1,15 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './PbxServersListHeader.module.scss'
-import React, { memo } from 'react'
+import { memo } from 'react'
 import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { getRoutePbxServerCreate } from '@/shared/const/router'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { useMediaQuery } from '@mui/material'
-import AddBox from '@mui/icons-material/AddBox'
 import { useTranslation } from 'react-i18next'
 import { Input } from '@/shared/ui/redesigned/Input'
-import { Icon } from '@/shared/ui/redesigned/Icon'
 import { Button } from '@/shared/ui/redesigned/Button'
-import SearchIcon from '@/shared/assets/icons/search.svg'
+import { Text } from '@/shared/ui/redesigned/Text'
+import { Plus, Search, Users } from 'lucide-react'
 import { usePbxServersFilters } from '../../lib/hooks/usePbxServersFilters'
 import { ClientSelect, isUserAdmin } from '@/entities/User'
 import { useSelector } from 'react-redux'
@@ -32,49 +31,50 @@ export const PbxServersListHeader = memo((props: PbxServersListHeaderProps) => {
   } = usePbxServersFilters()
 
   const { t } = useTranslation('pbx')
-  const isMobile = useMediaQuery('(max-width:800px)')
   const isAdmin = useSelector(isUserAdmin)
 
   return (
-    <VStack max gap={'16'} className={classNames(cls.PbxServersListHeader, { [cls.mobileHeader]: isMobile }, [className])}>
-      <HStack
-        justify={'between'}
-        max
-        gap={'16'}
-        wrap={isMobile ? 'wrap' : 'nowrap'}
-      >
-        <HStack gap={'8'} justify={'start'} max={isMobile}>
-          <Input
-            data-testid={'PbxServerSearch'}
-            className={cls.searchInput}
-            placeholder={t('Поиск') ?? ''}
-            size={'s'}
-            onChange={onChangeSearch}
-            addonLeft={<Icon Svg={SearchIcon} />}
-            value={search}
-          />
-        </HStack>
-        <HStack max={isMobile} justify={'end'}>
-          <AppLink
-            to={getRoutePbxServerCreate()}
+    <VStack gap="16" max className={classNames(cls.PbxServersListHeader, {}, [className])}>
+      <HStack max justify="between" align="start" gap="16" wrap="wrap">
+        <VStack gap="4">
+          <Text title={t('Серверы АТС')} size="l" bold />
+          <Text text={t('Управление подключениями к телефонным серверам и их статусами')} size="s" variant="accent" />
+        </VStack>
+
+        <AppLink to={getRoutePbxServerCreate()}>
+          <Button
+            variant="outline"
+            className={cls.createBtn}
+            addonLeft={<Plus size={20} className={cls.plusIcon} />}
           >
-            <Button
-              variant={'clear'}
-              addonLeft={<Icon Svg={AddBox} width={24} height={24} />}
-            >
-              {t('Новый сервер')}
-            </Button>
-          </AppLink>
-        </HStack>
+            {t('Новый сервер')}
+          </Button>
+        </AppLink>
       </HStack>
-      {isAdmin &&
-        <ClientSelect
-          label={t('Клиент') || ''}
-          clientId={clientId}
-          onChangeClient={onChangeUserId}
-          fullWidth
+
+      <HStack max gap="12" wrap="wrap" className={cls.searchRow}>
+        <Input
+          data-testid={'PbxServerSearch'}
+          className={cls.searchInput}
+          placeholder={t('Поиск') ?? ''}
+          onChange={onChangeSearch}
+          addonLeft={<Search size={18} className={cls.searchIcon} />}
+          value={search}
         />
-      }
+
+        {isAdmin && (
+          <HStack gap="8" className={cls.clientSelectWrapper}>
+            <div className={cls.iconCircle}>
+              <Users size={18} className={cls.userIcon} />
+            </div>
+            <ClientSelect
+              clientId={clientId}
+              onChangeClient={onChangeUserId}
+              className={cls.clientSelect}
+            />
+          </HStack>
+        )}
+      </HStack>
     </VStack>
   )
 })

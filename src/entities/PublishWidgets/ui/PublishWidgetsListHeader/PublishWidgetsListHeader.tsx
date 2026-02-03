@@ -10,7 +10,7 @@ import AddBox from '@mui/icons-material/AddBox'
 import { Input } from '@/shared/ui/redesigned/Input'
 import { Icon } from '@/shared/ui/redesigned/Icon'
 import { Text } from '@/shared/ui/redesigned/Text'
-import SearchIcon from '@/shared/assets/icons/search.svg'
+import { Plus, Search } from 'lucide-react'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { usePublishWidgetsFilters } from '../../model/hooks/usePublishWidgetsFilters'
 
@@ -29,35 +29,32 @@ export const PublishWidgetsListHeader = memo((props: PublishWidgetsListHeaderPro
     const isMobile = useMediaQuery('(max-width:800px)')
 
     return (
-        <VStack max className={classNames(cls.PublishWidgetsListHeader, { [cls.mobileHeader]: isMobile }, [className])}>
-            <HStack
-                justify={'between'}
-                max
-                gap={'16'}
-                wrap={isMobile ? 'wrap' : 'nowrap'}
-            >
-                <HStack gap={'8'} justify={'start'} max={isMobile}>
-                    <Input
-                        className={cls.searchInput}
-                        placeholder={t('Поиск') ?? ''}
-                        size={'s'}
-                        onChange={onSearchChange}
-                        addonLeft={<Icon Svg={SearchIcon} width={20} height={20} />}
-                        value={search}
-                    />
-                </HStack>
-                <HStack max={isMobile} justify={isMobile ? 'center' : 'end'}>
-                    <AppLink
-                        to={getRoutePublishWidgetsCreate()}
+        <VStack gap="16" max className={classNames(cls.PublishWidgetsListHeader, {}, [className])}>
+            <HStack max justify="between" align="start" gap="16" wrap="wrap">
+                <VStack gap="4">
+                    <Text title={t('Виджеты')} size="l" bold />
+                    <Text text={t('Управление и настройка виджетов для сайта')} size="s" variant="accent" />
+                </VStack>
+
+                <AppLink to={getRoutePublishWidgetsCreate()}>
+                    <Button
+                        variant="outline"
+                        className={cls.createBtn}
+                        addonLeft={<Plus size={20} className={cls.plusIcon} />}
                     >
-                        <Button
-                            variant={'clear'}
-                            addonLeft={<Icon Svg={AddBox} width={20} height={20} />}
-                        >
-                            {t('Создать виджет')}
-                        </Button>
-                    </AppLink>
-                </HStack>
+                        {t('Создать виджет')}
+                    </Button>
+                </AppLink>
+            </HStack>
+
+            <HStack max gap="12" wrap="wrap" className={cls.searchRow}>
+                <Input
+                    className={cls.searchInput}
+                    placeholder={t('Поиск') ?? ''}
+                    onChange={onSearchChange}
+                    addonLeft={<Search size={18} className={cls.searchIcon} />}
+                    value={search}
+                />
             </HStack>
         </VStack>
     )

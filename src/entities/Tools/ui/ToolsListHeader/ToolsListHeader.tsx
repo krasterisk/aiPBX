@@ -10,11 +10,10 @@ import { Input } from '@/shared/ui/redesigned/Input'
 import { Icon } from '@/shared/ui/redesigned/Icon'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import SearchIcon from '@/shared/assets/icons/search.svg'
-import { useToolsFilters } from '../../lib/hooks/useToolsFilters'
-import { ClientSelect, isUserAdmin } from '@/entities/User'
+import { Plus, Search, Users } from 'lucide-react'
 import { useSelector } from 'react-redux'
-import { Plus } from 'lucide-react'
+import { ClientSelect, isUserAdmin } from '@/entities/User'
+import { useToolsFilters } from '../../lib/hooks/useToolsFilters'
 
 interface ToolsListHeaderProps {
     className?: string
@@ -35,45 +34,46 @@ export const ToolsListHeader = memo((props: ToolsListHeaderProps) => {
 
     return (
         <VStack gap="16" max className={classNames(cls.ToolsListHeader, {}, [className])}>
-            <HStack max justify="between" align="center" gap="16" wrap="wrap">
+            <HStack max justify="between" align="start" gap="16" wrap="wrap">
                 <VStack gap="4">
                     <Text title={t('Функции')} size="l" bold />
                     <Text text={t('Управление функциями и MCP серверами')} size="s" variant="accent" />
                 </VStack>
 
-                <HStack gap="12" wrap="wrap">
-                    <Input
-                        data-testid="ToolSearch"
-                        className={cls.searchInput}
-                        placeholder={t('Поиск') ?? ''}
-                        size="s"
-                        onChange={onChangeSearch}
-                        addonLeft={<Icon Svg={SearchIcon} />}
-                        value={search}
-                    />
-
-                    <AppLink to={getRouteToolsCreate()}>
-                        <Button
-                            variant="outline"
-                            className={cls.createBtn}
-                            addonLeft={<Plus size={18} />}
-                        >
-                            {t('Создать функцию')}
-                        </Button>
-                    </AppLink>
-                </HStack>
+                <AppLink to={getRouteToolsCreate()}>
+                    <Button
+                        variant="outline"
+                        className={cls.createBtn}
+                        addonLeft={<Plus size={20} className={cls.plusIcon} />}
+                    >
+                        {t('Создать функцию')}
+                    </Button>
+                </AppLink>
             </HStack>
 
-            {isAdmin && (
-                <div className={cls.filtersSection}>
-                    <ClientSelect
-                        label={t('Клиент') || ''}
-                        clientId={clientId}
-                        onChangeClient={onChangeUserId}
-                        className={cls.clientSelect}
-                    />
-                </div>
-            )}
+            <HStack max gap="12" wrap="wrap" className={cls.searchRow}>
+                <Input
+                    data-testid="ToolSearch"
+                    className={cls.searchInput}
+                    placeholder={t('Поиск') ?? ''}
+                    onChange={onChangeSearch}
+                    addonLeft={<Search size={18} className={cls.searchIcon} />}
+                    value={search}
+                />
+
+                {isAdmin && (
+                    <HStack gap="8" className={cls.clientSelectWrapper}>
+                        <div className={cls.iconCircle}>
+                            <Users size={18} className={cls.userIcon} />
+                        </div>
+                        <ClientSelect
+                            clientId={clientId}
+                            onChangeClient={onChangeUserId}
+                            className={cls.clientSelect}
+                        />
+                    </HStack>
+                )}
+            </HStack>
         </VStack>
     )
 })
