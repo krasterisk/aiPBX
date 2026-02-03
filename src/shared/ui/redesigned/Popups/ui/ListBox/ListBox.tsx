@@ -1,4 +1,5 @@
 import { Fragment, ReactNode, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Listbox as HListBox } from '@headlessui/react'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { Button } from '../../../Button/Button'
@@ -32,6 +33,7 @@ interface ListBoxProps<T extends string> {
 }
 
 export function ListBox<T extends string>(props: ListBoxProps<T>) {
+  const { t } = useTranslation()
   const {
     className,
     items,
@@ -87,7 +89,7 @@ export function ListBox<T extends string>(props: ListBoxProps<T>) {
     }
     const itemsContent = values.map(val => {
       const item = items?.find(item => item.value === val)
-      return item ? item.content : 'Клиент'
+      return item ? item.content : t('Клиент')
     }).filter(Boolean)
 
     return <>{itemsContent.join(', ')}</>

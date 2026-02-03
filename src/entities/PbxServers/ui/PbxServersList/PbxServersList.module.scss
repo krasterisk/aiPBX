@@ -1,8 +1,6 @@
 .PbxServersList {
     position: relative;
-
-
-
+    width: 100%;
 
     .uncheck {
         position: absolute;
@@ -10,12 +8,13 @@
         color: var(--icon-redesigned);
         left: 0;
         top: 0;
+        opacity: 0.7;
     }
 
     .check {
         position: absolute;
         display: flex;
-        color: var(--icon-redesigned);
+        color: var(--accent-redesigned);
         left: 0;
         top: 0;
     }
@@ -24,9 +23,67 @@
         display: none;
     }
 
-    .checkButtons {
+    .checkButton {
         display: flex;
+        animation: slideIn 0.3s ease-out;
     }
 
+    .controlsCard {
+        position: relative;
+        background: var(--card-bg-redesigned);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        margin-bottom: 8px;
+        transition: all 0.3s ease;
 
+        &:hover {
+            border-color: rgba(94, 211, 243, 0.2);
+        }
+    }
+
+    .controls {
+        padding: 12px 20px;
+        width: 100%;
+    }
+
+    .listWrapper {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+        width: 100%;
+        align-items: stretch;
+    }
+}
+
+.loader {
+    padding: 60px;
+}
+
+.emptyState {
+    padding: 80px;
+    background: var(--card-bg-redesigned);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@media (max-width: 800px) {
+    .PbxServersList {
+        .listWrapper {
+            grid-template-columns: 1fr;
+        }
+    }
 }

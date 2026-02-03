@@ -7,6 +7,9 @@ const initialState: PublishSipUrisFormSchema = {
     selectedAssistant: null,
     selectedPbx: null,
     ipAddress: '',
+    records: true,
+    tls: true,
+    active: true,
     isLoading: false
 }
 
@@ -23,15 +26,30 @@ export const publishSipUrisFormSlice = createSlice({
         setIpAddress: (state, action: PayloadAction<string>) => {
             state.ipAddress = action.payload
         },
+        setRecords: (state, action: PayloadAction<boolean>) => {
+            state.records = action.payload
+        },
+        setTls: (state, action: PayloadAction<boolean>) => {
+            state.tls = action.payload
+        },
+        setActive: (state, action: PayloadAction<boolean>) => {
+            state.active = action.payload
+        },
         resetForm: (state) => {
             state.selectedAssistant = null
             state.selectedPbx = null
             state.ipAddress = ''
+            state.records = true
+            state.tls = true
+            state.active = true
         },
-        initForm: (state, action: PayloadAction<{ assistant: AssistantOptions, pbx: PbxServerOptions, ip: string }>) => {
+        initForm: (state, action: PayloadAction<{ assistant: AssistantOptions, pbx: PbxServerOptions, ip: string, records?: boolean, tls?: boolean, active?: boolean }>) => {
             state.selectedAssistant = action.payload.assistant
             state.selectedPbx = action.payload.pbx
             state.ipAddress = action.payload.ip
+            state.records = action.payload.records ?? true
+            state.tls = action.payload.tls ?? true
+            state.active = action.payload.active ?? true
         }
     }
 })

@@ -1,8 +1,57 @@
-
-.icon {
-    color: var(--icon-redesigned);
+.modal {
+    :global(.MuiPaper-root) {
+        background: var(--card-bg-redesigned) !important;
+        backdrop-filter: blur(25px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        border-radius: 24px !important;
+        box-shadow: 0 32px 64px rgba(0, 0, 0, 0.4) !important;
+        min-width: 500px;
+    }
 }
 
-.description {
-    overflow-y: auto;
+.content {
+    padding: 24px;
+}
+
+.iconWrapper {
+    width: 44px;
+    height: 44px;
+    background: rgba(94, 211, 243, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-redesigned);
+}
+
+.label {
+    opacity: 0.6;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.checks {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 20px;
+}
+
+@media (max-width: 600px) {
+    .modal :global(.MuiPaper-root) {
+        min-width: 90vw;
+    }
+
+    .checks {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
 }

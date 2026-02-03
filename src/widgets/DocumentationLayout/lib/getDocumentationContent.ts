@@ -666,6 +666,105 @@ export const getDocumentationContent = (sectionId: string, language: string): Do
                 ]
             }
 
+        case 'publish-overview':
+            return {
+                title: 'Publish & Integration Overview',
+                sections: [
+                    {
+                        content: 'publish-overview-intro'
+                    },
+                    {
+                        heading: 'publish-overview-methods-heading',
+                        list: [
+                            'publish-overview-method-sips',
+                            'publish-overview-method-widgets',
+                            'publish-overview-method-pbxs'
+                        ]
+                    }
+                ]
+            }
+
+        case 'publish-sips':
+            return {
+                title: 'SIPs (VoIP Integration)',
+                sections: [
+                    {
+                        content: 'publish-sips-intro'
+                    },
+                    {
+                        heading: 'publish-sips-setup-heading',
+                        steps: [
+                            'publish-sips-step-1',
+                            'publish-sips-step-2',
+                            'publish-sips-step-3',
+                            'publish-sips-step-4'
+                        ]
+                    },
+                    {
+                        note: 'publish-sips-note'
+                    }
+                ]
+            }
+
+        case 'publish-widgets':
+            return {
+                title: 'Widgets (WebRTC Integration)',
+                sections: [
+                    {
+                        content: 'publish-widgets-intro'
+                    },
+                    {
+                        heading: 'publish-widgets-setup-heading',
+                        steps: [
+                            'publish-widgets-step-1',
+                            'publish-widgets-step-2',
+                            'publish-widgets-step-3',
+                            'publish-widgets-step-4'
+                        ]
+                    }
+                ]
+            }
+
+        case 'publish-pbxs':
+            return {
+                title: 'PBXs (Custom Servers)',
+                sections: [
+                    {
+                        content: 'publish-pbxs-intro'
+                    },
+                    {
+                        heading: 'publish-pbxs-fields-heading',
+                        list: [
+                            'publish-pbxs-field-wss',
+                            'publish-pbxs-field-ari',
+                            'publish-pbxs-field-context'
+                        ]
+                    }
+                ]
+            }
+
+        case 'asterisk-config':
+            return {
+                title: 'Asterisk Configuration',
+                sections: [
+                    {
+                        content: 'asterisk-config-intro'
+                    },
+                    {
+                        heading: 'asterisk-config-ari-heading',
+                        content: 'asterisk-config-ari-content'
+                    },
+                    {
+                        heading: 'asterisk-config-pjsip-heading',
+                        content: 'asterisk-config-pjsip-content'
+                    },
+                    {
+                        heading: 'asterisk-config-dialplan-heading',
+                        content: 'asterisk-config-dialplan-content'
+                    }
+                ]
+            }
+
         default:
             return {
                 title: 'Getting Started',

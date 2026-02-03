@@ -1,81 +1,175 @@
 .ToolItem {
     position: relative;
-    background: var(--light-bg-redesigned);
-    border: 0.5px solid var(--accent-redesigned);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    width: 100%;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.15);
 
     &:hover {
         cursor: pointer;
+        transform: translateY(-6px);
+        box-shadow:
+            0 20px 40px rgba(0, 0, 0, 0.25),
+            0 0 20px rgba(94, 211, 243, 0.1);
+        border-color: rgba(94, 211, 243, 0.3) !important;
+
+        .avatar {
+            transform: scale(1.05);
+            background: rgba(94, 211, 243, 0.25);
+        }
 
         .uncheck {
-            position: absolute;
-            left: 0;
-            top: 0;
-            display: flex;
-            color: var(--icon-redesigned);
-        }
-    }
-
-    .uncheck {
-        position: absolute;
-        display: none;
-        color: var(--icon-redesigned);
-        left: 0;
-        top: 0;
-    }
-
-    .check {
-        position: absolute;
-        display: flex;
-        color: var(--icon-redesigned);
-        left: 0;
-        top: 0;
-    }
-
-
-
-    &.BIG {
-        width: 100%;
-
-    }
-
-    &.SMALL {
-        width: 260px;
-        height: 100%;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-
-
-        .img {
-            width: 100%;
-            object-fit: cover;
-            min-height: 140px;
-            max-height: 140px;
+            opacity: 1;
         }
 
-        .info {
-            padding: 8px;
+        .arrowIcon {
+            transform: translateX(4px);
+            color: var(--accent-redesigned);
         }
 
-
-    }
-
-    @media (hover: none) {
-        .uncheck {
-            display: flex;
+        .editLabel {
+            opacity: 1;
         }
     }
+}
+
+.content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding: 24px;
+}
+
+.checkContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--icon-redesigned);
+    transition: all 0.2s ease;
+    margin-left: -8px;
+
+    &:hover {
+        color: var(--accent-redesigned);
+        transform: scale(1.1);
+    }
+}
+
+.uncheck {
+    opacity: 0.3;
+    transition: opacity 0.2s ease;
+}
+
+.check {
+    color: var(--accent-redesigned);
 }
 
 .avatar {
-    margin-left: 8px;
+    width: 44px;
+    height: 44px;
+    background: rgba(94, 211, 243, 0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-redesigned);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
 }
 
-.isAdmin {
-    border: 2px solid var(--save-redesigned);
+.title {
+    color: var(--text-redesigned);
+    font-family: 'Outfit', sans-serif;
 }
 
-.isClient {
-    border: 2px solid var(--accent-redesigned);
+.subtitle {
+    opacity: 0.6;
+}
+
+.subIcon {
+    opacity: 0.5;
+    color: var(--accent-redesigned);
+}
+
+.chip {
+    border: 1px solid rgba(94, 211, 243, 0.3);
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background: rgba(94, 211, 243, 0.05);
+    border-radius: 8px;
+    color: var(--accent-redesigned) !important;
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0.05) 100%);
+    margin: 8px 0;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-grow: 1;
+}
+
+.detailIcon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: rgba(94, 211, 243, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-redesigned);
+    flex-shrink: 0;
+}
+
+.detailText {
+    color: var(--text-redesigned);
+    opacity: 0.8;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+}
+
+.footer {
+    margin-top: 8px;
+}
+
+.editLabel {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-weight: 500;
+}
+
+.arrowIcon {
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.3);
+    margin-left: 4px;
+}
+
+@media (max-width: 600px) {
+    .content {
+        padding: 16px;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+    }
 }

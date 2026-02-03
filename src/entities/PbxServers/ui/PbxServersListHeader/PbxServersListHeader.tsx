@@ -4,12 +4,12 @@ import React, { memo } from 'react'
 import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { getRoutePbxServerCreate } from '@/shared/const/router'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
-import { IconButton, useMediaQuery } from '@mui/material'
+import { useMediaQuery } from '@mui/material'
 import AddBox from '@mui/icons-material/AddBox'
 import { useTranslation } from 'react-i18next'
 import { Input } from '@/shared/ui/redesigned/Input'
 import { Icon } from '@/shared/ui/redesigned/Icon'
-import { Text } from '@/shared/ui/redesigned/Text'
+import { Button } from '@/shared/ui/redesigned/Button'
 import SearchIcon from '@/shared/assets/icons/search.svg'
 import { usePbxServersFilters } from '../../lib/hooks/usePbxServersFilters'
 import { ClientSelect, isUserAdmin } from '@/entities/User'
@@ -36,13 +36,14 @@ export const PbxServersListHeader = memo((props: PbxServersListHeaderProps) => {
   const isAdmin = useSelector(isUserAdmin)
 
   return (
-    <VStack max>
+    <VStack max gap={'16'} className={classNames(cls.PbxServersListHeader, { [cls.mobileHeader]: isMobile }, [className])}>
       <HStack
-        className={classNames(cls.PbxServersListHeader, { [cls.mobileHeader]: isMobile }, [className])}
         justify={'between'}
         max
+        gap={'16'}
+        wrap={isMobile ? 'wrap' : 'nowrap'}
       >
-        <HStack gap={'8'} justify={'start'}>
+        <HStack gap={'8'} justify={'start'} max={isMobile}>
           <Input
             data-testid={'PbxServerSearch'}
             className={cls.searchInput}
@@ -52,18 +53,17 @@ export const PbxServersListHeader = memo((props: PbxServersListHeaderProps) => {
             addonLeft={<Icon Svg={SearchIcon} />}
             value={search}
           />
-
         </HStack>
-        <HStack>
+        <HStack max={isMobile} justify={'end'}>
           <AppLink
-            title={String(t('Новый сервер'))}
-            className={cls.CreateButton}
             to={getRoutePbxServerCreate()}
           >
-            <IconButton>
-              <AddBox className={cls.icon} fontSize={'large'} />
-              <Text text={t('Новый сервер')} />
-            </IconButton>
+            <Button
+              variant={'clear'}
+              addonLeft={<Icon Svg={AddBox} width={24} height={24} />}
+            >
+              {t('Новый сервер')}
+            </Button>
           </AppLink>
         </HStack>
       </HStack>
@@ -72,7 +72,7 @@ export const PbxServersListHeader = memo((props: PbxServersListHeaderProps) => {
           label={t('Клиент') || ''}
           clientId={clientId}
           onChangeClient={onChangeUserId}
-          className={cls.clientSelect}
+          fullWidth
         />
       }
     </VStack>

@@ -17,6 +17,10 @@ export interface Tool {
   strict?: boolean
   webhook?: string
   method?: string
+  auth_type?: string
+  auth_token?: string
+  auth_login?: string
+  auth_password?: string
   headers?: Record<string, string>
   user?: User
   userId?: string
@@ -43,6 +47,7 @@ export interface ToolsListProps {
   isToolsError?: boolean
   tools?: AllTools
   onDelete?: (id: string) => void
+  onRefetch?: () => void
 }
 
 export interface ToolType {

@@ -1,6 +1,6 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ToolsList.module.scss'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, memo } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Tool, ToolsListProps } from '../../model/types/tools'
 import { ToolsListHeader } from '../ToolsListHeader/ToolsListHeader'
@@ -14,24 +14,27 @@ import { Check } from '@/shared/ui/mui/Check'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useDeleteTool } from '../../api/toolsApi'
 import { Loader } from '@/shared/ui/Loader'
+import { Icon } from '@/shared/ui/redesigned/Icon'
+import SearchIcon from '@/shared/assets/icons/search.svg'
+import { toast } from 'react-toastify'
+import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 
-export const ToolsList = (props: ToolsListProps) => {
+export const ToolsList = memo((props: ToolsListProps) => {
   const {
     className,
     isToolsError,
     isToolsLoading,
     tools,
-    target
+    onRefetch
   } = props
 
   const { t } = useTranslation('tools')
-
   const [checkedBox, setCheckedBox] = useState<string[]>([])
   const [indeterminateBox, setIndeterminateBox] = useState<boolean>(false)
 
-  const [toolDeleteMutation, { isError, isLoading }] = useDeleteTool()
+  const [deleteTool, { isLoading: isDeleting }] = useDeleteTool()
 
-  const handleCheckChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     setCheckedBox((prev) => {
       const currentIndex = prev.indexOf(value)
@@ -42,53 +45,52 @@ export const ToolsList = (props: ToolsListProps) => {
         newChecked.splice(currentIndex, 1)
       }
       if (tools?.count) {
-        setIndeterminateBox(newChecked.length > 0 && newChecked.length < tools?.count)
+        setIndeterminateBox(newChecked.length > 0 && newChecked.length < tools.count)
       }
       return newChecked
     })
-  }
+  }, [tools?.count])
 
   const handleCheckAll = useCallback(() => {
     if (indeterminateBox && tools?.count && checkedBox.length > 0) {
-      setCheckedBox(tools?.rows.map(tool => String(tool.id)))
+      setCheckedBox(tools.rows.map(tool => String(tool.id)))
       setIndeterminateBox(false)
-    }
-
-    if (!indeterminateBox && tools?.count && checkedBox.length === 0) {
-      setCheckedBox(tools?.rows.map(tool => String(tool.id)))
+    } else if (!indeterminateBox && tools?.count && checkedBox.length === 0) {
+      setCheckedBox(tools.rows.map(tool => String(tool.id)))
       setIndeterminateBox(false)
-    }
-
-    if (!indeterminateBox && checkedBox.length > 0) {
+    } else if (!indeterminateBox && checkedBox.length > 0) {
       setCheckedBox([])
     }
-  }, [tools?.count, tools?.rows, checkedBox.length, indeterminateBox])
+  }, [tools, checkedBox.length, indeterminateBox])
+
+  const handleDeleteAll = useCallback(async () => {
+    if (!window.confirm(t('Вы уверены, что хотите удалить выбранные функции?') || '')) return
+
+    try {
+      await Promise.all(checkedBox.map(id => deleteTool(id).unwrap()))
+      toast.success(t('Выбранные функции успешно удалены'))
+      setCheckedBox([])
+      setIndeterminateBox(false)
+    } catch (e) {
+      toast.error(getErrorMessage(e))
+    }
+  }, [checkedBox, deleteTool, t])
 
   const getSkeletons = () => {
     return new Array(4)
       .fill(0)
-      .map((item, index) => (
+      .map((_, index) => (
         <ContentListItemSkeleton className={cls.card} key={index} view={'BIG'} />
       ))
   }
 
-  const handlerDeleteAll = useCallback(() => {
-    checkedBox.forEach(item => {
-      toolDeleteMutation(item).unwrap()
-    })
-    setCheckedBox([])
-    setIndeterminateBox(false)
-  }, [toolDeleteMutation, checkedBox])
-
-  if (isToolsError && isError) {
-    return (
-      <ErrorGetData />
-    )
+  if (isToolsError) {
+    return <ErrorGetData onRefetch={onRefetch} />
   }
 
-  if (isLoading) {
+  if (isDeleting) {
     return (
-      <VStack gap={'16'} align={'center'} className={cls.loader}>
+      <VStack gap="16" align="center" justify="center" className={cls.loader}>
         <Loader />
       </VStack>
     )
@@ -96,71 +98,74 @@ export const ToolsList = (props: ToolsListProps) => {
 
   const checkedButtons = (
     <HStack
-      gap={'16'}
-      wrap={'wrap'}
+      gap="16"
+      wrap="wrap"
       className={classNames('', {
         [cls.uncheckButtons]: checkedBox.length === 0,
         [cls.checkButton]: checkedBox.length > 0
       }, [])}
     >
-      <Button
-        variant={'clear'}
-        onClick={handlerDeleteAll}
-      >
-        <Text text={t('Удалить выбранные')} variant={'error'} />
+      <Button variant="clear" onClick={handleDeleteAll}>
+        <Text text={t('Удалить выбранные')} variant="error" />
       </Button>
     </HStack>
   )
 
-  const renderContent = (tool: Tool) => {
-    return (
-      <ToolItem
-        key={tool.id}
-        tool={tool}
-        checkedItems={checkedBox}
-        onChangeChecked={handleCheckChange}
-        view={'BIG'}
-        target={target}
-        className={cls.caskItem}
-      />
-    )
-  }
-
   return (
-    <VStack gap={'16'} max>
+    <VStack gap="16" max className={classNames(cls.ToolsList, {}, [className])}>
       <ToolsListHeader />
-      <Card max className={classNames(cls.ToolsList, {}, [className])}>
-        <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
-          <Check
-            className={classNames(cls.ToolsList, {
-              [cls.uncheck]: checkedBox.length === 0,
-              [cls.check]: checkedBox.length > 0
-            }, [])}
-            indeterminate={indeterminateBox}
-            checked={checkedBox.length === tools?.count}
-            onChange={handleCheckAll}
-          />
-          {checkedButtons}
-          {
-            checkedBox.length > 0
-              ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(tools?.count)} />
-              : <Text text={t('Всего') + ': ' + String(tools?.count || 0)} />
-          }
+
+      <Card max className={cls.controlsCard} padding="0">
+        <HStack wrap="nowrap" justify="between" align="center" max className={cls.controls}>
+          <HStack gap="16">
+            <Check
+              className={classNames(cls.checkbox, {
+                [cls.uncheck]: checkedBox.length === 0,
+                [cls.check]: checkedBox.length > 0
+              }, [])}
+              indeterminate={indeterminateBox}
+              checked={tools?.count ? checkedBox.length === tools.count : false}
+              onChange={handleCheckAll}
+            />
+            {checkedBox.length > 0 ? (
+              <HStack gap="16">
+                <Text
+                  text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(tools?.count)}
+                  bold
+                />
+                {checkedButtons}
+              </HStack>
+            ) : (
+              <Text text={t('Всего') + ': ' + String(tools?.count || 0)} variant="accent" />
+            )}
+          </HStack>
         </HStack>
       </Card>
 
-      {tools?.rows.length
-        ? <HStack wrap={'wrap'} gap={'16'} align={'start'} max>
-          {tools.rows.map(renderContent)}
-        </HStack>
-        : <HStack
-          justify={'center'} max
-          className={classNames('', {}, [className, cls.BIG])}
-        >
-          <Text align={'center'} text={t('Данные не найдены')} />
-        </HStack>
-      }
-      {isToolsLoading && getSkeletons()}
+      {tools?.rows.length ? (
+        <div className={cls.listWrapper}>
+          {tools.rows.map((tool) => (
+            <ToolItem
+              key={tool.id}
+              tool={tool}
+              checkedItems={checkedBox}
+              onChangeChecked={handleCheckChange}
+            />
+          ))}
+        </div>
+      ) : (
+        <VStack justify="center" align="center" max className={cls.emptyState} gap="16">
+          <Icon Svg={SearchIcon} width={48} height={48} />
+          <Text align="center" text={t('Данные не найдены')} size="l" bold />
+          <Text align="center" text={t('У вас пока нет активных функций')} />
+        </VStack>
+      )}
+
+      {isToolsLoading && (
+        <div className={cls.listWrapper}>
+          {getSkeletons()}
+        </div>
+      )}
     </VStack>
   )
-}
+})

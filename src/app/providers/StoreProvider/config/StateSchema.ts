@@ -13,6 +13,7 @@ import { PlaygroundAssistantFormSchema } from '@/pages/Playground'
 import { PublishSipUrisFormSchema, PublishSipUrisPageSchema } from '@/features/PublishSipUris'
 import { PublishWidgetsFormSchema } from '@/features/PublishWidgets'
 import { PublishWidgetsPageSchema } from '@/entities/PublishWidgets'
+import { PbxServerFormSchema } from '@/features/PbxServers'
 
 export interface StateSchema {
   user: UserSchema
@@ -34,6 +35,7 @@ export interface StateSchema {
   publishSipUrisPage?: PublishSipUrisPageSchema
   publishWidgetsForm?: PublishWidgetsFormSchema
   publishWidgetsPage?: PublishWidgetsPageSchema
+  pbxServerForm?: PbxServerFormSchema
 }
 
 export type StateSchemaKey = keyof StateSchema

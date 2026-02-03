@@ -9,13 +9,15 @@ import { PublishSipUrisItem } from '../PublishSipUrisItem/PublishSipUrisItem'
 import { Assistant } from '@/entities/Assistants'
 import { toast } from 'react-toastify'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
-import { useDeleteSipUri } from '@/entities/PbxServers'
+import { useDeleteSipUri, usePbxServersCloud } from '@/entities/PbxServers'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Check } from '@/shared/ui/mui/Check'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { PublishSipUrisListHeader } from '../PublishSipUrisListHeader/PublishSipUrisListHeader'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { ContentListItemSkeleton } from '@/entities/Content'
+import SearchIcon from '@/shared/assets/icons/search.svg'
+import { Icon } from '@/shared/ui/redesigned/Icon'
 
 interface PublishSipUrisListProps {
     className?: string
@@ -29,6 +31,7 @@ export const PublishSipUrisList = memo((props: PublishSipUrisListProps) => {
     const { className, assistants, isLoading, isError, onRefetch } = props
     const { t } = useTranslation('publish-sip')
     const [deleteSip, { isLoading: isDeleting }] = useDeleteSipUri()
+    const { data: pbxServers } = usePbxServersCloud(null)
 
     const [checkedBox, setCheckedBox] = useState<string[]>([])
     const [indeterminateBox, setIndeterminateBox] = useState<boolean>(false)
@@ -114,41 +117,57 @@ export const PublishSipUrisList = memo((props: PublishSipUrisListProps) => {
         <VStack gap={'16'} max className={classNames(cls.PublishSipUrisList, {}, [className])}>
             <PublishSipUrisListHeader />
 
-            <Card max className={cls.controlsCard}>
-                <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
-                    <Check
-                        className={classNames(cls.checkbox, {
-                            [cls.uncheck]: checkedBox.length === 0,
-                            [cls.check]: checkedBox.length > 0
-                        }, [])}
-                        indeterminate={indeterminateBox}
-                        checked={assistants.length ? checkedBox.length === assistants.length : false}
-                        onChange={handleCheckAll}
-                    />
-                    {checkedButtons}
-                    {checkedBox.length > 0
-                        ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(assistants.length)} />
-                        : <Text text={t('Всего') + ': ' + String(assistants.length)} />
-                    }
+            <Card max className={cls.controlsCard} padding={'0'}>
+                <HStack wrap={'nowrap'} justify={'between'} align={'center'} max className={cls.controls}>
+                    <HStack gap={'16'}>
+                        <Check
+                            className={classNames(cls.checkbox, {
+                                [cls.uncheck]: checkedBox.length === 0,
+                                [cls.check]: checkedBox.length > 0
+                            }, [])}
+                            indeterminate={indeterminateBox}
+                            checked={assistants.length ? checkedBox.length === assistants.length : false}
+                            onChange={handleCheckAll}
+                        />
+                        {checkedBox.length > 0 ? (
+                            <HStack gap={'16'}>
+                                <Text
+                                    text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(assistants.length)}
+                                    bold
+                                />
+                                {checkedButtons}
+                            </HStack>
+                        ) : (
+                            <Text text={t('Всего') + ': ' + String(assistants.length)} variant={'accent'} />
+                        )}
+                    </HStack>
                 </HStack>
             </Card>
 
-            {assistants.length
-                ? <HStack wrap={'wrap'} gap={'16'} align={'start'} max>
+            {assistants.length ? (
+                <div className={cls.listWrapper}>
                     {assistants.map((assistant) => (
                         <PublishSipUrisItem
                             key={assistant.id}
                             assistant={assistant}
                             checkedItems={checkedBox}
                             onChangeChecked={handleCheckChange}
+                            pbxServers={pbxServers}
                         />
                     ))}
-                </HStack>
-                : <HStack justify={'center'} max className={cls.emptyState}>
-                    <Text align={'center'} text={t('Данные не найдены')} />
-                </HStack>
-            }
-            {isLoading && getSkeletons()}
+                </div>
+            ) : (
+                <VStack justify={'center'} align={'center'} max className={cls.emptyState} gap={'16'}>
+                    <Icon Svg={SearchIcon} width={48} height={48} />
+                    <Text align={'center'} text={t('Данные не найдены')} size={'l'} bold />
+                    <Text align={'center'} text={t('У вас пока нет активных SIP URIs')} />
+                </VStack>
+            )}
+            {isLoading && (
+                <div className={cls.listWrapper}>
+                    {getSkeletons()}
+                </div>
+            )}
         </VStack>
     )
 })

@@ -23,7 +23,6 @@ const PublishSipUriCreatePage = memo((props: PublishSipUriCreatePageProps) => {
         <DynamicModuleLoader reducers={reducers} removeAfterUnmount>
             <Page className={classNames('', {}, [className])}>
                 <VStack gap="24" max>
-                    <Text title={t('Создание SIP URI')} size="l" bold />
                     <PublishSipUrisForm />
                 </VStack>
             </Page>

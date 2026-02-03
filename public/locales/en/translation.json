@@ -64,5 +64,7 @@
   "Playground": "Playground",
   "Публикация": "Publish",
   "Виджеты": "Widgets",
-  "SIP URIs": "SIP URIs"
+  "SIPs": "SIPs",
+  "PBXs": "PBXs",
+  "Клиент": "Customer"
 }

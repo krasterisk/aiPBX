@@ -129,23 +129,30 @@ export const AssistantsList = (props: AssistantsListProps) => {
   return (
     <VStack gap={'16'} max>
       <AssistantsListHeader />
-      <Card max className={classNames(cls.AssistantsToolBar, {}, [className])}>
-        <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
-          <Check
-            className={classNames(cls.AssistantsList, {
-              [cls.uncheck]: checkedBox.length === 0,
-              [cls.check]: checkedBox.length > 0
-            }, [])}
-            indeterminate={indeterminateBox}
-            checked={checkedBox.length === assistants?.count}
-            onChange={handleCheckAll}
-          />
-          {checkedButtons}
-          {
-            checkedBox.length > 0
-              ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(assistants?.count)} />
-              : <Text text={t('Всего') + ': ' + String(assistants?.count || 0)} />
-          }
+      <Card max className={cls.controlsCard} padding={'0'}>
+        <HStack wrap={'nowrap'} justify={'between'} align={'center'} max className={cls.controls}>
+          <HStack gap={'16'}>
+            <Check
+              className={classNames(cls.checkbox, {
+                [cls.uncheck]: checkedBox.length === 0,
+                [cls.check]: checkedBox.length > 0
+              }, [])}
+              indeterminate={indeterminateBox}
+              checked={assistants?.count ? checkedBox.length === assistants?.count : false}
+              onChange={handleCheckAll}
+            />
+            {checkedBox.length > 0 ? (
+              <HStack gap={'16'}>
+                <Text
+                  text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(assistants?.count)}
+                  bold
+                />
+                {checkedButtons}
+              </HStack>
+            ) : (
+              <Text text={t('Всего') + ': ' + String(assistants?.count || 0)} variant={'accent'} />
+            )}
+          </HStack>
         </HStack>
       </Card>
 

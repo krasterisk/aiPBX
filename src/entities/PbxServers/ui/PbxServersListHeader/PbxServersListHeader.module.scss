@@ -1,20 +1,26 @@
 .PbxServersListHeader {
+    padding: 12px 0;
 
+    .searchInput {
+        width: 300px;
+        transition: all 0.3s ease;
+
+        &:focus-within {
+            width: 350px;
+
+            :global(.MuiInputBase-root) {
+                border-color: var(--accent-redesigned);
+                box-shadow: 0 0 10px rgba(94, 211, 243, 0.2);
+            }
+        }
+    }
 }
 
-.icon {
-    color: var(--icon-redesigned);
-}
 
 .mobileHeader {
-    flex-wrap: wrap;
-}
+    gap: 16px;
 
-.clientSelect {
-    //height: 50px;
-    width: 200px;
-}
-
-.searchInput {
-    width: 200px;
+    .searchInput {
+        width: 100%;
+    }
 }

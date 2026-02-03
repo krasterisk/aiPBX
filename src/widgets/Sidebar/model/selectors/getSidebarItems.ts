@@ -11,14 +11,16 @@ import {
   getRouteContexts
 } from '@/shared/const/router'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 
 export const useSidebarItems = () => {
+  const { t } = useTranslation()
   const userData = useSelector(getUserAuthData)
   const sidebarItemsList: SidebarItemType[] = [
     {
       path: getRouteMain(),
       Icon: MainIcon,
-      text: 'Главная'
+      text: t('Главная')
     }
   ]
   if (userData) {
@@ -27,19 +29,19 @@ export const useSidebarItems = () => {
       {
         path: getRouteEndpoints(),
         Icon: EndpointsIcon,
-        text: 'Абоненты',
+        text: t('Абоненты'),
         authOnly: false
       },
       {
         path: getRouteContexts(),
         Icon: ContextsIcon,
-        text: 'Контексты',
+        text: t('Контексты'),
         authOnly: false
       },
       {
         path: getRouteProfile(userId),
         Icon: ProfileIcon,
-        text: 'Профиль',
+        text: t('Профиль'),
         authOnly: true
       }
     )

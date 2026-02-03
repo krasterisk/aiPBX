@@ -1,32 +1,62 @@
-.AssistantsToolBar {
-    position: relative;
+.AssistantsList {
+    width: 100%;
+}
 
+.controlsCard {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+}
 
+.controls {
+    padding: 12px 24px;
+}
 
+.checkbox {
+    padding: 0;
+    color: var(--icon-redesigned);
 
-    .uncheck {
-        position: absolute;
-        display: flex;
-        color: var(--icon-redesigned);
-        left: 0;
-        top: 0;
+    &.check {
+        color: var(--accent-redesigned);
+    }
+}
+
+.uncheck {
+    opacity: 0.7;
+}
+
+.checkButton {
+    animation: slideIn 0.3s ease-out;
+}
+
+.uncheckButtons {
+    display: none;
+}
+
+.loader {
+    padding: 40px 0;
+}
+
+.caskItem {
+    flex: 1 1 350px;
+    max-width: 100%;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
     }
 
-    .check {
-        position: absolute;
-        display: flex;
-        color: var(--icon-redesigned);
-        left: 0;
-        top: 0;
+    to {
+        opacity: 1;
+        transform: translateX(0);
     }
+}
 
-    .uncheckButtons {
-        display: none;
+@media (max-width: 600px) {
+    .caskItem {
+        flex: 1 1 100%;
     }
-
-    .checkButtons {
-        display: flex;
-    }
-
-
 }

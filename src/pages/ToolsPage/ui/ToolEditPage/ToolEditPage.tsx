@@ -10,15 +10,15 @@ const ToolEditPage = memo(() => {
 
   if (!id) {
     return (
-        <ErrorPage />
+      <ErrorPage />
     )
   }
   return (
-      <Page data-testid={'ToolPage'}>
-        <VStack gap='8'>
-          <ToolCard isEdit toolId={id}/>
-        </VStack>
-      </Page>
+    <Page data-testid={'ToolPage'}>
+      <VStack gap='8' max>
+        <ToolCard isEdit toolId={id} />
+      </VStack>
+    </Page>
   )
 })
 

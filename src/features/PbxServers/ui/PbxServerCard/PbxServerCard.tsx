@@ -1,125 +1,225 @@
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { getRoutePbxServers } from '@/shared/const/router'
-import { Card } from '@/shared/ui/redesigned/Card'
-import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
-import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
+import { toast } from 'react-toastify'
+import { useMediaQuery } from '@mui/material'
 import { classNames } from '@/shared/lib/classNames/classNames'
-import cls from './PbxServerCard.module.scss'
-
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
+import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
+import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
+import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
+import { getRoutePbxServers } from '@/shared/const/router'
+import { getUserAuthData, isUserAdmin, ClientOptions } from '@/entities/User'
 import {
   useDeletePbxServers,
   useSetPbxServers,
   useUpdatePbxServers,
-  PbxServer,
-  useCheckPbxServer
+  usePbxServer,
+  usePbxServerStatus,
+  PbxServer
 } from '@/entities/PbxServers'
-
-import { PbxServerEditCard } from '../PbxServerEditCard/PbxServerEditCard'
-import { PbxServerCreateCard } from '../PbxServerCreateCard/PbxServerCreateCard'
+import { pbxServerFormActions, pbxServerFormReducer } from '../../model/slices/pbxServerFormSlice'
+import { getPbxServerForm } from '../../model/selectors/pbxServerFormSelectors'
+import { PbxServerFormHeader } from '../PbxServerFormHeader/PbxServerFormHeader'
+import { GeneralSection } from '../PbxServerForm/components/GeneralSection/GeneralSection'
+import { ConnectivitySection } from '../PbxServerForm/components/ConnectivitySection/ConnectivitySection'
+import { ErrorGetData } from '@/entities/ErrorGetData'
+import { Text } from '@/shared/ui/redesigned/Text'
+import cls from './PbxServerCard.module.scss'
 
 export interface PbxServerCardProps {
   className?: string
-  error?: string
-  isLoading?: boolean
-  readonly?: boolean
   isEdit?: boolean
   pbxServerId?: string
 }
 
+const reducers: ReducersList = {
+  pbxServerForm: pbxServerFormReducer
+}
+
+
 export const PbxServerCard = memo((props: PbxServerCardProps) => {
-  const {
-    className,
-    isLoading,
-    isEdit,
-    pbxServerId
-  } = props
-
-  const [pbxServerCreate] = useSetPbxServers()
-  const [pbxServerUpdate] = useUpdatePbxServers()
-  const [checkPbxServer] = useCheckPbxServer()
-  const [pbxServerDelete] = useDeletePbxServers()
-
+  const { className, isEdit, pbxServerId } = props
+  const { t } = useTranslation('pbx')
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const isMobile = useMediaQuery('(max-width:800px)')
 
-  const handleCreatePbxServer = useCallback((data: PbxServer) => {
-    pbxServerCreate(data).then((res) => {
-      if ('error' in res) return
-      navigate(getRoutePbxServers())
-    })
-  }, [pbxServerCreate, navigate])
+  const isAdmin = useSelector(isUserAdmin)
+  const clientData = useSelector(getUserAuthData)
+  const form = useSelector(getPbxServerForm)
 
-  const onCreate = useCallback((data: PbxServer) => {
-    handleCreatePbxServer(data)
-  }, [handleCreatePbxServer])
+  const [createPbx, { isLoading: isCreating }] = useSetPbxServers()
+  const [updatePbx, { isLoading: isUpdating }] = useUpdatePbxServers()
+  const [deletePbx, { isLoading: isDeleting }] = useDeletePbxServers()
 
-  const handleEditPbxServer = useCallback((data: PbxServer) => {
-    try {
-      pbxServerUpdate(data).unwrap()
-    } finally {
-      navigate(getRoutePbxServers())
+  const isActionLoading = isCreating || isUpdating || isDeleting
+
+  const { data: serverData, isLoading: isDataLoading, isError } = usePbxServer(pbxServerId!, {
+    skip: !isEdit || !pbxServerId
+  })
+
+  const { data: statusData, isLoading: isStatusLoading } = usePbxServerStatus(serverData?.uniqueId!, {
+    skip: !serverData?.uniqueId,
+    pollingInterval: 30000,
+  })
+
+  useEffect(() => {
+    if (isEdit && serverData) {
+      dispatch(pbxServerFormActions.initForm(serverData))
+    } else if (!isEdit) {
+      dispatch(pbxServerFormActions.resetForm())
     }
-  }, [navigate, pbxServerUpdate])
+  }, [isEdit, serverData, dispatch])
 
-  const handleCheckPbxServer = useCallback((data: PbxServer) => {
-    try {
-      checkPbxServer(data).unwrap()
-    } finally {
-      navigate(getRoutePbxServers())
+  const onChangeField = useCallback((field: keyof PbxServer, value: any) => {
+    dispatch(pbxServerFormActions.updateForm({ [field]: value }))
+  }, [dispatch])
+
+  const onChangeClient = useCallback((event: any, newValue: ClientOptions | null) => {
+    dispatch(pbxServerFormActions.updateForm({
+      user: newValue || { id: '', name: '' },
+      userId: newValue?.id || ''
+    }))
+  }, [dispatch])
+
+  const onSave = useCallback(async () => {
+    if (!form?.name) {
+      toast.error(t('Пожалуйста введите название сервера'))
+      return
     }
-  }, [checkPbxServer, navigate])
 
-  const handleDeletePbxServer = useCallback((id: string) => {
-    pbxServerDelete(id)
-      .unwrap()
-      .then(() => {
-        navigate(getRoutePbxServers())
-      })
-  }, [pbxServerDelete, navigate])
+    if (!form.wss_url && !form.ari_url) {
+      toast.error(t('WSS или ARI URL должны быть заполнены'))
+      return
+    }
 
-  const onDelete = useCallback((id: string) => {
-    handleDeletePbxServer(id)
-  }, [handleDeletePbxServer])
+    try {
+      if (isEdit && pbxServerId) {
+        await updatePbx(form).unwrap()
+        toast.success(t('Сервер успешно обновлен'))
+      } else {
+        await createPbx(form).unwrap()
+        toast.success(t('Сервер успешно создан'))
+      }
+      navigate(getRoutePbxServers())
+    } catch (e) {
+      toast.error(t('Произошла ошибка при сохранении'))
+    }
+  }, [form, isEdit, pbxServerId, updatePbx, createPbx, navigate, t])
 
-  const onEdit = useCallback((data: PbxServer) => {
-    handleEditPbxServer(data)
-  }, [handleEditPbxServer])
+  const onDelete = useCallback(async () => {
+    if (!pbxServerId) return
+    try {
+      await deletePbx(pbxServerId).unwrap()
+      toast.success(t('Сервер успешно удален'))
+      navigate(getRoutePbxServers())
+    } catch (e) {
+      toast.error(t('Произошла ошибка при удалении'))
+    }
+  }, [pbxServerId, deletePbx, navigate, t])
 
-  if (isLoading) {
+  const onClose = useCallback(() => {
+    navigate(getRoutePbxServers())
+  }, [navigate])
+
+  if (isError) return <ErrorGetData />
+
+  if (isDataLoading && isEdit) {
     return (
-        <Card padding="24" max>
-          <VStack gap="32">
-            <HStack gap="32" max>
-              <VStack gap="16" max>
-                <Skeleton width="100%" height={38}/>
-                <Skeleton width="100%" height={38}/>
-                <Skeleton width="100%" height={38}/>
-                <Skeleton width="100%" height={38}/>
-                <Skeleton width="100%" height={38}/>
-                <Skeleton width="100%" height={38}/>
-              </VStack>
-            </HStack>
-          </VStack>
-        </Card>
+      <VStack gap={isMobile ? '8' : '16'} max>
+        <Skeleton width="100%" height={80} border="16px" />
+        <VStack gap={isMobile ? '16' : '24'} max align="start">
+          <Skeleton width="100%" height={400} border="16px" />
+          <Skeleton width="100%" height={400} border="16px" />
+        </VStack>
+      </VStack>
     )
   }
 
   return (
-      <VStack gap={'8'} max className={classNames(cls.PbxServerCard, {}, [className])}>
-        {
-          isEdit && pbxServerId
-            ? <PbxServerEditCard
-                  key={`edit-form-${pbxServerId}`}
-                  onEdit={onEdit}
-                  pbxServerId={pbxServerId}
-                  onDelete={onDelete}
-              />
-            : <PbxServerCreateCard
-                  key={`create-form-${Date.now()}`}
-                  onCreate={onCreate}
-              />
+    <DynamicModuleLoader reducers={reducers} removeAfterUnmount>
+      <VStack gap="16" max className={classNames(cls.PbxServerCard, {}, [className])}>
+        <PbxServerFormHeader
+          isEdit={isEdit}
+          serverName={form?.name}
+          onSave={onSave}
+          onClose={onClose}
+          isLoading={isActionLoading || isDataLoading}
+        />
 
-        }
+        <VStack gap={isMobile ? '16' : '24'} max align="center">
+          {/* Status Badge for Edit Mode */}
+          {isEdit && serverData?.uniqueId && (
+            <HStack justify="end" max className={cls.statusBadge}>
+              <HStack gap="8" align="center" className={cls.statusWrapper}>
+                <Text text={t('Статус') + ':'} />
+                <div
+                  className={classNames(cls.statusIndicator, {
+                    [cls.online]: statusData?.online,
+                    [cls.offline]: statusData && !statusData.online,
+                    [cls.loading]: isStatusLoading
+                  })}
+                />
+                <Text text={isStatusLoading ? t('Загрузка...') : (statusData?.online ? t('В сети') : t('Не в сети'))} />
+              </HStack>
+            </HStack>
+          )}
+
+          <HStack
+            gap={isMobile ? '16' : '24'}
+            max
+            align="start"
+            wrap="wrap"
+            className={cls.contentWrapper}
+          >
+            <VStack gap="24" className={cls.leftColumn}>
+              <GeneralSection
+                name={form?.name || ''}
+                onChangeName={(v) => onChangeField('name', v)}
+                location={form?.location || ''}
+                onChangeLocation={(v) => onChangeField('location', v)}
+                comment={form?.comment || ''}
+                onChangeComment={(v) => onChangeField('comment', v)}
+                cloudPbx={form?.cloudPbx || false}
+                onChangeCloudPbx={(v) => onChangeField('cloudPbx', v)}
+                user={form?.user as ClientOptions}
+                userId={form?.userId}
+                onChangeClient={onChangeClient}
+                isAdmin={isAdmin}
+                clientName={clientData?.name}
+              />
+            </VStack>
+
+            <VStack gap="24" className={cls.rightColumn}>
+              <ConnectivitySection
+                sipHost={form?.sip_host || ''}
+                onChangeSipHost={(v) => onChangeField('sip_host', v)}
+                wssUrl={form?.wss_url || ''}
+                onChangeWssUrl={(v) => onChangeField('wss_url', v)}
+                ariUrl={form?.ari_url || ''}
+                onChangeAriUrl={(v) => onChangeField('ari_url', v)}
+                ariUser={form?.ari_user || ''}
+                onChangeAriUser={(v) => onChangeField('ari_user', v)}
+                context={form?.context || ''}
+                onChangeContext={(v) => onChangeField('context', v)}
+                password={form?.password}
+                onChangePassword={(v) => onChangeField('password', v)}
+              />
+            </VStack>
+          </HStack>
+        </VStack>
+
+        <PbxServerFormHeader
+          isEdit={isEdit}
+          serverName={form?.name}
+          onSave={onSave}
+          onClose={onClose}
+          isLoading={isActionLoading || isDataLoading}
+          variant="diviner-bottom"
+        />
       </VStack>
+    </DynamicModuleLoader>
   )
 })

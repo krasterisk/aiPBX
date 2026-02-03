@@ -107,9 +107,25 @@ export const toolsPageSlice = createSlice({
     },
     updateToolCreateType: (state, action: PayloadAction<string>) => {
       state.createForm.type = action.payload
+      if (action.payload === 'mcp' && (!state.createForm.toolData || Object.keys(state.createForm.toolData).length === 0)) {
+        state.createForm.toolData = {
+          type: 'mcp',
+          server_label: 'dmcp',
+          server_url: 'https://mymcpserver.dev/sse',
+          require_approval: 'never'
+        }
+      }
     },
     updateToolEditType: (state, action: PayloadAction<string>) => {
       state.editForm.type = action.payload
+      if (action.payload === 'mcp' && (!state.editForm.toolData || Object.keys(state.editForm.toolData).length === 0)) {
+        state.editForm.toolData = {
+          type: 'mcp',
+          server_label: 'dmcp',
+          server_url: 'https://mymcpserver.dev/sse',
+          require_approval: 'never'
+        }
+      }
     },
 
     initState: (state) => {

@@ -52,6 +52,7 @@ const ToolsPage = ({ className }: ToolsPageProps) => {
         isToolsLoading={isLoading}
         tools={data}
         isToolsError={isError}
+        onRefetch={onRefetch}
       />
     </Page>
   )

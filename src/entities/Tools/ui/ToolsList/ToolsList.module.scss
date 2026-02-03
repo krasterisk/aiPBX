@@ -1,32 +1,50 @@
 .ToolsList {
-    position: relative;
+    width: 100%;
+}
 
+.controlsCard {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 16px;
+}
 
+.controls {
+    padding: 12px 24px;
+}
 
+.checkbox {
+    margin-left: -8px;
+}
 
-    .uncheck {
-        position: absolute;
-        display: flex;
-        color: var(--icon-redesigned);
-        left: 0;
-        top: 0;
+.uncheck {
+    opacity: 0.5;
+}
+
+.check {
+    color: var(--accent-redesigned);
+}
+
+.listWrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+.loader {
+    height: 300px;
+}
+
+.emptyState {
+    padding: 60px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 800px) {
+    .listWrapper {
+        grid-template-columns: 1fr;
     }
-
-    .check {
-        position: absolute;
-        display: flex;
-        color: var(--icon-redesigned);
-        left: 0;
-        top: 0;
-    }
-
-    .uncheckButtons {
-        display: none;
-    }
-
-    .checkButtons {
-        display: flex;
-    }
-
-
 }

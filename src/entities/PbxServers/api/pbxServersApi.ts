@@ -53,6 +53,30 @@ export const pbxServersApi = rtkApi.injectEndpoints({
           ]
           : [{ type: 'PbxServers', id: 'LIST' }]
     }),
+    getPbxServersCloud: build.query<PbxServer[], null>({
+      query: (args) => ({
+        url: '/pbx-servers/cloud'
+      }),
+      providesTags: (result) =>
+        result?.length
+          ? [
+            ...result.map(({ id }) => ({ type: 'PbxServers', id } as const)),
+            { type: 'PbxServers', id: 'LIST' }
+          ]
+          : [{ type: 'PbxServers', id: 'LIST' }]
+    }),
+    getPbxServersCloudAndUser: build.query<PbxServer[], null>({
+      query: (args) => ({
+        url: '/pbx-servers/cloud-and-user'
+      }),
+      providesTags: (result) =>
+        result?.length
+          ? [
+            ...result.map(({ id }) => ({ type: 'PbxServers', id } as const)),
+            { type: 'PbxServers', id: 'LIST' }
+          ]
+          : [{ type: 'PbxServers', id: 'LIST' }]
+    }),
     setPbxServers: build.mutation<PbxServer, PbxServer>({
       query: (arg) => ({
         url: '/pbx-servers',
@@ -99,19 +123,38 @@ export const pbxServersApi = rtkApi.injectEndpoints({
       // Invalidates all queries that subscribe to this Post `id` only.
       invalidatesTags: (result, error, id) => [{ type: 'PbxServers', id }]
     }),
-    createSipUri: build.mutation<{ success: boolean, sipUri: string }, { assistantId: string, serverId: string, ipAddress: string }>({
+    createSipUri: build.mutation<{ success: boolean, sipUri: string }, { assistantId: string, serverId: string, ipAddress: string, records?: boolean, tls?: boolean, active?: boolean }>({
       query: (arg) => ({
         url: '/pbx-servers/create-sip-uri',
         method: 'POST',
         body: arg
-      })
+      }),
+      invalidatesTags: (result, error, { assistantId }) => [
+        { type: 'Assistants', id: assistantId },
+        { type: 'Assistants', id: 'LIST' }
+      ]
     }),
     deleteSipUri: build.mutation<{ success: boolean }, { assistantId: string }>({
       query: (arg) => ({
         url: '/pbx-servers/delete-sip-uri',
         method: 'DELETE',
         body: arg
-      })
+      }),
+      invalidatesTags: (result, error, { assistantId }) => [
+        { type: 'Assistants', id: assistantId },
+        { type: 'Assistants', id: 'LIST' }
+      ]
+    }),
+    updateSipUri: build.mutation<{ success: boolean }, { assistantId: string, serverId: string, ipAddress: string, records?: boolean, tls?: boolean, active?: boolean }>({
+      query: (arg) => ({
+        url: '/pbx-servers/update-sip-uri',
+        method: 'PATCH',
+        body: arg
+      }),
+      invalidatesTags: (result, error, { assistantId }) => [
+        { type: 'Assistants', id: assistantId },
+        { type: 'Assistants', id: 'LIST' }
+      ]
     }),
     getPbxServerStatus: build.query<{ online: boolean }, string>({
       query: (uniqueId) => `/pbx-servers/${uniqueId}/status`,
@@ -121,6 +164,8 @@ export const pbxServersApi = rtkApi.injectEndpoints({
 
 export const usePbxServers = pbxServersApi.useGetPbxServersQuery
 export const usePbxServersAll = pbxServersApi.useGetPbxServersAllQuery
+export const usePbxServersCloud = pbxServersApi.useGetPbxServersCloudQuery
+export const usePbxServersCloudAndUser = pbxServersApi.useGetPbxServersCloudAndUserQuery
 export const useSetPbxServers = pbxServersApi.useSetPbxServersMutation
 export const useCheckPbxServer = pbxServersApi.useCheckPbxServerMutation
 export const usePbxServer = pbxServersApi.useGetPbxServerQuery
@@ -128,4 +173,5 @@ export const usePbxServerStatus = pbxServersApi.useGetPbxServerStatusQuery
 export const useUpdatePbxServers = pbxServersApi.useUpdatePbxServerMutation
 export const useDeletePbxServers = pbxServersApi.useDeletePbxServerMutation
 export const useCreateSipUri = pbxServersApi.useCreateSipUriMutation
+export const useUpdateSipUri = pbxServersApi.useUpdateSipUriMutation
 export const useDeleteSipUri = pbxServersApi.useDeleteSipUriMutation

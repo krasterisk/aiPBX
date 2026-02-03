@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { AssistantOptions } from '@/entities/Assistants'
-import { PbxServerOptions, usePbxServersAll } from '@/entities/PbxServers'
+import { PbxServerOptions, usePbxServersCloudAndUser } from '@/entities/PbxServers'
 import {
     getPublishWidgetsFormName,
     getPublishWidgetsFormSelectedAssistant,
@@ -61,11 +61,11 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
 
     const isMobile = useMediaQuery('(max-width:800px)')
 
-    const { data: allPbxServers, isLoading: isServersLoading } = usePbxServersAll(null)
+    const { data: allPbxServers, isLoading: isServersLoading } = usePbxServersCloudAndUser(null)
 
     useEffect(() => {
         if (selectedPbxServer && !selectedPbxServer.wss_url && allPbxServers) {
-            const fullServerData = allPbxServers.find(s => String(s.id) === String(selectedPbxServer.id))
+            const fullServerData = allPbxServers.find((s: any) => String(s.id) === String(selectedPbxServer.id))
             if (fullServerData && fullServerData.wss_url) {
                 dispatch(publishWidgetsFormActions.setSelectedPbxServer({
                     id: String(fullServerData.id),

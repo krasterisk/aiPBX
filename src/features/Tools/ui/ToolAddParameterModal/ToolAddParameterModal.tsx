@@ -7,6 +7,9 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Check } from '@/shared/ui/mui/Check'
 import { ToolParam } from '@/entities/Tools'
+import { classNames } from '@/shared/lib/classNames/classNames'
+import { FileCode, Save, X } from 'lucide-react'
+import cls from './ToolAddParameterModal.module.scss'
 
 export interface ToolAddParameterModalProps {
   className?: string
@@ -30,7 +33,8 @@ const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
     param,
     paramName,
     onClose,
-    onSave
+    onSave,
+    className
   } = props
 
   const { t } = useTranslation('tools')
@@ -77,7 +81,7 @@ const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
   }, [])
 
   const handleOnSave = useCallback(() => {
-    if (!parName && !description) return
+    if (!parName) return
 
     const params: ToolParam = {
       type: 'string',
@@ -94,12 +98,12 @@ const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
     onClose?.()
   }, [onClose])
 
-  const toggleEnumHandler = useCallback(() => {
-    setEnumShow(prev => !prev)
+  const toggleEnumHandler = useCallback((e: any) => {
+    setEnumShow(e.target.checked)
   }, [])
 
-  const toggleRequiredHandler = useCallback(() => {
-    setRequired(prev => !prev)
+  const toggleRequiredHandler = useCallback((e: any) => {
+    setRequired(e.target.checked)
   }, [])
 
   const changeEnumsHandler = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -110,52 +114,79 @@ const ToolAddParameterModal = memo((props: ToolAddParameterModalProps) => {
   }, [])
 
   return (
-      <Modal isOpen={show} onClose={onClose} lazy>
-        <VStack gap={'24'} max>
-          <VStack max justify={'center'} align={'center'}>
-            <Text title={label} bold/>
+    <Modal isOpen={show} onClose={onClose} lazy className={classNames(cls.modal, {}, [className])}>
+      <VStack gap={'24'} max className={cls.content}>
+        <HStack gap="16" align="center" max>
+          <div className={cls.iconWrapper}>
+            <FileCode size={20} />
+          </div>
+          <VStack gap="4">
+            <Text title={t('Параметр')} size="l" bold />
+            {label && <Text text={label} size="s" variant="accent" />}
           </VStack>
+        </HStack>
+
+        <VStack gap="16" max>
+          <VStack gap="8" max>
+            <Text text={t('Название параметра')} size="s" bold className={cls.label} />
             <Textarea
-                label={t('Название параметра') ?? ''}
-                onChange={changeNameHandler}
-                value={parName}
+              placeholder={t('Название параметра') ?? ''}
+              onChange={changeNameHandler}
+              value={parName}
+              className={cls.fullWidth}
             />
+          </VStack>
+
+          <VStack gap="8" max>
+            <Text text={t('Описание параметра')} size="s" bold className={cls.label} />
             <Textarea
-                label={t('Описание параметра') ?? ''}
-                onChange={changeDescriptionHandler}
-                value={description}
-                multiline
-                minRows={3}
+              placeholder={t('Описание параметра') ?? ''}
+              onChange={changeDescriptionHandler}
+              value={description}
+              multiline
+              minRows={3}
+              className={cls.fullWidth}
             />
-          <Check
+          </VStack>
+
+          <HStack gap="24" max className={cls.checks}>
+            <Check
               label={t('Указать возможные значения') || ''}
               onChange={toggleEnumHandler}
               checked={enumShow}
-          />
-          {enumShow &&
-              <Textarea
-                  label={t('Каждое значение - отдельная строка') ?? ''}
-                  onChange={changeEnumsHandler}
-                  value={enumValue}
-                  multiline
-                  minRows={3}
-              />
-          }
-          <Check
+            />
+            <Check
               label={t('Параметр обязателен') || ''}
               checked={required}
               onChange={toggleRequiredHandler}
-          />
-          <HStack gap={'16'} align={'center'} justify={'end'} max>
-            <Button onClick={handleOnClose} variant={'outline'} color={'normal'}>
-              {t('Закрыть')}
-            </Button>
-            <Button onClick={handleOnSave} variant={'outline'} color={'success'}>
-              {t('Сохранить')}
-            </Button>
+            />
           </HStack>
+
+          {enumShow &&
+            <VStack gap="8" max>
+              <Text text={t('Возможные значения')} size="s" bold className={cls.label} />
+              <Textarea
+                placeholder={t('Каждое значение - отдельная строка') ?? ''}
+                onChange={changeEnumsHandler}
+                value={enumValue}
+                multiline
+                minRows={3}
+                className={cls.fullWidth}
+              />
+            </VStack>
+          }
         </VStack>
-      </Modal>
+
+        <HStack gap={'12'} align={'center'} justify={'end'} max className={cls.footer}>
+          <Button onClick={handleOnClose} variant={'clear'}>
+            {t('Закрыть')}
+          </Button>
+          <Button onClick={handleOnSave} variant={'outline'}>
+            {t('Сохранить')}
+          </Button>
+        </HStack>
+      </VStack>
+    </Modal>
   )
 })
 

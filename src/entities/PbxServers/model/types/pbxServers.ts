@@ -13,6 +13,7 @@ export interface PbxServerOptions {
   name: string
   location?: string
   wss_url?: string
+  sip_host?: string
 }
 
 export interface PbxServer {
@@ -28,6 +29,8 @@ export interface PbxServer {
   comment?: string
   user?: User
   userId?: string
+  cloudPbx?: boolean
+  context?: string
 }
 
 export interface PbxServerListProps {

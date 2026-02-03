@@ -1,5 +1,6 @@
 .PublishSipUrisList {
     position: relative;
+    width: 100%;
 
     .uncheck {
         position: absolute;
@@ -12,7 +13,7 @@
     .check {
         position: absolute;
         display: flex;
-        color: var(--icon-redesigned);
+        color: var(--accent-redesigned);
         left: 0;
         top: 0;
     }
@@ -27,13 +28,48 @@
 
     .controlsCard {
         position: relative;
+        background: var(--card-bg-redesigned);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        margin-bottom: 8px;
+        transition: all 0.3s ease;
+
+        &:hover {
+            border-color: rgba(94, 211, 243, 0.2);
+        }
+    }
+
+    .controls {
+        padding: 12px 20px;
+        width: 100%;
+    }
+
+    .listWrapper {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+        width: 100%;
+        align-items: stretch;
     }
 }
 
 .loader {
-    padding: 40px;
+    padding: 60px;
 }
 
 .emptyState {
-    padding: 40px;
+    padding: 80px;
+    background: var(--card-bg-redesigned);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 800px) {
+    .PublishSipUrisList {
+        .listWrapper {
+            grid-template-columns: 1fr;
+        }
+    }
 }

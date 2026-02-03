@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { PbxServerOptions } from '../../model/types/pbxServers'
-import { usePbxServersAll } from '../../api/pbxServersApi'
+import { usePbxServersAll, usePbxServersCloud, usePbxServersCloudAndUser } from '../../api/pbxServersApi'
 import { TextField } from '@mui/material'
 
 interface PbxServerSelectProps {
@@ -11,6 +11,8 @@ interface PbxServerSelectProps {
   className?: string
   onChangePbxServer?: (event: any, newValue: PbxServerOptions | null) => void
   userId?: string
+  fullWidth?: boolean
+  fetchType?: 'all' | 'cloud' | 'cloud-and-user'
 }
 
 export const PbxServerSelect = memo((props: PbxServerSelectProps) => {
@@ -21,10 +23,19 @@ export const PbxServerSelect = memo((props: PbxServerSelectProps) => {
     onChangePbxServer,
     PbxServerId,
     userId,
+    fetchType = 'all',
     ...otherProps
   } = props
 
-  const { data: PbxServers } = usePbxServersAll(null)
+  const { data: pbxServersAll } = usePbxServersAll(null, { skip: fetchType !== 'all' })
+  const { data: pbxServersCloud } = usePbxServersCloud(null, { skip: fetchType !== 'cloud' })
+  const { data: pbxServersCloudAndUser } = usePbxServersCloudAndUser(null, { skip: fetchType !== 'cloud-and-user' })
+
+  const PbxServers = useMemo(() => {
+    if (fetchType === 'cloud') return pbxServersCloud
+    if (fetchType === 'cloud-and-user') return pbxServersCloudAndUser
+    return pbxServersAll
+  }, [fetchType, pbxServersAll, pbxServersCloud, pbxServersCloudAndUser])
 
   const onChangeHandler = (event: any, newValue: PbxServerOptions | null) => {
     onChangePbxServer?.(event, newValue)

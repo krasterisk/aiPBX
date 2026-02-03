@@ -15,9 +15,9 @@ export enum AppRoutes {
   TOOLS = 'tools',
   TOOLS_CREATE = 'tools_create',
   TOOLS_EDIT = 'tools_edit',
-  PBX_SERVERS = 'pbx_servers',
-  PBX_SERVER_CREATE = 'pbx_create',
-  PBX_SERVER_EDIT = 'pbx_edit',
+  PBX_SERVERS = 'publish_pbxs',
+  PBX_SERVER_CREATE = 'publish_pbxs_create',
+  PBX_SERVER_EDIT = 'publish_pbxs_edit',
   FORBIDDEN = 'forbidden',
   ERROR = 'error',
   USERS = 'users',
@@ -27,9 +27,9 @@ export enum AppRoutes {
   BILLING = 'billing',
   PAYMENT_DETAILS = 'payment_details',
   DOCS = 'docs',
-  PUBLISH_SIP_URIS = 'publish_sip_uris',
-  PUBLISH_SIP_URIS_CREATE = 'publish_sip_uris_create',
-  PUBLISH_SIP_URIS_EDIT = 'publish_sip_uris_edit',
+  PUBLISH_SIP_URIS = 'publish_sips',
+  PUBLISH_SIP_URIS_CREATE = 'publish_sips_create',
+  PUBLISH_SIP_URIS_EDIT = 'publish_sips_edit',
   PUBLISH_WIDGETS = 'publish_widgets',
   PUBLISH_WIDGETS_CREATE = 'publish_widgets_create',
   PUBLISH_WIDGETS_EDIT = 'publish_widgets_edit'
@@ -53,9 +53,9 @@ export const getRouteReports = () => '/reports'
 export const getRouteTools = () => '/tools'
 export const getRouteToolsEdit = (id: string) => `/tools/${id}`
 export const getRouteToolsCreate = () => '/tools/create'
-export const getRoutePbxServers = () => '/pbxServers'
-export const getRoutePbxServerEdit = (id: string) => `/pbxServer/${id}`
-export const getRoutePbxServerCreate = () => '/pbxServer/create'
+export const getRoutePbxServers = () => '/publish/pbxs'
+export const getRoutePbxServerEdit = (id: string) => `/publish/pbxs/${id}`
+export const getRoutePbxServerCreate = () => '/publish/pbxs/create'
 export const getRouteProfile = (id: string) => `/profile/${id}`
 export const getRouteForbidden = () => '/forbidden'
 export const getRouteUsers = () => '/users'
@@ -65,9 +65,9 @@ export const getRoutePlayground = () => '/playground'
 export const getRouteBilling = () => '/billing'
 export const getRoutePaymentDetails = () => '/payment-history'
 export const getRouteDocs = () => '/docs'
-export const getRoutePublishSipUris = () => '/publish/sip-uris'
-export const getRoutePublishSipUrisCreate = () => '/publish/sip-uris/create'
-export const getRoutePublishSipUrisEdit = (id: string) => `/publish/sip-uris/${id}`
+export const getRoutePublishSipUris = () => '/publish/sips'
+export const getRoutePublishSipUrisCreate = () => '/publish/sips/create'
+export const getRoutePublishSipUrisEdit = (id: string) => `/publish/sips/${id}`
 export const getRoutePublishWidgets = () => '/publish/widgets'
 export const getRoutePublishWidgetsCreate = () => '/publish/widgets/create'
 export const getRoutePublishWidgetsEdit = (id: string) => `/publish/widgets/${id}`

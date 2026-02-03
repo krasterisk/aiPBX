@@ -1,20 +1,29 @@
 .ToolsListHeader {
-    // display: flex;
-}
-
-.icon {
-    color: var(--icon-redesigned);
-}
-
-.mobileHeader {
-    flex-wrap: wrap;
-}
-
-.clientSelect {
-    //height: 50px;
-    width: 200px;
+    width: 100%;
 }
 
 .searchInput {
-    width: 200px;
+    width: 300px;
+
+    @media (max-width: 600px) {
+        width: 100%;
+    }
+}
+
+.createBtn {
+    @media (max-width: 600px) {
+        width: 100%;
+    }
+}
+
+.filtersSection {
+    width: 100%;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.clientSelect {
+    max-width: 400px;
 }

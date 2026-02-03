@@ -50,6 +50,7 @@ export const TelephonyAiCard = memo((props: TelephonyAiCardProps) => {
                 value={selectedPbxServer}
                 onChangePbxServer={onChangePbxServer}
                 userId={isAdmin ? undefined : userId}
+                fetchType="cloud-and-user"
             />
 
             <Textarea

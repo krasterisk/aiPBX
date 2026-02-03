@@ -10,6 +10,7 @@ export interface AllAssistants {
 export interface AssistantOptions {
   id: string
   name: string
+  uniqueId?: string
   userId?: string
 }
 
@@ -18,6 +19,9 @@ export interface AssistantSipAccount {
   sipUri: string
   ipAddress: string
   pbxId: string
+  records?: boolean
+  tls?: boolean
+  active?: boolean
 }
 
 export interface Assistant {

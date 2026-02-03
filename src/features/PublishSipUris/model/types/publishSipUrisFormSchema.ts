@@ -5,6 +5,9 @@ export interface PublishSipUrisFormSchema {
     selectedAssistant: AssistantOptions | null
     selectedPbx: PbxServerOptions | null
     ipAddress: string
+    records: boolean
+    tls: boolean
+    active: boolean
     isLoading: boolean
     error?: string
 }

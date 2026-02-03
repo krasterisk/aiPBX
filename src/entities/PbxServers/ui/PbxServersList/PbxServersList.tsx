@@ -14,6 +14,8 @@ import { Check } from '@/shared/ui/mui/Check'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useDeletePbxServers } from '../../api/pbxServersApi'
 import { Loader } from '@/shared/ui/Loader'
+import { Icon } from '@/shared/ui/redesigned/Icon'
+import SearchIcon from '@/shared/assets/icons/search.svg'
 
 export const PbxServersList = (props: PbxServerListProps) => {
   const {
@@ -31,38 +33,33 @@ export const PbxServersList = (props: PbxServerListProps) => {
 
   const [pbxServerDeleteMutation, { isError, isLoading }] = useDeletePbxServers()
 
-  const handleCheckChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     setCheckedBox((prev) => {
-      const currentIndex = prev.indexOf(value)
-      const newChecked = [...prev]
-      if (currentIndex === -1) {
-        newChecked.push(value)
-      } else {
-        newChecked.splice(currentIndex, 1)
-      }
-      if (pbxServers?.count) {
-        setIndeterminateBox(newChecked.length > 0 && newChecked.length < pbxServers?.count)
+      const isChecked = prev.includes(value)
+      const newChecked = isChecked
+        ? prev.filter(id => id !== value)
+        : [...prev, value]
+
+      const totalCount = pbxServers?.rows.length || 0
+      if (totalCount > 0) {
+        setIndeterminateBox(newChecked.length > 0 && newChecked.length < totalCount)
       }
       return newChecked
     })
-  }
+  }, [pbxServers?.rows.length])
 
   const handleCheckAll = useCallback(() => {
-    if (indeterminateBox && pbxServers?.count && checkedBox.length > 0) {
-      setCheckedBox(pbxServers?.rows.map(pbx => String(pbx.id)))
-      setIndeterminateBox(false)
-    }
+    const totalIds = pbxServers?.rows.map(pbx => String(pbx.id)) || []
 
-    if (!indeterminateBox && pbxServers?.count && checkedBox.length === 0) {
-      setCheckedBox(pbxServers?.rows.map(pbxServer => String(pbxServer.id)))
-      setIndeterminateBox(false)
-    }
-
-    if (!indeterminateBox && checkedBox.length > 0) {
+    if (checkedBox.length === totalIds.length && totalIds.length > 0) {
       setCheckedBox([])
+      setIndeterminateBox(false)
+    } else {
+      setCheckedBox(totalIds)
+      setIndeterminateBox(false)
     }
-  }, [pbxServers?.count, pbxServers?.rows, checkedBox.length, indeterminateBox])
+  }, [pbxServers?.rows, checkedBox.length])
 
   const getSkeletons = () => {
     return new Array(4)
@@ -127,40 +124,50 @@ export const PbxServersList = (props: PbxServerListProps) => {
   }
 
   return (
-    <VStack gap={'16'} max>
+    <VStack gap={'16'} max className={classNames(cls.PbxServersList, {}, [className])}>
       <PbxServersListHeader />
-      <Card max className={classNames(cls.PbxServersList, {}, [className])}>
-        <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
-          <Check
-            className={classNames(cls.PbxServersList, {
-              [cls.uncheck]: checkedBox.length === 0,
-              [cls.check]: checkedBox.length > 0
-            }, [])}
-            indeterminate={indeterminateBox}
-            checked={checkedBox.length === pbxServers?.count}
-            onChange={handleCheckAll}
-          />
-          {checkedButtons}
-          {
-            checkedBox.length > 0
-              ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(pbxServers?.count)} />
-              : <Text text={t('Всего') + ': ' + String(pbxServers?.count || 0)} />
-          }
+      <Card max className={cls.controlsCard} padding={'0'}>
+        <HStack wrap={'nowrap'} justify={'between'} align={'center'} max className={cls.controls}>
+          <HStack gap={'16'}>
+            <Check
+              className={classNames(cls.checkbox, {
+                [cls.uncheck]: checkedBox.length === 0,
+                [cls.check]: checkedBox.length > 0
+              }, [])}
+              indeterminate={indeterminateBox}
+              checked={pbxServers?.count ? checkedBox.length === pbxServers?.count : false}
+              onChange={handleCheckAll}
+            />
+            {checkedBox.length > 0 ? (
+              <HStack gap={'16'}>
+                <Text
+                  text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(pbxServers?.count)}
+                  bold
+                />
+                {checkedButtons}
+              </HStack>
+            ) : (
+              <Text text={t('Всего') + ': ' + String(pbxServers?.count || 0)} variant={'accent'} />
+            )}
+          </HStack>
         </HStack>
       </Card>
 
-      {pbxServers?.rows.length
-        ? <HStack wrap={'wrap'} gap={'16'} align={'start'} max>
+      {pbxServers?.rows.length ? (
+        <div className={cls.listWrapper}>
           {pbxServers.rows.map(renderContent)}
-        </HStack>
-        : <HStack
-          justify={'center'} max
-          className={classNames('', {}, [className, cls.BIG])}
-        >
-          <Text align={'center'} text={t('Данные не найдены')} />
-        </HStack>
-      }
-      {isPbxServersLoading && getSkeletons()}
+        </div>
+      ) : (
+        <VStack justify={'center'} align={'center'} max className={cls.emptyState} gap={'16'}>
+          <Icon Svg={SearchIcon} width={48} height={48} />
+          <Text align={'center'} text={t('Данные не найдены')} size={'l'} bold />
+        </VStack>
+      )}
+      {isPbxServersLoading && (
+        <div className={cls.listWrapper}>
+          {getSkeletons()}
+        </div>
+      )}
     </VStack>
   )
 }

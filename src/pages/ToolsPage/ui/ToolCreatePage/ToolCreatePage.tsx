@@ -5,11 +5,11 @@ import { ToolCard } from '@/features/Tools'
 
 const ToolCreatePage = memo(() => {
   return (
-        <Page data-testid={'ToolsCreatePage'}>
-            <VStack gap='8'>
-                <ToolCard />
-            </VStack>
-        </Page>
+    <Page data-testid={'ToolsCreatePage'}>
+      <VStack gap='8' max>
+        <ToolCard />
+      </VStack>
+    </Page>
   )
 })
 

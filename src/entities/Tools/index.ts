@@ -35,5 +35,6 @@ export {
   useTools,
   useTool,
   useSetTools,
-  useUpdateTool
+  useUpdateTool,
+  useCreateTool
 } from './api/toolsApi'

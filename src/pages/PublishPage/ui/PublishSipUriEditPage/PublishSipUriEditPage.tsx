@@ -39,14 +39,19 @@ const PublishSipUriEditPage = memo((props: PublishSipUriEditPageProps) => {
                 assistant: {
                     id: String(assistant.id),
                     name: assistant.name || '',
+                    uniqueId: assistant.uniqueId,
                     userId: assistant.userId
                 },
                 pbx: {
                     id: assistant.sipAccount?.pbxId || '',
                     name: pbxServer?.name || '',
-                    uniqueId: pbxServer?.uniqueId
+                    uniqueId: pbxServer?.uniqueId,
+                    sip_host: pbxServer?.sip_host
                 },
-                ip: assistant.sipAccount?.ipAddress || ''
+                ip: assistant.sipAccount?.ipAddress || '',
+                records: assistant.sipAccount?.records,
+                tls: assistant.sipAccount?.tls,
+                active: assistant.sipAccount?.active
             }))
         }
     }, [assistant, dispatch, pbxServer])
@@ -63,7 +68,6 @@ const PublishSipUriEditPage = memo((props: PublishSipUriEditPageProps) => {
         <DynamicModuleLoader reducers={reducers} removeAfterUnmount>
             <Page className={classNames('', {}, [className])}>
                 <VStack gap="24" max>
-                    <Text title={`${t('Редактирование SIP URI')}: ${assistant?.name}`} size="l" bold />
                     <PublishSipUrisForm isEdit />
                 </VStack>
             </Page>

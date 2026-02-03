@@ -90,6 +90,17 @@ const DOC_SECTIONS: DocSection[] = [
             { id: 'payments-history', titleKey: 'Payment History' },
             { id: 'payments-organizations', titleKey: 'Organizations' }
         ]
+    },
+    {
+        id: 'publish',
+        titleKey: 'Publish & Integration',
+        subsections: [
+            { id: 'publish-overview', titleKey: 'Overview' },
+            { id: 'publish-sips', titleKey: 'SIPs (VoIP)' },
+            { id: 'publish-widgets', titleKey: 'Widgets (WebRTC)' },
+            { id: 'publish-pbxs', titleKey: 'PBXs (Servers)' },
+            { id: 'asterisk-config', titleKey: 'Asterisk Configuration' }
+        ]
     }
 ]
 

@@ -9,6 +9,7 @@ interface ClientSelectProps {
   value?: ClientOptions | null
   clientId?: string
   className?: string
+  fullWidth?: boolean
   onChangeClient?: (event: any, newValue: ClientOptions) => void
   onInputChange?: (
     event: React.SyntheticEvent,

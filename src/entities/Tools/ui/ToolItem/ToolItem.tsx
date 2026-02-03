@@ -1,21 +1,21 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ToolItem.module.scss'
-import React, { HTMLAttributeAnchorTarget, memo, useCallback } from 'react'
+import React, { memo, useCallback } from 'react'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
-import { ContentView } from '@/entities/Content'
 import { Check } from '@/shared/ui/mui/Check'
 import { Tool } from '../../model/types/tools'
 import { getRouteToolsEdit } from '@/shared/const/router'
 import { useNavigate } from 'react-router-dom'
+import { Settings, FileCode, MessageSquare, ChevronRight, User } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+import { isUserAdmin } from '@/entities/User'
 
 interface ToolItemProps {
   className?: string
   tool: Tool
-  onEdit?: (id: string) => void
-  view?: ContentView
-  target?: HTMLAttributeAnchorTarget
   checkedItems?: string[]
   onChangeChecked?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
@@ -24,32 +24,36 @@ export const ToolItem = memo((props: ToolItemProps) => {
   const {
     className,
     tool,
-    view = 'SMALL',
     checkedItems,
     onChangeChecked
   } = props
 
+  const { t } = useTranslation('tools')
   const navigate = useNavigate()
+  const isAdmin = useSelector(isUserAdmin)
 
   const onOpenEdit = useCallback(() => {
-    navigate(getRouteToolsEdit(tool.id || ''))
+    if (tool.id) {
+      navigate(getRouteToolsEdit(tool.id))
+    }
   }, [tool.id, navigate])
 
   const onCheckClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation()
   }, [])
 
-  if (view === 'BIG') {
-    return (
-      <Card
-        padding={'16'}
-        max
-        border={'partial'}
-        className={classNames(cls.ToolItem, {}, [className, cls[view]])}
-        onClick={onOpenEdit}
-      >
-        <HStack gap={'24'} wrap={'wrap'} justify={'start'}>
-          <div onClick={onCheckClick}>
+  return (
+    <Card
+      padding="0"
+      max
+      border="partial"
+      variant="outlined"
+      className={classNames(cls.ToolItem, {}, [className])}
+      onClick={onOpenEdit}
+    >
+      <VStack className={cls.content} max gap="12">
+        <HStack max justify="between" align="center">
+          <div onClick={onCheckClick} className={cls.checkContainer}>
             <Check
               key={String(tool.id)}
               className={classNames('', {
@@ -57,48 +61,79 @@ export const ToolItem = memo((props: ToolItemProps) => {
                 [cls.check]: checkedItems?.includes(String(tool.id))
               }, [])}
               value={String(tool.id)}
-              size={'small'}
+              size="small"
               checked={checkedItems?.includes(String(tool.id))}
               onChange={onChangeChecked}
             />
           </div>
-          <VStack max>
-            <Text title={tool.name} />
-            {tool.comment ? <HStack><Text text={tool.comment} /></HStack> : ''}
+          <HStack gap="8">
+            <Text
+              text={tool.type === 'function' ? t('Вызов функции') : t('MCP сервер')}
+              size="xs"
+              bold
+              variant="accent"
+              className={cls.chip}
+            />
+            {tool.webhook && (
+              <Text
+                text={t('Вебхук')}
+                size="xs"
+                bold
+                variant="accent"
+                className={cls.chip}
+              />
+            )}
+          </HStack>
+        </HStack>
+
+        <HStack gap="16" max align="center">
+          <div className={cls.avatar}>
+            <Settings size={24} />
+          </div>
+          <VStack max gap="4">
+            <Text title={tool.name} size="m" bold className={cls.title} />
+            {isAdmin && tool.user && (
+              <HStack gap="4" align="center">
+                <User size={16} className={cls.subIcon} />
+                <Text text={tool.user.name} size="s" bold className={cls.subtitle} />
+              </HStack>
+            )}
           </VStack>
         </HStack>
-      </Card>
-    )
-  }
 
-  return (
-    <Card
-      padding={'24'}
-      border={'partial'}
-      className={classNames(cls.ToolItem, {}, [className, cls[view]])}
-      onClick={onOpenEdit}
-    >
-      <VStack
-        gap={'8'}
-        justify={'start'}
-      >
-        <div onClick={onCheckClick}>
-          <Check
-            key={String(tool.id)}
-            className={classNames('', {
-              [cls.uncheck]: !checkedItems?.includes(String(tool.id)),
-              [cls.check]: checkedItems?.includes(String(tool.id))
-            }, [])}
-            value={String(tool.id)}
-            size={'small'}
-            checked={checkedItems?.includes(String(tool.id))}
-            onChange={onChangeChecked}
-          />
-        </div>
-        <VStack gap={'4'}>
-          <Text title={tool.name} />
-          {tool.comment ? <HStack><Text text={tool.comment} /></HStack> : ''}
+        <div className={cls.divider} />
+
+        <VStack gap="16" max className={cls.details}>
+          <HStack gap="12" align="start">
+            <div className={cls.detailIcon}>
+              <FileCode size={14} />
+            </div>
+            <VStack max>
+              <Text text={t('Описание')} variant="accent" size="xs" />
+              <Text
+                text={tool.description || t('Нет описания')}
+                className={cls.detailText}
+              />
+            </VStack>
+          </HStack>
+
+          {tool.comment && (
+            <HStack gap="12" align="start">
+              <div className={cls.detailIcon}>
+                <MessageSquare size={14} />
+              </div>
+              <VStack max>
+                <Text text={t('Комментарий')} variant="accent" size="xs" />
+                <Text text={tool.comment} className={cls.detailText} />
+              </VStack>
+            </HStack>
+          )}
         </VStack>
+
+        <HStack justify="end" align="center" max className={cls.footer}>
+          <Text text={t('Редактировать')} size="xs" variant="accent" className={cls.editLabel} />
+          <ChevronRight size={14} className={cls.arrowIcon} />
+        </HStack>
       </VStack>
     </Card>
   )

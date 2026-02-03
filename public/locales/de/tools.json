@@ -35,7 +35,7 @@
   "Ошибка при сохранении функции": "Fehler beim Speichern des Tools",
   "Редактировать": "Bearbeiten",
   "Параметр с именем уже существует": "Parameter mit diesem Namen existiert bereits",
-  "Функция": "Funktionsaufruf",
+  "Вызов функции": "Funktionsaufruf",
   "MCP сервер": "Remote MCP",
   "Тип": "Typ",
   "Наименование": "Name",
@@ -51,5 +51,6 @@
   "Логин": "Login",
   "Пароль": "Passwort",
   "Заголовки (JSON)": "Header (JSON)",
-  "Вебхук": "Webhook"
+  "Вебхук": "Webhook",
+  "Нет описания": "Keine Beschreibung"
 }

@@ -28,13 +28,13 @@ export const PublishSipUrisListHeader = memo((props: PublishSipUrisListHeaderPro
     } = usePublishSipUrisFilters()
 
     return (
-        <VStack max>
+        <VStack max gap="16">
             <HStack
                 className={classNames(cls.PublishSipUrisListHeader, { [cls.mobileHeader]: isMobile }, [className])}
                 justify={'between'}
                 max
             >
-                <HStack gap={'8'} justify={'start'}>
+                <HStack gap={'8'} justify={'start'} max={isMobile}>
                     <Input
                         className={cls.searchInput}
                         placeholder={t('Поиск') ?? ''}
@@ -44,9 +44,8 @@ export const PublishSipUrisListHeader = memo((props: PublishSipUrisListHeaderPro
                         value={search}
                     />
                 </HStack>
-                <HStack>
+                <HStack max={isMobile} justify={'end'}>
                     <AppLink
-                        title={String(t('Создать SIP URI'))}
                         className={cls.CreateButton}
                         to={getRoutePublishSipUrisCreate()}
                     >

@@ -3,7 +3,7 @@ import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Button } from '@/shared/ui/redesigned/Button'
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import { Trash2, Plus } from 'lucide-react'
 import {
   getToolsCreateParameters,
   getToolsEditParameters,
@@ -14,10 +14,10 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import ToolAddParameterModal from '../ToolAddParameterModal/ToolAddParameterModal'
-import AddBoxIcon from '@mui/icons-material/AddBox'
-import cls from '../ToolCreateCard/ToolCreateCard.module.scss'
 import { useSelector } from 'react-redux'
 import { SnackAlert } from '@/shared/ui/mui/SnackAlert'
+import { classNames } from '@/shared/lib/classNames/classNames'
+import cls from './ToolAddParam.module.scss'
 
 interface ToolAddParamProps {
   parameters?: ToolParameters
@@ -40,6 +40,7 @@ export const ToolAddParam = memo((props: ToolAddParamProps) => {
   const [errorOpen, setErrorOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [paramName, setParamName] = useState<string>('')
+
   const editParameters = useSelector(getToolsEditParameters)
   const createParameters = useSelector(getToolsCreateParameters)
   const parameters = isEdit ? editParameters : createParameters
@@ -53,8 +54,6 @@ export const ToolAddParam = memo((props: ToolAddParamProps) => {
   const onCloseModalHandler = useCallback(() => {
     setIsAddParameterOpen(false)
   }, [])
-
-  console.log(isEdit)
 
   const onSaveHandler = useCallback((
     name: string,
@@ -132,61 +131,70 @@ export const ToolAddParam = memo((props: ToolAddParamProps) => {
   const requiredList = parameters?.required || []
 
   return (
-        <VStack gap={'8'} className={className}>
-          <SnackAlert
-              message={errorMessage}
-              variant={'filled'}
-              severity={'error'}
-              onClose={() => {
-                setErrorOpen(false)
-              }}
-              open={errorOpen}
-          />
-            <ToolAddParameterModal
-                param={param}
-                paramName={paramName}
-                label={toolName}
-                show={isAddParameterOpen}
-                onClose={onCloseModalHandler}
-                onSave={onSaveHandler}
-            />
-            <Text text={t('Параметры функции')} bold/>
-            <HStack gap="8" max wrap={'wrap'}>
-                {parameters?.properties && Object.entries(parameters.properties).map(([key, param]) => {
-                  const isRequired = requiredList.includes(key)
-                  return (
-                        <Card key={key} padding="8" border="partial" variant="light">
-                            <HStack gap="4" max>
-                                <Button
-                                    onClick={() => {
-                                      onEditParamClick(key, param, isRequired)
-                                    }}
-                                    variant={'clear'}
-                                >
-                                    <Text text={key}/>
-                                </Button>
-                                <Button
-                                    addonRight={<DeleteForeverIcon/>}
-                                    onClick={() => {
-                                      onDeleteParamClick(key)
-                                    }}
-                                    variant={'clear'}
-                                />
-                            </HStack>
-                        </Card>
-                  )
-                })}
-            </HStack>
-            <Button
-                title={String(t('Добавить параметр'))}
-                onClick={onAddParamClick}
-                addonLeft={
-                    <AddBoxIcon className={cls.icon}/>
-                }
-                variant={'filled'}
+    <VStack gap={'12'} max className={classNames(cls.ToolAddParam, {}, [className])}>
+      <SnackAlert
+        message={errorMessage}
+        variant={'filled'}
+        severity={'error'}
+        onClose={() => {
+          setErrorOpen(false)
+        }}
+        open={errorOpen}
+      />
+      <ToolAddParameterModal
+        param={param}
+        paramName={paramName}
+        label={toolName}
+        show={isAddParameterOpen}
+        onClose={onCloseModalHandler}
+        onSave={onSaveHandler}
+      />
+
+      <Text text={t('Параметры функции')} bold size="s" variant="accent" />
+
+      <HStack gap="8" max wrap={'wrap'}>
+        {parameters?.properties && Object.entries(parameters.properties).map(([key, param]) => {
+          const isRequired = requiredList.includes(key)
+          return (
+            <Card
+              key={key}
+              padding="8"
+              border="partial"
+              variant="outlined"
+              className={cls.parameterCard}
             >
-                <Text text={t('Добавить параметр')}/>
-            </Button>
-        </VStack>
+              <HStack gap="4" max align="center">
+                <Button
+                  onClick={() => {
+                    onEditParamClick(key, param, isRequired)
+                  }}
+                  variant={'clear'}
+                  className={cls.paramName}
+                >
+                  <Text text={key + (isRequired ? ' *' : '')} />
+                </Button>
+                <Button
+                  addonLeft={<Trash2 size={16} />}
+                  onClick={() => {
+                    onDeleteParamClick(key)
+                  }}
+                  variant={'clear'}
+                  className={cls.deleteBtn}
+                />
+              </HStack>
+            </Card>
+          )
+        })}
+      </HStack>
+
+      <Button
+        onClick={onAddParamClick}
+        addonLeft={<Plus size={18} />}
+        variant={'outline'}
+        className={cls.addBtn}
+      >
+        {t('Добавить параметр')}
+      </Button>
+    </VStack>
   )
 })

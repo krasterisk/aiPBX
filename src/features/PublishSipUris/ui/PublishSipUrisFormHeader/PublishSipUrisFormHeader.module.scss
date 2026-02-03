@@ -1,3 +1,41 @@
 .PublishSipUrisFormHeader {
     width: 100%;
+    padding: 20px 24px;
+    background: var(--card-bg-redesigned);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: rgba(94, 211, 243, 0.2);
+    }
+
+    &.bottom {
+        margin-top: 16px;
+    }
+}
+
+@media (max-width: 800px) {
+    .PublishSipUrisFormHeader {
+        padding: 16px;
+        border-radius: 12px;
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+
+        .actions {
+            width: 100%;
+            justify-content: flex-end;
+        }
+
+        &.bottom {
+            flex-direction: row;
+            justify-content: flex-end;
+
+            .actions {
+                width: auto;
+            }
+        }
+    }
 }

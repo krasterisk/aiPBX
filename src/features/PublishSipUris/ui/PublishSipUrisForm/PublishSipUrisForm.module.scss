@@ -1,1 +1,39 @@
-.PublishSipUrisForm {}
+.PublishSipUrisForm {
+    width: 100%;
+}
+
+.contentWrapper {
+    width: 100%;
+    align-items: flex-start;
+}
+
+.leftColumn {
+    flex: 1;
+    min-width: 320px;
+}
+
+.rightColumn {
+    width: 450px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 1100px) {
+    .contentWrapper {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .rightColumn {
+        width: 100%;
+    }
+
+    .leftColumn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .leftColumn {
+        min-width: 100%;
+    }
+}

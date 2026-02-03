@@ -1,0 +1,41 @@
+.ToolForm {
+    width: 100%;
+}
+
+.contentWrapper {
+    width: 100%;
+    margin: 0;
+    justify-content: flex-start;
+}
+
+.leftColumn {
+    width: 400px;
+    flex-shrink: 0;
+}
+
+.rightColumn {
+    flex: 1;
+    min-width: 320px;
+}
+
+@media (max-width: 1000px) {
+    .contentWrapper {
+        flex-direction: column !important;
+        gap: 24px !important;
+        align-items: stretch !important;
+    }
+
+    .leftColumn,
+    .rightColumn {
+        width: 100% !important;
+        max-width: none !important;
+        flex-shrink: 1 !important;
+    }
+}
+
+.loader {
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

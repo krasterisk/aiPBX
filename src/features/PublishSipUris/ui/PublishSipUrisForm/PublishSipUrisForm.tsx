@@ -4,15 +4,20 @@ import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { VStack } from '@/shared/ui/redesigned/Stack'
-import { AssistantSelect, AssistantOptions } from '@/entities/Assistants'
-import { PbxServerSelect, useCreateSipUri, PbxServerOptions } from '@/entities/PbxServers'
-import { Textarea } from '@/shared/ui/mui/Textarea'
-import { Card } from '@/shared/ui/redesigned/Card'
+import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
+import { AssistantOptions } from '@/entities/Assistants'
+import {
+    useCreateSipUri,
+    useUpdateSipUri,
+    PbxServerOptions
+} from '@/entities/PbxServers'
 import {
     getPublishSipUrisFormSelectedAssistant,
     getPublishSipUrisFormSelectedPbx,
-    getPublishSipUrisFormIpAddress
+    getPublishSipUrisFormIpAddress,
+    getPublishSipUrisFormRecords,
+    getPublishSipUrisFormTls,
+    getPublishSipUrisFormActive
 } from '../../model/selectors/publishSipUrisFormSelectors'
 import { publishSipUrisFormActions } from '../../model/slices/publishSipUrisFormSlice'
 import { isUserAdmin, getUserAuthData } from '@/entities/User'
@@ -21,6 +26,9 @@ import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { useNavigate } from 'react-router-dom'
 import { getRoutePublishSipUris } from '@/shared/const/router'
 import { PublishSipUrisFormHeader } from '../PublishSipUrisFormHeader/PublishSipUrisFormHeader'
+import { TelephonySipCard } from './components/TelephonySipCard/TelephonySipCard'
+import { SecuritySipCard } from './components/SecuritySipCard/SecuritySipCard'
+import { useMediaQuery } from '@mui/material'
 
 interface PublishSipUrisFormProps {
     className?: string
@@ -36,10 +44,21 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
     const selectedAssistant = useSelector(getPublishSipUrisFormSelectedAssistant)
     const selectedPbx = useSelector(getPublishSipUrisFormSelectedPbx)
     const ipAddress = useSelector(getPublishSipUrisFormIpAddress)
+    const records = useSelector(getPublishSipUrisFormRecords)
+    const tls = useSelector(getPublishSipUrisFormTls)
+    const active = useSelector(getPublishSipUrisFormActive)
     const isAdmin = useSelector(isUserAdmin)
     const userData = useSelector(getUserAuthData)
 
-    const [createSip, { isLoading }] = useCreateSipUri()
+    const [createSip, { isLoading: isCreating }] = useCreateSipUri()
+    const [updateSip, { isLoading: isUpdating }] = useUpdateSipUri()
+
+    const isLoading = isCreating || isUpdating
+    const isMobile = useMediaQuery('(max-width:800px)')
+
+    const onClose = useCallback(() => {
+        navigate(getRoutePublishSipUris())
+    }, [navigate])
 
     const onChangeAssistant = useCallback((_: any, value: AssistantOptions | null) => {
         dispatch(publishSipUrisFormActions.setSelectedAssistant(value))
@@ -53,66 +72,101 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
         dispatch(publishSipUrisFormActions.setIpAddress(e.target.value))
     }, [dispatch])
 
+    const onChangeRecords = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(publishSipUrisFormActions.setRecords(e.target.checked))
+    }, [dispatch])
+
+    const onChangeTls = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(publishSipUrisFormActions.setTls(e.target.checked))
+    }, [dispatch])
+
+    const onChangeActive = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(publishSipUrisFormActions.setActive(e.target.checked))
+    }, [dispatch])
+
     const onSave = useCallback(async () => {
         if (!selectedAssistant || !selectedPbx || !ipAddress) {
             toast.error(t('Пожалуйста заполни все поля'))
             return
         }
 
-        try {
-            await createSip({
-                assistantId: selectedAssistant.id,
-                serverId: selectedPbx.id,
-                ipAddress
-            }).unwrap()
+        const payload = {
+            assistantId: String(selectedAssistant.id),
+            serverId: String(selectedPbx.id),
+            ipAddress,
+            records,
+            tls,
+            active
+        }
 
-            toast.success(isEdit ? t('SIP URI успешно обновлен') : t('SIP URI успешно создан'))
+        try {
+            if (isEdit) {
+                await updateSip(payload).unwrap()
+                toast.success(t('SIP URI успешно обновлен'))
+            } else {
+                await createSip(payload).unwrap()
+                toast.success(t('SIP URI успешно создан'))
+            }
+
             navigate(getRoutePublishSipUris())
             dispatch(publishSipUrisFormActions.resetForm())
         } catch (e) {
             toast.error(getErrorMessage(e))
         }
-    }, [selectedAssistant, selectedPbx, ipAddress, createSip, t, isEdit, navigate, dispatch])
+    }, [selectedAssistant, selectedPbx, ipAddress, records, tls, active, updateSip, createSip, t, isEdit, navigate, dispatch])
 
     return (
-        <VStack gap={'8'} max className={classNames(cls.PublishSipUrisForm, {}, [className])}>
+        <VStack gap={'16'} max className={classNames(cls.PublishSipUrisForm, {}, [className])}>
             <PublishSipUrisFormHeader
                 onSave={onSave}
+                onClose={onClose}
                 isEdit={isEdit}
                 isLoading={isLoading}
+                assistantName={selectedAssistant?.name}
             />
 
-            <Card padding={'24'} max border={'partial'}>
-                <VStack gap={'16'} max>
-                    <AssistantSelect
-                        key={selectedAssistant?.id}
-                        label={t('AI Ассистент') || ''}
-                        value={selectedAssistant}
-                        onChangeAssistant={onChangeAssistant}
-                        userId={isEdit ? selectedAssistant?.userId : (isAdmin ? undefined : userData?.id)}
-                    />
+            <VStack gap={isMobile ? '16' : '24'} max align="center">
+                <HStack
+                    gap={isMobile ? '16' : '24'}
+                    max
+                    align="start"
+                    wrap="wrap"
+                    className={cls.contentWrapper}
+                >
+                    <VStack gap="24" className={cls.leftColumn}>
+                        <TelephonySipCard
+                            selectedAssistant={selectedAssistant}
+                            onChangeAssistant={onChangeAssistant}
+                            selectedPbx={selectedPbx}
+                            onChangePbx={onChangePbx}
+                            active={active || false}
+                            onChangeActive={onChangeActive}
+                            isEdit={isEdit}
+                            isAdmin={isAdmin}
+                            userId={userData?.id}
+                        />
+                    </VStack>
 
-                    <PbxServerSelect
-                        key={selectedPbx?.id}
-                        label={t('Выберите VoIP сервер') || ''}
-                        value={selectedPbx}
-                        onChangePbxServer={onChangePbx}
-                    />
-
-                    <Textarea
-                        label={t('Ваш IP Адрес') || ''}
-                        value={ipAddress}
-                        onChange={onChangeIp}
-                        placeholder={t('Введите IP адрес') || '1.2.3.4'}
-                    />
-                </VStack>
-            </Card>
+                    <VStack gap="24" className={cls.rightColumn}>
+                        <SecuritySipCard
+                            ipAddress={ipAddress}
+                            onChangeIp={onChangeIp}
+                            records={records || false}
+                            onChangeRecords={onChangeRecords}
+                            tls={tls || false}
+                            onChangeTls={onChangeTls}
+                        />
+                    </VStack>
+                </HStack>
+            </VStack>
 
             <PublishSipUrisFormHeader
                 onSave={onSave}
+                onClose={onClose}
                 isEdit={isEdit}
                 isLoading={isLoading}
                 variant={'diviner-bottom'}
+                assistantName={selectedAssistant?.name}
             />
         </VStack>
     )

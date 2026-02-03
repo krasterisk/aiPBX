@@ -97,5 +97,9 @@
     "example.com": "example.com",
     "По одному домену. Нажмите Enter для добавления.": "One domain per line. Press Enter to add.",
     "Установка виджета": "Widget installation",
-    "Скопируйте код и добавьте его на ваш сайт для начала работы": "Copy the code and add it to your site to get started"
+    "Скопируйте код и добавьте его на ваш сайт для начала работы": "Copy the code and add it to your site to get started",
+    "Логотип на виджете": "Widget logo",
+    "Загрузить": "Upload",
+    "Рекомендуемый размер 200x200px": "Recommended size 200x200px",
+    "Удалить": "Delete"
 }

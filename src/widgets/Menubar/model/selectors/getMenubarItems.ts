@@ -79,13 +79,19 @@ export const useMenubarItems = () => {
           {
             path: getRoutePublishSipUris(),
             Icon: SendIcon,
-            text: t('SIP URIs'),
+            text: t('SIPs'),
             authOnly: true
           },
           {
             path: getRoutePublishWidgets(),
             Icon: SmartToyIcon,
             text: t('Виджеты'),
+            authOnly: true
+          },
+          {
+            path: getRoutePbxServers(),
+            Icon: DnsIcon,
+            text: t('PBXs'),
             authOnly: true
           }
         ]
@@ -110,12 +116,6 @@ export const useMenubarItems = () => {
       },
       ...(isAdmin
         ? [
-          {
-            path: getRoutePbxServers(),
-            Icon: DnsIcon,
-            text: t('VoIP Серверы'),
-            authOnly: true
-          },
           {
             path: getRouteUsers(),
             Icon: PeopleIcon,

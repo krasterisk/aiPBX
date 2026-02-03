@@ -34,14 +34,10 @@ export const GetCodeDialog = memo((props: GetCodeDialogProps) => {
         initialAppearance || DEFAULT_APPEARANCE_SETTINGS
     )
 
-    const { data: pbxServer } = usePbxServer(String(widget?.pbxServerId), {
-        skip: !widget?.pbxServerId
-    })
-
     const embedCode = useMemo(() => {
         if (!widget) return ''
-        return generateEmbedCode(widget, appearance, pbxServer?.wss_url || '')
-    }, [widget, appearance, pbxServer?.wss_url])
+        return generateEmbedCode(widget, appearance)
+    }, [widget, appearance])
 
     if (!widget) return null
 

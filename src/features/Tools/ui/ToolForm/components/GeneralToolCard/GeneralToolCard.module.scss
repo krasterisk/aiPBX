@@ -1,0 +1,25 @@
+.GeneralToolCard {
+    background: var(--card-bg-redesigned);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    width: 100%;
+
+    &:hover {
+        border-color: var(--accent-redesigned);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 800px) {
+        padding: 16px !important;
+    }
+}
+
+.label {
+    opacity: 0.6;
+}
+
+.fullWidth {
+    width: 100%;
+}

@@ -3,6 +3,7 @@ import { Combobox } from '@/shared/ui/mui/Combobox'
 import { ToolType } from '../../model/types/tools'
 import { ToolTypesValues } from '../../model/consts/consts'
 import { useTranslation } from 'react-i18next'
+import { TextField } from '@mui/material'
 
 interface ToolTypeSelectorProps {
   label?: string
@@ -25,7 +26,7 @@ export const ToolTypeSelect = memo((props: ToolTypeSelectorProps) => {
   const toolsData = [
     {
       value: ToolTypesValues.FUNCTION,
-      descriptions: t('Функция')
+      descriptions: t('Вызов функции')
     },
     {
       value: ToolTypesValues.MCP,
@@ -38,21 +39,35 @@ export const ToolTypeSelect = memo((props: ToolTypeSelectorProps) => {
   const onChangeHandler = (event: any, newValue: ToolType) => {
     if (newValue) {
       onChangeToolType?.(event, newValue)
+    } else {
+      onChangeToolType?.(event, { value: '' as any, descriptions: '' })
     }
   }
 
   return (
-        <Combobox
-            label={label}
-            autoComplete={true}
-            options={toolsData}
-            disableClearable
-            value={currentValue}
-            onChange={onChangeHandler}
-            getOptionKey={option => option.value}
-            isOptionEqualToValue={(option, value) => value === undefined || value === '' || option.value === value.value}
-            getOptionLabel={(option) => option.value ? option.descriptions : ''}
-            {...otherProps}
+    <Combobox
+      label={label}
+      autoComplete={true}
+      options={toolsData}
+      className={className}
+      value={currentValue}
+      onChange={onChangeHandler}
+      getOptionKey={option => option.value}
+      isOptionEqualToValue={(option, value) => !value || option.value === (typeof value === 'string' ? value : value?.value)}
+      getOptionLabel={(option) => option.value ? option.descriptions : ''}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          slotProps={{
+            htmlInput: {
+              ...params.inputProps,
+              readOnly: true
+            }
+          }}
         />
+      )}
+      {...otherProps}
+    />
   )
 })
