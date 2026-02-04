@@ -10,7 +10,7 @@ import { Input } from '@/shared/ui/redesigned/Input'
 import { Icon } from '@/shared/ui/redesigned/Icon'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { Plus, Search, Users } from 'lucide-react'
+import { Plus, Search } from 'lucide-react'
 import { useSelector } from 'react-redux'
 import { ClientSelect, isUserAdmin } from '@/entities/User'
 import { useToolsFilters } from '../../lib/hooks/useToolsFilters'
@@ -62,16 +62,11 @@ export const ToolsListHeader = memo((props: ToolsListHeaderProps) => {
                 />
 
                 {isAdmin && (
-                    <HStack gap="8" className={cls.clientSelectWrapper}>
-                        <div className={cls.iconCircle}>
-                            <Users size={18} className={cls.userIcon} />
-                        </div>
-                        <ClientSelect
-                            clientId={clientId}
-                            onChangeClient={onChangeUserId}
-                            className={cls.clientSelect}
-                        />
-                    </HStack>
+                    <ClientSelect
+                        clientId={clientId}
+                        onChangeClient={onChangeUserId}
+                        className={cls.clientSelect}
+                    />
                 )}
             </HStack>
         </VStack>

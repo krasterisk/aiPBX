@@ -1,16 +1,15 @@
+@import '@/app/styles/variables/mixins';
+
 .ToolsList {
     width: 100%;
 }
 
 .controlsCard {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-radius: 16px;
+    @include glass-card-secondary;
 }
 
 .controls {
-    padding: 12px 24px;
+    padding: var(--space-3) var(--card-padding-md);
 }
 
 .checkbox {
@@ -28,7 +27,7 @@
 .listWrapper {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 20px;
+    gap: var(--space-5);
     width: 100%;
 }
 
@@ -37,13 +36,13 @@
 }
 
 .emptyState {
-    padding: 60px 20px;
+    padding: var(--space-16) var(--space-5);
     background: rgba(255, 255, 255, 0.02);
-    border-radius: 20px;
-    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-xl);
+    border: 1px dashed var(--divider-solid);
 }
 
-@media (max-width: 800px) {
+@include tablet {
     .listWrapper {
         grid-template-columns: 1fr;
     }

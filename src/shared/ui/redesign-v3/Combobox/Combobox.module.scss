@@ -1,0 +1,425 @@
+@import '@/app/styles/variables/mixins';
+
+.Combobox {
+    position: relative;
+    width: 100%;
+}
+
+.label {
+    display: block;
+    margin-bottom: var(--space-2);
+    color: var(--text-redesigned);
+    font-size: var(--font-size-m);
+    font-weight: 500;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+.control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    min-height: 42px;
+    padding: 10px 12px;
+    background: var(--light-bg-redesigned);
+    border: 1px solid rgba(94, 211, 243, 0.2);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: var(--transition-colors);
+    outline: none;
+
+    &:hover:not(.disabled) {
+        border-color: rgba(94, 211, 243, 0.4);
+        background: var(--card-bg);
+    }
+
+    &:focus-visible {
+        @include focus-visible;
+    }
+}
+
+.open .control {
+    border-color: var(--accent-redesigned);
+    box-shadow: 0 0 0 3px rgba(94, 211, 243, 0.1);
+    background: var(--card-bg);
+
+    .dropdownIndicator svg {
+        transform: rotate(180deg);
+        color: var(--accent-redesigned);
+    }
+}
+
+.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+
+    .control {
+        background: var(--bg-redesigned);
+    }
+}
+
+.error .control {
+    border-color: var(--status-error-border);
+
+    &:hover,
+    &:focus {
+        border-color: var(--status-error);
+    }
+}
+
+// Value display
+.valueContainer {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    flex: 1;
+    overflow: hidden;
+}
+
+// Addon icons
+.addonLeft,
+.addonRight {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--icon-redesigned);
+    transition: var(--transition-colors);
+
+    svg {
+        transition: var(--transition-colors);
+    }
+}
+
+.addonLeft {
+    margin-right: var(--space-2);
+}
+
+.addonRight {
+    margin-left: var(--space-2);
+}
+
+.focused {
+
+    .addonLeft,
+    .addonRight {
+        color: var(--accent-redesigned);
+
+        svg {
+            color: var(--accent-redesigned);
+        }
+    }
+}
+
+.input {
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text-redesigned);
+    font-size: var(--font-size-m);
+    font-family: var(--font-family-main);
+    flex: 1;
+    min-width: 60px;
+    cursor: pointer;
+
+    &::placeholder {
+        color: var(--hint-redesigned);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+}
+
+.singleValue {
+    flex: 1;
+    color: var(--text-redesigned);
+    font-size: var(--font-size-m);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hasValue .input::placeholder {
+    color: var(--text-redesigned);
+}
+
+// Chips for multiple selection
+.chip {
+    @include chip-base;
+    @include flex-center;
+    gap: var(--space-1);
+    background: rgba(94, 211, 243, 0.15);
+    border: 1px solid rgba(94, 211, 243, 0.3);
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-normal);
+
+    &:hover {
+        background: rgba(94, 211, 243, 0.25);
+        border-color: var(--accent-redesigned);
+    }
+}
+
+.chipLabel {
+    color: var(--text-redesigned);
+    font-size: var(--font-size-s);
+    font-weight: 500;
+}
+
+.chipRemove {
+    @include flex-center;
+    @include interactive-element;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--icon-redesigned);
+    cursor: pointer;
+    border-radius: var(--radius-xs);
+    transition: var(--transition-fast);
+
+    &:hover {
+        color: var(--status-error);
+        background: rgba(239, 68, 68, 0.1);
+    }
+
+    svg {
+        display: block;
+    }
+}
+
+// Indicators
+.indicators {
+    @include flex-center;
+    gap: var(--space-1);
+    flex-shrink: 0;
+}
+
+.separator {
+    width: 1px;
+    height: 20px;
+    background: var(--divider-solid);
+}
+
+.clearButton {
+    @include flex-center;
+    @include interactive-element;
+    background: none;
+    border: none;
+    padding: 2px;
+    color: var(--icon-redesigned);
+    cursor: pointer;
+    border-radius: var(--radius-xs);
+    transition: var(--transition-fast);
+
+    &:hover {
+        color: var(--status-error);
+        background: rgba(239, 68, 68, 0.1);
+        transform: var(--hover-scale-md);
+    }
+
+    svg {
+        display: block;
+    }
+}
+
+.dropdownIndicator {
+    @include flex-center;
+    color: var(--icon-redesigned);
+    transition: var(--transition-normal);
+
+    svg {
+        transition: var(--transition-transform);
+    }
+}
+
+// Dropdown menu
+.menu {
+    @include custom-scrollbar;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000; // Высокий z-index для отображения поверх форм
+    padding: var(--space-2);
+    background: var(--card-bg);
+    border: 1px solid rgba(94, 211, 243, 0.2);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    animation: slideDown 0.2s var(--ease-out);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Options
+.option {
+    @include flex-between;
+    gap: var(--space-2);
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    color: var(--text-redesigned);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    user-select: none;
+
+    &:hover,
+    &.highlighted {
+        background: rgba(94, 211, 243, 0.1);
+        transform: translateX(2px);
+    }
+}
+
+.selected {
+    background: rgba(94, 211, 243, 0.15);
+    font-weight: 600;
+
+    .checkIcon {
+        color: var(--accent-redesigned);
+    }
+
+    &:hover,
+    &.highlighted {
+        background: rgba(94, 211, 243, 0.2);
+    }
+}
+
+.optionLabel {
+    flex: 1;
+    font-size: var(--font-size-m);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.checkIcon {
+    @include flex-center;
+    flex-shrink: 0;
+    color: var(--accent-redesigned);
+    animation: checkIn 0.2s var(--ease-spring);
+}
+
+@keyframes checkIn {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+.noOptions {
+    padding: var(--space-4);
+    text-align: center;
+    color: var(--hint-redesigned);
+    font-size: var(--font-size-m);
+}
+
+.errorText {
+    display: block;
+    margin-top: var(--space-1);
+    color: var(--status-error);
+    font-size: var(--font-size-s);
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+// Size variants
+.s {
+    .control {
+        min-height: 36px;
+        padding: 8px 10px;
+    }
+
+    .input,
+    .singleValue,
+    .optionLabel {
+        font-size: var(--font-size-s);
+    }
+
+    .chip {
+        padding: 2px 6px;
+    }
+
+    .chipLabel {
+        font-size: 11px;
+    }
+}
+
+.m {
+    .control {
+        min-height: 42px;
+        padding: 10px 12px;
+    }
+
+    .input,
+    .singleValue,
+    .optionLabel {
+        font-size: var(--font-size-m);
+    }
+}
+
+.l {
+    .control {
+        min-height: 48px;
+        padding: 12px 16px;
+    }
+
+    .input,
+    .singleValue,
+    .optionLabel {
+        font-size: var(--font-size-l);
+    }
+
+    .chip {
+        padding: 6px 10px;
+    }
+
+    .chipLabel {
+        font-size: var(--font-size-m);
+    }
+}
+
+// Responsive
+@include mobile {
+    .menu {
+        max-height: 250px;
+    }
+
+    .control {
+        min-height: 40px;
+    }
+
+    .s .control {
+        min-height: 34px;
+    }
+
+    .m .control {
+        min-height: 40px;
+    }
+
+    .l .control {
+        min-height: 44px;
+    }
+}

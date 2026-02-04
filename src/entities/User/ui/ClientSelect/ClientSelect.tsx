@@ -1,79 +1,76 @@
-import { memo } from 'react'
-import { Combobox } from '@/shared/ui/mui/Combobox'
-import { ClientOptions } from '../../model/types/user'
+import { useTranslation } from 'react-i18next'
+import { memo, useCallback, ReactNode } from 'react'
+import { Combobox, ComboboxOption } from '@/shared/ui/redesign-v3/Combobox'
 import { useGetAllUsers } from '../../api/usersApi'
-import { AutocompleteInputChangeReason, TextField } from '@mui/material'
+import { Users } from 'lucide-react'
 
 interface ClientSelectProps {
   label?: string
-  value?: ClientOptions | null
   clientId?: string
   className?: string
   fullWidth?: boolean
-  onChangeClient?: (event: any, newValue: ClientOptions) => void
-  onInputChange?: (
-    event: React.SyntheticEvent,
-    value: string,
-    reason: AutocompleteInputChangeReason,
-  ) => void
-  inputValue?: string
+  onChangeClient?: (clientId: string) => void
+  size?: 's' | 'm' | 'l'
+  error?: string
+  placeholder?: string
+  addonLeft?: ReactNode
+  showIcon?: boolean
 }
 
 export const ClientSelect = memo((props: ClientSelectProps) => {
+  const { t } = useTranslation('users')
   const {
     className,
     label,
-    value = null,
-    inputValue,
     clientId,
     onChangeClient,
-    onInputChange,
-    ...otherProps
+    fullWidth = true,
+    size = 'm',
+    error,
+    placeholder,
+    addonLeft,
+    showIcon = true
   } = props
 
-  const { data } = useGetAllUsers(null)
+  const { data, isLoading } = useGetAllUsers(null)
 
-  const clientItems = data?.map(item => ({
+  const clientItems: ComboboxOption[] = data?.map(item => ({
     id: item.id,
     name: String(item.name)
   })) || []
 
-  const selectedUserValue = clientId ? clientItems.find(item => item.id === clientId) : null
+  const selectedClient = clientId
+    ? clientItems.find(item => item.id === clientId) || null
+    : null
 
-  const onChangeHandler = (event: any, newValue: ClientOptions) => {
-    if (newValue) {
-      onChangeClient?.(event, newValue)
+  const handleChange = useCallback((value: ComboboxOption | ComboboxOption[] | null) => {
+    if (!value || Array.isArray(value)) {
+      onChangeClient?.('')
     } else {
-      onChangeClient?.(event, { id: '', name: '' })
+      onChangeClient?.(value.id)
     }
-  }
+  }, [onChangeClient])
+
+  // Определяем иконку слева
+  const leftAddon = addonLeft || (showIcon ? <Users size={18} /> : undefined)
+  const placeholderText = placeholder || (t('Все клиенты') as string)
 
   return (
     <Combobox
+      className={className}
       label={label}
-      autoComplete={true}
-      clearOnBlur={false}
+      placeholder={isLoading ? (t('Загрузка...') as string) : placeholderText}
       options={clientItems}
-      value={value || selectedUserValue || null}
-      onChange={onChangeHandler}
-      inputValue={inputValue}
-      getOptionKey={option => option.id}
-      isOptionEqualToValue={(option, value) => value === undefined || value === '' || option.id === value.id}
-      getOptionLabel={(option) => option.id ? option.name : ''}
-      onInputChange={onInputChange}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-          slotProps={{
-            htmlInput: {
-              ...params.inputProps,
-              readOnly: true
-            }
-          }}
-        />
-      )}
-      {...otherProps}
+      value={selectedClient}
+      onChange={handleChange}
+      fullWidth={fullWidth}
+      size={size}
+      error={error}
+      searchable={true}
+      clearable={true}
+      disabled={isLoading}
+      noOptionsText={t('Клиенты не найдены') ?? ''}
+      addonLeft={leftAddon}
     />
   )
 })

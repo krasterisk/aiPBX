@@ -10,7 +10,7 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { PeriodTabs } from '@/entities/Filters'
 import quarterOfYear from 'dayjs/plugin/quarterOfYear'
-import { ClientOptions } from '@/entities/User'
+
 import TuneIcon from '@mui/icons-material/Tune'
 
 // Расширяем Day.js плагинами weekday и updateLocale
@@ -33,7 +33,7 @@ interface PeriodPickerProps {
   onChangeTab: (tab: string) => void
   onChangeStartDate: (value: string) => void
   onChangeEndDate: (value: string) => void
-  onChangeUserId: (event: any, user: ClientOptions) => void
+
 }
 
 export const PeriodPicker = memo((props: PeriodPickerProps) => {
@@ -47,7 +47,7 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
     onChangeTab,
     onChangeEndDate,
     onChangeStartDate,
-    onChangeUserId
+
   } = props
 
   const [date, setDate] = useState<Dayjs>(dayjs())

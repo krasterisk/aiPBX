@@ -1,6 +1,8 @@
+@import '@/app/styles/variables/mixins';
+
 .PbxServersListHeader {
     width: 100%;
-    padding: 16px 0;
+    padding: var(--space-4) 0;
 }
 
 .searchRow {
@@ -13,10 +15,10 @@
     width: 100%;
     background: var(--light-bg-redesigned) !important;
     border: 1px solid rgba(94, 211, 243, 0.1) !important;
-    border-radius: 14px !important;
+    border-radius: var(--radius-lg) !important;
     height: 42px !important;
-    padding: 0 16px !important;
-    transition: all 0.3s ease !important;
+    padding: 0 var(--space-4) !important;
+    transition: var(--transition-normal) !important;
 
     &:hover {
         background: var(--card-bg) !important;
@@ -26,111 +28,53 @@
     &.focused {
         background: var(--card-bg) !important;
         border-color: var(--accent-redesigned) !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--shadow-sm);
 
         .searchIcon {
             color: var(--accent-redesigned);
-            transform: scale(1.1);
+            transform: var(--hover-scale-sm);
         }
     }
 
-    @media (max-width: 600px) {
+    @include mobile {
         max-width: 100%;
     }
 }
 
 .searchIcon {
     color: var(--hint-redesigned);
-    transition: all 0.3s ease;
+    transition: var(--transition-normal);
 }
 
-.clientSelectWrapper {
-    height: 42px;
-    background: var(--light-bg-redesigned);
-    border: 1px solid rgba(94, 211, 243, 0.1);
-    border-radius: 14px;
-    padding-left: 12px;
-    transition: all 0.3s ease;
+.clientSelect {
+    flex: 1;
     min-width: 280px;
 
-    &:hover {
-        background: var(--card-bg);
-        border-color: rgba(94, 211, 243, 0.3);
-    }
-
-    @media (max-width: 600px) {
+    @include mobile {
         width: 100%;
         min-width: 0;
     }
 }
 
-.iconCircle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: rgba(94, 211, 243, 0.1);
-}
-
-.userIcon {
-    color: var(--accent-redesigned);
-}
-
-.clientSelect {
-    width: 100%;
-
-    :global(.MuiInputBase-root) {
-        height: 40px !important;
-        background: transparent !important;
-    }
-
-    :global(.MuiOutlinedInput-notchedOutline) {
-        border: none !important;
-        outline: none !important;
-    }
-
-    :global(.MuiAutocomplete-root .MuiOutlinedInput-root) {
-        padding: 0 !important;
-
-        fieldset {
-            border: none !important;
-        }
-
-        &:hover fieldset {
-            border: none !important;
-        }
-
-        &.Mui-focused fieldset {
-            border: none !important;
-        }
-    }
-
-    :global(.MuiInputLabel-root) {
-        display: none !important;
-    }
-}
-
 .plusIcon {
     color: var(--accent-redesigned);
-    transition: transform 0.3s ease;
+    transition: var(--transition-transform);
 }
 
 .createBtn {
-    border-radius: 12px !important;
+    border-radius: var(--radius-md) !important;
     height: 42px !important;
     border: 1px solid rgba(94, 211, 243, 0.2) !important;
-    background: rgba(94, 211, 243, 0.05) !important;
+    background: var(--icon-bg-primary) !important;
     color: var(--text-redesigned) !important;
     font-weight: 600 !important;
-    padding: 0 20px !important;
-    transition: all 0.3s ease !important;
+    padding: 0 var(--space-5) !important;
+    transition: var(--transition-normal) !important;
 
     &:hover {
-        background: rgba(94, 211, 243, 0.1) !important;
+        background: var(--icon-bg-secondary) !important;
         border-color: var(--accent-redesigned) !important;
-        transform: translateY(-1px);
+        transform: var(--hover-lift-sm);
 
         .plusIcon {
             transform: rotate(90deg);
@@ -141,7 +85,7 @@
         transform: translateY(0);
     }
 
-    @media (max-width: 600px) {
+    @include mobile {
         width: 100%;
     }
 }

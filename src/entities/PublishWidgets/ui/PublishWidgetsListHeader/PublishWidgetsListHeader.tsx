@@ -5,14 +5,14 @@ import { useTranslation } from 'react-i18next'
 import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { getRoutePublishWidgetsCreate } from '@/shared/const/router'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
-import { IconButton, useMediaQuery } from '@mui/material'
-import AddBox from '@mui/icons-material/AddBox'
+import { useMediaQuery } from '@mui/material'
 import { Input } from '@/shared/ui/redesigned/Input'
-import { Icon } from '@/shared/ui/redesigned/Icon'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Plus, Search } from 'lucide-react'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { usePublishWidgetsFilters } from '../../model/hooks/usePublishWidgetsFilters'
+import { ClientSelect, isUserAdmin } from '@/entities/User'
+import { useSelector } from 'react-redux'
 
 interface PublishWidgetsListHeaderProps {
     className?: string
@@ -22,11 +22,14 @@ export const PublishWidgetsListHeader = memo((props: PublishWidgetsListHeaderPro
     const { className } = props
     const {
         search,
-        onSearchChange
+        onSearchChange,
+        clientId,
+        onClientIdChange
     } = usePublishWidgetsFilters()
 
     const { t } = useTranslation('publish-widgets')
     const isMobile = useMediaQuery('(max-width:800px)')
+    const isAdmin = useSelector(isUserAdmin)
 
     return (
         <VStack gap="16" max className={classNames(cls.PublishWidgetsListHeader, {}, [className])}>
@@ -55,6 +58,15 @@ export const PublishWidgetsListHeader = memo((props: PublishWidgetsListHeaderPro
                     addonLeft={<Search size={18} className={cls.searchIcon} />}
                     value={search}
                 />
+
+                {isAdmin && (
+                    <ClientSelect
+                        clientId={clientId}
+                        onChangeClient={onClientIdChange}
+                        className={cls.clientSelect}
+                        placeholder={t('Все клиенты') ?? 'Все клиенты'}
+                    />
+                )}
             </HStack>
         </VStack>
     )

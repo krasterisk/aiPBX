@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import dayjs from 'dayjs'
 import { Modal } from '@/shared/ui/redesigned/Modal'
-import { ClientOptions, ClientSelect, isUserAdmin } from '@/entities/User'
+import { ClientSelect, isUserAdmin } from '@/entities/User'
 import cls from './PeriodExtendedFilter.module.scss'
 import { useSelector } from 'react-redux'
 import SearchIcon from '@mui/icons-material/Search'
@@ -23,7 +23,7 @@ interface PeriodExtendedFilterProps {
     onChangeStartDate?: (value: string) => void
     onChangeEndDate?: (value: string) => void
     onChangeAssistant: (event: any, assistant: AssistantOptions[]) => void
-    onChangeUserId: (event: any, user: ClientOptions) => void
+    onChangeUserId: (clientId: string) => void
 
 }
 

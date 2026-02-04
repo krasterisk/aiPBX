@@ -1,0 +1,93 @@
+@import '@/app/styles/variables/mixins';
+
+.PromptSection {
+    @include glass-card-tertiary;
+    padding: var(--card-padding-lg);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition-normal);
+
+    &:hover {
+        border-color: var(--accent-redesigned);
+        box-shadow: var(--shadow-lg);
+    }
+
+    @include tablet {
+        padding: var(--card-padding-md);
+        height: auto;
+    }
+
+    @include mobile {
+        padding: var(--space-4);
+    }
+}
+
+.sectionTitle {
+    color: var(--text-redesigned);
+    font-size: 18px;
+}
+
+.promptHeader {
+    margin-bottom: var(--space-5);
+
+    @include mobile {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-3);
+    }
+}
+
+.generateBtn {
+    transition: var(--transition-normal);
+    flex-shrink: 0;
+
+    &:hover {
+        transform: var(--hover-scale-sm);
+    }
+
+    svg {
+        color: var(--accent-redesigned);
+    }
+
+    @include mobile {
+        width: 100%;
+    }
+}
+
+.promptTextarea {
+    font-family: 'Fira Code', 'Roboto Mono', monospace !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    background: var(--code-bg) !important;
+    flex: 1;
+
+    textarea {
+        font-family: 'Fira Code', 'Roboto Mono', monospace !important;
+    }
+}
+
+.popover {
+    :global(.MuiPopover-paper) {
+        @include glass-card-tertiary;
+        padding: var(--card-padding-md);
+        max-width: 420px;
+        width: calc(100vw - var(--space-8));
+    }
+}
+
+.popoverContent {
+    padding: var(--space-4);
+    min-width: 320px;
+
+    @include mobile {
+        min-width: auto;
+        padding: var(--space-3);
+    }
+}
+
+@include mobile {
+    .sectionTitle {
+        font-size: 16px;
+    }
+}

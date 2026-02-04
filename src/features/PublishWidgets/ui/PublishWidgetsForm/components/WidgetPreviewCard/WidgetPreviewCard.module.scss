@@ -1,27 +1,26 @@
+@import '@/app/styles/variables/mixins';
+
 .WidgetPreviewCard {
-    background: var(--card-bg-redesigned);
+    @include glass-card-secondary;
     overflow: hidden;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.05);
 
     &:hover {
         border-color: var(--accent-redesigned);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        box-shadow: var(--shadow-lg);
     }
 }
 
 .container {
     width: 100%;
     height: 500px;
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: var(--glass-border-subtle);
     background: #f8fafc;
     position: relative;
 }
 
 .iframe {
-    width: 100%;
-    height: 100%;
+    @include full-size;
     border: none;
 }

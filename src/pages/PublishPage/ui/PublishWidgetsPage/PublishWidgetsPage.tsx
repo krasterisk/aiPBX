@@ -8,7 +8,7 @@ import { Page } from '@/widgets/Page'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import {
     PublishWidgetsList,
-    PublishWidgetsListHeader,
+
     publishWidgetsPageReducer,
     usePublishWidgetsFilters,
     initPublishWidgetsPage

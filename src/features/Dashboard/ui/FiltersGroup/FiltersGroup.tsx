@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import React, { memo, useState } from 'react'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
-import { ClientOptions } from '@/entities/User'
+
 import { ReportFilters } from '@/entities/Report'
 import { AssistantOptions } from '@/entities/Assistants'
 import { PeriodPicker } from '@/entities/PeriodPicker'
@@ -21,7 +21,7 @@ interface FiltersGroupProps {
   isInited?: boolean
   dashboardData?: ReportFilters
   onChangeAssistant: (event: any, assistant: AssistantOptions[]) => void
-  onChangeUserId: (event: any, user: ClientOptions) => void
+  onChangeUserId: (clientId: string) => void
   onChangeTab: (value: string) => void
   onChangeStartDate: (value: string) => void
   onChangeEndDate: (value: string) => void
@@ -79,7 +79,7 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
             endDate={endDate}
             isInited={isInited}
             onChangeTab={onChangeTab}
-            onChangeUserId={onChangeUserId}
+
             onChangeEndDate={onChangeEndDate}
             onChangeStartDate={onChangeStartDate}
             onOpenFilters={() => setFilterShow(true)}

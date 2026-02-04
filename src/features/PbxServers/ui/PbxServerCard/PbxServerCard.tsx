@@ -10,7 +10,7 @@ import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/Dynam
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
 import { getRoutePbxServers } from '@/shared/const/router'
-import { getUserAuthData, isUserAdmin, ClientOptions } from '@/entities/User'
+import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import {
   useDeletePbxServers,
   useSetPbxServers,
@@ -77,10 +77,10 @@ export const PbxServerCard = memo((props: PbxServerCardProps) => {
     dispatch(pbxServerFormActions.updateForm({ [field]: value }))
   }, [dispatch])
 
-  const onChangeClient = useCallback((event: any, newValue: ClientOptions | null) => {
+  const onChangeClient = useCallback((id: string) => {
     dispatch(pbxServerFormActions.updateForm({
-      user: newValue || { id: '', name: '' },
-      userId: newValue?.id || ''
+      user: { id, name: '' },
+      userId: id
     }))
   }, [dispatch])
 
@@ -184,7 +184,6 @@ export const PbxServerCard = memo((props: PbxServerCardProps) => {
                 onChangeComment={(v) => onChangeField('comment', v)}
                 cloudPbx={form?.cloudPbx || false}
                 onChangeCloudPbx={(v) => onChangeField('cloudPbx', v)}
-                user={form?.user as ClientOptions}
                 userId={form?.userId}
                 onChangeClient={onChangeClient}
                 isAdmin={isAdmin}

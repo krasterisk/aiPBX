@@ -1,0 +1,293 @@
+/**
+ * Design System Variables
+ * Глобальные переменные для единообразного дизайна приложения
+ * Включает Glassmorphism эффекты, анимации, тени и цветовую схему
+ */
+
+:root {
+    // ========================================
+    // GLASSMORPHISM EFFECTS
+    // ========================================
+
+    /* Основной glassmorphism эффект для карточек */
+    --glass-bg-primary: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    --glass-bg-secondary: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+    --glass-bg-tertiary: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+
+    /* Blur эффекты */
+    --glass-blur-sm: blur(10px);
+    --glass-blur-md: blur(20px);
+    --glass-blur-lg: blur(30px);
+    --glass-blur-xl: blur(40px);
+
+    /* Границы glassmorphism */
+    --glass-border-primary: 1px solid rgba(255, 255, 255, 0.12);
+    --glass-border-secondary: 1px solid rgba(255, 255, 255, 0.08);
+    --glass-border-accent: 1px solid rgba(94, 211, 243, 0.3);
+    --glass-border-subtle: 1px solid rgba(255, 255, 255, 0.05);
+
+    /* Overlay эффекты */
+    --glass-overlay-light: rgba(255, 255, 255, 0.02);
+    --glass-overlay-medium: rgba(255, 255, 255, 0.05);
+    --glass-overlay-dark: rgba(0, 0, 0, 0.2);
+    --glass-overlay-darker: rgba(0, 0, 0, 0.3);
+
+    // ========================================
+    // SHADOWS & DEPTH
+    // ========================================
+
+    /* Тени для карточек */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.25);
+    --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.3);
+
+    /* Тени с цветовым акцентом */
+    --shadow-accent-sm: 0 0 10px rgba(94, 211, 243, 0.1);
+    --shadow-accent-md: 0 0 20px rgba(94, 211, 243, 0.15);
+    --shadow-accent-lg: 0 0 30px rgba(94, 211, 243, 0.2);
+
+    /* Glow эффекты */
+    --glow-success: 0 0 10px #10b981;
+    --glow-error: 0 0 10px #ef4444;
+    --glow-warning: 0 0 10px #f59e0b;
+    --glow-info: 0 0 10px #3b82f6;
+    --glow-accent: 0 0 10px var(--accent-redesigned);
+
+    /* Inset тени */
+    --shadow-inset-sm: inset 0 0 10px rgba(0, 0, 0, 0.1);
+    --shadow-inset-md: inset 0 0 15px rgba(0, 0, 0, 0.2);
+    --shadow-inset-lg: inset 0 0 20px rgba(0, 0, 0, 0.3);
+
+    // ========================================
+    // BORDER RADIUS
+    // ========================================
+
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 24px;
+    --radius-full: 9999px;
+
+    // ========================================
+    // TRANSITIONS & ANIMATIONS
+    // ========================================
+
+    /* Timing functions */
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* Durations */
+    --duration-fast: 0.15s;
+    --duration-normal: 0.2s;
+    --duration-medium: 0.3s;
+    --duration-slow: 0.4s;
+    --duration-slower: 0.6s;
+
+    /* Combined transitions */
+    --transition-fast: all var(--duration-fast) var(--ease-out);
+    --transition-normal: all var(--duration-normal) var(--ease-in-out);
+    --transition-medium: all var(--duration-medium) var(--ease-in-out);
+    --transition-slow: all var(--duration-slow) var(--ease-spring);
+    --transition-transform: transform var(--duration-medium) var(--ease-spring);
+    --transition-opacity: opacity var(--duration-normal) var(--ease-in-out);
+    --transition-colors: background-color var(--duration-normal) var(--ease-in-out),
+        border-color var(--duration-normal) var(--ease-in-out),
+        color var(--duration-normal) var(--ease-in-out);
+
+    // ========================================
+    // HOVER & INTERACTIVE EFFECTS
+    // ========================================
+
+    /* Трансформации при hover */
+    --hover-lift-sm: translateY(-2px);
+    --hover-lift-md: translateY(-4px);
+    --hover-lift-lg: translateY(-6px);
+    --hover-lift-xl: translateY(-8px);
+
+    --hover-scale-sm: scale(1.02);
+    --hover-scale-md: scale(1.05);
+    --hover-scale-lg: scale(1.1);
+
+    /* Combined hover transitions */
+    --hover-card-primary: var(--hover-lift-lg) scale(1.01);
+    --hover-button: scale(1.05);
+    --hover-icon: scale(1.1);
+
+    // ========================================
+    // SPACING
+    // ========================================
+
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-20: 80px;
+
+    // ========================================
+    // CARD STYLES
+    // ========================================
+
+    /* Базовые стили для карточек */
+    --card-padding-sm: var(--space-4);
+    --card-padding-md: var(--space-6);
+    --card-padding-lg: var(--space-8);
+
+    --card-gap-sm: var(--space-2);
+    --card-gap-md: var(--space-4);
+    --card-gap-lg: var(--space-6);
+
+    // ========================================
+    // DIVIDERS
+    // ========================================
+
+    --divider-gradient: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0.05) 100%);
+
+    --divider-solid: rgba(255, 255, 255, 0.1);
+    --divider-subtle: rgba(255, 255, 255, 0.05);
+
+    // ========================================
+    // STATUS COLORS
+    // ========================================
+
+    /* Success */
+    --status-success: #10b981;
+    --status-success-bg: rgba(16, 185, 129, 0.1);
+    --status-success-border: rgba(16, 185, 129, 0.2);
+
+    /* Error */
+    --status-error: #ef4444;
+    --status-error-bg: rgba(239, 68, 68, 0.1);
+    --status-error-border: rgba(239, 68, 68, 0.2);
+
+    /* Warning */
+    --status-warning: #f59e0b;
+    --status-warning-bg: rgba(245, 158, 11, 0.1);
+    --status-warning-border: rgba(245, 158, 11, 0.2);
+
+    /* Info */
+    --status-info: #3b82f6;
+    --status-info-bg: rgba(59, 130, 246, 0.1);
+    --status-info-border: rgba(59, 130, 246, 0.2);
+
+    /* Neutral */
+    --status-neutral: #9ca3af;
+    --status-neutral-bg: rgba(156, 163, 175, 0.1);
+    --status-neutral-border: rgba(156, 163, 175, 0.2);
+
+    // ========================================
+    // BADGE & CHIP STYLES
+    // ========================================
+
+    --badge-bg: var(--glass-overlay-medium);
+    --badge-border: var(--glass-border-subtle);
+    --badge-padding: 4px 10px;
+    --badge-radius: var(--radius-sm);
+
+    --chip-bg: var(--glass-overlay-medium);
+    --chip-border: var(--glass-border-primary);
+    --chip-padding: 6px 14px;
+    --chip-radius: var(--radius-full);
+
+    // ========================================
+    // ICON BACKGROUNDS
+    // ========================================
+
+    --icon-bg-primary: rgba(94, 211, 243, 0.05);
+    --icon-bg-secondary: rgba(94, 211, 243, 0.1);
+    --icon-bg-accent: rgba(94, 211, 243, 0.15);
+
+    --icon-size-xs: 12px;
+    --icon-size-sm: 14px;
+    --icon-size-md: 16px;
+    --icon-size-lg: 20px;
+    --icon-size-xl: 24px;
+    --icon-size-2xl: 32px;
+
+    // ========================================
+    // FORM ELEMENTS
+    // ========================================
+
+    --input-bg: var(--glass-overlay-dark);
+    --input-border: var(--glass-border-primary);
+    --input-border-focus: var(--glass-border-accent);
+    --input-padding: 12px 16px;
+    --input-radius: var(--radius-md);
+
+    --input-placeholder: rgba(255, 255, 255, 0.4);
+
+    // ========================================
+    // BUTTON STYLES
+    // ========================================
+
+    --button-primary-bg: var(--glass-bg-secondary);
+    --button-primary-border: var(--glass-border-primary);
+    --button-primary-hover-bg: var(--glass-bg-primary);
+
+    --button-outline-bg: transparent;
+    --button-outline-border: var(--glass-border-primary);
+    --button-outline-hover-bg: var(--glass-overlay-medium);
+
+    --button-padding-sm: 6px 12px;
+    --button-padding-md: 10px 20px;
+    --button-padding-lg: 14px 28px;
+
+    // ========================================
+    // SCROLL STYLES
+    // ========================================
+
+    --scrollbar-width: 8px;
+    --scrollbar-track-bg: var(--glass-overlay-dark);
+    --scrollbar-thumb-bg: var(--glass-overlay-medium);
+    --scrollbar-thumb-hover-bg: var(--icon-redesigned);
+
+    // ========================================
+    // CODE BLOCK STYLES
+    // ========================================
+
+    --code-bg: var(--glass-overlay-darker);
+    --code-border: var(--glass-border-subtle);
+    --code-text: #d1d5db;
+    --code-radius: var(--radius-md);
+    --code-padding: 12px 16px;
+
+    // ========================================
+    // LAYOUT
+    // ========================================
+
+    --container-width-sm: 640px;
+    --container-width-md: 768px;
+    --container-width-lg: 1024px;
+    --container-width-xl: 1280px;
+    --container-width-2xl: 1536px;
+
+    // ========================================
+    // Z-INDEX SCALE
+    // ========================================
+
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-fixed: 300;
+    --z-modal-backdrop: 400;
+    --z-modal: 500;
+    --z-popover: 600;
+    --z-tooltip: 700;
+    --z-notification: 800;
+    --z-max: 999;
+}

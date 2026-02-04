@@ -1,19 +1,21 @@
+@import '@/app/styles/variables/mixins';
+
 .PublishSipUrisList {
     position: relative;
     width: 100%;
 
     .uncheck {
+        @include checkbox-hidden;
         position: absolute;
         display: flex;
-        color: var(--icon-redesigned);
         left: 0;
         top: 0;
     }
 
     .check {
+        @include checkbox-visible;
         position: absolute;
         display: flex;
-        color: var(--accent-redesigned);
         left: 0;
         top: 0;
     }
@@ -27,13 +29,8 @@
     }
 
     .controlsCard {
-        position: relative;
-        background: var(--card-bg-redesigned);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 16px;
-        margin-bottom: 8px;
-        transition: all 0.3s ease;
+        @include glass-card-secondary;
+        margin-bottom: var(--space-2);
 
         &:hover {
             border-color: rgba(94, 211, 243, 0.2);
@@ -41,32 +38,32 @@
     }
 
     .controls {
-        padding: 12px 20px;
+        padding: var(--space-3) var(--space-5);
         width: 100%;
     }
 
     .listWrapper {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 20px;
+        gap: var(--space-5);
         width: 100%;
         align-items: stretch;
     }
 }
 
 .loader {
-    padding: 60px;
+    padding: var(--space-16);
 }
 
 .emptyState {
-    padding: 80px;
+    padding: var(--space-20);
     background: var(--card-bg-redesigned);
-    backdrop-filter: blur(8px);
-    border-radius: 20px;
-    border: 1px dashed rgba(255, 255, 255, 0.1);
+    backdrop-filter: var(--glass-blur-sm);
+    border-radius: var(--radius-xl);
+    border: 1px dashed var(--divider-solid);
 }
 
-@media (max-width: 800px) {
+@include tablet {
     .PublishSipUrisList {
         .listWrapper {
             grid-template-columns: 1fr;

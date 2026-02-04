@@ -1,25 +1,12 @@
+@import '@/app/styles/variables/mixins';
+
 .ToolItem {
-    position: relative;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 20px;
-    width: 100%;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.15);
+    @include glass-card-primary;
+    @include hover-lift-card;
 
     &:hover {
-        cursor: pointer;
-        transform: translateY(-6px);
-        box-shadow:
-            0 20px 40px rgba(0, 0, 0, 0.25),
-            0 0 20px rgba(94, 211, 243, 0.1);
-        border-color: rgba(94, 211, 243, 0.3) !important;
-
         .avatar {
-            transform: scale(1.05);
+            transform: var(--hover-scale-md);
             background: rgba(94, 211, 243, 0.25);
         }
 
@@ -42,42 +29,24 @@
     position: relative;
     z-index: 10;
     width: 100%;
-    padding: 24px;
+    padding: var(--card-padding-md);
 }
 
 .checkContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--icon-redesigned);
-    transition: all 0.2s ease;
-    margin-left: -8px;
-
-    &:hover {
-        color: var(--accent-redesigned);
-        transform: scale(1.1);
-    }
+    @include checkbox-container;
 }
 
 .uncheck {
     opacity: 0.3;
-    transition: opacity 0.2s ease;
+    transition: var(--transition-fast);
 }
 
 .check {
-    color: var(--accent-redesigned);
+    @include checkbox-visible;
 }
 
 .avatar {
-    width: 44px;
-    height: 44px;
-    background: rgba(94, 211, 243, 0.15);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--accent-redesigned);
-    transition: all 0.3s ease;
+    @include icon-avatar(44px);
     flex-shrink: 0;
 }
 
@@ -100,72 +69,54 @@
     display: inline-flex;
     align-items: center;
     padding: 4px 10px;
-    background: rgba(94, 211, 243, 0.05);
-    border-radius: 8px;
+    background: var(--icon-bg-primary);
+    border-radius: var(--radius-sm);
     color: var(--accent-redesigned) !important;
 }
 
 .divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg,
-            rgba(255, 255, 255, 0.05) 0%,
-            rgba(255, 255, 255, 0.1) 50%,
-            rgba(255, 255, 255, 0.05) 100%);
-    margin: 8px 0;
+    @include divider-gradient;
+    margin: var(--space-2) 0;
 }
 
 .details {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--space-4);
     flex-grow: 1;
 }
 
 .detailIcon {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    background: rgba(94, 211, 243, 0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--accent-redesigned);
-    flex-shrink: 0;
+    @include icon-container(30px);
 }
 
 .detailText {
+    @include text-clamp(2);
     color: var(--text-redesigned);
     opacity: 0.8;
     font-size: 0.85rem;
     line-height: 1.4;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    line-clamp: 2;
 }
 
 .footer {
-    margin-top: 8px;
+    margin-top: var(--space-2);
 }
 
 .editLabel {
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: var(--transition-normal);
     font-weight: 500;
 }
 
 .arrowIcon {
-    transition: all 0.3s ease;
+    transition: var(--transition-normal);
     color: rgba(255, 255, 255, 0.3);
-    margin-left: 4px;
+    margin-left: var(--space-1);
 }
 
-@media (max-width: 600px) {
+@include mobile {
     .content {
-        padding: 16px;
+        padding: var(--space-4);
     }
 
     .avatar {

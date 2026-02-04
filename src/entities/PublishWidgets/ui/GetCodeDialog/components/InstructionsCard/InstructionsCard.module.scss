@@ -1,8 +1,7 @@
+@import '@/app/styles/variables/mixins';
+
 .InstructionsCard {
-    background: var(--card-bg-redesigned);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--bg-redesigned);
-    transition: all 0.3s ease;
+    @include glass-card-secondary;
 
     &:hover {
         border-color: var(--accent-redesigned);
@@ -20,11 +19,11 @@
 .accordion {
     background: var(--light-bg-redesigned) !important;
     border: 1px solid var(--bg-redesigned) !important;
-    border-radius: 12px !important;
+    border-radius: var(--radius-md) !important;
     color: var(--text-redesigned) !important;
     box-shadow: none !important;
-    margin-bottom: 12px !important;
-    transition: all 0.3s ease !important;
+    margin-bottom: var(--space-3) !important;
+    transition: var(--transition-normal) !important;
 
     &:hover {
         background: var(--bg-redesigned) !important;
@@ -47,10 +46,10 @@
 }
 
 .instructionItem {
-    padding: 8px 0;
+    padding: var(--space-2) 0;
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: var(--space-3);
     color: var(--text-redesigned);
     font-size: 14px;
     line-height: 1.5;
@@ -65,11 +64,11 @@
 }
 
 .alternative {
-    margin-top: 12px;
-    padding: 12px;
+    margin-top: var(--space-3);
+    padding: var(--space-3);
     background: var(--bg-redesigned);
-    border-radius: 8px;
-    border: 1px solid var(--bg-redesigned);
+    border-radius: var(--radius-sm);
+    border: var(--glass-border-subtle);
     font-size: 13px;
     color: var(--hint-redesigned);
 }

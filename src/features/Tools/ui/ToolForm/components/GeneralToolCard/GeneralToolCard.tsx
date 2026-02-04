@@ -5,7 +5,7 @@ import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { ToolTypeSelect, Tool, ToolType } from '@/entities/Tools'
-import { ClientSelect, ClientOptions } from '@/entities/User'
+import { ClientSelect } from '@/entities/User'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './GeneralToolCard.module.scss'
 
@@ -14,7 +14,7 @@ interface GeneralToolCardProps {
     formFields?: Partial<Tool>
     isAdmin?: boolean
     onChangeField: (field: keyof Tool, value: any) => void
-    onChangeClient: (value: ClientOptions | null) => void
+    onChangeClient: (clientId: string) => void
     onChangeType: (type: string) => void
 }
 

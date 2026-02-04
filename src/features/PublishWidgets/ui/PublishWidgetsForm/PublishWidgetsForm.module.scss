@@ -1,3 +1,5 @@
+@import '@/app/styles/variables/mixins';
+
 .PublishWidgetsForm {
     width: 100%;
 }
@@ -7,21 +9,6 @@
     margin: 0 auto;
     max-width: 1400px;
     justify-content: center;
-}
-
-@media (max-width: 800px) {
-    .contentWrapper {
-        flex-direction: column !important;
-        gap: 16px !important;
-    }
-
-    .leftColumn {
-        width: 100% !important;
-    }
-
-    .rightColumn {
-        width: 100% !important;
-    }
 }
 
 .leftColumn {
@@ -36,10 +23,24 @@
 }
 
 .item {
-    transition: all 0.3s ease;
+    transition: var(--transition-normal);
 }
-
 
 .formSection {
     background: var(--card-bg-redesigned);
+}
+
+@include tablet {
+    .contentWrapper {
+        flex-direction: column !important;
+        gap: var(--space-4) !important;
+    }
+
+    .leftColumn {
+        width: 100% !important;
+    }
+
+    .rightColumn {
+        width: 100% !important;
+    }
 }

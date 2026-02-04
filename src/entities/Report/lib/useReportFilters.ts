@@ -17,7 +17,7 @@ import {
 import { reportsPageActions } from '../model/slices/reportsPageSlice'
 import { useGetReports } from '../api/reportApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
-import { ClientOptions, getUserAuthData, isUserAdmin } from '@/entities/User'
+import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 
 export function useReportFilters() {
@@ -115,9 +115,8 @@ export function useReportFilters() {
     dispatch(reportsPageActions.setStartDate(value))
   }, [dispatch])
 
-  const onChangeUserId = useCallback((event: any, client: ClientOptions | null) => {
-    const newUserId = client ? client.id : ''
-    dispatch(reportsPageActions.setUserId(newUserId))
+  const onChangeUserId = useCallback((clientId: string) => {
+    dispatch(reportsPageActions.setUserId(clientId))
     dispatch(reportsPageActions.setPage(1))
   }, [dispatch])
 

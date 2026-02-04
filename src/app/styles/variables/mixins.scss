@@ -1,0 +1,490 @@
+/**
+ * Design System Mixins
+ * Переиспользуемые миксины для единообразного применения стилей
+ */
+
+// ========================================
+// GLASSMORPHISM CARD
+// ========================================
+
+@mixin glass-card-primary {
+    position: relative;
+    background: var(--glass-bg-primary);
+    backdrop-filter: var(--glass-blur-md);
+    -webkit-backdrop-filter: var(--glass-blur-md);
+    border-radius: var(--radius-xl);
+    border: var(--glass-border-primary);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-slow);
+    overflow: hidden;
+}
+
+@mixin glass-card-secondary {
+    position: relative;
+    background: var(--glass-bg-secondary);
+    backdrop-filter: var(--glass-blur-md);
+    -webkit-backdrop-filter: var(--glass-blur-md);
+    border-radius: var(--radius-lg);
+    border: var(--glass-border-secondary);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-medium);
+}
+
+@mixin glass-card-tertiary {
+    background: var(--glass-bg-tertiary);
+    backdrop-filter: var(--glass-blur-sm);
+    -webkit-backdrop-filter: var(--glass-blur-sm);
+    border-radius: var(--radius-md);
+    border: var(--glass-border-subtle);
+    transition: var(--transition-normal);
+}
+
+// ========================================
+// HOVER EFFECTS
+// ========================================
+
+@mixin hover-lift-card {
+    &:hover {
+        cursor: pointer;
+        transform: var(--hover-card-primary);
+        box-shadow: var(--shadow-lg), var(--shadow-accent-md);
+        border-color: rgba(94, 211, 243, 0.3);
+    }
+}
+
+@mixin hover-lift-simple {
+    transition: var(--transition-transform);
+
+    &:hover {
+        transform: var(--hover-lift-md);
+    }
+}
+
+@mixin hover-scale {
+    transition: var(--transition-transform);
+
+    &:hover {
+        transform: var(--hover-scale-md);
+    }
+}
+
+@mixin hover-glow-accent {
+    transition: var(--transition-normal);
+
+    &:hover {
+        box-shadow: var(--glow-accent);
+        border-color: var(--accent-redesigned);
+    }
+}
+
+@mixin hover-icon {
+    transition: var(--transition-fast);
+
+    &:hover {
+        transform: var(--hover-icon);
+        color: var(--accent-redesigned);
+    }
+}
+
+// ========================================
+// INTERACTIVE ELEMENTS
+// ========================================
+
+@mixin interactive-element {
+    transition: var(--transition-normal);
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+@mixin button-base {
+    padding: var(--button-padding-md);
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    font-weight: 600;
+    transition: var(--transition-normal);
+    cursor: pointer;
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+@mixin button-primary {
+    @include button-base;
+    background: var(--button-primary-bg);
+    border-color: var(--button-primary-border);
+
+    &:hover:not(:disabled) {
+        background: var(--button-primary-hover-bg);
+        transform: var(--hover-scale-sm);
+    }
+}
+
+@mixin button-outline {
+    @include button-base;
+    background: var(--button-outline-bg);
+    border-color: var(--button-outline-border);
+
+    &:hover:not(:disabled) {
+        background: var(--button-outline-hover-bg);
+        border-color: var(--accent-redesigned);
+    }
+}
+
+// ========================================
+// DIVIDERS
+// ========================================
+
+@mixin divider-gradient {
+    width: 100%;
+    height: 1px;
+    background: var(--divider-gradient);
+    margin: var(--space-4) 0;
+}
+
+@mixin divider-solid {
+    width: 100%;
+    height: 1px;
+    background: var(--divider-solid);
+    margin: var(--space-4) 0;
+}
+
+@mixin divider-vertical {
+    width: 1px;
+    height: 100%;
+    background: var(--divider-solid);
+}
+
+// ========================================
+// STATUS INDICATORS
+// ========================================
+
+@mixin status-dot($color, $size: 6px) {
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    background: $color;
+    box-shadow: 0 0 8px $color;
+}
+
+@mixin status-badge($bg, $border) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--badge-padding);
+    border-radius: var(--badge-radius);
+    background: $bg;
+    border: 1px solid $border;
+}
+
+@mixin chip-base {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--chip-padding);
+    border-radius: var(--chip-radius);
+    background: var(--chip-bg);
+    border: var(--chip-border);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+}
+
+// ========================================
+// ICON CONTAINERS
+// ========================================
+
+@mixin icon-container($size: 30px, $bg: var(--icon-bg-primary)) {
+    width: $size;
+    height: $size;
+    border-radius: var(--radius-sm);
+    background: $bg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-redesigned);
+    flex-shrink: 0;
+}
+
+@mixin icon-avatar($size: 44px) {
+    width: $size;
+    height: $size;
+    background: var(--icon-bg-accent);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-redesigned);
+    transition: var(--transition-transform);
+    flex-shrink: 0;
+}
+
+// ========================================
+// TEXT STYLES
+// ========================================
+
+@mixin text-gradient {
+    background: linear-gradient(135deg, var(--accent-redesigned) 0%, var(--icon-redesigned) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+@mixin text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin text-clamp($lines: 2) {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+// ========================================
+// FORM ELEMENTS
+// ========================================
+
+@mixin input-base {
+    width: 100%;
+    padding: var(--input-padding);
+    background: var(--input-bg);
+    border: var(--input-border);
+    border-radius: var(--input-radius);
+    color: var(--text-redesigned);
+    transition: var(--transition-colors);
+
+    &::placeholder {
+        color: var(--input-placeholder);
+    }
+
+    &:focus {
+        outline: none;
+        border-color: var(--accent-redesigned);
+        box-shadow: var(--shadow-accent-sm);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+@mixin textarea-base {
+    @include input-base;
+    resize: vertical;
+    min-height: 100px;
+}
+
+// ========================================
+// CODE BLOCK
+// ========================================
+
+@mixin code-block {
+    background: var(--code-bg);
+    border: var(--code-border);
+    border-radius: var(--code-radius);
+    padding: var(--code-padding);
+    font-family: 'Fira Code', 'Roboto Mono', monospace;
+    color: var(--code-text);
+    overflow-x: auto;
+}
+
+// ========================================
+// CHECKBOX STYLES
+// ========================================
+
+@mixin checkbox-hidden {
+    opacity: 0;
+    transition: var(--transition-opacity);
+}
+
+@mixin checkbox-visible {
+    opacity: 1;
+    color: var(--accent-redesigned);
+}
+
+@mixin checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--icon-redesigned);
+    transition: var(--transition-normal);
+
+    &:hover {
+        color: var(--accent-redesigned);
+        transform: scale(1.1);
+    }
+}
+
+// ========================================
+// SCROLLBAR
+// ========================================
+
+@mixin custom-scrollbar {
+    &::-webkit-scrollbar {
+        width: var(--scrollbar-width);
+        height: var(--scrollbar-width);
+    }
+
+    &::-webkit-scrollbar-track {
+        background: var(--scrollbar-track-bg);
+        border-radius: var(--radius-full);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb-bg);
+        border-radius: var(--radius-full);
+
+        &:hover {
+            background: var(--scrollbar-thumb-hover-bg);
+        }
+    }
+}
+
+// ========================================
+// LOADING ANIMATIONS
+// ========================================
+
+@mixin skeleton-shimmer {
+    background: linear-gradient(90deg,
+            var(--glass-overlay-dark) 0%,
+            var(--glass-overlay-medium) 50%,
+            var(--glass-overlay-dark) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@mixin pulse-animation {
+    animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@mixin spin-animation {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// ========================================
+// RESPONSIVE UTILITIES
+// ========================================
+
+@mixin mobile {
+    @media (max-width: 600px) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (max-width: 800px) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: 1024px) {
+        @content;
+    }
+}
+
+@mixin large-desktop {
+    @media (min-width: 1280px) {
+        @content;
+    }
+}
+
+// ========================================
+// LAYOUT HELPERS
+// ========================================
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@mixin flex-end {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+@mixin absolute-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@mixin full-size {
+    width: 100%;
+    height: 100%;
+}
+
+// ========================================
+// ACCESSIBILITY
+// ========================================
+
+@mixin focus-visible {
+    &:focus-visible {
+        outline: 2px solid var(--accent-redesigned);
+        outline-offset: 2px;
+    }
+}
+
+@mixin sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

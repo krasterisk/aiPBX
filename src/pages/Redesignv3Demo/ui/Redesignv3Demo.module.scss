@@ -1,0 +1,27 @@
+@import '@/app/styles/variables/mixins';
+
+.Redesignv3Demo {
+    padding: var(--space-8);
+    max-width: 1200px;
+    margin: 0 auto;
+
+    @include mobile {
+        padding: var(--space-4);
+    }
+}
+
+.section {
+    @include glass-card-primary;
+    padding: var(--card-padding-lg);
+    border-radius: var(--radius-xl);
+
+    @include mobile {
+        padding: var(--card-padding-md);
+    }
+}
+
+.form {
+    @include glass-card-secondary;
+    padding: var(--card-padding-md);
+    border-radius: var(--radius-lg);
+}

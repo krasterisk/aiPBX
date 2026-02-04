@@ -1,25 +1,12 @@
+@import '@/app/styles/variables/mixins';
+
 .PublishWidgetsItem {
-    position: relative;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 20px;
-    width: 100%;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+    @include glass-card-primary;
+    @include hover-lift-card;
 
     &:hover {
-        cursor: pointer;
-        transform: translateY(-6px);
-        box-shadow:
-            0 20px 40px rgba(0, 0, 0, 0.25),
-            0 0 20px rgba(94, 211, 243, 0.1);
-        border-color: rgba(94, 211, 243, 0.3);
-
         .logoWrapper {
-            transform: scale(1.05);
+            transform: var(--hover-scale-md);
 
             .colorIndicator {
                 transform: scale(1.2);
@@ -37,35 +24,34 @@
     }
 
     .uncheck {
+        @include checkbox-hidden;
         position: absolute;
-        left: 10px;
-        top: 10px;
+        left: var(--space-2);
+        top: var(--space-2);
         z-index: 20;
-        opacity: 0;
-        transition: opacity 0.2s ease;
         color: var(--icon-redesigned);
     }
 
     .check {
+        @include checkbox-visible;
         position: absolute;
-        left: 10px;
-        top: 10px;
+        left: var(--space-2);
+        top: var(--space-2);
         z-index: 20;
-        color: var(--accent-redesigned);
     }
 
     .content {
         position: relative;
         z-index: 10;
         width: 100%;
-        padding: 24px;
+        padding: var(--card-padding-md);
     }
 
     .logoWrapper {
         width: 56px;
         height: 56px;
         position: relative;
-        transition: transform 0.3s ease;
+        transition: var(--transition-transform);
         flex-shrink: 0;
     }
 
@@ -73,18 +59,15 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-lg);
+        border: var(--glass-border-subtle);
     }
 
     .defaultIcon {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 16px;
-        box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.2);
+        @include flex-center;
+        @include full-size;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-inset-md);
     }
 
     .colorIndicator {
@@ -139,29 +122,15 @@
     }
 
     .divider {
-        width: 100%;
-        height: 1px;
-        background: linear-gradient(90deg,
-                rgba(255, 255, 255, 0.05) 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                rgba(255, 255, 255, 0.05) 100%);
-        margin: 20px 0;
+        @include divider-gradient;
     }
 
     .details {
-        margin-bottom: 24px;
+        margin-bottom: var(--card-padding-md);
     }
 
     .detailIcon {
-        width: 30px;
-        height: 30px;
-        border-radius: 8px;
-        background: rgba(94, 211, 243, 0.05);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--accent-redesigned);
-        flex-shrink: 0;
+        @include icon-container(30px);
     }
 
     .truncatedText {
@@ -174,24 +143,24 @@
     }
 
     .footer {
-        padding-top: 16px;
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        padding-top: var(--space-4);
+        border-top: var(--glass-border-subtle);
     }
 
     .appearancePreview {
         display: flex;
         align-items: center;
-        gap: 6px;
-        background: rgba(0, 0, 0, 0.2);
+        gap: var(--space-2);
+        background: var(--glass-overlay-dark);
         padding: 4px 8px;
-        border-radius: 10px;
+        border-radius: var(--radius-sm);
     }
 
     .previewDot {
         width: 12px;
         height: 12px;
-        border-radius: 50%;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-full);
+        border: var(--glass-border-secondary);
     }
 
     .themeTag {
@@ -205,12 +174,12 @@
     .getCodeBtn {
         opacity: 0.9;
         transform: scale(0.98);
-        transition: all 0.2s ease;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.02);
+        transition: var(--transition-normal);
+        border-radius: var(--radius-md);
+        background: var(--glass-overlay-light);
 
         &:hover {
-            background: rgba(94, 211, 243, 0.1) !important;
+            background: var(--icon-bg-secondary) !important;
             border-color: var(--accent-redesigned) !important;
         }
     }

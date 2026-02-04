@@ -86,13 +86,12 @@ export const ToolForm = memo((props: ToolFormProps) => {
         }
     }, [dispatch, isEdit, formFields])
 
-    const onChangeClient = useCallback((value: ClientOptions | null) => {
-        if (value) {
-            if (isEdit) {
-                dispatch(toolsPageActions.updateToolEditForm({ ...formFields, user: value, userId: value.id }))
-            } else {
-                dispatch(toolsPageActions.updateToolsCreateForm({ ...formFields, user: value, userId: value.id }))
-            }
+    const onChangeClient = useCallback((id: string) => {
+        const user = { id, name: '' }
+        if (isEdit) {
+            dispatch(toolsPageActions.updateToolEditForm({ ...formFields, user, userId: id }))
+        } else {
+            dispatch(toolsPageActions.updateToolsCreateForm({ ...formFields, user, userId: id }))
         }
     }, [dispatch, isEdit, formFields])
 

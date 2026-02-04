@@ -1,21 +1,23 @@
+@import '@/app/styles/variables/mixins';
+
 .grid {
     display: grid;
     grid-template-columns: repeat(2, 60px);
     grid-template-rows: repeat(2, 60px);
-    gap: 8px;
-    background: rgba(0, 0, 0, 0.1);
-    padding: 8px;
-    border-radius: 12px;
+    gap: var(--space-2);
+    background: var(--glass-overlay-dark);
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
     width: fit-content;
 }
 
 .item {
     background: var(--light-bg-redesigned);
     border: 2px solid transparent;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     display: flex;
-    transition: all 0.2s ease;
+    transition: var(--transition-fast);
     position: relative;
 
     &:hover {
@@ -28,7 +30,7 @@
 
         .dot {
             background: var(--accent-redesigned);
-            box-shadow: 0 0 8px var(--accent-redesigned);
+            box-shadow: var(--glow-accent);
         }
     }
 }
@@ -37,9 +39,9 @@
     width: 12px;
     height: 12px;
     background: var(--icon-redesigned);
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     position: absolute;
-    transition: all 0.2s ease;
+    transition: var(--transition-fast);
 }
 
 /* Position dots in corners corresponding to the labels */

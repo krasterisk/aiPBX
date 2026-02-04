@@ -6,7 +6,7 @@ import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Check } from '@/shared/ui/mui/Check'
-import { ClientSelect, ClientOptions } from '@/entities/User'
+import { ClientSelect } from '@/entities/User'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './GeneralSection.module.scss'
 
@@ -20,9 +20,8 @@ interface GeneralSectionProps {
     onChangeComment: (v: string) => void
     cloudPbx: boolean
     onChangeCloudPbx: (v: boolean) => void
-    user?: ClientOptions
     userId?: string
-    onChangeClient: (event: any, newValue: ClientOptions | null) => void
+    onChangeClient: (clientId: string) => void
     isAdmin?: boolean
     clientName?: string
 }
@@ -38,11 +37,9 @@ export const GeneralSection = memo((props: GeneralSectionProps) => {
         onChangeComment,
         cloudPbx,
         onChangeCloudPbx,
-        user,
         userId,
         onChangeClient,
         isAdmin,
-        clientName
     } = props
 
     const { t } = useTranslation('pbx')
@@ -69,7 +66,6 @@ export const GeneralSection = memo((props: GeneralSectionProps) => {
                         </HStack>
                         <Text text={t('Клиент')} bold />
                         <ClientSelect
-                            value={user as ClientOptions}
                             clientId={userId}
                             onChangeClient={onChangeClient}
                             label=""

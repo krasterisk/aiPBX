@@ -62,9 +62,8 @@ export function useToolsFilters() {
     }
   }, [data, dispatch, hasMore, isFetching, isLoading, limit, page])
 
-  const onChangeUserId = useCallback((event: any, client: ClientOptions) => {
-    // const newUserId = client ? client.id || userId || '' : ''
-    dispatch(toolsPageActions.setUser(client))
+  const onChangeUserId = useCallback((id: string) => {
+    dispatch(toolsPageActions.setUser({ id, name: '' }))
     dispatch(toolsPageActions.setPage(1))
   }, [dispatch])
 

@@ -7,6 +7,7 @@ export interface PublishWidgetsPageSchema {
     limit: number
     hasMore: boolean
     search: string
+    clientId?: string
     _inited: boolean
 }
 

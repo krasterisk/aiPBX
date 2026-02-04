@@ -16,11 +16,15 @@ import {
   assistantFormReducer
 } from '@/entities/Assistants'
 
-import { AssistantOptionSelector } from '../AssistantOptionSelector/AssistantOptionSelector'
+import { AssistantForm } from '../AssistantForm'
+import { AssistantCreateCardHeader } from '../AssistantCreateCardHeader/AssistantCreateCardHeader'
+import { AssistantEditCardHeader } from '../AssistantEditCardHeader/AssistantEditCardHeader'
 import { toast } from 'react-toastify'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { useTranslation } from 'react-i18next'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
+import { useSelector } from 'react-redux'
+import { getAssistantFormData } from '@/entities/Assistants/model/selectors/assistantFormSelectors'
 
 export interface AssistantCardProps {
   className?: string
@@ -45,6 +49,7 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
 
   const navigate = useNavigate()
   const { t } = useTranslation('assistants')
+  const formFields = useSelector(getAssistantFormData)
 
   const reducers: ReducersList = {
     assistantForm: assistantFormReducer
@@ -61,9 +66,10 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
       })
   }, [assistantCreate, navigate])
 
-  const onCreate = useCallback((data: Assistant) => {
-    handleCreateAssistant(data)
-  }, [handleCreateAssistant])
+  const onCreate = useCallback(() => {
+    if (!formFields) return
+    handleCreateAssistant(formFields)
+  }, [formFields, handleCreateAssistant])
 
   const handleEditAssistant = useCallback((data: Assistant) => {
     assistantUpdate(data)
@@ -91,47 +97,56 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
     handleDeleteAssistant(id)
   }, [handleDeleteAssistant])
 
-  const onEdit = useCallback((data: Assistant) => {
-    handleEditAssistant(data)
-  }, [handleEditAssistant])
+  const onEdit = useCallback(() => {
+    if (!formFields) return
+    handleEditAssistant(formFields)
+  }, [formFields, handleEditAssistant])
 
   if (!assistantId && isEdit && isError && error) {
     return (
-            <ErrorGetData/>
+      <ErrorGetData />
     )
   }
 
   if (isLoading) {
     return (
-            <Card padding="24" max>
-                <VStack gap="32">
-                    <HStack gap="32" max>
-                        <VStack gap="16" max>
-                            <Skeleton width="100%" height={38}/>
-                            <Skeleton width="100%" height={38}/>
-                            <Skeleton width="100%" height={38}/>
-                            <Skeleton width="100%" height={38}/>
-                            <Skeleton width="100%" height={38}/>
-                            <Skeleton width="100%" height={38}/>
-                        </VStack>
-                    </HStack>
-                </VStack>
-            </Card>
+      <Card padding="24" max>
+        <VStack gap="32">
+          <HStack gap="32" max>
+            <VStack gap="16" max>
+              <Skeleton width="100%" height={38} />
+              <Skeleton width="100%" height={38} />
+              <Skeleton width="100%" height={38} />
+              <Skeleton width="100%" height={38} />
+              <Skeleton width="100%" height={38} />
+              <Skeleton width="100%" height={38} />
+            </VStack>
+          </HStack>
+        </VStack>
+      </Card>
     )
   }
 
   return (
-        <VStack gap={'8'} max className={classNames(cls.AssistantCard, {}, [className])}>
-            {
-                <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
-                    <AssistantOptionSelector
-                        onEdit={onEdit}
-                        onCreate={onCreate}
-                        assistantId={assistantId || ''}
-                        onDelete={onDelete}
-                    />
-                </DynamicModuleLoader>
-            }
-        </VStack>
+    <VStack gap="8" max className={classNames(cls.AssistantCard, {}, [className])}>
+      <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
+        {!isEdit
+          ? <AssistantCreateCardHeader
+            onCreate={onCreate}
+            variant="diviner-top"
+          />
+          : <AssistantEditCardHeader
+            onEdit={onEdit}
+            onDelete={onDelete}
+            assistantId={assistantId}
+            assistantName={formFields?.name || ''}
+          />
+        }
+
+        <AssistantForm
+          assistantId={assistantId}
+        />
+      </DynamicModuleLoader>
+    </VStack>
   )
 })

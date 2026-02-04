@@ -9,6 +9,7 @@ const initialState: PublishWidgetsPageSchema = {
     hasMore: true,
     limit: 20,
     search: '',
+    clientId: '',
     _inited: false
 }
 
@@ -18,6 +19,9 @@ export const publishWidgetsPageSlice = createSlice({
     reducers: {
         setSearch: (state, action: PayloadAction<string>) => {
             state.search = action.payload
+        },
+        setClientId: (state, action: PayloadAction<string>) => {
+            state.clientId = action.payload
         },
         setPage: (state, action: PayloadAction<number>) => {
             state.page = action.payload

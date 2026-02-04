@@ -81,7 +81,7 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
           endDate={endDate}
           onChangeStartDate={onChangeStartDate}
           onChangeEndDate={onChangeEndDate}
-          onChangeUserId={onChangeUserId}
+
           onOpenFilters={() => setFilterShow(true)}
         />
       </HStack>

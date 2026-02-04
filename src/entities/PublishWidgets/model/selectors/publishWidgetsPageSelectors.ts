@@ -7,3 +7,4 @@ export const getPublishWidgetsPageLimit = (state: StateSchema) => state.publishW
 export const getPublishWidgetsPageHasMore = (state: StateSchema) => state.publishWidgetsPage?.hasMore
 export const getPublishWidgetsPageSearch = (state: StateSchema) => state.publishWidgetsPage?.search ?? ''
 export const getPublishWidgetsPageInited = (state: StateSchema) => state.publishWidgetsPage?._inited
+export const getPublishWidgetsPageClientId = (state: StateSchema) => state.publishWidgetsPage?.clientId || ''

@@ -1,0 +1,119 @@
+@import '@/app/styles/variables/mixins';
+
+.SpeechSettingsCard {
+    @include glass-card-tertiary;
+    padding: var(--card-padding-md);
+    transition: var(--transition-normal);
+    border: 1px dashed rgba(94, 211, 243, 0.2);
+
+    &:hover {
+        border-color: rgba(94, 211, 243, 0.4);
+        box-shadow: var(--shadow-md);
+    }
+
+    @include mobile {
+        padding: var(--space-4);
+    }
+}
+
+.header {
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition-normal);
+
+    &:hover {
+        .cardTitle {
+            color: var(--accent-redesigned);
+        }
+    }
+}
+
+.adminIcon {
+    color: var(--status-warning);
+    animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 4px var(--status-warning));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 8px var(--status-warning));
+    }
+}
+
+.cardTitle {
+    color: var(--text-redesigned);
+    font-size: 16px;
+    transition: var(--transition-colors);
+}
+
+.expandButton {
+    transition: var(--transition-transform) !important;
+    color: var(--hint-redesigned) !important;
+
+    &.expanded {
+        transform: rotate(180deg);
+    }
+
+    &:hover {
+        color: var(--accent-redesigned) !important;
+    }
+}
+
+.adminHint {
+    color: var(--status-warning);
+    opacity: 0.8;
+    font-style: italic;
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-3);
+}
+
+.content {
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--divider-solid);
+}
+
+.section {
+    padding: var(--space-4);
+    background: var(--glass-overlay-subtle);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+
+    &:hover {
+        background: var(--glass-overlay-hover);
+    }
+}
+
+.sectionHeader {
+    margin-bottom: var(--space-3);
+}
+
+.sectionIcon {
+    color: var(--accent-redesigned);
+    opacity: 0.7;
+}
+
+.sectionTitle {
+    color: var(--text-redesigned);
+    font-size: 14px;
+    margin-bottom: var(--space-3);
+}
+
+@include mobile {
+    .cardTitle {
+        font-size: 14px;
+    }
+
+    .sectionTitle {
+        font-size: 13px;
+    }
+
+    .section {
+        padding: var(--space-3);
+    }
+}

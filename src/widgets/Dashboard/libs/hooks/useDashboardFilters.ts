@@ -9,12 +9,12 @@ import {
   getDashboardTab,
   getDashboardUserId
 } from '../../model/selectors/dashboardPageSelectors'
-import { ClientOptions, getUserAuthData, isUserAdmin } from '@/entities/User'
+import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 import { dashboardPageActions } from '../../model/slices/dashboardPageSlice'
 import { useDashboard } from '@/entities/Report'
 
-export function useDashboardFilters () {
+export function useDashboardFilters() {
   const tab = useSelector(getDashboardTab)
   const clientId = useSelector(getDashboardUserId)
   const startDate = useSelector(getDashboardStartDate)
@@ -47,9 +47,8 @@ export function useDashboardFilters () {
     refetch()
   }, [refetch])
 
-  const onChangeUserId = useCallback((event: any, client: ClientOptions | null) => {
-    const newUserId = client ? client.id : ''
-    dispatch(dashboardPageActions.setUserId(newUserId))
+  const onChangeUserId = useCallback((clientId: string) => {
+    dispatch(dashboardPageActions.setUserId(clientId))
   }, [dispatch])
 
   const onChangeAssistant = useCallback((event: any, assistant: AssistantOptions[]) => {

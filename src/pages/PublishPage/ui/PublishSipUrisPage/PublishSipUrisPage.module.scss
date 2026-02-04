@@ -1,3 +1,5 @@
+@import '@/app/styles/variables/mixins';
+
 .PublishSipUrisPage {
-    padding-bottom: 24px;
+    padding-bottom: var(--card-padding-md);
 }

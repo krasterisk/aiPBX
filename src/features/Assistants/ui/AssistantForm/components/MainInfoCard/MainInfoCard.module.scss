@@ -1,0 +1,28 @@
+@import '@/app/styles/variables/mixins';
+
+.MainInfoCard {
+    @include glass-card-tertiary;
+    padding: var(--card-padding-md);
+    transition: var(--transition-normal);
+
+    &:hover {
+        border-color: rgba(94, 211, 243, 0.2);
+        box-shadow: var(--shadow-md);
+    }
+
+    @include mobile {
+        padding: var(--space-4);
+    }
+}
+
+.cardTitle {
+    margin-bottom: var(--space-5);
+    color: var(--text-redesigned);
+    font-size: 16px;
+}
+
+@include mobile {
+    .cardTitle {
+        font-size: 14px;
+    }
+}

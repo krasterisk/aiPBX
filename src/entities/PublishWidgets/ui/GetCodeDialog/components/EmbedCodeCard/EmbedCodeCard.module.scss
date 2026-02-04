@@ -1,9 +1,7 @@
-.EmbedCodeCard {
-    background: var(--card-bg-redesigned);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--bg-redesigned);
-    transition: all 0.3s ease;
+@import '@/app/styles/variables/mixins';
 
+.EmbedCodeCard {
+    @include glass-card-secondary;
     width: 100%;
     max-width: 100%;
     overflow: hidden;

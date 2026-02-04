@@ -1,3 +1,5 @@
+@import '@/app/styles/variables/mixins';
+
 .ColorGradientPicker {
     max-width: 100%;
 }
@@ -6,7 +8,7 @@
     position: relative;
     width: 40px;
     height: 40px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     overflow: hidden;
     cursor: pointer;
     border: 2px solid var(--light-bg-redesigned);
@@ -23,8 +25,7 @@
 }
 
 .colorPreview {
-    width: 100%;
-    height: 100%;
+    @include full-size;
 }
 
 .hexCode {
@@ -32,31 +33,31 @@
     font-size: 14px;
     color: var(--text-redesigned);
     background: var(--light-bg-redesigned);
-    padding: 4px 8px;
-    border-radius: 4px;
+    padding: 4px var(--space-2);
+    border-radius: var(--radius-xs);
     min-width: 70px;
 }
 
 .presets {
     display: flex;
-    gap: 6px;
+    gap: var(--space-2);
     flex-wrap: wrap;
 }
 
 .preset {
     width: 24px;
     height: 24px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     cursor: pointer;
     border: 2px solid transparent;
-    transition: transform 0.2s ease;
+    transition: var(--transition-fast);
 
     &:hover {
-        transform: scale(1.1);
+        transform: var(--hover-scale-sm);
     }
 
     &.active {
         border-color: var(--accent-redesigned);
-        transform: scale(1.1);
+        transform: var(--hover-scale-sm);
     }
 }

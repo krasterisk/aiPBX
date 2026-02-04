@@ -1,0 +1,23 @@
+@import '@/app/styles/variables/mixins';
+
+.ParametersSection {
+    width: 100%;
+    position: sticky;
+    top: var(--space-4);
+    max-height: calc(100vh - var(--space-8));
+    overflow-y: auto;
+
+    @include custom-scrollbar;
+
+    @include tablet {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+    }
+}
+
+@include mobile {
+    .ParametersSection {
+        gap: var(--space-4);
+    }
+}

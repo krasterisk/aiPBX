@@ -1,0 +1,64 @@
+@import '@/app/styles/variables/mixins';
+
+.AssistantForm {
+    width: 100%;
+    padding: var(--space-2) 0;
+}
+
+.content {
+    width: 100%;
+    align-items: flex-start;
+    gap: var(--space-6);
+
+    @include tablet {
+        flex-direction: column;
+        gap: var(--space-5);
+    }
+}
+
+.leftColumn {
+    flex: 1;
+    min-width: 0; // Prevent overflow
+    width: 100%;
+
+    @include desktop {
+        max-width: 65%;
+    }
+
+    @include large-desktop {
+        max-width: 70%;
+    }
+
+    @include tablet {
+        max-width: 100%;
+    }
+}
+
+.rightColumn {
+    width: 400px;
+    flex-shrink: 0;
+
+    @include desktop {
+        width: 35%;
+    }
+
+    @include large-desktop {
+        width: 30%;
+        max-width: 450px;
+    }
+
+    @include tablet {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+@include mobile {
+    .AssistantForm {
+        padding: 0;
+    }
+
+    .content {
+        gap: var(--space-4);
+    }
+}

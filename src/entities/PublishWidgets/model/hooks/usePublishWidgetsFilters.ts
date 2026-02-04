@@ -7,7 +7,8 @@ import {
     getPublishWidgetsPageHasMore,
     getPublishWidgetsPageIsLoading,
     getPublishWidgetsPageError,
-    getPublishWidgetsPageSearch
+    getPublishWidgetsPageSearch,
+    getPublishWidgetsPageClientId
 } from '../selectors/publishWidgetsPageSelectors'
 import { useWidgetKeys } from '@/entities/WidgetKeys'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
@@ -19,6 +20,7 @@ export const usePublishWidgetsFilters = () => {
     const error = useSelector(getPublishWidgetsPageError)
     const hasMore = useSelector(getPublishWidgetsPageHasMore)
     const search = useSelector(getPublishWidgetsPageSearch)
+    const clientId = useSelector(getPublishWidgetsPageClientId)
 
     const userData = useSelector(getUserAuthData)
     const isAdmin = useSelector(isUserAdmin)
@@ -27,12 +29,19 @@ export const usePublishWidgetsFilters = () => {
     const { data: assistants = [] } = useAssistantsAll({})
 
     // Filter widgets based on user permissions
-    const filteredWidgets = isAdmin
-        ? widgets
-        : widgets.filter(w => {
+    let filteredWidgets = widgets
+
+    if (!isAdmin) {
+        filteredWidgets = widgets.filter(w => {
             const assistant = assistants.find(a => a.id === String(w.assistantId))
             return assistant?.userId === userData?.id
         })
+    } else if (clientId) {
+        filteredWidgets = widgets.filter(w => {
+            const assistant = assistants.find(a => a.id === String(w.assistantId))
+            return assistant?.userId === clientId
+        })
+    }
 
     // Filter by search
     const searchedWidgets = search
@@ -59,6 +68,10 @@ export const usePublishWidgetsFilters = () => {
         dispatch(publishWidgetsPageActions.setSearch(value))
     }, [dispatch])
 
+    const onClientIdChange = useCallback((clientId: string) => {
+        dispatch(publishWidgetsPageActions.setClientId(clientId))
+    }, [dispatch])
+
     return {
         isLoading: isWidgetsLoading || isLoading,
         isError,
@@ -68,6 +81,8 @@ export const usePublishWidgetsFilters = () => {
         onLoadNext,
         onRefetch,
         search,
-        onSearchChange
+        onSearchChange,
+        clientId,
+        onClientIdChange
     }
 }

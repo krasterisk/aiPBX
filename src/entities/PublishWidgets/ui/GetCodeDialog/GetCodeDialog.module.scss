@@ -1,13 +1,15 @@
+@import '@/app/styles/variables/mixins';
+
 .GetCodeDialog {
     width: 100%;
     max-width: 900px;
     height: 85vh;
     max-height: 850px;
     background: var(--light-bg-redesigned);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border: 1px solid var(--bg-redesigned);
-    border-radius: 24px;
+    backdrop-filter: var(--glass-blur-xl);
+    -webkit-backdrop-filter: var(--glass-blur-xl);
+    border: var(--glass-border-primary);
+    border-radius: var(--radius-2xl);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -37,44 +39,30 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: var(--space-8);
     overflow-y: auto;
     flex: 1;
 
     /* Premium scrollbar */
-    &::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    &::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background: var(--bg-redesigned);
-        border-radius: 4px;
-        border: 2px solid var(--light-bg-redesigned);
-    }
+    @include custom-scrollbar;
 }
 
 .header {
-    margin-bottom: 24px;
+    margin-bottom: var(--card-padding-md);
 }
 
 .closeBtn {
+    @include flex-center;
     position: absolute;
-    top: 24px;
-    right: 24px;
+    top: var(--card-padding-md);
+    right: var(--card-padding-md);
     background: var(--bg-redesigned);
     border: none;
     width: 36px;
     height: 36px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    transition: var(--transition-fast);
     z-index: 100;
     color: var(--text-redesigned);
 
@@ -90,20 +78,6 @@
     }
 }
 
-@media (max-width: 768px) {
-    .GetCodeDialog {
-        border-radius: 0;
-        border: none;
-        margin: 0;
-        min-height: 100vh;
-    }
-
-    .content {
-        padding: 24px 16px;
-        gap: 24px;
-    }
-}
-
 .modalWrapper {
     max-width: 960px !important;
     width: 95% !important;
@@ -115,7 +89,23 @@
     justify-content: center !important;
 }
 
-@media (max-width: 768px) {
+.icon {
+    color: var(--text-redesigned);
+}
+
+@include tablet {
+    .GetCodeDialog {
+        border-radius: 0;
+        border: none;
+        margin: 0;
+        min-height: 100vh;
+    }
+
+    .content {
+        padding: var(--card-padding-md) var(--space-4);
+        gap: var(--card-padding-md);
+    }
+
     .modalWrapper {
         width: 100% !important;
         max-width: 100% !important;
@@ -123,8 +113,4 @@
         height: 100vh !important;
         border-radius: 0 !important;
     }
-}
-
-.icon {
-    color: var(--text-redesigned);
 }

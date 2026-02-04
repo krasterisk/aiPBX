@@ -62,9 +62,8 @@ export function usePbxServersFilters() {
     }
   }, [data, dispatch, hasMore, isFetching, isLoading, limit, page])
 
-  const onChangeUserId = useCallback((event: any, client: ClientOptions) => {
-    // const newUserId = client ? client.id || userId || '' : ''
-    dispatch(pbxServersPageActions.setUser(client))
+  const onChangeUserId = useCallback((id: string) => {
+    dispatch(pbxServersPageActions.setUser({ id, name: '' }))
     dispatch(pbxServersPageActions.setPage(1))
   }, [dispatch])
 

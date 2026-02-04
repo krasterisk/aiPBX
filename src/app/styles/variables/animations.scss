@@ -1,0 +1,555 @@
+/**
+ * Premium Animations & Effects
+ * Дополнительные keyframe анимации и микро-взаимодействия
+ */
+
+// ========================================
+// ENTRANCE ANIMATIONS
+// ========================================
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+// ========================================
+// LOADING ANIMATIONS
+// ========================================
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes pulseScale {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes dots {
+
+    0%,
+    20% {
+        color: var(--accent-redesigned);
+        text-shadow: 0 0 5px var(--accent-redesigned);
+    }
+
+    40% {
+        color: var(--text-redesigned);
+        text-shadow: none;
+    }
+
+    60%,
+    100% {
+        color: var(--accent-redesigned);
+        text-shadow: 0 0 5px var(--accent-redesigned);
+    }
+}
+
+// ========================================
+// GLOW & HIGHLIGHT ANIMATIONS
+// ========================================
+
+@keyframes glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 5px var(--accent-redesigned);
+    }
+
+    50% {
+        box-shadow: 0 0 20px var(--accent-redesigned), 0 0 30px var(--accent-redesigned);
+    }
+}
+
+@keyframes glowPulse {
+
+    0%,
+    100% {
+        box-shadow: var(--shadow-md);
+    }
+
+    50% {
+        box-shadow: var(--shadow-lg), var(--shadow-accent-lg);
+    }
+}
+
+@keyframes borderGlow {
+
+    0%,
+    100% {
+        border-color: var(--glass-border-primary);
+    }
+
+    50% {
+        border-color: var(--accent-redesigned);
+        box-shadow: 0 0 15px rgba(94, 211, 243, 0.3);
+    }
+}
+
+// ========================================
+// STATUS ANIMATIONS
+// ========================================
+
+@keyframes statusPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+@keyframes successPulse {
+
+    0%,
+    100% {
+        box-shadow: var(--glow-success);
+    }
+
+    50% {
+        box-shadow: 0 0 20px var(--status-success);
+    }
+}
+
+@keyframes errorPulse {
+
+    0%,
+    100% {
+        box-shadow: var(--glow-error);
+    }
+
+    50% {
+        box-shadow: 0 0 20px var(--status-error);
+    }
+}
+
+// ========================================
+// SHAKE & WIGGLE ANIMATIONS
+// ========================================
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes wiggle {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(-3deg);
+    }
+
+    75% {
+        transform: rotate(3deg);
+    }
+}
+
+// ========================================
+// BACKGROUND ANIMATIONS
+// ========================================
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes floatingGradient {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: translateY(-20px) scale(1.1);
+        opacity: 0.5;
+    }
+}
+
+// ========================================
+// NOTIFICATION ANIMATIONS
+// ========================================
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+// ========================================
+// SKELETON LOADING
+// ========================================
+
+@keyframes skeletonLoading {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+// ========================================
+// TYPING ANIMATION
+// ========================================
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+// ========================================
+// UTILITY ANIMATION CLASSES
+// ========================================
+
+// Entrance animations
+.animate-fade-in {
+    animation: fadeIn var(--duration-medium) var(--ease-out);
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp var(--duration-slow) var(--ease-spring);
+}
+
+.animate-fade-in-down {
+    animation: fadeInDown var(--duration-slow) var(--ease-spring);
+}
+
+.animate-scale-in {
+    animation: scaleIn var(--duration-medium) var(--ease-spring);
+}
+
+// Loading animations
+.animate-pulse {
+    animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-pulse-scale {
+    animation: pulseScale 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+.animate-bounce {
+    animation: bounce 1s ease-in-out infinite;
+}
+
+.animate-shimmer {
+    background: linear-gradient(90deg,
+            var(--glass-overlay-dark) 0%,
+            var(--glass-overlay-medium) 50%,
+            var(--glass-overlay-dark) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+// Glow animations
+.animate-glow {
+    animation: glow 2s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+    animation: glowPulse 2s ease-in-out infinite;
+}
+
+.animate-border-glow {
+    animation: borderGlow 2s ease-in-out infinite;
+}
+
+// Stagger delays for list animations
+.stagger-1 {
+    animation-delay: 0.1s;
+}
+
+.stagger-2 {
+    animation-delay: 0.2s;
+}
+
+.stagger-3 {
+    animation-delay: 0.3s;
+}
+
+.stagger-4 {
+    animation-delay: 0.4s;
+}
+
+.stagger-5 {
+    animation-delay: 0.5s;
+}
+
+// ========================================
+// ANIMATION MIXINS
+// ========================================
+
+@mixin animate-on-mount($animation-name, $duration: var(--duration-slow), $timing: var(--ease-spring)) {
+    animation: $animation-name $duration $timing;
+}
+
+@mixin staggered-list($item-selector, $max-items: 10, $delay: 0.05s) {
+    @for $i from 1 through $max-items {
+        #{$item-selector}:nth-child(#{$i}) {
+            animation-delay: #{$i * $delay};
+        }
+    }
+}
+
+// ========================================
+// PRESET ANIMATION COMBINATIONS
+// ========================================
+
+// Card появление с подъёмом
+@mixin card-entrance {
+    opacity: 0;
+    animation: fadeInUp var(--duration-slow) var(--ease-spring) forwards;
+}
+
+// Success state анимация
+@mixin success-state {
+    animation: successPulse 0.5s ease-in-out;
+}
+
+// Error state анимация
+@mixin error-state {
+    animation: shake 0.5s ease-in-out, errorPulse 0.5s ease-in-out;
+}
+
+// Notification entrance
+@mixin notification-entrance {
+    animation: slideInRight var(--duration-slow) var(--ease-spring);
+}
+
+// Notification exit
+@mixin notification-exit {
+    animation: slideOutRight var(--duration-normal) var(--ease-in);
+}
+
+// Loading state
+@mixin loading-state {
+    animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+// ========================================
+// PERFORMANCE OPTIMIZATION
+// ========================================
+
+// Use will-change для оптимизации анимаций
+.will-animate {
+    will-change: transform, opacity;
+}
+
+.will-transform {
+    will-change: transform;
+}
+
+.will-opacity {
+    will-change: opacity;
+}
+
+// Reduced motion для accessibility
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

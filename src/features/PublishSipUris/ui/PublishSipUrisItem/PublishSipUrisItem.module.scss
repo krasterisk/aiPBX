@@ -1,25 +1,12 @@
+@import '@/app/styles/variables/mixins';
+
 .PublishSipUrisItem {
-    position: relative;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 20px;
-    width: 100%;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+    @include glass-card-primary;
+    @include hover-lift-card;
 
     &:hover {
-        cursor: pointer;
-        transform: translateY(-6px);
-        box-shadow:
-            0 20px 40px rgba(0, 0, 0, 0.25),
-            0 0 20px rgba(94, 211, 243, 0.1);
-        border-color: rgba(94, 211, 243, 0.3);
-
         .avatar {
-            transform: scale(1.05);
+            transform: var(--hover-scale-md);
         }
 
         .uncheck {
@@ -33,41 +20,22 @@
     }
 
     .checkContainer {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--icon-redesigned);
-        transition: all 0.2s ease;
-        margin-left: -8px;
-
-        &:hover {
-            color: var(--accent-redesigned);
-            transform: scale(1.1);
-        }
+        @include checkbox-container;
     }
 
     .check {
-        color: var(--accent-redesigned);
+        @include checkbox-visible;
     }
 
     .content {
         position: relative;
         z-index: 10;
         width: 100%;
-        padding: 24px;
+        padding: var(--card-padding-md);
     }
 
     .avatar {
-        width: 44px;
-        height: 44px;
-        background: rgba(94, 211, 243, 0.15);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--accent-redesigned);
-        transition: transform 0.3s ease;
-        flex-shrink: 0;
+        @include icon-avatar(44px);
     }
 
     .title {
@@ -76,15 +44,10 @@
     }
 
     .statusDot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: #10b981;
-        box-shadow: 0 0 8px #10b981;
+        @include status-dot(var(--status-success), 6px);
 
         &.inactive {
-            background: #f87171;
-            box-shadow: 0 0 8px #f87171;
+            @include status-dot(var(--status-error), 6px);
         }
     }
 
@@ -98,13 +61,7 @@
     }
 
     .chip {
-        border: 1px solid var(--accent-redesigned);
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 10px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
+        @include chip-base;
     }
 
     .dot {
@@ -119,31 +76,18 @@
     }
 
     .divider {
-        width: 100%;
-        height: 1px;
-        background: linear-gradient(90deg,
-                rgba(255, 255, 255, 0.05) 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                rgba(255, 255, 255, 0.05) 100%);
-        margin: 8px 0;
+        @include divider-gradient;
+        margin: var(--space-2) 0;
     }
 
     .details {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: var(--space-4);
     }
 
     .detailIcon {
-        width: 30px;
-        height: 30px;
-        border-radius: 8px;
-        background: rgba(94, 211, 243, 0.05);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--accent-redesigned);
-        flex-shrink: 0;
+        @include icon-container(30px);
     }
 
     .urlText {
@@ -161,38 +105,38 @@
         height: unset !important;
         color: var(--icon-redesigned) !important;
         opacity: 0.5;
-        transition: all 0.2s ease;
+        transition: var(--transition-fast);
 
         &:hover {
             opacity: 1;
             color: var(--accent-redesigned) !important;
-            transform: scale(1.1);
+            transform: var(--hover-icon);
         }
     }
 
     .codeSection {
-        margin-top: 16px;
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
-        padding-top: 16px;
+        margin-top: var(--space-4);
+        border-top: var(--glass-border-subtle);
+        padding-top: var(--space-4);
     }
 
     .codeHeader {
         cursor: pointer;
-        padding: 8px;
-        border-radius: 8px;
-        transition: background 0.2s ease;
+        padding: var(--space-2);
+        border-radius: var(--radius-sm);
+        transition: var(--transition-fast);
 
         &:hover {
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--glass-overlay-light);
         }
     }
 
     .codeContainer {
-        margin-top: 12px;
-        padding: 12px;
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        margin-top: var(--space-3);
+        padding: var(--space-3);
+        background: var(--glass-overlay-darker);
+        border-radius: var(--radius-md);
+        border: var(--glass-border-subtle);
     }
 
     .codeBlock {
@@ -207,18 +151,18 @@
 
     .copyCodeBtn {
         align-self: flex-end;
-        background: rgba(94, 211, 243, 0.05);
+        background: var(--icon-bg-primary);
         border-color: rgba(94, 211, 243, 0.2) !important;
 
         &:hover {
-            background: rgba(94, 211, 243, 0.1) !important;
+            background: var(--icon-bg-secondary) !important;
         }
     }
 }
 
-@media (max-width: 600px) {
+@include mobile {
     .content {
-        padding: 16px;
+        padding: var(--card-padding-sm);
     }
 
     .avatar {
