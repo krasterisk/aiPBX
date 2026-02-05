@@ -39,5 +39,9 @@
     "Микрофон недоступен. Для работы микрофона требуется HTTPS или localhost.": "Microphone not available. HTTPS or localhost is required for microphone access.",
     "Подключение...": "Connecting...",
     "Сохранено успешно": "Saved successfully",
-    "Ошибка при сохранении": "Error saving"
+    "Ошибка при сохранении": "Error saving",
+    "Выбор ассистента": "Assistant Selection",
+    "Промпт": "Prompt",
+    "Настройки модели": "Model Settings",
+    "Введите инструкции для ИИ...": "Enter instructions for AI..."
 }

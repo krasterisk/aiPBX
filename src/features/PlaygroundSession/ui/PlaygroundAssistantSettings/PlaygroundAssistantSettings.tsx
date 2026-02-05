@@ -2,7 +2,6 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import { useTranslation } from 'react-i18next'
 import cls from './PlaygroundAssistantSettings.module.scss'
 import { memo, useCallback, useEffect, useRef } from 'react'
-import { Card } from '@/shared/ui/redesigned/Card'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
@@ -18,6 +17,8 @@ import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { Assistant } from '@/entities/Assistants'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { toast } from 'react-toastify'
+import { SectionCard } from '../components/SectionCard/SectionCard'
+import { MessageSquareText, Settings2, Save } from 'lucide-react'
 
 interface PlaygroundAssistantSettingsProps {
     className?: string
@@ -93,153 +94,168 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
     }
 
     return (
-        <VStack gap={'16'} max className={classNames(cls.PlaygroundAssistantSettings, {}, [className])}>
-            {/* Apply Button */}
-            <HStack justify={'start'} max>
-                <Button
-                    variant={'filled'}
-                    color={'success'}
-                    onClick={handleApply}
-                    disabled={isLoading || isUpdating}
-                >
-                    {isUpdating ? t('Применение...') : t('Применить')}
-                </Button>
-            </HStack>
-
-            {/* Cards Container */}
-            <HStack gap={'16'} max wrap={'wrap'} align={'start'}>
-                {/* Instructions Card */}
-                <Card padding={'16'} className={cls.card}>
-                    <VStack gap={'16'} max>
-                        <Text text={t('Инструкции')} bold />
-
+        <VStack gap="24" max className={classNames('', {}, [className])}>
+            <HStack
+                gap="24"
+                max
+                align="start"
+                wrap="wrap"
+            >
+                {/* Prompt Section */}
+                <VStack gap="24" className={cls.leftColumn}>
+                    <SectionCard
+                        title={t('Промпт')}
+                        icon={MessageSquareText}
+                        rightElement={
+                            <Button
+                                variant="outline"
+                                color="success"
+                                size="s"
+                                onClick={handleApply}
+                                disabled={isLoading || isUpdating}
+                                addonLeft={<Save size={16} />}
+                            >
+                                {isUpdating ? t('Применение...') : t('Применить')}
+                            </Button>
+                        }
+                    >
                         <Textarea
                             label={t('Инструкция для ассистента') || ''}
                             value={formData.instruction || ''}
                             onChange={onChangeTextHandler('instruction')}
-                            minRows={5}
+                            minRows={10}
                             multiline
+                            fullWidth
+                            placeholder={t('Введите инструкции для ИИ...') || ''}
                         />
-                    </VStack>
-                </Card>
+                    </SectionCard>
+                </VStack>
 
-                {/* Settings Card */}
-                <Card padding={'16'} className={cls.card}>
-                    <VStack gap={'16'} max>
-                        <Text text={t('Настройки')} bold />
-
-                        <ModelSelect
-                            label={String(t('Модель'))}
-                            value={formData.model || ''}
-                            onChangeValue={onChangeSelectHandler('model')}
-                        />
-
-                        <VoiceSelect
-                            label={String(t('Голос'))}
-                            value={formData.voice ?? ''}
-                            model={formData.model}
-                            onChangeValue={onChangeSelectHandler('voice')}
-                        />
-
-                        <ToolsSelect
-                            label={t('Функции') || ''}
-                            value={formData.tools || []}
-                            userId={userId}
-                            onChangeTool={onChangeToolsHandler}
-                        />
-
-                        {/* VAD Settings */}
-                        <Text text={t('Настройки VAD')} bold className={cls.vadTitle} />
-
-                        {/* Threshold */}
-                        <div className={cls.vadItem}>
-                            <div className={cls.vadHeader}>
-                                <div className={cls.vadLabel}>
-                                    {t('Порог')}
-                                    <Tooltip title={t('tooltip_threshold') || ''} arrow>
-                                        <IconButton size="small">
-                                            <InfoOutlinedIcon fontSize="small" className={cls.icon} />
-                                        </IconButton>
-                                    </Tooltip>
-                                </div>
-                                <span className={cls.vadValue}>{formData.turn_detection_threshold || '0.5'}</span>
-                            </div>
-                            <Slider
-                                value={Number(formData.turn_detection_threshold) || 0.5}
-                                onChange={onChangeSliderHandler('turn_detection_threshold')}
-                                min={0}
-                                max={1}
-                                step={0.1}
+                {/* Model Settings Section */}
+                <VStack gap="24" className={cls.rightColumn}>
+                    <SectionCard
+                        title={t('Настройки модели')}
+                        icon={Settings2}
+                    >
+                        <VStack gap="16" max>
+                            <ModelSelect
+                                label={String(t('Модель'))}
+                                value={formData.model || ''}
+                                onChangeValue={onChangeSelectHandler('model')}
+                                fullWidth
                             />
-                        </div>
 
-                        {/* Prefix Padding */}
-                        <div className={cls.vadItem}>
-                            <div className={cls.vadHeader}>
-                                <div className={cls.vadLabel}>
-                                    {t('Префиксный отступ (мс)')}
-                                    <Tooltip title={t('tooltip_prefix_padding') || ''} arrow>
-                                        <IconButton size="small">
-                                            <InfoOutlinedIcon fontSize="small" className={cls.icon} />
-                                        </IconButton>
-                                    </Tooltip>
-                                </div>
-                                <span className={cls.vadValue}>{formData.turn_detection_prefix_padding_ms || '500'}</span>
-                            </div>
-                            <Slider
-                                value={Number(formData.turn_detection_prefix_padding_ms) || 500}
-                                onChange={onChangeSliderHandler('turn_detection_prefix_padding_ms')}
-                                min={0}
-                                max={2000}
-                                step={100}
+                            <VoiceSelect
+                                label={String(t('Голос'))}
+                                value={formData.voice ?? ''}
+                                model={formData.model}
+                                onChangeValue={onChangeSelectHandler('voice')}
+                                fullWidth
                             />
-                        </div>
 
-                        {/* Silence Duration */}
-                        <div className={cls.vadItem}>
-                            <div className={cls.vadHeader}>
-                                <div className={cls.vadLabel}>
-                                    {t('Длительность тишины (мс)')}
-                                    <Tooltip title={t('tooltip_silence_duration') || ''} arrow>
-                                        <IconButton size="small">
-                                            <InfoOutlinedIcon fontSize="small" className={cls.icon} />
-                                        </IconButton>
-                                    </Tooltip>
-                                </div>
-                                <span className={cls.vadValue}>{formData.turn_detection_silence_duration_ms || '1000'}</span>
-                            </div>
-                            <Slider
-                                value={Number(formData.turn_detection_silence_duration_ms) || 1000}
-                                onChange={onChangeSliderHandler('turn_detection_silence_duration_ms')}
-                                min={200}
-                                max={3000}
-                                step={100}
+                            <ToolsSelect
+                                label={t('Функции') || ''}
+                                value={formData.tools || []}
+                                userId={userId}
+                                onChangeTool={onChangeToolsHandler}
+                                fullWidth
                             />
-                        </div>
 
-                        {/* Idle Timeout */}
-                        <div className={cls.vadItem}>
-                            <div className={cls.vadHeader}>
-                                <div className={cls.vadLabel}>
-                                    {t('Время простоя (мс)')}
-                                    <Tooltip title={t('tooltip_idle_timeout') || ''} arrow>
-                                        <IconButton size="small">
-                                            <InfoOutlinedIcon fontSize="small" className={cls.icon} />
-                                        </IconButton>
-                                    </Tooltip>
+                            {/* VAD Settings */}
+                            <VStack gap="16" max className={cls.vadContainer}>
+                                <Text text={t('Настройки VAD')} bold />
+
+                                {/* Threshold */}
+                                <div className={cls.vadItem}>
+                                    <div className={cls.vadHeader}>
+                                        <div className={cls.vadLabel}>
+                                            {t('Порог')}
+                                            <Tooltip title={t('tooltip_threshold') || ''} arrow>
+                                                <IconButton size="small">
+                                                    <InfoOutlinedIcon fontSize="small" className={cls.icon} />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </div>
+                                        <span className={cls.vadValue}>{formData.turn_detection_threshold || '0.5'}</span>
+                                    </div>
+                                    <Slider
+                                        value={Number(formData.turn_detection_threshold) || 0.5}
+                                        onChange={onChangeSliderHandler('turn_detection_threshold')}
+                                        min={0}
+                                        max={1}
+                                        step={0.1}
+                                    />
                                 </div>
-                                <span className={cls.vadValue}>{formData.idle_timeout_ms || '10000'}</span>
-                            </div>
-                            <Slider
-                                value={Number(formData.idle_timeout_ms) || 10000}
-                                onChange={onChangeSliderHandler('idle_timeout_ms')}
-                                min={1000}
-                                max={60000}
-                                step={1000}
-                            />
-                        </div>
-                    </VStack>
-                </Card>
+
+                                {/* Prefix Padding */}
+                                <div className={cls.vadItem}>
+                                    <div className={cls.vadHeader}>
+                                        <div className={cls.vadLabel}>
+                                            {t('Префиксный отступ (мс)')}
+                                            <Tooltip title={t('tooltip_prefix_padding') || ''} arrow>
+                                                <IconButton size="small">
+                                                    <InfoOutlinedIcon fontSize="small" className={cls.icon} />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </div>
+                                        <span className={cls.vadValue}>{formData.turn_detection_prefix_padding_ms || '500'}</span>
+                                    </div>
+                                    <Slider
+                                        value={Number(formData.turn_detection_prefix_padding_ms) || 500}
+                                        onChange={onChangeSliderHandler('turn_detection_prefix_padding_ms')}
+                                        min={0}
+                                        max={2000}
+                                        step={100}
+                                    />
+                                </div>
+
+                                {/* Silence Duration */}
+                                <div className={cls.vadItem}>
+                                    <div className={cls.vadHeader}>
+                                        <div className={cls.vadLabel}>
+                                            {t('Длительность тишины (мс)')}
+                                            <Tooltip title={t('tooltip_silence_duration') || ''} arrow>
+                                                <IconButton size="small">
+                                                    <InfoOutlinedIcon fontSize="small" className={cls.icon} />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </div>
+                                        <span className={cls.vadValue}>{formData.turn_detection_silence_duration_ms || '1000'}</span>
+                                    </div>
+                                    <Slider
+                                        value={Number(formData.turn_detection_silence_duration_ms) || 1000}
+                                        onChange={onChangeSliderHandler('turn_detection_silence_duration_ms')}
+                                        min={200}
+                                        max={3000}
+                                        step={100}
+                                    />
+                                </div>
+
+                                {/* Idle Timeout */}
+                                <div className={cls.vadItem}>
+                                    <div className={cls.vadHeader}>
+                                        <div className={cls.vadLabel}>
+                                            {t('Время простоя (мс)')}
+                                            <Tooltip title={t('tooltip_idle_timeout') || ''} arrow>
+                                                <IconButton size="small">
+                                                    <InfoOutlinedIcon fontSize="small" className={cls.icon} />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </div>
+                                        <span className={cls.vadValue}>{formData.idle_timeout_ms || '10000'}</span>
+                                    </div>
+                                    <Slider
+                                        value={Number(formData.idle_timeout_ms) || 10000}
+                                        onChange={onChangeSliderHandler('idle_timeout_ms')}
+                                        min={1000}
+                                        max={60000}
+                                        step={1000}
+                                    />
+                                </div>
+                            </VStack>
+                        </VStack>
+                    </SectionCard>
+                </VStack>
             </HStack>
         </VStack>
     )

@@ -17,6 +17,7 @@ interface VoiceSelectProps {
     reason: AutocompleteInputChangeReason,
   ) => void
   inputValue?: string
+  fullWidth?: boolean
 }
 
 const GPT_VOICES = ['alloy', 'ash', 'ballad', 'cedar', 'coral', 'echo', 'sage', 'shimmer', 'marin', 'verse']

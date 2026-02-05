@@ -5,13 +5,15 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import Left from '@/shared/assets/icons/left.svg'
 import Right from '@/shared/assets/icons/right.svg'
 import { Icon } from '@/shared/ui/redesigned/Icon'
-import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { PeriodTabs } from '@/entities/Filters'
 import quarterOfYear from 'dayjs/plugin/quarterOfYear'
-
 import TuneIcon from '@mui/icons-material/Tune'
+import cls from './PeriodPicker.module.scss'
+import { classNames } from '@/shared/lib/classNames/classNames'
+import { useMediaQuery } from '@mui/material'
 
 // Расширяем Day.js плагинами weekday и updateLocale
 dayjs.extend(weekday)
@@ -33,11 +35,11 @@ interface PeriodPickerProps {
   onChangeTab: (tab: string) => void
   onChangeStartDate: (value: string) => void
   onChangeEndDate: (value: string) => void
-
 }
 
 export const PeriodPicker = memo((props: PeriodPickerProps) => {
   const {
+    className,
     tab = 'week',
     userId,
     startDate,
@@ -47,10 +49,10 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
     onChangeTab,
     onChangeEndDate,
     onChangeStartDate,
-
   } = props
 
   const [date, setDate] = useState<Dayjs>(dayjs())
+  const isMobile = useMediaQuery('(max-width:800px)')
 
   // Sync internal state with props
   useEffect(() => {
@@ -68,14 +70,12 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
       const start = dayjs(date).startOf(tab as OpUnitType).format('YYYY-MM-DD')
       const end = dayjs(date).endOf(tab as OpUnitType).format('YYYY-MM-DD')
 
-      // Only invoke callback if values are different to avoid loops if parent passes them back
-      // Using simple string check assumes format consistency
       if (start !== startDate || end !== endDate) {
         onChangeStartDate(start)
         onChangeEndDate(end)
       }
     }
-  }, [isInited, tab]) // Removed date, startDate, endDate from dependencies
+  }, [isInited, tab])
 
   const handleDateChange = (direction: 'left' | 'right') => {
     const newDate = dayjs(date).add(direction === 'right' ? 1 : -1, tab as ManipulateType)
@@ -86,38 +86,51 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
     onChangeEndDate(end)
   }
 
-  return (
-    <VStack gap={'16'} align={'center'}>
-      <HStack gap={'16'}>
-        <PeriodTabs tab={tab} onChangeTab={onChangeTab} />
-        {onOpenFilters && (
-          <Button variant={'clear'} onClick={onOpenFilters}>
-            <TuneIcon fontSize={'large'} />
-          </Button>
-        )}
-      </HStack>
-      <HStack gap={'8'}>
+  const content = (
+    <HStack gap="8" align="center" wrap={isMobile ? 'wrap' : 'nowrap'} className={classNames(cls.PeriodPicker, {}, [className])}>
+      <PeriodTabs
+        tab={tab}
+        onChangeTab={onChangeTab}
+        className="PeriodFiltersTabs"
+      />
+
+      {!isMobile && <div className={cls.divider} />}
+
+      <HStack gap="4" align="center">
         <Button
-          variant={'clear'}
-          onClick={() => {
-            handleDateChange('left')
-          }}
+          variant="clear"
+          className={cls.navBtn}
+          onClick={() => handleDateChange('left')}
         >
-          <Icon Svg={Left} width={16} height={16} />
+          <Icon Svg={Left} width={18} height={18} />
         </Button>
+
         <Text
-          data-testid={'PeriodPicker.period'}
-          text={String(startDate) + ' - ' + String(endDate)}
+          data-testid="PeriodPicker.period"
+          text={`${startDate} - ${endDate}`}
+          className={cls.dateDisplay}
+          size="s"
         />
+
         <Button
-          variant={'clear'}
-          onClick={() => {
-            handleDateChange('right')
-          }}
+          variant="clear"
+          className={cls.navBtn}
+          onClick={() => handleDateChange('right')}
         >
-          <Icon Svg={Right} width={16} height={16} />
+          <Icon Svg={Right} width={18} height={18} />
         </Button>
       </HStack>
-    </VStack>
+
+      {onOpenFilters && (
+        <>
+          {!isMobile && <div className={cls.divider} />}
+          <Button variant="clear" onClick={onOpenFilters} className={cls.tuneBtn}>
+            <TuneIcon />
+          </Button>
+        </>
+      )}
+    </HStack>
   )
+
+  return content
 })

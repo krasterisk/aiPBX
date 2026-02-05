@@ -5,9 +5,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Check } from '@/shared/ui/mui/Check'
 import { Report } from '../../model/types/report'
 import { useTranslation } from 'react-i18next'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import { Button } from '@/shared/ui/redesigned/Button'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import { useGetReportDialogs } from '../../api/reportApi'
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { useMediaQuery } from '@mui/material'
@@ -48,9 +46,9 @@ export const ReportTable = memo((props: ReportTableProps) => {
     refetchOnReconnect: false
   })
 
+  // Localized date formatting
   const date = new Date(report.createdAt)
-  const formattedDate = new Intl.DateTimeFormat('ru-RU', {
-    // timeZone: 'UTC', // или 'Europe/Moscow' для другого смещения
+  const formattedDate = new Intl.DateTimeFormat(undefined, {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
@@ -67,11 +65,13 @@ export const ReportTable = memo((props: ReportTableProps) => {
   const duration = report.duration ? formatTime(report.duration, t) : ''
   const isMobile = useMediaQuery('(max-width:800px)')
 
-  const viewMode = isMobile ? 'SMALL' : cls.BIG
+  const viewMode = isMobile ? 'SMALL' : 'BIG'
 
   const onCheckClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation()
   }, [])
+
+  const isChecked = checkedItems?.includes(String(report.id))
 
   return (
     <>
@@ -82,13 +82,10 @@ export const ReportTable = memo((props: ReportTableProps) => {
         <td className={cls.tdCheck} onClick={onCheckClick}>
           <Check
             key={report.id}
-            className={classNames('', {
-              [cls.uncheck]: !checkedItems?.includes(String(report.id)),
-              [cls.check]: checkedItems?.includes(String(report.id))
-            }, [])}
+            className={classNames('', { [cls.check]: isChecked }, [])}
             value={report.id}
-            size={'small'}
-            checked={checkedItems?.includes(String(report.id))}
+            size="small"
+            checked={isChecked}
             onChange={onChangeChecked}
           />
         </td>
@@ -112,8 +109,8 @@ export const ReportTable = memo((props: ReportTableProps) => {
         </td>
         <td className={cls.actionsTd}>
           {showDialog
-            ? <ExpandLessIcon fontSize={'large'} />
-            : <ExpandMoreIcon fontSize={'large'} />
+            ? <ChevronUp className={cls.expandIcon} size={24} />
+            : <ChevronDown className={cls.expandIcon} size={24} />
           }
         </td>
       </tr>
@@ -131,5 +128,4 @@ export const ReportTable = memo((props: ReportTableProps) => {
       )}
     </>
   )
-}
-)
+})

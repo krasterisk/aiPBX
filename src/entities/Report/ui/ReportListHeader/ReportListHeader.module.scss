@@ -1,23 +1,50 @@
+@import '@/app/styles/variables/mixins';
+
 .ReportListHeader {
-    // display: flex;
+    margin-bottom: var(--space-6);
+    width: 100%;
 }
 
-.icon {
-    color: var(--icon-redesigned);
+.headerContent {
+    width: 100%;
+
+    @include tablet {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-4);
+    }
 }
 
-.mobileHeader {
-    flex-wrap: wrap;
+.titleSection {
+    min-width: fit-content;
 }
 
-.clientSelect {
-    width: 200px;
+.controlsSection {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--space-4);
+
+    @include tablet {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
 }
 
 .searchInput {
-    width: 200px;
+    width: 280px;
+
+    @include tablet {
+        width: 100%;
+        order: 2;
+    }
 }
 
 .datePicker {
-    width: 100%;
+    @include tablet {
+        width: 100%;
+        order: 1;
+    }
 }

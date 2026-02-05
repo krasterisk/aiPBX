@@ -11,6 +11,7 @@ import {
   reportsPageReducer,
   useReportFilters
 } from '@/entities/Report'
+import { ErrorGetData } from '@/entities/ErrorGetData'
 
 interface ReportsPageProps {
   className?: string
@@ -24,8 +25,10 @@ const ReportsPage = ({ className }: ReportsPageProps) => {
   const {
     isError,
     isLoading,
+    error,
     data,
     hasMore,
+    onRefetch,
     onLoadNext
   } = useReportFilters()
 
@@ -41,25 +44,33 @@ const ReportsPage = ({ className }: ReportsPageProps) => {
     dispatch(initReportsPage())
   })
 
-  const content = (
-    <Page
-      data-testid={'ReportsPage'}
-      onScrollEnd={onLoadNextPart}
-      className={classNames(cls.ReportPage, {}, [className])}
-      isSaveScroll={true}
-    >
+  if (isError) {
+    const errMsg = error && typeof error === 'object' && 'data' in error
+      ? String((error.data as { message: string }).message)
+      : ''
 
-      <ReportList
-        reports={data}
-        isReportsLoading={isLoading}
-        isReportsError={isError}
+    return (
+      <ErrorGetData
+        text={errMsg}
+        onRefetch={onRefetch}
       />
-    </Page>
-  )
+    )
+  }
 
   return (
     <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
-      {content}
+      <Page
+        data-testid="ReportsPage"
+        onScrollEnd={onLoadNextPart}
+        className={classNames(cls.ReportPage, {}, [className])}
+        isSaveScroll={true}
+      >
+        <ReportList
+          reports={data}
+          isReportsLoading={isLoading}
+          isReportsError={isError}
+        />
+      </Page>
     </DynamicModuleLoader>
   )
 }

@@ -47,5 +47,12 @@
   "Длительность (мин)": "Dauer (Min)",
   "Расходы": "Ausgaben",
   "Использование токенов": "Token-Nutzung",
-  "Динамика звонков": "Anruftrends"
+  "Динамика звонков": "Anrufdynamik",
+  "Поиск по звонку...": "Suche nach Anruf...",
+  "Расширенные фильтры": "Erweiterte Filter",
+  "Выберите параметры для фильтрации отчетов": "Parameter zum Filtern von Berichten auswählen",
+  "Выбор клиента": "Kunden auswählen",
+  "Выбор ассистента": "Assistenten auswählen",
+  "Показать результаты": "Ergebnisse anzeigen",
+  "Попробуйте изменить параметры поиска или фильтры": "Versuchen Sie, Ihre Suchparameter oder Filter zu ändern"
 }

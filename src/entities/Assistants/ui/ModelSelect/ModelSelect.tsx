@@ -14,6 +14,7 @@ interface ModelSelectProps {
     reason: AutocompleteInputChangeReason,
   ) => void
   inputValue?: string
+  fullWidth?: boolean
 }
 
 export const ModelSelect = memo((props: ModelSelectProps) => {

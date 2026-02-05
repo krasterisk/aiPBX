@@ -11,6 +11,7 @@ interface ToolsSelectorProps {
   className?: string
   onChangeTool?: (event: any, newValue: Tool[]) => void
   userId?: string
+  fullWidth?: boolean
 }
 
 export const ToolsSelect = memo((props: ToolsSelectorProps) => {

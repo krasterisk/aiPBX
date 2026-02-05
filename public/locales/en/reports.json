@@ -47,5 +47,12 @@
   "Длительность (мин)": "Duration (min)",
   "Расходы": "Expenses",
   "Использование токенов": "Token Usage",
-  "Динамика звонков": "Call Trends"
+  "Динамика звонков": "Call Dynamics",
+  "Поиск по звонку...": "Search by call...",
+  "Расширенные фильтры": "Advanced Filters",
+  "Выберите параметры для фильтрации отчетов": "Select parameters to filter reports",
+  "Выбор клиента": "Select Client",
+  "Выбор ассистента": "Select Assistant",
+  "Показать результаты": "Show Results",
+  "Попробуйте изменить параметры поиска или фильтры": "Try changing your search parameters or filters"
 }

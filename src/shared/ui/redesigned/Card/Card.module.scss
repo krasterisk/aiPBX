@@ -43,6 +43,11 @@
     background: var(--dark-bg-redesigned);
 }
 
+.clear {
+    background: transparent !important;
+    border-color: transparent !important;
+}
+
 .diviner-top {
     // border-top: 1px solid var(--accent-redesigned);
 }

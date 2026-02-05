@@ -1,0 +1,19 @@
+@import '@/app/styles/variables/mixins';
+
+.SectionCard {
+    @include glass-card-secondary;
+    height: 100%;
+
+    &:hover {
+        border-color: var(--accent-redesigned);
+        box-shadow: var(--shadow-lg);
+    }
+
+    @include tablet {
+        padding: var(--space-4) !important;
+    }
+}
+
+.icon {
+    color: var(--accent-redesigned);
+}

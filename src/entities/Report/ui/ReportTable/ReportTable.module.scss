@@ -1,151 +1,115 @@
+@import '@/app/styles/variables/mixins';
+
 .ReportTableItem {
-    position: relative;
-    background: var(--light-bg-redesigned);
-    width: 100%;
+    @include glass-card-secondary;
+    transition: var(--transition-medium);
+    cursor: pointer;
+    background: var(--glass-bg-secondary);
+    border: 1px solid var(--glass-border-secondary);
 
     td {
-        border-top: 0.5px solid var(--accent-redesigned);
-        border-bottom: 0.5px solid var(--accent-redesigned);
+        padding: 16px 20px;
+        vertical-align: middle;
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
 
         &:first-child {
-            border-left: 0.5px solid var(--accent-redesigned);
-            border-top-left-radius: 12px;
-            border-bottom-left-radius: 12px;
+            border-left: 1px solid transparent;
+            border-top-left-radius: var(--radius-lg);
+            border-bottom-left-radius: var(--radius-lg);
         }
 
         &:last-child {
-            border-right: 0.5px solid var(--accent-redesigned);
-            border-top-right-radius: 12px;
-            border-bottom-right-radius: 12px;
+            border-right: 1px solid transparent;
+            border-top-right-radius: var(--radius-lg);
+            border-bottom-right-radius: var(--radius-lg);
         }
     }
 
     &:hover {
-        cursor: pointer;
+        background: var(--glass-bg-tertiary);
+        border-color: var(--accent-redesigned);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
 
-        .uncheck {
-            display: flex;
-            color: var(--icon-redesigned);
+        td {
+            color: var(--text-redesigned);
         }
-
-        .menu {
-            position: absolute;
-            display: flex;
-            right: 0;
-            top: 0;
-        }
-    }
-
-    .uncheck {
-        display: flex;
-        color: var(--icon-redesigned);
     }
 
     .check {
-        display: flex;
+        color: var(--accent-redesigned) !important;
+    }
+
+    .expandIcon {
         color: var(--icon-redesigned);
-        width: 40px;
+        transition: var(--transition-medium);
     }
+}
 
-    .tdCheck {
-        width: 20px;
+.DialogRow {
+    background: transparent;
+
+    td {
+        padding: 0 12px 12px 12px;
+        border: none;
     }
+}
 
-    .actionsTd {
-        width: 40px;
-        text-align: right;
-    }
-
-    @media screen and (max-width: 1100px) {
+@include tablet {
+    .ReportTableItem {
         display: block;
         margin-bottom: 16px;
-        border-radius: 12px;
-        background-color: var(--dark-bg-redesigned);
-        padding: 8px 0;
-        border: 0.5px solid var(--accent-redesigned);
+        padding: 12px;
+        border-radius: var(--radius-lg);
 
         td {
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding: 8px 16px !important;
-            min-height: 40px;
+            padding: 10px 16px !important;
             border: none !important;
             position: relative;
-            text-align: right !important;
-            padding-left: 50% !important;
+            text-align: right;
+            min-height: 44px;
 
             &::before {
                 content: attr(data-label);
                 position: absolute;
                 left: 16px;
-                width: 45%;
-                padding-right: 10px;
-                white-space: nowrap;
-                text-align: left;
                 font-weight: 600;
+                font-size: 13px;
                 color: var(--text-redesigned);
-                opacity: 0.6;
+                opacity: 0.5;
+                text-transform: uppercase;
             }
 
             &:last-child,
             &.actionsTd {
-                border-bottom: none !important;
+                justify-content: center;
+
+                &::before {
+                    display: none;
+                }
             }
         }
 
         .tdCheck {
             justify-content: flex-start;
-            padding-left: 16px !important;
-
-            &::before {
-                display: none;
-            }
-        }
-
-        .actionsTd {
-            justify-content: center;
-            padding-left: 16px !important;
 
             &::before {
                 display: none;
             }
         }
     }
-}
 
-.DialogRow {
-    background: var(--dark-bg-redesigned);
-
-    td {
-        padding: 0;
-        border: none;
-    }
-
-    @media screen and (max-width: 1100px) {
+    .DialogRow {
         display: block;
-        margin-bottom: 8px;
-        margin-top: -16px;
-        border-radius: 0 0 12px 12px;
-        border: 0.5px solid var(--light-bg-redesigned);
-        border-top: none;
 
         td {
             display: block;
             width: 100%;
-            padding: 16px !important;
+            padding: 0 0 16px 0 !important;
         }
     }
-}
-
-.avatar {
-    margin-left: 8px;
-}
-
-.isAdmin {
-    border: 0.5px solid var(--save-redesigned);
-}
-
-.isClient {
-    border: 0.5px solid var(--accent-redesigned);
 }

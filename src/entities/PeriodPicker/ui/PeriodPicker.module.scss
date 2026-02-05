@@ -1,3 +1,127 @@
+@import '@/app/styles/variables/mixins';
+
 .PeriodPicker {
-    width: 100%;
+    @include glass-card-secondary;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--glass-border-secondary);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background: var(--glass-bg-primary) !important;
+    backdrop-filter: blur(15px);
+    box-shadow: none !important;
+
+    &:hover {
+        border-color: var(--accent-redesigned);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+        transform: translateY(-1px);
+    }
+}
+
+.navBtn {
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    color: var(--icon-redesigned);
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(94, 211, 243, 0.15);
+        color: var(--accent-redesigned);
+        transform: scale(1.1);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+.dateDisplay {
+    min-width: 190px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--text-redesigned);
+    letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.tuneBtn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    color: var(--icon-redesigned);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: var(--radius-md);
+
+    &:hover {
+        color: var(--accent-redesigned);
+        transform: rotate(90deg);
+        background: rgba(94, 211, 243, 0.1);
+    }
+}
+
+.divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border-redesigned);
+    opacity: 0.15;
+    margin: 0 var(--space-1);
+}
+
+// Fixed styling with global stable classes
+:global(.PeriodFiltersTabs) {
+    gap: 4px !important;
+    padding: 2px !important;
+    background: transparent !important;
+
+    // Default (Unselected) - Transparent
+    :global(.tab-item) {
+        background: transparent !important;
+        color: var(--text-redesigned) !important;
+        opacity: 0.6;
+        transition: all 0.3s ease;
+        border-radius: var(--radius-lg) !important;
+        padding: 6px 14px !important;
+        border: 1px solid transparent !important;
+        box-shadow: none !important;
+
+        &:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.05) !important;
+        }
+    }
+
+    // SELECTED (Active) - No background filling, only text opacity/weight
+    :global(.tab-item-selected) {
+        background: transparent !important;
+        color: var(--text-redesigned) !important;
+        opacity: 1 !important;
+        font-weight: 700 !important;
+        box-shadow: none !important;
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+}
+
+@include mobile {
+    .PeriodPicker {
+        flex-direction: column;
+        gap: var(--space-3);
+        padding: var(--space-4);
+        border-radius: var(--radius-lg);
+        width: 100%;
+    }
+
+    .divider {
+        display: none;
+    }
+
+    .dateDisplay {
+        min-width: 0;
+        width: 100%;
+    }
 }

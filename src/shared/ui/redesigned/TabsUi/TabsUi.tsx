@@ -31,27 +31,27 @@ export const TabsUi = memo((props: TabsProps) => {
   }, [onTabClick])
 
   return (
-        <Flex
-            direction={direction}
-            gap='8'
-            align={'start'}
-            className={classNames(cls.Tabs, {}, [className])}
-        >
-            {tabs.map((tab) => {
-              const isSelected = tab.value === value
-              return (
-                    <Card
-                        variant={isSelected ? 'light' : 'normal'}
-                        className={classNames(cls.tab, { [cls.selected]: isSelected })}
-                        key={tab.value}
-                        padding={isSelected ? '16' : '8'}
-                        onClick={onClickHandler(tab)}
-                        border="partial"
-                    >
-                        {tab.content}
-                    </Card>
-              )
-            })}
-        </Flex>
+    <Flex
+      direction={direction}
+      gap='8'
+      align={'start'}
+      className={classNames(cls.Tabs, {}, [className])}
+    >
+      {tabs.map((tab) => {
+        const isSelected = tab.value === value
+        return (
+          <Card
+            variant={isSelected ? 'light' : 'clear'}
+            className={classNames(cls.tab, { [cls.selected]: isSelected }, ['tab-item', isSelected ? 'tab-item-selected' : ''])}
+            key={tab.value}
+            padding="8"
+            onClick={onClickHandler(tab)}
+            border="partial"
+          >
+            {tab.content}
+          </Card>
+        )
+      })}
+    </Flex>
   )
 })

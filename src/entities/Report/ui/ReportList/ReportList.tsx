@@ -16,6 +16,8 @@ import * as XLSX from 'xlsx'
 import FileSaver from 'file-saver'
 import { formatDate } from '@/shared/lib/functions/formatDate'
 import { formatTime } from '@/shared/lib/functions/formatTime'
+import { Download, Phone, DollarSign } from 'lucide-react'
+import { Icon } from '@/shared/ui/redesigned/Icon'
 
 export const ReportList = (props: ReportsListProps) => {
   const {
@@ -41,9 +43,10 @@ export const ReportList = (props: ReportsListProps) => {
       } else {
         newChecked.splice(currentIndex, 1)
       }
-      if (reports?.count) {
-        setIndeterminateBox(newChecked.length > 0 && newChecked.length < reports?.count)
-      }
+
+      const currentRowsCount = reports?.rows.length || 0
+      setIndeterminateBox(newChecked.length > 0 && newChecked.length < currentRowsCount)
+
       return newChecked
     })
   }
@@ -53,7 +56,11 @@ export const ReportList = (props: ReportsListProps) => {
     const fileExtension = '.xlsx'
 
     if (reports) {
-      const exportData = reports.rows.map((report, index) => ({
+      const rowsToExport = checkedBox.length > 0
+        ? reports.rows.filter(report => checkedBox.includes(String(report.id)))
+        : reports.rows
+
+      const exportData = rowsToExport.map((report, index) => ({
         '№': index + 1,
         Date: report.createdAt ? formatDate(report.createdAt) : '',
         'Assistant:': report.assistantName,
@@ -66,7 +73,6 @@ export const ReportList = (props: ReportsListProps) => {
       const ws = XLSX.utils.json_to_sheet(exportData)
       const wb = XLSX.utils.book_new()
       XLSX.utils.book_append_sheet(wb, ws, 'data')
-      // Сохранение книги в формате Excel
       const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
       const data = new Blob([excelBuffer], { type: fileType })
       FileSaver.saveAs(data, 'reports_list' + fileExtension)
@@ -74,26 +80,23 @@ export const ReportList = (props: ReportsListProps) => {
   }
 
   const handleCheckAll = useCallback(() => {
-    if (indeterminateBox && reports?.count && checkedBox.length > 0) {
-      setCheckedBox(reports.rows.map(report => String(report.id)))
-      setIndeterminateBox(false)
-    }
+    if (!reports) return
+    const currentRowsCount = reports.rows.length
 
-    if (!indeterminateBox && reports?.count && checkedBox.length === 0) {
-      setCheckedBox(reports.rows.map(report => String(report.id)))
-      setIndeterminateBox(false)
-    }
-
-    if (!indeterminateBox && checkedBox.length > 0) {
+    if (checkedBox.length === currentRowsCount) {
       setCheckedBox([])
+      setIndeterminateBox(false)
+    } else {
+      setCheckedBox(reports.rows.map(report => String(report.id)))
+      setIndeterminateBox(false)
     }
-  }, [checkedBox.length, reports, indeterminateBox])
+  }, [checkedBox.length, reports])
 
   const getSkeletons = () => {
     return new Array(4)
       .fill(0)
       .map((item, index) => (
-        <ContentListItemSkeleton className={cls.card} key={index} view={'BIG'} />
+        <ContentListItemSkeleton className={cls.skeleton} key={index} view={'BIG'} />
       ))
   }
 
@@ -102,24 +105,6 @@ export const ReportList = (props: ReportsListProps) => {
       <ErrorGetData />
     )
   }
-
-  const checkedButtons = (
-    <HStack
-      gap={'16'}
-      wrap={'wrap'}
-      className={classNames('', {
-        [cls.uncheckButtons]: checkedBox.length === 0,
-        [cls.checkButtons]: checkedBox.length > 0
-      }, [])}
-    >
-      <Button
-        variant={'clear'}
-        onClick={exportToExcel}
-      >
-        <Text text={t('Выгрузить в Excel')} variant={'accent'} />
-      </Button>
-    </HStack>
-  )
 
   const renderTableContent = (report: Report) => {
     return (
@@ -135,34 +120,55 @@ export const ReportList = (props: ReportsListProps) => {
   }
 
   return (
-    <VStack gap={'16'} max>
+    <VStack gap="24" max className={classNames(cls.ReportListWrapper, {}, [className])}>
       <ReportsListHeader />
-      <Card max className={classNames(cls.ReportList, {}, [className])}>
-        <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
-          <Check
-            className={classNames(cls.ReportsList, {
-              [cls.uncheck]: checkedBox.length === 0,
-              [cls.check]: checkedBox.length > 0
-            }, [])}
-            indeterminate={indeterminateBox}
-            // checked={checkedBox.length === reports?.count}
-            onChange={handleCheckAll}
-          />
-          {checkedButtons}
-          {
-            checkedBox.length > 0
-              ? <Text
-                text={t('Выбрано') + ': ' + String(checkedBox.length) + ' ' + t('из') + ' ' + String(reports?.count)} />
-              : <HStack gap={'8'}>
-                <Text text={t('Всего звонков') + ' ' + String(reports?.count || 0)} />
-                <Text text={t('на сумму') + ' $' + String(reports?.totalCost || 0)} />
+
+      <Card padding="16" max border="partial" className={cls.actionsCard}>
+        <HStack max justify="between" align="center" wrap="wrap" gap="16">
+          <HStack gap="16" align="center">
+            <Check
+              className={cls.checkAll}
+              indeterminate={indeterminateBox}
+              checked={!!reports?.rows.length && checkedBox.length === reports?.rows.length}
+              onChange={handleCheckAll}
+            />
+            {checkedBox.length > 0 && (
+              <Text
+                text={`${t('Выбрано')}: ${checkedBox.length} ${t('из')} ${reports?.rows.length || 0}`}
+                bold
+                variant="accent"
+              />
+            )}
+          </HStack>
+
+          <HStack gap="24" align="center">
+            <HStack gap="16" align="center" className={cls.summaryInfo}>
+              <HStack gap="8" align="center">
+                <Icon Svg={Phone} width={18} height={18} className={cls.summaryIcon} />
+                <Text text={String(reports?.count || 0)} bold />
               </HStack>
-          }
+              <div className={cls.divider} />
+              <HStack gap="8" align="center">
+                <Icon Svg={DollarSign} width={18} height={18} className={cls.summaryIcon} />
+                <Text text={`${reports?.totalCost || 0}`} bold />
+              </HStack>
+            </HStack>
+
+            <Button
+              variant="clear"
+              color="success"
+              onClick={exportToExcel}
+              disabled={!reports?.rows.length}
+              addonLeft={<Download size={18} />}
+            >
+              {t('Выгрузить в Excel')}
+            </Button>
+          </HStack>
         </HStack>
       </Card>
 
-      {reports?.rows.length
-        ? <div className={cls.TableWrapper}>
+      {reports?.rows.length ? (
+        <div className={cls.TableWrapper}>
           <table className={cls.Table}>
             <thead className={cls.TableHeader}>
               <tr>
@@ -173,22 +179,30 @@ export const ReportList = (props: ReportsListProps) => {
                 <th>{t('Длительность')}</th>
                 <th>{t('Токены')}</th>
                 <th>{t('Стоимость')}</th>
-                <th></th>
+                <th className={cls.tdActions}></th>
               </tr>
             </thead>
-            <tbody>
-              {reports.rows.map(renderTableContent)}
+            <tbody className={cls.TableBody}>
+              {reports?.rows.map(renderTableContent)}
             </tbody>
           </table>
         </div>
-        : <HStack
-          justify={'center'} max
-          className={classNames('', {}, [className, cls.BIG])}
-        >
-          <Text align={'center'} text={t('Данные не найдены')} />
-        </HStack>
-      }
-      {isReportsLoading && getSkeletons()}
+      ) : (
+        !isReportsLoading && (
+          <Card padding="48" max border="partial">
+            <VStack max align="center" justify="center" gap="16">
+              <Text align="center" title={t('Данные не найдены')} />
+              <Text align="center" text={t('Попробуйте изменить параметры поиска или фильтры')} />
+            </VStack>
+          </Card>
+        )
+      )}
+
+      {isReportsLoading && (
+        <VStack gap="12" max>
+          {getSkeletons()}
+        </VStack>
+      )}
     </VStack>
   )
 }

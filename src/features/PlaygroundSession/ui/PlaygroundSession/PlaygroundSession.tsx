@@ -2,7 +2,6 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import { useTranslation } from 'react-i18next'
 import cls from './PlaygroundSession.module.scss'
 import { memo, useCallback, useState, useEffect } from 'react'
-import { Card } from '@/shared/ui/redesigned/Card'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
@@ -14,6 +13,8 @@ import { PlaygroundCall } from '../../ui/PlaygroundCall/PlaygroundCall'
 import { PlaygroundAssistantSettings } from '../PlaygroundAssistantSettings/PlaygroundAssistantSettings'
 import { playgroundAssistantFormActions } from '@/pages/Playground'
 import { useAssistant } from '@/entities/Assistants/api/assistantsApi'
+import { SectionCard } from '../components/SectionCard/SectionCard'
+import { UserCheck, Play, Square } from 'lucide-react'
 
 interface PlaygroundSessionProps {
     className?: string
@@ -49,7 +50,6 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
 
     const handleStartSession = useCallback(() => {
         if (selectedAssistant) {
-            // No micDeviceId - will use default microphone
             connect(selectedAssistant.id)
         }
     }, [connect, selectedAssistant])
@@ -58,51 +58,54 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
         disconnect()
     }, [disconnect])
 
-    return (
-        <VStack gap={'24'} max className={classNames(cls.PlaygroundSession, {}, [className])}>
-            <Card max padding={'24'}>
-                <VStack gap={'16'} max>
-                    <Text title={t('Настройка сессии')} />
+    const RightElement = (
+        <HStack gap="8">
+            {!isSessionActive ? (
+                <Button
+                    variant="outline"
+                    disabled={!selectedAssistant || isLoading || !navigator.mediaDevices}
+                    onClick={handleStartSession}
+                    addonLeft={<Play size={18} />}
+                >
+                    {isLoading ? t('Подключение...') : t('Начать сессию')}
+                </Button>
+            ) : (
+                <Button
+                    variant="outline"
+                    color="error"
+                    onClick={handleStopSession}
+                    addonLeft={<Square size={18} />}
+                >
+                    {t('Завершить сессию')}
+                </Button>
+            )}
+        </HStack>
+    )
 
-                    <HStack gap={'16'} max wrap={'wrap'}>
-                        <AssistantSelect
-                            label={t('Выберите ассистента') || 'Assistant'}
-                            value={selectedAssistant}
-                            onChangeAssistant={(_, newValue) => setSelectedAssistant(newValue)}
-                            userId={isAdmin ? undefined : userData?.id}
-                            className={cls.select}
-                        />
-                    </HStack>
+    return (
+        <VStack gap="24" max className={classNames(cls.PlaygroundSession, {}, [className])}>
+            <SectionCard
+                title={t('Выбор ассистента')}
+                icon={UserCheck}
+                rightElement={RightElement}
+            >
+                <VStack gap="16" max>
+                    <AssistantSelect
+                        label={t('Выберите ассистента') || 'Assistant'}
+                        value={selectedAssistant}
+                        onChangeAssistant={(_, newValue) => setSelectedAssistant(newValue)}
+                        userId={isAdmin ? undefined : userData?.id}
+                        fullWidth
+                    />
 
                     {!navigator.mediaDevices && (
                         <Text
-                            variant={'error'}
+                            variant="error"
                             text={t('Микрофон недоступен. Для работы микрофона требуется HTTPS или localhost.')}
                         />
                     )}
-
-                    <HStack justify={'end'} max>
-                        {!isSessionActive ? (
-                            <Button
-                                variant={'filled'}
-                                color={'success'}
-                                disabled={!selectedAssistant || isLoading || !navigator.mediaDevices}
-                                onClick={handleStartSession}
-                            >
-                                {isLoading ? t('Подключение...') : t('Начать сессию')}
-                            </Button>
-                        ) : (
-                            <Button
-                                variant={'outline'}
-                                color={'error'}
-                                onClick={handleStopSession}
-                            >
-                                {t('Завершить сессию')}
-                            </Button>
-                        )}
-                    </HStack>
                 </VStack>
-            </Card>
+            </SectionCard>
 
             {/* Show settings when assistant is selected but session is not active */}
             {selectedAssistant && !isSessionActive && assistantData && (

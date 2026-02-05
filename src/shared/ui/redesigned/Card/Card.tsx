@@ -11,6 +11,7 @@ export type CardVariant = 'normal'
   | 'success'
   | 'danger'
   | 'accent'
+  | 'clear'
 export type CardPadding = '0' | '8' | '16' | '24' | '48'
 export type CardBorder = 'round' | 'normal' | 'partial'
 
