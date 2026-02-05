@@ -1,11 +1,10 @@
-import { classNames } from '@/shared/lib/classNames/classNames'
-import cls from './PublishSipUrisFormHeader.module.scss'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { CardVariant } from '@/shared/ui/redesigned/Card'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
+import { classNames } from '@/shared/lib/classNames/classNames'
+import cls from './PublishSipUrisFormHeader.module.scss'
 
 interface PublishSipUrisFormHeaderProps {
     className?: string
@@ -13,7 +12,7 @@ interface PublishSipUrisFormHeaderProps {
     onClose?: () => void
     isEdit?: boolean
     isLoading?: boolean
-    variant?: CardVariant | 'diviner-top' | 'diviner-bottom'
+    variant?: 'diviner-top' | 'diviner-bottom'
     onDelete?: () => void
     assistantName?: string
 }
@@ -25,7 +24,7 @@ export const PublishSipUrisFormHeader = memo((props: PublishSipUrisFormHeaderPro
         onClose,
         isEdit,
         isLoading,
-        variant,
+        variant = 'diviner-top',
         assistantName,
         onDelete
     } = props
@@ -34,29 +33,28 @@ export const PublishSipUrisFormHeader = memo((props: PublishSipUrisFormHeaderPro
     return (
         <HStack
             max
-            justify={variant === 'diviner-bottom' ? 'end' : 'between'}
-            align="center"
+            justify="between"
             className={classNames(
                 cls.PublishSipUrisFormHeader,
                 { [cls.bottom]: variant === 'diviner-bottom' },
                 [className]
             )}
         >
-            {variant !== 'diviner-bottom' && (
-                <VStack gap="4">
+            <VStack gap="4">
+                {variant !== 'diviner-bottom' && (
                     <Text
                         title={isEdit ? (assistantName || t('Редактирование SIP URI')) : t('Новый SIP URI')}
                         size="l"
                         bold
                     />
-                </VStack>
-            )}
+                )}
+            </VStack>
 
             <HStack gap="16" className={cls.actions}>
                 {isEdit && onDelete && (
                     <Button
                         variant="clear"
-                        color="error" // Use error color if supported by Button
+                        color="error"
                         onClick={onDelete}
                         disabled={isLoading}
                     >

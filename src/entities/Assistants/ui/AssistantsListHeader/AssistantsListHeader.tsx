@@ -41,8 +41,8 @@ export const AssistantsListHeader = memo((props: AssistantsListHeaderProps) => {
         <VStack gap="16" max className={classNames(cls.AssistantsListHeader, {}, [className])}>
             <HStack max justify="between" align="center" gap="16" wrap="wrap">
                 <VStack gap="4">
-                    <Text title={t('Голосовые ассистенты')} size="l" bold />
-                    <Text text={t('Управление вашими ИИ-ассистентами')} size="s" variant="accent" />
+                    <Text title={t('Ассистенты')} size="l" bold />
+                    <Text text={t('Настройка ваших ИИ-ассистентов')} size="s" variant="accent" />
                 </VStack>
 
                 <HStack gap="16" wrap="nowrap" className={cls.headerActions}>

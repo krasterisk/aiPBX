@@ -22,13 +22,12 @@ import {
 import { pbxServerFormActions, pbxServerFormReducer } from '../../model/slices/pbxServerFormSlice'
 import { getPbxServerForm } from '../../model/selectors/pbxServerFormSelectors'
 import { PbxServerFormHeader } from '../PbxServerFormHeader/PbxServerFormHeader'
-import { GeneralSection } from '../PbxServerForm/components/GeneralSection/GeneralSection'
-import { ConnectivitySection } from '../PbxServerForm/components/ConnectivitySection/ConnectivitySection'
+import { GeneralSection } from './components/GeneralSection/GeneralSection'
+import { ConnectivitySection } from './components/ConnectivitySection/ConnectivitySection'
 import { ErrorGetData } from '@/entities/ErrorGetData'
-import { Text } from '@/shared/ui/redesigned/Text'
-import cls from './PbxServerCard.module.scss'
+import cls from './PbxServerForm.module.scss'
 
-export interface PbxServerCardProps {
+export interface PbxServerFormProps {
   className?: string
   isEdit?: boolean
   pbxServerId?: string
@@ -38,8 +37,7 @@ const reducers: ReducersList = {
   pbxServerForm: pbxServerFormReducer
 }
 
-
-export const PbxServerCard = memo((props: PbxServerCardProps) => {
+export const PbxServerForm = memo((props: PbxServerFormProps) => {
   const { className, isEdit, pbxServerId } = props
   const { t } = useTranslation('pbx')
   const dispatch = useAppDispatch()
@@ -56,7 +54,7 @@ export const PbxServerCard = memo((props: PbxServerCardProps) => {
 
   const isActionLoading = isCreating || isUpdating || isDeleting
 
-  const { data: serverData, isLoading: isDataLoading, isError } = usePbxServer(pbxServerId!, {
+  const { data: serverData, isLoading: isDataLoading, isError, error } = usePbxServer(pbxServerId!, {
     skip: !isEdit || !pbxServerId
   })
 
@@ -109,22 +107,29 @@ export const PbxServerCard = memo((props: PbxServerCardProps) => {
     }
   }, [form, isEdit, pbxServerId, updatePbx, createPbx, navigate, t])
 
-  const onDelete = useCallback(async () => {
-    if (!pbxServerId) return
-    try {
-      await deletePbx(pbxServerId).unwrap()
-      toast.success(t('Сервер успешно удален'))
-      navigate(getRoutePbxServers())
-    } catch (e) {
-      toast.error(t('Произошла ошибка при удалении'))
-    }
-  }, [pbxServerId, deletePbx, navigate, t])
-
   const onClose = useCallback(() => {
     navigate(getRoutePbxServers())
   }, [navigate])
 
-  if (isError) return <ErrorGetData />
+  const onDelete = useCallback(async () => {
+    if (!pbxServerId) return
+    if (window.confirm(t('Вы уверены, что хотите удалить сервер?') ?? '')) {
+      try {
+        await deletePbx(pbxServerId).unwrap()
+        toast.success(t('Сервер успешно удален'))
+        navigate(getRoutePbxServers())
+      } catch (e) {
+        toast.error(t('Произошла ошибка при удалении'))
+      }
+    }
+  }, [pbxServerId, deletePbx, navigate, t])
+
+  if (isError) {
+    const errMsg = error && typeof error === 'object' && 'data' in error
+      ? String((error.data as { message: string }).message)
+      : ''
+    return <ErrorGetData text={errMsg} />
+  }
 
   if (isDataLoading && isEdit) {
     return (
@@ -140,33 +145,17 @@ export const PbxServerCard = memo((props: PbxServerCardProps) => {
 
   return (
     <DynamicModuleLoader reducers={reducers} removeAfterUnmount>
-      <VStack gap="16" max className={classNames(cls.PbxServerCard, {}, [className])}>
+      <VStack gap="16" max className={classNames(cls.PbxServerForm, {}, [className])}>
         <PbxServerFormHeader
           isEdit={isEdit}
           serverName={form?.name}
           onSave={onSave}
           onClose={onClose}
+          onDelete={onDelete}
           isLoading={isActionLoading || isDataLoading}
         />
 
         <VStack gap={isMobile ? '16' : '24'} max align="center">
-          {/* Status Badge for Edit Mode */}
-          {isEdit && serverData?.uniqueId && (
-            <HStack justify="end" max className={cls.statusBadge}>
-              <HStack gap="8" align="center" className={cls.statusWrapper}>
-                <Text text={t('Статус') + ':'} />
-                <div
-                  className={classNames(cls.statusIndicator, {
-                    [cls.online]: statusData?.online,
-                    [cls.offline]: statusData && !statusData.online,
-                    [cls.loading]: isStatusLoading
-                  })}
-                />
-                <Text text={isStatusLoading ? t('Загрузка...') : (statusData?.online ? t('В сети') : t('Не в сети'))} />
-              </HStack>
-            </HStack>
-          )}
-
           <HStack
             gap={isMobile ? '16' : '24'}
             max
@@ -188,6 +177,9 @@ export const PbxServerCard = memo((props: PbxServerCardProps) => {
                 onChangeClient={onChangeClient}
                 isAdmin={isAdmin}
                 clientName={clientData?.name}
+                isEdit={isEdit}
+                statusData={statusData}
+                isStatusLoading={isStatusLoading}
               />
             </VStack>
 
@@ -215,6 +207,7 @@ export const PbxServerCard = memo((props: PbxServerCardProps) => {
           serverName={form?.name}
           onSave={onSave}
           onClose={onClose}
+          onDelete={onDelete}
           isLoading={isActionLoading || isDataLoading}
           variant="diviner-bottom"
         />

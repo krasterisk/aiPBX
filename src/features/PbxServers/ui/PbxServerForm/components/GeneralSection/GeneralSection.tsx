@@ -1,14 +1,14 @@
-import { memo, useCallback } from 'react'
+import { memo, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useMediaQuery } from '@mui/material'
-import { Card } from '@/shared/ui/redesigned/Card'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
-import { Text } from '@/shared/ui/redesigned/Text'
+import { Server } from 'lucide-react'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Check } from '@/shared/ui/mui/Check'
 import { ClientSelect } from '@/entities/User'
+import { SectionCard } from '../SectionCard/SectionCard'
+import { HStack } from '@/shared/ui/redesigned/Stack'
+import { Text } from '@/shared/ui/redesigned/Text'
 import { classNames } from '@/shared/lib/classNames/classNames'
-import cls from './GeneralSection.module.scss'
+import cls from '../../PbxServerForm.module.scss'
 
 interface GeneralSectionProps {
     className?: string
@@ -24,6 +24,9 @@ interface GeneralSectionProps {
     onChangeClient: (clientId: string) => void
     isAdmin?: boolean
     clientName?: string
+    isEdit?: boolean
+    statusData?: { online: boolean }
+    isStatusLoading?: boolean
 }
 
 export const GeneralSection = memo((props: GeneralSectionProps) => {
@@ -40,68 +43,76 @@ export const GeneralSection = memo((props: GeneralSectionProps) => {
         userId,
         onChangeClient,
         isAdmin,
+        isEdit,
+        statusData,
+        isStatusLoading
     } = props
 
     const { t } = useTranslation('pbx')
-    const isMobile = useMediaQuery('(max-width:800px)')
+
+    const statusBadge = isEdit ? (
+        <HStack gap="8" align="center" className={cls.statusBadgeSection}>
+            <div
+                className={classNames(cls.statusIndicator, {
+                    [cls.online]: statusData?.online,
+                    [cls.offline]: statusData && !statusData.online,
+                    [cls.loading]: isStatusLoading
+                })}
+            />
+            <Text
+                text={isStatusLoading ? t('Загрузка...') : (statusData?.online ? t('В сети') : t('Не в сети'))}
+                size="s"
+            />
+        </HStack>
+    ) : null
 
     return (
-        <Card
-            padding={isMobile ? '16' : '24'}
-            max
-            className={classNames(cls.GeneralSection, {}, [className])}
+        <SectionCard
+            title={t('Основные настройки')}
+            icon={Server}
+            className={className}
+            rightElement={statusBadge}
         >
-            <VStack gap="32" max align='start'>
-                <Text title={t('Основные настройки')} bold />
+            {isAdmin && (
+                <>
+                    <Check
+                        label={t('Облачная АТС') || ''}
+                        checked={cloudPbx}
+                        onChange={(e) => onChangeCloudPbx(e.target.checked)}
+                    />
+                    <ClientSelect
+                        clientId={userId}
+                        onChangeClient={onChangeClient}
+                        label={t('Клиент') || ''}
+                        fullWidth
+                    />
+                    <Textarea
+                        fullWidth
+                        label={t('Локация') || ''}
+                        value={location}
+                        onChange={(e) => onChangeLocation(e.target.value)}
+                        placeholder={t('Где находится сервер?') ?? ''}
+                    />
+                </>
+            )}
 
+            <Textarea
+                fullWidth
+                label={t('Наименование сервера') || ''}
+                value={name}
+                onChange={(e) => onChangeName(e.target.value)}
+                placeholder={t('Введите название...') ?? ''}
+            />
 
-                {isAdmin && (
-                    <VStack gap="24" max align='start'>
-                        <HStack max gap="24" align="start" className={cls.fieldRow}>
-                            <Text text={t('Облачная АТС')} bold />
-                            <Check
-                                checked={cloudPbx}
-                                onChange={(e) => onChangeCloudPbx(e.target.checked)}
-                            />
-                        </HStack>
-                        <Text text={t('Клиент')} bold />
-                        <ClientSelect
-                            clientId={userId}
-                            onChangeClient={onChangeClient}
-                            label=""
-                            fullWidth
-                        />
-                        <Text text={t('Локация')} bold />
-                        <Textarea
-                            fullWidth
-                            value={location}
-                            onChange={(e) => onChangeLocation(e.target.value)}
-                            multiline
-                            minRows={2}
-                            placeholder={t('Где находится сервер?') ?? ''}
-                        />
-                    </VStack>
-
-                )}
-
-                <Text text={t('Наименование сервера')} bold />
-                <Textarea
-                    fullWidth
-                    value={name}
-                    onChange={(e) => onChangeName(e.target.value)}
-                    placeholder={t('Введите название...') ?? ''}
-                />
-
-                <Text text={t('Комментарий')} bold />
-                <Textarea
-                    fullWidth
-                    value={comment}
-                    onChange={(e) => onChangeComment(e.target.value)}
-                    multiline
-                    minRows={3}
-                    placeholder={t('Любая дополнительная информация...') ?? ''}
-                />
-            </VStack>
-        </Card >
+            <Textarea
+                fullWidth
+                label={t('Комментарий') || ''}
+                value={comment}
+                onChange={(e) => onChangeComment(e.target.value)}
+                multiline
+                minRows={3}
+                placeholder={t('Любая дополнительная информация...') ?? ''}
+            />
+        </SectionCard>
     )
 })

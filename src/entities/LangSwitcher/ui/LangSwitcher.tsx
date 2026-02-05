@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import React, { memo, useCallback } from 'react'
 import { classNames } from '@/shared/lib/classNames/classNames'
-import { Button } from '@/shared/ui/redesigned/Button'
 import { Dropdown } from '@/shared/ui/redesigned/Popups'
 import { Icon } from '@/shared/ui/redesigned/Icon'
 import RuIcon from '@/shared/assets/icons/RU.svg'
@@ -9,6 +8,7 @@ import USIcon from '@/shared/assets/icons/US.svg'
 import DEIcon from '@/shared/assets/icons/DE.svg'
 import CNIcon from '@/shared/assets/icons/CN.svg'
 import { HStack } from '@/shared/ui/redesigned/Stack'
+import { Text } from '@/shared/ui/redesigned/Text'
 
 interface LangSwitcherProps {
   className?: string
@@ -27,7 +27,7 @@ export const LangSwitcher = memo(({ className, short }: LangSwitcherProps) => {
       content: (
         <HStack gap="8">
           <Icon Svg={RuIcon} width={20} height={20} />
-          <span>Русский</span>
+          <Text text="Русский" size="s" />
         </HStack>
       ),
       onClick: () => onChange('ru')
@@ -36,7 +36,7 @@ export const LangSwitcher = memo(({ className, short }: LangSwitcherProps) => {
       content: (
         <HStack gap="8">
           <Icon Svg={USIcon} width={20} height={20} />
-          <span>English</span>
+          <Text text="English" size="s" />
         </HStack>
       ),
       onClick: () => onChange('en')
@@ -45,7 +45,7 @@ export const LangSwitcher = memo(({ className, short }: LangSwitcherProps) => {
       content: (
         <HStack gap="8">
           <Icon Svg={DEIcon} width={20} height={20} />
-          <span>Deutsch</span>
+          <Text text="Deutsch" size="s" />
         </HStack>
       ),
       onClick: () => onChange('de')
@@ -54,7 +54,7 @@ export const LangSwitcher = memo(({ className, short }: LangSwitcherProps) => {
       content: (
         <HStack gap="8">
           <Icon Svg={CNIcon} width={20} height={20} />
-          <span>中文</span>
+          <Text text="中文" size="s" />
         </HStack>
       ),
       onClick: () => onChange('zh')
@@ -84,7 +84,7 @@ export const LangSwitcher = memo(({ className, short }: LangSwitcherProps) => {
           : (
             <HStack gap="8">
               <Icon Svg={currentConfig.icon} width={20} height={20} />
-              <span>{currentConfig.label}</span>
+              <Text text={currentConfig.label} />
             </HStack>
           )
       }

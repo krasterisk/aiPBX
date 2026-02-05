@@ -37,15 +37,27 @@ export const PbxServerFormHeader = memo((props: PbxServerFormHeaderProps) => {
             justify="between"
             className={classNames(cls.PbxServerFormHeader, { [cls.bottom]: variant === 'diviner-bottom' }, [className])}
         >
-            <VStack gap="4">
-                <Text
-                    title={isEdit ? (serverName || t('Редактирование сервера')) : t('Новый сервер')}
-                    size="l"
-                    bold
-                />
-            </VStack>
+            {variant !== 'diviner-bottom' && (
+                <VStack gap="4">
+                    <Text
+                        title={isEdit ? (serverName || t('Редактирование сервера')) : t('Новый сервер')}
+                        size="l"
+                        bold
+                    />
+                </VStack>
+            )}
 
             <HStack gap="16" className={cls.actions}>
+                {isEdit && onDelete && (
+                    <Button
+                        variant="clear"
+                        color="error"
+                        onClick={onDelete}
+                        disabled={isLoading}
+                    >
+                        {t('Удалить')}
+                    </Button>
+                )}
                 <Button
                     variant="clear"
                     onClick={onClose}

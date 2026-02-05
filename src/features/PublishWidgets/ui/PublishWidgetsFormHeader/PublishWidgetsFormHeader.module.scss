@@ -1,5 +1,29 @@
-@import '@/app/styles/variables/mixins';
-
 .PublishWidgetsFormHeader {
-    width: 100%;
+    padding: 24px;
+    background: var(--card-bg-redesigned);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: var(--accent-redesigned);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    &.bottom {
+        margin-top: 16px;
+    }
+
+    @media (max-width: 600px) {
+        padding: 16px;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 16px;
+
+        .actions {
+            width: 100%;
+            justify-content: flex-end;
+        }
+    }
 }

@@ -2,11 +2,16 @@ import { memo, useState, useCallback } from 'react'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Input } from '@/shared/ui/redesign-v3/Input'
-import { Combobox, ComboboxOption } from '@/shared/ui/redesign-v3/Combobox'
+import { Combobox } from '@/shared/ui/mui/Combobox'
 import { Search, Mail, User, Lock } from 'lucide-react'
 import cls from './Redesignv3Demo.module.scss'
 
-const demoOptions: ComboboxOption[] = [
+interface DemoOption {
+    id: string
+    name: string
+}
+
+const demoOptions: DemoOption[] = [
     { id: '1', name: 'React' },
     { id: '2', name: 'TypeScript' },
     { id: '3', name: 'JavaScript' },
@@ -28,9 +33,9 @@ export const Redesignv3Demo = memo(() => {
     const [emailError, setEmailError] = useState('')
 
     // Combobox states
-    const [singleValue, setSingleValue] = useState<ComboboxOption | null>(null)
-    const [multiValue, setMultiValue] = useState<ComboboxOption[] | null>(null)
-    const [searchableValue, setSearchableValue] = useState<ComboboxOption | null>(null)
+    const [singleValue, setSingleValue] = useState<DemoOption | null>(null)
+    const [multiValue, setMultiValue] = useState<DemoOption[] | null>(null)
+    const [searchableValue, setSearchableValue] = useState<DemoOption | null>(null)
 
     const handleEmailChange = useCallback((value: string) => {
         setEmail(value)
@@ -45,7 +50,7 @@ export const Redesignv3Demo = memo(() => {
         <VStack gap="32" max className={cls.Redesignv3Demo}>
             <VStack gap="16" max>
                 <Text title="Redesign v3 Components Demo" size="l" bold />
-                <Text text="Демонстрация новых компонентов Input и Combobox без использования MUI" variant="accent" />
+                <Text text="Демонстрация новых компонентов Input и Combobox (MUI version)" variant="accent" />
             </VStack>
 
             {/* Input Examples */}
@@ -105,17 +110,17 @@ export const Redesignv3Demo = memo(() => {
 
             {/* Combobox Examples */}
             <VStack gap="24" max className={cls.section}>
-                <Text title="Combobox Component" size="l" />
+                <Text title="Combobox Component (MUI)" size="l" />
 
                 <VStack gap="16" max>
                     <VStack gap="8" max>
                         <Text text="Одиночный выбор" bold />
                         <Combobox
                             label="Выберите технологию"
-                            placeholder="Выберите один вариант"
                             options={demoOptions}
                             value={singleValue}
-                            onChange={(value) => setSingleValue(value as ComboboxOption | null)}
+                            onChange={(e, value) => setSingleValue(value as DemoOption | null)}
+                            getOptionLabel={(option: any) => option.name}
                             fullWidth
                         />
                         {singleValue && (
@@ -127,10 +132,10 @@ export const Redesignv3Demo = memo(() => {
                         <Text text="Множественный выбор" bold />
                         <Combobox
                             label="Выберите технологии"
-                            placeholder="Выберите несколько вариантов"
                             options={demoOptions}
-                            value={multiValue}
-                            onChange={(value) => setMultiValue(value as ComboboxOption[] | null)}
+                            value={multiValue || []}
+                            onChange={(e, value) => setMultiValue(value as DemoOption[] | null)}
+                            getOptionLabel={(option: any) => option.name}
                             multiple
                             fullWidth
                         />
@@ -143,14 +148,13 @@ export const Redesignv3Demo = memo(() => {
                     </VStack>
 
                     <VStack gap="8" max>
-                        <Text text="С поиском" bold />
+                        <Text text="С поиском (MUI Autocomplete)" bold />
                         <Combobox
                             label="Поиск технологии"
-                            placeholder="Начните вводить для поиска"
                             options={demoOptions}
                             value={searchableValue}
-                            onChange={(value) => setSearchableValue(value as ComboboxOption | null)}
-                            searchable
+                            getOptionLabel={(option: any) => option.name}
+                            onChange={(e, value) => setSearchableValue(value as DemoOption | null)}
                             fullWidth
                             noOptionsText="Технология не найдена"
                         />
@@ -158,26 +162,26 @@ export const Redesignv3Demo = memo(() => {
 
                     <HStack gap="16" max wrap="wrap">
                         <Combobox
-                            size="s"
-                            placeholder="Маленький"
+                            placeholder="Стандартный"
                             options={demoOptions.slice(0, 5)}
                             value={null}
+                            getOptionLabel={(option: any) => option.name}
                             onChange={() => { }}
                         />
 
                         <Combobox
-                            size="m"
                             placeholder="Средний"
                             options={demoOptions.slice(0, 5)}
                             value={null}
+                            getOptionLabel={(option: any) => option.name}
                             onChange={() => { }}
                         />
 
                         <Combobox
-                            size="l"
-                            placeholder="Большой"
+                            placeholder="С иконкой (заглушка)"
                             options={demoOptions.slice(0, 5)}
                             value={null}
+                            getOptionLabel={(option: any) => option.name}
                             onChange={() => { }}
                         />
                     </HStack>
@@ -220,19 +224,19 @@ export const Redesignv3Demo = memo(() => {
 
                     <Combobox
                         label="Основная технология"
-                        placeholder="Выберите технологию"
                         options={demoOptions}
                         value={singleValue}
-                        onChange={(value) => setSingleValue(value as ComboboxOption | null)}
+                        getOptionLabel={(option: any) => option.name}
+                        onChange={(e, value) => setSingleValue(value as DemoOption | null)}
                         fullWidth
                     />
 
                     <Combobox
                         label="Дополнительные навыки"
-                        placeholder="Выберите несколько"
                         options={demoOptions}
-                        value={multiValue}
-                        onChange={(value) => setMultiValue(value as ComboboxOption[] | null)}
+                        value={multiValue || []}
+                        getOptionLabel={(option: any) => option.name}
+                        onChange={(e, value) => setMultiValue(value as DemoOption[] | null)}
                         multiple
                         fullWidth
                     />

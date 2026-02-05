@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Combobox } from '@/shared/ui/redesign-v3/Combobox'
+import { Combobox } from '@/shared/ui/mui/Combobox'
 import { useTranslation } from 'react-i18next'
 import { UserRolesValues } from '../../model/consts/consts'
 
@@ -31,9 +31,9 @@ export const RoleSelect = memo((props: RoleSelectProps) => {
     }
   ], [t])
 
-  const onChangeHandler = (newValue: typeof roleItems[number] | typeof roleItems | null) => {
+  const onChangeHandler = (event: any, newValue: typeof roleItems[number] | null) => {
     if (newValue && !Array.isArray(newValue)) {
-      onChange?.(null as any, newValue.id)
+      onChange?.(event, newValue.id)
     }
   }
 
@@ -48,6 +48,7 @@ export const RoleSelect = memo((props: RoleSelectProps) => {
       options={roleItems}
       value={selectedValue}
       onChange={onChangeHandler}
+      getOptionLabel={(option: any) => option.name}
       {...otherProps}
     />
   )

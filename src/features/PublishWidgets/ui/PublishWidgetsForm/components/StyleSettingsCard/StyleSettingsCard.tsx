@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { Palette } from 'lucide-react'
 import { Check } from '@/shared/ui/mui/Check'
 import { Textarea } from '@/shared/ui/mui/Textarea'
-import { Combobox } from '@/shared/ui/redesign-v3/Combobox'
 import { SectionCard } from '../SectionCard/SectionCard'
 import { VisualPositionGrid } from '../VisualPositionGrid/VisualPositionGrid'
 import { ColorGradientPicker } from '../ColorGradientPicker/ColorGradientPicker'
@@ -19,7 +18,7 @@ import { toast } from 'react-toastify'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import noImage from '@/shared/assets/icons/user-filled.svg' // Using user icon as fallback or a generic image icon
-import { Loader } from '@/shared/ui/Loader'
+import { Combobox } from '@/shared/ui/mui/Combobox'
 
 interface StyleSettingsCardProps {
     appearance: any
@@ -144,13 +143,13 @@ export const StyleSettingsCard = memo((props: StyleSettingsCardProps) => {
                 label={t('Язык виджета') || ''}
                 options={languageOptions}
                 value={languageOptions.find(opt => opt.value === appearance?.language) || languageOptions[0]}
-                onChange={(newValue) => {
+                getOptionLabel={(option) => option.name}
+                onChange={(e, newValue) => {
                     if (newValue && !Array.isArray(newValue)) {
                         onChangeAppearance('language', newValue.value)
                     }
                 }}
-                clearable={false}
-                searchable={false}
+                disableClearable
             />
 
             <ColorGradientPicker
@@ -169,13 +168,13 @@ export const StyleSettingsCard = memo((props: StyleSettingsCardProps) => {
                 label={t('Тема') || ''}
                 options={themeOptions}
                 value={themeOptions.find(opt => opt.value === appearance?.theme) || themeOptions[0]}
-                onChange={(newValue) => {
+                getOptionLabel={(option) => option.name}
+                onChange={(e, newValue) => {
                     if (newValue && !Array.isArray(newValue)) {
                         onChangeAppearance('theme', newValue.value)
                     }
                 }}
-                clearable={false}
-                searchable={false}
+                disableClearable
             />
 
             <Check

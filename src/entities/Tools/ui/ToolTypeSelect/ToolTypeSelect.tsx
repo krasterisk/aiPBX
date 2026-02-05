@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Combobox } from '@/shared/ui/redesign-v3/Combobox'
+import { Combobox } from '@/shared/ui/mui/Combobox'
 import { ToolType } from '../../model/types/tools'
 import { ToolTypesValues } from '../../model/consts/consts'
 import { useTranslation } from 'react-i18next'
@@ -42,11 +42,11 @@ export const ToolTypeSelect = memo((props: ToolTypeSelectorProps) => {
     [toolsData, value]
   )
 
-  const onChangeHandler = (newValue: typeof toolsData[number] | typeof toolsData | null) => {
+  const onChangeHandler = (event: any, newValue: typeof toolsData[number] | null) => {
     if (newValue && !Array.isArray(newValue)) {
-      onChangeToolType?.(null as any, { value: newValue.value, descriptions: newValue.descriptions })
+      onChangeToolType?.(event, { value: newValue.value, descriptions: newValue.descriptions })
     } else {
-      onChangeToolType?.(null as any, { value: '' as any, descriptions: '' })
+      onChangeToolType?.(event, { value: '' as any, descriptions: '' })
     }
   }
 
@@ -57,7 +57,7 @@ export const ToolTypeSelect = memo((props: ToolTypeSelectorProps) => {
       className={className}
       value={currentValue}
       onChange={onChangeHandler}
-      searchable={false}
+      getOptionLabel={(option: any) => option.name}
       {...otherProps}
     />
   )

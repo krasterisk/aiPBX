@@ -1,15 +1,10 @@
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useMediaQuery } from '@mui/material'
-import { Card } from '@/shared/ui/redesigned/Card'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
-import { Text } from '@/shared/ui/redesigned/Text'
+import { Phone } from 'lucide-react'
 import { AssistantSelect, AssistantOptions } from '@/entities/Assistants'
 import { PbxServerSelect, PbxServerOptions } from '@/entities/PbxServers'
 import { Check } from '@/shared/ui/mui/Check'
-
-import { classNames } from '@/shared/lib/classNames/classNames'
-import cls from './TelephonySipCard.module.scss'
+import { SectionCard } from '../SectionCard/SectionCard'
 
 interface TelephonySipCardProps {
     className?: string
@@ -26,7 +21,6 @@ interface TelephonySipCardProps {
 
 export const TelephonySipCard = memo((props: TelephonySipCardProps) => {
     const {
-        className,
         selectedAssistant,
         onChangeAssistant,
         selectedPbx,
@@ -38,48 +32,30 @@ export const TelephonySipCard = memo((props: TelephonySipCardProps) => {
         userId
     } = props
     const { t } = useTranslation('publish-sip')
-    const isMobile = useMediaQuery('(max-width:800px)')
 
     return (
-        <Card
-            padding={isMobile ? '16' : '24'}
-            max
-            variant="outlined"
-            className={classNames(cls.TelephonySipCard, {}, [className])}
-        >
-            <VStack gap="32" max align="start">
-                <Text title={t('Телефония и AI')} bold />
+        <SectionCard title={t('Телефония и AI')} icon={Phone}>
+            <AssistantSelect
+                label={t('AI Ассистент') || ''}
+                value={selectedAssistant}
+                onChangeAssistant={onChangeAssistant}
+                userId={isEdit ? selectedAssistant?.userId : (isAdmin ? undefined : userId)}
+                fullWidth
+            />
 
-                <VStack gap="12" max align="start">
-                    <Text text={t('AI Ассистент')} bold />
-                    <AssistantSelect
-                        label=""
-                        value={selectedAssistant}
-                        onChangeAssistant={onChangeAssistant}
-                        userId={isEdit ? selectedAssistant?.userId : (isAdmin ? undefined : userId)}
-                        fullWidth
-                    />
-                </VStack>
+            <PbxServerSelect
+                label={t('Выберите VoIP сервер') || ''}
+                value={selectedPbx}
+                onChangePbxServer={onChangePbx}
+                fetchType="cloud"
+                fullWidth
+            />
 
-                <VStack gap="12" max align="start">
-                    <Text text={t('Выберите VoIP сервер')} bold />
-                    <PbxServerSelect
-                        label=""
-                        value={selectedPbx}
-                        onChangePbxServer={onChangePbx}
-                        fetchType="cloud"
-                        fullWidth
-                    />
-                </VStack>
-
-                <HStack gap="12" align="center">
-                    <Check
-                        checked={active}
-                        onChange={onChangeActive}
-                    />
-                    <Text text={t('SIP URI активен')} bold />
-                </HStack>
-            </VStack>
-        </Card>
+            <Check
+                label={t('SIP URI активен') || ''}
+                checked={active}
+                onChange={onChangeActive}
+            />
+        </SectionCard>
     )
 })

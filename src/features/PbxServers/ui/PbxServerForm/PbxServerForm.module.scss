@@ -1,37 +1,24 @@
-.PbxServerCard {
+@import '@/app/styles/variables/mixins';
+
+.PbxServerForm {
     width: 100%;
 }
 
 .contentWrapper {
     width: 100%;
+    margin: 0 auto;
+    max-width: 1400px;
+    justify-content: center;
 }
 
 .leftColumn {
     flex: 1;
-    min-width: 320px;
 }
 
 .rightColumn {
-    width: 450px;
-    flex-shrink: 0;
-}
-
-.statusBadge {
-    margin-bottom: 8px;
-}
-
-.statusWrapper {
-    padding: 8px 16px;
-    background: var(--card-bg-redesigned);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    transition: all 0.3s ease;
-
-    &:hover {
-        border-color: var(--accent-redesigned);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    }
+    width: 400px;
+    display: flex;
+    flex-direction: column;
 }
 
 .statusIndicator {
@@ -56,6 +43,19 @@
     }
 }
 
+.statusBadgeSection {
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+}
+
 @keyframes pulse {
     0% {
         opacity: 0.5;
@@ -70,34 +70,17 @@
     }
 }
 
-@media (max-width: 1024px) {
+@include tablet {
     .contentWrapper {
         flex-direction: column !important;
-        gap: 24px !important;
+        gap: var(--space-4) !important;
     }
 
     .leftColumn {
-        width: 100%;
-        min-width: 0;
+        width: 100% !important;
     }
 
     .rightColumn {
         width: 100% !important;
-        flex-shrink: 1 !important;
-    }
-
-    .statusBadge {
-        justify-content: center !important;
-    }
-
-    .statusWrapper {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-@media (max-width: 600px) {
-    .PbxServerCard {
-        gap: 12px !important;
     }
 }

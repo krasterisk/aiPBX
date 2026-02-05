@@ -13,30 +13,47 @@ const areaStyles = {
   //   overflow: 'auto',
   //   maxHeight: '200px' // или любая другая подходящая высота
   // },
+  // Основной контейнер поля ввода
   '& .MuiOutlinedInput-root': {
-
+    backgroundColor: 'var(--light-bg-redesigned)',
+    borderRadius: 'var(--radius-lg)',
+    padding: '0 12px',
+    transition: 'var(--transition-colors)',
+    color: 'var(--icon-redesigned)', // Цвет для иконок (svg) по умолчанию
     '& fieldset': {
-      border: '1px solid var(--icon-redesigned)', // Цвет по умолчанию
-      borderRadius: '8px'
+      border: '1px solid rgba(94, 211, 243, 0.2)',
+      transition: 'var(--transition-colors)',
     },
-    '&:hover fieldset': {
-      borderColor: 'var(--accent-redesigned)' // Цвет рамки при наведении
+    '&:hover': {
+      backgroundColor: 'var(--bg-color)',
+      '& fieldset': {
+        borderColor: 'rgba(94, 211, 243, 0.4) !important',
+      },
     },
-    '&.Mui-focused fieldset': {
-      borderColor: 'var(--accent-redesigned)' // Цвет рамки при фокусировке
-    }
+    '&.Mui-focused': {
+      backgroundColor: 'var(--card-bg)',
+      boxShadow: '0 0 0 3px rgba(94, 211, 243, 0.1)',
+      '& fieldset': {
+        borderColor: 'var(--accent-redesigned) !important',
+        borderWidth: '1px !important',
+      },
+    },
   },
   '& .MuiInputBase-input': {
-    color: 'var(--text-redesigned)'
-  },
-  '& .MuiInputBase-input::placeholder': {
-    color: 'var(--text-redesigned)'
+    padding: '11px 0 !important',
+    color: 'var(--text-redesigned)',
+    fontSize: 'var(--font-size-m) !important',
+    fontWeight: '500 !important',
+    '&::placeholder': {
+      color: 'var(--hint-redesigned)',
+      opacity: 1,
+    },
   },
   '& .MuiInputLabel-root': {
-    color: 'var(--text-redesigned)'
-  },
-  '& .MuiInputLabel-root.Mui-focused': {
-    color: 'var(--text-redesigned)'
+    color: 'var(--text-redesigned)',
+    '&.Mui-focused': {
+      color: 'var(--accent-redesigned)',
+    },
   },
   '& .MuiSvgIcon-root': {
     color: 'var(--icon-redesigned)'
@@ -49,12 +66,12 @@ export const Textarea = memo((props: TextAreaProps) => {
     ...otherProps
   } = props
   return (
-        <div className={classNames(cls.Textarea, {}, [className])}>
-            <TextField
-                fullWidth
-                sx={areaStyles}
-                {...otherProps}
-            />
-        </div>
+    <div className={classNames(cls.Textarea, {}, [className])}>
+      <TextField
+        fullWidth
+        sx={areaStyles}
+        {...otherProps}
+      />
+    </div>
   )
 })

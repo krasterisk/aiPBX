@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import { Combobox } from '@/shared/ui/redesign-v3/Combobox'
-import { Checkbox } from '@mui/material'
+import { Combobox } from '@/shared/ui/mui/Combobox'
+import { Check } from '@/shared/ui/mui/Check'
 import { Tool } from '../../model/types/tools'
 import { useToolsAll } from '../../api/toolsApi'
 
@@ -27,9 +27,9 @@ export const ToolsSelect = memo((props: ToolsSelectorProps) => {
     data: tools
   } = useToolsAll(null)
 
-  const onChangeMultipleHandler = (newValue: Tool | Tool[] | null) => {
+  const onChangeMultipleHandler = (event: any, newValue: Tool | Tool[] | null) => {
     const arrayValue = Array.isArray(newValue) ? newValue : []
-    onChangeTool?.(null as any, arrayValue)
+    onChangeTool?.(event, arrayValue)
   }
 
   return (
@@ -40,14 +40,17 @@ export const ToolsSelect = memo((props: ToolsSelectorProps) => {
       value={(value || []).filter(v => v.id && v.name) as any[]}
       onChange={onChangeMultipleHandler}
       className={className}
-      renderOption={(option, selected) => (
-        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-          <Checkbox
-            style={{ marginRight: 8 }}
-            checked={selected}
-          />
-          {String(option.name)}
-        </div>
+      getOptionLabel={(option: any) => option.name || ''}
+      renderOption={(props, option: any, { selected }) => (
+        <li {...props}>
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+            <Check
+              style={{ marginRight: 8 }}
+              checked={selected}
+            />
+            {String(option.name)}
+          </div>
+        </li>
       )}
       {...otherProps}
     />

@@ -6,6 +6,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch
 import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitialEffect'
 import { Page } from '@/widgets/Page'
 import { pbxServersPageReducer, usePbxServersFilters, initNextPbxServerPage, PbxServersList } from '@/entities/PbxServers'
+import { ErrorGetData } from '@/entities/ErrorGetData'
 
 interface PbxServersPageProps {
   className?: string
@@ -17,11 +18,12 @@ const reducers: ReducersList = {
 
 const PbxServersPage = ({ className }: PbxServersPageProps) => {
   const {
-    view,
     isError,
     isLoading,
+    error,
     data,
     hasMore,
+    onRefetch,
     onLoadNext
   } = usePbxServersFilters()
 
@@ -45,13 +47,25 @@ const PbxServersPage = ({ className }: PbxServersPageProps) => {
       isSaveScroll={true}
     >
       <PbxServersList
-        className={className}
         isPbxServersLoading={isLoading}
         pbxServers={data}
         isPbxServersError={isError}
       />
     </Page>
   )
+
+  if (isError) {
+    const errMsg = error && typeof error === 'object' && 'data' in error
+      ? String((error.data as { message: string }).message)
+      : ''
+
+    return (
+      <ErrorGetData
+        text={errMsg}
+        onRefetch={onRefetch}
+      />
+    )
+  }
 
   return (
     <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>

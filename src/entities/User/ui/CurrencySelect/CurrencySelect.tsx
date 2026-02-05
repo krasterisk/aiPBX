@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Combobox } from '@/shared/ui/redesign-v3/Combobox'
+import { Combobox } from '@/shared/ui/mui/Combobox'
 import { useTranslation } from 'react-i18next'
 import { UserCurrencyValues } from '../../model/consts/consts'
 
@@ -32,9 +32,9 @@ export const CurrencySelect = memo((props: CurrencySelectProps) => {
     [value, currencyItems]
   )
 
-  const onChangeHandler = (newValue: typeof currencyItems[number] | typeof currencyItems | null) => {
+  const onChangeHandler = (event: any, newValue: typeof currencyItems[number] | null) => {
     if (newValue && !Array.isArray(newValue)) {
-      onChange?.(null as any, newValue.id)
+      onChange?.(event, newValue.id)
     }
   }
 
@@ -44,6 +44,7 @@ export const CurrencySelect = memo((props: CurrencySelectProps) => {
       options={currencyItems}
       value={selectedValue}
       onChange={onChangeHandler}
+      getOptionLabel={(option: any) => option.name}
       {...otherProps}
     />
   )

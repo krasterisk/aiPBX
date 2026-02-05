@@ -1,63 +1,78 @@
-import { classNames } from '@/shared/lib/classNames/classNames'
-import cls from './PublishWidgetsFormHeader.module.scss'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { CardVariant } from '@/shared/ui/redesigned/Card'
-import { HStack } from '@/shared/ui/redesigned/Stack'
+import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { AppLink } from '@/shared/ui/redesigned/AppLink'
-import { getRoutePublishWidgets } from '@/shared/const/router'
-import SaveIcon from '@mui/icons-material/Save'
-import CloseIcon from '@mui/icons-material/Close'
+import { classNames } from '@/shared/lib/classNames/classNames'
+import cls from './PublishWidgetsFormHeader.module.scss'
 
 interface PublishWidgetsFormHeaderProps {
     className?: string
-    onSave?: () => void
     isEdit?: boolean
+    widgetName?: string
+    onSave?: () => void
+    onClose?: () => void
+    onDelete?: () => void
     isLoading?: boolean
-    variant?: CardVariant
+    variant?: 'diviner-top' | 'diviner-bottom'
 }
 
 export const PublishWidgetsFormHeader = memo((props: PublishWidgetsFormHeaderProps) => {
     const {
         className,
-        onSave,
         isEdit,
+        widgetName,
+        onSave,
+        onClose,
+        onDelete,
         isLoading,
-        variant
+        variant = 'diviner-top'
     } = props
+
     const { t } = useTranslation('publish-widgets')
 
-    const actions = (
-        <HStack gap="8" justify="end" wrap="wrap">
-            <Button
-                variant={'outline'}
-                color={'success'}
-                onClick={onSave}
-                disabled={isLoading}
-                addonLeft={<SaveIcon />}
-            >
-                {isEdit ? t('Сохранить') : t('Создать')}
-            </Button>
-            <AppLink to={getRoutePublishWidgets()}>
+    return (
+        <HStack
+            max
+            justify="between"
+            className={classNames(cls.PublishWidgetsFormHeader, { [cls.bottom]: variant === 'diviner-bottom' }, [className])}
+        >
+            <VStack gap="4">
+                {variant !== 'diviner-bottom' && (
+                    <Text
+                        title={isEdit ? (widgetName || t('Редактирование виджета')) : t('Создание виджета')}
+                        size="l"
+                        bold
+                    />
+                )}
+            </VStack>
+
+            <HStack gap="16" className={cls.actions}>
+                {isEdit && onDelete && (
+                    <Button
+                        variant="clear"
+                        color="error"
+                        onClick={onDelete}
+                        disabled={isLoading}
+                    >
+                        {t('Удалить')}
+                    </Button>
+                )}
                 <Button
-                    variant={'outline'}
-                    addonLeft={<CloseIcon />}
+                    variant="clear"
+                    onClick={onClose}
                     disabled={isLoading}
                 >
                     {t('Закрыть')}
                 </Button>
-            </AppLink>
-        </HStack>
-    )
-
-    return (
-        <HStack max justify={'between'} wrap={'wrap'} gap={'8'} className={classNames(cls.PublishWidgetsFormHeader, {}, [className])}>
-            {variant !== 'diviner-bottom' && (
-                <Text title={isEdit ? t('Редактирование виджета') : t('Создание виджета')} />
-            )}
-            {actions}
+                <Button
+                    variant="outline"
+                    onClick={onSave}
+                    disabled={isLoading}
+                >
+                    {isEdit ? t('Сохранить') : t('Создать')}
+                </Button>
+            </HStack>
         </HStack>
     )
 })

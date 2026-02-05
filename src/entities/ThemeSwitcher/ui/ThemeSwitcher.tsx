@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 import { useTheme } from '@/shared/lib/hooks/useTheme/useTheme'
 import { Theme } from '@/shared/const/theme'
 import LightModeIcon from '@mui/icons-material/LightMode'

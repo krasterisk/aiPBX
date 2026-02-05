@@ -5,7 +5,7 @@ import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Check } from '@/shared/ui/mui/Check'
-import { Combobox } from '@/shared/ui/redesign-v3/Combobox'
+import { Combobox } from '@/shared/ui/mui/Combobox'
 import { Tool } from '@/entities/Tools'
 import { ToolAddParam } from '../../../ToolAddParam/ToolAddParam'
 import { classNames } from '@/shared/lib/classNames/classNames'
@@ -132,9 +132,10 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
                                         <Combobox
                                             options={methods}
                                             value={methods.find(m => m.id === (formFields?.method || 'POST')) || null}
-                                            onChange={(v) => onChangeField('method', Array.isArray(v) ? undefined : v?.id)}
+                                            onChange={(e, v: any) => onChangeField('method', Array.isArray(v) ? undefined : v?.id)}
                                             className={cls.fullWidth}
-                                            clearable={false}
+                                            disableClearable
+                                            getOptionLabel={(option: any) => option.name}
                                         />
                                     </VStack>
 
@@ -143,9 +144,10 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
                                         <Combobox
                                             options={authTypes}
                                             value={authTypes.find(m => m.id === (formFields?.auth_type || 'none')) || null}
-                                            onChange={(v) => onChangeField('auth_type', Array.isArray(v) ? undefined : v?.id)}
+                                            onChange={(e, v: any) => onChangeField('auth_type', Array.isArray(v) ? undefined : v?.id)}
                                             className={cls.fullWidth}
-                                            clearable={false}
+                                            disableClearable
+                                            getOptionLabel={(option: any) => option.name}
                                         />
                                     </VStack>
                                 </HStack>

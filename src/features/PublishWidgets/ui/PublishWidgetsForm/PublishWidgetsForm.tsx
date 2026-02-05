@@ -23,7 +23,11 @@ import { toast } from 'react-toastify'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { useNavigate } from 'react-router-dom'
 import { getRoutePublishWidgets } from '@/shared/const/router'
-import { useCreateWidgetKey, useUpdateWidgetKey } from '@/entities/WidgetKeys'
+import {
+    useCreateWidgetKey,
+    useUpdateWidgetKey,
+    useDeleteWidgetKey
+} from '@/entities/WidgetKeys'
 import { PublishWidgetsFormHeader } from '../PublishWidgetsFormHeader/PublishWidgetsFormHeader'
 import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
 import { TelephonyAiCard } from './components/TelephonyAiCard/TelephonyAiCard'
@@ -57,7 +61,8 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
 
     const [createWidget, { isLoading: isCreating }] = useCreateWidgetKey()
     const [updateWidget, { isLoading: isUpdating }] = useUpdateWidgetKey()
-    const isLoading = isCreating || isUpdating
+    const [deleteWidget, { isLoading: isDeleting }] = useDeleteWidgetKey()
+    const isLoading = isCreating || isUpdating || isDeleting
 
     const isMobile = useMediaQuery('(max-width:800px)')
 
@@ -167,6 +172,21 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
         }
     }, [name, selectedAssistant, selectedPbxServer, allowedDomains, maxSessions, maxSessionDuration, isActive, appearance, isEdit, widgetId, updateWidget, createWidget, navigate, dispatch, t])
 
+    const onDelete = useCallback(async () => {
+        if (!widgetId) return
+
+        if (window.confirm(t('Вы уверены, что хотите удалить виджет?') ?? '')) {
+            try {
+                await deleteWidget(Number(widgetId)).unwrap()
+                toast.success(t('Виджет успешно удален'))
+                navigate(getRoutePublishWidgets())
+                dispatch(publishWidgetsFormActions.resetForm())
+            } catch (e) {
+                toast.error(getErrorMessage(e))
+            }
+        }
+    }, [deleteWidget, dispatch, navigate, t, widgetId])
+
     if ((isLoading || isServersLoading) && isEdit) {
         return (
             <VStack gap="16" max>
@@ -191,6 +211,9 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
                 onSave={onSave}
                 isEdit={isEdit}
                 isLoading={isLoading}
+                widgetName={name}
+                onClose={() => navigate(getRoutePublishWidgets())}
+                onDelete={onDelete}
             />
 
             {/* Content: Sections */}
@@ -240,6 +263,9 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
                 isEdit={isEdit}
                 isLoading={isLoading}
                 variant={'diviner-bottom'}
+                widgetName={name}
+                onClose={() => navigate(getRoutePublishWidgets())}
+                onDelete={onDelete}
             />
         </VStack>
     )

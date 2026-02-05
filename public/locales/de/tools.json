@@ -52,5 +52,6 @@
   "Пароль": "Passwort",
   "Заголовки (JSON)": "Header (JSON)",
   "Вебхук": "Webhook",
-  "Нет описания": "Keine Beschreibung"
+  "Нет описания": "Keine Beschreibung",
+  "Управление функциями и MCP серверами": "Verwaltung von Funktionen und MCP-Servern"
 }

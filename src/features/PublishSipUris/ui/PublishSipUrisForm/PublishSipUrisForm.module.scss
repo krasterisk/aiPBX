@@ -2,42 +2,36 @@
 
 .PublishSipUrisForm {
     width: 100%;
-    padding: 0 var(--space-1); // Subtle padding for shadows
 }
 
 .contentWrapper {
     width: 100%;
-    align-items: flex-start;
-    padding: var(--space-2) var(--space-4); // Padding to allow card shadows on hover
+    margin: 0 auto;
+    max-width: 1400px;
+    justify-content: center;
 }
 
 .leftColumn {
     flex: 1;
-    min-width: 320px;
 }
 
 .rightColumn {
-    width: 450px;
-    flex-shrink: 0;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
 }
 
-@include desktop {
+@include tablet {
     .contentWrapper {
-        flex-direction: column;
-        gap: var(--card-padding-md);
+        flex-direction: column !important;
+        gap: var(--space-4) !important;
+    }
+
+    .leftColumn {
+        width: 100% !important;
     }
 
     .rightColumn {
-        width: 100%;
-    }
-
-    .leftColumn {
-        width: 100%;
-    }
-}
-
-@include mobile {
-    .leftColumn {
-        min-width: 100%;
+        width: 100% !important;
     }
 }

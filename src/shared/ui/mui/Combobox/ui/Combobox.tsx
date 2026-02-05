@@ -61,7 +61,7 @@ export const Combobox = memo((props: ComboBoxProps) => {
 
     // Лейбл (если есть, хотя в редизайне часто внешний лейбл)
     '& .MuiInputLabel-root': {
-      color: 'var(--hint-redesigned)',
+      color: 'var(--text-redesigned)',
       '&.Mui-focused': {
         color: 'var(--accent-redesigned)',
       },
