@@ -4,7 +4,6 @@ import React, { memo, useCallback } from 'react'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
-import { Check } from '@/shared/ui/mui/Check'
 import { Tool } from '../../model/types/tools'
 import { getRouteToolsEdit } from '@/shared/const/router'
 import { useNavigate } from 'react-router-dom'
@@ -16,16 +15,12 @@ import { isUserAdmin } from '@/entities/User'
 interface ToolItemProps {
   className?: string
   tool: Tool
-  checkedItems?: string[]
-  onChangeChecked?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export const ToolItem = memo((props: ToolItemProps) => {
   const {
     className,
     tool,
-    checkedItems,
-    onChangeChecked
   } = props
 
   const { t } = useTranslation('tools')
@@ -38,10 +33,6 @@ export const ToolItem = memo((props: ToolItemProps) => {
     }
   }, [tool.id, navigate])
 
-  const onCheckClick = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation()
-  }, [])
-
   return (
     <Card
       padding="0"
@@ -52,20 +43,7 @@ export const ToolItem = memo((props: ToolItemProps) => {
       onClick={onOpenEdit}
     >
       <VStack className={cls.content} max gap="12">
-        <HStack max justify="between" align="center">
-          <div onClick={onCheckClick} className={cls.checkContainer}>
-            <Check
-              key={String(tool.id)}
-              className={classNames('', {
-                [cls.uncheck]: !checkedItems?.includes(String(tool.id)),
-                [cls.check]: checkedItems?.includes(String(tool.id))
-              }, [])}
-              value={String(tool.id)}
-              size="small"
-              checked={checkedItems?.includes(String(tool.id))}
-              onChange={onChangeChecked}
-            />
-          </div>
+        <HStack max justify="end" align="center">
           <HStack gap="8">
             <Text
               text={tool.type === 'function' ? t('Вызов функции') : t('MCP сервер')}

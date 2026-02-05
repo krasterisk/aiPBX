@@ -1,6 +1,6 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './PublishSipUrisItem.module.scss'
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
@@ -11,28 +11,30 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { getRoutePublishSipUrisEdit } from '@/shared/const/router'
 import { Assistant } from '@/entities/Assistants'
-import { Check } from '@/shared/ui/mui/Check'
-import { Phone, Globe, Shield, Bot, Activity } from 'lucide-react'
+import { Phone, Globe, Shield, Bot, User as UserIcon } from 'lucide-react'
 import { PbxServer } from '@/entities/PbxServers'
+import { useSelector } from 'react-redux'
+import { isUserAdmin } from '@/entities/User'
 
 interface PublishSipUrisItemProps {
     className?: string
     assistant: Assistant
-    checkedItems?: string[]
-    onChangeChecked?: (event: React.ChangeEvent<HTMLInputElement>) => void
     pbxServers?: PbxServer[]
 }
 
 export const PublishSipUrisItem = memo((props: PublishSipUrisItemProps) => {
-    const { className, assistant, checkedItems, onChangeChecked, pbxServers } = props
+    const { className, assistant, pbxServers } = props
     const { t } = useTranslation('publish-sip')
     const navigate = useNavigate()
-    const [isExpanded, setIsExpanded] = useState(false)
 
-    const server = pbxServers?.find(s => s.id === assistant.sipAccount?.pbxId)
-    const sipDomain = server?.sip_host || assistant.sipAccount?.sipUri.split('@')[1] || 'aipbx.net'
-    const serverName = server?.name || sipDomain
-    const fullSipUri = assistant.uniqueId ? `sip:${assistant.uniqueId}@${sipDomain}` : assistant.sipAccount?.sipUri || ''
+    const sipAccount = assistant.sipAccount
+
+    const server = pbxServers?.find(s => s.id === sipAccount?.pbxId)
+    const sipDomain = server?.sip_host || sipAccount?.sipUri.split('@')[1] || 'aipbx.net'
+    const location = server?.location || ''
+    const fullSipUri = assistant.uniqueId ? `sip:${assistant.uniqueId}@${sipDomain}` : sipAccount?.sipUri || ''
+
+    const isAdmin = useSelector(isUserAdmin)
 
     const onCopy = useCallback((value: string) => (e: React.MouseEvent) => {
         e.stopPropagation()
@@ -48,24 +50,7 @@ export const PublishSipUrisItem = memo((props: PublishSipUrisItemProps) => {
         }
     }, [assistant.id, navigate])
 
-    const onCheckClick = useCallback((e: React.MouseEvent) => {
-        e.stopPropagation()
-    }, [])
-
-    const toggleExpand = useCallback((e: React.MouseEvent) => {
-        e.stopPropagation()
-        setIsExpanded(prev => !prev)
-    }, [])
-
-    if (!assistant.sipAccount) return null
-
-    const configCode = `[aipbx-trunk]
-type=trunk
-host=${sipDomain}
-context=from-trunk
-qualify=yes
-outbound_proxy=sip:${sipDomain}
-; SIP URI: ${fullSipUri}`
+    if (!sipAccount) return null
 
     return (
         <Card
@@ -73,32 +58,19 @@ outbound_proxy=sip:${sipDomain}
             max
             border={'partial'}
             variant={'outlined'}
-            className={classNames(cls.PublishSipUrisItem, { [cls.expanded]: isExpanded }, [className])}
+            className={classNames(cls.PublishSipUrisItem, {}, [className])}
             onClick={onOpenEdit}
         >
             <VStack className={cls.content} max gap="12">
-                <HStack max justify="between" align="center">
-                    <div onClick={onCheckClick} className={cls.checkContainer}>
-                        <Check
-                            key={String(assistant.id)}
-                            className={classNames('', {
-                                [cls.uncheck]: !checkedItems?.includes(String(assistant.id)),
-                                [cls.check]: checkedItems?.includes(String(assistant.id))
-                            }, [])}
-                            value={String(assistant.id)}
-                            size={'small'}
-                            checked={checkedItems?.includes(String(assistant.id))}
-                            onChange={onChangeChecked}
-                        />
-                    </div>
+                <HStack max justify="end" align="center">
                     <HStack gap="8">
-                        {assistant.sipAccount.tls && (
-                            <Text text="TLS/SRTP" size="xs" bold variant="accent" className={cls.chip} />
+                        {sipAccount.tls && (
+                            <Text text="TLS/SRTP" size="s" bold variant="accent" className={cls.chip} />
                         )}
-                        {assistant.sipAccount.records && (
+                        {sipAccount.records && (
                             <div className={cls.chip}>
                                 <div className={classNames(cls.dot, {}, [cls.records])} />
-                                <Text text={t('REC')} size="xs" bold />
+                                <Text text={t('REC')} size="s" bold />
                             </div>
                         )}
                     </HStack>
@@ -111,11 +83,11 @@ outbound_proxy=sip:${sipDomain}
                     <VStack max gap="4">
                         <Text title={assistant.name} size={'m'} bold className={cls.title} />
                         <HStack gap="8" align="center">
-                            <div className={classNames(cls.statusDot, { [cls.inactive]: assistant.sipAccount?.active === false })} />
+                            <div className={classNames(cls.statusDot, { [cls.inactive]: sipAccount.active === false })} />
                             <Text
-                                text={assistant.sipAccount?.active !== false ? t('Активен') : t('Неактивен')}
-                                size="xs"
-                                className={classNames(cls.statusText, { [cls.inactive]: assistant.sipAccount?.active === false })}
+                                text={sipAccount.active !== false ? t('Активен') : t('Неактивен')}
+                                size="s"
+                                className={classNames(cls.statusText, { [cls.inactive]: sipAccount.active === false })}
                             />
                         </HStack>
                     </VStack>
@@ -124,12 +96,24 @@ outbound_proxy=sip:${sipDomain}
                 <div className={cls.divider} />
 
                 <VStack gap="16" max className={cls.details}>
+                    {isAdmin && assistant.user?.name && (
+                        <HStack gap="12" align="start">
+                            <div className={cls.detailIcon}>
+                                <UserIcon size={14} />
+                            </div>
+                            <VStack max>
+                                <Text text={t('Клиент')} variant="accent" size="s" />
+                                <Text text={assistant.user.name} className={cls.urlText} />
+                            </VStack>
+                        </HStack>
+                    )}
+
                     <HStack gap="12" align="start">
                         <div className={cls.detailIcon}>
                             <Phone size={14} />
                         </div>
                         <VStack max>
-                            <Text text={t('SIP URI')} variant="accent" size="xs" />
+                            <Text text={t('SIP URI')} variant="accent" size="s" />
                             <HStack gap="8" max align="start">
                                 <Text text={fullSipUri} className={cls.urlText} />
                                 <Button variant="clear" onClick={onCopy(fullSipUri)} className={cls.smallCopyBtn}>
@@ -144,53 +128,33 @@ outbound_proxy=sip:${sipDomain}
                             <Shield size={14} />
                         </div>
                         <VStack max>
-                            <Text text={t('IP Адрес')} variant="accent" size="xs" />
+                            <Text text={t('IP Адрес')} variant="accent" size="s" />
                             <HStack gap="8" max align="start">
-                                <Text text={assistant.sipAccount?.ipAddress} className={cls.urlText} />
-                                <Button variant="clear" onClick={onCopy(assistant.sipAccount?.ipAddress || '')} className={cls.smallCopyBtn}>
+                                <Text text={sipAccount.ipAddress} className={cls.urlText} />
+                                <Button variant="clear" onClick={onCopy(sipAccount.ipAddress || '')} className={cls.smallCopyBtn}>
                                     <ContentCopyIcon sx={{ fontSize: 14 }} />
                                 </Button>
                             </HStack>
                         </VStack>
                     </HStack>
 
-                    <HStack gap="12" align="start">
-                        <div className={cls.detailIcon}>
-                            <Globe size={14} />
-                        </div>
-                        <VStack max>
-                            <Text text={t('VoIP Сервер')} variant="accent" size="xs" />
-                            <HStack gap="8" max align="start">
-                                <Text text={serverName} className={cls.urlText} />
-                                <Button variant="clear" onClick={onCopy(sipDomain)} className={cls.smallCopyBtn}>
-                                    <ContentCopyIcon sx={{ fontSize: 14 }} />
-                                </Button>
-                            </HStack>
-                        </VStack>
-                    </HStack>
-                </VStack>
-
-                <div className={cls.codeSection}>
-                    <HStack justify="between" align="center" max onClick={toggleExpand} className={cls.codeHeader}>
-                        <Text text={t('Конфигурация (Asterisk/PJSIP)')} size="s" bold />
-                        <Button variant="clear" size="m">
-                            <Text text={isExpanded ? t('Свернуть') : t('Развернуть')} size="xs" variant="accent" />
-                        </Button>
-                    </HStack>
-                    {isExpanded && (
-                        <VStack gap="8" max className={cls.codeContainer}>
-                            <pre className={cls.codeBlock}>{configCode}</pre>
-                            <Button
-                                variant="outline"
-                                size="m"
-                                onClick={onCopy(configCode)}
-                                className={cls.copyCodeBtn}
-                            >
-                                {t('Скопировать конфиг')}
-                            </Button>
-                        </VStack>
+                    {server?.cloudPbx && (
+                        <HStack gap="12" align="start">
+                            <div className={cls.detailIcon}>
+                                <Globe size={14} />
+                            </div>
+                            <VStack max>
+                                <Text text={t('Локация')} variant="accent" size="s" />
+                                <HStack gap="8" max align="start">
+                                    <Text text={location} className={cls.urlText} />
+                                    <Button variant="clear" onClick={onCopy(sipDomain)} className={cls.smallCopyBtn}>
+                                        <ContentCopyIcon sx={{ fontSize: 14 }} />
+                                    </Button>
+                                </HStack>
+                            </VStack>
+                        </HStack>
                     )}
-                </div>
+                </VStack>
             </VStack>
         </Card>
     )

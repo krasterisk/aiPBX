@@ -16,19 +16,53 @@
     --save-redesigned: #6cd98b;
     --icon-redesigned: #74a2b2;
     --accent-redesigned: #5ed3f3;
+    --accent-dark: #3aa8c2;
+
+    // Glassmorphism overrides for Dark Theme using palette
+    // Using --light-bg-redesigned (#151c1f) as base for glass
+    --glass-bg-primary: rgba(21, 28, 31, 0.6);
+    --glass-bg-secondary: rgba(21, 28, 31, 0.4);
+    --glass-bg-tertiary: rgba(21, 28, 31, 0.2);
+
+    // Using --hint-redesigned (#555) for borders
+    --glass-border-primary: 1px solid rgba(85, 85, 85, 0.3);
+    --glass-border-secondary: 1px solid rgba(85, 85, 85, 0.2);
+    // Using --accent-redesigned (#5ed3f3) for accent borders
+    --glass-border-accent: 1px solid rgba(94, 211, 243, 0.3);
+    --glass-border-subtle: 1px solid rgba(85, 85, 85, 0.1);
+
+    --glass-overlay-light: rgba(255, 255, 255, 0.05);
+    --glass-overlay-medium: rgba(255, 255, 255, 0.1);
+    --glass-overlay-dark: rgba(0, 0, 0, 0.2);
+    --glass-overlay-darker: rgba(0, 0, 0, 0.4);
+
+    // Button overrides (explicit mapping to dark palette)
+    --button-primary-bg: var(--accent-redesigned);
+    --button-primary-border: var(--accent-redesigned);
+    --button-primary-hover-bg: var(--accent-dark);
+
+    --button-outline-bg: transparent;
+    --button-outline-border: var(--hint-redesigned);
+    --button-outline-hover-bg: rgba(255, 255, 255, 0.05);
+
+    // Status colors
+    --status-success: var(--save-redesigned);
+    --status-success-bg: rgba(108, 217, 139, 0.1);
+    --status-error: var(--cancel-redesigned);
+    --status-error-bg: rgba(217, 87, 87, 0.1);
 
     // skeleton
     --skeleton-color: #0138d7;
     --skeleton-shadow: #3a64e1;
 
     // Code
-    --code-bg: #090f11;
+    --code-bg: var(--dark-bg-redesigned);
 
     // card
-    --card-bg: #090f11;
+    --card-bg: var(--dark-bg-redesigned);
 
     // listBox
-    --listbox-bg: #090f11;
+    --listbox-bg: var(--dark-bg-redesigned);
 
     // signup logo
     --signup-logo: url('@/shared/assets/icons/signup.png');

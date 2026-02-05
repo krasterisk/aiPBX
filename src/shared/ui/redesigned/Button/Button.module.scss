@@ -25,13 +25,13 @@
 }
 
 .addonLeft {
-  display: flex;
-  padding-right: 8px;
+    display: flex;
+    padding-right: 8px;
 }
 
 .addonRight {
-  display: flex;
-  padding-left: 8px;
+    display: flex;
+    padding-left: 8px;
 }
 
 .clear {
@@ -39,10 +39,44 @@
     border: none;
     background: none;
     outline: none;
+
+    &.normal {
+        color: var(--text-redesigned);
+    }
+
+    &.error {
+        color: var(--cancel-redesigned);
+    }
+
+    &.success {
+        color: var(--save-redesigned);
+    }
+
+    &.accent {
+        color: var(--accent-redesigned);
+    }
 }
 
 .filled {
-    background: var(--icon-redesigned);
+    border: none;
+    outline: none;
+    border-radius: 8px;
+
+    &.error {
+        background: var(--cancel-redesigned);
+    }
+
+    &.success {
+        background: var(--save-redesigned);
+    }
+
+    &.accent {
+        background: var(--accent-redesigned);
+    }
+}
+
+.accent {
+    background: var(--accent-redesigned);
     border: none;
     outline: none;
     border-radius: 8px;
@@ -64,10 +98,19 @@
     &.success {
         border: 2px solid var(--save-redesigned);
     }
+
+    &.accent {
+        border: 2px solid var(--accent-redesigned);
+    }
 }
 
 .square {
     padding: 0;
+}
+
+.square.s {
+    width: var(--font-line-s);
+    height: var(--font-line-s);
 }
 
 .square.m {
@@ -85,12 +128,13 @@
     height: var(--font-line-xl);
 }
 
-.m {
-    font: var(--font-m-redesigned);
+.s {
+    padding: 4px 8px;
+    font: var(--font-s-redesigned);
 }
 
 .l {
-    font: var(--font-l-redesigned);
+    font: var(--font-line-l);
 }
 
 .xl {

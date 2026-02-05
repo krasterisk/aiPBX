@@ -1,8 +1,7 @@
 import { memo, useMemo } from 'react'
-import { Combobox } from '@/shared/ui/mui/Combobox'
+import { Combobox } from '@/shared/ui/redesign-v3/Combobox'
 import { useTranslation } from 'react-i18next'
 import { UserCurrencyValues } from '../../model/consts/consts'
-import { UserCurrency } from '../../model/types/user'
 
 interface CurrencySelectProps {
   className?: string
@@ -21,35 +20,31 @@ export const CurrencySelect = memo((props: CurrencySelectProps) => {
 
   const { t } = useTranslation('profile')
 
-  const currencyItems: UserCurrency[] = useMemo(() => [
-    { value: UserCurrencyValues.RUB, descriptions: String(t('Рубль')) },
-    { value: UserCurrencyValues.USD, descriptions: String(t('Доллар')) },
-    { value: UserCurrencyValues.EUR, descriptions: String(t('Евро')) },
-    { value: UserCurrencyValues.CNY, descriptions: String(t('Китайский юань')) }
+  const currencyItems = useMemo(() => [
+    { id: UserCurrencyValues.RUB, name: String(t('Рубль')) },
+    { id: UserCurrencyValues.USD, name: String(t('Доллар')) },
+    { id: UserCurrencyValues.EUR, name: String(t('Евро')) },
+    { id: UserCurrencyValues.CNY, name: String(t('Китайский юань')) }
   ], [t])
 
   const selectedValue = useMemo(
-    () => currencyItems.find(item => item.value === value) || null,
+    () => currencyItems.find(item => item.id === value) || null,
     [value, currencyItems]
   )
 
-  const onChangeHandler = (event: any, newValue: UserCurrency | null) => {
-    if (newValue?.value) {
-      onChange?.(event, newValue.value)
+  const onChangeHandler = (newValue: typeof currencyItems[number] | typeof currencyItems | null) => {
+    if (newValue && !Array.isArray(newValue)) {
+      onChange?.(null as any, newValue.id)
     }
   }
 
   return (
-      <Combobox
-          label={label}
-          autoComplete
-          options={currencyItems}
-          value={selectedValue}
-          onChange={onChangeHandler}
-          getOptionKey={(option) => option.value}
-          isOptionEqualToValue={(option, val) => option.value === val?.value}
-          getOptionLabel={(option) => option.descriptions || ''}
-          {...otherProps}
-      />
+    <Combobox
+      label={label}
+      options={currencyItems}
+      value={selectedValue}
+      onChange={onChangeHandler}
+      {...otherProps}
+    />
   )
 })

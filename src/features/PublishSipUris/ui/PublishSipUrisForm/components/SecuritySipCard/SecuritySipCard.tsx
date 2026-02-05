@@ -37,6 +37,7 @@ export const SecuritySipCard = memo((props: SecuritySipCardProps) => {
         <Card
             padding={isMobile ? '16' : '24'}
             max
+            variant="outlined"
             className={classNames(cls.SecuritySipCard, {}, [className])}
         >
             <VStack gap="32" max align="start">

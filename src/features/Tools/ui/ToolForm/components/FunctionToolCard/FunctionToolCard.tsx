@@ -5,7 +5,7 @@ import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Check } from '@/shared/ui/mui/Check'
-import { Combobox } from '@/shared/ui/mui/Combobox'
+import { Combobox } from '@/shared/ui/redesign-v3/Combobox'
 import { Tool } from '@/entities/Tools'
 import { ToolAddParam } from '../../../ToolAddParam/ToolAddParam'
 import { classNames } from '@/shared/lib/classNames/classNames'
@@ -34,10 +34,16 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
     }, [formFields?.webhook])
 
     const methods = [
-        { value: 'GET', label: 'GET' },
-        { value: 'POST', label: 'POST' },
-        { value: 'PUT', label: 'PUT' },
-        { value: 'DELETE', label: 'DELETE' }
+        { id: 'GET', name: 'GET' },
+        { id: 'POST', name: 'POST' },
+        { id: 'PUT', name: 'PUT' },
+        { id: 'DELETE', name: 'DELETE' }
+    ]
+
+    const authTypes = [
+        { id: 'none', name: t('Нет') },
+        { id: 'bearer', name: 'Bearer Token' },
+        { id: 'basic', name: 'Basic Auth' }
     ]
 
     const onWebhookToggle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -125,31 +131,21 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
                                         <Text text={t('Метод запроса') || ''} size="s" bold className={cls.label} />
                                         <Combobox
                                             options={methods}
-                                            value={methods.find(m => m.value === (formFields?.method || 'POST'))}
-                                            onChange={(_, v) => onChangeField('method', v?.value)}
-                                            getOptionLabel={(o) => o?.label || ''}
+                                            value={methods.find(m => m.id === (formFields?.method || 'POST')) || null}
+                                            onChange={(v) => onChangeField('method', Array.isArray(v) ? undefined : v?.id)}
                                             className={cls.fullWidth}
-                                            disableClearable
+                                            clearable={false}
                                         />
                                     </VStack>
 
                                     <VStack gap="8" className={cls.flex1}>
                                         <Text text={t('Тип авторизации') || ''} size="s" bold className={cls.label} />
                                         <Combobox
-                                            options={[
-                                                { value: 'none', label: t('Нет') },
-                                                { value: 'bearer', label: 'Bearer Token' },
-                                                { value: 'basic', label: 'Basic Auth' }
-                                            ]}
-                                            value={[
-                                                { value: 'none', label: t('Нет') },
-                                                { value: 'bearer', label: 'Bearer Token' },
-                                                { value: 'basic', label: 'Basic Auth' }
-                                            ].find(m => m.value === (formFields?.auth_type || 'none'))}
-                                            onChange={(_, v) => onChangeField('auth_type', v?.value)}
-                                            getOptionLabel={(o) => o?.label || ''}
+                                            options={authTypes}
+                                            value={authTypes.find(m => m.id === (formFields?.auth_type || 'none')) || null}
+                                            onChange={(v) => onChangeField('auth_type', Array.isArray(v) ? undefined : v?.id)}
                                             className={cls.fullWidth}
-                                            disableClearable
+                                            clearable={false}
                                         />
                                     </VStack>
                                 </HStack>

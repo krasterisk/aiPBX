@@ -17,8 +17,7 @@ import {
 } from '@/entities/Assistants'
 
 import { AssistantForm } from '../AssistantForm'
-import { AssistantCreateCardHeader } from '../AssistantCreateCardHeader/AssistantCreateCardHeader'
-import { AssistantEditCardHeader } from '../AssistantEditCardHeader/AssistantEditCardHeader'
+import { AssistantFormHeader } from '../AssistantFormHeader'
 import { toast } from 'react-toastify'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { useTranslation } from 'react-i18next'
@@ -130,21 +129,26 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
   return (
     <VStack gap="8" max className={classNames(cls.AssistantCard, {}, [className])}>
       <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
-        {!isEdit
-          ? <AssistantCreateCardHeader
-            onCreate={onCreate}
-            variant="diviner-top"
-          />
-          : <AssistantEditCardHeader
-            onEdit={onEdit}
-            onDelete={onDelete}
-            assistantId={assistantId}
-            assistantName={formFields?.name || ''}
-          />
-        }
+        <AssistantFormHeader
+          isEdit={isEdit}
+          assistantName={formFields?.name}
+          assistantId={assistantId}
+          onSave={isEdit ? onEdit : onCreate}
+          onDelete={onDelete}
+          variant="diviner-top"
+        />
 
         <AssistantForm
           assistantId={assistantId}
+        />
+
+        <AssistantFormHeader
+          isEdit={isEdit}
+          assistantName={formFields?.name}
+          assistantId={assistantId}
+          onSave={isEdit ? onEdit : onCreate}
+          onDelete={onDelete}
+          variant="diviner-bottom"
         />
       </DynamicModuleLoader>
     </VStack>

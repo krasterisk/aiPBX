@@ -1,6 +1,6 @@
-import { memo, useCallback, useRef, useState } from 'react'
+import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
-import { AutocompleteInputChangeReason, IconButton, TextField } from '@mui/material'
+import { AutocompleteInputChangeReason, IconButton } from '@mui/material'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import StopIcon from '@mui/icons-material/Stop'
 import cls from './VoiceSelect.module.scss'
@@ -52,20 +52,25 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [playingVoice, setPlayingVoice] = useState<string | null>(null)
 
-  let topics: string[] = []
+  const topics = useMemo(() => {
+    const voiceArray = model?.startsWith('qwen') ? QWEN_VOICES
+      : model?.startsWith('gpt') ? GPT_VOICES
+        : GPT_VOICES
 
-  if (model?.startsWith('gpt')) {
-    topics = GPT_VOICES
-  } else if (model?.startsWith('qwen')) {
-    topics = QWEN_VOICES
-  } else {
-    topics = GPT_VOICES
-  }
+    return voiceArray.map(voice => ({ id: voice, name: voice }))
+  }, [model])
 
-  const selectedValue = topics.find(item => item === value) ?? null
+  const selectedValue = useMemo(
+    () => topics.find(item => item.id === value) ?? null,
+    [topics, value]
+  )
 
-  const onChangeHandler = (event: any, newValue: string) => {
-    onChangeValue?.(event, newValue)
+  const onChangeHandler = (event: any, newValue: typeof topics[number] | null) => {
+    if (newValue) {
+      onChangeValue?.(event, newValue.id)
+    } else {
+      onChangeValue?.(event, '')
+    }
   }
 
   const handlePlayStop = useCallback((voice: string, event: React.MouseEvent) => {
@@ -102,46 +107,33 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
   return (
     <Combobox
       label={label}
-      autoComplete={true}
-      clearOnBlur={false}
       options={topics}
       value={selectedValue}
       onChange={onChangeHandler}
-      inputValue={inputValue}
-      onInputChange={onInputChange}
-      freeSolo={false}
       className={className}
-      renderOption={(props, option) => {
-        const isPlaying = playingVoice === option
+      getOptionLabel={(option: { id: string, name: string }) => option.name}
+      isOptionEqualToValue={(option: { id: string }, value: { id: string }) => option.id === value.id}
+      renderOption={(props: any, option: any) => {
+        const isPlaying = playingVoice === option.id
         return (
-          <li {...props} className={cls.option}>
-            <span className={cls.voiceName}>{option}</span>
-            <IconButton
-              size="small"
-              onClick={(e) => handlePlayStop(option, e)}
-              className={cls.playButton}
-            >
-              {isPlaying ? (
-                <StopIcon fontSize="small" className={cls.icon} />
-              ) : (
-                <PlayArrowIcon fontSize="small" className={cls.icon} />
-              )}
-            </IconButton>
+          <li {...props}>
+            <div className={cls.option} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+              <span className={cls.voiceName}>{option.name}</span>
+              <IconButton
+                size="small"
+                onClick={(e) => handlePlayStop(option.id, e)}
+                className={cls.playButton}
+              >
+                {isPlaying ? (
+                  <StopIcon fontSize="small" className={cls.icon} />
+                ) : (
+                  <PlayArrowIcon fontSize="small" className={cls.icon} />
+                )}
+              </IconButton>
+            </div>
           </li>
         )
       }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-          slotProps={{
-            htmlInput: {
-              ...params.inputProps,
-              readOnly: true
-            }
-          }}
-        />
-      )}
       {...otherProps}
     />
   )

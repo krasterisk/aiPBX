@@ -1,0 +1,170 @@
+@import '@/app/styles/variables/mixins';
+
+.Button {
+    @include button-base;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+
+    // Variants
+    &.primary {
+        @include button-primary;
+    }
+
+    &.outline {
+        @include button-outline;
+    }
+
+    &.clear {
+        background: transparent;
+        border: 1px solid var(--accent-redesigned);
+
+
+        &:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--accent-redesigned);
+        }
+    }
+
+    // Sizes
+    &.m {
+        height: 40px;
+        font-size: var(--font-size-m);
+    }
+
+    &.l {
+        height: 48px;
+        font-size: var(--font-size-l);
+        padding: 0 var(--space-6);
+    }
+
+    &.xl {
+        height: 56px;
+        font-size: var(--font-size-xl);
+        padding: 0 var(--space-8);
+    }
+
+    // Modifiers
+    &.square {
+        padding: 0;
+
+        &.m {
+            width: 40px;
+        }
+
+        &.l {
+            width: 48px;
+        }
+
+        &.xl {
+            width: 56px;
+        }
+    }
+
+    &.fullWidth {
+        width: 100%;
+    }
+
+    &.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+
+        &:hover {
+            transform: none;
+        }
+    }
+
+    // Colors
+    &.accent {
+
+        &.primary,
+        &:not(.outline):not(.clear) {
+            // Handle color="accent" on primary OR variant="accent" without other variants
+            background: var(--accent-redesigned);
+            color: #fff;
+            border-color: var(--accent-redesigned);
+
+            &:hover:not(:disabled) {
+                background: var(--accent-dark);
+                border-color: var(--accent-dark);
+            }
+        }
+
+        &.outline {
+            color: var(--accent-redesigned);
+            border-color: var(--accent-redesigned);
+
+            &:hover:not(:disabled) {
+                background: rgba(94, 211, 243, 0.1);
+            }
+        }
+
+        &.clear {
+            background: transparent;
+            border-color: var(--accent-redesigned);
+            color: var(--accent-redesigned);
+
+            &:hover:not(:disabled) {
+                background: rgba(94, 211, 243, 0.1);
+                color: var(--accent-redesigned);
+            }
+        }
+    }
+
+    &.success {
+        &.primary {
+            background: var(--status-success);
+            border-color: var(--status-success);
+        }
+
+        &.outline {
+            color: var(--status-success);
+            border-color: var(--status-success);
+
+            &:hover:not(:disabled) {
+                background: var(--status-success-bg);
+            }
+        }
+
+        &.clear {
+            color: var(--status-success);
+
+            &:hover:not(:disabled) {
+                background: var(--status-success-bg);
+                color: var(--status-success);
+            }
+        }
+    }
+
+    &.error {
+        &.primary {
+            background: var(--status-error);
+            border-color: var(--status-error);
+        }
+
+        &.outline {
+            color: var(--status-error);
+            border-color: var(--status-error);
+
+            &:hover:not(:disabled) {
+                background: var(--status-error-bg);
+            }
+        }
+
+        &.clear {
+            color: var(--status-error);
+
+            &:hover:not(:disabled) {
+                background: var(--status-error-bg);
+                color: var(--status-error);
+            }
+        }
+    }
+}
+
+.addonLeft,
+.addonRight {
+    display: flex;
+    align-items: center;
+}

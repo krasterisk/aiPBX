@@ -1,5 +1,8 @@
-@import '@/app/styles/variables/mixins';
-
 .PublishSipUrisPage {
-    padding-bottom: var(--card-padding-md);
+    min-height: 100%;
+    overflow: inherit;
+
+    .list {
+        margin-top: 0;
+    }
 }

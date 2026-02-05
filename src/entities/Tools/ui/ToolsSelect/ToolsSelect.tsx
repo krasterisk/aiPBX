@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Combobox } from '@/shared/ui/mui/Combobox'
+import { Combobox } from '@/shared/ui/redesign-v3/Combobox'
 import { Checkbox } from '@mui/material'
 import { Tool } from '../../model/types/tools'
 import { useToolsAll } from '../../api/toolsApi'
@@ -27,38 +27,29 @@ export const ToolsSelect = memo((props: ToolsSelectorProps) => {
     data: tools
   } = useToolsAll(null)
 
-  const onChangeMultipleHandler = (event: any, newValue: Tool[]) => {
-    onChangeTool?.(event, newValue)
+  const onChangeMultipleHandler = (newValue: Tool | Tool[] | null) => {
+    const arrayValue = Array.isArray(newValue) ? newValue : []
+    onChangeTool?.(null as any, arrayValue)
   }
 
   return (
-      <Combobox
-          id={'toolsSelectBox'}
-          multiple
-          label={label}
-          autoComplete
-          groupBy={(option) => option.group || ''}
-          options={tools || []}
-          disableCloseOnSelect
-          value={value}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-          renderOption={(props, option, { selected, inputValue, index }) => {
-            const { ...otherProps } = props
-            return (
-                <li {...otherProps}>
-                  <Checkbox
-                      // icon={icon}
-                      // checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                  />
-                  {String(option.name)}
-                </li>
-            )
-          }}
-          onChange={onChangeMultipleHandler}
-          getOptionLabel={(option) => option.name}
-          {...otherProps}
-      />
+    <Combobox
+      multiple
+      label={label}
+      options={(tools || []).filter(t => t.id && t.name) as any[]}
+      value={(value || []).filter(v => v.id && v.name) as any[]}
+      onChange={onChangeMultipleHandler}
+      className={className}
+      renderOption={(option, selected) => (
+        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+          <Checkbox
+            style={{ marginRight: 8 }}
+            checked={selected}
+          />
+          {String(option.name)}
+        </div>
+      )}
+      {...otherProps}
+    />
   )
 })

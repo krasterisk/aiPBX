@@ -3,13 +3,17 @@
 .PublishSipUrisFormHeader {
     @include glass-card-secondary;
     padding: var(--space-5) var(--card-padding-md);
+    width: 100%;
+    transition: all var(--transition-normal);
 
-    &:hover {
-        border-color: rgba(94, 211, 243, 0.2);
-    }
+    @include hover-lift-card;
 
     &.bottom {
         margin-top: var(--space-4);
+    }
+
+    .actions {
+        transition: transform var(--transition-normal);
     }
 
     @include tablet {

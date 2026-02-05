@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Textarea } from '@/shared/ui/mui/Textarea'
-import { Button } from '@/shared/ui/redesigned/Button'
+import { Button } from '@/shared/ui/redesign-v3/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Assistant } from '@/entities/Assistants/model/types/assistants'
 import { getAssistantFormData } from '@/entities/Assistants/model/selectors/assistantFormSelectors'
@@ -84,14 +84,12 @@ export const PromptSection = memo((props: PromptSectionProps) => {
                     <Button
                         aria-describedby={popoverId}
                         onClick={handleOpenPopover}
-                        variant="outline"
-                        size="l"
+                        variant="clear"
+                        size="m"
                         className={cls.generateBtn}
+                        addonLeft={<AutoAwesomeIcon fontSize="small" />}
                     >
-                        <HStack gap="8" align="center">
-                            <AutoAwesomeIcon fontSize="small" />
-                            <span>{t('Сгенерировать')}</span>
-                        </HStack>
+                        {t('Сгенерировать')}
                     </Button>
                 </HStack>
 
@@ -150,7 +148,7 @@ export const PromptSection = memo((props: PromptSectionProps) => {
                         <Button
                             onClick={handleGenerate}
                             color="success"
-                            variant="filled"
+                            variant="clear"
                             disabled={!userPrompt.trim() || isLoading}
                             size="m"
                         >

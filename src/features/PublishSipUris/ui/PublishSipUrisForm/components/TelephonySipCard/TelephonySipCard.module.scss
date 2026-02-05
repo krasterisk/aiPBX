@@ -4,11 +4,7 @@
     @include glass-card-secondary;
     width: 100%;
 
-    &:hover {
-        border-color: var(--accent-redesigned);
-        box-shadow: var(--shadow-lg);
-        transform: var(--hover-lift-sm);
-    }
+    @include hover-lift-card;
 
     @include tablet {
         border-radius: var(--radius-md);

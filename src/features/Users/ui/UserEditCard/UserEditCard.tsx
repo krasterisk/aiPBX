@@ -15,7 +15,8 @@ import {
   useGetUser,
   User,
   UserCurrencyValues,
-  UserRoles
+  UserRoles,
+  UserRolesValues
 } from '@/entities/User'
 import { UserEditCardHeader } from '../UserEditCardHeader/UserEditCardHeader'
 import { Textarea } from '@/shared/ui/mui/Textarea'
@@ -71,10 +72,10 @@ export const UserEditCard = memo((props: UserEditCardProps) => {
       })
     }
 
-  const editChangeRolesHandler = (field: keyof User) => (event: any, value: UserRoles) => {
+  const editChangeRolesHandler = (field: keyof User) => (event: any, value: UserRolesValues) => {
     setFormFields({
       ...formFields,
-      [field]: [value]
+      [field]: [{ value, description: '' }]
     })
   }
 
@@ -181,7 +182,7 @@ export const UserEditCard = memo((props: UserEditCardProps) => {
           {isAdmin &&
             <>
               <RoleSelect
-                value={formFields.roles?.[0]}
+                value={formFields.roles?.[0]?.value}
                 label={t('Уровень доступа') || ''}
                 data-testid={'UserCard.RoleSelect'}
                 onChange={editChangeRolesHandler('roles')}

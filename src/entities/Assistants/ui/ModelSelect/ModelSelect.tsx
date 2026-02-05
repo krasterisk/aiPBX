@@ -36,24 +36,23 @@ export const ModelSelect = memo((props: ModelSelectProps) => {
 
   const selectedValue = modelItems.find(item => item.name === value) || null
 
-  const onChangeHandler = (event: any, newValue: { name: string }) => {
-    onChangeValue?.(event, newValue?.name || '')
+  const onChangeHandler = (event: any, newValue: typeof modelItems[number] | null) => {
+    if (newValue) {
+      onChangeValue?.(event, newValue.name || '')
+    } else {
+      onChangeValue?.(event, '')
+    }
   }
 
   return (
     <Combobox
       label={label}
-      autoComplete={true}
-      clearOnBlur={false}
       options={modelItems}
       value={selectedValue}
       onChange={onChangeHandler}
-      inputValue={inputValue}
-      getOptionKey={option => option.name}
-      isOptionEqualToValue={(option, value) => option.name === value?.name}
-      getOptionLabel={option => option.name || ''}
-      onInputChange={onInputChange}
-      freeSolo={false}
+      className={className}
+      getOptionLabel={(option: { name: string }) => option.name}
+      isOptionEqualToValue={(option: { name: string }, value: { name: string }) => option.name === value.name}
       {...otherProps}
     />
   )

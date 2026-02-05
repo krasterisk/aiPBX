@@ -4,6 +4,7 @@
     @include glass-card-tertiary;
     padding: var(--card-padding-md);
     transition: var(--transition-normal);
+    isolation: auto; // Не создаем изолированный stacking context
 
     &:hover {
         border-color: rgba(94, 211, 243, 0.2);

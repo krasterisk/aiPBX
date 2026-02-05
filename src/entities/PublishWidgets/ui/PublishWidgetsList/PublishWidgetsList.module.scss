@@ -4,44 +4,6 @@
     position: relative;
     width: 100%;
 
-    .uncheck {
-        @include checkbox-hidden;
-        position: absolute;
-        display: flex;
-        left: 0;
-        top: 0;
-    }
-
-    .check {
-        @include checkbox-visible;
-        position: absolute;
-        display: flex;
-        left: 0;
-        top: 0;
-    }
-
-    .uncheckButtons {
-        display: none;
-    }
-
-    .checkButton {
-        display: flex;
-    }
-
-    .controlsCard {
-        @include glass-card-secondary;
-        margin-bottom: var(--space-2);
-
-        &:hover {
-            border-color: rgba(94, 211, 243, 0.2);
-        }
-    }
-
-    .controls {
-        padding: var(--space-3) var(--space-5);
-        width: 100%;
-    }
-
     .listWrapper {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));

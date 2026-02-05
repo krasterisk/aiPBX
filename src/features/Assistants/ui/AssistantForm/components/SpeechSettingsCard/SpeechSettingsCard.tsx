@@ -8,7 +8,8 @@ import { Textarea } from '@/shared/ui/mui/Textarea'
 import { isUserAdmin } from '@/entities/User'
 import { Assistant } from '@/entities/Assistants/model/types/assistants'
 import { getAssistantFormData } from '@/entities/Assistants/model/selectors/assistantFormSelectors'
-import { Collapse, IconButton } from '@mui/material'
+import { Collapse } from '@mui/material'
+import { Button } from '@/shared/ui/redesign-v3/Button'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import SettingsIcon from '@mui/icons-material/Settings'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
@@ -56,14 +57,16 @@ export const SpeechSettingsCard = memo((props: SpeechSettingsCardProps) => {
                     />
                 </HStack>
 
-                <IconButton
+                <Button
                     className={classNames(cls.expandButton, { [cls.expanded]: expanded })}
                     aria-expanded={expanded}
-                    aria-label="показать больше"
-                    size="small"
+                    aria-label={t('Показать больше') || 'Show more'}
+                    size="m"
+                    variant="clear"
+                    square
                 >
                     <ExpandMoreIcon />
-                </IconButton>
+                </Button>
             </HStack>
 
             <Text

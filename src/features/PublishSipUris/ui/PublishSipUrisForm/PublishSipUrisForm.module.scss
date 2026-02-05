@@ -2,11 +2,13 @@
 
 .PublishSipUrisForm {
     width: 100%;
+    padding: 0 var(--space-1); // Subtle padding for shadows
 }
 
 .contentWrapper {
     width: 100%;
     align-items: flex-start;
+    padding: var(--space-2) var(--space-4); // Padding to allow card shadows on hover
 }
 
 .leftColumn {

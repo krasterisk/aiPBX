@@ -9,22 +9,10 @@
             transform: var(--hover-scale-md);
         }
 
-        .checkboxWrapper {
-            opacity: 1;
-        }
-
         .copyBtn {
             opacity: 1;
             transform: scale(1);
         }
-    }
-
-    .checkContainer {
-        @include checkbox-container;
-    }
-
-    .check {
-        @include checkbox-visible;
     }
 
     .content {
@@ -167,21 +155,19 @@
 }
 
 @media (max-width: 600px) {
-    .content {
-        padding: 16px;
-    }
+    .PbxServerItem {
+        .content {
+            padding: 16px;
+        }
 
-    .detailsGrid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
+        .detailsGrid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
 
-    .truncatedText {
-        max-width: 100%;
-    }
-
-    .avatar {
-        width: 40px;
-        height: 40px;
+        .avatar {
+            width: 40px;
+            height: 40px;
+        }
     }
 }

@@ -9,22 +9,10 @@
             transform: var(--hover-scale-md);
         }
 
-        .uncheck {
-            opacity: 1;
-        }
-
         .copyBtn {
             opacity: 1;
             transform: scale(1);
         }
-    }
-
-    .checkContainer {
-        @include checkbox-container;
-    }
-
-    .check {
-        @include checkbox-visible;
     }
 
     .content {
@@ -161,12 +149,14 @@
 }
 
 @include mobile {
-    .content {
-        padding: var(--card-padding-sm);
-    }
+    .PublishSipUrisItem {
+        .content {
+            padding: var(--card-padding-sm);
+        }
 
-    .avatar {
-        width: 40px;
-        height: 40px;
+        .avatar {
+            width: 40px;
+            height: 40px;
+        }
     }
 }

@@ -2,10 +2,10 @@ import { ButtonHTMLAttributes, forwardRef, memo, ReactNode } from 'react'
 import { classNames, Mods } from '@/shared/lib/classNames/classNames'
 import cls from './Button.module.scss'
 
-export type ButtonVariant = 'clear' | 'outline' | 'filled'
-export type ButtonColor = 'normal' | 'success' | 'error'
+export type ButtonVariant = 'clear' | 'outline' | 'filled' | 'accent'
+export type ButtonColor = 'normal' | 'success' | 'error' | 'accent'
 
-export type ButtonSize = 'm' | 'l' | 'xl'
+export type ButtonSize = 's' | 'm' | 'l' | 'xl'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string
@@ -61,21 +61,21 @@ export const Button = memo(forwardRef<HTMLButtonElement, ButtonProps>((props, re
   }
 
   return (
-      <button
-          type="button"
-          className={classNames(cls.Button, mods, [
-            className,
-            cls[variant],
-            cls[size],
-            cls[color]
-          ])}
-          disabled={disabled}
-          ref={ref}
-          {...otherProps}
-      >
-        <div className={cls.addonLeft}>{addonLeft}</div>
-        {children}
-        <div className={cls.addonRight}>{addonRight}</div>
-      </button>
+    <button
+      type="button"
+      className={classNames(cls.Button, mods, [
+        className,
+        cls[variant],
+        cls[size],
+        cls[color]
+      ])}
+      disabled={disabled}
+      ref={ref}
+      {...otherProps}
+    >
+      <div className={cls.addonLeft}>{addonLeft}</div>
+      {children}
+      <div className={cls.addonRight}>{addonRight}</div>
+    </button>
   )
 }))

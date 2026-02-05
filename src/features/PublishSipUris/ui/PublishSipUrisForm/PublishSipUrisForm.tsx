@@ -9,6 +9,7 @@ import { AssistantOptions } from '@/entities/Assistants'
 import {
     useCreateSipUri,
     useUpdateSipUri,
+    useDeleteSipUri,
     PbxServerOptions
 } from '@/entities/PbxServers'
 import {
@@ -52,8 +53,9 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
 
     const [createSip, { isLoading: isCreating }] = useCreateSipUri()
     const [updateSip, { isLoading: isUpdating }] = useUpdateSipUri()
+    const [deleteSip, { isLoading: isDeleting }] = useDeleteSipUri()
 
-    const isLoading = isCreating || isUpdating
+    const isLoading = isCreating || isUpdating || isDeleting
     const isMobile = useMediaQuery('(max-width:800px)')
 
     const onClose = useCallback(() => {
@@ -83,6 +85,22 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
     const onChangeActive = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(publishSipUrisFormActions.setActive(e.target.checked))
     }, [dispatch])
+
+    const onDelete = useCallback(async () => {
+        if (!selectedAssistant) return
+
+        const confirmed = window.confirm(t('Вы уверены, что хотите удалить SIP URI?') ?? '')
+        if (!confirmed) return
+
+        try {
+            await deleteSip({ assistantId: String(selectedAssistant.id) }).unwrap()
+            toast.success(t('SIP URI успешно удален'))
+            navigate(getRoutePublishSipUris())
+            dispatch(publishSipUrisFormActions.resetForm())
+        } catch (e) {
+            toast.error(getErrorMessage(e))
+        }
+    }, [deleteSip, selectedAssistant, t, navigate, dispatch])
 
     const onSave = useCallback(async () => {
         if (!selectedAssistant || !selectedPbx || !ipAddress) {
@@ -120,6 +138,7 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
             <PublishSipUrisFormHeader
                 onSave={onSave}
                 onClose={onClose}
+                onDelete={onDelete}
                 isEdit={isEdit}
                 isLoading={isLoading}
                 assistantName={selectedAssistant?.name}
@@ -163,6 +182,7 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
             <PublishSipUrisFormHeader
                 onSave={onSave}
                 onClose={onClose}
+                onDelete={onDelete}
                 isEdit={isEdit}
                 isLoading={isLoading}
                 variant={'diviner-bottom'}

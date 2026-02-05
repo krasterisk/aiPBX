@@ -5,60 +5,24 @@
     padding: var(--space-4) 0;
 }
 
-.searchRow {
-    width: 100%;
+.headerActions {
+    display: flex;
     align-items: center;
-}
-
-.searchInput {
-    max-width: 400px;
-    width: 100%;
-    background: var(--light-bg-redesigned) !important;
-    border: 1px solid rgba(94, 211, 243, 0.1) !important;
-    border-radius: var(--radius-lg) !important;
-    height: 42px !important;
-    padding: 0 var(--space-4) !important;
-    transition: var(--transition-normal) !important;
-
-    &:hover {
-        background: var(--card-bg) !important;
-        border-color: rgba(94, 211, 243, 0.3) !important;
-    }
-
-    &.focused {
-        background: var(--card-bg) !important;
-        border-color: var(--accent-redesigned) !important;
-        box-shadow: var(--shadow-sm);
-
-        .searchIcon {
-            color: var(--accent-redesigned);
-            transform: var(--hover-scale-sm);
-        }
-    }
-
-    @include mobile {
-        max-width: 100%;
-    }
-}
-
-.searchIcon {
-    color: var(--hint-redesigned);
-    transition: var(--transition-normal);
-}
-
-.clientSelect {
-    flex: 1;
-    min-width: 280px;
+    gap: var(--space-4);
 
     @include mobile {
         width: 100%;
-        min-width: 0;
+        flex-direction: column;
+        align-items: stretch;
     }
 }
 
-.plusIcon {
-    color: var(--accent-redesigned);
-    transition: var(--transition-transform);
+.searchInput {
+    width: 300px;
+
+    @include mobile {
+        width: 100%;
+    }
 }
 
 .createBtn {

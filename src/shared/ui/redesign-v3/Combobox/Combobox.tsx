@@ -3,6 +3,17 @@ import { classNames, Mods } from '@/shared/lib/classNames/classNames'
 import cls from './Combobox.module.scss'
 import { ChevronDown, X, Check } from 'lucide-react'
 import { VStack } from '../../redesigned/Stack'
+import {
+    useFloating,
+    autoUpdate,
+    offset,
+    flip,
+    shift,
+    useDismiss,
+    useInteractions,
+    FloatingPortal,
+    size as floatingSize
+} from '@floating-ui/react'
 
 export interface ComboboxOption {
     id: string
@@ -60,22 +71,32 @@ export const Combobox = memo(<T extends ComboboxOption = ComboboxOption>(props: 
     const [isOpen, setIsOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [highlightedIndex, setHighlightedIndex] = useState(0)
-    const containerRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
     const listRef = useRef<HTMLDivElement>(null)
 
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-                setIsOpen(false)
-                setSearchQuery('')
-            }
-        }
+    // Floating UI setup
+    const { refs, floatingStyles, context, isPositioned } = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+        whileElementsMounted: autoUpdate,
+        middleware: [
+            offset(4),
+            flip({ padding: 10 }),
+            shift({ padding: 10 }),
+            floatingSize({
+                apply({ rects, elements, availableHeight }) {
+                    Object.assign(elements.floating.style, {
+                        width: `${rects.reference.width}px`,
+                        maxHeight: `${Math.min(availableHeight, 300)}px`
+                    })
+                },
+                padding: 10
+            })
+        ]
+    })
 
-        document.addEventListener('mousedown', handleClickOutside)
-        return () => document.removeEventListener('mousedown', handleClickOutside)
-    }, [])
+    const dismiss = useDismiss(context)
+    const { getReferenceProps, getFloatingProps } = useInteractions([dismiss])
 
     // Filter options based on search query
     const filteredOptions = searchable && searchQuery
@@ -198,7 +219,8 @@ export const Combobox = memo(<T extends ComboboxOption = ComboboxOption>(props: 
             {label && <label className={cls.label}>{label}</label>}
 
             <div
-                ref={containerRef}
+                ref={refs.setReference}
+                {...getReferenceProps()}
                 className={classNames(cls.container, mods, [cls[size]])}
             >
                 <div
@@ -308,41 +330,55 @@ export const Combobox = memo(<T extends ComboboxOption = ComboboxOption>(props: 
 
                 {/* Dropdown menu */}
                 {isOpen && (
-                    <div className={cls.menu} ref={listRef}>
-                        {filteredOptions.length > 0 ? (
-                            filteredOptions.map((option, index) => {
-                                const selected = isSelected(option)
-                                const highlighted = index === highlightedIndex
+                    <FloatingPortal>
+                        <div
+                            className={cls.menu}
+                            ref={refs.setFloating}
+                            style={{
+                                ...floatingStyles,
+                                right: 'auto', // Reset right to prevent conflict with absolute positioning in SCSS
+                                opacity: isPositioned ? 1 : 0,
+                                zIndex: 9999 // Ensure it's above everything including modals
+                            }}
+                            {...getFloatingProps()}
+                        >
+                            <div ref={listRef}>
+                                {filteredOptions.length > 0 ? (
+                                    filteredOptions.map((option, index) => {
+                                        const selected = isSelected(option)
+                                        const highlighted = index === highlightedIndex
 
-                                return (
-                                    <div
-                                        key={getOptionKey(option)}
-                                        className={classNames(cls.option, {
-                                            [cls.selected]: selected,
-                                            [cls.highlighted]: highlighted
-                                        })}
-                                        onClick={() => handleSelectOption(option)}
-                                        onMouseEnter={() => setHighlightedIndex(index)}
-                                    >
-                                        {renderOption ? (
-                                            renderOption(option, selected)
-                                        ) : (
-                                            <>
-                                                <span className={cls.optionLabel}>{getOptionLabel(option)}</span>
-                                                {selected && (
-                                                    <div className={cls.checkIcon}>
-                                                        <Check size={16} />
-                                                    </div>
+                                        return (
+                                            <div
+                                                key={getOptionKey(option)}
+                                                className={classNames(cls.option, {
+                                                    [cls.selected]: selected,
+                                                    [cls.highlighted]: highlighted
+                                                })}
+                                                onClick={() => handleSelectOption(option)}
+                                                onMouseEnter={() => setHighlightedIndex(index)}
+                                            >
+                                                {renderOption ? (
+                                                    renderOption(option, selected)
+                                                ) : (
+                                                    <>
+                                                        <span className={cls.optionLabel}>{getOptionLabel(option)}</span>
+                                                        {selected && (
+                                                            <div className={cls.checkIcon}>
+                                                                <Check size={16} />
+                                                            </div>
+                                                        )}
+                                                    </>
                                                 )}
-                                            </>
-                                        )}
-                                    </div>
-                                )
-                            })
-                        ) : (
-                            <div className={cls.noOptions}>{noOptionsText}</div>
-                        )}
-                    </div>
+                                            </div>
+                                        )
+                                    })
+                                ) : (
+                                    <div className={cls.noOptions}>{noOptionsText}</div>
+                                )}
+                            </div>
+                        </div>
+                    </FloatingPortal>
                 )}
             </div>
 

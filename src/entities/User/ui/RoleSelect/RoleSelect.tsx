@@ -1,13 +1,12 @@
-import { memo } from 'react'
-import { Combobox } from '@/shared/ui/mui/Combobox'
+import { memo, useMemo } from 'react'
+import { Combobox } from '@/shared/ui/redesign-v3/Combobox'
 import { useTranslation } from 'react-i18next'
 import { UserRolesValues } from '../../model/consts/consts'
-import { UserRoles } from '../../model/types/user'
 
 interface RoleSelectProps {
   className?: string
-  value?: UserRoles
-  onChange?: (event: any, value: UserRoles) => void
+  value?: UserRolesValues
+  onChange?: (event: any, value: UserRolesValues) => void
   label?: string
 }
 
@@ -21,36 +20,34 @@ export const RoleSelect = memo((props: RoleSelectProps) => {
 
   const { t } = useTranslation('profile')
 
-  const roleItems = [
+  const roleItems = useMemo(() => [
     {
-      value: UserRolesValues.USER,
-      descriptions: t('Клиент')
+      id: UserRolesValues.USER,
+      name: t('Клиент')
     },
     {
-      value: UserRolesValues.ADMIN,
-      descriptions: t('Администратор')
+      id: UserRolesValues.ADMIN,
+      name: t('Администратор')
     }
-  ]
+  ], [t])
 
-  const onChangeHandler = (event: any, newValue: UserRoles | null) => {
-    if (newValue) {
-      onChange?.(event, newValue)
+  const onChangeHandler = (newValue: typeof roleItems[number] | typeof roleItems | null) => {
+    if (newValue && !Array.isArray(newValue)) {
+      onChange?.(null as any, newValue.id)
     }
   }
+
+  const selectedValue = useMemo(() =>
+    roleItems.find(item => item.id === value) || null,
+    [roleItems, value]
+  )
 
   return (
     <Combobox
       label={label}
-      autoComplete={true}
       options={roleItems}
-      value={value ?? null}
+      value={selectedValue}
       onChange={onChangeHandler}
-      getOptionKey={option => option?.value}
-      isOptionEqualToValue={(option, value) => option.value === value?.value}
-      getOptionLabel={(option) => {
-        const found = roleItems.find(item => item.value === option?.value)
-        return found ? found.descriptions : (option?.descriptions || '')
-      }}
       {...otherProps}
     />
   )

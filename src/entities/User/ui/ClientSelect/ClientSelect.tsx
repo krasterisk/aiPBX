@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import { memo, useCallback, ReactNode } from 'react'
-import { Combobox, ComboboxOption } from '@/shared/ui/redesign-v3/Combobox'
+import { Combobox } from '@/shared/ui/mui/Combobox'
 import { useGetAllUsers } from '../../api/usersApi'
 import { Users } from 'lucide-react'
+import { TextField } from '@mui/material'
 
 interface ClientSelectProps {
   label?: string
@@ -10,11 +11,16 @@ interface ClientSelectProps {
   className?: string
   fullWidth?: boolean
   onChangeClient?: (clientId: string) => void
-  size?: 's' | 'm' | 'l'
+  size?: 'small' | 'medium'
   error?: string
   placeholder?: string
   addonLeft?: ReactNode
   showIcon?: boolean
+}
+
+interface ClientOption {
+  id: string
+  name: string
 }
 
 export const ClientSelect = memo((props: ClientSelectProps) => {
@@ -25,7 +31,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
     clientId,
     onChangeClient,
     fullWidth = true,
-    size = 'm',
+    size = 'medium',
     error,
     placeholder,
     addonLeft,
@@ -34,7 +40,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
 
   const { data, isLoading } = useGetAllUsers(null)
 
-  const clientItems: ComboboxOption[] = data?.map(item => ({
+  const clientItems: ClientOption[] = data?.map(item => ({
     id: item.id,
     name: String(item.name)
   })) || []
@@ -43,8 +49,8 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
     ? clientItems.find(item => item.id === clientId) || null
     : null
 
-  const handleChange = useCallback((value: ComboboxOption | ComboboxOption[] | null) => {
-    if (!value || Array.isArray(value)) {
+  const handleChange = useCallback((event: any, value: ClientOption | null) => {
+    if (!value) {
       onChangeClient?.('')
     } else {
       onChangeClient?.(value.id)
@@ -52,25 +58,41 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
   }, [onChangeClient])
 
   // Определяем иконку слева
-  const leftAddon = addonLeft || (showIcon ? <Users size={18} /> : undefined)
+  const leftAddon = addonLeft || (showIcon ? <Users size={18} style={{ marginRight: 8 }} /> : undefined)
   const placeholderText = placeholder || (t('Все клиенты') as string)
 
   return (
     <Combobox
       className={className}
       label={label}
-      placeholder={isLoading ? (t('Загрузка...') as string) : placeholderText}
+      size={size}
       options={clientItems}
       value={selectedClient}
       onChange={handleChange}
       fullWidth={fullWidth}
-      size={size}
-      error={error}
-      searchable={true}
-      clearable={true}
       disabled={isLoading}
       noOptionsText={t('Клиенты не найдены') ?? ''}
-      addonLeft={leftAddon}
+      getOptionLabel={(option: ClientOption) => option.name}
+      isOptionEqualToValue={(option: ClientOption, value: ClientOption) => option.id === value.id}
+      renderInput={(params: any) => (
+        <TextField
+          {...params}
+          label={label}
+          placeholder={isLoading ? (t('Загрузка...') as string) : placeholderText}
+          error={!!error}
+          helperText={error}
+          size={size}
+          InputProps={{
+            ...params.InputProps,
+            startAdornment: (
+              <>
+                {leftAddon}
+                {params.InputProps.startAdornment}
+              </>
+            )
+          }}
+        />
+      )}
     />
   )
 })

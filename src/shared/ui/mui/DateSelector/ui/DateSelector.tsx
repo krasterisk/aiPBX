@@ -8,41 +8,47 @@ interface DateSelectorProps extends DatePickerProps<any> {
 }
 
 const acStyles = {
+  // Root text color
   '& .MuiInputBase-root': {
     color: 'var(--text-redesigned) !important'
-  },
-  '& .MuiPickersOutlinedInput-root': {
-    color: 'var(--text-redesigned) !important',
-    WebkitTextFillColor: 'var(--text-redesigned) !important'
   },
   '& input': {
     color: 'var(--text-redesigned) !important',
     WebkitTextFillColor: 'var(--text-redesigned) !important'
   },
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      border: '2px solid var(--icon-redesigned)',
-      borderRadius: '48px'
-    },
-    '&:hover fieldset': {
-      borderColor: 'var(--accent-redesigned)'
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: 'var(--accent-redesigned)'
-    }
-  },
+  // Label colors
   '& .MuiFormLabel-root': {
     color: 'var(--text-redesigned) !important'
   },
   '& .MuiInputLabel-root': {
     color: 'var(--text-redesigned) !important'
   },
+  // Icon color
   '& .MuiSvgIcon-root': {
-    color: 'var(--icon-redesigned)'
+    color: 'var(--icon-redesigned) !important'
   },
+  // Placeholder
   '& .MuiInputBase-input::placeholder': {
-    color: 'var(--text-redesigned)'
+    color: 'var(--text-redesigned) !important',
+    opacity: 0.7
   },
+
+  // BORDERS - Targeting notchedOutline directly (supporting both standard and Pickers specific classes)
+  // 1. Default state
+  '& .MuiOutlinedInput-notchedOutline, & .MuiPickersOutlinedInput-notchedOutline': {
+    borderColor: 'var(--accent-redesigned) !important',
+    borderRadius: 'var(--radius-lg) !important',
+  },
+  // 2. Hover state
+  '&:hover .MuiOutlinedInput-notchedOutline, &:hover .MuiPickersOutlinedInput-notchedOutline': {
+    borderColor: 'var(--accent-redesigned) !important',
+    borderWidth: '2px !important'
+  },
+  // 3. Focused state
+  '& .Mui-focused .MuiOutlinedInput-notchedOutline, & .Mui-focused .MuiPickersOutlinedInput-notchedOutline': {
+    borderColor: 'var(--accent-redesigned) !important',
+    borderWidth: '2px !important'
+  }
 }
 
 export const DateSelector = memo((props: DateSelectorProps) => {
@@ -72,7 +78,9 @@ export const DateSelector = memo((props: DateSelectorProps) => {
               zIndex: 12000,
               '& .MuiPaper-root': {
                 backgroundColor: 'var(--bg-redesigned)',
-                color: 'var(--text-redesigned)'
+                color: 'var(--text-redesigned)',
+                border: '1px solid var(--accent-redesigned)',
+                borderRadius: 'var(--radius-lg)'
               },
               '& .MuiPickersDay-root': {
                 color: 'var(--text-redesigned)'

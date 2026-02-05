@@ -1,9 +1,9 @@
 import { memo } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { Check } from '@/shared/ui/mui/Check'
-import { Textarea } from '@/shared/ui/mui/Textarea'
 import { AssistantOptions } from '../../model/types/assistants'
 import { useAssistantsAll } from '../../api/assistantsApi'
+import { TextField } from '@mui/material'
 
 interface BaseAssistantSelectProps {
   label?: string
@@ -47,49 +47,45 @@ export const AssistantSelect = memo((props: AssistantSelectProps) => {
     { userId }
   )
 
-  const onChangeHandler = (event: any, newValue: any) => {
+  const onChangeHandler = (event: any, newValue: AssistantOptions | AssistantOptions[] | null) => {
     if (multiple) {
-      (onChangeAssistant as MultipleAssistantSelectProps['onChangeAssistant'])?.(event, newValue)
+      const arrayValue = Array.isArray(newValue) ? newValue : [];
+      (onChangeAssistant as MultipleAssistantSelectProps['onChangeAssistant'])?.(event, arrayValue)
     } else {
-      (onChangeAssistant as SingleAssistantSelectProps['onChangeAssistant'])?.(event, newValue)
+      const singleValue = Array.isArray(newValue) ? null : newValue;
+      (onChangeAssistant as SingleAssistantSelectProps['onChangeAssistant'])?.(event, singleValue)
     }
   }
 
   return (
     <Combobox
-      id={'assistantSelectBox'}
       multiple={multiple}
       label={label}
-      options={assistants || []}
+      options={(assistants || []).filter(a => a.id) as AssistantOptions[]}
       value={value ?? (multiple ? [] : null)}
-      isOptionEqualToValue={(option, value) => value?.id !== undefined && String(option.id) === String(value.id)}
       onChange={onChangeHandler}
-      getOptionLabel={(option) => option.name}
-      disableCloseOnSelect={multiple}
-      renderInput={(params) => (
-        <Textarea
+      className={className}
+      getOptionLabel={(option: AssistantOptions) => option.name || ''}
+      isOptionEqualToValue={(option: AssistantOptions, value: AssistantOptions) => option.id === value.id}
+      renderInput={(params: any) => (
+        <TextField
           {...params}
           label={label}
           error={error}
           helperText={helperText}
-          inputProps={{
-            ...params.inputProps,
-            readOnly: true
-          }}
         />
       )}
-      renderOption={multiple ? (props, option, { selected }) => {
-        const { ...otherProps } = props
-        return (
-          <li {...otherProps}>
+      renderOption={multiple ? (props, option, { selected }) => (
+        <li {...props}>
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
             <Check
               style={{ marginRight: 8 }}
               checked={selected}
             />
             {String(option.name)}
-          </li>
-        )
-      } : undefined}
+          </div>
+        </li>
+      ) : undefined}
       {...otherProps}
     />
   )

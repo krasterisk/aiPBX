@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Palette } from 'lucide-react'
 import { Check } from '@/shared/ui/mui/Check'
 import { Textarea } from '@/shared/ui/mui/Textarea'
-import { Combobox } from '@/shared/ui/mui/Combobox'
+import { Combobox } from '@/shared/ui/redesign-v3/Combobox'
 import { SectionCard } from '../SectionCard/SectionCard'
 import { VisualPositionGrid } from '../VisualPositionGrid/VisualPositionGrid'
 import { ColorGradientPicker } from '../ColorGradientPicker/ColorGradientPicker'
@@ -31,16 +31,16 @@ export const StyleSettingsCard = memo((props: StyleSettingsCardProps) => {
     const { t } = useTranslation('publish-widgets')
 
     const themeOptions = useMemo(() => [
-        { label: t('Светлая'), value: 'light' },
-        { label: t('Темная'), value: 'dark' },
-        { label: t('Автоматически'), value: 'auto' },
+        { id: 'light', name: t('Светлая'), value: 'light' },
+        { id: 'dark', name: t('Темная'), value: 'dark' },
+        { id: 'auto', name: t('Автоматически'), value: 'auto' },
     ], [t])
 
     const languageOptions = useMemo(() => [
-        { label: 'English', value: 'en' },
-        { label: 'Русский', value: 'ru' },
-        { label: 'Deutsch', value: 'de' },
-        { label: '中文 (Chinese)', value: 'zh' },
+        { id: 'en', name: 'English', value: 'en' },
+        { id: 'ru', name: 'Русский', value: 'ru' },
+        { id: 'de', name: 'Deutsch', value: 'de' },
+        { id: 'zh', name: '中文 (Chinese)', value: 'zh' },
     ], [])
 
     const [uploadLogo, { isLoading: isUploading }] = useUploadWidgetLogo()
@@ -143,22 +143,14 @@ export const StyleSettingsCard = memo((props: StyleSettingsCardProps) => {
             <Combobox
                 label={t('Язык виджета') || ''}
                 options={languageOptions}
-                getOptionLabel={(opt) => opt.label}
                 value={languageOptions.find(opt => opt.value === appearance?.language) || languageOptions[0]}
-                onChange={(_, newValue: { label: string, value: string } | null) => {
-                    if (newValue) {
+                onChange={(newValue) => {
+                    if (newValue && !Array.isArray(newValue)) {
                         onChangeAppearance('language', newValue.value)
                     }
                 }}
-                isOptionEqualToValue={(opt, val) => opt.value === val.value}
-                disableClearable
-                renderInput={(params) => (
-                    <Textarea
-                        {...params}
-                        label={t('Язык виджета')}
-                        inputProps={{ ...params.inputProps, readOnly: true }}
-                    />
-                )}
+                clearable={false}
+                searchable={false}
             />
 
             <ColorGradientPicker
@@ -176,18 +168,14 @@ export const StyleSettingsCard = memo((props: StyleSettingsCardProps) => {
             <Combobox
                 label={t('Тема') || ''}
                 options={themeOptions}
-                getOptionLabel={(opt) => opt.label}
                 value={themeOptions.find(opt => opt.value === appearance?.theme) || themeOptions[0]}
-                onChange={(_, newValue) => newValue && onChangeAppearance('theme', newValue.value)}
-                isOptionEqualToValue={(opt, val) => opt.value === val.value}
-                disableClearable
-                renderInput={(params) => (
-                    <Textarea
-                        {...params}
-                        label={t('Тема')}
-                        inputProps={{ ...params.inputProps, readOnly: true }}
-                    />
-                )}
+                onChange={(newValue) => {
+                    if (newValue && !Array.isArray(newValue)) {
+                        onChangeAppearance('theme', newValue.value)
+                    }
+                }}
+                clearable={false}
+                searchable={false}
             />
 
             <Check

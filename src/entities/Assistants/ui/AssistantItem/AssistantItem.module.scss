@@ -22,28 +22,10 @@
             transform: scale(1.05);
         }
 
-        .checkboxWrapper {
-            opacity: 1;
-        }
-
         .copyBtn {
             opacity: 1;
             transform: scale(1);
         }
-    }
-
-    .checkboxWrapper {
-        position: absolute;
-        left: 10px;
-        top: 10px;
-        z-index: 20;
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        color: var(--icon-redesigned);
-    }
-
-    .check {
-        color: var(--accent-redesigned);
     }
 
     .content {

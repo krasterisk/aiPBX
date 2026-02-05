@@ -3,6 +3,12 @@
 .Combobox {
     position: relative;
     width: 100%;
+    z-index: auto; // Создаем отдельный stacking context
+
+    // Когда открыт, повышаем z-index всего компонента
+    &.open {
+        z-index: 10000;
+    }
 }
 
 .label {
@@ -35,7 +41,7 @@
 
     &:hover:not(.disabled) {
         border-color: rgba(94, 211, 243, 0.4);
-        background: var(--card-bg);
+        background: var(--bg-color);
     }
 
     &:focus-visible {
@@ -243,13 +249,10 @@
 // Dropdown menu
 .menu {
     @include custom-scrollbar;
-    position: absolute;
-    top: calc(100% + 4px);
-    left: 0;
-    right: 0;
+    // position, top, left handled by JS (floating-ui)
     max-height: 300px;
     overflow-y: auto;
-    z-index: 1000; // Высокий z-index для отображения поверх форм
+    // z-index handled inline
     padding: var(--space-2);
     background: var(--card-bg);
     border: 1px solid rgba(94, 211, 243, 0.2);

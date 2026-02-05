@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
+import { Input } from '@/shared/ui/redesign-v3/Input'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { ClientSelect, getUserAuthData, isUserAdmin } from '@/entities/User'
 import { Tool, ToolsSelect } from '@/entities/Tools'
@@ -55,13 +56,19 @@ export const MainInfoCard = memo((props: MainInfoCardProps) => {
                     />
                 )}
 
-                <Textarea
+                <Input
                     label={t('Наименование ассистента') ?? ''}
-                    onChange={onChangeTextHandler?.('name')}
+                    onChange={(value) => {
+                        const syntheticEvent = {
+                            target: { value }
+                        } as ChangeEvent<HTMLInputElement>
+                        onChangeTextHandler?.('name')(syntheticEvent)
+                    }}
                     data-testid="AssistantForm.name"
                     value={formFields?.name || ''}
                     placeholder={t('Название вашего ассистента') ?? ''}
                     required
+                    fullWidth
                 />
 
                 <ModelSelect

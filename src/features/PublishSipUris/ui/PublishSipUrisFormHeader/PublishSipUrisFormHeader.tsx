@@ -14,6 +14,7 @@ interface PublishSipUrisFormHeaderProps {
     isEdit?: boolean
     isLoading?: boolean
     variant?: CardVariant | 'diviner-top' | 'diviner-bottom'
+    onDelete?: () => void
     assistantName?: string
 }
 
@@ -25,7 +26,8 @@ export const PublishSipUrisFormHeader = memo((props: PublishSipUrisFormHeaderPro
         isEdit,
         isLoading,
         variant,
-        assistantName
+        assistantName,
+        onDelete
     } = props
     const { t } = useTranslation('publish-sip')
 
@@ -51,6 +53,16 @@ export const PublishSipUrisFormHeader = memo((props: PublishSipUrisFormHeaderPro
             )}
 
             <HStack gap="16" className={cls.actions}>
+                {isEdit && onDelete && (
+                    <Button
+                        variant="clear"
+                        color="error" // Use error color if supported by Button
+                        onClick={onDelete}
+                        disabled={isLoading}
+                    >
+                        {t('Удалить')}
+                    </Button>
+                )}
                 <Button
                     variant="clear"
                     onClick={onClose}

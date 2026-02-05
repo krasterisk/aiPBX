@@ -44,6 +44,7 @@ export const TelephonySipCard = memo((props: TelephonySipCardProps) => {
         <Card
             padding={isMobile ? '16' : '24'}
             max
+            variant="outlined"
             className={classNames(cls.TelephonySipCard, {}, [className])}
         >
             <VStack gap="32" max align="start">

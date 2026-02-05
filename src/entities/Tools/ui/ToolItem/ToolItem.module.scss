@@ -10,10 +10,6 @@
             background: rgba(94, 211, 243, 0.25);
         }
 
-        .uncheck {
-            opacity: 1;
-        }
-
         .arrowIcon {
             transform: translateX(4px);
             color: var(--accent-redesigned);
@@ -30,19 +26,6 @@
     z-index: 10;
     width: 100%;
     padding: var(--card-padding-md);
-}
-
-.checkContainer {
-    @include checkbox-container;
-}
-
-.uncheck {
-    opacity: 0.3;
-    transition: var(--transition-fast);
-}
-
-.check {
-    @include checkbox-visible;
 }
 
 .avatar {

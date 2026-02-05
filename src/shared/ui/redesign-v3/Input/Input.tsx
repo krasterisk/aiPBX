@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 import { classNames, Mods } from '@/shared/lib/classNames/classNames'
 import cls from './Input.module.scss'
-import { HStack } from '../../redesigned/Stack'
+import { VStack } from '../../redesigned/Stack'
 import { Text } from '../../redesigned/Text'
 
 type HTMLInputProps = Omit<
@@ -106,13 +106,13 @@ export const Input = memo((props: InputProps) => {
 
     if (label) {
         return (
-            <HStack max gap="8" align="start">
+            <VStack max gap="8" align="start">
                 <Text text={label} />
                 <div className={cls.inputContainer}>
                     {input}
                     {error && <Text text={error} variant="error" size="s" className={cls.errorText} />}
                 </div>
-            </HStack>
+            </VStack>
         )
     }
 

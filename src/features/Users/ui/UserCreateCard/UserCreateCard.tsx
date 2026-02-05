@@ -120,10 +120,10 @@ export const UserCreateCard = memo((props: UserCreateCardProps) => {
     }
   }, [formFields])
 
-  const createChangeRolesHandler = (field: keyof User) => (event: any, value: UserRoles) => {
+  const createChangeRolesHandler = (field: keyof User) => (event: any, value: UserRolesValues) => {
     setFormFields({
       ...formFields,
-      [field]: [value]
+      [field]: [{ value, description: '' }]
     })
   }
 
@@ -222,7 +222,7 @@ export const UserCreateCard = memo((props: UserCreateCardProps) => {
                 label={t('Уровень доступа') || ''}
                 data-testid={'UserCard.RoleSelect'}
                 onChange={createChangeRolesHandler('roles')}
-                value={formFields.roles?.[0]}
+                value={formFields.roles?.[0]?.value}
               />
             </>
           }

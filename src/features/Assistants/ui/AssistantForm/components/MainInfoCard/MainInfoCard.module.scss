@@ -4,6 +4,9 @@
     @include glass-card-tertiary;
     padding: var(--card-padding-md);
     transition: var(--transition-normal);
+    position: relative;
+    z-index: 1; // Базовый z-index для карточки
+    isolation: auto; // Не изолируем stacking context
 
     &:hover {
         border-color: rgba(94, 211, 243, 0.2);

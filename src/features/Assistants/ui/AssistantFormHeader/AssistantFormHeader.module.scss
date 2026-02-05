@@ -1,0 +1,39 @@
+@import '@/app/styles/variables/mixins';
+
+.AssistantFormHeader {
+    padding: var(--card-padding-md);
+    background: var(--card-bg);
+    border: 1px solid var(--divider-solid);
+    border-radius: var(--radius-lg);
+    transition: var(--transition-normal);
+
+    &:hover {
+        border-color: rgba(94, 211, 243, 0.2);
+        box-shadow: var(--shadow-sm);
+    }
+
+    @include mobile {
+        padding: var(--space-4);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-4);
+    }
+}
+
+.bottom {
+    margin-top: var(--space-4);
+    border-top: 1px solid var(--divider-solid);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.actions {
+    @include mobile {
+        width: 100%;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+}
+
+.saveButton {
+    border: 1px solid var(--accent-redesigned);
+}

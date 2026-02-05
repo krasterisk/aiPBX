@@ -5,13 +5,12 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { useTranslation } from 'react-i18next'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
-import { Check } from '@/shared/ui/mui/Check'
 import { PbxServer } from '../../model/types/pbxServers'
 import { getRoutePbxServerEdit } from '@/shared/const/router'
 import { ContentView } from '../../../Content'
 import { useNavigate } from 'react-router-dom'
 import { usePbxServerStatus } from '../../api/pbxServersApi'
-import { Server, MapPin, Globe, Terminal, Activity, Info } from 'lucide-react'
+import { Server, Globe, Activity, Info } from 'lucide-react'
 import { Button } from '@/shared/ui/redesigned/Button'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import { toast } from 'react-toastify'
@@ -21,8 +20,6 @@ interface PbxServerItemProps {
   pbxServer: PbxServer
   onEdit?: (id: string) => void
   target?: HTMLAttributeAnchorTarget
-  checkedItems?: string[]
-  onChangeChecked?: (event: React.ChangeEvent<HTMLInputElement>) => void
   view?: ContentView
 }
 
@@ -30,8 +27,6 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
   const {
     className,
     pbxServer,
-    checkedItems,
-    onChangeChecked,
     view = 'BIG',
   } = props
 
@@ -54,10 +49,6 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
     navigate(getRoutePbxServerEdit(pbxServer.id || ''))
   }, [navigate, pbxServer.id])
 
-  const onCheckClick = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation()
-  }, [])
-
   return (
     <Card
       padding={'0'}
@@ -68,20 +59,7 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
       onClick={onOpenEdit}
     >
       <VStack className={cls.content} max gap="12">
-        <HStack max justify="between" align="center">
-          <div onClick={onCheckClick} className={cls.checkContainer}>
-            <Check
-              key={String(pbxServer.id)}
-              className={classNames('', {
-                [cls.uncheck]: !checkedItems?.includes(String(pbxServer.id)),
-                [cls.check]: checkedItems?.includes(String(pbxServer.id))
-              }, [])}
-              value={String(pbxServer.id)}
-              size={'small'}
-              checked={checkedItems?.includes(String(pbxServer.id))}
-              onChange={onChangeChecked}
-            />
-          </div>
+        <HStack max justify="end" align="center">
           <HStack gap="8">
             {pbxServer.cloudPbx && (
               <div className={cls.chip}>

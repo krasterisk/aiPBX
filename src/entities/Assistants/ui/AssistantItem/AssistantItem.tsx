@@ -21,8 +21,6 @@ interface AssistantItemProps {
     onEdit?: (id: string) => void
     view?: ContentView
     target?: HTMLAttributeAnchorTarget
-    checkedItems?: string[]
-    onChangeChecked?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export const AssistantItem = memo((props: AssistantItemProps) => {
@@ -30,8 +28,6 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
         className,
         assistant,
         view = 'SMALL',
-        checkedItems,
-        onChangeChecked,
     } = props
 
     const { t } = useTranslation('assistants')
@@ -49,10 +45,6 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
         navigate(getRouteAssistantEdit(assistant.id || ''))
     }, [assistant.id, navigate])
 
-    const onCheckClick = useCallback((e: React.MouseEvent) => {
-        e.stopPropagation()
-    }, [])
-
     return (
         <Card
             padding={'0'}
@@ -62,20 +54,6 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
             className={classNames(cls.AssistantItem, {}, [className, cls[view]])}
             onClick={onOpenEdit}
         >
-            <div onClick={onCheckClick} className={cls.checkboxWrapper}>
-                <Check
-                    key={String(assistant.id)}
-                    className={classNames('', {
-                        [cls.uncheck]: !checkedItems?.includes(String(assistant.id)),
-                        [cls.check]: checkedItems?.includes(String(assistant.id))
-                    }, [])}
-                    value={String(assistant.id)}
-                    size={'small'}
-                    checked={checkedItems?.includes(String(assistant.id))}
-                    onChange={onChangeChecked}
-                />
-            </div>
-
             <VStack className={cls.content} max>
                 <HStack gap={'16'} justify={'between'} max align="start">
                     <HStack gap={'16'} max>
@@ -86,20 +64,6 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
                             <Text title={assistant.name} size={'m'} bold className={cls.title} />
                             <Text text={assistant.model || 'gpt-4o'} size="xs" variant="accent" />
                         </VStack>
-                    </HStack>
-                    <HStack gap="8">
-                        {assistant.tools && assistant.tools.length > 0 && (
-                            <div className={cls.chip}>
-                                <Wrench size={12} className={cls.chipIcon} />
-                                <Text text={String(assistant.tools.length)} size="xs" bold />
-                            </div>
-                        )}
-                        {assistant.voice && (
-                            <div className={cls.chip}>
-                                <Mic size={12} className={cls.chipIcon} />
-                                <Text text={assistant.voice} size="xs" bold />
-                            </div>
-                        )}
                     </HStack>
                 </HStack>
 
@@ -112,7 +76,7 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
                         </div>
                         <VStack>
                             <Text text={t('Модель')} variant="accent" size="xs" />
-                            <Text text={assistant.model || 'OpenAI gpt-4o'} className={cls.truncatedText} />
+                            <Text text={assistant.model || ''} className={cls.truncatedText} />
                         </VStack>
                     </HStack>
 
@@ -123,16 +87,6 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
                         <VStack>
                             <Text text={t('Голос')} variant="accent" size="xs" />
                             <Text text={assistant.voice || t('По умолчанию')} className={cls.truncatedText} />
-                        </VStack>
-                    </HStack>
-
-                    <HStack gap="12" align="center">
-                        <div className={cls.detailIcon}>
-                            <Terminal size={14} />
-                        </div>
-                        <VStack>
-                            <Text text={t('Unique ID')} variant="accent" size="xs" />
-                            <Text text={assistant.uniqueId || '-'} className={cls.truncatedText} />
                         </VStack>
                     </HStack>
 
@@ -155,13 +109,13 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
 
                 <HStack className={cls.footer} justify={'end'} max align="center">
                     <Button
-                        variant={'outline'}
+                        variant={'clear'}
                         onClick={onCopy}
                         addonLeft={<ContentCopyIcon sx={{ fontSize: 18 }} />}
                         className={cls.copyBtn}
-                        size={'m'}
+                        size={'s'}
                     >
-                        {t('Copy UniqueId')}
+                        {t('Скопировать ID')}
                     </Button>
                 </HStack>
             </VStack>

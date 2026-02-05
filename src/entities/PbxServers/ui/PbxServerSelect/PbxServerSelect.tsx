@@ -2,7 +2,6 @@ import { memo, useMemo } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { PbxServerOptions } from '../../model/types/pbxServers'
 import { usePbxServersAll, usePbxServersCloud, usePbxServersCloudAndUser } from '../../api/pbxServersApi'
-import { TextField } from '@mui/material'
 
 interface PbxServerSelectProps {
   label?: string
@@ -37,41 +36,28 @@ export const PbxServerSelect = memo((props: PbxServerSelectProps) => {
     return pbxServersAll
   }, [fetchType, pbxServersAll, pbxServersCloud, pbxServersCloudAndUser])
 
-  const onChangeHandler = (event: any, newValue: PbxServerOptions | null) => {
-    onChangePbxServer?.(event, newValue)
+  const onChangeHandler = (event: any, newValue: PbxServerOptions | PbxServerOptions[] | null) => {
+    if (!Array.isArray(newValue)) {
+      onChangePbxServer?.(event, newValue)
+    }
   }
 
   const options = useMemo(() => {
     if (!PbxServers) return []
-    return [...PbxServers].sort((a, b) => (a.location || '').localeCompare(b.location || ''))
+    return [...PbxServers]
+      .filter(s => s.id && s.name)
+      .sort((a, b) => (a.location || '').localeCompare(b.location || '')) as PbxServerOptions[]
   }, [PbxServers])
 
   return (
     <Combobox
-      id="PbxServerSelectBox"
       label={label}
-      autoComplete
       options={options}
       value={value || null}
-      groupBy={(option) => option.location || ''}
-      isOptionEqualToValue={(option, value) => value?.id !== undefined && String(option.id) === String(value.id)}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-          slotProps={{
-            htmlInput: {
-              ...params.inputProps,
-              readOnly: true // Disable keyboard on mobile
-            }
-          }}
-        />
-      )}
-      renderOption={(props, option) => (
-        <li {...props}>{option.name}</li>
-      )}
       onChange={onChangeHandler}
-      getOptionLabel={(option) => option.name}
+      className={className}
+      getOptionLabel={(option: PbxServerOptions) => option.name || ''}
+      isOptionEqualToValue={(option: PbxServerOptions, value: PbxServerOptions) => option.id === value.id}
       {...otherProps}
     />
   )

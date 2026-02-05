@@ -2,17 +2,20 @@ import { useSelector } from 'react-redux'
 import { useCallback } from 'react'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { publishSipUrisPageActions } from '../slices/publishSipUrisPageSlice'
-import { getPublishSipUrisPageSearch } from '../selectors/publishSipUrisPageSelectors'
+import { getPublishSipUrisPageSearch, getPublishSipUrisPageClientId } from '../selectors/publishSipUrisPageSelectors'
 import { useAssistantsAll } from '@/entities/Assistants'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 
 export const usePublishSipUrisFilters = () => {
     const dispatch = useAppDispatch()
     const search = useSelector(getPublishSipUrisPageSearch)
+    const clientId = useSelector(getPublishSipUrisPageClientId)
     const userData = useSelector(getUserAuthData)
     const isAdmin = useSelector(isUserAdmin)
 
-    const { data: assistants = [], isLoading, isError, error, refetch } = useAssistantsAll({})
+    const { data: assistants = [], isLoading, isError, error, refetch } = useAssistantsAll({
+        userId: clientId || undefined
+    })
 
     const filteredAssistants = isAdmin
         ? assistants
@@ -32,13 +35,19 @@ export const usePublishSipUrisFilters = () => {
         dispatch(publishSipUrisPageActions.setSearch(value))
     }, [dispatch])
 
+    const onClientIdChange = useCallback((value: string) => {
+        dispatch(publishSipUrisPageActions.setClientId(value))
+    }, [dispatch])
+
     return {
         isLoading,
         isError,
         error,
         data: assistantsWithSip,
         search,
+        clientId,
         onSearchChange,
+        onClientIdChange,
         onRefetch: refetch
     }
 }

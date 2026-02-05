@@ -16,19 +16,53 @@
     --save-redesigned: #62de85;
     --icon-redesigned: #5ed3f3;
     --accent-redesigned: #00c8ff;
+    --accent-dark: #009ec9;
+
+    // Glassmorphism overrides for Light Theme using palette
+    // Using --light-bg-redesigned (#e2eef1) as base for glass surfaces
+    --glass-bg-primary: rgba(226, 238, 241, 0.7); // #e2eef1 with opacity
+    --glass-bg-secondary: rgba(226, 238, 241, 0.5);
+    --glass-bg-tertiary: rgba(226, 238, 241, 0.3);
+
+    // Using --hint-redesigned (#adbcc0) for borders
+    --glass-border-primary: 1px solid rgba(173, 188, 192, 0.5);
+    --glass-border-secondary: 1px solid rgba(173, 188, 192, 0.3);
+    // Using --accent-redesigned (#00c8ff) for accent borders
+    --glass-border-subtle: 1px solid rgba(173, 188, 192, 0.2);
+    --glass-border-accent: 1px solid rgba(94, 211, 243, 0.2);
+    --glass-overlay-light: rgba(226, 238, 241, 0.2);
+    --glass-overlay-medium: rgba(226, 238, 241, 0.5);
+    --glass-overlay-dark: rgba(20, 28, 31, 0.05); // using --text-redesigned tone
+    --glass-overlay-darker: rgba(20, 28, 31, 0.1);
+
+    // Button overrides using palette
+    --button-primary-bg: var(--accent-redesigned); // Primary buttons should match accent
+    --button-primary-border: var(--accent-redesigned);
+    --button-primary-hover-bg: var(--accent-dark);
+
+    --button-outline-bg: transparent;
+    --button-outline-border: var(--hint-redesigned);
+    // Hover uses light bg
+    --button-outline-hover-bg: rgba(226, 238, 241, 0.8);
+
+    // Status colors (can inherit or use palette if close)
+    --status-success: var(--save-redesigned);
+    --status-success-bg: rgba(98, 222, 133, 0.1);
+    --status-error: var(--cancel-redesigned);
+    --status-error-bg: rgba(255, 119, 119, 0.1);
 
     // skeleton
     --skeleton-color: #807d7d;
     --skeleton-shadow: #181717;
 
     // Code
-    --code-bg: #fff;
+    --code-bg: var(--bg-redesigned);
 
     // card
-    --card-bg: #fff;
+    --card-bg: var(--bg-redesigned);
 
     // listBox
-    --listbox-bg: #fff;
+    --listbox-bg: var(--bg-redesigned);
 
     // signup logo
     --signup-logo: url('@/shared/assets/icons/signup.png');

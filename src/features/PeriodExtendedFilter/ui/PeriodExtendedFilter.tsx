@@ -57,6 +57,7 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
                 </HStack>
                 <DateSelector
                     label={t('Дата с')}
+                    className={cls.fullWidth}
                     onChange={(newValue: any) => {
                         const formattedDate = newValue && dayjs(newValue).isValid() ? dayjs(newValue).format('YYYY-MM-DD') : ''
                         onChangeStartDate?.(formattedDate)
@@ -67,6 +68,7 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
 
                 <DateSelector
                     label={t('Дата по')}
+                    className={cls.fullWidth}
                     onChange={(newValue: any) => {
                         const formattedDate = newValue && dayjs(newValue).isValid() ? dayjs(newValue).format('YYYY-MM-DD') : ''
                         onChangeEndDate?.(formattedDate)
