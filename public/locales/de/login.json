@@ -43,5 +43,6 @@
   "Некорректные данные": "Ungültige Daten",
   "Не пришло письмо?": "Keine E-Mail erhalten?",
   "Повторить": "Erneut senden",
-  "Activation code is wrong": "Der Code ist falsch!"
+  "Activation code is wrong": "Der Code ist falsch!",
+  "example@mail.com": "example@mail.com"
 }

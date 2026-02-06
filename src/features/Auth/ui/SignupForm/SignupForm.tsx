@@ -13,162 +13,176 @@ import TelegramIcon from '@mui/icons-material/Telegram'
 import { useSignupData } from '../../lib/hooks/useSignupData'
 
 interface SignupFormProps {
-  className?: string
-
+    className?: string
 }
 
 export const SignupForm = memo((props: SignupFormProps) => {
-  const {
-    className
-  } = props
+    const { className } = props
+    const { t } = useTranslation('login')
 
-  const { t } = useTranslation('login')
+    const {
+        email,
+        resendTimer,
+        activationSignupCode,
+        isSignupLoading,
+        isGoogleLoading,
+        isTelegramLoading,
+        isSignupActivateLoading,
+        isSignupActivation,
+        onLogin,
+        onChangeActivationCode,
+        onSignupActivateClick,
+        onTelegramSignupClick,
+        onSignupClick,
+        onChangeEmail,
+        onGoogleSignupClick,
+    } = useSignupData()
 
-  const {
-    email,
-    resendTimer,
-    activationSignupCode,
-    isSignupLoading,
-    isGoogleLoading,
-    isTelegramLoading,
-    isSignupActivateLoading,
-    isSignupActivation,
-    onLogin,
-    onChangeActivationCode,
-    onSignupActivateClick,
-    onTelegramSignupClick,
-    onSignupClick,
-    onChangeEmail,
-    onGoogleSignupClick
-  } = useSignupData()
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    if (isSignupActivation) {
-      onSignupActivateClick()
-    } else {
-      onSignupClick()
+        if (isSignupActivation) {
+            onSignupActivateClick()
+        } else {
+            onSignupClick()
+        }
     }
-  }
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault()
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault()
 
-      if (isSignupActivation) {
-        onSignupActivateClick()
-      } else {
-        onSignupClick()
-      }
+            if (isSignupActivation) {
+                onSignupActivateClick()
+            } else {
+                onSignupClick()
+            }
+        }
     }
-  }
 
-  return (
+    const isLoading = isSignupLoading || isGoogleLoading || isTelegramLoading || isSignupActivateLoading
+
+    return (
         <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
-            <VStack max gap={'16'} className={classNames(cls.SignupForm, {}, [className])}>
-                <VStack gap={'4'} justify={'center'} align={'center'} max>
-                    <Text title={t('Регистрация в AI PBX')}/>
-                    <Text text={t('Голосовые ассистенты для бизнеса')}/>
+            <VStack max gap="24" className={classNames(cls.SignupForm, {}, [className])}>
+                <VStack gap="4" justify="center" align="center" max>
+                    <Text
+                        title={t('Регистрация в AI PBX')}
+                        size="m"
+                        align="center"
+                    />
+                    <Text
+                        text={t('Голосовые ассистенты для бизнеса')}
+                        size="s"
+                        align="center"
+                    />
                 </VStack>
-                {(isSignupLoading || isGoogleLoading || isTelegramLoading || isSignupActivateLoading) &&
-                    <HStack max justify={'center'}>
-                        <Loader className={cls.signupLoader}/>
+
+                {isLoading && (
+                    <HStack max justify="center" className={cls.loaderWrapper}>
+                        <Loader className={cls.signupLoader} />
                     </HStack>
-                }
-                <Textarea
-                    type={'email'}
-                    label={t('Электронная почта') ?? ''}
-                    onChange={onChangeEmail}
-                    autoComplete={'email'}
-                    value={email}
-                    fullWidth
-                    required
-                />
-                {isSignupActivation
-                  ? <VStack max>
-                        <Text
-                            text={t('Введите код активации из почты') + ':'}
-                            bold
-                        />
-                        <Textarea
-                            type="text"
-                            className={cls.input}
-                            placeholder={t('Введите код') ?? ''}
-                            onChange={onChangeActivationCode}
-                            value={activationSignupCode}
-                            fullWidth
-                            required
-                        />
-                        <Button
-                            variant={'filled'}
-                            fullWidth
-                            className={cls.signupBtn}
-                            onClick={onSignupActivateClick}
-                            disabled={isSignupActivateLoading}
-                        >
-                            {t('Вход')}
-                        </Button>
-                        <HStack
-                            max
-                            justify={'center'}
-                            align={'center'}
-                        >
-                            <Text text={t('Не пришло письмо?')}/>
+                )}
+
+                <VStack max gap="16">
+                    <Textarea
+                        type="email"
+                        label={t('Электронная почта') ?? ''}
+                        placeholder={t('example@mail.com') ?? ''}
+                        onChange={onChangeEmail}
+                        autoComplete="email"
+                        value={email}
+                        fullWidth
+                        disabled={isLoading}
+                        required
+                    />
+
+                    {isSignupActivation ? (
+                        <VStack max gap="16">
+                            <Textarea
+                                type="text"
+                                label={t('Введите код активации из почты') ?? ''}
+                                placeholder={t('Введите код') ?? ''}
+                                onChange={onChangeActivationCode}
+                                value={activationSignupCode}
+                                fullWidth
+                                autoFocus
+                                disabled={isLoading}
+                                required
+                            />
                             <Button
-                                variant={'clear'}
-                                className={cls.linkButton}
-                                onClick={onSignupClick}
-                                disabled={resendTimer > 0}
+                                variant="filled"
+                                fullWidth
+                                onClick={onSignupActivateClick}
+                                disabled={isLoading}
+                                className={cls.submitBtn}
                             >
-                                {resendTimer > 0 ? `${t('Повторить')} (${resendTimer})` : t('Повторить')}
+                                {t('Вход')}
                             </Button>
-                        </HStack>
-                    </VStack>
-                  : <Button
-                        variant={'filled'}
-                        fullWidth
-                        className={cls.signupBtn}
-                        onClick={onSignupClick}
-                        disabled={isSignupLoading}
-                    >
-                        {t('Регистрация')}
-                    </Button>
-                }
-                <Divider>{t('или')}</Divider>
-                <VStack gap={'0'} max>
+
+                            <HStack max justify="center" align="center" gap="8">
+                                <Text text={t('Не пришло письмо?')} size="s" />
+                                <Button
+                                    variant="clear"
+                                    onClick={onSignupClick}
+                                    disabled={resendTimer > 0 || isLoading}
+                                    size="s"
+                                >
+                                    {resendTimer > 0
+                                        ? `${t('Повторить')} (${resendTimer})`
+                                        : t('Повторить')}
+                                </Button>
+                            </HStack>
+                        </VStack>
+                    ) : (
+                        <Button
+                            variant="filled"
+                            fullWidth
+                            onClick={onSignupClick}
+                            disabled={isLoading || !email}
+                            className={cls.submitBtn}
+                        >
+                            {t('Регистрация')}
+                        </Button>
+                    )}
+                </VStack>
+
+                <Divider className={cls.divider}>{t('или')}</Divider>
+
+                <VStack gap="12" max>
                     <Button
-                        variant={'filled'}
+                        variant="filled"
                         fullWidth
-                        className={cls.signupBtn}
                         onClick={onGoogleSignupClick}
-                        disabled={isSignupLoading}
-                        addonLeft={<GoogleIcon/>}
+                        disabled={isLoading}
+                        addonLeft={<GoogleIcon className={cls.socialIcon} />}
+                        className={cls.socialBtn}
                     >
                         {t('Продолжить с Google')}
                     </Button>
                     <Button
-                        variant={'filled'}
+                        variant="filled"
                         fullWidth
-                        className={cls.signupBtn}
                         onClick={onTelegramSignupClick}
-                        disabled={isSignupLoading}
-                        addonLeft={<TelegramIcon/>}
+                        disabled={isLoading}
+                        addonLeft={<TelegramIcon className={cls.socialIcon} />}
+                        className={cls.socialBtn}
                     >
                         {t('Продолжить с Telegram')}
                     </Button>
                 </VStack>
-                <HStack max justify={'center'}>
-                    <Text text={t('Уже есть аккаунт?')}/>
+
+                <HStack max justify="center" align="center" gap="8">
+                    <Text text={t('Уже есть аккаунт?')} />
                     <Button
-                        variant={'clear'}
-                        className={cls.linkButton}
+                        variant="clear"
                         onClick={onLogin}
+                        className={cls.loginLink}
                     >
                         {t('Вход')}
                     </Button>
                 </HStack>
             </VStack>
         </form>
-  )
+    )
 })

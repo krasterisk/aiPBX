@@ -1,48 +1,59 @@
-.loginLoader {
+.loaderWrapper {
     position: absolute;
-    z-index: var(--alert-z-index);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: var(--z-notification);
 }
 
-.logoIcon {
-    //position: absolute;
-    //top: 16px;
-    //left: 16px;
-    width: 200px;
-    height: 50px;
-
+.loginLoader {
+    color: var(--accent-redesigned);
 }
 
-.visibilityIcon {
-    color: var(--icon-color);
-    cursor: pointer;
+.submitBtn {
+    margin-top: 8px;
+    height: 48px;
+    font-weight: 600;
+}
+
+.divider {
+    margin: 8px 0;
+    color: var(--text-redesigned);
+    opacity: 0.5;
+}
+
+.socialBtn {
+    height: 48px;
+    background: var(--glass-bg-secondary) !important;
+    border: var(--glass-border-primary) !important;
+    transition: var(--transition-normal);
 
     &:hover {
-        color: var(--primary-color);
+        background: var(--glass-bg-primary) !important;
+        transform: var(--hover-lift-sm);
     }
 }
 
-.linkButton {
+.socialIcon {
+    width: 20px;
+    height: 20px;
+}
+
+.signupLink {
     padding: 0;
+    font-weight: 600;
+    color: var(--accent-redesigned) !important;
 
     &:hover {
-        background-color: transparent;
-        color: var(--primary-color);
+        text-decoration: underline;
     }
 }
 
-.loginBtn {
-    display: flex;
-    justify-content: center;
-    margin-top: 16px;
-}
-
-// Адаптивность для мобильных устройств
+// Адаптивность
 @media (max-width: 768px) {
-    .LoginContainer {
-        padding: 16px;
-    }
 
-    .loginCard {
-        max-width: 100%;
+    .submitBtn,
+    .socialBtn {
+        height: 44px;
     }
 }

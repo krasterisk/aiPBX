@@ -1,25 +1,120 @@
 {
-  "Главная": "Home",
-  "Real-time OpenAI Events for": "Real-time OpenAI Events for",
-  "Новое событие": "New Event",
-  "Текущие звонки": "Current Calls",
-  "Главная страница": "Main Page",
-  "AI PBX - будущее бизнес-телефонии": "AI PBX - The Future of Business Telephony",
-  "Создавайте голосовых ассистентов за минуты": "Create Voice Assistants in Minutes",
-  "и автоматизируйте коммуникации": "and Automate Communications",
-  "Войти": "Login",
-  "Смотреть видео": "Watch Video",
-  "Подключение к данным": "Data Integration",
-  "CRM, ERP, базы клиентов - мгновенный доступ к информации": "CRM, ERP, customer databases - instant access to information.",
-  "Вызов функций - заказы, бронирования, платежи, статусы": "Tools calls - orders, bookings, payments, status updates.",
-  "Многоязычие, локальные номера, аналитика и отчёты": "Multilingual support, local numbers, analytics, and reports.",
-  "Масштаб и география": "Scale and Geography",
-  "Автоматизация действий": "Action Automation",
-  "Омниканальность": "Omnichannel",
-  "AI PBX заменяет колл-центр и поддержку - звонки, заказы, интеграция с CRM и мессенджерами, аналитика и масштабируемость": "AI PBX replaces call centers and support - calls, orders, CRM and messenger integration, analytics, and scalability",
-  "Нейро-диалоги": "Neuro Dialogues",
-  "LLM-модель понимает намерения, контекст и действует как живой оператор": "LLM model understands intentions, context, and acts like a live operator",
-  "Голос, WhatsApp, Telegram, веб-чат - единый сценарий для всех каналов": "Voice, WhatsApp, Telegram, web chat - one scenario for all channels",
-  "Замена колл-центра": "Call Center Replacement",
-  "Очереди, приоритеты, колл-бек, перевод на оператора": "Queues, priorities, callbacks, transfer to a live agent"
+  "Hero": {
+    "Title": "AI PBX: The Future of Your Telephony Starts Here",
+    "SubTitle": "Combine the power of generative AI with the reliability of classic communications. Automate calls, support, and sales with natural voice dialogues.",
+    "CTA_Start": "Start Now",
+    "CTA_Demo": "Request Demo"
+  },
+  "Problem": {
+    "Title": "Why Traditional Call Centers No Longer Work?",
+    "Expensive": {
+      "Title": "Expensive and Hard",
+      "Desc": "Hiring and training operators takes weeks, and costs grow with every new employee."
+    },
+    "HumanFactor": {
+      "Title": "Human Factor",
+      "Desc": "Errors, fatigue, and inconsistent service quality lead to loss of customer loyalty."
+    },
+    "OldIVR": {
+      "Title": "Outdated IVR",
+      "Desc": "Customers hate \"press 1, press 2\". Modern consumers want live dialogue."
+    }
+  },
+  "Solution": {
+    "Title": "Smart Platform for Automated Communication",
+    "Desc": "AI PBX is not just a bot. It's a full-fledged voice assistant that understands context, remembers history, and is integrated into your business processes."
+  },
+  "HowItWorks": {
+    "Title": "How It Works",
+    "Step1": {
+      "Title": "Registration",
+      "Desc": "Create an account and get access to the dashboard in seconds."
+    },
+    "Step2": {
+      "Title": "Assistant Setup",
+      "Desc": "Define personality, knowledge base, and choose one of the premium voices."
+    },
+    "Step3": {
+      "Title": "Integration",
+      "Desc": "Set up Webhooks and MCP servers to interact with your data."
+    },
+    "Step4": {
+      "Title": "Telephony",
+      "Desc": "Connect your Asterisk or get a ready-made SIP URI for inbound and outbound calls."
+    },
+    "Step5": {
+      "Title": "Launch",
+      "Desc": "Accept calls with full analytics and real-time quality control."
+    }
+  },
+  "Features": {
+    "Title": "Key Capabilities",
+    "NLU": {
+      "Title": "Language Understanding",
+      "Desc": "Dialogues based on modern LLMs that are practically indistinguishable from human."
+    },
+    "ToolUse": {
+      "Title": "Functional Calls",
+      "Desc": "The assistant can check order status or record a client in CRM on its own."
+    },
+    "Analytics": {
+      "Title": "24/7 Analytics",
+      "Desc": "Instant transcription, sentiment analysis, and detailed reports for every call."
+    },
+    "WebRTC": {
+      "Title": "WebRTC Widgets",
+      "Desc": "Allow clients to call you directly from the browser in one click."
+    }
+  },
+  "Integrations": {
+    "Title": "Integrations and Flexibility",
+    "DevFriendly": {
+      "Title": "Developer-friendly",
+      "Desc": "Full control via API. Integration with any logic through functional calls."
+    },
+    "Asterisk": {
+      "Title": "Compatibility",
+      "Desc": "Works with Asterisk, FreePBX, and any other system using the SIP protocol."
+    }
+  },
+  "UseCases": {
+    "Title": "Use Cases",
+    "Support": {
+      "Title": "24/7 Support",
+      "Desc": "Reduce load on the front line and provide instant answers to questions."
+    },
+    "Sales": {
+      "Title": "Sales",
+      "Desc": "Automatic lead qualification and incoming request processing without pauses."
+    },
+    "Booking": {
+      "Title": "Service Booking",
+      "Desc": "Voice booking and visit reminders in automatic mode."
+    }
+  },
+  "Target": {
+    "Title": "Who AI PBX Is For",
+    "SMB": "Small Business",
+    "Enterprise": "Enterprise",
+    "Integrators": "Integrators"
+  },
+  "Security": {
+    "Title": "Security and Control",
+    "Transparency": {
+      "Title": "Transparency",
+      "Desc": "Full control over decision logic and dialogue history."
+    },
+    "Safety": {
+      "Title": "Data Protection",
+      "Desc": "All calls and data are protected by modern encryption standards."
+    }
+  },
+  "FinalCTA": {
+    "Title": "Ready to put your business on autopilot?",
+    "SubTitle": "Start call automation today and experience the power of voice AI.",
+    "Button": "Start Now"
+  },
+  "Footer": {
+    "Copyright": "© {{year}} AI PBX. All rights reserved."
+  }
 }

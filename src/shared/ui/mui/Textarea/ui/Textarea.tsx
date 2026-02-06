@@ -20,6 +20,9 @@ const areaStyles = {
     padding: '0 12px',
     transition: 'var(--transition-colors)',
     color: 'var(--icon-redesigned)', // Цвет для иконок (svg) по умолчанию
+    display: 'flex',
+    alignItems: 'center',
+    minHeight: '44px',
     '& fieldset': {
       border: '1px solid rgba(94, 211, 243, 0.2)',
       transition: 'var(--transition-colors)',
@@ -38,9 +41,14 @@ const areaStyles = {
         borderWidth: '1px !important',
       },
     },
+    '&.MuiInputBase-multiline': {
+      alignItems: 'flex-start',
+      padding: '12px',
+      minHeight: '80px',
+    },
   },
   '& .MuiInputBase-input': {
-    padding: '11px 0 !important',
+    padding: '0 !important',
     color: 'var(--text-redesigned)',
     fontSize: 'var(--font-size-m) !important',
     fontWeight: '500 !important',
@@ -51,6 +59,10 @@ const areaStyles = {
   },
   '& .MuiInputLabel-root': {
     color: 'var(--text-redesigned)',
+    transform: 'translate(14px, 12px) scale(1)', // Центрируем по вертикали для высоты 44px
+    '&.MuiInputLabel-shrink': {
+      transform: 'translate(14px, -9px) scale(0.75)', // Позиция при фокусе (сверху)
+    },
     '&.Mui-focused': {
       color: 'var(--accent-redesigned)',
     },

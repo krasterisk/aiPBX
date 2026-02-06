@@ -3,71 +3,76 @@ import { Page } from '@/widgets/Page'
 import cls from './MainPage.module.scss'
 import { useTranslation } from 'react-i18next'
 import {
-  Card,
-  CardContent,
-  CardHeader,
+  Container,
   Typography,
   Box,
-  Container,
   useMediaQuery
 } from '@mui/material'
 import { motion } from 'framer-motion'
 import {
-  BrainCircuit,
-  Headphones,
-  Zap,
-  Database,
+  Brain,
+  Wrench,
+  BarChart3,
   Globe,
-  Share2,
+  DollarSign,
+  UserX,
+  MessageSquareOff,
+  Phone,
+  Settings,
+  Link as LinkIcon,
+  Rocket,
+  Headphones,
+  LineChart,
+  Calendar,
+  ShieldCheck,
+  Eye,
+  ArrowRight,
   Sparkles,
-  LucideIcon
+  UserPlus
 } from 'lucide-react'
 import { LangSwitcher } from '@/entities/LangSwitcher'
 import { useNavigate } from 'react-router-dom'
-import { getRouteDashboard, getRouteLogin } from '@/shared/const/router'
+import { getRouteDashboard, getRouteSignup, getRouteLogin } from '@/shared/const/router'
 import { getUserAuthData } from '@/entities/User'
 import { useSelector } from 'react-redux'
+import { Button } from '@/shared/ui/redesign-v3/Button'
+import LogoIcon from '@/shared/assets/icons/aipbx_logo_v3.svg'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },
-  animate: { opacity: 1, y: 0 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
   transition: { duration: 0.6, ease: 'easeOut' }
 }
 
 interface FeatureCardProps {
-  icon: LucideIcon
+  icon: React.ElementType
   title: string
   desc: string
+  delay?: number
 }
 
-const FeatureCard: FC<FeatureCardProps> = ({ icon: Icon, title, desc }) => (
-    <motion.div {...fadeInUp}>
-        <Card
-            sx={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))',
-              borderRadius: 3,
-              border: '1px solid rgba(255,255,255,0.1)',
-              backdropFilter: 'blur(12px)',
-              boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
-              color: 'white'
-            }}
-        >
-            <CardHeader
-                avatar={<Icon size={28} />}
-                title={<Typography variant="h6">{title}</Typography>}
-            />
-            <CardContent>
-                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)' }}>
-                    {desc}
-                </Typography>
-            </CardContent>
-        </Card>
-    </motion.div>
+const FeatureCard: FC<FeatureCardProps> = ({ icon: Icon, title, desc, delay = 0 }) => (
+  <motion.div
+    variants={fadeInUp}
+    initial="initial"
+    whileInView="whileInView"
+    viewport={{ once: true }}
+    transition={{ ...fadeInUp.transition, delay }}
+  >
+    <div className={cls.card}>
+      <div className={cls.iconWrapper}>
+        <Icon size={28} />
+      </div>
+      <h3 className={cls.cardTitle}>{title}</h3>
+      <p className={cls.cardDesc}>{desc}</p>
+    </div>
+  </motion.div>
 )
 
 const MainPage: FC = memo(() => {
   const { t } = useTranslation('main')
-  const isMobile = useMediaQuery('(max-width:800px)')
+  const isMobile = useMediaQuery('(max-width:768px)')
   const navigate = useNavigate()
   const auth = useSelector(getUserAuthData)
 
@@ -77,153 +82,311 @@ const MainPage: FC = memo(() => {
     }
   }, [auth, navigate])
 
+  const onRegister = useCallback(() => {
+    navigate(getRouteSignup())
+  }, [navigate])
+
   const onLogin = useCallback(() => {
     navigate(getRouteLogin())
   }, [navigate])
 
   return (
-        <Page data-testid={'MainPage'} className={cls.MainPage}>
-            <Box
-                sx={{
-                  color: 'white',
-                  background: 'radial-gradient(circle at top, #1e293b, #0f172a)',
-                  minHeight: '100vh',
-                  width: '100%'
-                }}
-            >
-                <LangSwitcher short={isMobile} className={cls.lang} />
-                <Container maxWidth="lg" sx={{ py: 8, textAlign: 'center' }}>
-                    <motion.div {...fadeInUp}>
-                        <Typography
-                            variant="overline"
-                            display="block"
-                            gutterBottom
-                            sx={{
-                              fontSize: { xs: '0.8rem', sm: '0.9rem' }
-                            }}
-                        >
-                            <Sparkles size={isMobile ? 36 : 48} style={{ verticalAlign: 'middle' }} />{' '}
-                            {t('AI PBX - будущее бизнес-телефонии')}
-                        </Typography>
+    <Page data-testid={'MainPage'} className={cls.MainPage}>
+      <div className={cls.lang}>
+        <LangSwitcher short={isMobile} />
+      </div>
 
-                        <Typography
-                            component="h1"
-                            gutterBottom
-                            sx={{
-                              fontWeight: 700,
-                              wordBreak: 'break-word',
-                              whiteSpace: 'normal',
-                              fontSize: { xs: '1.8rem', sm: '2.4rem', md: '3rem' },
-                              lineHeight: 1.2
-                            }}
-                        >
-                            {t('Создавайте голосовых ассистентов за минуты')}{' '}
-                            <Box
-                                component="span"
-                                sx={{
-                                  background:
-                                        'linear-gradient(to right, #f0abfc, #c084fc, #22d3ee)',
-                                  WebkitBackgroundClip: 'text',
-                                  color: 'transparent',
-                                  display: 'inline'
-                                }}
-                            >
-                                {t('и автоматизируйте коммуникации')}
-                            </Box>
-                        </Typography>
-
-                        <Typography
-                            variant="h6"
-                            sx={{
-                              color: 'rgba(255,255,255,0.7)',
-                              maxWidth: '900px',
-                              mx: 'auto',
-                              wordBreak: 'break-word',
-                              fontSize: { xs: '1rem', sm: '1.25rem' },
-                              lineHeight: 1.4
-                            }}
-                        >
-                            {t(
-                              'AI PBX заменяет колл-центр и поддержку - звонки, заказы, интеграция с CRM и мессенджерами, аналитика и масштабируемость'
-                            )}
-                        </Typography>
-
-                        <Box
-                            sx={{
-                              mt: 4,
-                              display: 'flex',
-                              justifyContent: 'center',
-                              gap: 2,
-                              flexWrap: 'wrap'
-                            }}
-                        >
-                            {/* <Button */}
-                            {/*    variant="contained" */}
-                            {/*    color="primary" */}
-                            {/*    size="large" */}
-                            {/*    startIcon={<LogIn />} */}
-                            {/*    onClick={onLogin} */}
-                            {/* > */}
-                            {/*    {t('Войти')} */}
-                            {/* </Button> */}
-                        </Box>
-                    </motion.div>
-                </Container>
-
-                <Container maxWidth="lg" sx={{ py: 8 }}>
-                    <Box
-                        sx={{
-                          display: 'grid',
-                          gap: 3,
-                          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))'
-                        }}
-                    >
-                        <FeatureCard
-                            icon={BrainCircuit}
-                            title={t('Нейро-диалоги')}
-                            desc={t(
-                              'LLM-модель понимает намерения, контекст и действует как живой оператор'
-                            )}
-                        />
-                        <FeatureCard
-                            icon={Database}
-                            title={t('Подключение к данным')}
-                            desc={t(
-                              'CRM, ERP, базы клиентов - мгновенный доступ к информации'
-                            )}
-                        />
-                        <FeatureCard
-                            icon={Share2}
-                            title={t('Омниканальность')}
-                            desc={t(
-                              'Голос, WhatsApp, Telegram, веб-чат - единый сценарий для всех каналов'
-                            )}
-                        />
-                        <FeatureCard
-                            icon={Headphones}
-                            title={t('Замена колл-центра')}
-                            desc={t(
-                              'Очереди, приоритеты, колл-бек, перевод на оператора'
-                            )}
-                        />
-                        <FeatureCard
-                            icon={Zap}
-                            title={t('Автоматизация действий')}
-                            desc={t(
-                              'Вызов функций - заказы, бронирования, платежи, статусы'
-                            )}
-                        />
-                        <FeatureCard
-                            icon={Globe}
-                            title={t('Масштаб и география')}
-                            desc={t(
-                              'Многоязычие, локальные номера, аналитика и отчёты'
-                            )}
-                        />
-                    </Box>
-                </Container>
+      {/* Hero Section */}
+      <section className={`${cls.section} ${cls.hero}`}>
+        <div className={cls.glow} style={{ top: '-10%', left: '20%' }} />
+        <Container maxWidth="lg" className={cls.heroContent}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            className={cls.heroWrapper}
+          >
+            <Box sx={{ mb: 6, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <LogoIcon style={{ width: isMobile ? 100 : 120, height: 'auto' }} />
             </Box>
-        </Page>
+
+            <Typography
+              variant="h1"
+              className={cls.title}
+              align="center"
+              sx={{
+                fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.5rem' },
+                mb: 4
+              }}
+            >
+              {t('Hero.Title')}
+            </Typography>
+
+            <Typography className={cls.subtitle} align="center">
+              {t('Hero.SubTitle')}
+            </Typography>
+
+            <div className={cls.ctaGroup} style={{ marginTop: 'var(--space-4)' }}>
+              <Button
+                color="accent"
+                size="l"
+                onClick={onRegister}
+              >
+                {t('Hero.CTA_Start')}
+                <ArrowRight size={18} style={{ marginLeft: 8 }} />
+              </Button>
+            </div>
+          </motion.div>
+        </Container>
+      </section>
+
+      {/* Problem Section */}
+      <section className={cls.section}>
+        <Container maxWidth="lg">
+          <div className={cls.sectionHeader}>
+            <motion.h2 {...fadeInUp}>{t('Problem.Title')}</motion.h2>
+          </div>
+
+          <div className={cls.grid}>
+            <FeatureCard
+              icon={DollarSign}
+              title={t('Problem.Expensive.Title')}
+              desc={t('Problem.Expensive.Desc')}
+              delay={0.1}
+            />
+            <FeatureCard
+              icon={UserX}
+              title={t('Problem.HumanFactor.Title')}
+              desc={t('Problem.HumanFactor.Desc')}
+              delay={0.2}
+            />
+            <FeatureCard
+              icon={MessageSquareOff}
+              title={t('Problem.OldIVR.Title')}
+              desc={t('Problem.OldIVR.Desc')}
+              delay={0.3}
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* Solution Section */}
+      <section className={cls.section} style={{ background: 'rgba(255,255,255,0.02)' }}>
+        <Container maxWidth="lg">
+          <div className={cls.step}>
+            <motion.div className={cls.stepContent} {...fadeInUp}>
+              <h2 className={cls.solutionTitle}>
+                {t('Solution.Title')}
+              </h2>
+              <p className={cls.solutionDesc}>
+                {t('Solution.Desc')}
+              </p>
+            </motion.div>
+            <motion.div
+              className={cls.stepImage}
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              style={{ height: isMobile ? '300px' : '400px' }}
+            >
+              <img
+                src="/assets/hero-visual.png"
+                alt="AI PBX Visual"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }}
+              />
+            </motion.div>
+          </div>
+        </Container>
+      </section>
+
+      {/* How It Works */}
+      <section className={cls.section}>
+        <Container maxWidth="lg">
+          <div className={cls.sectionHeader}>
+            <motion.h2 {...fadeInUp}>{t('HowItWorks.Title')}</motion.h2>
+          </div>
+
+          <div className={cls.steps}>
+            {[1, 2, 3, 4, 5].map((step) => (
+              <div key={step} className={cls.step}>
+                <motion.div
+                  className={cls.stepContent}
+                  initial={{ opacity: 0, x: step % 2 === 0 ? 50 : -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <div className={cls.stepNumber}>0{step}</div>
+                  <h3 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '1rem' }}>
+                    {t(`HowItWorks.Step${step}.Title`)}
+                  </h3>
+                  <p style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.5)' }}>
+                    {t(`HowItWorks.Step${step}.Desc`)}
+                  </p>
+                </motion.div>
+                <motion.div
+                  className={cls.stepImage}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <Box sx={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden'
+                  }}>
+                    <img
+                      src={`/assets/how-it-works-${step}.png`}
+                      alt={String(t(`HowItWorks.Step${step}.Title`))}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }}
+                    />
+                  </Box>
+                </motion.div>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* Features Grid */}
+      <section className={cls.section} style={{ background: 'rgba(255,255,255,0.02)' }}>
+        <Container maxWidth="lg">
+          <div className={cls.sectionHeader}>
+            <motion.h2 {...fadeInUp}>{t('Features.Title')}</motion.h2>
+          </div>
+
+          <div className={cls.grid}>
+            <FeatureCard
+              icon={Brain}
+              title={t('Features.NLU.Title')}
+              desc={t('Features.NLU.Desc')}
+              delay={0.1}
+            />
+            <FeatureCard
+              icon={Wrench}
+              title={t('Features.ToolUse.Title')}
+              desc={t('Features.ToolUse.Desc')}
+              delay={0.2}
+            />
+            <FeatureCard
+              icon={BarChart3}
+              title={t('Features.Analytics.Title')}
+              desc={t('Features.Analytics.Desc')}
+              delay={0.3}
+            />
+            <FeatureCard
+              icon={Globe}
+              title={t('Features.WebRTC.Title')}
+              desc={t('Features.WebRTC.Desc')}
+              delay={0.4}
+            />
+            <FeatureCard
+              icon={Wrench}
+              title={t('Integrations.DevFriendly.Title')}
+              desc={t('Integrations.DevFriendly.Desc')}
+              delay={0.5}
+            />
+            <FeatureCard
+              icon={Phone}
+              title={t('Integrations.Asterisk.Title')}
+              desc={t('Integrations.Asterisk.Desc')}
+              delay={0.6}
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* Cases Section */}
+      <section className={cls.section}>
+        <Container maxWidth="lg">
+          <div className={cls.sectionHeader}>
+            <motion.h2 {...fadeInUp}>{t('UseCases.Title')}</motion.h2>
+          </div>
+
+          <div className={cls.grid}>
+            <div className={cls.card}>
+              <Headphones size={40} color="var(--accent-redesigned)" />
+              <h3 className={cls.cardTitle}>{t('UseCases.Support.Title')}</h3>
+              <p className={cls.cardDesc}>{t('UseCases.Support.Desc')}</p>
+            </div>
+            <div className={cls.card}>
+              <LineChart size={40} color="var(--accent-redesigned)" />
+              <h3 className={cls.cardTitle}>{t('UseCases.Sales.Title')}</h3>
+              <p className={cls.cardDesc}>{t('UseCases.Sales.Desc')}</p>
+            </div>
+            <div className={cls.card}>
+              <Calendar size={40} color="var(--accent-redesigned)" />
+              <h3 className={cls.cardTitle}>{t('UseCases.Booking.Title')}</h3>
+              <p className={cls.cardDesc}>{t('UseCases.Booking.Desc')}</p>
+            </div>
+          </div>
+
+          <div className={cls.tags}>
+            <div className={cls.tag}>{t('Target.SMB')}</div>
+            <div className={cls.tag}>{t('Target.Enterprise')}</div>
+            <div className={cls.tag}>{t('Target.Integrators')}</div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Security Section */}
+      <section className={cls.section}>
+        <Container maxWidth="lg">
+          <div className={cls.grid} style={{ gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)' }}>
+            <div className={cls.card}>
+              <Eye size={32} color="var(--accent-redesigned)" />
+              <h3 className={cls.cardTitle}>{t('Security.Transparency.Title')}</h3>
+              <p className={cls.cardDesc}>{t('Security.Transparency.Desc')}</p>
+            </div>
+            <div className={cls.card}>
+              <ShieldCheck size={32} color="var(--accent-redesigned)" />
+              <h3 className={cls.cardTitle}>{t('Security.Safety.Title')}</h3>
+              <p className={cls.cardDesc}>{t('Security.Safety.Desc')}</p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Final CTA */}
+      <section className={cls.section}>
+        <Container maxWidth="lg">
+          <motion.div
+            className={cls.finalCta}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+          >
+            <h2 style={{ fontSize: isMobile ? '2rem' : '3rem', fontWeight: 800, marginBottom: '1.5rem' }}>
+              {t('FinalCTA.Title')}
+            </h2>
+            <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.6)', marginBottom: '2.5rem' }}>
+              {t('FinalCTA.SubTitle')}
+            </p>
+            <Button
+              color="accent"
+              size="l"
+              onClick={onRegister}
+            >
+              {t('FinalCTA.Button')}
+              <ArrowRight size={18} style={{ marginLeft: 8 }} />
+            </Button>
+          </motion.div>
+        </Container>
+      </section>
+
+      <footer style={{ padding: '40px 0', borderTop: 'var(--glass-border-subtle)', textAlign: 'center', color: 'rgba(255,255,255,0.3)' }}>
+        <Container maxWidth="lg">
+          <Typography variant="body2">
+            {t('Footer.Copyright', { year: new Date().getFullYear() })}
+          </Typography>
+        </Container>
+      </footer>
+    </Page>
   )
 })
 

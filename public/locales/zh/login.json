@@ -43,5 +43,6 @@
   "Некорректные данные": "数据无效",
   "Не пришло письмо?": "没收到邮件？",
   "Повторить": "重发",
-  "Activation code is wrong": "代码错误！"
+  "Activation code is wrong": "代码错误！",
+  "example@mail.com": "example@mail.com"
 }
