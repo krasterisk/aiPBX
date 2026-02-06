@@ -31,6 +31,8 @@ export interface PbxServer {
   userId?: string
   cloudPbx?: boolean
   context?: string
+  moh?: string
+  recordFormat?: string
 }
 
 export interface PbxServerListProps {

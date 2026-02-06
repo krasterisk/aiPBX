@@ -167,9 +167,9 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
                                 />
                                 {section.subsections && (
                                     expandedSections.includes(section.id) ? (
-                                        <ChevronDown size={20} />
+                                        <ChevronDown size={20} className={cls.chevron} />
                                     ) : (
-                                        <ChevronRight size={20} />
+                                        <ChevronRight size={20} className={cls.chevron} />
                                     )
                                 )}
                             </ListItemButton>

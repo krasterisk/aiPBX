@@ -19,7 +19,7 @@ export const AppLogo = memo(({ className, size, width, height, variant = '1' }: 
 
   // Variant 3 (icon only) has 1:1 aspect ratio
   const isIconOnly = variant === '3'
-  const logoWidth = size ? (isIconOnly ? size * 2.4 : size * 2.4) : (width ?? 120)
+  const logoWidth = size ? (isIconOnly ? size : size * 2.4) : (width ?? (isIconOnly ? 50 : 100))
   const logoHeight = size ? size : (height ?? 50)
 
   // Choose SVG based on variant

@@ -6,10 +6,10 @@ import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { SimpleTreeView, TreeItem } from '@mui/x-tree-view'
 import { useMenubarItems } from '../../model/selectors/getMenubarItems'
 import { Drawer } from '@/shared/ui/mui/Drawer'
-import { AppLogo } from '@/shared/ui/redesigned/AppLogo'
 import { LangSwitcher } from '@/entities/LangSwitcher'
 import { ThemeSwitcher } from '@/entities/ThemeSwitcher'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import AppLogoV3 from '@/shared/assets/icons/aipbx_logo_v3.svg'
 
 interface MenubarItemProps {
     className?: string
@@ -26,7 +26,6 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
     } = props
 
     const { t } = useTranslation()
-    // const isAuth = useSelector(getUserAuthData)
     const menubarItemList = useMenubarItems()
 
     const renderNodes = (nodes: MenubarItemType[]) => (
@@ -56,6 +55,7 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
                 <AppLink
                     key={node.path}
                     to={node.path}
+                    className={cls.itemLink}
                 >
                     {content}
                 </AppLink>
@@ -72,15 +72,13 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
     if (isMobile) {
         return (
             <Drawer isOpen={openDrawer} onClose={onDrawerClose}>
-                <VStack max style={{ height: '100%' }}>
-                    <AppLogo
-                        size={60}
-                        variant="3"
-                        className={cls.appLogo}
-                    />
-                    <div className={cls.brandText}>AI PBX</div>
+                <VStack max gap="16">
+                    <VStack max align="center" gap="8" className={cls.appLogo}>
+                        <AppLogoV3 className={cls.logoIcon} />
+                        <span className={cls.brandText}>AI PBX</span>
+                    </VStack>
                     {tree}
-                    <HStack className={cls.switchers} justify="center" gap="16" wrap="wrap">
+                    <HStack className={cls.switchers} justify="between" gap="16" wrap="wrap">
                         <LangSwitcher short />
                         <ThemeSwitcher />
                     </HStack>

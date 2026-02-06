@@ -34,7 +34,7 @@
   "WSS или ARI URL должны быть заполнены": "WSS or ARI URL must be filled",
   "Создание сервера": "Server creation",
   "Редактирование сервера": "Server editing",
-  "Основные настройки": "Main settings",
+  "Информация": "Information",
   "Подключение и адреса": "Connectivity & addresses",
   "Адрес сервера (SIP)": "Server address (SIP)",
   "Пожалуйста введите название сервера": "Please enter server name",
@@ -45,5 +45,18 @@
   "Произошла ошибка при удалении": "An error occurred while deleting",
   "Введите название...": "Enter name...",
   "Где находится сервер?": "Where is the server located?",
-  "Любая дополнительная информация...": "Any additional information..."
+  "Любая дополнительная информация...": "Any additional information...",
+  "Инструкции": "Instructions",
+  "Используйте эти примеры конфигурации для настройки вашего Asterisk сервера": "Use these configuration examples to set up your Asterisk server",
+  "Инструкции по настройке Asterisk": "Asterisk Configuration Instructions",
+  "Настройка ARI (ari.conf)": "ARI Configuration (ari.conf)",
+  "Включите ARI и создайте пользователя в файле ari.conf:": "Enable ARI and create a user in ari.conf:",
+  "Контекст используется для возврата звонка от ассистента в вашу PBX, например при переводе": "Context is used for returning calls from the assistant back to your PBX, e.g. during a transfer",
+  "Класс музыки во время ожидания. Этот класс будет запускаться как фоновая музыка во время ответов ассистента": "Music-on-hold class. This class (if specified) will be played as background music while the assistant is answering",
+  "MOH (Music On Hold)": "MOH (Music On Hold)",
+  "Настройка HTTP для WebRTC (http.conf)": "HTTP for WebRTC Configuration (http.conf)",
+  "Включите HTTP сервер для работы WebSocket в файле http.conf:": "Enable HTTP server for WebSocket in http.conf:",
+  "Настройка WSS и WebRTC (pjsip.conf)": "WSS and WebRTC Configuration (pjsip.conf)",
+  "Настройте транспорт и эндпоинт для работы через WebSocket в файле pjsip.conf:": "Configure transport and endpoint for WebSocket in pjsip.conf:",
+  "Скопировано в буфер обмена": "Copied to clipboard"
 }

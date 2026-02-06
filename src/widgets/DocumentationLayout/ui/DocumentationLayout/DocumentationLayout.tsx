@@ -41,10 +41,11 @@ export const DocumentationLayout = memo(() => {
                     sx={{
                         '& .MuiDrawer-paper': {
                             boxSizing: 'border-box',
-                            width: 280,
-                            background: 'var(--light-bg-redesigned)',
+                            width: 300,
+                            background: 'rgba(21, 28, 31, 0.8)',
+                            backdropFilter: 'blur(20px)',
                             color: 'var(--text-redesigned)',
-                            borderRight: '1px solid var(--bg-redesigned)'
+                            borderRight: '1px solid rgba(255, 255, 255, 0.1)'
                         }
                     }}
                 >

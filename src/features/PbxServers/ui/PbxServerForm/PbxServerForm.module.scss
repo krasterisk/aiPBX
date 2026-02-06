@@ -12,13 +12,13 @@
 }
 
 .leftColumn {
-    flex: 1;
-}
-
-.rightColumn {
     width: 400px;
     display: flex;
     flex-direction: column;
+}
+
+.rightColumn {
+    flex: 1;
 }
 
 .statusIndicator {

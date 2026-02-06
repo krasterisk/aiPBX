@@ -130,10 +130,7 @@ export const PublishSipUrisItem = memo((props: PublishSipUrisItemProps) => {
                         <VStack max>
                             <Text text={t('IP Адрес')} variant="accent" size="s" />
                             <HStack gap="8" max align="start">
-                                <Text text={sipAccount.ipAddress} className={cls.urlText} />
-                                <Button variant="clear" onClick={onCopy(sipAccount.ipAddress || '')} className={cls.smallCopyBtn}>
-                                    <ContentCopyIcon sx={{ fontSize: 14 }} />
-                                </Button>
+                                <Text text={sipAccount.ipAddress || ''} className={cls.urlText} />
                             </HStack>
                         </VStack>
                     </HStack>
@@ -147,9 +144,6 @@ export const PublishSipUrisItem = memo((props: PublishSipUrisItemProps) => {
                                 <Text text={t('Локация')} variant="accent" size="s" />
                                 <HStack gap="8" max align="start">
                                     <Text text={location} className={cls.urlText} />
-                                    <Button variant="clear" onClick={onCopy(sipDomain)} className={cls.smallCopyBtn}>
-                                        <ContentCopyIcon sx={{ fontSize: 14 }} />
-                                    </Button>
                                 </HStack>
                             </VStack>
                         </HStack>

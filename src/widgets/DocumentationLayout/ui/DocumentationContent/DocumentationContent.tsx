@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { getDocumentationContent } from '../../lib/getDocumentationContent'
+import { CodeBlock } from '@/shared/ui/redesigned/CodeBlock/CodeBlock'
+import { Text } from '@/shared/ui/redesigned/Text'
 import cls from './DocumentationContent.module.scss'
 
 export const DocumentationContent = memo(() => {
@@ -14,36 +16,46 @@ export const DocumentationContent = memo(() => {
 
     return (
         <Box className={cls.DocumentationContent}>
-            <Typography variant="h4" className={cls.title}>
-                {t(content.title)}
-            </Typography>
+            <Text
+                title={t(content.title)}
+                size="xl"
+                bold
+                className={cls.title}
+            />
 
             <Box className={cls.contentBody}>
                 {content.sections.map((section, index) => (
                     <Box key={index} className={cls.section}>
                         {section.heading && (
-                            <Typography variant="h5" className={cls.heading}>
-                                {t(section.heading)}
-                            </Typography>
+                            <Text
+                                title={t(section.heading)}
+                                size="l"
+                                bold
+                                className={cls.heading}
+                            />
                         )}
 
                         {section.subheading && (
-                            <Typography variant="h6" className={cls.subheading}>
-                                {t(section.subheading)}
-                            </Typography>
+                            <Text
+                                text={t(section.subheading)}
+                                variant="accent"
+                                bold
+                                className={cls.subheading}
+                            />
                         )}
 
                         {section.content && (
-                            <Typography className={cls.paragraph}>
-                                {t(section.content)}
-                            </Typography>
+                            <Text
+                                text={t(section.content)}
+                                className={cls.paragraph}
+                            />
                         )}
 
                         {section.list && (
                             <Box component="ul" className={cls.list}>
                                 {section.list.map((item, i) => (
                                     <li key={i}>
-                                        <Typography>{t(item)}</Typography>
+                                        <Text text={t(item)} />
                                     </li>
                                 ))}
                             </Box>
@@ -57,19 +69,21 @@ export const DocumentationContent = memo(() => {
                                     className={cls.image}
                                 />
                                 {section.imageCaption && (
-                                    <Typography variant="caption" className={cls.imageCaption}>
-                                        {t(section.imageCaption)}
-                                    </Typography>
+                                    <Text
+                                        text={t(section.imageCaption)}
+                                        size="s"
+                                        className={cls.imageCaption}
+                                    />
                                 )}
                             </Box>
                         )}
 
                         {section.note && (
                             <Box className={cls.note}>
-                                <Typography>
-                                    <strong>{t('Note')}: </strong>
-                                    {t(section.note)}
-                                </Typography>
+                                <Text
+                                    text={t(section.note)}
+                                    title={t('Note') + ':'}
+                                />
                             </Box>
                         )}
 
@@ -77,9 +91,18 @@ export const DocumentationContent = memo(() => {
                             <Box component="ol" className={cls.steps}>
                                 {section.steps.map((step, i) => (
                                     <li key={i}>
-                                        <Typography>{t(step)}</Typography>
+                                        <Text text={t(step)} />
                                     </li>
                                 ))}
+                            </Box>
+                        )}
+
+                        {section.code && (
+                            <Box className={cls.codeBlockContainer}>
+                                <CodeBlock
+                                    code={section.code}
+                                    language={section.language || 'ini'}
+                                />
                             </Box>
                         )}
                     </Box>

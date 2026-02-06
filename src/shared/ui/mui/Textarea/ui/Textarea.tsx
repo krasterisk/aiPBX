@@ -57,6 +57,10 @@ const areaStyles = {
   },
   '& .MuiSvgIcon-root': {
     color: 'var(--icon-redesigned)'
+  },
+  '& .MuiFormHelperText-root': {
+    color: 'var(--text-redesigned)',
+    opacity: 0.8
   }
 }
 

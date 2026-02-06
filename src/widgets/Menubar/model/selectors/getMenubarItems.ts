@@ -53,6 +53,13 @@ export const useMenubarItems = () => {
       //   authOnly: true
       // },
       {
+        path: getRoutePlayground(),
+        Icon: ScienceIcon,
+        text: t('Playground'),
+        authOnly: true
+      },
+
+      {
         path: getRouteAssistants(),
         Icon: SmartToyIcon,
         text: t('Ассистенты'),
@@ -62,12 +69,6 @@ export const useMenubarItems = () => {
         path: getRouteTools(),
         Icon: BuildIcon,
         text: t('Функции'),
-        authOnly: true
-      },
-      {
-        path: getRoutePlayground(),
-        Icon: ScienceIcon,
-        text: t('Playground'),
         authOnly: true
       },
       {

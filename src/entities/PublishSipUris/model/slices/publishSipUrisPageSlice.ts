@@ -1,10 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-export interface PublishSipUrisPageSchema {
-    search: string
-    clientId: string
-    _inited: boolean
-}
+import { PublishSipUrisPageSchema } from '../types/publishSipUris'
 
 const initialState: PublishSipUrisPageSchema = {
     search: '',

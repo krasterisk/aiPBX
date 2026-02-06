@@ -1,9 +1,14 @@
+@import '@/app/styles/variables/mixins';
+
 .DocumentationLayout {
     display: flex;
     width: 100vw;
     height: 100vh;
     position: relative;
     overflow: hidden;
+    background: radial-gradient(circle at top right, rgba(0, 200, 255, 0.05), transparent 40%),
+        radial-gradient(circle at bottom left, rgba(0, 200, 255, 0.03), transparent 40%),
+        var(--bg-redesigned);
 }
 
 .mobileHeader {
@@ -11,34 +16,41 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 48px;
+    height: 60px;
     display: flex;
     align-items: center;
     padding: 0 16px;
-    background: var(--light-bg-redesigned);
-    border-bottom: 1px solid var(--bg-redesigned);
+    background: rgba(0, 200, 255, 0.05);
+    backdrop-filter: var(--glass-blur-md);
+    -webkit-backdrop-filter: var(--glass-blur-md);
+    border-bottom: var(--glass-border-subtle);
+    z-index: var(--z-fixed);
 }
 
 .menuButton {
-    color: var(--icon-redesigned) !important;
+    color: var(--accent-redesigned) !important;
 }
 
 .sidebar {
-    width: 280px;
+    width: 300px;
     flex-shrink: 0;
     height: 100%;
-    overflow-y: auto;
-    border-right: 1px solid var(--bg-redesigned);
-    background: var(--light-bg-redesigned);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.01);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: var(--glass-blur-sm);
+    -webkit-backdrop-filter: var(--glass-blur-sm);
 }
 
 .content {
     flex: 1;
     overflow-y: auto;
-    padding: 24px;
+    padding: 40px;
+    height: 100%;
+    @include custom-scrollbar;
 
     @media (max-width: 960px) {
-        margin-top: 48px;
-        padding: 16px;
+        margin-top: 60px;
+        padding: 24px 16px;
     }
 }

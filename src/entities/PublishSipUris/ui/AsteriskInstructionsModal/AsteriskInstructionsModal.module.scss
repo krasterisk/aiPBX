@@ -1,0 +1,20 @@
+.AsteriskInstructionsModal {
+    max-width: 800px;
+    width: 100%;
+}
+
+.container {
+    padding: 24px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.section {
+    width: 100%;
+}
+
+.codeBlock {
+    margin-top: 8px;
+    background: var(--light-bg-redesigned);
+    border-radius: 12px;
+}

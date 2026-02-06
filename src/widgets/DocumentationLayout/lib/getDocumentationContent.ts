@@ -8,6 +8,8 @@ export interface DocumentationSection {
     imageAlt?: string
     imageCaption?: string
     note?: string
+    code?: string
+    language?: string
 }
 
 export interface DocumentationPage {
@@ -752,15 +754,65 @@ export const getDocumentationContent = (sectionId: string, language: string): Do
                     },
                     {
                         heading: 'asterisk-config-ari-heading',
-                        content: 'asterisk-config-ari-content'
+                        content: 'asterisk-config-ari-content',
+                        code: `[general]
+enabled = yes
+pretty = yes
+
+[username]
+type = user
+read_only = no
+password = your_password
+password_format = plain`,
+                        language: 'ini'
+                    },
+                    {
+                        heading: 'asterisk-config-http-heading',
+                        content: 'asterisk-config-http-content',
+                        code: `[general]
+enabled = yes
+bindaddr = 0.0.0.0
+bindport = 8088
+tlsenable = yes
+tlsbindaddr = 0.0.0.0:8089
+tlscertfile = /etc/asterisk/keys/asterisk.pem
+tlsprivatekey = /etc/asterisk/keys/asterisk.pem`,
+                        language: 'ini'
                     },
                     {
                         heading: 'asterisk-config-pjsip-heading',
-                        content: 'asterisk-config-pjsip-content'
+                        content: 'asterisk-config-pjsip-content',
+                        code: `[transport-wss]
+type = transport
+protocol = wss
+bind = 0.0.0.0
+
+[endpoint-name]
+type = endpoint
+context = from-external
+disallow = all
+allow = ulaw,alaw,opus
+webrtc = yes
+dtls_auto_self_generated = yes`,
+                        language: 'ini'
                     },
                     {
                         heading: 'asterisk-config-dialplan-heading',
-                        content: 'asterisk-config-dialplan-content'
+                        content: 'asterisk-config-dialplan-content',
+                        code: `[assistant-in]
+exten => 100,1,NoOp()
+same => n,Set(__fname=/usr/records/assistants/\${UNIQUEID})
+same => n,MixMonitor(\${fname}.wav)
+same => n,Stasis(aiPBXBot,\${ASSISTANTID})
+same => n,Hangup()`,
+                        language: 'ini'
+                    },
+                    {
+                        heading: 'asterisk-config-recordings-heading',
+                        content: 'asterisk-config-recordings-content',
+                        note: 'asterisk-config-recordings-note',
+                        code: 'https://{{PBX_ADDRESS}}/records/{{ASSISTANTID}}/{{UNIQUEID}}.{{FORMAT}}',
+                        language: 'text'
                     }
                 ]
             }

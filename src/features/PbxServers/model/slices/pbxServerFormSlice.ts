@@ -13,6 +13,8 @@ const initialState: PbxServerFormSchema = {
         password: '',
         comment: '',
         context: '',
+        moh: '',
+        recordFormat: '',
         cloudPbx: false,
     },
     isLoading: false,

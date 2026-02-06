@@ -1,13 +1,11 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './Menubar.module.scss'
 import React, { memo } from 'react'
-
-import { VStack } from '@/shared/ui/redesigned/Stack'
-import { AppLogo } from '@/shared/ui/redesigned/AppLogo'
+import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { MenubarItems } from '../MenubarItems/MenubarItems'
 import { LangSwitcher } from '@/entities/LangSwitcher'
 import { ThemeSwitcher } from '@/entities/ThemeSwitcher'
-import { HStack } from '@/shared/ui/redesigned/Stack'
+import AppLogoV3 from '@/shared/assets/icons/aipbx_logo_v3.svg'
 
 interface MenubarProps {
   className?: string
@@ -19,21 +17,27 @@ export const Menubar = memo((props: MenubarProps) => {
   } = props
 
   return (
-    <section
+    <aside
       data-testid="menubar"
       className={classNames(cls.Menubar, {}, [className])}
     >
-      <AppLogo className={cls.appLogo} />
+      <div className={cls.appLogo}>
+        <AppLogoV3 className={cls.logoIcon} />
+        <span className={cls.brandText}>AI PBX</span>
+      </div>
+
       <VStack
         role="navigation"
         className={cls.items}
+        gap="4"
       >
         <MenubarItems />
       </VStack>
-      <HStack className={cls.switchers}>
-        <LangSwitcher />
+
+      <HStack className={cls.switchers} justify="center" gap="16">
+        <LangSwitcher short />
         <ThemeSwitcher />
       </HStack>
-    </section>
+    </aside>
   )
 })

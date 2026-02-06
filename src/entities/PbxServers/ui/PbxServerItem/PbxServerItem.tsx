@@ -1,6 +1,6 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './PbxServerItem.module.scss'
-import React, { HTMLAttributeAnchorTarget, memo, useCallback } from 'react'
+import React, { HTMLAttributeAnchorTarget, memo, useCallback, useState } from 'react'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { useTranslation } from 'react-i18next'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
@@ -14,6 +14,7 @@ import { Server, Globe, Activity, Info } from 'lucide-react'
 import { Button } from '@/shared/ui/redesigned/Button'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import { toast } from 'react-toastify'
+import { AsteriskInstructionsModal } from '../AsteriskInstructionsModal/AsteriskInstructionsModal'
 
 interface PbxServerItemProps {
   className?: string
@@ -31,6 +32,7 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
   } = props
 
   const { t } = useTranslation('pbx')
+  const [isInstructionsModalOpen, setIsInstructionsModalOpen] = useState(false)
 
   const { data: statusData, isLoading: isStatusLoading } = usePbxServerStatus(pbxServer.uniqueId!, {
     skip: !pbxServer.uniqueId,
@@ -49,6 +51,15 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
     navigate(getRoutePbxServerEdit(pbxServer.id || ''))
   }, [navigate, pbxServer.id])
 
+  const onOpenInstructions = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+    setIsInstructionsModalOpen(true)
+  }, [])
+
+  const onCloseInstructions = useCallback(() => {
+    setIsInstructionsModalOpen(false)
+  }, [])
+
   return (
     <Card
       padding={'0'}
@@ -62,10 +73,10 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
         <HStack max justify="end" align="center">
           <HStack gap="8">
             {pbxServer.cloudPbx && (
-              <div className={cls.chip}>
+              <HStack gap="4" align="center" className={cls.chip}>
                 <div className={classNames(cls.dot, {}, [cls.cloud])} />
                 <Text text={t('CLOUD')} size="xs" bold />
-              </div>
+              </HStack>
             )}
             {pbxServer.ari_url && (
               <Text text="ARI" size="xs" bold variant="accent" className={cls.chip} />
@@ -77,9 +88,9 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
         </HStack>
 
         <HStack gap={'16'} max align="center">
-          <div className={cls.avatar}>
+          <VStack justify="center" align="center" className={cls.avatar}>
             <Server size={24} />
-          </div>
+          </VStack>
           <VStack max gap="4">
             <Text title={pbxServer.name} size={'m'} bold className={cls.title} />
             <HStack gap="8" align="center">
@@ -101,11 +112,11 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
 
         <div className={cls.divider} />
 
-        <div className={cls.detailsGrid}>
+        <VStack gap="16" max className={cls.detailsStack}>
           <HStack gap="12" align="start">
-            <div className={cls.detailIcon}>
+            <VStack align="center" justify="center" className={cls.detailIcon}>
               <Globe size={14} />
-            </div>
+            </VStack>
             <VStack max>
               <Text text={t('Адрес')} variant="accent" size="xs" />
               <HStack gap="8" max align="start">
@@ -119,9 +130,9 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
 
           {pbxServer.ari_url && (
             <HStack gap="12" align="start">
-              <div className={cls.detailIcon}>
+              <VStack align="center" justify="center" className={cls.detailIcon}>
                 <Activity size={14} />
-              </div>
+              </VStack>
               <VStack max>
                 <Text text={t('ARI URL')} variant="accent" size="xs" />
                 <HStack gap="8" max align="start">
@@ -136,9 +147,9 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
 
           {pbxServer.wss_url && (
             <HStack gap="12" align="start">
-              <div className={cls.detailIcon}>
+              <VStack align="center" justify="center" className={cls.detailIcon}>
                 <Globe size={14} />
-              </div>
+              </VStack>
               <VStack max>
                 <Text text={t('WSS URL')} variant="accent" size="xs" />
                 <HStack gap="8" max align="start">
@@ -153,26 +164,38 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
 
           {pbxServer.context && (
             <HStack gap="12" align="start">
-              <div className={cls.detailIcon}>
+              <VStack align="center" justify="center" className={cls.detailIcon}>
                 <Activity size={14} />
-              </div>
+              </VStack>
               <VStack max>
                 <Text text={t('Контекст')} variant="accent" size="xs" />
                 <Text text={pbxServer.context} className={cls.urlText} />
               </VStack>
             </HStack>
           )}
-        </div>
-
+        </VStack>
         {pbxServer.comment && (
           <HStack gap="8" className={cls.commentWrapper} align="start">
-            <div className={cls.commentIcon}>
+            <VStack align="center" justify="center" className={cls.commentIcon}>
               <Info size={12} />
-            </div>
+            </VStack>
             <Text text={pbxServer.comment} size="xs" className={cls.comment} bold />
           </HStack>
         )}
+
+        <HStack max justify="end">
+          <Button variant="clear" onClick={onOpenInstructions} className={cls.instructionsBtn}>
+            <HStack gap="4" align="center">
+              <Info size={14} />
+              <Text text={t('Инструкции')} size="s" bold variant="accent" />
+            </HStack>
+          </Button>
+        </HStack>
       </VStack>
+      <AsteriskInstructionsModal
+        isOpen={isInstructionsModalOpen}
+        onClose={onCloseInstructions}
+      />
     </Card>
   )
 })

@@ -1,14 +1,10 @@
-import { memo, ReactNode } from 'react'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Server } from 'lucide-react'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Check } from '@/shared/ui/mui/Check'
 import { ClientSelect } from '@/entities/User'
 import { SectionCard } from '../SectionCard/SectionCard'
-import { HStack } from '@/shared/ui/redesigned/Stack'
-import { Text } from '@/shared/ui/redesigned/Text'
-import { classNames } from '@/shared/lib/classNames/classNames'
-import cls from '../../PbxServerForm.module.scss'
 
 interface GeneralSectionProps {
     className?: string
@@ -25,8 +21,6 @@ interface GeneralSectionProps {
     isAdmin?: boolean
     clientName?: string
     isEdit?: boolean
-    statusData?: { online: boolean }
-    isStatusLoading?: boolean
 }
 
 export const GeneralSection = memo((props: GeneralSectionProps) => {
@@ -43,35 +37,15 @@ export const GeneralSection = memo((props: GeneralSectionProps) => {
         userId,
         onChangeClient,
         isAdmin,
-        isEdit,
-        statusData,
-        isStatusLoading
     } = props
 
     const { t } = useTranslation('pbx')
 
-    const statusBadge = isEdit ? (
-        <HStack gap="8" align="center" className={cls.statusBadgeSection}>
-            <div
-                className={classNames(cls.statusIndicator, {
-                    [cls.online]: statusData?.online,
-                    [cls.offline]: statusData && !statusData.online,
-                    [cls.loading]: isStatusLoading
-                })}
-            />
-            <Text
-                text={isStatusLoading ? t('Загрузка...') : (statusData?.online ? t('В сети') : t('Не в сети'))}
-                size="s"
-            />
-        </HStack>
-    ) : null
-
     return (
         <SectionCard
-            title={t('Основные настройки')}
+            title={t('Информация')}
             icon={Server}
             className={className}
-            rightElement={statusBadge}
         >
             {isAdmin && (
                 <>

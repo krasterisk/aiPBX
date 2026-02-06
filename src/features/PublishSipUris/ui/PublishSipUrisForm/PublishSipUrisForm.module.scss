@@ -19,6 +19,15 @@
     width: 400px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+}
+
+.item {
+    transition: var(--transition-normal);
+}
+
+.formSection {
+    background: var(--card-bg-redesigned);
 }
 
 @include tablet {

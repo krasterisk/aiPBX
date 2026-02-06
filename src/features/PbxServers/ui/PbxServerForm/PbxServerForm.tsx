@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -17,7 +17,8 @@ import {
   useUpdatePbxServers,
   usePbxServer,
   usePbxServerStatus,
-  PbxServer
+  PbxServer,
+  AsteriskInstructionsModal
 } from '@/entities/PbxServers'
 import { pbxServerFormActions, pbxServerFormReducer } from '../../model/slices/pbxServerFormSlice'
 import { getPbxServerForm } from '../../model/selectors/pbxServerFormSelectors'
@@ -42,6 +43,7 @@ export const PbxServerForm = memo((props: PbxServerFormProps) => {
   const { t } = useTranslation('pbx')
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const [isInstructionsModalOpen, setIsInstructionsModalOpen] = useState(false)
   const isMobile = useMediaQuery('(max-width:800px)')
 
   const isAdmin = useSelector(isUserAdmin)
@@ -124,6 +126,14 @@ export const PbxServerForm = memo((props: PbxServerFormProps) => {
     }
   }, [pbxServerId, deletePbx, navigate, t])
 
+  const onOpenInstructions = useCallback(() => {
+    setIsInstructionsModalOpen(true)
+  }, [])
+
+  const onCloseInstructions = useCallback(() => {
+    setIsInstructionsModalOpen(false)
+  }, [])
+
   if (isError) {
     const errMsg = error && typeof error === 'object' && 'data' in error
       ? String((error.data as { message: string }).message)
@@ -166,41 +176,52 @@ export const PbxServerForm = memo((props: PbxServerFormProps) => {
             <VStack gap="24" className={cls.leftColumn}>
               <GeneralSection
                 name={form?.name || ''}
-                onChangeName={(v) => onChangeField('name', v)}
+                onChangeName={(v: string) => onChangeField('name', v)}
                 location={form?.location || ''}
-                onChangeLocation={(v) => onChangeField('location', v)}
+                onChangeLocation={(v: string) => onChangeField('location', v)}
                 comment={form?.comment || ''}
-                onChangeComment={(v) => onChangeField('comment', v)}
+                onChangeComment={(v: string) => onChangeField('comment', v)}
                 cloudPbx={form?.cloudPbx || false}
-                onChangeCloudPbx={(v) => onChangeField('cloudPbx', v)}
+                onChangeCloudPbx={(v: boolean) => onChangeField('cloudPbx', v)}
                 userId={form?.userId}
                 onChangeClient={onChangeClient}
                 isAdmin={isAdmin}
                 clientName={clientData?.name}
                 isEdit={isEdit}
-                statusData={statusData}
-                isStatusLoading={isStatusLoading}
               />
             </VStack>
 
             <VStack gap="24" className={cls.rightColumn}>
               <ConnectivitySection
                 sipHost={form?.sip_host || ''}
-                onChangeSipHost={(v) => onChangeField('sip_host', v)}
+                onChangeSipHost={(v: string) => onChangeField('sip_host', v)}
                 wssUrl={form?.wss_url || ''}
-                onChangeWssUrl={(v) => onChangeField('wss_url', v)}
+                onChangeWssUrl={(v: string) => onChangeField('wss_url', v)}
                 ariUrl={form?.ari_url || ''}
-                onChangeAriUrl={(v) => onChangeField('ari_url', v)}
+                onChangeAriUrl={(v: string) => onChangeField('ari_url', v)}
                 ariUser={form?.ari_user || ''}
-                onChangeAriUser={(v) => onChangeField('ari_user', v)}
+                onChangeAriUser={(v: string) => onChangeField('ari_user', v)}
                 context={form?.context || ''}
-                onChangeContext={(v) => onChangeField('context', v)}
+                onChangeContext={(v: string) => onChangeField('context', v)}
+                moh={form?.moh || ''}
+                onChangeMoh={(v: string) => onChangeField('moh', v)}
+                recordFormat={form?.recordFormat || ''}
+                onChangeRecordFormat={(v: string) => onChangeField('recordFormat', v)}
                 password={form?.password}
-                onChangePassword={(v) => onChangeField('password', v)}
+                onChangePassword={(v: string) => onChangeField('password', v)}
+                onOpenInstructions={onOpenInstructions}
+                isEdit={isEdit}
+                statusData={statusData}
+                isStatusLoading={isStatusLoading}
               />
             </VStack>
           </HStack>
         </VStack>
+
+        <AsteriskInstructionsModal
+          isOpen={isInstructionsModalOpen}
+          onClose={onCloseInstructions}
+        />
 
         <PbxServerFormHeader
           isEdit={isEdit}

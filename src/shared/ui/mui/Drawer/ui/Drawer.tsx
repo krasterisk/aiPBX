@@ -27,19 +27,15 @@ export const Drawer = memo((props: DrawerProps) => {
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          width: '50vw',
-          maxWidth: '50vw',
+          width: '80vw',
+          maxWidth: '320px',
           padding: '16px',
           boxSizing: 'border-box',
           overflowX: 'visible',
           overflowY: 'auto',
-          backgroundColor: '#fff',
-          color: '#000',
-          '--text-redesigned': '#000',
-          '& *': {
-            color: '#000 !important',
-            opacity: '1 !important'
-          }
+          background: 'var(--bg-redesigned)',
+          color: 'var(--text-redesigned)',
+          borderRight: '1px solid var(--glass-border-primary)',
         }
       }}
     >

@@ -1,10 +1,10 @@
 .MainLayout {
-    min-height: 100%;
+    min-height: 100vh;
     display: grid;
     grid-template-areas:
         "sidebar header header"
         "sidebar content rightbar";
-    grid-template-columns: 220px 1fr auto;
+    grid-template-columns: 260px 1fr auto;
 }
 
 .header {
@@ -26,12 +26,7 @@
 
 .sidebar {
     grid-area: sidebar;
-
-    // padding: 32px;
-    max-width: 284px;
-    position: sticky;
-    top: 0;
-    height: 100vh;
+    height: 100%;
 }
 
 .content {

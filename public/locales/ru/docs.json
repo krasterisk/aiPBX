@@ -283,11 +283,16 @@
     "publish-pbxs-field-wss": "WSS URL - адрес для подключения WebRTC виджетов через WebSocket",
     "publish-pbxs-field-ari": "ARI URL - интерфейс управления Asterisk (Asterisk REST Interface) для управления логикой звонка",
     "publish-pbxs-field-context": "Контекст - диалплан контекст в Asterisk, где обрабатываются входящие звонки",
-    "asterisk-config-intro": "Для работы с собственным сервером Asterisk необходимо выполнить базовую настройку ARI и PJSIP.",
+    "asterisk-config-intro": "Для работы с собственным сервером Asterisk необходимо выполнить базовую настройку ARI, HTTP и PJSIP.",
     "asterisk-config-ari-heading": "Настройка ARI (ari.conf)",
-    "asterisk-config-ari-content": "[general]\nenabled = yes\npretty = yes\n\n[user]\nread_only = no\npassword = your_password\npassword_format = plain",
-    "asterisk-config-pjsip-heading": "Настройка PJSIP (pjsip.conf)",
-    "asterisk-config-pjsip-content": "[transport-wss]\ntype=transport\nprotocol=wss\nbind=0.0.0.0",
-    "asterisk-config-dialplan-heading": "Пример Диалплана (extensions.conf)",
-    "asterisk-config-dialplan-content": "[from-internal]\nexten => 100,1,NoOp(AI Assistant Call)\n same => n,Stasis(aipbx)\n same => n,Hangup()"
+    "asterisk-config-ari-content": "Включите ARI и создайте пользователя в файле ari.conf:",
+    "asterisk-config-http-heading": "Настройка HTTP для WebRTC (http.conf)",
+    "asterisk-config-http-content": "Включите HTTP сервер для работы WebSocket в файле http.conf:",
+    "asterisk-config-pjsip-heading": "Настройка WSS и WebRTC (pjsip.conf)",
+    "asterisk-config-pjsip-content": "Настройте транспорт и эндпоинт для работы через WebSocket в файле pjsip.conf:",
+    "asterisk-config-dialplan-heading": "Настройка Dialplan (extensions.conf)",
+    "asterisk-config-dialplan-content": "Добавьте контекст для обработки входящих звонков через Stasis в файле extensions.conf:",
+    "asterisk-config-recordings-heading": "Запись разговоров",
+    "asterisk-config-recordings-content": "Если необходима доступность записи разговоров из отчёта приложения AI PBX, вам необходимо обеспечить доступность файла с записью по адресу:",
+    "asterisk-config-recordings-note": "ASSISTANTID — ID ассистента в AI PBX, UNIQUEID — уникальный идентификатор звонка, FORMAT — формат записи."
 }

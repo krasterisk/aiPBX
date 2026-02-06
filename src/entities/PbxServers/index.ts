@@ -24,6 +24,7 @@ export type { PbxServersPageSchema } from './model/types/pbxServersPageSchema'
 export type { PbxServer, AllPbxServers, PbxServerListProps, PbxServerOptions } from './model/types/pbxServers'
 export { PbxServersList } from './ui/PbxServersList/PbxServersList'
 export { PbxServerSelect } from './ui/PbxServerSelect/PbxServerSelect'
+export { AsteriskInstructionsModal } from './ui/AsteriskInstructionsModal/AsteriskInstructionsModal'
 
 export {
   pbxServersApi,
