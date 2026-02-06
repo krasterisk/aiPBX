@@ -1,23 +1,20 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ReportList.module.scss'
 import React, { useCallback, useState } from 'react'
-import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Report, ReportsListProps } from '../../model/types/report'
 import { ErrorGetData } from '../../../ErrorGetData'
 import { ContentListItemSkeleton } from '../../../Content'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { useTranslation } from 'react-i18next'
 import { Card } from '@/shared/ui/redesigned/Card'
-import { Check } from '@/shared/ui/mui/Check'
-import { Button } from '@/shared/ui/redesigned/Button'
 import { ReportsListHeader } from '../ReportListHeader/ReportListHeader'
 import { ReportTable } from '../ReportTable/ReportTable'
 import * as XLSX from 'xlsx'
 import FileSaver from 'file-saver'
 import { formatDate } from '@/shared/lib/functions/formatDate'
 import { formatTime } from '@/shared/lib/functions/formatTime'
-import { Download, Phone, DollarSign } from 'lucide-react'
-import { Icon } from '@/shared/ui/redesigned/Icon'
+import { ReportListActions } from '../ReportListActions/ReportListActions'
 
 export const ReportList = (props: ReportsListProps) => {
   const {
@@ -120,52 +117,16 @@ export const ReportList = (props: ReportsListProps) => {
   }
 
   return (
-    <VStack gap="24" max className={classNames(cls.ReportListWrapper, {}, [className])}>
+    <VStack gap="16" max className={classNames(cls.ReportListWrapper, {}, [className])}>
       <ReportsListHeader />
 
-      <Card padding="16" max border="partial" className={cls.actionsCard}>
-        <HStack max justify="between" align="center" wrap="wrap" gap="16">
-          <HStack gap="16" align="center">
-            <Check
-              className={cls.checkAll}
-              indeterminate={indeterminateBox}
-              checked={!!reports?.rows.length && checkedBox.length === reports?.rows.length}
-              onChange={handleCheckAll}
-            />
-            {checkedBox.length > 0 && (
-              <Text
-                text={`${t('Выбрано')}: ${checkedBox.length} ${t('из')} ${reports?.rows.length || 0}`}
-                bold
-                variant="accent"
-              />
-            )}
-          </HStack>
-
-          <HStack gap="24" align="center">
-            <HStack gap="16" align="center" className={cls.summaryInfo}>
-              <HStack gap="8" align="center">
-                <Icon Svg={Phone} width={18} height={18} className={cls.summaryIcon} />
-                <Text text={String(reports?.count || 0)} bold />
-              </HStack>
-              <div className={cls.divider} />
-              <HStack gap="8" align="center">
-                <Icon Svg={DollarSign} width={18} height={18} className={cls.summaryIcon} />
-                <Text text={`${reports?.totalCost || 0}`} bold />
-              </HStack>
-            </HStack>
-
-            <Button
-              variant="clear"
-              color="success"
-              onClick={exportToExcel}
-              disabled={!reports?.rows.length}
-              addonLeft={<Download size={18} />}
-            >
-              {t('Выгрузить в Excel')}
-            </Button>
-          </HStack>
-        </HStack>
-      </Card>
+      <ReportListActions
+        reports={reports}
+        checkedBox={checkedBox}
+        indeterminateBox={indeterminateBox}
+        onCheckAll={handleCheckAll}
+        onExportToExcel={exportToExcel}
+      />
 
       {reports?.rows.length ? (
         <div className={cls.TableWrapper}>

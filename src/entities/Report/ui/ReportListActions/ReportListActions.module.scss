@@ -1,0 +1,39 @@
+@import '@/app/styles/variables/mixins';
+
+.actionsCard {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    box-shadow: none;
+    transition: var(--transition-medium);
+    background: var(--glass-bg-primary) !important;
+    backdrop-filter: var(--glass-blur-md);
+    -webkit-backdrop-filter: var(--glass-blur-md);
+    border-color: transparent !important;
+
+    &:hover {
+        box-shadow: var(--shadow-md);
+    }
+}
+
+.checkAll {
+    color: var(--accent-redesigned) !important;
+}
+
+.summaryInfo {
+    opacity: 0.9;
+
+    @include mobile {
+        display: none; // Hide summary on small mobile to save space
+    }
+}
+
+.summaryIcon {
+    color: var(--accent-redesigned);
+}
+
+.divider {
+    width: 1px;
+    height: 16px;
+    background: var(--border-redesigned);
+    opacity: 0.5;
+}

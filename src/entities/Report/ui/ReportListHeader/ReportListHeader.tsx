@@ -44,26 +44,28 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
     <VStack
       className={classNames(cls.ReportListHeader, {}, [className])}
       max
-      gap="24"
+      gap="16"
     >
       <HStack max justify="between" align="center" gap="16" className={cls.headerContent}>
-        <div className={cls.titleSection}>
+        <HStack className={cls.titleSection}>
           <Text title={t('Звонки')} size="l" bold />
-        </div>
+        </HStack>
 
-        <div className={cls.controlsSection}>
-          <PeriodPicker
-            className={cls.datePicker}
-            userId={clientId}
-            onChangeTab={onChangeTab}
-            tab={tab}
-            isInited={isInited}
-            startDate={startDate}
-            endDate={endDate}
-            onChangeStartDate={onChangeStartDate}
-            onChangeEndDate={onChangeEndDate}
-            onOpenFilters={() => setFilterShow(true)}
-          />
+        <HStack gap="16" align="center" className={cls.controlsSection}>
+          <HStack gap="8" align="center">
+            <PeriodPicker
+              className={cls.datePicker}
+              userId={clientId}
+              onChangeTab={onChangeTab}
+              tab={tab}
+              isInited={isInited}
+              startDate={startDate}
+              endDate={endDate}
+              onChangeStartDate={onChangeStartDate}
+              onChangeEndDate={onChangeEndDate}
+              onOpenFilters={() => setFilterShow(true)}
+            />
+          </HStack>
 
           <SearchInput
             className={cls.searchInput}
@@ -71,21 +73,20 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
             onChange={onChangeSearch}
             value={search}
           />
-
-          <PeriodExtendedFilters
-            assistantId={assistantId}
-            userId={clientId}
-            startDate={startDate}
-            endDate={endDate}
-            onChangeUserId={onChangeUserId}
-            onChangeAssistant={onChangeAssistant}
-            onChangeStartDate={onChangeStartDate}
-            onChangeEndDate={onChangeEndDate}
-            show={filterShow}
-            onClose={() => setFilterShow(false)}
-          />
-        </div>
+        </HStack>
       </HStack>
+      <PeriodExtendedFilters
+        assistantId={assistantId}
+        userId={clientId}
+        startDate={startDate}
+        endDate={endDate}
+        onChangeUserId={onChangeUserId}
+        onChangeAssistant={onChangeAssistant}
+        onChangeStartDate={onChangeStartDate}
+        onChangeEndDate={onChangeEndDate}
+        show={filterShow}
+        onClose={() => setFilterShow(false)}
+      />
     </VStack>
   )
 })

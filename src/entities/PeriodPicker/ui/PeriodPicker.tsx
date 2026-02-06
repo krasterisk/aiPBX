@@ -96,7 +96,7 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
 
       {!isMobile && <div className={cls.divider} />}
 
-      <HStack gap="4" align="center">
+      <HStack gap="4" align="center" wrap='nowrap'>
         <Button
           variant="clear"
           className={cls.navBtn}
@@ -119,16 +119,17 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
         >
           <Icon Svg={Right} width={18} height={18} />
         </Button>
-      </HStack>
 
-      {onOpenFilters && (
-        <>
-          {!isMobile && <div className={cls.divider} />}
-          <Button variant="clear" onClick={onOpenFilters} className={cls.tuneBtn}>
-            <TuneIcon />
-          </Button>
-        </>
-      )}
+        {onOpenFilters && (
+          <>
+            {!isMobile && <div className={cls.divider} />}
+            <Button variant="clear" onClick={onOpenFilters} className={cls.tuneBtn}>
+              <TuneIcon />
+            </Button>
+          </>
+
+        )}
+      </HStack>
     </HStack>
   )
 
