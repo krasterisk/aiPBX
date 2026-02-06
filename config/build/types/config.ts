@@ -9,6 +9,8 @@ export interface buildPaths {
   locales: string
   buildLocales: string
   favicon: string
+  assets: string
+  buildAssets: string
 }
 
 export interface buildOptions {
