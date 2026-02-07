@@ -65,6 +65,12 @@
     textarea {
         font-family: 'Fira Code', 'Roboto Mono', monospace !important;
     }
+
+    :global(.MuiInputBase-root) {
+        max-height: calc(100vh - 300px);
+        min-height: 400px;
+        overflow-y: auto;
+    }
 }
 
 .popover {

@@ -63,3 +63,12 @@
         min-width: 0 !important;
     }
 }
+
+
+.promptTextarea {
+    :global(.MuiInputBase-root) {
+        max-height: calc(100vh - 300px);
+        min-height: 400px;
+        overflow-y: auto;
+    }
+}

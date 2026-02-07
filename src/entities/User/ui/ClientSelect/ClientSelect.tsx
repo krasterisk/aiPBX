@@ -41,7 +41,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
   const { data, isLoading } = useGetAllUsers(null)
 
   const clientItems: ClientOption[] = data?.map(item => ({
-    id: item.id,
+    id: String(item.id),
     name: String(item.name)
   })) || []
 

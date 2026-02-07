@@ -1,0 +1,25 @@
+@import '@/app/styles/variables/mixins';
+
+.AiModelItem {
+    @include glass-card-primary;
+    @include hover-lift-card;
+    border-radius: var(--radius-xl);
+    padding: var(--card-padding-md);
+    display: flex;
+    flex-direction: column;
+    background: var(--glass-bg-primary) !important;
+    border: var(--glass-border-primary) !important;
+}
+
+.header {
+    @include flex-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-4);
+    width: 100%;
+}
+
+.actions {
+    @include flex-end;
+    gap: var(--space-2);
+    width: 100%;
+}

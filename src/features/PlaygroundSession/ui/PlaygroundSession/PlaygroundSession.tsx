@@ -85,7 +85,7 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
     return (
         <VStack gap="24" max className={classNames(cls.PlaygroundSession, {}, [className])}>
             <SectionCard
-                title={t('Выбор ассистента')}
+                title={t('Ассистент')}
                 icon={UserCheck}
                 rightElement={RightElement}
             >

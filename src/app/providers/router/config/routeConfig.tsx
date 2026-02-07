@@ -38,10 +38,15 @@ import {
   getRoutePublishSipUrisEdit,
   getRoutePublishWidgets,
   getRoutePublishWidgetsCreate,
-  getRoutePublishWidgetsEdit
+  getRoutePublishWidgetsEdit,
+  getRoutePrices,
+  getRouteModels
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
+
 import { SettingPage } from '@/pages/SettingsPage'
+import { PricesPage } from '@/pages/PricesPage'
+import { ModelsPage } from '@/pages/ModelsPage'
 import { AssistantsCreatePage, AssistantsPage, AssistantsEditPage } from '@/pages/AssistantsPage'
 import { UsersCreatePage, UsersEditPage, UsersPage } from '@/pages/UsersPage'
 import { ToolsCreatePage, ToolsEditPage, ToolsPage } from '@/pages/ToolsPage'
@@ -237,6 +242,18 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.ERROR]: {
     path: '*',
     element: <ErrorPage />
+  },
+  [AppRoutes.PRICES]: {
+    path: getRoutePrices(),
+    element: <PricesPage />,
+    authOnly: true,
+    roles: [UserRolesValues.ADMIN]
+  },
+  [AppRoutes.MODELS]: {
+    path: getRouteModels(),
+    element: <ModelsPage />,
+    authOnly: true,
+    roles: [UserRolesValues.ADMIN]
   }
 
 }

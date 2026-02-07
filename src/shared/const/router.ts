@@ -32,7 +32,9 @@ export enum AppRoutes {
   PUBLISH_SIP_URIS_EDIT = 'publish_sips_edit',
   PUBLISH_WIDGETS = 'publish_widgets',
   PUBLISH_WIDGETS_CREATE = 'publish_widgets_create',
-  PUBLISH_WIDGETS_EDIT = 'publish_widgets_edit'
+  PUBLISH_WIDGETS_EDIT = 'publish_widgets_edit',
+  PRICES = 'prices',
+  MODELS = 'models'
 }
 
 export const getRouteMain = () => '/'
@@ -71,6 +73,8 @@ export const getRoutePublishSipUrisEdit = (id: string) => `/publish/sips/${id}`
 export const getRoutePublishWidgets = () => '/publish/widgets'
 export const getRoutePublishWidgetsCreate = () => '/publish/widgets/create'
 export const getRoutePublishWidgetsEdit = (id: string) => `/publish/widgets/${id}`
+export const getRoutePrices = () => '/admin/prices'
+export const getRouteModels = () => '/admin/models'
 
 
 export const AppRouteByPathPattern: Record<string, AppRoutes> = {
@@ -106,5 +110,7 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRoutePublishSipUrisEdit(':id')]: AppRoutes.PUBLISH_SIP_URIS_EDIT,
   [getRoutePublishWidgets()]: AppRoutes.PUBLISH_WIDGETS,
   [getRoutePublishWidgetsCreate()]: AppRoutes.PUBLISH_WIDGETS_CREATE,
-  [getRoutePublishWidgetsEdit(':id')]: AppRoutes.PUBLISH_WIDGETS_EDIT
+  [getRoutePublishWidgetsEdit(':id')]: AppRoutes.PUBLISH_WIDGETS_EDIT,
+  [getRoutePrices()]: AppRoutes.PRICES,
+  [getRouteModels()]: AppRoutes.MODELS
 }

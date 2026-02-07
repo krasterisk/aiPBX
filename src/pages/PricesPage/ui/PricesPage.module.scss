@@ -1,0 +1,37 @@
+@import '@/app/styles/variables/mixins';
+
+.PricesPage {
+    width: 100%;
+}
+
+.list {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.priceCard {
+    @include glass-card-primary;
+    @include hover-lift-card;
+    border-radius: var(--radius-xl);
+
+    background: var(--glass-bg-primary) !important;
+    border: var(--glass-border-primary) !important;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.cardActions {
+    @include flex-end;
+    margin-top: var(--space-4);
+    gap: var(--space-2);
+}
+
+.createBtn {
+    @include button-primary;
+    @include hover-scale;
+}

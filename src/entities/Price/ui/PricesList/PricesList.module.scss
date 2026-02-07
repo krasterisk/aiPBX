@@ -1,0 +1,10 @@
+@import '@/app/styles/variables/mixins';
+
+.list {
+    width: 100%;
+    margin-top: var(--space-4);
+}
+
+.table {
+    width: 100%;
+}

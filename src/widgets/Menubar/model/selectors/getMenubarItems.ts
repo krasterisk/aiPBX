@@ -9,9 +9,13 @@ import {
   getRouteTools,
   getRouteUsers,
   getRoutePayment,
-  getRouteDocs
+  getRouteDocs,
+  getRoutePrices,
+  getRouteModels
 } from '@/shared/const/router'
 import DashboardIcon from '@mui/icons-material/Dashboard'
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
+import PsychologyIcon from '@mui/icons-material/Psychology'
 import ScienceIcon from '@mui/icons-material/Science'
 import SmartToyIcon from '@mui/icons-material/SmartToy'
 import BuildIcon from '@mui/icons-material/Build'
@@ -121,6 +125,18 @@ export const useMenubarItems = () => {
             path: getRouteUsers(),
             Icon: PeopleIcon,
             text: t('Пользователи'),
+            authOnly: true
+          },
+          {
+            path: getRoutePrices(),
+            Icon: AttachMoneyIcon,
+            text: t('Цены'),
+            authOnly: true
+          },
+          {
+            path: getRouteModels(),
+            Icon: PsychologyIcon,
+            text: t('AI Модели'),
             authOnly: true
           }
         ]

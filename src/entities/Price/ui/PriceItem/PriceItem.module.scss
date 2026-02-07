@@ -1,0 +1,22 @@
+@import '@/app/styles/variables/mixins';
+
+.PriceItem {
+    @include glass-card-primary;
+    @include hover-lift-card;
+    border-radius: var(--radius-xl);
+    padding: var(--card-padding-md);
+    background: var(--glass-bg-primary) !important;
+    border: var(--glass-border-primary) !important;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.actions {
+    @include flex-end;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+}

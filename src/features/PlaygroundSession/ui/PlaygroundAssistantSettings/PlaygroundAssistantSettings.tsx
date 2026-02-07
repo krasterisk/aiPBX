@@ -127,6 +127,7 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
                             multiline
                             fullWidth
                             placeholder={t('Введите инструкции для ИИ...') || ''}
+                            className={cls.promptTextarea}
                         />
                     </SectionCard>
                 </VStack>

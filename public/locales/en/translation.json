@@ -66,5 +66,7 @@
   "Виджеты": "Widgets",
   "SIPs": "SIPs",
   "PBXs": "PBXs",
-  "Клиент": "Customer"
+  "Клиент": "Customer",
+  "Цены": "Prices",
+  "AI Модели": "Models"
 }

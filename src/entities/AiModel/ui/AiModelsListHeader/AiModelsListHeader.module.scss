@@ -1,0 +1,15 @@
+@import '@/app/styles/variables/mixins';
+
+.AiModelsListHeader {
+    width: 100%;
+}
+
+.headerActions {
+    @include flex-center;
+    gap: var(--space-4);
+}
+
+.createBtn {
+    @include button-primary;
+    @include hover-scale;
+}

@@ -1,0 +1,10 @@
+@import '@/app/styles/variables/mixins';
+
+.PricesListHeader {
+    width: 100%;
+}
+
+.createBtn {
+    @include button-primary;
+    @include hover-scale;
+}
