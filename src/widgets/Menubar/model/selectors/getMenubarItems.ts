@@ -11,7 +11,9 @@ import {
   getRoutePayment,
   getRouteDocs,
   getRoutePrices,
-  getRouteModels
+  getRouteModels,
+  getRoutePublishSipUris,
+  getRoutePublishWidgets
 } from '@/shared/const/router'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
@@ -26,22 +28,17 @@ import PaymentsIcon from '@mui/icons-material/Payments'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import PublicIcon from '@mui/icons-material/Public'
 import SendIcon from '@mui/icons-material/Send'
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import { MenubarItemType } from '../types/menubar'
 import { useTranslation } from 'react-i18next'
-import { getRoutePublishSipUris, getRoutePublishWidgets } from '@/shared/const/router'
 
 export const useMenubarItems = () => {
   const userData = useSelector(getUserAuthData)
   const { t } = useTranslation()
   const isAdmin = useSelector(isUserAdmin)
 
-  const menubarItemsList: MenubarItemType[] = [
-    // {
-    //   path: getRouteMain(),
-    //   Icon: MainIcon,
-    //   text: t('Главная')
-    // }
-  ]
+  const menubarItemsList: MenubarItemType[] = []
+
   if (userData) {
     menubarItemsList.push(
       {
@@ -50,19 +47,12 @@ export const useMenubarItems = () => {
         text: t('Дашбоард'),
         authOnly: true
       },
-      // {
-      //   path: getRouteOnline(),
-      //   Icon: WifiTetheringIcon,
-      //   text: t('Онлайн'),
-      //   authOnly: true
-      // },
       {
         path: getRoutePlayground(),
         Icon: ScienceIcon,
         text: t('Playground'),
         authOnly: true
       },
-
       {
         path: getRouteAssistants(),
         Icon: SmartToyIcon,
@@ -122,22 +112,30 @@ export const useMenubarItems = () => {
       ...(isAdmin
         ? [
           {
-            path: getRouteUsers(),
-            Icon: PeopleIcon,
-            text: t('Пользователи'),
-            authOnly: true
-          },
-          {
-            path: getRoutePrices(),
-            Icon: AttachMoneyIcon,
-            text: t('Цены'),
-            authOnly: true
-          },
-          {
-            path: getRouteModels(),
-            Icon: PsychologyIcon,
-            text: t('AI Модели'),
-            authOnly: true
+            path: '/admin',
+            Icon: AdminPanelSettingsIcon,
+            text: t('Управление'),
+            authOnly: true,
+            subItems: [
+              {
+                path: getRouteUsers(),
+                Icon: PeopleIcon,
+                text: t('Пользователи'),
+                authOnly: true
+              },
+              {
+                path: getRouteModels(),
+                Icon: PsychologyIcon,
+                text: t('AI Модели'),
+                authOnly: true
+              },
+              {
+                path: getRoutePrices(),
+                Icon: AttachMoneyIcon,
+                text: t('Цены'),
+                authOnly: true
+              }
+            ]
           }
         ]
         : []

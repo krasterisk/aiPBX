@@ -57,5 +57,7 @@
   "Включите HTTP сервер для работы WebSocket в файле http.conf:": "Aktivieren Sie den HTTP-Server für WebSocket in http.conf:",
   "Настройка WSS и WebRTC (pjsip.conf)": "WSS und WebRTC Konfiguration (pjsip.conf)",
   "Настройте транспорт и эндпоинт для работы через WebSocket в файле pjsip.conf:": "Konfigurieren Sie Transport und Endpunkt für WebSocket in pjsip.conf:",
-  "Скопировано в буфер обмена": "In die Zwischenablage kopiert"
+  "Скопировано в буфер обмена": "In die Zwischenablage kopiert",
+  "Данные не найдены": "Daten nicht gefunden",
+  "У вас пока нет АТС": "Sie haben noch keine Telefonanlage"
 }

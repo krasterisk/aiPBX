@@ -39,15 +39,15 @@ export const PricesList = memo((props: PricesListProps) => {
         }),
 
         columnHelper.accessor('user.name', {
-            header: (t('User Name') ?? '') as string,
+            header: (t('Customer') ?? '') as string,
             cell: info => info.getValue() || info.row.original.user?.username || '-'
         }),
         columnHelper.accessor('realtime', {
-            header: (t('Price') ?? '') as string,
+            header: (t('Realtime') ?? '') as string,
             cell: info => info.getValue()
         }),
         columnHelper.accessor('analytic', {
-            header: (t('Analytic Price') ?? '') as string,
+            header: (t('Analytic') ?? '') as string,
             cell: info => info.getValue()
         }),
         columnHelper.display({

@@ -58,5 +58,7 @@
   "Включите HTTP сервер для работы WebSocket в файле http.conf:": "Enable HTTP server for WebSocket in http.conf:",
   "Настройка WSS и WebRTC (pjsip.conf)": "WSS and WebRTC Configuration (pjsip.conf)",
   "Настройте транспорт и эндпоинт для работы через WebSocket в файле pjsip.conf:": "Configure transport and endpoint for WebSocket in pjsip.conf:",
-  "Скопировано в буфер обмена": "Copied to clipboard"
+  "Скопировано в буфер обмена": "Copied to clipboard",
+  "Данные не найдены": "Data not found",
+  "У вас пока нет АТС": "You have no PBX yet"
 }

@@ -18,6 +18,7 @@ interface VoiceSelectProps {
   ) => void
   inputValue?: string
   fullWidth?: boolean
+  required?: boolean
 }
 
 const GPT_VOICES = ['alloy', 'ash', 'ballad', 'cedar', 'coral', 'echo', 'sage', 'shimmer', 'marin', 'verse']

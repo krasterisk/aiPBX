@@ -63,7 +63,7 @@
   "Инструкция для ассистента": "Assistant System Prompt",
   "Главное": "Main",
   "Инструкции": "Prompts",
-  "Параметры": "Parameters",
+  "Параметры Модели": "Model Parameters",
   "Публикация": "Publication",
   "Создать SIP аккаунт": "Create SIP account",
   "Создать WebRTC скрипт для сайта": "Create a WebRTC script for a website",
@@ -162,7 +162,7 @@
   "Генератор промпта": "Prompt Generator",
   "Отмена": "Cancel",
   "Максимальное количество токенов в ответе": "Max output tokens",
-  "Основная информация": "Main Information",
+  "Основные настройки": "Basic Settings",
   "Параметры модели": "Model Parameters",
   "Параметры VAD": "VAD Parameters",
   "Расширенные настройки": "Advanced Settings",
@@ -180,5 +180,6 @@
   "tooltip_vad_threshold": "Probability (0-1) to consider sound as speech. Higher values make activation harder.",
   "tooltip_audio_duration": "Audio duration before speech start to include (preserves start of phrases).",
   "tooltip_silence_duration": "Silence duration to wait before considering user speech finished.",
-  "tooltip_idle_timeout": "Max idle time before the call is terminated."
+  "tooltip_idle_timeout": "Max idle time before the call is terminated.",
+  "ms": " (ms)"
 }

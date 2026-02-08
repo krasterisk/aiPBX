@@ -7,6 +7,7 @@ export interface ComboBoxProps extends Omit<AutocompleteProps<any, any, any, any
   className?: string
   label?: string
   renderInput?: (params: any) => ReactNode
+  required?: boolean
 }
 
 export const Combobox = memo((props: ComboBoxProps) => {
@@ -15,10 +16,11 @@ export const Combobox = memo((props: ComboBoxProps) => {
     label,
     renderInput,
     options,
+    required,
     ...otherProps
   } = props
 
-  const renderInputProp = renderInput || ((params) => <TextField {...params} label={label} />)
+  const renderInputProp = renderInput || ((params) => <TextField {...params} label={label} required={required} />)
 
   const acStyles = {
     // Основной контейнер поля ввода

@@ -60,6 +60,7 @@ export const PbxServersList = (props: PbxServerListProps) => {
         <VStack justify={'center'} align={'center'} max className={cls.emptyState} gap={'16'}>
           <Icon Svg={SearchIcon} width={48} height={48} />
           <Text align={'center'} text={t('Данные не найдены')} size={'l'} bold />
+          <Text align={'center'} text={t('У вас пока нет АТС')} />
         </VStack>
       )}
 

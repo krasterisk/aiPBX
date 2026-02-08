@@ -2,12 +2,13 @@ import { memo, ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { classNames } from '@/shared/lib/classNames/classNames'
-import { VStack } from '@/shared/ui/redesigned/Stack'
+import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { Input } from '@/shared/ui/redesign-v3/Input'
+
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { ClientSelect, getUserAuthData, isUserAdmin } from '@/entities/User'
 import { Tool, ToolsSelect } from '@/entities/Tools'
+import { Check } from '@/shared/ui/mui/Check'
 import { VoiceSelect } from '@/entities/Assistants/ui/VoiceSelect/VoiceSelect'
 import { ModelSelect } from '@/entities/Assistants/ui/ModelSelect/ModelSelect'
 import { Assistant } from '@/entities/Assistants/model/types/assistants'
@@ -20,6 +21,7 @@ interface MainInfoCardProps {
     onChangeSelectHandler?: (field: keyof Assistant) => (event: any, newValue: string) => void
     onChangeClientHandler?: (clientId: string) => void
     onChangeToolsHandler?: (event: any, value: Tool[]) => void
+    onChangeCheckboxHandler?: (field: keyof Assistant) => (event: ChangeEvent<HTMLInputElement>) => void
 }
 
 export const MainInfoCard = memo((props: MainInfoCardProps) => {
@@ -28,7 +30,8 @@ export const MainInfoCard = memo((props: MainInfoCardProps) => {
         onChangeTextHandler,
         onChangeSelectHandler,
         onChangeClientHandler,
-        onChangeToolsHandler
+        onChangeToolsHandler,
+        onChangeCheckboxHandler
     } = props
 
     const { t } = useTranslation('assistants')
@@ -41,7 +44,7 @@ export const MainInfoCard = memo((props: MainInfoCardProps) => {
     return (
         <div className={classNames(cls.MainInfoCard, {}, [className])}>
             <Text
-                title={t('Основная информация')}
+                title={t('Основные настройки')}
                 className={cls.cardTitle}
                 bold
             />
@@ -56,14 +59,9 @@ export const MainInfoCard = memo((props: MainInfoCardProps) => {
                     />
                 )}
 
-                <Input
+                <Textarea
                     label={t('Наименование ассистента') ?? ''}
-                    onChange={(value) => {
-                        const syntheticEvent = {
-                            target: { value }
-                        } as ChangeEvent<HTMLInputElement>
-                        onChangeTextHandler?.('name')(syntheticEvent)
-                    }}
+                    onChange={onChangeTextHandler?.('name')}
                     data-testid="AssistantForm.name"
                     value={formFields?.name || ''}
                     placeholder={t('Название вашего ассистента') ?? ''}
@@ -75,6 +73,7 @@ export const MainInfoCard = memo((props: MainInfoCardProps) => {
                     label={String(t('Модель'))}
                     value={formFields?.model || ''}
                     onChangeValue={onChangeSelectHandler?.('model')}
+                    required
                 />
 
                 <VoiceSelect
@@ -82,6 +81,7 @@ export const MainInfoCard = memo((props: MainInfoCardProps) => {
                     value={formFields?.voice ?? ''}
                     model={formFields?.model}
                     onChangeValue={onChangeSelectHandler?.('voice')}
+                    required
                 />
 
                 <ToolsSelect
@@ -89,6 +89,12 @@ export const MainInfoCard = memo((props: MainInfoCardProps) => {
                     value={formFields?.tools || []}
                     userId={userId}
                     onChangeTool={onChangeToolsHandler}
+                />
+
+                <Check
+                    checked={formFields?.analytic ?? true}
+                    onChange={onChangeCheckboxHandler?.('analytic')}
+                    label={t('Аналитика разговора') ?? ''}
                 />
 
                 <Textarea

@@ -120,13 +120,13 @@ export const PricesPage = memo(() => {
                             size="medium"
                         />
                         <Textarea
-                            label={t('Price')}
+                            label={t('Realtime')}
                             value={String(formData.realtime)}
                             onChange={(e) => setFormData(prev => ({ ...prev, realtime: Number(e.target.value) }))}
                             type="number"
                         />
                         <Textarea
-                            label={t('Analytic Price')}
+                            label={t('Analytic')}
                             value={String(formData.analytic)}
                             onChange={(e) => setFormData(prev => ({ ...prev, analytic: Number(e.target.value) }))}
                             type="number"
@@ -142,21 +142,18 @@ export const PricesPage = memo(() => {
                 <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
                     <VStack gap="16" max>
                         <Text title={t('Edit Price')} />
-                        <ClientSelect
-                            label={t('User ID') ?? ''}
-                            clientId={String(formData.userId || '')}
-                            onChangeClient={(id: string) => setFormData(prev => ({ ...prev, userId: Number(id) }))}
-                            fullWidth
-                            size="medium"
+                        <Text
+                            text={selectedPrice?.user?.name || selectedPrice?.userName || String(selectedPrice?.userId)}
+                            bold
                         />
                         <Textarea
-                            label={t('Price')}
+                            label={t('Realtime')}
                             value={String(formData.realtime)}
                             onChange={(e) => setFormData(prev => ({ ...prev, realtime: Number(e.target.value) }))}
                             type="number"
                         />
                         <Textarea
-                            label={t('Analytic Price')}
+                            label={t('Analytic')}
                             value={String(formData.analytic)}
                             onChange={(e) => setFormData(prev => ({ ...prev, analytic: Number(e.target.value) }))}
                             type="number"

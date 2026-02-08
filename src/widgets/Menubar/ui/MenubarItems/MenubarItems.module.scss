@@ -3,19 +3,40 @@
 .menuContainer {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: 0;
     flex: 1;
     width: 100%;
     margin-top: var(--space-1);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 4px;
+
+    // Custom Scrollbar
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(94, 211, 243, 0.2);
+        border-radius: 4px;
+
+        &:hover {
+            background: rgba(94, 211, 243, 0.4);
+        }
+    }
 
     // Global overrides for MUI TreeView to match redesign
     :global {
         .MuiTreeItem-root {
-            margin-bottom: 2px;
+            margin-bottom: 0px;
         }
 
         .MuiTreeItem-content {
-            padding: var(--space-2) var(--space-3);
+            padding: var(--space-1) var(--space-2);
             border-radius: var(--radius-lg);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--text-redesigned);
@@ -66,9 +87,11 @@
         }
 
         .MuiTreeItem-group {
-            margin-left: var(--space-6);
-            border-left: 1px dashed var(--glass-border-subtle);
-            padding-left: var(--space-1);
+            margin-left: 24px;
+            border-left: 1px solid var(--glass-border-subtle);
+            padding-left: 12px;
+            margin-top: 2px;
+            margin-bottom: 2px;
         }
     }
 }
@@ -78,8 +101,8 @@
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    margin-bottom: var(--space-8);
-    padding: var(--space-6) var(--space-4);
+    margin-bottom: var(--space-2);
+    padding: var(--space-4);
     width: 100%;
 
     .logoIcon {

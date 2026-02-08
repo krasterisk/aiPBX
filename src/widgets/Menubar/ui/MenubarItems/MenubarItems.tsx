@@ -34,13 +34,15 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
                 <TreeItem
                     key={node.path}
                     itemId={node.path}
-                    label={t(node.text)}
+                    label={
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px 0' }}>
+                            {node.Icon && <node.Icon style={{ width: 20, height: 20, color: 'inherit' }} />}
+                            <span style={{ fontSize: 'inherit', fontWeight: 'inherit' }}>{t(node.text)}</span>
+                        </div>
+                    }
                     onClick={(e) => {
                         if (!node.subItems && onDrawerClose) onDrawerClose()
                         if (node.subItems) e.stopPropagation()
-                    }}
-                    slots={{
-                        icon: () => <node.Icon />
                     }}
                 >
                     {node.subItems ? renderNodes(node.subItems) : null}
@@ -72,7 +74,7 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
     if (isMobile) {
         return (
             <Drawer isOpen={openDrawer} onClose={onDrawerClose}>
-                <VStack max gap="16">
+                <VStack max gap="8">
                     <VStack max align="center" gap="8" className={cls.appLogo}>
                         <AppLogoV3 className={cls.logoIcon} />
                         <span className={cls.brandText}>AI PBX</span>

@@ -13,6 +13,11 @@ import { ReportShowDialog } from '../ReportShowDialog/ReportShowDialog'
 import { useSelector } from 'react-redux'
 import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
 import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
+import { Button } from '@/shared/ui/redesigned/Button'
+import { ChartBar, Sparkles } from 'lucide-react'
+import { Loader } from '@/shared/ui/Loader'
+import { ReportShowAnalytics } from '../ReportShowAnalytics/ReportShowAnalytics'
+import { useCreateCallAnalytics } from '../../api/reportApi'
 
 interface ReportTableProps {
   className?: string
@@ -34,17 +39,19 @@ export const ReportTable = memo((props: ReportTableProps) => {
   const authData = useSelector(getUserAuthData)
   const userCurrency = UserCurrencyValues.USD || authData?.currency
 
-  const [showDialog, setShowDialog] = useState(false)
+  const [expandedView, setExpandedView] = useState<'none' | 'dialog' | 'analytics'>('none')
 
   const {
     data: Dialogs,
     isLoading: isDialogLoading,
     isError: isDialogError
   } = useGetReportDialogs(report.channelId, {
-    skip: !showDialog,
+    skip: expandedView !== 'dialog',
     refetchOnFocus: false,
     refetchOnReconnect: false
   })
+
+  const [createCallAnalytics, { isLoading: isAnalyticsLoading }] = useCreateCallAnalytics()
 
   // Localized date formatting
   const date = new Date(report.createdAt)
@@ -57,9 +64,25 @@ export const ReportTable = memo((props: ReportTableProps) => {
     hour12: false
   }).format(date)
 
-  const onHistoryHandle = useCallback(() => {
-    setShowDialog(prev => !prev)
+  const onShowDialog = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+    setExpandedView(prev => prev === 'dialog' ? 'none' : 'dialog')
   }, [])
+
+  const onShowAnalytics = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+    setExpandedView(prev => prev === 'analytics' ? 'none' : 'analytics')
+  }, [])
+
+  const onGetAnalytics = useCallback(async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    try {
+      await createCallAnalytics(report.channelId).unwrap()
+      setExpandedView('analytics')
+    } catch (e) {
+      console.error(e)
+    }
+  }, [createCallAnalytics, report.channelId])
 
   const mediaUrl = report.recordUrl || ''
   const duration = report.duration ? formatTime(report.duration, t) : ''
@@ -73,11 +96,14 @@ export const ReportTable = memo((props: ReportTableProps) => {
 
   const isChecked = checkedItems?.includes(String(report.id))
 
+  const totalTokens = (report.tokens || 0)
+  const totalCost = (report.cost || 0)
+
   return (
     <>
       <tr
         className={classNames(cls.ReportTableItem, {}, [className, viewMode])}
-        onClick={onHistoryHandle}
+        onClick={onShowDialog}
       >
         <td className={cls.tdCheck} onClick={onCheckClick}>
           <Check
@@ -102,27 +128,62 @@ export const ReportTable = memo((props: ReportTableProps) => {
           <Text text={String(duration)} />
         </td>
         <td data-label={t('Токены')}>
-          {report.tokens ? <Text text={String(report.tokens)} /> : ''}
+          {totalTokens ? <Text text={String(totalTokens)} /> : ''}
         </td>
         <td data-label={t('Стоимость')}>
-          {report.cost ? <Text text={formatCurrency(report.cost, userCurrency, 4)} bold /> : ''}
+          {totalCost ? <Text text={formatCurrency(totalCost, userCurrency, 4)} bold /> : ''}
         </td>
-        <td className={cls.actionsTd}>
-          {showDialog
-            ? <ChevronUp className={cls.expandIcon} size={24} />
-            : <ChevronDown className={cls.expandIcon} size={24} />
-          }
+        <td className={cls.actionsTd} onClick={(e) => e.stopPropagation()}>
+          <div className={cls.actions}>
+            {report.analytics
+              ? (
+                <Button
+                  variant="clear"
+                  onClick={onShowAnalytics}
+                  title={String(t('Показать аналитику'))}
+                >
+                  <ChartBar size={24} color={expandedView === 'analytics' ? 'var(--accent-redesigned)' : 'var(--icon-redesigned)'} />
+                </Button>
+              )
+              : (
+                <Button
+                  variant="clear"
+                  onClick={onGetAnalytics}
+                  disabled={isAnalyticsLoading}
+                  title={String(t('Получить аналитику'))}
+                >
+                  {isAnalyticsLoading ? <Loader className={cls.btnLoader} /> : <Sparkles size={24} />}
+                </Button>
+              )
+            }
+            <Button
+              variant="clear"
+              onClick={onShowDialog}
+            >
+              {expandedView === 'dialog'
+                ? <ChevronUp className={cls.expandIcon} size={24} />
+                : <ChevronDown className={cls.expandIcon} size={24} />
+              }
+            </Button>
+          </div>
         </td>
       </tr>
-      {showDialog && (
+      {expandedView !== 'none' && (
         <tr className={cls.DialogRow}>
           <td colSpan={8}>
-            <ReportShowDialog
-              Dialogs={Dialogs}
-              isDialogLoading={isDialogLoading}
-              isDialogError={isDialogError}
-              mediaUrl={mediaUrl}
-            />
+            {expandedView === 'dialog' && (
+              <ReportShowDialog
+                Dialogs={Dialogs}
+                isDialogLoading={isDialogLoading}
+                isDialogError={isDialogError}
+                mediaUrl={mediaUrl}
+              />
+            )}
+            {expandedView === 'analytics' && report.analytics && (
+              <ReportShowAnalytics
+                analytics={report.analytics}
+              />
+            )}
           </td>
         </tr>
       )}

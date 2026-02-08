@@ -26,3 +26,11 @@
         padding: 0;
     }
 }
+
+.emptyState {
+    padding: var(--space-20);
+    background: var(--card-bg-redesigned);
+    backdrop-filter: var(--glass-blur-sm);
+    border-radius: var(--radius-xl);
+    border: 1px dashed var(--divider-solid);
+}

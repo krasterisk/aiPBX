@@ -19,6 +19,7 @@ export interface Report {
   events?: ReportEvent[]
   createdAt: string
   userId: string
+  analytics?: Analytics
 }
 
 export interface ReportsListProps {
@@ -69,4 +70,60 @@ export interface ReportDialog {
   timestamp: string
   role: 'User' | 'Assistant' | 'Function' | 'Call' | 'Error' | 'System'
   text: string
+}
+
+export interface BusinessImpact {
+  automation_rate?: number
+  escalation_rate?: number
+  cost_savings_estimated?: number
+}
+
+export interface ScenarioAnalysis {
+  success?: boolean
+  summary?: string
+  escalation_reason?: string | null
+  top_fallback_intents?: string[]
+}
+
+export interface UserSatisfaction {
+  csat?: number
+  sentiment?: string
+  bail_out_rate?: boolean
+  frustration_detected?: boolean
+}
+
+export interface AccuracyAndEfficiency {
+  average_turns?: number
+  dialog_completion_rate?: number
+  entity_extraction_rate?: number
+  context_retention_score?: number
+  intent_recognition_rate?: number
+}
+
+export interface SpeechAndInteractionQuality {
+  mos?: number
+  wer_estimated?: number
+  self_recovery_rate?: number
+  response_latency_score?: number
+}
+
+export interface AnalyticsMetrics {
+  'Business Impact'?: BusinessImpact
+  'Scenario Analysis'?: ScenarioAnalysis
+  'User Satisfaction (Sentiment)'?: UserSatisfaction
+  'Accuracy and Efficiency (NLU)'?: AccuracyAndEfficiency
+  'Speech and Interaction Quality'?: SpeechAndInteractionQuality
+}
+
+export interface Analytics {
+  id?: number
+  channelId: string
+  metrics?: AnalyticsMetrics
+  summary?: string | null
+  sentiment?: string | null
+  csat?: number | null
+  cost?: number
+  tokens?: number
+  createdAt?: string
+  updatedAt?: string
 }

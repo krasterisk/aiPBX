@@ -29,7 +29,7 @@ export const Drawer = memo((props: DrawerProps) => {
           height: '100%',
           width: '80vw',
           maxWidth: '320px',
-          padding: '16px',
+          padding: '8px',
           boxSizing: 'border-box',
           overflowX: 'visible',
           overflowY: 'auto',

@@ -70,7 +70,7 @@ export const ModelParametersCard = memo((props: ModelParametersCardProps) => {
             min: 0,
             max: 1000,
             step: 50,
-            unit: 'мс',
+            unit: t('ms'),
             marks: [
                 { value: 0, label: '0' },
                 { value: 500, label: '500' },
@@ -84,7 +84,7 @@ export const ModelParametersCard = memo((props: ModelParametersCardProps) => {
             min: 100,
             max: 5000,
             step: 100,
-            unit: 'мс',
+            unit: t('ms'),
             marks: [
                 { value: 100, label: '100' },
                 { value: 2500, label: '2.5K' },
@@ -98,7 +98,7 @@ export const ModelParametersCard = memo((props: ModelParametersCardProps) => {
             min: 6000,
             max: 60000,
             step: 1000,
-            unit: 'мс',
+            unit: t('ms'),
             marks: [
                 { value: 6000, label: '6K' },
                 { value: 30000, label: '30K' },
@@ -133,7 +133,7 @@ export const ModelParametersCard = memo((props: ModelParametersCardProps) => {
                 <HStack gap="8" align="center">
                     <GraphicEqIcon className={cls.headerIcon} />
                     <Text
-                        title={t('Параметры')}
+                        title={t('Параметры Модели')}
                         className={cls.cardTitle}
                         bold
                     />

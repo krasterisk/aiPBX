@@ -21,7 +21,7 @@ export const PricesListHeader = memo((props: PricesListHeaderProps) => {
 
     return (
         <HStack max justify="between" className={classNames(cls.PricesListHeader, {}, [className])}>
-            <Text title={t('Prices Management')} size="l" bold />
+            <Text title={t('Prices')} size="l" bold />
             <Button onClick={onCreate} variant="outline" className={cls.createBtn}>
                 {t('Add Price')}
             </Button>

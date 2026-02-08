@@ -144,6 +144,16 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
             dispatch(assistantFormActions.updateForm(updatedFields))
         }, [dispatch, formFields])
 
+    const onChangeCheckboxHandler = useCallback((field: keyof Assistant) =>
+        (event: ChangeEvent<HTMLInputElement>) => {
+            const value = event.target.checked
+            const updatedFields = {
+                ...formFields,
+                [field]: value
+            }
+            dispatch(assistantFormActions.updateForm(updatedFields))
+        }, [dispatch, formFields])
+
     return (
         <div className={classNames(cls.AssistantForm, {}, [className])}>
             <HStack max gap="16" align="start" className={cls.content}>
@@ -163,6 +173,7 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
                             onChangeSelectHandler={onChangeSelectHandler}
                             onChangeClientHandler={onChangeClientHandler}
                             onChangeToolsHandler={onChangeToolsHandler}
+                            onChangeCheckboxHandler={onChangeCheckboxHandler}
                         />
 
 

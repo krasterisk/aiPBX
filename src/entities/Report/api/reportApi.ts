@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { AllReports, Report, ReportDialog } from '../model/types/report'
+import { AllReports, Analytics, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
   page?: number
@@ -32,15 +32,15 @@ export const reportApi = rtkApi.injectEndpoints({
         }
       },
       // Refetch when the page arg changes
-      forceRefetch ({ currentArg, previousArg }) {
+      forceRefetch({ currentArg, previousArg }) {
         return JSON.stringify(currentArg) !== JSON.stringify(previousArg)
       },
       providesTags: (result) =>
         result?.rows?.length
           ? [
-              ...result.rows.map(({ id }) => ({ type: 'Reports', id } as const)),
-              { type: 'Reports', id: 'LIST' }
-            ]
+            ...result.rows.map(({ id }) => ({ type: 'Reports', id } as const)),
+            { type: 'Reports', id: 'LIST' }
+          ]
           : [{ type: 'Reports', id: 'LIST' }]
     }),
     getAllReports: build.query<Report[], null>({
@@ -50,9 +50,9 @@ export const reportApi = rtkApi.injectEndpoints({
       providesTags: (result) =>
         result?.length
           ? [
-              ...result.map(({ id }) => ({ type: 'Reports', id } as const)),
-              { type: 'Reports', id: 'LIST' }
-            ]
+            ...result.map(({ id }) => ({ type: 'Reports', id } as const)),
+            { type: 'Reports', id: 'LIST' }
+          ]
           : [{ type: 'Reports', id: 'LIST' }]
     }),
     getReportEvents: build.query<Report[], string>({
@@ -62,9 +62,9 @@ export const reportApi = rtkApi.injectEndpoints({
       providesTags: (result) =>
         result?.length
           ? [
-              ...result.map(({ channelId }) => ({ type: 'Reports', channelId } as const)),
-              { type: 'Reports', id: 'LIST' }
-            ]
+            ...result.map(({ channelId }) => ({ type: 'Reports', channelId } as const)),
+            { type: 'Reports', id: 'LIST' }
+          ]
           : [{ type: 'Reports', id: 'LIST' }]
     }),
     getReportDialogs: build.query<ReportDialog[], string>({
@@ -74,9 +74,9 @@ export const reportApi = rtkApi.injectEndpoints({
       providesTags: (result) =>
         result?.length
           ? [
-              ...result.map(({ channelId }) => ({ type: 'Reports', channelId } as const)),
-              { type: 'Reports', id: 'LIST' }
-            ]
+            ...result.map(({ channelId }) => ({ type: 'Reports', channelId } as const)),
+            { type: 'Reports', id: 'LIST' }
+          ]
           : [{ type: 'Reports', id: 'LIST' }]
     }),
     setReports: build.mutation<Report, Report>({
@@ -103,7 +103,7 @@ export const reportApi = rtkApi.injectEndpoints({
         method: 'PATCH',
         body: { id, ...patch }
       }),
-      async onQueryStarted ({ id, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           reportApi.util.updateQueryData('getReport', id, (draft) => {
             Object.assign(draft, patch)
@@ -114,7 +114,7 @@ export const reportApi = rtkApi.injectEndpoints({
       invalidatesTags: (result, error, { id }) => [{ type: 'Reports', id }]
     }),
     deleteReport: build.mutation<{ success: boolean, id: string }, string>({
-      query (id) {
+      query(id) {
         return {
           url: `/reports/${id}`,
           method: 'DELETE'
@@ -122,6 +122,16 @@ export const reportApi = rtkApi.injectEndpoints({
       },
       // Invalidates all queries that subscribe to this Post `id` only.
       invalidatesTags: (result, error, id) => [{ type: 'Reports', id }]
+    }),
+    createCallAnalytics: build.mutation<Analytics, string>({
+      query: (channelId) => ({
+        url: `/ai-analytics/${channelId}`,
+        method: 'POST'
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: 'Reports', id: 'LIST' },
+        ...((result && 'channelId' in result) ? [{ type: 'Reports' as const, channelId: result.channelId }] : [])
+      ]
     })
   })
 })
@@ -135,3 +145,4 @@ export const useSetReports = reportApi.useSetReportsMutation
 export const useGetReport = reportApi.useGetReportQuery
 export const useUpdateReport = reportApi.useUpdateReportMutation
 export const useDeleteReport = reportApi.useDeleteReportMutation
+export const useCreateCallAnalytics = reportApi.useCreateCallAnalyticsMutation

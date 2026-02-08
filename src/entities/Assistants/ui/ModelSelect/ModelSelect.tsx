@@ -15,6 +15,7 @@ interface ModelSelectProps {
   ) => void
   inputValue?: string
   fullWidth?: boolean
+  required?: boolean
 }
 
 export const ModelSelect = memo((props: ModelSelectProps) => {

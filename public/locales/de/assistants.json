@@ -62,7 +62,7 @@
   "Инструкция для ассистента": "Anweisung für den Assistenten",
   "Главное": "Hauptseite",
   "Инструкции": "Anweisungen",
-  "Параметры": "Parameter",
+  "Параметры Модели": "Modellparameter",
   "Публикация": "Veröffentlichung",
   "Создать SIP аккаунт": "SIP-Konto erstellen",
   "Создать WebRTC скрипт для сайта": "WebRTC-Skript für Website erstellen",
@@ -149,7 +149,7 @@
   "Генератор промпта": "Prompt-Generator",
   "Отмена": "Abbrechen",
   "Максимальное количество токенов в ответе": "Maximale Token-Anzahl in der Antwort",
-  "Основная информация": "Basisinformationen",
+  "Основные настройки": "Grundeinstellungen",
   "Параметры модели": "Modellparameter",
   "Параметры VAD": "VAD-Parameter",
   "Расширенные настройки": "Erweiterte Einstellungen",
@@ -168,5 +168,6 @@
   "tooltip_vad_threshold": "Wahrscheinlichkeit (0-1), ab der ein Ton als Sprache gilt. Höhere Werte erschweren die Aktivierung.",
   "tooltip_audio_duration": "Dauer des Audios vor Sprachbeginn, das mitverarbeitet wird (um den Satzanfang zu bewahren).",
   "tooltip_silence_duration": "Dauer der Stille, um das Ende der Benutzereingabe festzustellen.",
-  "tooltip_idle_timeout": "Maximale Inaktivitätszeit, nach der der Anruf beendet wird."
+  "tooltip_idle_timeout": "Maximale Inaktivitätszeit, nach der der Anruf beendet wird.",
+  "ms": " (ms)"
 }

@@ -65,10 +65,19 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
       })
   }, [assistantCreate, navigate])
 
+  const validateAssistant = useCallback((data: Assistant) => {
+    if (!data.name || !data.model || !data.voice || !data.instruction) {
+      toast.error(t('Проверьте заполняемые поля и повторите ещё раз'))
+      return false
+    }
+    return true
+  }, [t])
+
   const onCreate = useCallback(() => {
     if (!formFields) return
+    if (!validateAssistant(formFields)) return
     handleCreateAssistant(formFields)
-  }, [formFields, handleCreateAssistant])
+  }, [formFields, handleCreateAssistant, validateAssistant])
 
   const handleEditAssistant = useCallback((data: Assistant) => {
     assistantUpdate(data)
@@ -98,8 +107,9 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
 
   const onEdit = useCallback(() => {
     if (!formFields) return
+    if (!validateAssistant(formFields)) return
     handleEditAssistant(formFields)
-  }, [formFields, handleEditAssistant])
+  }, [formFields, handleEditAssistant, validateAssistant])
 
   if (!assistantId && isEdit && isError && error) {
     return (

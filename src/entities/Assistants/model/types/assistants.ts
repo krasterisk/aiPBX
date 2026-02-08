@@ -51,6 +51,7 @@ export interface Assistant {
   userId?: string
   sipAccount?: AssistantSipAccount
   comment?: string
+  analytic?: boolean
 }
 
 export interface AssistantsListProps {

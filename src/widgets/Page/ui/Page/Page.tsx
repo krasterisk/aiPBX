@@ -1,12 +1,11 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './Page.module.scss'
-import { MutableRefObject, ReactNode, UIEvent, useRef } from 'react'
+import { MutableRefObject, ReactNode, UIEvent, useRef, useEffect } from 'react'
 import { useInfiniteScroll } from '@/shared/lib/hooks/useInfiniteScroll/useInfiniteScroll'
 import { useDispatch, useSelector } from 'react-redux'
 import { getScrollByPath, getScrollRestorationEnabled, scrollSaveActions } from '@/features/ScrollSave'
 import { useLocation } from 'react-router-dom'
 import { StateSchema } from '@/app/providers/StoreProvider'
-import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitialEffect'
 import { useThrottle } from '@/shared/lib/hooks/useThrottle/useThrottle'
 import { TestsProps } from '@/shared/types/tests'
 
@@ -51,11 +50,18 @@ export const Page = (props: PageProps) => {
     callbackEnd: onScrollEnd
   })
 
-  useInitialEffect(() => {
+  useEffect(() => {
     if (isSaveScroll && isRestorationEnabled) {
-      wrapperRef.current.scrollTop = scrollPosition
+      if (wrapperRef.current) {
+        wrapperRef.current.scrollTop = scrollPosition
+      }
+    } else {
+      if (wrapperRef.current) {
+        wrapperRef.current.scrollTop = 0
+      }
+      window.scrollTo(0, 0)
     }
-  })
+  }, [pathname, isSaveScroll, isRestorationEnabled, scrollPosition])
   const onScroll = useThrottle((e: UIEvent<HTMLDivElement>) => {
     if (isSaveScroll && isRestorationEnabled) {
       const scrollTop = e.currentTarget.scrollTop
