@@ -200,13 +200,13 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
           </HStack>
         )}
 
-        <Button variant="clear" onClick={onOpenInstructions} className={cls.instructionsBtn}>
-          <HStack gap="4" align="center">
-            <Info size={14} />
-            <Text text={t('Инструкции')} size="s" bold variant="accent" />
-          </HStack>
-        </Button>
       </VStack>
+      <Button variant="clear" onClick={onOpenInstructions} className={cls.instructionsBtn}>
+        <HStack gap="4" align="center">
+          <Info size={14} />
+          <Text text={t('Инструкции')} size="s" bold variant="accent" />
+        </HStack>
+      </Button>
       <AsteriskInstructionsModal
         isOpen={isInstructionsModalOpen}
         onClose={onCloseInstructions}
