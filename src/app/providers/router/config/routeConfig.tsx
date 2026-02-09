@@ -40,7 +40,10 @@ import {
   getRoutePublishWidgetsCreate,
   getRoutePublishWidgetsEdit,
   getRoutePrices,
-  getRouteModels
+  getRouteModels,
+  getRouteDashboardOverview,
+  getRouteDashboardAIAnalytics,
+  getRouteDashboardCallRecords
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 
@@ -73,6 +76,10 @@ import {
   PublishWidgetCreatePage,
   PublishWidgetEditPage
 } from '@/pages/PublishPage'
+import { DashboardOverviewPage } from '@/pages/DashboardOverviewPage'
+import { AIAnalyticsPage } from '@/pages/AIAnalyticsPage'
+import { DashboardCallRecordsPage } from '@/pages/DashboardCallRecordsPage'
+import { Navigate } from 'react-router-dom'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -99,7 +106,22 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.DASHBOARD]: {
     path: getRouteDashboard(),
     authOnly: true,
-    element: <DashboardPage />
+    element: <Navigate to={getRouteDashboardOverview()} replace />
+  },
+  [AppRoutes.DASHBOARD_OVERVIEW]: {
+    path: getRouteDashboardOverview(),
+    authOnly: true,
+    element: <DashboardOverviewPage />
+  },
+  [AppRoutes.DASHBOARD_AI_ANALYTICS]: {
+    path: getRouteDashboardAIAnalytics(),
+    authOnly: true,
+    element: <AIAnalyticsPage />
+  },
+  [AppRoutes.DASHBOARD_CALL_RECORDS]: {
+    path: getRouteDashboardCallRecords(),
+    authOnly: true,
+    element: <DashboardCallRecordsPage />
   },
   [AppRoutes.PAYMENT]: {
     path: getRoutePayment(),

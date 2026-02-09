@@ -8,3 +8,4 @@ export const getPublishSipUrisFormTls = (state: StateSchema) => state.publishSip
 export const getPublishSipUrisFormActive = (state: StateSchema) => state.publishSipUrisForm?.active
 export const getPublishSipUrisFormIsLoading = (state: StateSchema) => state.publishSipUrisForm?.isLoading
 export const getPublishSipUrisFormError = (state: StateSchema) => state.publishSipUrisForm?.error
+export const getPublishSipUrisFormUserId = (state: StateSchema) => state.publishSipUrisForm?.userId ?? ''

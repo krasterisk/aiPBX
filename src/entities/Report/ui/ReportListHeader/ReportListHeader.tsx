@@ -26,6 +26,7 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
     clientId,
     search,
     assistantId,
+    assistants,
     isInited,
     onChangeAssistant,
     onChangeTab,
@@ -77,6 +78,7 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
       </HStack>
       <PeriodExtendedFilters
         assistantId={assistantId}
+        assistants={assistants}
         userId={clientId}
         startDate={startDate}
         endDate={endDate}

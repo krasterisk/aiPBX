@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { AllReports, Analytics, Report, ReportDialog } from '../model/types/report'
+import { AIAnalyticsResponse, AllReports, Analytics, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
   page?: number
@@ -10,6 +10,13 @@ interface QueryArgs {
   startDate?: string
   endDate?: string
   userId?: string
+}
+
+interface AIAnalyticsDashboardArgs {
+  userId?: string
+  assistantId?: string[]
+  startDate?: string
+  endDate?: string
 }
 
 export const reportApi = rtkApi.injectEndpoints({
@@ -123,6 +130,16 @@ export const reportApi = rtkApi.injectEndpoints({
       // Invalidates all queries that subscribe to this Post `id` only.
       invalidatesTags: (result, error, id) => [{ type: 'Reports', id }]
     }),
+    getAIAnalyticsDashboard: build.query<AIAnalyticsResponse, AIAnalyticsDashboardArgs>({
+      query: (args) => ({
+        url: '/ai-analytics/dashboard/data',
+        params: {
+          ...args,
+          assistantId: args.assistantId?.length ? args.assistantId.join(',') : undefined
+        }
+      }),
+      providesTags: ['AIAnalytics']
+    }),
     createCallAnalytics: build.mutation<Analytics, string>({
       query: (channelId) => ({
         url: `/ai-analytics/${channelId}`,
@@ -139,6 +156,7 @@ export const reportApi = rtkApi.injectEndpoints({
 export const useGetReportDialogs = reportApi.useGetReportDialogsQuery
 export const useGetReportEvents = reportApi.useGetReportEventsQuery
 export const useDashboard = reportApi.useGetReportDashboardQuery
+export const useGetAIAnalyticsDashboard = reportApi.useGetAIAnalyticsDashboardQuery
 export const useGetReports = reportApi.useGetReportsQuery
 export const useGetAllReports = reportApi.useGetAllReportsQuery
 export const useSetReports = reportApi.useSetReportsMutation

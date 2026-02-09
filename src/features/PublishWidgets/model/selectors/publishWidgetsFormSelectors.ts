@@ -10,3 +10,4 @@ export const getPublishWidgetsFormMaxSessionDuration = (state: StateSchema) => s
 export const getPublishWidgetsFormIsActive = (state: StateSchema) => state.publishWidgetsForm?.isActive ?? true
 export const getPublishWidgetsFormAppearance = (state: StateSchema) => state.publishWidgetsForm?.appearance
 export const getPublishWidgetsFormIsLoading = (state: StateSchema) => state.publishWidgetsForm?.isLoading
+export const getPublishWidgetsFormUserId = (state: StateSchema) => state.publishWidgetsForm?.userId ?? ''

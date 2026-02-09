@@ -1,6 +1,7 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './PbxServerItem.module.scss'
 import React, { HTMLAttributeAnchorTarget, memo, useCallback, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { useTranslation } from 'react-i18next'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
@@ -10,11 +11,12 @@ import { getRoutePbxServerEdit } from '@/shared/const/router'
 import { ContentView } from '../../../Content'
 import { useNavigate } from 'react-router-dom'
 import { usePbxServerStatus } from '../../api/pbxServersApi'
-import { Server, Globe, Activity, Info } from 'lucide-react'
+import { Server, Globe, Activity, Info, User as UserIcon } from 'lucide-react'
 import { Button } from '@/shared/ui/redesigned/Button'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import { toast } from 'react-toastify'
 import { AsteriskInstructionsModal } from '../AsteriskInstructionsModal/AsteriskInstructionsModal'
+import { isUserAdmin } from '@/entities/User'
 
 interface PbxServerItemProps {
   className?: string
@@ -33,6 +35,9 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
 
   const { t } = useTranslation('pbx')
   const [isInstructionsModalOpen, setIsInstructionsModalOpen] = useState(false)
+  const isAdmin = useSelector(isUserAdmin)
+
+  const clientDisplayName = pbxServer.user?.name || pbxServer.user?.email || ''
 
   const { data: statusData, isLoading: isStatusLoading } = usePbxServerStatus(pbxServer.uniqueId!, {
     skip: !pbxServer.uniqueId,
@@ -113,6 +118,18 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
         <div className={cls.divider} />
 
         <VStack gap="16" max className={cls.detailsStack}>
+          {isAdmin && clientDisplayName && (
+            <HStack gap="12" align="start">
+              <VStack align="center" justify="center" className={cls.detailIcon}>
+                <UserIcon size={14} />
+              </VStack>
+              <VStack max>
+                <Text text={t('Клиент')} variant="accent" size="s" />
+                <Text text={clientDisplayName} className={cls.urlText} />
+              </VStack>
+            </HStack>
+          )}
+
           <HStack gap="12" align="start">
             <VStack align="center" justify="center" className={cls.detailIcon}>
               <Globe size={14} />
@@ -183,14 +200,12 @@ export const PbxServerItem = memo((props: PbxServerItemProps) => {
           </HStack>
         )}
 
-        <HStack max justify="end">
-          <Button variant="clear" onClick={onOpenInstructions} className={cls.instructionsBtn}>
-            <HStack gap="4" align="center">
-              <Info size={14} />
-              <Text text={t('Инструкции')} size="s" bold variant="accent" />
-            </HStack>
-          </Button>
-        </HStack>
+        <Button variant="clear" onClick={onOpenInstructions} className={cls.instructionsBtn}>
+          <HStack gap="4" align="center">
+            <Info size={14} />
+            <Text text={t('Инструкции')} size="s" bold variant="accent" />
+          </HStack>
+        </Button>
       </VStack>
       <AsteriskInstructionsModal
         isOpen={isInstructionsModalOpen}

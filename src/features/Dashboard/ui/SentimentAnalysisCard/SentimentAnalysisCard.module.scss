@@ -1,0 +1,87 @@
+@import '@/app/styles/variables/mixins';
+
+.SentimentAnalysisCard {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    height: 100%;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow:
+            0 20px 40px rgba(0, 0, 0, 0.25),
+            0 0 20px rgba(94, 211, 243, 0.1);
+        border-color: rgba(94, 211, 243, 0.3);
+    }
+}
+
+.layout {
+    display: flex;
+    gap: var(--space-6);
+    width: 100%;
+    align-items: stretch;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+}
+
+.chartSection {
+    flex: 0 0 280px;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    // Force MUI Charts to fill container
+    >div {
+        width: 100% !important;
+    }
+
+    @media (max-width: 768px) {
+        flex: 1 1 auto;
+    }
+}
+
+.metricsSection {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-3);
+}
+
+.metricRow {
+    padding: var(--space-4) var(--space-5);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.06);
+    }
+}
+
+.iconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;
+}
+
+.metricLabel {
+    color: var(--text-redesigned);
+    opacity: 0.7;
+    font-size: var(--font-size-sm);
+}

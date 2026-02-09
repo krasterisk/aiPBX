@@ -70,8 +70,15 @@ export const PbxServerForm = memo((props: PbxServerFormProps) => {
       dispatch(pbxServerFormActions.initForm(serverData))
     } else if (!isEdit) {
       dispatch(pbxServerFormActions.resetForm())
+      // Auto-set userId for non-admin users
+      if (!isAdmin && clientData?.id) {
+        dispatch(pbxServerFormActions.updateForm({
+          userId: String(clientData.id),
+          user: { id: String(clientData.id), name: clientData.name || '' }
+        }))
+      }
     }
-  }, [isEdit, serverData, dispatch])
+  }, [isEdit, serverData, dispatch, isAdmin, clientData])
 
   const onChangeField = useCallback((field: keyof PbxServer, value: any) => {
     dispatch(pbxServerFormActions.updateForm({ [field]: value }))
@@ -183,7 +190,7 @@ export const PbxServerForm = memo((props: PbxServerFormProps) => {
                 onChangeComment={(v: string) => onChangeField('comment', v)}
                 cloudPbx={form?.cloudPbx || false}
                 onChangeCloudPbx={(v: boolean) => onChangeField('cloudPbx', v)}
-                userId={form?.userId}
+                userId={String(form?.userId || '')}
                 onChangeClient={onChangeClient}
                 isAdmin={isAdmin}
                 clientName={clientData?.name}

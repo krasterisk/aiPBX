@@ -10,6 +10,7 @@ export interface PublishWidgetsFormSchema {
     maxConcurrentSessions: number
     maxSessionDuration: number
     isActive: boolean
+    userId: string
     appearance: WidgetAppearanceSettings
     isLoading: boolean
     error?: string

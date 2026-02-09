@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import {
   getReportAssistantId,
+  getReportAssistants,
   getReportEndDate,
   getReportsHasMore,
   getReportsInited,
@@ -31,6 +32,7 @@ export function useReportFilters() {
   const endDate = useSelector(getReportEndDate)
   const clientId = useSelector(getReportUserId)
   const assistantId = useSelector(getReportAssistantId)
+  const assistants = useSelector(getReportAssistants)
   const isInited = useSelector(getReportsInited)
 
   const authData = useSelector(getUserAuthData)
@@ -147,6 +149,7 @@ export function useReportFilters() {
     clientId,
     isInited,
     assistantId,
+    assistants,
     onChangeAssistant,
     onChangeUserId,
     onChangeStartDate,

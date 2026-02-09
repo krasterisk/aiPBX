@@ -2,25 +2,30 @@ import { useSelector } from 'react-redux'
 import { useCallback } from 'react'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import {
+  getDashboardActiveTab,
   getDashboardAssistantId,
   getDashboardEndDate,
   getDashboardInited,
   getDashboardStartDate,
   getDashboardTab,
-  getDashboardUserId
+  getDashboardUserId,
+  getDashboardAssistants
 } from '../../model/selectors/dashboardPageSelectors'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 import { dashboardPageActions } from '../../model/slices/dashboardPageSlice'
-import { useDashboard } from '@/entities/Report'
+import { useDashboard, useGetAIAnalyticsDashboard } from '@/entities/Report'
+import { DashboardTab } from '../../model/types/dashboardPageSchema'
 
 export function useDashboardFilters() {
   const tab = useSelector(getDashboardTab)
+  const activeTab = useSelector(getDashboardActiveTab)
   const clientId = useSelector(getDashboardUserId)
   const startDate = useSelector(getDashboardStartDate)
   const endDate = useSelector(getDashboardEndDate)
   const isInited = useSelector(getDashboardInited)
   const assistantId = useSelector(getDashboardAssistantId)
+  const assistants = useSelector(getDashboardAssistants)
   const authData = useSelector(getUserAuthData)
   const isAdmin = useSelector(isUserAdmin)
 
@@ -43,9 +48,26 @@ export function useDashboardFilters() {
     assistantId
   }, { skip: !startDate || !endDate || !tab })
 
+  const {
+    data: aiAnalyticsData,
+    isLoading: isAIAnalyticsLoading,
+    isFetching: isAIAnalyticsFetching,
+    isError: isAIAnalyticsError,
+    error: aiAnalyticsError,
+    refetch: refetchAIAnalytics
+  } = useGetAIAnalyticsDashboard({
+    startDate,
+    endDate,
+    userId,
+    assistantId
+  }, { skip: !startDate || !endDate || activeTab !== 'ai-analytics' })
+
   const onRefetch = useCallback(() => {
     refetch()
-  }, [refetch])
+    if (activeTab === 'ai-analytics') {
+      refetchAIAnalytics()
+    }
+  }, [refetch, refetchAIAnalytics, activeTab])
 
   const onChangeUserId = useCallback((clientId: string) => {
     dispatch(dashboardPageActions.setUserId(clientId))
@@ -61,6 +83,10 @@ export function useDashboardFilters() {
     dispatch(dashboardPageActions.setTab(value))
   }, [dispatch])
 
+  const onChangeActiveTab = useCallback((value: DashboardTab) => {
+    dispatch(dashboardPageActions.setActiveTab(value))
+  }, [dispatch])
+
   const onChangeStartDate = useCallback((value: string) => {
     dispatch(dashboardPageActions.setStartDate(value))
   }, [dispatch])
@@ -71,6 +97,7 @@ export function useDashboardFilters() {
 
   return {
     tab,
+    activeTab,
     isError,
     isLoading,
     isFetching,
@@ -79,9 +106,16 @@ export function useDashboardFilters() {
     isInited,
     userId,
     assistantId,
+    assistants,
     startDate,
     endDate,
+    aiAnalyticsData,
+    isAIAnalyticsLoading,
+    isAIAnalyticsFetching,
+    isAIAnalyticsError,
+    aiAnalyticsError,
     onChangeTab,
+    onChangeActiveTab,
     onRefetch,
     onChangeUserId,
     onChangeAssistant,

@@ -1,0 +1,21 @@
+@import '@/app/styles/variables/mixins';
+
+.TimeSeriesCharts {
+    width: 100%;
+}
+
+.chartCard {
+    height: 100%;
+    transition: var(--transition-transform);
+
+    &:hover {
+        transform: var(--hover-lift-sm);
+        box-shadow: var(--shadow-md), var(--shadow-accent-sm);
+    }
+}
+
+.chartWrapper {
+    width: 100%;
+    overflow-x: auto;
+    @include custom-scrollbar;
+}

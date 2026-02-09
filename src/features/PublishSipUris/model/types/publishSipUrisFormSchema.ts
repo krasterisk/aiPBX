@@ -8,6 +8,7 @@ export interface PublishSipUrisFormSchema {
     records: boolean
     tls: boolean
     active: boolean
+    userId: string
     isLoading: boolean
     error?: string
 }

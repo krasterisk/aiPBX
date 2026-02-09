@@ -181,5 +181,10 @@
   "tooltip_audio_duration": "Audio duration before speech start to include (preserves start of phrases).",
   "tooltip_silence_duration": "Silence duration to wait before considering user speech finished.",
   "tooltip_idle_timeout": "Max idle time before the call is terminated.",
-  "ms": " (ms)"
+  "ms": " (ms)",
+  "У вас пока нет ассистентов": "You don't have any assistants yet",
+  "Аналитика разговора": "Call Analytics",
+  "Скопировать ID": "Copy ID",
+  "По умолчанию": "Default",
+  "Инструменты": "Tools"
 }

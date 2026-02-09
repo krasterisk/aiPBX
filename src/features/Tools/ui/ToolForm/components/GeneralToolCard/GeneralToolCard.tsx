@@ -42,7 +42,7 @@ export const GeneralToolCard = memo((props: GeneralToolCardProps) => {
                     <VStack gap="8" max>
                         <Text text={t('Клиент') || ''} size="s" bold className={cls.label} />
                         <ClientSelect
-                            clientId={formFields?.userId}
+                            clientId={String(formFields?.userId || '')}
                             onChangeClient={onChangeClient}
                             className={cls.fullWidth}
                         />

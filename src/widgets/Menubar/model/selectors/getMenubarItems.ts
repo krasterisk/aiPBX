@@ -2,7 +2,9 @@ import { useSelector } from 'react-redux'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import {
   getRouteAssistants,
-  getRouteDashboard,
+  getRouteDashboardOverview,
+  getRouteDashboardAIAnalytics,
+  getRouteDashboardCallRecords,
   getRoutePbxServers,
   getRoutePlayground,
   getRouteReports,
@@ -21,7 +23,6 @@ import PsychologyIcon from '@mui/icons-material/Psychology'
 import ScienceIcon from '@mui/icons-material/Science'
 import SmartToyIcon from '@mui/icons-material/SmartToy'
 import BuildIcon from '@mui/icons-material/Build'
-import AssessmentIcon from '@mui/icons-material/Assessment'
 import DnsIcon from '@mui/icons-material/Dns'
 import PeopleIcon from '@mui/icons-material/People'
 import PaymentsIcon from '@mui/icons-material/Payments'
@@ -29,6 +30,9 @@ import MenuBookIcon from '@mui/icons-material/MenuBook'
 import PublicIcon from '@mui/icons-material/Public'
 import SendIcon from '@mui/icons-material/Send'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
+import AnalyticsIcon from '@mui/icons-material/Analytics'
+import DescriptionIcon from '@mui/icons-material/Description'
+import BarChartIcon from '@mui/icons-material/BarChart'
 import { MenubarItemType } from '../types/menubar'
 import { useTranslation } from 'react-i18next'
 
@@ -42,10 +46,30 @@ export const useMenubarItems = () => {
   if (userData) {
     menubarItemsList.push(
       {
-        path: getRouteDashboard(),
-        Icon: DashboardIcon,
-        text: t('Дашбоард'),
-        authOnly: true
+        path: '/dashboards',
+        Icon: BarChartIcon,
+        text: t('Dashboards'),
+        authOnly: true,
+        subItems: [
+          {
+            path: getRouteDashboardOverview(),
+            Icon: DashboardIcon,
+            text: t('Overview'),
+            authOnly: true
+          },
+          {
+            path: getRouteDashboardAIAnalytics(),
+            Icon: AnalyticsIcon,
+            text: t('AI Analytics'),
+            authOnly: true
+          },
+          {
+            path: getRouteReports(),
+            Icon: DescriptionIcon,
+            text: t('Call Records'),
+            authOnly: true
+          }
+        ]
       },
       {
         path: getRoutePlayground(),
@@ -90,12 +114,6 @@ export const useMenubarItems = () => {
             authOnly: true
           }
         ]
-      },
-      {
-        path: getRouteReports(),
-        Icon: AssessmentIcon,
-        text: t('Отчёт'),
-        authOnly: true
       },
       {
         path: getRoutePayment(),

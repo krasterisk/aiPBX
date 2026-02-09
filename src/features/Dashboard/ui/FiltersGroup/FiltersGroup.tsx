@@ -16,6 +16,7 @@ interface FiltersGroupProps {
   tab?: string
   userId?: string
   assistantId?: string[]
+  assistants?: AssistantOptions[]
   startDate?: string
   endDate?: string
   isInited?: boolean
@@ -33,6 +34,7 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
     tab,
     userId,
     assistantId,
+    assistants,
     startDate,
     endDate,
     isInited,
@@ -62,6 +64,7 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
         <VStack gap={'16'} justify={'center'} align={'center'}>
           <PeriodExtendedFilters
             assistantId={assistantId}
+            assistants={assistants}
             userId={userId}
             startDate={startDate}
             endDate={endDate}

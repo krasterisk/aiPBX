@@ -52,7 +52,7 @@ export const MainInfoCard = memo((props: MainInfoCardProps) => {
             <VStack max gap="16">
                 {isAdmin && (
                     <ClientSelect
-                        clientId={formFields?.userId}
+                        clientId={String(formFields?.userId || '')}
                         onChangeClient={onChangeClientHandler}
                         label={String(t('Клиент'))}
                         data-testid="AssistantForm.ClientSelect"

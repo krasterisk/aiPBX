@@ -169,5 +169,10 @@
   "tooltip_audio_duration": "Dauer des Audios vor Sprachbeginn, das mitverarbeitet wird (um den Satzanfang zu bewahren).",
   "tooltip_silence_duration": "Dauer der Stille, um das Ende der Benutzereingabe festzustellen.",
   "tooltip_idle_timeout": "Maximale Inaktivitätszeit, nach der der Anruf beendet wird.",
-  "ms": " (ms)"
+  "ms": " (ms)",
+  "У вас пока нет ассистентов": "Sie haben noch keine Assistenten",
+  "Аналитика разговора": "Gesprächsanalyse",
+  "Скопировать ID": "ID kopieren",
+  "По умолчанию": "Standard",
+  "Инструменты": "Werkzeuge"
 }

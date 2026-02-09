@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Phone } from 'lucide-react'
 import { AssistantSelect, AssistantOptions } from '@/entities/Assistants'
 import { PbxServerSelect, PbxServerOptions } from '@/entities/PbxServers'
+import { ClientSelect } from '@/entities/User'
 import { Check } from '@/shared/ui/mui/Check'
 import { SectionCard } from '../SectionCard/SectionCard'
 
@@ -17,6 +18,8 @@ interface TelephonySipCardProps {
     isEdit?: boolean
     isAdmin?: boolean
     userId?: string
+    clientId?: string
+    onChangeClient?: (clientId: string) => void
 }
 
 export const TelephonySipCard = memo((props: TelephonySipCardProps) => {
@@ -29,17 +32,32 @@ export const TelephonySipCard = memo((props: TelephonySipCardProps) => {
         onChangeActive,
         isEdit,
         isAdmin,
-        userId
+        userId,
+        clientId,
+        onChangeClient
     } = props
     const { t } = useTranslation('publish-sip')
 
+    const assistantUserId = isAdmin
+        ? (clientId || undefined)
+        : userId
+
     return (
         <SectionCard title={t('Телефония и AI')} icon={Phone}>
+            {isAdmin && (
+                <ClientSelect
+                    clientId={String(clientId || '')}
+                    onChangeClient={onChangeClient}
+                    label={t('Клиент') || ''}
+                    fullWidth
+                />
+            )}
+
             <AssistantSelect
                 label={t('AI Ассистент') || ''}
                 value={selectedAssistant}
                 onChangeAssistant={onChangeAssistant}
-                userId={isEdit ? selectedAssistant?.userId : (isAdmin ? undefined : userId)}
+                userId={isEdit ? selectedAssistant?.userId : assistantUserId}
                 fullWidth
             />
 

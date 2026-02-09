@@ -127,3 +127,69 @@ export interface Analytics {
   createdAt?: string
   updatedAt?: string
 }
+
+// AI Analytics Dashboard Types
+
+export interface AIAnalyticsResponse {
+  totalCalls: number
+  totalCost: number
+  totalTokens: number
+  metrics: AggregatedAIMetrics
+  timeSeries: TimeSeriesPoint[]
+  assistantMetrics: AssistantMetric[]
+  topIssues: TopIssue[]
+}
+
+export interface AggregatedAIMetrics {
+  // NLU Metrics (0-100)
+  avgIntentRecognitionRate: number
+  avgEntityExtractionRate: number
+  dialogCompletionRate: number // 0-1 (convert to %)
+  avgContextRetentionScore: number
+  avgTurns: number
+
+  // Speech Quality
+  avgWerEstimated: number // 0-100
+  avgResponseLatencyScore: number // 0-100
+  avgMos: number // 1-5
+  selfRecoveryRate: number // 0-1 (convert to %)
+
+  // Business Impact
+  escalationRate: number // 0-1 (convert to %)
+  automationRate: number // 0-1 (convert to %)
+  avgCostSavingsEstimated: number // 0-1 (convert to %)
+
+  // Sentiment
+  avgCsat: number // 1-5
+  sentimentDistribution: {
+    positive: number // %
+    neutral: number // %
+    negative: number // %
+  }
+  frustrationDetectedRate: number // %
+  bailOutRate: number // %
+}
+
+export interface TimeSeriesPoint {
+  label: string // Date or period label
+  callsCount: number
+  avgCsat: number
+  avgMos: number
+  automationRate: number
+  totalCost: number
+  totalTokens: number
+}
+
+export interface AssistantMetric {
+  assistantId: string
+  assistantName: string
+  callsCount: number
+  avgCsat: number
+  automationRate: number
+  totalCost: number
+}
+
+export interface TopIssue {
+  intent: string
+  count: number
+}

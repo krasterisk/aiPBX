@@ -21,6 +21,7 @@ export const Dashboard = memo(() => {
     tab,
     userId,
     assistantId,
+    assistants,
     startDate,
     endDate,
     onChangeAssistant,
@@ -57,6 +58,7 @@ export const Dashboard = memo(() => {
         isInited={isInited}
         userId={userId}
         assistantId={assistantId}
+        assistants={assistants}
         startDate={startDate}
         endDate={endDate}
         onChangeTab={onChangeTab}
@@ -65,10 +67,12 @@ export const Dashboard = memo(() => {
         onChangeEndDate={onChangeEndDate}
         onChangeStartDate={onChangeStartDate}
       />
+
       <DashboardStatistics
         data={data}
         isLoading={isLoading || isFetching}
       />
+
       <DashboardCharts
         data={data}
       />

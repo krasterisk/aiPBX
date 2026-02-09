@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Phone } from 'lucide-react'
 import { AssistantSelect, AssistantOptions } from '@/entities/Assistants'
 import { PbxServerSelect, PbxServerOptions } from '@/entities/PbxServers'
+import { ClientSelect } from '@/entities/User'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Check } from '@/shared/ui/mui/Check'
 import { SectionCard } from '../SectionCard/SectionCard'
@@ -18,6 +19,8 @@ interface TelephonyAiCardProps {
     onChangeIsActive: (e: React.ChangeEvent<HTMLInputElement>) => void
     isAdmin: boolean
     userId?: string
+    clientId?: string
+    onChangeClient?: (clientId: string) => void
 }
 
 export const TelephonyAiCard = memo((props: TelephonyAiCardProps) => {
@@ -31,27 +34,26 @@ export const TelephonyAiCard = memo((props: TelephonyAiCardProps) => {
         isActive,
         onChangeIsActive,
         isAdmin,
-        userId
+        userId,
+        clientId,
+        onChangeClient
     } = props
     const { t } = useTranslation('publish-widgets')
 
+    const filterUserId = isAdmin
+        ? (clientId || undefined)
+        : userId
+
     return (
         <SectionCard title={t('Телефония и AI')} icon={Phone}>
-            <AssistantSelect
-                key={selectedAssistant?.id}
-                label={t('AI Ассистент') || ''}
-                value={selectedAssistant}
-                onChangeAssistant={onChangeAssistant}
-                userId={isAdmin ? undefined : userId}
-            />
-
-            <PbxServerSelect
-                label={t('PBX Сервер') || ''}
-                value={selectedPbxServer}
-                onChangePbxServer={onChangePbxServer}
-                userId={isAdmin ? undefined : userId}
-                fetchType="cloud-and-user"
-            />
+            {isAdmin && (
+                <ClientSelect
+                    clientId={String(clientId || '')}
+                    onChangeClient={onChangeClient}
+                    label={t('Клиент') || ''}
+                    fullWidth
+                />
+            )}
 
             <Textarea
                 label={t('Название виджета') || ''}
@@ -59,6 +61,22 @@ export const TelephonyAiCard = memo((props: TelephonyAiCardProps) => {
                 onChange={onChangeName}
                 placeholder={t('Напр. Служба поддержки') || ''}
                 rows={1}
+            />
+
+            <AssistantSelect
+                key={selectedAssistant?.id}
+                label={t('AI Ассистент') || ''}
+                value={selectedAssistant}
+                onChangeAssistant={onChangeAssistant}
+                userId={filterUserId}
+            />
+
+            <PbxServerSelect
+                label={t('PBX Сервер') || ''}
+                value={selectedPbxServer}
+                onChangePbxServer={onChangePbxServer}
+                userId={filterUserId}
+                fetchType="cloud-and-user"
             />
 
             <Check

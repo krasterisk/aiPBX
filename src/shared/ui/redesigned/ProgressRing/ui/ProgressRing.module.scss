@@ -1,0 +1,41 @@
+@import '@/app/styles/variables/mixins';
+
+.ProgressRing {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.label {
+    position: absolute;
+    @include flex-center;
+    flex-direction: column;
+    gap: var(--space-1);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+}
+
+.value {
+    font-size: var(--font-size-l);
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-color);
+    line-height: 1;
+}
+
+.text {
+    font-size: var(--font-size-xs);
+    color: var(--secondary-color);
+    line-height: 1.2;
+    max-width: 80px;
+    @include text-clamp(2);
+}

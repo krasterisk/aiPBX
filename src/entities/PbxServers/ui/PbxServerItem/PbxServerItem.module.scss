@@ -59,6 +59,8 @@
 
     .chip {
         @include chip-base;
+        padding: 2px 6px;
+        font-size: 0.6rem;
     }
 
     .dot {
@@ -140,11 +142,15 @@
     }
 
     .instructionsBtn {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
         padding: 0 !important;
         min-width: unset !important;
         height: unset !important;
         color: var(--accent-redesigned) !important;
         transition: var(--transition-fast);
+        z-index: 11;
 
         &:hover {
             transform: scale(1.05);

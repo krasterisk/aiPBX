@@ -52,5 +52,6 @@
     "Развернуть": "Ausklappen",
     "Скопировать конфиг": "Konfiguration kopieren",
     "Новый SIP URI": "Neuer SIP-URI",
-    "SIP URI активен": "SIP-URI aktiv"
+    "SIP URI активен": "SIP-URI aktiv",
+    "Клиент": "Kunde"
 }

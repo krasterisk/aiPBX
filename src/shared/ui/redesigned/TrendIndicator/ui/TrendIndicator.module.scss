@@ -1,0 +1,36 @@
+@import '@/app/styles/variables/mixins';
+
+.TrendIndicator {
+    @include flex-center;
+    gap: var(--space-1);
+    transition: var(--transition-colors);
+    font-weight: var(--font-weight-medium);
+
+    &.sm {
+        font-size: var(--font-size-xs);
+    }
+
+    &.md {
+        font-size: var(--font-size-sm);
+    }
+
+    &.lg {
+        font-size: var(--font-size-m);
+    }
+
+    &.positive {
+        color: var(--status-success);
+    }
+
+    &.negative {
+        color: var(--status-error);
+    }
+
+    &.neutral {
+        color: var(--status-neutral);
+    }
+}
+
+.value {
+    font-variant-numeric: tabular-nums;
+}

@@ -1,39 +1,49 @@
+@import '@/app/styles/variables/mixins';
+
 .StatCard {
     height: 100%;
-    transition: transform 0.2s;
+    transition: var(--transition-transform);
 
     &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transform: var(--hover-lift-sm);
+        box-shadow: var(--shadow-md), var(--shadow-accent-sm);
+    }
+
+    &.success {
+        border-color: var(--status-success-border);
+    }
+
+    &.warning {
+        border-color: var(--status-warning-border);
+    }
+
+    &.error {
+        border-color: var(--status-error-border);
     }
 }
 
 .title {
     color: var(--hint-redesigned, #8b96a5);
-    font-size: 14px;
-    font-weight: 500;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
 }
 
 .value {
-    font-size: 28px;
-    line-height: 32px;
-    font-weight: 700;
-    color: var(--text-redesigned, #fff);
+    font-size: var(--font-size-xl);
+    line-height: 1.2;
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-color);
 }
 
 .description {
-    color: var(--hint-redesigned, #8b96a5);
+    color: var(--secondary-color);
     opacity: 0.8;
+    font-size: var(--font-size-xs);
 }
 
 .iconWrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: var(--light-bg-redesigned, rgba(255, 255, 255, 0.05));
+    @include flex-center;
+    @include icon-container(48px, var(--light-bg-redesigned, rgba(255, 255, 255, 0.05)));
     color: var(--icon-redesigned);
 
     svg {

@@ -12,6 +12,7 @@ const initialState: PublishWidgetsFormSchema = {
     maxConcurrentSessions: 10,
     maxSessionDuration: 600,
     isActive: true,
+    userId: '',
     appearance: DEFAULT_APPEARANCE_SETTINGS,
     isLoading: false
 }
@@ -43,6 +44,9 @@ export const publishWidgetsFormSlice = createSlice({
         },
         setAppearance: (state, action: PayloadAction<Partial<PublishWidgetsFormSchema['appearance']>>) => {
             state.appearance = { ...state.appearance, ...action.payload }
+        },
+        setUserId: (state, action: PayloadAction<string>) => {
+            state.userId = action.payload
         },
         resetForm: (state) => {
             return initialState

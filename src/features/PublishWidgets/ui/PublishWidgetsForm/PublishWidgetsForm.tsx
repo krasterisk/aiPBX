@@ -15,7 +15,8 @@ import {
     getPublishWidgetsFormMaxSessions,
     getPublishWidgetsFormMaxSessionDuration,
     getPublishWidgetsFormIsActive,
-    getPublishWidgetsFormAppearance
+    getPublishWidgetsFormAppearance,
+    getPublishWidgetsFormUserId
 } from '../../model/selectors/publishWidgetsFormSelectors'
 import { publishWidgetsFormActions } from '../../model/slices/publishWidgetsFormSlice'
 import { isUserAdmin, getUserAuthData } from '@/entities/User'
@@ -58,6 +59,7 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
     const appearance = useSelector(getPublishWidgetsFormAppearance)
     const isAdmin = useSelector(isUserAdmin)
     const userData = useSelector(getUserAuthData)
+    const formUserId = useSelector(getPublishWidgetsFormUserId)
 
     const [createWidget, { isLoading: isCreating }] = useCreateWidgetKey()
     const [updateWidget, { isLoading: isUpdating }] = useUpdateWidgetKey()
@@ -65,6 +67,13 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
     const isLoading = isCreating || isUpdating || isDeleting
 
     const isMobile = useMediaQuery('(max-width:800px)')
+
+    // Auto-set userId for non-admin users
+    useEffect(() => {
+        if (!isAdmin && userData?.id && !formUserId) {
+            dispatch(publishWidgetsFormActions.setUserId(String(userData.id)))
+        }
+    }, [isAdmin, userData, formUserId, dispatch])
 
     const { data: allPbxServers, isLoading: isServersLoading } = usePbxServersCloudAndUser(null)
 
@@ -123,6 +132,13 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
         (field: string, value: unknown) => dispatch(publishWidgetsFormActions.setAppearance({ [field]: value })),
         [dispatch]
     )
+
+    const onChangeClient = useCallback((clientId: string) => {
+        dispatch(publishWidgetsFormActions.setUserId(clientId))
+        // Reset assistant and PBX server when client changes
+        dispatch(publishWidgetsFormActions.setSelectedAssistant(null))
+        dispatch(publishWidgetsFormActions.setSelectedPbxServer(null))
+    }, [dispatch])
 
     const onSave = useCallback(async () => {
         if (!name || !selectedAssistant) {
@@ -231,7 +247,9 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
                             isActive={isActive}
                             onChangeIsActive={onChangeIsActive}
                             isAdmin={isAdmin}
-                            userId={userData?.id}
+                            userId={String(userData?.id || '')}
+                            clientId={formUserId}
+                            onChangeClient={onChangeClient}
                         />
 
                         <SecurityLimitsCard

@@ -1,0 +1,91 @@
+@import '@/app/styles/variables/mixins';
+
+.TopIssuesChart {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    height: 100%;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow:
+            0 20px 40px rgba(0, 0, 0, 0.25),
+            0 0 20px rgba(94, 211, 243, 0.1);
+        border-color: rgba(94, 211, 243, 0.3);
+    }
+}
+
+.issuesList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 100%;
+}
+
+.issueRow {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.04);
+    }
+}
+
+.issueHeader {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+}
+
+.issueRank {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: rgba(244, 67, 54, 0.15);
+    color: #f44336;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.issueLabel {
+    flex: 1;
+    color: var(--text-redesigned);
+    opacity: 0.85;
+    font-size: var(--font-size-sm);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.issueCount {
+    color: var(--text-redesigned);
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+    min-width: 30px;
+    text-align: right;
+}
+
+.emptyMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-redesigned);
+    opacity: 0.5;
+    padding: var(--space-8);
+}

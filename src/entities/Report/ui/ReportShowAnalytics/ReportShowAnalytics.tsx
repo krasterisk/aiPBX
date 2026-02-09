@@ -6,12 +6,8 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Analytics } from '../../model/types/report'
 import { useTranslation } from 'react-i18next'
-import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
-import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
 import { useSelector } from 'react-redux'
 import {
-    Coins,
-    Cpu,
     GitBranch,
     Smile,
     Star,
@@ -32,8 +28,6 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
     } = props
 
     const { t } = useTranslation('reports')
-    const authData = useSelector(getUserAuthData)
-    const userCurrency = UserCurrencyValues.USD || authData?.currency
 
     const metrics = analytics.metrics
 
@@ -70,33 +64,15 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
             className={classNames(cls.ReportShowAnalytics, {}, [className])}
             max
         >
-            {/* Top Cards: Tokens, Cost, CSAT */}
+            {/* Top Cards: CSAT */}
             <HStack gap="16" max className={cls.topCards}>
                 <Card variant="light" className={cls.card}>
                     <VStack gap="4">
                         <HStack justify="between" max align="start">
-                            <Text title={t('Токены')} className={cls.metricLabel} />
-                            <Cpu size={20} className={cls.metricLabel} />
-                        </HStack>
-                        <Text text={String(analytics.tokens || 0)} size="l" bold />
-                    </VStack>
-                </Card>
-                <Card variant="light" className={cls.card}>
-                    <VStack gap="4">
-                        <HStack justify="between" max align="start">
-                            <Text title={t('Стоимость')} className={cls.metricLabel} />
-                            <Coins size={20} className={cls.metricLabel} />
-                        </HStack>
-                        <Text text={formatCurrency(analytics.cost || 0, userCurrency, 4)} size="l" bold />
-                    </VStack>
-                </Card>
-                <Card variant="light" className={cls.card}>
-                    <VStack gap="4">
-                        <HStack justify="between" max align="start">
                             <Text title={t('CSAT')} className={cls.metricLabel} />
+                            <Text text={String(csat ?? '-')} size="l" bold />
                             <Star size={20} className={cls.metricLabel} />
                         </HStack>
-                        <Text text={String(csat ?? '-')} size="l" bold />
                     </VStack>
                 </Card>
             </HStack>

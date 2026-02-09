@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { DashboardPageSchema } from '../types/dashboardPageSchema'
+import { DashboardPageSchema, DashboardTab } from '../types/dashboardPageSchema'
 import { AssistantOptions } from '@/entities/Assistants'
 import { ClientOptions } from '@/entities/User'
 
 const initialState: DashboardPageSchema = {
   tab: 'week',
+  activeTab: 'overview',
   startDate: '',
   endDate: '',
   userId: ''
@@ -16,6 +17,9 @@ export const dashboardPageSlice = createSlice({
   reducers: {
     setTab: (state, action: PayloadAction<string>) => {
       state.tab = action.payload
+    },
+    setActiveTab: (state, action: PayloadAction<DashboardTab>) => {
+      state.activeTab = action.payload
     },
     setStartDate: (state, action: PayloadAction<string>) => {
       state.startDate = action.payload
@@ -39,6 +43,7 @@ export const dashboardPageSlice = createSlice({
     initState: (state) => {
       state._inited = true
       state.tab = 'week'
+      state.activeTab = 'overview'
     }
   }
 })

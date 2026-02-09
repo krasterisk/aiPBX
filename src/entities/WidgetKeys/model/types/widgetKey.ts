@@ -23,6 +23,11 @@ export interface WidgetKey {
         name: string
         uniqueId?: string
     }
+    user?: {
+        id: number
+        name?: string
+        email?: string
+    }
 }
 
 export interface CreateWidgetDto {

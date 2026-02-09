@@ -1,6 +1,6 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './PublishSipUrisForm.module.scss'
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
@@ -18,7 +18,8 @@ import {
     getPublishSipUrisFormIpAddress,
     getPublishSipUrisFormRecords,
     getPublishSipUrisFormTls,
-    getPublishSipUrisFormActive
+    getPublishSipUrisFormActive,
+    getPublishSipUrisFormUserId
 } from '../../model/selectors/publishSipUrisFormSelectors'
 import { publishSipUrisFormActions } from '../../model/slices/publishSipUrisFormSlice'
 import { isUserAdmin, getUserAuthData } from '@/entities/User'
@@ -50,6 +51,7 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
     const active = useSelector(getPublishSipUrisFormActive)
     const isAdmin = useSelector(isUserAdmin)
     const userData = useSelector(getUserAuthData)
+    const formUserId = useSelector(getPublishSipUrisFormUserId)
 
     const [createSip, { isLoading: isCreating }] = useCreateSipUri()
     const [updateSip, { isLoading: isUpdating }] = useUpdateSipUri()
@@ -57,6 +59,13 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
 
     const isLoading = isCreating || isUpdating || isDeleting
     const isMobile = useMediaQuery('(max-width:800px)')
+
+    // Auto-set userId for non-admin users
+    useEffect(() => {
+        if (!isAdmin && userData?.id && !formUserId) {
+            dispatch(publishSipUrisFormActions.setUserId(String(userData.id)))
+        }
+    }, [isAdmin, userData, formUserId, dispatch])
 
     const onClose = useCallback(() => {
         navigate(getRoutePublishSipUris())
@@ -84,6 +93,12 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
 
     const onChangeActive = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(publishSipUrisFormActions.setActive(e.target.checked))
+    }, [dispatch])
+
+    const onChangeClient = useCallback((clientId: string) => {
+        dispatch(publishSipUrisFormActions.setUserId(clientId))
+        // Reset assistant when client changes
+        dispatch(publishSipUrisFormActions.setSelectedAssistant(null))
     }, [dispatch])
 
     const onDelete = useCallback(async () => {
@@ -162,7 +177,9 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
                             onChangeActive={onChangeActive}
                             isEdit={isEdit}
                             isAdmin={isAdmin}
-                            userId={userData?.id}
+                            userId={String(userData?.id || '')}
+                            clientId={formUserId}
+                            onChangeClient={onChangeClient}
                         />
                     </VStack>
 

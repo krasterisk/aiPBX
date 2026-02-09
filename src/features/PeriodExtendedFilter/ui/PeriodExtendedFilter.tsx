@@ -21,6 +21,7 @@ interface PeriodExtendedFilterProps {
     endDate?: string
     userId?: string
     assistantId?: string[]
+    assistants?: AssistantOptions[]
     onChangeStartDate?: (value: string) => void
     onChangeEndDate?: (value: string) => void
     onChangeAssistant: (event: any, assistant: AssistantOptions[]) => void
@@ -35,6 +36,7 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
         startDate,
         userId,
         assistantId,
+        assistants,
         onChangeStartDate,
         onClose,
         onChangeEndDate,
@@ -101,6 +103,8 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
 
                     <AssistantSelect
                         multiple
+                        value={assistants}
+                        userId={userId}
                         label={t('Выбор ассистента') || ''}
                         className={cls.clientSelect}
                         onChangeAssistant={onChangeAssistant}

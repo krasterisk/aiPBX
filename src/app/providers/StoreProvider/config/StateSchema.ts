@@ -15,6 +15,7 @@ import { PublishSipUrisPageSchema } from '@/entities/PublishSipUris'
 import { PublishWidgetsFormSchema } from '@/features/PublishWidgets'
 import { PublishWidgetsPageSchema } from '@/entities/PublishWidgets'
 import { PbxServerFormSchema } from '@/features/PbxServers'
+import { AIAnalyticsPageSchema } from '@/pages/AIAnalyticsPage'
 
 export interface StateSchema {
   user: UserSchema
@@ -37,6 +38,7 @@ export interface StateSchema {
   publishWidgetsForm?: PublishWidgetsFormSchema
   publishWidgetsPage?: PublishWidgetsPageSchema
   pbxServerForm?: PbxServerFormSchema
+  aiAnalyticsPage?: AIAnalyticsPageSchema
 }
 
 export type StateSchemaKey = keyof StateSchema

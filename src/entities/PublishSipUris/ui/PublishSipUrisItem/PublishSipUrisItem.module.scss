@@ -50,6 +50,8 @@
 
     .chip {
         @include chip-base;
+        padding: 3px 8px;
+        font-size: 0.65rem;
     }
 
     .dot {

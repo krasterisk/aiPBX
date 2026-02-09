@@ -34,9 +34,21 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
                 <TreeItem
                     key={node.path}
                     itemId={node.path}
+                    sx={{
+                        '& .MuiTreeItem-iconContainer': {
+                            width: '24px !important',
+                            marginRight: '0px !important',
+                            flexShrink: 0,
+                        },
+                        '& .MuiTreeItem-label': {
+                            paddingLeft: '0px !important',
+                        },
+                        // Не переопределяем padding-left у content через !important, 
+                        // чтобы MUI мог применить отступ вложенности
+                    }}
                     label={
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px 0' }}>
-                            {node.Icon && <node.Icon style={{ width: 20, height: 20, color: 'inherit' }} />}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 0' }}>
+                            {node.Icon && <node.Icon style={{ width: 18, height: 18, color: 'inherit' }} />}
                             <span style={{ fontSize: 'inherit', fontWeight: 'inherit' }}>{t(node.text)}</span>
                         </div>
                     }
@@ -66,7 +78,20 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
     )
 
     const tree = (
-        <SimpleTreeView className={cls.menuContainer}>
+        <SimpleTreeView
+            className={cls.menuContainer}
+            style={{
+                // @ts-ignore
+                '--TreeView-itemChildrenIndentation': '32px'
+            }}
+            sx={{
+                width: '100%',
+                '& .MuiTreeItem-groupTransition': {
+                    marginLeft: '15px !important',
+                    borderLeft: '1px solid var(--glass-border-subtle) !important',
+                },
+            }}
+        >
             {renderNodes(menubarItemList)}
         </SimpleTreeView>
     )

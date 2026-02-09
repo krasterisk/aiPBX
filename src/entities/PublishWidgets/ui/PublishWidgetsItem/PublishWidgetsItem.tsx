@@ -12,7 +12,9 @@ import CodeIcon from '@mui/icons-material/Code'
 import { GetCodeDialog } from '../GetCodeDialog/GetCodeDialog'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '@/shared/ui/redesigned/Icon'
-import { Globe, Bot, Zap } from 'lucide-react'
+import { Globe, Bot, Zap, User as UserIcon } from 'lucide-react'
+import { useSelector } from 'react-redux'
+import { isUserAdmin } from '@/entities/User'
 
 interface PublishWidgetsItemProps {
     className?: string
@@ -25,6 +27,9 @@ export const PublishWidgetsItem = memo((props: PublishWidgetsItemProps) => {
     const navigate = useNavigate()
 
     const [isCodeModalOpen, setIsCodeModalOpen] = useState(false)
+    const isAdmin = useSelector(isUserAdmin)
+
+    const clientDisplayName = widget.user?.name || widget.user?.email || ''
 
     const appearance: WidgetAppearanceSettings = useMemo(() => {
         try {
@@ -92,6 +97,18 @@ export const PublishWidgetsItem = memo((props: PublishWidgetsItemProps) => {
                 <div className={cls.divider} />
 
                 <VStack gap="12" max className={cls.details}>
+                    {isAdmin && clientDisplayName && (
+                        <HStack gap="12" align="center">
+                            <div className={cls.detailIcon}>
+                                <UserIcon size={14} />
+                            </div>
+                            <VStack>
+                                <Text text={t('Клиент')} variant="accent" />
+                                <Text text={clientDisplayName} className={cls.truncatedText} />
+                            </VStack>
+                        </HStack>
+                    )}
+
                     <HStack gap="12" align="center">
                         <div className={cls.detailIcon}>
                             <Globe size={14} />

@@ -75,21 +75,14 @@
         }
 
         .MuiTreeItem-iconContainer {
-            width: 24px;
-            margin-right: var(--space-1);
-
             svg {
-                width: 20px;
-                height: 20px;
                 transition: all 0.3s ease;
                 color: var(--icon-redesigned);
             }
         }
 
         .MuiTreeItem-group {
-            margin-left: 24px;
             border-left: 1px solid var(--glass-border-subtle);
-            padding-left: 12px;
             margin-top: 2px;
             margin-bottom: 2px;
         }

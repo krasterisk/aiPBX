@@ -1,0 +1,38 @@
+.row {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    align-items: stretch;
+
+    @media (max-width: 900px) {
+        flex-direction: column;
+    }
+}
+
+.col60 {
+    flex: 3;
+    min-width: 0;
+
+    // Force children (Card) to fill height
+    >* {
+        height: 100%;
+    }
+}
+
+.col40 {
+    flex: 2;
+    min-width: 0;
+
+    >* {
+        height: 100%;
+    }
+}
+
+.col50 {
+    flex: 1;
+    min-width: 0;
+
+    >* {
+        height: 100%;
+    }
+}
