@@ -66,5 +66,13 @@
   "Нет описания": "No description",
   "Добавьте комментарий...": "Add a comment...",
   "Введите наименование функции": "Enter tool name",
-  "Опишите назначение функции...": "Describe the tool's purpose..."
+  "Опишите назначение функции...": "Describe the tool's purpose...",
+  "Авто-заголовок авторизации": "Auto-generated Authorization Header",
+  "Введите наименование": "Enter a name",
+  "Пожалуйста заполни все поля": "Please fill in all required fields",
+  "Авторизация": "Authorization",
+  "Пользовательские заголовки": "Custom Headers",
+  "Заголовки": "Headers",
+  "Введите Bearer токен": "Enter Bearer token",
+  "Добавить": "Add"
 }

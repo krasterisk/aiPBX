@@ -2,77 +2,85 @@
 
 .AssistantComparisonTable {
     position: relative;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all var(--duration-slow) var(--ease-spring);
     overflow: hidden;
     height: 100%;
 
     &:hover {
-        transform: translateY(-4px);
-        box-shadow:
-            0 20px 40px rgba(0, 0, 0, 0.25),
-            0 0 20px rgba(94, 211, 243, 0.1);
-        border-color: rgba(94, 211, 243, 0.3);
+        transform: var(--hover-lift-md);
+        box-shadow: var(--shadow-lg), var(--shadow-accent-md);
+    }
+
+    @include mobile {
+        &:hover {
+            transform: none;
+        }
     }
 }
 
 .tableContainer {
     width: 100%;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     @include custom-scrollbar;
 
-    // Fix MUI Table text colors for dark themes
     :global {
         .MuiTableCell-root {
             color: var(--text-redesigned);
-            border-color: rgba(255, 255, 255, 0.06);
+            border-color: var(--divider-subtle);
+            white-space: nowrap;
         }
 
         .MuiTableCell-head {
-            color: var(--text-redesigned);
-            opacity: 0.7;
+            color: var(--icon-redesigned);
             font-weight: 600;
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--glass-overlay-light);
         }
 
         .MuiTableSortLabel-root {
-            color: var(--text-redesigned) !important;
-            opacity: 0.7;
+            color: var(--icon-redesigned) !important;
 
             &.Mui-active {
                 color: var(--accent-redesigned) !important;
-                opacity: 1;
             }
 
             & .MuiTableSortLabel-icon {
-                color: var(--text-redesigned) !important;
-                opacity: 0.5;
+                color: var(--hint-redesigned) !important;
             }
         }
 
         .MuiTableRow-root:hover {
-            background: rgba(255, 255, 255, 0.03) !important;
+            background: var(--glass-overlay-light) !important;
+        }
+    }
+
+    @include mobile {
+        :global {
+            .MuiTableCell-root {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .MuiTableCell-head {
+                padding: 8px 12px;
+                font-size: 11px;
+            }
         }
     }
 }
 
 .progressLabel {
     font-size: var(--font-size-xs);
-    color: var(--text-redesigned);
-    opacity: 0.7;
+    color: var(--icon-redesigned);
     margin-top: 2px;
 }
 
 .emptyMessage {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-redesigned);
-    opacity: 0.5;
+    @include flex-center;
+    color: var(--hint-redesigned);
     padding: var(--space-8);
+
+    @include mobile {
+        padding: var(--space-4);
+    }
 }

@@ -12,6 +12,7 @@ export type CardVariant = 'normal'
   | 'danger'
   | 'accent'
   | 'clear'
+  | 'glass'
 export type CardPadding = '0' | '8' | '16' | '24' | '48'
 export type CardBorder = 'round' | 'normal' | 'partial'
 

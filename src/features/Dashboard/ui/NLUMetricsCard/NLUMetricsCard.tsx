@@ -1,6 +1,5 @@
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Grid } from '@mui/material'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
@@ -47,33 +46,32 @@ export const NLUMetricsCard = memo((props: NLUMetricsCardProps) => {
     return (
         <Card
             max
+            variant="glass"
             border="partial"
             padding="24"
             className={classNames(cls.NLUMetricsCard, {}, [className])}
         >
             <VStack gap="16" max>
                 <Text title={t('Natural Language Understanding')} bold />
-                <Grid container spacing={3}>
+                <div className={cls.metricsGrid}>
                     {nluMetrics.map((metric, index) => (
-                        <Grid size={{ xs: 6, md: 3 }} key={index}>
-                            <VStack gap="8" align="center" className={cls.metricWrapper}>
-                                <ProgressRing
-                                    value={metric.value}
-                                    color={getColorByValue(metric.value)}
-                                    size={100}
-                                    thickness={6}
-                                    showPercentage={true}
-                                    label=""
-                                />
-                                <Text
-                                    text={metric.label}
-                                    className={cls.metricLabel}
-                                    align="center"
-                                />
-                            </VStack>
-                        </Grid>
+                        <VStack gap="8" align="center" className={cls.metricWrapper} key={index}>
+                            <ProgressRing
+                                value={metric.value}
+                                color={getColorByValue(metric.value)}
+                                size={100}
+                                thickness={6}
+                                showPercentage={true}
+                                label=""
+                            />
+                            <Text
+                                text={metric.label}
+                                className={cls.metricLabel}
+                                align="center"
+                            />
+                        </VStack>
                     ))}
-                </Grid>
+                </div>
             </VStack>
         </Card>
     )

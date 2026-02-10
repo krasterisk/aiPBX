@@ -2,22 +2,19 @@
 
 .TopIssuesChart {
     position: relative;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all var(--duration-slow) var(--ease-spring);
     overflow: hidden;
     height: 100%;
 
     &:hover {
-        transform: translateY(-4px);
-        box-shadow:
-            0 20px 40px rgba(0, 0, 0, 0.25),
-            0 0 20px rgba(94, 211, 243, 0.1);
-        border-color: rgba(94, 211, 243, 0.3);
+        transform: var(--hover-lift-md);
+        box-shadow: var(--shadow-lg), var(--shadow-accent-md);
+    }
+
+    @include mobile {
+        &:hover {
+            transform: none;
+        }
     }
 }
 
@@ -33,12 +30,16 @@
     flex-direction: column;
     gap: var(--space-2);
     padding: var(--space-3) var(--space-4);
-    border-radius: 10px;
-    transition: all 0.2s ease;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
     cursor: pointer;
 
     &:hover {
-        background: rgba(255, 255, 255, 0.04);
+        background: var(--glass-overlay-light);
+    }
+
+    @include mobile {
+        padding: var(--space-2) var(--space-3);
     }
 }
 
@@ -47,45 +48,63 @@
     align-items: center;
     gap: var(--space-3);
     width: 100%;
+
+    @include mobile {
+        gap: var(--space-2);
+    }
 }
 
 .issueRank {
     width: 24px;
     height: 24px;
-    border-radius: 6px;
-    background: rgba(244, 67, 54, 0.15);
-    color: #f44336;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: var(--radius-xs);
+    background: var(--status-error-bg);
+    color: var(--status-error);
+    @include flex-center;
     font-size: 11px;
     font-weight: 700;
     flex-shrink: 0;
+
+    @include mobile {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
 }
 
 .issueLabel {
     flex: 1;
     color: var(--text-redesigned);
     opacity: 0.85;
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-s);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    @include mobile {
+        font-size: var(--font-size-xs);
+    }
 }
 
 .issueCount {
     color: var(--text-redesigned);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-s);
     flex-shrink: 0;
     min-width: 30px;
     text-align: right;
+
+    @include mobile {
+        font-size: var(--font-size-xs);
+        min-width: 24px;
+    }
 }
 
 .emptyMessage {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-redesigned);
-    opacity: 0.5;
+    @include flex-center;
+    color: var(--hint-redesigned);
     padding: var(--space-8);
+
+    @include mobile {
+        padding: var(--space-4);
+    }
 }

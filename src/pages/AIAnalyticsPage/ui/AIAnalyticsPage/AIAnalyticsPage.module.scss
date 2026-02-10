@@ -1,0 +1,9 @@
+@import '@/app/styles/variables/mixins';
+
+.AIAnalyticsPage {
+    width: 100%;
+
+    @include mobile {
+        padding: 0 var(--space-2);
+    }
+}

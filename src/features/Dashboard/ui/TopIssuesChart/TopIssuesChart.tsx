@@ -29,6 +29,7 @@ export const TopIssuesChart = memo((props: TopIssuesChartProps) => {
         return (
             <Card
                 max
+                variant="glass"
                 border="partial"
                 padding="24"
                 className={classNames(cls.TopIssuesChart, {}, [className])}
@@ -46,6 +47,7 @@ export const TopIssuesChart = memo((props: TopIssuesChartProps) => {
     return (
         <Card
             max
+            variant="glass"
             border="partial"
             padding="24"
             className={classNames(cls.TopIssuesChart, {}, [className])}
@@ -80,10 +82,10 @@ export const TopIssuesChart = memo((props: TopIssuesChartProps) => {
                                     sx={{
                                         height: 6,
                                         borderRadius: 3,
-                                        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                                        backgroundColor: 'var(--glass-overlay-medium)',
                                         '& .MuiLinearProgress-bar': {
                                             borderRadius: 3,
-                                            background: `linear-gradient(90deg, #f44336 ${percentage}%, #ff7043 100%)`
+                                            background: 'var(--status-error)'
                                         }
                                     }}
                                 />

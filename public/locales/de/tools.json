@@ -53,5 +53,11 @@
   "Заголовки (JSON)": "Header (JSON)",
   "Вебхук": "Webhook",
   "Нет описания": "Keine Beschreibung",
-  "Управление функциями и MCP серверами": "Verwaltung von Funktionen und MCP-Servern"
+  "Управление функциями и MCP серверами": "Verwaltung von Funktionen und MCP-Servern",
+  "Авто-заголовок авторизации": "Automatisch generierter Autorisierungs-Header",
+  "Авторизация": "Autorisierung",
+  "Пользовательские заголовки": "Benutzerdefinierte Header",
+  "Заголовки": "Header",
+  "Введите Bearer токен": "Bearer-Token eingeben",
+  "Добавить": "Hinzufügen"
 }

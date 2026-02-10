@@ -28,13 +28,13 @@
 .value {
     font-size: var(--font-size-l);
     font-weight: var(--font-weight-bold);
-    color: var(--primary-color);
+    color: var(--text-redesigned);
     line-height: 1;
 }
 
 .text {
     font-size: var(--font-size-xs);
-    color: var(--secondary-color);
+    color: var(--icon-redesigned);
     line-height: 1.2;
     max-width: 80px;
     @include text-clamp(2);

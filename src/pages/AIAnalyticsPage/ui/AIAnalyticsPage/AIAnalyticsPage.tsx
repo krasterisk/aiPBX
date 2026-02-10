@@ -9,6 +9,7 @@ import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitial
 import { useAIAnalyticsFilters } from '../../libs/hooks/useAIAnalyticsFilters'
 import { aiAnalyticsPageReducer } from '../../model/slices/aiAnalyticsPageSlice'
 import { initAIAnalyticsPage } from '../../model/services/initAIAnalyticsPage'
+import cls from './AIAnalyticsPage.module.scss'
 
 const reducers: ReducersList = {
     aiAnalyticsPage: aiAnalyticsPageReducer
@@ -58,7 +59,7 @@ const AIAnalyticsPageContent = memo(() => {
     }
 
     return (
-        <VStack max gap={'16'}>
+        <VStack max gap={'16'} className={cls.AIAnalyticsPage}>
             <FiltersGroup
                 tab={tab}
                 isInited={isInited}

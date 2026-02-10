@@ -21,24 +21,25 @@ export const SentimentAnalysisCard = memo((props: SentimentAnalysisCardProps) =>
     const { className, metrics, isLoading } = props
     const { t } = useTranslation('reports')
 
+    // Using design system status colors
     const sentimentData = [
         {
             id: 0,
             value: metrics?.sentimentDistribution?.positive || 0,
             label: t('Positive'),
-            color: '#4caf50'
+            color: '#10b981' // --status-success
         },
         {
             id: 1,
             value: metrics?.sentimentDistribution?.neutral || 0,
             label: t('Neutral'),
-            color: '#8b96a5'
+            color: '#9ca3af' // --status-neutral
         },
         {
             id: 2,
             value: metrics?.sentimentDistribution?.negative || 0,
             label: t('Negative'),
-            color: '#f44336'
+            color: '#ef4444' // --status-error
         }
     ]
 
@@ -66,6 +67,7 @@ export const SentimentAnalysisCard = memo((props: SentimentAnalysisCardProps) =>
     return (
         <Card
             max
+            variant="glass"
             border="partial"
             padding="24"
             className={classNames(cls.SentimentAnalysisCard, {}, [className])}
@@ -97,7 +99,8 @@ export const SentimentAnalysisCard = memo((props: SentimentAnalysisCardProps) =>
                                     gap: '16px'
                                 },
                                 '& .MuiChartsLegend-label': {
-                                    fill: '#8b96a5 !important'
+                                    color: 'var(--text-redesigned) !important',
+                                    fill: 'var(--text-redesigned) !important'
                                 }
                             }}
                         />

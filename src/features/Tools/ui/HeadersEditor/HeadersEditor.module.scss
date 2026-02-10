@@ -1,0 +1,86 @@
+.HeadersEditor {
+    width: 100%;
+}
+
+.label {
+    opacity: 0.6;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.headerRow {
+    width: 100%;
+    position: relative;
+    animation: fadeIn 0.2s ease;
+}
+
+.headerRowInputs {
+    flex: 1;
+    min-width: 0;
+}
+
+.removeBtn {
+    flex-shrink: 0;
+    min-width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--cancel-redesigned);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: rgba(239, 68, 68, 0.25);
+        border-color: var(--cancel-redesigned);
+        transform: scale(1.05);
+    }
+}
+
+.addBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px dashed rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--accent-redesigned);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: var(--accent-redesigned);
+    }
+}
+
+.headersList {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

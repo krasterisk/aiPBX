@@ -17,10 +17,10 @@ export const BarsChart = memo((props: BarsChartsProps) => {
   const chartStyles = {
     // Стили для осей
     '& .MuiChartsAxis-root .MuiChartsAxis-tickLabel': {
-      fill: 'var(--text-redesigned)'
+      fill: 'var(--chart-axis-label)'
     },
     '& .MuiChartsAxis-root .MuiChartsAxis-line': {
-      stroke: 'var(--text-redesigned)'
+      stroke: 'var(--chart-axis-label)'
     },
 
     // Стили для заголовков легенды (именно тот элемент, который вы указали)

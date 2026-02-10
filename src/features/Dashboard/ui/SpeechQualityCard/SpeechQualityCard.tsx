@@ -38,7 +38,7 @@ const QualityBar = memo(({ label, value, max, color }: QualityBarProps) => {
                 sx={{
                     height: 8,
                     borderRadius: 'var(--radius-sm)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    backgroundColor: 'var(--glass-overlay-medium)',
                     '& .MuiLinearProgress-bar': {
                         borderRadius: 'var(--radius-sm)'
                     }
@@ -78,6 +78,7 @@ export const SpeechQualityCard = memo((props: SpeechQualityCardProps) => {
     return (
         <Card
             max
+            variant="glass"
             border="partial"
             padding="24"
             className={classNames(cls.SpeechQualityCard, {}, [className])}

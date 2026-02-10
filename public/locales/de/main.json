@@ -1,25 +1,120 @@
 {
-  "Главная": "Startseite",
-  "Real-time OpenAI Events for": "Echtzeit-OpenAI-Events für",
-  "Новое событие": "Neues Ereignis",
-  "Текущие звонки": "Aktuelle Anrufe",
-  "Главная страница": "Hauptseite",
-  "AI PBX - будущее бизнес-телефонии": "AI PBX - Die Zukunft der Geschäftstelefonie",
-  "Создавайте голосовых ассистентов за минуты": "Erstellen Sie Sprachassistenten in Minuten",
-  "и автоматизируйте коммуникации": "und automatisieren Sie die Kommunikation",
-  "Войти": "Anmelden",
-  "Смотреть видео": "Video ansehen",
-  "Подключение к данным": "Datenintegration",
-  "CRM, ERP, базы клиентов - мгновенный доступ к информации": "CRM, ERP, Kundendatenbanken - sofortiger Zugriff auf Informationen",
-  "Вызов функций - заказы, бронирования, платежи, статусы": "Funktionsaufrufe - Bestellungen, Buchungen, Zahlungen, Status",
-  "Многоязычие, локальные номера, аналитика и отчёты": "Mehrsprachigkeit, lokale Nummern, Analysen und Berichte",
-  "Масштаб и география": "Skalierung und Geografie",
-  "Автоматизация действий": "Aktionsautomatisierung",
-  "Омниканальность": "Omnichannel",
-  "AI PBX заменяет колл-центр и поддержку - звонки, заказы, интеграция с CRM и мессенджерами, аналитика и масштабируемость": "AI PBX ersetzt Callcenter und Support - Anrufe, Bestellungen, Integration mit CRM und Messengern, Analyse und Skalierbarkeit",
-  "Нейро-диалоги": "Neuro-Dialoge",
-  "LLM-модель понимает намерения, контекст и действует как живой оператор": "LLM-Modell versteht Absichten, Kontext und handelt wie ein echter Mitarbeiter",
-  "Голос, WhatsApp, Telegram, веб-чат - единый сценарий для всех каналов": "Stimme, WhatsApp, Telegram, Web-Chat - ein Szenario für alle Kanäle",
-  "Замена колл-центра": "Callcenter-Ersatz",
-  "Очереди, приоритеты, колл-бек, перевод на оператора": "Warteschlangen, Prioritäten, Rückruf, Weiterleitung an Mitarbeiter"
+  "Hero": {
+    "Title": "AI PBX: Die Zukunft Ihrer Telefonie beginnt hier",
+    "SubTitle": "Verbinden Sie die Leistung generativer KI mit der Zuverlässigkeit klassischer Kommunikation. Automatisieren Sie Anrufe, Support und Vertrieb mit natürlichen Sprachdialogen.",
+    "CTA_Start": "Jetzt starten",
+    "CTA_Demo": "Demo anfordern"
+  },
+  "Problem": {
+    "Title": "Warum klassische Callcenter nicht mehr funktionieren?",
+    "Expensive": {
+      "Title": "Teuer und aufwendig",
+      "Desc": "Die Einstellung und Schulung von Mitarbeitern dauert Wochen, und die Kosten steigen mit jedem neuen Mitarbeiter."
+    },
+    "HumanFactor": {
+      "Title": "Menschlicher Faktor",
+      "Desc": "Fehler, Müdigkeit und schwankende Servicequalität führen zum Verlust der Kundentreue."
+    },
+    "OldIVR": {
+      "Title": "Veraltete IVR",
+      "Desc": "Kunden hassen \"drücken Sie 1, drücken Sie 2\". Moderne Verbraucher wünschen sich einen echten Dialog."
+    }
+  },
+  "Solution": {
+    "Title": "Intelligente Plattform für automatisierte Kommunikation",
+    "Desc": "AI PBX ist nicht nur ein Bot. Es ist ein vollwertiger Sprachassistent, der den Kontext versteht, die Geschichte kennt und in Ihre Geschäftsprozesse integriert ist."
+  },
+  "HowItWorks": {
+    "Title": "So funktioniert es",
+    "Step1": {
+      "Title": "Registrierung",
+      "Desc": "Erstellen Sie ein Konto und erhalten Sie in wenigen Sekunden Zugang zum Dashboard."
+    },
+    "Step2": {
+      "Title": "Assistent einrichten",
+      "Desc": "Definieren Sie Persönlichkeit, Wissensbasis und wählen Sie eine der Premium-Stimmen."
+    },
+    "Step3": {
+      "Title": "Integration",
+      "Desc": "Richten Sie Webhooks und MCP-Server ein, um mit Ihren Daten zu interagieren."
+    },
+    "Step4": {
+      "Title": "Telefonie",
+      "Desc": "Verbinden Sie Ihren Asterisk oder erhalten Sie eine fertige SIP-URI für ein- und ausgehende Anrufe."
+    },
+    "Step5": {
+      "Title": "Start",
+      "Desc": "Nehmen Sie Anrufe mit vollständiger Analyse und Echtzeit-Qualitätskontrolle entgegen."
+    }
+  },
+  "Features": {
+    "Title": "Hauptfunktionen",
+    "NLU": {
+      "Title": "Sprachverständnis",
+      "Desc": "Dialoge basierend auf modernen LLMs, die praktisch nicht von menschlichen zu unterscheiden sind."
+    },
+    "ToolUse": {
+      "Title": "Funktionsaufrufe",
+      "Desc": "Der Assistent kann selbst den Bestellstatus prüfen oder einen Kunden ins CRM eintragen."
+    },
+    "Analytics": {
+      "Title": "24/7 Analytik",
+      "Desc": "Sofortige Transkription, Stimmungsanalyse und detaillierte Berichte für jeden Anruf."
+    },
+    "WebRTC": {
+      "Title": "WebRTC-Widgets",
+      "Desc": "Ermöglichen Sie Ihren Kunden, Sie direkt aus dem Browser mit einem Klick anzurufen."
+    }
+  },
+  "Integrations": {
+    "Title": "Integrationen und Flexibilität",
+    "DevFriendly": {
+      "Title": "Entwicklerfreundlich",
+      "Desc": "Volle Kontrolle über API. Integration mit beliebiger Logik durch Funktionsaufrufe."
+    },
+    "Asterisk": {
+      "Title": "Kompatibilität",
+      "Desc": "Funktioniert mit Asterisk, FreePBX und jedem anderen System über das SIP-Protokoll."
+    }
+  },
+  "UseCases": {
+    "Title": "Anwendungsfälle",
+    "Support": {
+      "Title": "24/7 Support",
+      "Desc": "Reduzieren Sie die Belastung der ersten Linie und geben Sie sofortige Antworten auf Fragen."
+    },
+    "Sales": {
+      "Title": "Vertrieb",
+      "Desc": "Automatische Lead-Qualifizierung und Bearbeitung eingehender Anfragen ohne Wartezeiten."
+    },
+    "Booking": {
+      "Title": "Terminbuchung",
+      "Desc": "Sprachbasierte Buchung und automatische Terminerinnerungen."
+    }
+  },
+  "Target": {
+    "Title": "Für wen ist AI PBX",
+    "SMB": "Kleinunternehmen",
+    "Enterprise": "Enterprise",
+    "Integrators": "Integratoren"
+  },
+  "Security": {
+    "Title": "Sicherheit und Kontrolle",
+    "Transparency": {
+      "Title": "Transparenz",
+      "Desc": "Volle Kontrolle über Entscheidungslogik und Dialogverlauf."
+    },
+    "Safety": {
+      "Title": "Datenschutz",
+      "Desc": "Alle Anrufe und Daten sind durch moderne Verschlüsselungsstandards geschützt."
+    }
+  },
+  "FinalCTA": {
+    "Title": "Bereit, Ihr Unternehmen auf Autopilot zu setzen?",
+    "SubTitle": "Starten Sie die Automatisierung von Anrufen noch heute und erleben Sie die Leistung von Sprach-KI.",
+    "Button": "Jetzt starten"
+  },
+  "Footer": {
+    "Copyright": "© {{year}} AI PBX. Alle Rechte vorbehalten."
+  }
 }

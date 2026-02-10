@@ -42,6 +42,7 @@ export const BusinessImpactCard = memo((props: BusinessImpactCardProps) => {
     return (
         <Card
             max
+            variant="glass"
             border="partial"
             padding="24"
             className={classNames(cls.BusinessImpactCard, {}, [className])}

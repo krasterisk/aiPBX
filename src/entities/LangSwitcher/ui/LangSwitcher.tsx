@@ -50,6 +50,30 @@ export const LangSwitcher = memo(({ className, short }: LangSwitcherProps) => {
         isOptionEqualToValue={(option, value) => option.value === value.value}
         disableClearable
         componentsProps={{
+          popper: {
+            placement: 'bottom-end' as const,
+            sx: {
+              '&.MuiAutocomplete-popper': {
+                width: 'auto !important',
+                minWidth: '150px',
+              },
+            },
+            modifiers: [
+              {
+                name: 'flip',
+                enabled: true,
+              },
+              {
+                name: 'preventOverflow',
+                enabled: true,
+                options: {
+                  boundary: 'window',
+                  altAxis: true,
+                  padding: 8,
+                },
+              },
+            ],
+          },
           paper: {
             sx: {
               minWidth: '150px',

@@ -57,7 +57,7 @@ export const DashboardCharts = memo(({ data }: DashboardChartsProps) => {
                                 {
                                     data: amount,
                                     label: `${t('Стоимость')} (${currencySymbol})`,
-                                    color: '#4caf50'
+                                    color: '#10b981' // --chart-success
                                 }
                             ]}
                             height={350}
@@ -77,7 +77,7 @@ export const DashboardCharts = memo(({ data }: DashboardChartsProps) => {
                                 {
                                     data: tokensCount,
                                     label: String(t('Токены')),
-                                    color: '#9c27b0'
+                                    color: '#a78bfa' // --chart-purple
                                 }
                             ]}
                             xAxis={[{ scaleType: 'point', data: label }]}
@@ -98,7 +98,7 @@ export const DashboardCharts = memo(({ data }: DashboardChartsProps) => {
                                     data: ringsCount,
                                     label: String(t('Звонки')),
                                     curve: 'linear',
-                                    color: '#2196f3'
+                                    color: '#3b82f6' // --chart-info
                                 }
                             ]}
                             xAxis={[{ scaleType: 'point', data: label }]}

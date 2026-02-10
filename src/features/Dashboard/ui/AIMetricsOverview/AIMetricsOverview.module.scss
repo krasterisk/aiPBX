@@ -1,10 +1,12 @@
+@import '@/app/styles/variables/mixins';
+
 .row {
     display: flex;
     gap: 16px;
     width: 100%;
     align-items: stretch;
 
-    @media (max-width: 900px) {
+    @include tablet {
         flex-direction: column;
     }
 }
@@ -13,9 +15,14 @@
     flex: 3;
     min-width: 0;
 
-    // Force children (Card) to fill height
     >* {
         height: 100%;
+    }
+
+    @include tablet {
+        >* {
+            height: auto;
+        }
     }
 }
 
@@ -26,6 +33,12 @@
     >* {
         height: 100%;
     }
+
+    @include tablet {
+        >* {
+            height: auto;
+        }
+    }
 }
 
 .col50 {
@@ -34,5 +47,11 @@
 
     >* {
         height: 100%;
+    }
+
+    @include tablet {
+        >* {
+            height: auto;
+        }
     }
 }

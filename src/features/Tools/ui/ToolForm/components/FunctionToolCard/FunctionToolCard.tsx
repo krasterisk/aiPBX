@@ -8,6 +8,7 @@ import { Check } from '@/shared/ui/mui/Check'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { Tool } from '@/entities/Tools'
 import { ToolAddParam } from '../../../ToolAddParam/ToolAddParam'
+import { HeadersEditor } from '../../../HeadersEditor/HeadersEditor'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './FunctionToolCard.module.scss'
 
@@ -40,18 +41,18 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
         { id: 'DELETE', name: 'DELETE' }
     ]
 
-    const authTypes = [
-        { id: 'none', name: t('Нет') },
-        { id: 'bearer', name: 'Bearer Token' },
-        { id: 'basic', name: 'Basic Auth' }
-    ]
-
     const onWebhookToggle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const checked = e.target.checked
         setWebhookActive(checked)
         if (!checked) {
             onChangeField('webhook', '')
+            onChangeField('method', 'POST')
+            onChangeField('headers', {})
         }
+    }, [onChangeField])
+
+    const onHeadersChange = useCallback((headers: Record<string, string>) => {
+        onChangeField('headers', headers)
     }, [onChangeField])
 
     const isFunction = formFields?.type === 'function'
@@ -126,93 +127,22 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
                                     />
                                 </VStack>
 
-                                <HStack gap="16" max wrap="wrap">
-                                    <VStack gap="8" className={cls.flex1}>
-                                        <Text text={t('Метод запроса') || ''} size="s" bold className={cls.label} />
-                                        <Combobox
-                                            options={methods}
-                                            value={methods.find(m => m.id === (formFields?.method || 'POST')) || null}
-                                            onChange={(e, v: any) => onChangeField('method', Array.isArray(v) ? undefined : v?.id)}
-                                            className={cls.fullWidth}
-                                            disableClearable
-                                            getOptionLabel={(option: any) => option.name}
-                                        />
-                                    </VStack>
-
-                                    <VStack gap="8" className={cls.flex1}>
-                                        <Text text={t('Тип авторизации') || ''} size="s" bold className={cls.label} />
-                                        <Combobox
-                                            options={authTypes}
-                                            value={authTypes.find(m => m.id === (formFields?.auth_type || 'none')) || null}
-                                            onChange={(e, v: any) => onChangeField('auth_type', Array.isArray(v) ? undefined : v?.id)}
-                                            className={cls.fullWidth}
-                                            disableClearable
-                                            getOptionLabel={(option: any) => option.name}
-                                        />
-                                    </VStack>
-                                </HStack>
-
-                                {formFields?.auth_type === 'bearer' && (
-                                    <VStack gap="8" max>
-                                        <Text text={t('Токен') || ''} size="s" bold className={cls.label} />
-                                        <Textarea
-                                            placeholder="your-token-here"
-                                            onChange={(e) => onChangeField('auth_token', e.target.value)}
-                                            value={formFields?.auth_token || ''}
-                                            className={cls.fullWidth}
-                                        />
-                                    </VStack>
-                                )}
-
-                                {formFields?.auth_type === 'basic' && (
-                                    <HStack gap="16" max wrap="wrap">
-                                        <VStack gap="8" className={cls.flex1}>
-                                            <Text text={t('Логин') || ''} size="s" bold className={cls.label} />
-                                            <Textarea
-                                                placeholder="username"
-                                                onChange={(e) => onChangeField('auth_login', e.target.value)}
-                                                value={formFields?.auth_login || ''}
-                                                className={cls.fullWidth}
-                                            />
-                                        </VStack>
-                                        <VStack gap="8" className={cls.flex1}>
-                                            <Text text={t('Пароль') || ''} size="s" bold className={cls.label} />
-                                            <Textarea
-                                                placeholder="password"
-                                                onChange={(e) => onChangeField('auth_password', e.target.value)}
-                                                value={formFields?.auth_password || ''}
-                                                className={cls.fullWidth}
-                                            />
-                                        </VStack>
-                                    </HStack>
-                                )}
-
                                 <VStack gap="8" max>
-                                    <Text text={t('Заголовки (JSON)') || ''} size="s" bold className={cls.label} />
-                                    <Textarea
-                                        multiline
-                                        minRows={2}
-                                        placeholder='{"Key": "Value"}'
-                                        onChange={(e) => {
-                                            const val = e.target.value
-                                            if (!val) {
-                                                onChangeField('headers', {})
-                                                return
-                                            }
-                                            try {
-                                                onChangeField('headers', JSON.parse(val))
-                                            } catch (err) {
-                                                onChangeField('headers', val)
-                                            }
-                                        }}
-                                        value={
-                                            formFields?.headers && typeof formFields.headers === 'object'
-                                                ? (Object.keys(formFields.headers).length === 0 ? '' : JSON.stringify(formFields.headers, null, 2))
-                                                : (formFields?.headers ?? '')
-                                        }
+                                    <Text text={t('Метод запроса') || ''} size="s" bold className={cls.label} />
+                                    <Combobox
+                                        options={methods}
+                                        value={methods.find(m => m.id === (formFields?.method || 'POST')) || null}
+                                        onChange={(e, v: any) => onChangeField('method', Array.isArray(v) ? undefined : v?.id)}
                                         className={cls.fullWidth}
+                                        disableClearable
+                                        getOptionLabel={(option: any) => option.name}
                                     />
                                 </VStack>
+
+                                <HeadersEditor
+                                    value={formFields?.headers}
+                                    onChange={onHeadersChange}
+                                />
                             </VStack>
                         )}
                     </VStack>

@@ -191,6 +191,30 @@
     --status-neutral-border: rgba(156, 163, 175, 0.2);
 
     // ========================================
+    // CHART PALETTE
+    // ========================================
+
+    /* Primary chart series colors — harmonized with design system */
+    --chart-primary: var(--accent-redesigned); // Main accent (#5ed3f3 dark / #00c8ff light)
+    --chart-success: var(--status-success); // Success green (#10b981)
+    --chart-warning: var(--status-warning); // Warning amber (#f59e0b)
+    --chart-error: var(--status-error); // Error red (#ef4444)
+    --chart-info: var(--status-info); // Info blue (#3b82f6)
+    --chart-secondary: var(--icon-redesigned); // Secondary (#74a2b2)
+
+    /* Extended palette for multi-series charts */
+    --chart-purple: #a78bfa;
+    --chart-pink: #f472b6;
+    --chart-teal: #2dd4bf;
+    --chart-orange: #fb923c;
+
+    /* Chart text + axis labels */
+    --chart-axis-label: var(--icon-redesigned);
+    --chart-legend-label: var(--icon-redesigned);
+    --chart-grid-line: var(--divider-subtle);
+    --chart-bg-track: var(--glass-overlay-medium);
+
+    // ========================================
     // BADGE & CHIP STYLES
     // ========================================
 

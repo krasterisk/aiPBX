@@ -4,6 +4,32 @@
     width: 100%;
 }
 
+.row {
+    display: flex;
+    gap: var(--space-4);
+    width: 100%;
+    align-items: stretch;
+
+    @include tablet {
+        flex-direction: column;
+    }
+}
+
+.col50 {
+    flex: 1;
+    min-width: 0;
+
+    >* {
+        height: 100%;
+    }
+
+    @include tablet {
+        >* {
+            height: auto;
+        }
+    }
+}
+
 .chartCard {
     height: 100%;
     transition: var(--transition-transform);
@@ -12,10 +38,17 @@
         transform: var(--hover-lift-sm);
         box-shadow: var(--shadow-md), var(--shadow-accent-sm);
     }
+
+    @include mobile {
+        &:hover {
+            transform: none;
+        }
+    }
 }
 
 .chartWrapper {
     width: 100%;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     @include custom-scrollbar;
 }
