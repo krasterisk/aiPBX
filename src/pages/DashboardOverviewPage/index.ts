@@ -1,1 +1,1 @@
-export { default as DashboardOverviewPage } from './ui/DashboardOverviewPage/DashboardOverviewPage'
+export { DashboardOverviewPageAsync as DashboardOverviewPage } from './ui/DashboardOverviewPage/DashboardOverviewPage.async'

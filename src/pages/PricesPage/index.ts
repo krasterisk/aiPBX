@@ -1,1 +1,1 @@
-export { PricesPage } from './ui/PricesPage';
+export { PricesPageAsync as PricesPage } from './ui/PricesPage.async';

@@ -1,1 +1,1 @@
-export { default as DashboardCallRecordsPage } from './ui/DashboardCallRecordsPage/DashboardCallRecordsPage'
+export { DashboardCallRecordsPageAsync as DashboardCallRecordsPage } from './ui/DashboardCallRecordsPage/DashboardCallRecordsPage.async'
