@@ -9,6 +9,11 @@
     @include tablet {
         flex-direction: column;
     }
+
+    @include mobile {
+        flex-direction: column;
+        gap: 12px;
+    }
 }
 
 .col60 {

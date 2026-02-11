@@ -16,7 +16,6 @@
     border: var(--glass-border-primary);
     box-shadow: var(--shadow-md);
     transition: var(--transition-slow);
-    overflow: hidden;
 }
 
 @mixin glass-card-secondary {

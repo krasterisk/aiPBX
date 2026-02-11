@@ -106,6 +106,11 @@ export const publishWidgetsFormSlice = createSlice({
             if (widget.logo) {
                 state.appearance.logo = widget.logo
             }
+
+            // Set userId so admin can see correct assistants/PBX for this user
+            if (widget.userId) {
+                state.userId = String(widget.userId)
+            }
         }
     }
 })

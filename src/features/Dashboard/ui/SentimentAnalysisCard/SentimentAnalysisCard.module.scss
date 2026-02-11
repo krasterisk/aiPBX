@@ -12,6 +12,8 @@
     }
 
     @include mobile {
+        padding: var(--space-4) !important;
+
         &:hover {
             transform: none;
         }
@@ -31,14 +33,30 @@
 }
 
 .chartSection {
-    flex: 0 0 280px;
+    flex: 0 0 auto;
+    width: 280px;
+    max-width: 100%;
     min-width: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 
     >div {
         width: 100% !important;
+        max-width: 100%;
+    }
+
+    svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+    :global {
+        .MuiChartsWrapper-root {
+            max-width: 100%;
+            overflow: hidden;
+        }
     }
 
     @include tablet {
@@ -48,7 +66,10 @@
     }
 
     @include mobile {
+        width: 100%;
         max-width: 100%;
+        flex-direction: column;
+        align-items: center;
     }
 }
 
@@ -101,4 +122,31 @@
     @include mobile {
         font-size: var(--font-size-xs);
     }
+}
+
+.customLegend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+    width: 100%;
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legendDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.legendText {
+    font-size: var(--font-size-xs);
+    color: var(--text-redesigned);
 }

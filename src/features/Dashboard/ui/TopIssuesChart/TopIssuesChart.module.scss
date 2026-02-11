@@ -12,6 +12,8 @@
     }
 
     @include mobile {
+        padding: var(--space-4) !important;
+
         &:hover {
             transform: none;
         }

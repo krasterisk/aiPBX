@@ -12,6 +12,8 @@
     }
 
     @include mobile {
+        padding: var(--space-4) !important;
+
         &:hover {
             transform: none;
         }
@@ -55,15 +57,17 @@
     }
 
     @include mobile {
+        max-width: calc(100vw - 48px);
+
         :global {
             .MuiTableCell-root {
-                padding: 8px 12px;
-                font-size: 12px;
+                padding: 6px 8px;
+                font-size: 11px;
             }
 
             .MuiTableCell-head {
-                padding: 8px 12px;
-                font-size: 11px;
+                padding: 6px 8px;
+                font-size: 10px;
             }
         }
     }

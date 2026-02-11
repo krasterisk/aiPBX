@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useMediaQuery } from '@mui/material'
 import { PieChart } from '@mui/x-charts/PieChart'
 import StarIcon from '@mui/icons-material/Star'
 import WarningIcon from '@mui/icons-material/Warning'
@@ -20,6 +21,7 @@ interface SentimentAnalysisCardProps {
 export const SentimentAnalysisCard = memo((props: SentimentAnalysisCardProps) => {
     const { className, metrics, isLoading } = props
     const { t } = useTranslation('reports')
+    const isMobile = useMediaQuery('(max-width:600px)')
 
     // Using design system status colors
     const sentimentData = [
@@ -81,20 +83,24 @@ export const SentimentAnalysisCard = memo((props: SentimentAnalysisCardProps) =>
                                 {
                                     data: sentimentData,
                                     highlightScope: { fade: 'global', highlight: 'item' },
-                                    innerRadius: 40,
-                                    outerRadius: 80,
+                                    innerRadius: isMobile ? 25 : 40,
+                                    outerRadius: isMobile ? 55 : 80,
                                     paddingAngle: 2,
                                     cornerRadius: 4
                                 }
                             ]}
-                            height={220}
-                            margin={{ top: 10, bottom: 50, left: 0, right: 0 }}
+                            height={isMobile ? 140 : 220}
+                            margin={{ top: 10, bottom: isMobile ? 10 : 50, left: 0, right: 0 }}
                             slotProps={{
                                 legend: {
                                     position: { vertical: 'bottom', horizontal: 'center' },
                                 }
                             }}
                             sx={{
+                                maxWidth: '100%',
+                                '& .MuiChartsLegend-root': {
+                                    display: isMobile ? 'none' : 'flex',
+                                },
                                 '& .MuiChartsLegend-series': {
                                     gap: '16px'
                                 },
@@ -104,6 +110,19 @@ export const SentimentAnalysisCard = memo((props: SentimentAnalysisCardProps) =>
                                 }
                             }}
                         />
+                        {isMobile && (
+                            <div className={cls.customLegend}>
+                                {sentimentData.map((item) => (
+                                    <div key={item.id} className={cls.legendItem}>
+                                        <span
+                                            className={cls.legendDot}
+                                            style={{ backgroundColor: item.color }}
+                                        />
+                                        <span className={cls.legendText}>{item.label}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                     <div className={cls.metricsSection}>
                         {additionalMetrics.map((metric, index) => (

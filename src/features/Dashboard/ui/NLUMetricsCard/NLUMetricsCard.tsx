@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useMediaQuery } from '@mui/material'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
@@ -23,6 +24,7 @@ const getColorByValue = (value: number): string => {
 export const NLUMetricsCard = memo((props: NLUMetricsCardProps) => {
     const { className, metrics, isLoading } = props
     const { t } = useTranslation('reports')
+    const isMobile = useMediaQuery('(max-width:600px)')
 
     const nluMetrics = [
         {
@@ -59,8 +61,8 @@ export const NLUMetricsCard = memo((props: NLUMetricsCardProps) => {
                             <ProgressRing
                                 value={metric.value}
                                 color={getColorByValue(metric.value)}
-                                size={100}
-                                thickness={6}
+                                size={isMobile ? 72 : 100}
+                                thickness={isMobile ? 5 : 6}
                                 showPercentage={true}
                                 label=""
                             />

@@ -10,3 +10,8 @@ export { TimeSeriesCharts } from './ui/TimeSeriesCharts/TimeSeriesCharts'
 export { FiltersGroup } from './ui/FiltersGroup/FiltersGroup'
 export { DashboardStatistics } from './ui/DashboardStatistics/DashboardStatistics'
 export { DashboardCharts } from './ui/DashboardCharts/DashboardCharts'
+export { Dashboard } from './ui/Dashboard/Dashboard'
+
+export type { DashboardPageSchema } from './model/types/dashboardPageSchema'
+export { dashboardPageActions, dashboardPageReducer } from './model/slices/dashboardPageSlice'
+export { initDashboardPage } from './model/services/initDashboardPage'

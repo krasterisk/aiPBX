@@ -16,8 +16,12 @@ const reducers: ReducersList = {
     publishWidgetsForm: publishWidgetsFormReducer
 }
 
-const PublishWidgetEditPage = memo((props: PublishWidgetEditPageProps) => {
-    const { className } = props
+/**
+ * Inner component that runs INSIDE DynamicModuleLoader,
+ * so the publishWidgetsForm reducer is guaranteed to be registered
+ * before we dispatch initForm.
+ */
+const PublishWidgetEditContent = memo(({ className }: { className?: string }) => {
     const { id } = useParams<{ id: string }>()
     const dispatch = useAppDispatch()
 
@@ -30,20 +34,25 @@ const PublishWidgetEditPage = memo((props: PublishWidgetEditPageProps) => {
     }, [widget, dispatch])
 
     if (isLoading) {
-        return (
-            <Page>
-                <Loader />
-            </Page>
-        )
+        return <Loader />
     }
+
+    return (
+        <PublishWidgetsForm isEdit widgetId={id} />
+    )
+})
+
+const PublishWidgetEditPage = memo((props: PublishWidgetEditPageProps) => {
+    const { className } = props
 
     return (
         <DynamicModuleLoader reducers={reducers} removeAfterUnmount>
             <Page className={classNames('', {}, [className])}>
-                <PublishWidgetsForm isEdit widgetId={id} />
+                <PublishWidgetEditContent className={className} />
             </Page>
         </DynamicModuleLoader>
     )
 })
 
 export default PublishWidgetEditPage
+
