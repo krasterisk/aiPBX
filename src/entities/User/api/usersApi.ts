@@ -203,7 +203,7 @@ export const usersApi = rtkApi.injectEndpoints({
     }),
     adminTopUp: build.mutation<{ success: boolean }, AdminTopUpDto>({
       query: (arg) => ({
-        url: '/admin/top-up',
+        url: '/users/admin/top-up',
         method: 'POST',
         body: arg
       }),

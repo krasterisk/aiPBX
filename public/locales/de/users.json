@@ -45,5 +45,6 @@
     "Введите имя!": "Name eingeben!",
     "Введите логин!": "Benutzername eingeben!",
     "Введите пароль!": "Passwort eingeben!",
-    "Введите email!": "E-Mail eingeben!"
+    "Введите email!": "E-Mail eingeben!",
+    "Вы уверены, что хотите удалить пользователя?": "Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?"
 }

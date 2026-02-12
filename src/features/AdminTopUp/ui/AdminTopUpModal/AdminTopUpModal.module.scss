@@ -1,0 +1,11 @@
+.AdminTopUpModal {
+    :global(.content) {
+        min-width: 500px;
+        max-width: 600px;
+
+        @media (max-width: 768px) {
+            min-width: unset;
+            max-width: 95%;
+        }
+    }
+}

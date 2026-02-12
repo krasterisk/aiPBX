@@ -42,10 +42,10 @@ export const UserFormHeader = memo((props: UserFormHeaderProps) => {
     }, [navigate, isAdmin])
 
     const handleDelete = useCallback(() => {
-        if (userId) {
-            onDelete?.(userId)
-        }
-    }, [userId, onDelete])
+        if (!userId) return
+        if (!window.confirm(t('Вы уверены, что хотите удалить пользователя?') ?? '')) return
+        onDelete?.(userId)
+    }, [userId, onDelete, t])
 
     return (
         <HStack

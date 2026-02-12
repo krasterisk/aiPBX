@@ -97,7 +97,7 @@ export const UserItem = memo((props: UserItemProps) => {
             </HStack>
             <VStack>
               <Text text={t('Email')} variant="accent" size="xs" />
-              <Text text={user.email} className={cls.truncatedText} />
+              <Text text={user.email} className={cls.wrappedText} />
             </VStack>
           </HStack>
         )}

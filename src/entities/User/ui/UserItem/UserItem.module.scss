@@ -123,6 +123,13 @@
     font-size: 0.85rem;
 }
 
+.wrappedText {
+    word-break: break-all;
+    color: var(--text-redesigned);
+    opacity: 0.9;
+    font-size: 0.85rem;
+}
+
 .footer {
     padding-top: var(--space-4);
     border-top: 1px solid rgba(255, 255, 255, 0.05);

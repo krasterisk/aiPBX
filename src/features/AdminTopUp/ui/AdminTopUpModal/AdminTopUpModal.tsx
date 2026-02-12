@@ -6,12 +6,12 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { useAdminTopUp } from '@/entities/User/api/usersApi'
-import { ClientSelect } from '@/entities/User/ui/ClientSelect/ClientSelect'
 import { CurrencySelect } from '@/entities/User/ui/CurrencySelect/CurrencySelect'
 import { UserCurrencyValues } from '@/entities/User/model/consts/consts'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { Wallet } from 'lucide-react'
 import { toast } from 'react-toastify'
+import cls from './AdminTopUpModal.module.scss'
 
 interface AdminTopUpModalProps {
     className?: string
@@ -26,26 +26,18 @@ export const AdminTopUpModal = memo((props: AdminTopUpModalProps) => {
     const { t } = useTranslation('users')
     const [adminTopUp, { isLoading }] = useAdminTopUp()
 
-    const [selectedUserId, setSelectedUserId] = useState('')
     const [amount, setAmount] = useState('')
     const [currency, setCurrency] = useState<UserCurrencyValues>(UserCurrencyValues.USD)
     const [paymentMethod, setPaymentMethod] = useState('bank_transfer')
     const [paymentInfo, setPaymentInfo] = useState('')
 
     useEffect(() => {
-        if (isOpen && userId) {
-            setSelectedUserId(userId)
-        }
         if (!isOpen) {
             setAmount('')
             setPaymentInfo('')
             setPaymentMethod('bank_transfer')
         }
-    }, [isOpen, userId])
-
-    const handleClientChange = useCallback((clientId: string) => {
-        setSelectedUserId(clientId)
-    }, [])
+    }, [isOpen])
 
     const handleCurrencyChange = useCallback((_: any, value: UserCurrencyValues) => {
         setCurrency(value)
@@ -57,7 +49,7 @@ export const AdminTopUpModal = memo((props: AdminTopUpModalProps) => {
             if (isNaN(numAmount) || numAmount <= 0) return
 
             await adminTopUp({
-                userId: selectedUserId,
+                userId: String(userId),
                 amount: numAmount,
                 currency,
                 paymentMethod,
@@ -70,13 +62,13 @@ export const AdminTopUpModal = memo((props: AdminTopUpModalProps) => {
             toast.error(t('Ошибка пополнения'))
             console.error(e)
         }
-    }, [adminTopUp, selectedUserId, amount, currency, paymentMethod, paymentInfo, onClose, t])
+    }, [adminTopUp, userId, amount, currency, paymentMethod, paymentInfo, onClose, t])
 
-    const isValid = selectedUserId && amount && parseFloat(amount) > 0 && paymentMethod
+    const isValid = userId && amount && parseFloat(amount) > 0 && paymentMethod
 
     return (
         <Modal
-            className={classNames('', {}, [className])}
+            className={classNames(cls.AdminTopUpModal, {}, [className])}
             isOpen={isOpen}
             onClose={onClose}
         >
@@ -93,12 +85,7 @@ export const AdminTopUpModal = memo((props: AdminTopUpModalProps) => {
                     <Text text={`${t('Пользователь')}: ${userName}`} variant="accent" />
                 )}
 
-                <ClientSelect
-                    label={t('Клиент') || ''}
-                    clientId={selectedUserId}
-                    onChangeClient={handleClientChange}
-                    size="small"
-                />
+
 
                 <Textarea
                     label={t('Сумма') || ''}
