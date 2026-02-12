@@ -7,7 +7,7 @@
     "start": "webpack serve --env mode=development apiUrl=http://192.168.2.37:5005/api wsUrl=ws://192.168.2.37:3033 port=3005 tgBotId=8298793342 stripePublishableKey=pk_test_51SraxrIPIiX1aE70WbOwZQhPPjDvHQELzJQ8WbgZOMomPve8AxQlFgczq9qT2QQhCwgZDPbtiBZ4eFdtOSWuiZC200kLK9XSQ0",
     "start:dev": "webpack serve --env mode=development",
     "start:vite": "vite",
-    "build:prod": "webpack --env mode=production apiUrl=https://aipbx.net/api staticUrl=https://aipbx.net/static wsUrl=wss://aipbx.krasterisk.ru port=7003 tgBotId=8298793342 stripePublishableKey=VITE_STRIPE_PUBLISHABLE_KEY=pk_live_51Q0CNuRQGiq1R43MEEQeRhErS8M3fVSjhkV2UMi5QQkldHZYNfek7CMQqEaY2tZECqvG63TSLSO9USUxztxZIIi300TWB7KRS4",
+    "build:prod": "webpack --env mode=production apiUrl=https://aipbx.net/api staticUrl=https://aipbx.net/static wsUrl=wss://aipbx.krasterisk.ru port=7003 tgBotId=8298793342 stripePublishableKey=pk_live_51Q0CNuRQGiq1R43MEEQeRhErS8M3fVSjhkV2UMi5QQkldHZYNfek7CMQqEaY2tZECqvG63TSLSO9USUxztxZIIi300TWB7KRS4",
     "build:dev": "webpack --env mode=development",
     "prettier": "npx prettier --write **/*.{ts,tsx}",
     "lint:ts": "eslint \"**/*.{ts,tsx}\"",
