@@ -18,7 +18,8 @@
   "Сумма": "Summe",
   "Валюта": "Währung",
   "Статус": "Status",
-  "Метод": "Methode",
+  "Детали": "Details",
+  "Чек": "Quittung",
   "История платежей пуста": "Zahlungshistorie ist leer",
   "Ошибка при загрузке платежей": "Fehler beim Laden der Zahlungen",
   "Здесь будет отображаться история ваших платежей": "Hier wird Ihre Zahlungshistorie angezeigt",
@@ -41,5 +42,15 @@
   "Адрес": "Adresse",
   "Вы действительно хотите удалить организацию?": "Möchten Sie die Organisation wirklich löschen?",
   "Список организаций пуст": "Organisationsliste ist leer",
-  "Ошибка при загрузке организаций": "Fehler beim Laden der Organisationen"
+  "Ошибка при загрузке организаций": "Fehler beim Laden der Organisationen",
+  "Некорректная сумма": "Ungültiger Betrag",
+  "Настройки сохранены": "Einstellungen gespeichert",
+  "Ошибка сохранения": "Fehler beim Speichern",
+  "Текущий баланс": "Aktueller Kontostand",
+  "Быстрые действия": "Schnellaktionen",
+  "Укажите сумму пополнения в долларах США": "Geben Sie den Aufladebetrag in US-Dollar ein",
+  "Сумма (USD)": "Betrag (USD)",
+  "Загрузка...": "Wird geladen...",
+  "Продолжить": "Fortfahren",
+  "Отмена": "Abbrechen"
 }

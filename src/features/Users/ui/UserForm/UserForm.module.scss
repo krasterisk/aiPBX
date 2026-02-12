@@ -1,0 +1,62 @@
+@import '@/app/styles/variables/mixins';
+
+.UserForm {
+    width: 100%;
+    padding: var(--space-2) 0;
+}
+
+.formCard {
+    background: var(--card-bg-redesigned);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    width: 100%;
+
+    &:hover {
+        border-color: var(--accent-redesigned);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 800px) {
+        padding: 16px !important;
+    }
+}
+
+.sectionIcon {
+    color: var(--accent-redesigned);
+    opacity: 0.8;
+}
+
+.label {
+    opacity: 0.6;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.avatarWrap {
+    cursor: pointer;
+    display: flex;
+    border-radius: 50%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(94, 211, 243, 0.2);
+    }
+}
+
+.loader {
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@include mobile {
+    .UserForm {
+        padding: 0;
+    }
+}

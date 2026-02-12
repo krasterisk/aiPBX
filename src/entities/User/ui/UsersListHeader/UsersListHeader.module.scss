@@ -1,16 +1,59 @@
+@import '@/app/styles/variables/mixins';
+
 .UsersListHeader {
+    width: 100%;
+    padding: var(--space-4) 0;
+}
+
+.headerActions {
     display: flex;
-}
+    align-items: center;
+    gap: var(--space-4);
 
-.icon {
-    color: var(--icon-redesigned);
-}
-
-.mobileHeader {
-    flex-wrap: wrap;
+    @include mobile {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
 
 .searchInput {
-    width: 200px;
+    width: 300px;
+
+    @include mobile {
+        width: 100%;
+    }
 }
 
+.createBtn {
+    border-radius: var(--radius-md) !important;
+    height: 42px !important;
+    border: 1px solid rgba(94, 211, 243, 0.2) !important;
+    background: var(--icon-bg-primary) !important;
+    color: var(--text-redesigned) !important;
+    font-weight: 600 !important;
+    padding: 0 var(--space-5) !important;
+    transition: var(--transition-normal) !important;
+
+    &:hover {
+        background: var(--icon-bg-secondary) !important;
+        border-color: var(--accent-redesigned) !important;
+        transform: var(--hover-lift-sm);
+
+        .plusIcon {
+            transform: rotate(90deg);
+        }
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    @include mobile {
+        width: 100%;
+    }
+}
+
+.plusIcon {
+    transition: transform var(--duration-medium) var(--ease-spring);
+}

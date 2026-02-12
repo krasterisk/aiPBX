@@ -1,13 +1,13 @@
 import React, { memo, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Card } from '@/shared/ui/redesigned/Card'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { VStack } from '@/shared/ui/redesigned/Stack'
+import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useCreateIntentMutation } from '@/entities/Payment'
 import { useSelector } from 'react-redux'
 import { getUserAuthData } from '@/entities/User'
 import { Textarea } from '@/shared/ui/mui/Textarea'
+import { CreditCard } from 'lucide-react'
 
 interface TopUpBalanceProps {
     onSuccess: (clientSecret: string) => void
@@ -33,7 +33,7 @@ export const TopUpBalance = memo((props: TopUpBalanceProps) => {
     const onContinue = useCallback(async () => {
         const numAmount = Number(amount)
         if (!amount || isNaN(numAmount) || numAmount <= 0) {
-            setError(t('Invalid amount'))
+            setError(t('Некорректная сумма'))
             return
         }
 
@@ -49,39 +49,41 @@ export const TopUpBalance = memo((props: TopUpBalanceProps) => {
                 onSuccess(result.clientSecret)
             }
         } catch (e: any) {
-            setError(e?.data?.message || t('Failed to create payment intent'))
+            setError(e?.data?.message || t('Ошибка сохранения'))
         }
     }, [amount, createIntent, onSuccess, t, userData?.id])
 
     return (
-        <Card padding="24" max border="round">
-            <VStack gap="24" max>
-                <Text title={t('Refill Balance')} />
+        <VStack gap="24" max>
+            <HStack gap="8" align="center">
+                <CreditCard size={22} />
+                <Text title={t('Пополнить баланс')} bold />
+            </HStack>
 
-                <VStack gap="16" max>
-                    <Textarea
-                        label={t('Amount (USD)')}
-                        value={amount}
-                        onChange={onAmountChange}
-                        placeholder="0.00"
-                    />
+            <Text
+                text={t('Укажите сумму пополнения в долларах США')}
+                size="s"
+            />
 
-                    {error && (
-                        <Text variant="error" text={error} />
-                    )}
+            <Textarea
+                label={t('Сумма (USD)') || ''}
+                value={amount}
+                onChange={onAmountChange}
+                placeholder="0.00"
+            />
 
-                    <Button
-                        variant="filled"
-                        color="normal"
-                        onClick={onContinue}
-                        disabled={isLoading}
-                        fullWidth
-                        size="l"
-                    >
-                        {isLoading ? t('Loading...') : t('Continue')}
-                    </Button>
-                </VStack>
-            </VStack>
-        </Card>
+            {error && (
+                <Text variant="error" text={error} />
+            )}
+
+            <Button
+                variant="glass-action"
+                onClick={onContinue}
+                disabled={isLoading}
+                fullWidth
+            >
+                {isLoading ? t('Загрузка...') : t('Продолжить')}
+            </Button>
+        </VStack>
     )
 })

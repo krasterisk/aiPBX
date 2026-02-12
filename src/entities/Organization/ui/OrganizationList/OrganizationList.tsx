@@ -61,7 +61,7 @@ export const OrganizationList = memo((props: OrganizationListProps) => {
     ], [t, onEdit, onDelete])
 
     if (isLoading) {
-        return <Loader />
+        return <VStack max align="center"><Loader /></VStack>
     }
 
     if (isError) {

@@ -1,37 +1,36 @@
+@import '@/app/styles/variables/mixins';
+
 .UsersList {
-    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
 
+.loaderWrap {
+    padding: var(--space-20) 0;
+}
 
+.userItem {
+    flex: 0 1 350px;
+    max-width: 100%;
+}
 
-
-    .uncheck {
-        position: absolute;
-        display: flex;
-        color: var(--icon-redesigned);
-        left: 0;
-        top: 0;
-    }
-
-    .check {
-        position: absolute;
-        display: flex;
-        color: var(--icon-redesigned);
-        left: 0;
-        top: 0;
-    }
-
-    .uncheckButtons {
-        display: none;
-    }
-
-    .checkButtons {
-        display: flex;
+@media (max-width: 600px) {
+    .userItem {
+        flex: 1 1 100%;
     }
 }
 
-.loader {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+@include mobile {
+    .UsersList {
+        padding: 0;
+    }
+}
+
+.emptyState {
+    padding: var(--space-20);
+    background: var(--card-bg-redesigned);
+    backdrop-filter: var(--glass-blur-sm);
+    border-radius: var(--radius-xl);
+    border: 1px dashed var(--divider-solid);
 }

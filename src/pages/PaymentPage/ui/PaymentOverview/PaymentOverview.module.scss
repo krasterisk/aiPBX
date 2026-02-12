@@ -1,11 +1,49 @@
-.modalContent {
-    padding: 20px;
-    min-width: 500px;
-    background-color: var(--bg-redesigned);
+@import '@/app/styles/variables/mixins';
 
-    @media (max-width: 768px) {
+.PaymentOverview {
+    width: 100%;
+}
+
+// ========================================
+// Balance Section
+// ========================================
+
+
+.balanceAmount {
+    @include text-gradient;
+}
+
+// ========================================
+// Quick Actions Grid
+// ========================================
+
+.quickActionsGrid {
+    @include mobile {
+        flex-direction: column;
+    }
+}
+
+.quickActionCard {
+    flex: 1 1 0;
+    min-width: 0;
+
+    @include mobile {
+        width: 100%;
+        flex: unset;
+    }
+}
+
+// ========================================
+// Modal
+// ========================================
+
+.modalContent {
+    padding: var(--card-padding-md);
+    min-width: 500px;
+
+    @include tablet {
         min-width: unset;
         width: 100%;
-        padding: 16px;
+        padding: var(--card-padding-sm);
     }
 }

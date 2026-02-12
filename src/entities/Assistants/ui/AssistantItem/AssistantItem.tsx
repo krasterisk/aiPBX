@@ -9,11 +9,14 @@ import { Assistant } from '../../model/types/assistants'
 import { getRouteAssistantEdit } from '@/shared/const/router'
 import { ContentView } from '@/entities/Content'
 import { useNavigate } from 'react-router-dom'
-import { Bot, Mic, Cpu, Wrench, Terminal } from 'lucide-react'
+import { Bot, Mic, Cpu, Wrench, Terminal, User } from 'lucide-react'
 import { Button } from '@/shared/ui/redesigned/Button'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+import { isUserAdmin } from '@/entities/User'
+import PersonIcon from '@mui/icons-material/Person'
 
 interface AssistantItemProps {
     className?: string
@@ -32,6 +35,7 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
 
     const { t } = useTranslation('assistants')
     const navigate = useNavigate()
+    const isAdmin = useSelector(isUserAdmin)
 
     const onCopy = useCallback((e: React.MouseEvent) => {
         e.stopPropagation()
@@ -57,23 +61,26 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
             <VStack className={cls.content} max>
                 <HStack gap={'16'} justify={'between'} max align="start">
                     <HStack gap={'16'} max>
-                        <div className={cls.avatar}>
+                        <HStack className={cls.avatar} align="center" justify="center">
                             <Bot size={24} />
-                        </div>
+                        </HStack>
                         <VStack max gap="4">
                             <Text title={assistant.name} size={'m'} bold className={cls.title} />
-                            <Text text={assistant.model || 'gpt-4o'} size="xs" variant="accent" />
+                            {isAdmin && assistant.user?.name && (
+                                <HStack gap="4" align="center">
+                                    <User size={16} className={cls.subIcon} />
+                                    <Text text={assistant.user.name} size="s" bold className={cls.subtitle} />
+                                </HStack>
+                            )}
                         </VStack>
                     </HStack>
                 </HStack>
 
-                <div className={cls.divider} />
-
-                <div className={cls.detailsGrid}>
+                <VStack gap="16" max className={cls.detailsGrid}>
                     <HStack gap="12" align="center">
-                        <div className={cls.detailIcon}>
+                        <HStack className={cls.detailIcon} align="center" justify="center">
                             <Cpu size={14} />
-                        </div>
+                        </HStack>
                         <VStack>
                             <Text text={t('Модель')} variant="accent" size="xs" />
                             <Text text={assistant.model || ''} className={cls.truncatedText} />
@@ -81,9 +88,9 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
                     </HStack>
 
                     <HStack gap="12" align="center">
-                        <div className={cls.detailIcon}>
+                        <HStack className={cls.detailIcon} align="center" justify="center">
                             <Mic size={14} />
-                        </div>
+                        </HStack>
                         <VStack>
                             <Text text={t('Голос')} variant="accent" size="xs" />
                             <Text text={assistant.voice || t('По умолчанию')} className={cls.truncatedText} />
@@ -91,15 +98,15 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
                     </HStack>
 
                     <HStack gap="12" align="center">
-                        <div className={cls.detailIcon}>
+                        <HStack className={cls.detailIcon} align="center" justify="center">
                             <Wrench size={14} />
-                        </div>
+                        </HStack>
                         <VStack>
                             <Text text={t('Инструменты')} variant="accent" size="xs" />
                             <Text text={assistant.tools?.length ? String(assistant.tools.length) : '0'} className={cls.truncatedText} />
                         </VStack>
                     </HStack>
-                </div>
+                </VStack>
 
                 {assistant.comment && (
                     <VStack gap="4" className={cls.commentSection}>

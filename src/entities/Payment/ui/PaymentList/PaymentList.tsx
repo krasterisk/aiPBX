@@ -1,5 +1,6 @@
 import { memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import cls from './PaymentList.module.scss'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
@@ -57,9 +58,14 @@ export const PaymentList = memo((props: PaymentListProps) => {
             cell: (info: any) => info.getValue()
         },
         {
-            header: t('Метод'),
-            accessorKey: 'paymentMethod',
-            cell: (info: any) => info.getValue() || '-'
+            header: t('Детали'),
+            accessorKey: 'receiptUrl',
+            cell: (info: any) => {
+                const url = info.getValue()
+                return url
+                    ? <a href={url} target="_blank" rel="noopener noreferrer">{t('Чек')}</a>
+                    : '-'
+            }
         }
     ], [t])
 
@@ -74,10 +80,10 @@ export const PaymentList = memo((props: PaymentListProps) => {
     }
 
     return (
-        <VStack gap="16" max className={classNames('', {}, [className])}>
-            <HStack justify="between" max>
+        <VStack gap="16" max className={classNames(cls.PaymentListSection, {}, [className])}>
+            <HStack justify="between" max wrap="wrap" gap="16">
                 <Text title={t('История платежей') || ''} />
-                <Button onClick={exportToExcel} variant="outline">
+                <Button onClick={exportToExcel} variant="glass-action">
                     {t('Экспорт в Excel')}
                 </Button>
             </HStack>

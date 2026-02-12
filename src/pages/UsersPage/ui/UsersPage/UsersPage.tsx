@@ -33,16 +33,12 @@ const UsersPage = ({ className }: UsersPageProps) => {
     if (hasMore) {
       onLoadNext()
     }
-    //    onRefetch()
   }, [hasMore, onLoadNext])
 
   useInitialEffect(() => {
     dispatch(initUsersPage())
   })
 
-  //  const content = <StickyContentLayout
-  // left={<ContentViewSelector view={view} onViewClick={onChangeView}/>}
-  // right={<EndpointFiltersContainer />}
   const content = (
     <Page
       data-testid={'UsersPage'}
@@ -59,15 +55,6 @@ const UsersPage = ({ className }: UsersPageProps) => {
     </Page>
   )
 
-  // if (!isAdmin) {
-  //   return (
-  //           <ErrorGetData
-  //               text={'Доступ запрещён!'}
-  //               onRefetch={onRefetch}
-  //           />
-  //   )
-  // }
-
   if (isError) {
     const errMsg = error && 'data' in error
       ? String((error.data as { message: string }).message)
@@ -80,18 +67,6 @@ const UsersPage = ({ className }: UsersPageProps) => {
       />
     )
   }
-
-  // if (!data?.rows.length) {
-  //   return (
-  //       <div className={classNames(cls.ContentList, {}, [className, cls[view]])}>
-  //         <Text
-  //             size={'xl'}
-  //             text={t('Абоненты не найдены')}
-  //         />
-  //       </div>
-  //   )
-  // }
-  //
 
   return (
     <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>

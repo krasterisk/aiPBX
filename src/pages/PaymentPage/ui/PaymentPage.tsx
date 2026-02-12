@@ -1,4 +1,6 @@
 import React, { memo, useState, useMemo, useCallback } from 'react'
+import { classNames } from '@/shared/lib/classNames/classNames'
+import cls from './PaymentPage.module.scss'
 import { Page } from '@/widgets/Page'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { useTranslation } from 'react-i18next'
@@ -10,6 +12,7 @@ import { getUserAuthData } from '@/entities/User'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { PaymentOverview } from './PaymentOverview/PaymentOverview'
 import { PaymentOrganizations } from './PaymentOrganizations/PaymentOrganizations'
+import { Card } from '@/shared/ui/redesigned/Card'
 
 const PaymentPage = memo(() => {
   const { t } = useTranslation('payment')
@@ -35,14 +38,16 @@ const PaymentPage = memo(() => {
   ], [t, userId, onTabChangeByIndex])
 
   return (
-    <Page data-testid={'PaymentPage'}>
+    <Page data-testid={'PaymentPage'} className={classNames(cls.PaymentPage, {}, [])}>
       <VStack gap="24" max>
         <Text title={t('Оплата')} />
-        <TabsPanel
-          tabItems={tabs}
-          value={tabIndex}
-          onChange={handleTabChange}
-        />
+        <Card max variant='glass' border='partial' padding='0'>
+          <TabsPanel
+            tabItems={tabs}
+            value={tabIndex}
+            onChange={handleTabChange}
+          />
+        </Card>
       </VStack>
     </Page>
   )

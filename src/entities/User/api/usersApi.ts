@@ -9,6 +9,14 @@ interface QueryArgs {
   search?: string
 }
 
+export interface AdminTopUpDto {
+  userId: string
+  amount: number
+  currency?: string
+  paymentMethod: string
+  paymentInfo?: string
+}
+
 export const usersApi = rtkApi.injectEndpoints({
   endpoints: (build) => ({
     getUsers: build.query<AllUsers, QueryArgs>({
@@ -192,6 +200,14 @@ export const usersApi = rtkApi.injectEndpoints({
       },
       // Invalidates all queries that subscribe to this Post `id` only.
       invalidatesTags: (result, error, id) => [{ type: 'Users', id }]
+    }),
+    adminTopUp: build.mutation<{ success: boolean }, AdminTopUpDto>({
+      query: (arg) => ({
+        url: '/admin/top-up',
+        method: 'POST',
+        body: arg
+      }),
+      invalidatesTags: [{ type: 'Users', id: 'LIST' }]
     })
   })
 })
@@ -216,3 +232,4 @@ export const useUploadAvatarUser = usersApi.useUploadAvatarUserMutation
 export const useSetUsageLimit = usersApi.useSetUsageLimitMutation
 export const useGetUsageLimit = usersApi.useGetUsageLimitQuery
 export const useDeleteUser = usersApi.useDeleteUserMutation
+export const useAdminTopUp = usersApi.useAdminTopUpMutation

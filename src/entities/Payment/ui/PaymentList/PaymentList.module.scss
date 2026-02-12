@@ -1,14 +1,17 @@
+@import '@/app/styles/variables/mixins';
+
 .paymentCard {
-    background-color: var(--bg-redesigned);
-    padding: 16px;
-    border-radius: 12px;
-    border: 1px solid var(--light-bg-redesigned);
+    @include glass-card-secondary;
+    padding: var(--card-padding-md);
 }
 
 .cardHeader {
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px dashed var(--light-bg-redesigned);
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+
+    .divider {
+        @include divider-gradient;
+    }
 }
 
 .row {
@@ -16,9 +19,8 @@
 }
 
 .label {
-    color: var(--text-redesigned);
-    opacity: 0.6;
-    font-size: 14px;
+    color: var(--hint-redesigned);
+    font-size: var(--font-size-sm);
 }
 
 .value {
@@ -27,13 +29,13 @@
 }
 
 .succeeded {
-    color: #4caf50;
+    color: var(--status-success);
 }
 
 .pending {
-    color: #ff9800;
+    color: var(--status-warning);
 }
 
 .failed {
-    color: #f44336;
+    color: var(--status-error);
 }

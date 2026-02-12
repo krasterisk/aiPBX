@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes, forwardRef, memo, ReactNode } from 'react'
 import { classNames, Mods } from '@/shared/lib/classNames/classNames'
 import cls from './Button.module.scss'
 
-export type ButtonVariant = 'clear' | 'outline' | 'filled' | 'accent'
+export type ButtonVariant = 'clear' | 'outline' | 'filled' | 'accent' | 'glass-action'
 export type ButtonColor = 'normal' | 'success' | 'error' | 'accent'
 
 export type ButtonSize = 's' | 'm' | 'l' | 'xl'

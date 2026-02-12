@@ -5,17 +5,16 @@ import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { ErrorGetData } from '../../../ErrorGetData'
 import { ContentListItemSkeleton } from '../../../Content'
 import { User, UsersListProps } from '../../model/types/user'
-import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { Card } from '@/shared/ui/redesigned/Card'
-import { Check } from '@/shared/ui/mui/Check'
 import { UserItem } from '../UserItem/UserItem'
-import { useDeleteUser } from '../../api/usersApi'
 import { useTranslation } from 'react-i18next'
 import { UsersListHeader } from '../UsersListHeader/UsersListHeader'
 import { useNavigate } from 'react-router-dom'
 import { getRouteUserEdit } from '@/shared/const/router'
 import { Loader } from '@/shared/ui/Loader'
+import { Icon } from '@/shared/ui/redesigned/Icon'
+import SearchIcon from '@/shared/assets/icons/search.svg'
+import { AdminTopUpModal } from '@/features/AdminTopUp'
 
 export const UsersList = (props: UsersListProps) => {
   const {
@@ -26,46 +25,10 @@ export const UsersList = (props: UsersListProps) => {
     users
   } = props
 
-  const { t } = useTranslation('profile')
+  const { t } = useTranslation('users')
   const navigate = useNavigate()
 
-  const [checkedBox, setCheckedBox] = useState<string[]>([])
-  const [indeterminateBox, setIndeterminateBox] = useState<boolean>(false)
-
-  const [userDeleteMutation, { isError: isDeleteError, isLoading: isDeleteLoading }] = useDeleteUser()
-
-  const handleCheckChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
-    setCheckedBox((prev) => {
-      const currentIndex = prev.indexOf(value)
-      const newChecked = [...prev]
-      if (currentIndex === -1) {
-        newChecked.push(value)
-      } else {
-        newChecked.splice(currentIndex, 1)
-      }
-      if (users?.count) {
-        setIndeterminateBox(newChecked.length > 0 && newChecked.length < users?.count)
-      }
-      return newChecked
-    })
-  }
-
-  const handleCheckAll = useCallback(() => {
-    if (indeterminateBox && users?.count && checkedBox.length > 0) {
-      setCheckedBox(users?.rows.map(users => String(users.id)))
-      setIndeterminateBox(false)
-    }
-
-    if (!indeterminateBox && users?.count && checkedBox.length === 0) {
-      setCheckedBox(users?.rows.map(users => String(users.id)))
-      setIndeterminateBox(false)
-    }
-
-    if (!indeterminateBox && checkedBox.length > 0) {
-      setCheckedBox([])
-    }
-  }, [users?.count, users?.rows, checkedBox.length, indeterminateBox])
+  const [topUpUser, setTopUpUser] = useState<User | null>(null)
 
   const getSkeletons = () => {
     return new Array(4)
@@ -75,13 +38,13 @@ export const UsersList = (props: UsersListProps) => {
       ))
   }
 
-  const handlerDeleteAll = useCallback(() => {
-    checkedBox.forEach(item => {
-      userDeleteMutation(item).unwrap()
-    })
-    setCheckedBox([])
-    setIndeterminateBox(false)
-  }, [userDeleteMutation, checkedBox])
+  const handleTopUp = useCallback((user: User) => {
+    setTopUpUser(user)
+  }, [])
+
+  const handleCloseTopUp = useCallback(() => {
+    setTopUpUser(null)
+  }, [])
 
   if (isError) {
     return (
@@ -89,50 +52,22 @@ export const UsersList = (props: UsersListProps) => {
     )
   }
 
-  if (isDeleteError) {
+  if (isLoading) {
     return (
-      <ErrorGetData
-        title={String(t('Произошла ошибка при удалении пользователя!'))}
-        text={String(t('Проверьте, чтобы у пользователя не было связанных ассистентов или функций!'))}
-      />
+      <VStack max align="center" justify="center" className={cls.loaderWrap}>
+        <Loader />
+      </VStack>
     )
   }
-
-  if (isLoading || isDeleteLoading) {
-    return (
-      <Loader className={cls.loader} />
-    )
-  }
-
-  const checkedButtons = (
-    <HStack
-      gap={'16'}
-      wrap={'wrap'}
-      className={classNames(cls.CasksList, {
-        [cls.uncheckButtons]: checkedBox.length === 0,
-        [cls.checkButton]: checkedBox.length > 0
-      }, [])}
-    >
-      <Button
-        variant={'clear'}
-        onClick={handlerDeleteAll}
-      >
-        <Text text={t('Удалить выбранные')} variant={'error'} />
-      </Button>
-    </HStack>
-  )
 
   const renderContent = (user: User) => {
     return (
       <UserItem
         key={user.id}
         user={user}
-        checkedItems={checkedBox}
-        onChangeChecked={handleCheckChange}
-        target={target}
-        view={'BIG'}
         className={cls.userItem}
         onEdit={(id) => navigate(getRouteUserEdit(id))}
+        onTopUp={handleTopUp}
       />
     )
   }
@@ -140,38 +75,25 @@ export const UsersList = (props: UsersListProps) => {
   return (
     <VStack gap={'16'} max>
       <UsersListHeader />
-      <Card max className={classNames(cls.UsersList, {}, [className])}>
-        <HStack wrap={'nowrap'} justify={'end'} gap={'24'}>
-          <Check
-            className={classNames(cls.UsersList, {
-              [cls.uncheck]: checkedBox.length === 0,
-              [cls.check]: checkedBox.length > 0
-            }, [])}
-            indeterminate={indeterminateBox}
-            checked={checkedBox.length === users?.count}
-            onChange={handleCheckAll}
-          />
-          {checkedButtons}
-          {
-            checkedBox.length > 0
-              ? <Text text={t('Выбрано') + ': ' + String(checkedBox.length) + t(' из ') + String(users?.count)} />
-              : <Text text={t('Всего') + ': ' + String(users?.count || 0)} />
-          }
 
-        </HStack>
-      </Card>
       {users?.rows.length
-        ? <HStack gap={'16'} align={'start'} wrap={'wrap'} max>
+        ? <HStack wrap={'wrap'} gap={'16'} align={'start'} max>
           {users.rows.map(renderContent)}
         </HStack>
-        : <HStack
-          justify={'center'} max
-          className={classNames('', {}, [className, cls.BIG])}
-        >
-          <Text align={'center'} text={t('Данные не найдены')} />
-        </HStack>
+        : <VStack justify={'center'} align={'center'} max className={cls.emptyState} gap={'16'}>
+          <Icon Svg={SearchIcon} width={48} height={48} />
+          <Text align={'center'} text={t('Данные не найдены')} size={'l'} bold />
+          <Text align={'center'} text={t('Нет пользователей')} />
+        </VStack>
       }
       {isLoading && getSkeletons()}
+
+      <AdminTopUpModal
+        isOpen={!!topUpUser}
+        onClose={handleCloseTopUp}
+        userId={topUpUser?.id || ''}
+        userName={topUpUser?.name || ''}
+      />
     </VStack>
   )
 }

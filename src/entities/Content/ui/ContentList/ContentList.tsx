@@ -24,7 +24,7 @@ const getSkeletons = (view: ContentView) => {
   return new Array(view === 'SMALL' ? 9 : 4)
     .fill(0)
     .map((item, index) => (
-            <ContentListItemSkeleton className={cls.card} key={index} view={view}/>
+      <ContentListItemSkeleton className={cls.card} key={index} view={view} />
     ))
 }
 
@@ -44,50 +44,48 @@ export const ContentList = <T extends object>(props: ContentListProps<T>) => {
     if (componentName === 'users') {
       const user = content as User
       return (
-                <UserItem
-                    key={user.id}
-                    user={user}
-                    target={target}
-                    view={view}
-                    className={cls.caskItem}
-                />
+        <UserItem
+          key={user.id}
+          user={user}
+          className={cls.caskItem}
+        />
       )
     }
   }
 
   if (!isLoading && !data?.length) {
     return (
-            <HStack
-                justify={'start'}
-                max
-                className={classNames(cls.ContentList, {}, [className, cls[view]])}
-            >
-                <Text
-                    align={'center'}
-                    text={t('Данные не найдены')}
-                />
-            </HStack>
+      <HStack
+        justify={'start'}
+        max
+        className={classNames(cls.ContentList, {}, [className, cls[view]])}
+      >
+        <Text
+          align={'center'}
+          text={t('Данные не найдены')}
+        />
+      </HStack>
     )
   }
 
   return (
-        <VStack
-            className={classNames(cls.ContentList, {}, [className, cls[view]])}
-            max
-            gap={'16'}
-        >
-            <Card max border={'partial'}>
-                <HStack gap={'4'} max wrap={'nowrap'}>
-                    <Check indeterminate className={cls.checkAll} label={t('Выбрать всё') || ''}/>
-                    <Text text={t('Всего') + ': ' + String(data?.length)}/>
-                </HStack>
-            </Card>
+    <VStack
+      className={classNames(cls.ContentList, {}, [className, cls[view]])}
+      max
+      gap={'16'}
+    >
+      <Card max border={'partial'}>
+        <HStack gap={'4'} max wrap={'nowrap'}>
+          <Check indeterminate className={cls.checkAll} label={t('Выбрать всё') || ''} />
+          <Text text={t('Всего') + ': ' + String(data?.length)} />
+        </HStack>
+      </Card>
 
-            {data?.length
-              ? data.map(renderContent)
-              : null
-            }
-            {isLoading && getSkeletons(view)}
-        </VStack>
+      {data?.length
+        ? data.map(renderContent)
+        : null
+      }
+      {isLoading && getSkeletons(view)}
+    </VStack>
   )
 }

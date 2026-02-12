@@ -7,7 +7,6 @@ import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { classNames } from '@/shared/lib/classNames/classNames'
 
 interface UsageLimitsFormProps {
     className?: string
@@ -55,7 +54,7 @@ export const UsageLimitsForm = memo((props: UsageLimitsFormProps) => {
     }, [authData?.id, emails, limitAmount, setUsageLimit, t])
 
     return (
-        <VStack gap="16" max className={classNames('', {}, [className])}>
+        <VStack gap="16" max className={className}>
             <Text title={t('Порог для уведомления')} text={t('Укажите сумму, при достижении которой вы будете получать уведомления')} />
 
             <Textarea
@@ -76,7 +75,7 @@ export const UsageLimitsForm = memo((props: UsageLimitsFormProps) => {
             <Button
                 onClick={handleSave}
                 disabled={isLoading}
-                variant="filled"
+                variant="glass-action"
             >
                 {t('Сохранить')}
             </Button>

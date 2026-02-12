@@ -9,9 +9,12 @@ import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
 import { Icon } from '@/shared/ui/redesigned/Icon'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Loader } from '@/shared/ui/Loader'
-import { Button as ButtonMui, styled } from '@mui/material'
 import { User } from '../../model/types/user'
 import { useUpdateUser, useUploadAvatarUser } from '../../api/usersApi'
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import CloseIcon from '@mui/icons-material/Close'
+import cls from './UserAddAvatar.module.scss'
 
 interface UserAddAvatarProps {
   user?: User
@@ -61,7 +64,6 @@ export const UserAddAvatar = memo((props: UserAddAvatarProps) => {
           }
         })
     }
-    // onClose?.(false)
   }, [uploadAvatarUser, user?.id, onAvatarUploaded])
 
   const handleUserClearAvatar = useCallback((data: User) => {
@@ -83,65 +85,53 @@ export const UserAddAvatar = memo((props: UserAddAvatarProps) => {
   const errorFallback = <Icon width={128} height={128} Svg={noUser} />
   const fallback = <Skeleton width={128} height={128} border={'50%'} />
 
-  const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1
-  })
-
-  const AddToAvatarButton = (
-    <ButtonMui
-      component="label"
-      role={undefined}
-      variant="text"
-      size={'large'}
-      tabIndex={-1}
-    // startIcon={<Icon Svg={noUser} width={'50'} height={'50'}/>}
-    >{t('Добавить')}
-      <VisuallyHiddenInput
-        type="file"
-        multiple
-        accept={'image/*'}
-        name={'images[]'}
-        onChange={onChangeUserAvatarHandler}
-      />
-    </ButtonMui>
-  )
-
   return (
     <Modal isOpen={show} onClose={onClose}>
-      <VStack gap={'24'} align={'center'}>
-        <Text title={user?.name} />
-        {isLoading
-          ? <Loader />
-          : <AppImage
-            width={'100%'}
-            height={300}
-            fallback={fallback}
-            errorFallback={errorFallback}
-            src={image}
-          />
-        }
-        {isError ? <Text text={t('Ошибка загрузки')} variant={'error'} /> : ''}
-        {AddToAvatarButton}
-        <HStack gap={'16'} justify={'start'}>
-          <Button onClick={() => {
-            handleUserClearAvatar(user as User)
-          }} variant={'clear'}>
-            {t('Убрать фото')}
-          </Button>
-          <Button onClick={handleOnClose} variant={'outline'} color={'error'}>
-            {t('Закрыть')}
-          </Button>
+      <VStack gap="24" align="center" className={cls.modalContent}>
+        <button className={cls.closeIcon} onClick={handleOnClose} type="button">
+          <CloseIcon fontSize="small" />
+        </button>
+
+        <Text title={user?.name} size="l" bold />
+
+        <div className={cls.imageContainer}>
+          {isLoading
+            ? <VStack align="center" justify="center" className={cls.loaderWrap}><Loader /></VStack>
+            : <AppImage
+              width="100%"
+              height={280}
+              fallback={fallback}
+              errorFallback={errorFallback}
+              src={image}
+              className={cls.avatarImage}
+            />
+          }
+        </div>
+
+        {isError && <Text text={t('Ошибка загрузки')} variant="error" />}
+
+        <HStack gap="12" justify="center" max className={cls.actions}>
+          <label className={cls.uploadBtn}>
+            <CloudUploadIcon fontSize="small" />
+            <span>{t('Добавить')}</span>
+            <input
+              type="file"
+              accept="image/*"
+              name="images[]"
+              onChange={onChangeUserAvatarHandler}
+              className={cls.hiddenInput}
+            />
+          </label>
+
+          <button
+            className={cls.deleteIconBtn}
+            onClick={() => handleUserClearAvatar(user as User)}
+            type="button"
+          >
+            <DeleteOutlineIcon fontSize="small" />
+          </button>
         </HStack>
       </VStack>
     </Modal>
-
   )
 })

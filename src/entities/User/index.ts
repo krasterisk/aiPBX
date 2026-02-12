@@ -62,5 +62,7 @@ export {
   useGetUserBalance,
   useGetMe,
   useSetUsageLimit,
-  useGetUsageLimit
+  useGetUsageLimit,
+  useAdminTopUp
 } from './api/usersApi'
+export type { AdminTopUpDto } from './api/usersApi'

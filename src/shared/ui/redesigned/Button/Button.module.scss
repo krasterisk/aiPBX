@@ -148,3 +148,29 @@
 .fullWidth {
     width: 100%;
 }
+
+.glass-action {
+    border-radius: var(--radius-md);
+    height: 42px;
+    border: 1px solid rgba(94, 211, 243, 0.2);
+    background: var(--icon-bg-primary);
+    color: var(--text-redesigned);
+    font-weight: 600;
+    padding: 0 var(--space-5);
+    transition: var(--transition-normal);
+
+    &:hover {
+        opacity: 1;
+        background: var(--icon-bg-secondary);
+        border-color: var(--accent-redesigned);
+        transform: var(--hover-lift-sm);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    @media (max-width: 600px) {
+        width: 100%;
+    }
+}

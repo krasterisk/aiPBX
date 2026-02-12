@@ -1,0 +1,12 @@
+@import '@/app/styles/variables/mixins';
+
+.PaymentOrganizations {
+    width: 100%;
+}
+
+.header {
+    @include mobile {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

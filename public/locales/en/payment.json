@@ -18,7 +18,8 @@
   "Сумма": "Amount",
   "Валюта": "Currency",
   "Статус": "Status",
-  "Метод": "Method",
+  "Детали": "Details",
+  "Чек": "Receipt",
   "История платежей пуста": "Payment history is empty",
   "Ошибка при загрузке платежей": "Error loading payments",
   "Здесь будет отображаться история ваших платежей": "Your payment history will be displayed here",
@@ -41,5 +42,15 @@
   "Адрес": "Address",
   "Вы действительно хотите удалить организацию?": "Do you really want to delete this organization?",
   "Список организаций пуст": "Organization list is empty",
-  "Ошибка при загрузке организаций": "Error loading organizations"
+  "Ошибка при загрузке организаций": "Error loading organizations",
+  "Некорректная сумма": "Invalid amount",
+  "Настройки сохранены": "Settings saved",
+  "Ошибка сохранения": "Save error",
+  "Текущий баланс": "Current balance",
+  "Быстрые действия": "Quick actions",
+  "Укажите сумму пополнения в долларах США": "Enter the top-up amount in US dollars",
+  "Сумма (USD)": "Amount (USD)",
+  "Загрузка...": "Loading...",
+  "Продолжить": "Continue",
+  "Отмена": "Cancel"
 }

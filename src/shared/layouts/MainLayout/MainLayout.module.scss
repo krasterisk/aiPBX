@@ -25,6 +25,14 @@
         "header"
         "content";
     grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+    overflow: hidden;
+
+    .content {
+        overflow-y: auto;
+        height: 100%;
+    }
 }
 
 .sidebar {

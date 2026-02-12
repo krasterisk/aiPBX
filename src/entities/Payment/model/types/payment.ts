@@ -6,6 +6,7 @@ export interface Payment {
     createdAt: string;
     paymentMethod?: string;
     description?: string;
+    receiptUrl?: string;
 }
 
 export interface PaymentListResponse {

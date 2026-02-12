@@ -1,13 +1,14 @@
 import { memo, useState, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal } from '@/shared/ui/redesigned/Modal'
-import { VStack } from '@/shared/ui/redesigned/Stack'
+import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { useCreateOrganizationMutation, useUpdateOrganizationMutation } from '@/entities/Organization'
 import { Organization } from '@/entities/Organization'
 import { classNames } from '@/shared/lib/classNames/classNames'
+import { Building2 } from 'lucide-react'
 
 interface OrganizationCreateModalProps {
     className?: string
@@ -44,7 +45,7 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
             if (organization) {
                 await updateOrganization({
                     id: organization.id,
-                    userId, // organization might need userId if backend requires it, otherwise ignored
+                    userId,
                     name,
                     tin,
                     address
@@ -75,7 +76,13 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
             onClose={onClose}
         >
             <VStack gap="16" max>
-                <Text title={organization ? t('Редактировать организацию') : t('Добавить организацию')} />
+                <HStack gap="8" align="center">
+                    <Building2 size={22} />
+                    <Text
+                        title={organization ? t('Редактировать организацию') : t('Добавить организацию')}
+                        bold
+                    />
+                </HStack>
 
                 <Textarea
                     label={t('Наименование') || ''}
@@ -100,12 +107,21 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
                     disabled={isLoading}
                 />
 
-                <Button
-                    onClick={handleSubmit}
-                    disabled={isLoading || !name || !tin || !address}
-                >
-                    {t('Сохранить')}
-                </Button>
+                <HStack gap="8" max justify="end">
+                    <Button
+                        onClick={onClose}
+                        variant="clear"
+                    >
+                        {t('Отмена')}
+                    </Button>
+                    <Button
+                        onClick={handleSubmit}
+                        disabled={isLoading || !name || !tin || !address}
+                        variant="glass-action"
+                    >
+                        {t('Сохранить')}
+                    </Button>
+                </HStack>
             </VStack>
         </Modal>
     )

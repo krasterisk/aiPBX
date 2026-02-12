@@ -1,0 +1,10 @@
+@import '@/app/styles/variables/mixins';
+
+.PaymentPage {
+    min-height: 100%;
+    overflow: visible;
+
+    @include mobile {
+        padding: var(--space-2);
+    }
+}
