@@ -12,7 +12,7 @@ const LiabilityDisclaimerPage = memo(() => {
         <Page data-testid="LiabilityDisclaimerPage">
             <div className={cls.legalContent}>
                 <Link to={getRouteLegal()} className={cls.backLink}>
-                    ← {t('Back to Legal')}
+                    {t('Back to Legal')}
                 </Link>
                 <h1 className={cls.contentTitle}>{t('Liability Disclaimer')}</h1>
                 <p className={cls.lastUpdated}>{t('Last updated')}: 2026-02-13</p>

@@ -3,7 +3,7 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserAuthData, isUserAdmin, userActions } from '@/entities/User'
-import { getRouteMain, getRoutePayment, getRouteUserEdit } from '@/shared/const/router'
+import { getRouteLegal, getRouteMain, getRoutePayment, getRouteUserEdit } from '@/shared/const/router'
 import { Avatar } from '@/shared/ui/redesigned/Avatar'
 import { Dropdown } from '@/shared/ui/redesigned/Popups'
 import { useNavigate } from 'react-router-dom'
@@ -43,18 +43,22 @@ export const AvatarDropdown = memo((props: AvatarDropdownProps) => {
       href: getRoutePayment()
     },
     {
+      content: t('Правовая информация'),
+      href: getRouteLegal()
+    },
+    {
       content: t('Выйти'),
       onClick: onLogout
     }
   ]
 
   return (
-        <Dropdown
-            className={classNames('', {}, [className])}
-            direction={'bottom-left'}
-            items={items}
-            trigger={<Avatar size={40} src={authData?.avatar}/>}
-        />
+    <Dropdown
+      className={classNames('', {}, [className])}
+      direction={'bottom-left'}
+      items={items}
+      trigger={<Avatar size={40} src={authData?.avatar} />}
+    />
 
   )
 })
