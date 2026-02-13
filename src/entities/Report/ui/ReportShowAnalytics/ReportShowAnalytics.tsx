@@ -31,11 +31,11 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
 
     const metrics = analytics.metrics
 
-    const businessImpact = metrics?.['Business Impact']
-    const scenarioAnalysis = metrics?.['Scenario Analysis']
-    const userSatisfaction = metrics?.['User Satisfaction (Sentiment)']
-    const accuracyAndEfficiency = metrics?.['Accuracy and Efficiency (NLU)']
-    // const speechAndInteractionQuality = metrics?.['Speech and Interaction Quality']
+    const businessImpact = metrics?.business_impact
+    const scenarioAnalysis = metrics?.scenario_analysis
+    const userSatisfaction = metrics?.user_satisfaction
+    const accuracyAndEfficiency = metrics?.accuracy_and_efficiency
+    // const speechAndInteractionQuality = metrics?.speech_and_interaction_quality
 
     // Fallback values if metrics is missing or partial
     const sentiment = userSatisfaction?.sentiment || analytics.sentiment
@@ -64,19 +64,6 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
             className={classNames(cls.ReportShowAnalytics, {}, [className])}
             max
         >
-            {/* Top Cards: CSAT */}
-            <HStack gap="16" max className={cls.topCards}>
-                <Card variant="light" className={cls.card}>
-                    <VStack gap="4">
-                        <HStack justify="between" max align="start">
-                            <Text title={t('CSAT')} className={cls.metricLabel} />
-                            <Text text={String(csat ?? '-')} size="l" bold />
-                            <Star size={20} className={cls.metricLabel} />
-                        </HStack>
-                    </VStack>
-                </Card>
-            </HStack>
-
             {/* Main Summary */}
             {summary && (
                 <Card variant="outlined" className={cls.summaryCard} max>

@@ -12,7 +12,6 @@ import {
 } from '../selectors/publishWidgetsPageSelectors'
 import { useWidgetKeys } from '@/entities/WidgetKeys'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
-import { useAssistantsAll } from '@/entities/Assistants'
 
 export const usePublishWidgetsFilters = () => {
     const dispatch = useAppDispatch()
@@ -26,21 +25,14 @@ export const usePublishWidgetsFilters = () => {
     const isAdmin = useSelector(isUserAdmin)
 
     const { data: widgets = [], isLoading: isWidgetsLoading, error: widgetsError, isError, refetch } = useWidgetKeys()
-    const { data: assistants = [] } = useAssistantsAll({})
 
     // Filter widgets based on user permissions
     let filteredWidgets = widgets
 
     if (!isAdmin) {
-        filteredWidgets = widgets.filter(w => {
-            const assistant = assistants.find(a => a.id === String(w.assistantId))
-            return assistant?.userId === userData?.id
-        })
+        filteredWidgets = widgets.filter(w => String(w.userId) === String(userData?.id))
     } else if (clientId) {
-        filteredWidgets = widgets.filter(w => {
-            const assistant = assistants.find(a => a.id === String(w.assistantId))
-            return assistant?.userId === clientId
-        })
+        filteredWidgets = widgets.filter(w => String(w.userId) === clientId)
     }
 
     // Filter by search

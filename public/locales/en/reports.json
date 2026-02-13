@@ -109,5 +109,20 @@
   "Count": "Count",
   "Fallback Count": "Fallback Count",
   "No issues detected": "No issues detected",
-  "Top Issues": "Top Issues"
+  "Top Issues": "Top Issues",
+  "Результат": "Result",
+  "Эскалация": "Escalation",
+  "Биллинг": "Billing",
+  "Тип": "Type",
+  "Audio токены": "Audio Tokens",
+  "Text токены": "Text Tokens",
+  "Audio стоимость": "Audio Cost",
+  "Text стоимость": "Text Cost",
+  "Итого": "Total",
+  "Нет данных о биллинге": "No billing data available",
+  "Время": "Time",
+  "realtime": "Realtime",
+  "analytic": "Analytics",
+  "№": "#",
+  "Аналитика": "Analytics"
 }

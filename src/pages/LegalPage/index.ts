@@ -1,0 +1,7 @@
+export { LegalPageAsync as LegalPage } from './ui/LegalPage/LegalPage.async'
+export { TermsOfServicePageAsync as TermsOfServicePage } from './ui/TermsOfServicePage/TermsOfServicePage.async'
+export { PrivacyPolicyPageAsync as PrivacyPolicyPage } from './ui/PrivacyPolicyPage/PrivacyPolicyPage.async'
+export { DpaPageAsync as DpaPage } from './ui/DpaPage/DpaPage.async'
+export { PublicOfferPageAsync as PublicOfferPage } from './ui/PublicOfferPage/PublicOfferPage.async'
+export { PersonalDataPolicyPageAsync as PersonalDataPolicyPage } from './ui/PersonalDataPolicyPage/PersonalDataPolicyPage.async'
+export { LiabilityDisclaimerPageAsync as LiabilityDisclaimerPage } from './ui/LiabilityDisclaimerPage/LiabilityDisclaimerPage.async'

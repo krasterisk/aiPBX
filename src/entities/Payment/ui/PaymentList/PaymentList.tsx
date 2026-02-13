@@ -53,6 +53,11 @@ export const PaymentList = memo((props: PaymentListProps) => {
             cell: (info: any) => String(info.getValue()).toUpperCase()
         },
         {
+            header: t('Метод оплаты'),
+            accessorKey: 'paymentMethod',
+            cell: (info: any) => info.getValue() || '-'
+        },
+        {
             header: t('Статус'),
             accessorKey: 'status',
             cell: (info: any) => info.getValue()

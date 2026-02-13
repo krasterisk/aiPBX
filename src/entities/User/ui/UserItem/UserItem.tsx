@@ -63,25 +63,19 @@ export const UserItem = memo((props: UserItemProps) => {
       <VStack className={cls.content} max gap="16">
         <HStack gap={'16'} justify={'between'} max align="start">
           <HStack gap={'16'} max>
-            <HStack className={cls.avatar}>
-              <Avatar
-                size={36}
-                src={checkedSrc}
-                alt={user.name}
-              />
-            </HStack>
+            <Avatar
+              size={36}
+              src={checkedSrc}
+              alt={user.name}
+              className={cls.avatar}
+            />
             <VStack max gap="4">
-              <HStack gap="8" align="center">
-                <Text title={user.name || user.username || user.email || ''} bold className={cls.title} />
-                {isAdmin && (
-                  <HStack className={cls.adminBadge} gap="4" align="center">
-                    <ShieldCheck size={8} />
-                    <Text text={t('Администратор')} size="xs" />
-                  </HStack>
-                )}
-              </HStack>
-              {user.vpbxUser && (
-                <Text text={user.vpbxUser.name} size="xs" variant="accent" />
+              <Text title={user.name || user.username || user.email || ''} bold className={cls.title} />
+              {isAdmin && (
+                <HStack className={cls.adminBadge} gap="4" align="center">
+                  <ShieldCheck size={8} />
+                  <Text text={t('Администратор')} size="xs" />
+                </HStack>
               )}
             </VStack>
           </HStack>

@@ -16,7 +16,7 @@ interface ReportShowDialogProps {
   isDialogLoading: boolean
   isDialogError: boolean
   Dialogs?: ReportDialog[]
-  mediaUrl: string
+  mediaUrl?: string
 }
 
 export const ReportShowDialog = memo((props: ReportShowDialogProps) => {

@@ -20,6 +20,7 @@ export interface Report {
   createdAt: string
   userId: string
   analytics?: Analytics
+  billingRecords?: BillingRecord[]
 }
 
 export interface ReportsListProps {
@@ -72,6 +73,19 @@ export interface ReportDialog {
   text: string
 }
 
+export interface BillingRecord {
+  id: number
+  channelId: string
+  type: 'realtime' | 'analytic'
+  audioTokens: number
+  textTokens: number
+  totalTokens: number
+  audioCost: number
+  textCost: number
+  totalCost: number
+  createdAt: string
+}
+
 export interface BusinessImpact {
   automation_rate?: number
   escalation_rate?: number
@@ -108,11 +122,11 @@ export interface SpeechAndInteractionQuality {
 }
 
 export interface AnalyticsMetrics {
-  'Business Impact'?: BusinessImpact
-  'Scenario Analysis'?: ScenarioAnalysis
-  'User Satisfaction (Sentiment)'?: UserSatisfaction
-  'Accuracy and Efficiency (NLU)'?: AccuracyAndEfficiency
-  'Speech and Interaction Quality'?: SpeechAndInteractionQuality
+  business_impact?: BusinessImpact
+  scenario_analysis?: ScenarioAnalysis
+  user_satisfaction?: UserSatisfaction
+  accuracy_and_efficiency?: AccuracyAndEfficiency
+  speech_and_interaction_quality?: SpeechAndInteractionQuality
 }
 
 export interface Analytics {

@@ -5,19 +5,16 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Check } from '@/shared/ui/mui/Check'
 import { Report } from '../../model/types/report'
 import { useTranslation } from 'react-i18next'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Star, CheckCircle, AlertCircle } from 'lucide-react'
 import { useGetReportDialogs } from '../../api/reportApi'
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { useMediaQuery } from '@mui/material'
-import { ReportShowDialog } from '../ReportShowDialog/ReportShowDialog'
 import { useSelector } from 'react-redux'
 import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
 import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { ChartBar, Sparkles } from 'lucide-react'
-import { Loader } from '@/shared/ui/Loader'
-import { ReportShowAnalytics } from '../ReportShowAnalytics/ReportShowAnalytics'
 import { useCreateCallAnalytics } from '../../api/reportApi'
+import { ReportExpandedPanel } from '../ReportExpandedPanel/ReportExpandedPanel'
 
 interface ReportTableProps {
   className?: string
@@ -39,14 +36,14 @@ export const ReportTable = memo((props: ReportTableProps) => {
   const authData = useSelector(getUserAuthData)
   const userCurrency = UserCurrencyValues.USD || authData?.currency
 
-  const [expandedView, setExpandedView] = useState<'none' | 'dialog' | 'analytics'>('none')
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const {
     data: Dialogs,
     isLoading: isDialogLoading,
     isError: isDialogError
   } = useGetReportDialogs(report.channelId, {
-    skip: expandedView !== 'dialog',
+    skip: !isExpanded,
     refetchOnFocus: false,
     refetchOnReconnect: false
   })
@@ -64,21 +61,15 @@ export const ReportTable = memo((props: ReportTableProps) => {
     hour12: false
   }).format(date)
 
-  const onShowDialog = useCallback((e: React.MouseEvent) => {
+  const onToggleExpanded = useCallback((e: React.MouseEvent) => {
     e.stopPropagation()
-    setExpandedView(prev => prev === 'dialog' ? 'none' : 'dialog')
-  }, [])
-
-  const onShowAnalytics = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation()
-    setExpandedView(prev => prev === 'analytics' ? 'none' : 'analytics')
+    setIsExpanded(prev => !prev)
   }, [])
 
   const onGetAnalytics = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation()
     try {
       await createCallAnalytics(report.channelId).unwrap()
-      setExpandedView('analytics')
     } catch (e) {
       console.error(e)
     }
@@ -99,11 +90,16 @@ export const ReportTable = memo((props: ReportTableProps) => {
   const totalTokens = (report.tokens || 0)
   const totalCost = (report.cost || 0)
 
+  // Analytics-derived fields
+  const csat = report.analytics?.csat
+  const scenarioSuccess = report.analytics?.metrics?.scenario_analysis?.success
+
   return (
     <>
       <tr
-        className={classNames(cls.ReportTableItem, {}, [className, viewMode])}
-        onClick={onShowDialog}
+        className={classNames(cls.ReportTableItem, { [cls.expanded]: isExpanded }, [className, viewMode])}
+        onClick={onToggleExpanded}
+        id={`report-row-${report.id}`}
       >
         <td className={cls.tdCheck} onClick={onCheckClick}>
           <Check
@@ -133,34 +129,37 @@ export const ReportTable = memo((props: ReportTableProps) => {
         <td data-label={t('Стоимость')}>
           {totalCost ? <Text text={formatCurrency(totalCost, userCurrency, 4)} bold /> : ''}
         </td>
+        <td data-label={t('CSAT')} className={cls.csatCell}>
+          {csat != null ? (
+            <span className={cls.csatValue}>
+              <Star size={14} className={cls.csatStar} />
+              {csat}
+            </span>
+          ) : '—'}
+        </td>
+        <td data-label={t('Результат')} className={cls.resultCell}>
+          {scenarioSuccess === true && (
+            <span className={cls.successText}>
+              <CheckCircle size={16} />
+              {t('Успех')}
+            </span>
+          )}
+          {scenarioSuccess === false && (
+            <span className={cls.escalationText}>
+              <AlertCircle size={16} />
+              {t('Эскалация')}
+            </span>
+          )}
+          {scenarioSuccess == null && '—'}
+        </td>
         <td className={cls.actionsTd} onClick={(e) => e.stopPropagation()}>
           <div className={cls.actions}>
-            {report.analytics
-              ? (
-                <Button
-                  variant="clear"
-                  onClick={onShowAnalytics}
-                  title={String(t('Показать аналитику'))}
-                >
-                  <ChartBar size={24} color={expandedView === 'analytics' ? 'var(--accent-redesigned)' : 'var(--icon-redesigned)'} />
-                </Button>
-              )
-              : (
-                <Button
-                  variant="clear"
-                  onClick={onGetAnalytics}
-                  disabled={isAnalyticsLoading}
-                  title={String(t('Получить аналитику'))}
-                >
-                  {isAnalyticsLoading ? <Loader className={cls.btnLoader} /> : <Sparkles size={24} />}
-                </Button>
-              )
-            }
             <Button
               variant="clear"
-              onClick={onShowDialog}
+              onClick={onToggleExpanded}
+              id={`report-expand-${report.id}`}
             >
-              {expandedView === 'dialog'
+              {isExpanded
                 ? <ChevronUp className={cls.expandIcon} size={24} />
                 : <ChevronDown className={cls.expandIcon} size={24} />
               }
@@ -168,22 +167,18 @@ export const ReportTable = memo((props: ReportTableProps) => {
           </div>
         </td>
       </tr>
-      {expandedView !== 'none' && (
+      {isExpanded && (
         <tr className={cls.DialogRow}>
-          <td colSpan={8}>
-            {expandedView === 'dialog' && (
-              <ReportShowDialog
-                Dialogs={Dialogs}
-                isDialogLoading={isDialogLoading}
-                isDialogError={isDialogError}
-                mediaUrl={mediaUrl}
-              />
-            )}
-            {expandedView === 'analytics' && report.analytics && (
-              <ReportShowAnalytics
-                analytics={report.analytics}
-              />
-            )}
+          <td colSpan={10}>
+            <ReportExpandedPanel
+              report={report}
+              dialogs={Dialogs}
+              isDialogLoading={isDialogLoading}
+              isDialogError={isDialogError}
+              mediaUrl={mediaUrl}
+              onGetAnalytics={onGetAnalytics}
+              isAnalyticsLoading={isAnalyticsLoading}
+            />
           </td>
         </tr>
       )}

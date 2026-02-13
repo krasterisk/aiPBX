@@ -1,0 +1,91 @@
+@import '@/app/styles/variables/mixins';
+
+.BillingBreakdown {
+    width: 100%;
+    padding: 8px 0;
+}
+
+.tableWrapper {
+    width: 100%;
+    overflow-x: auto;
+    @include custom-scrollbar;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+
+    th {
+        text-align: left;
+        padding: 10px 12px;
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-redesigned);
+        opacity: 0.6;
+        border-bottom: 1px solid var(--glass-border-secondary);
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 10px 12px;
+        color: var(--text-redesigned);
+        border-bottom: 1px solid var(--glass-border-secondary);
+        white-space: nowrap;
+    }
+
+    tbody tr {
+        transition: var(--transition-fast);
+
+        &:hover {
+            background: var(--glass-bg-tertiary);
+        }
+    }
+}
+
+.typeBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.typeRealtime {
+    background: rgba(var(--accent-redesigned-rgb), 0.12);
+    color: var(--accent-redesigned);
+}
+
+.typeAnalytic {
+    background: rgba(var(--warning-rgb, 255, 170, 0), 0.12);
+    color: var(--warning, #ffaa00);
+}
+
+.totalCell {
+    font-weight: 600;
+    color: var(--accent-redesigned);
+}
+
+.totalsRow {
+    td {
+        padding: 12px;
+        border-top: 2px solid var(--accent-redesigned);
+        border-bottom: none;
+        color: var(--text-redesigned);
+    }
+}
+
+@include tablet {
+    .table {
+        font-size: 12px;
+
+        th,
+        td {
+            padding: 8px 8px;
+        }
+    }
+}

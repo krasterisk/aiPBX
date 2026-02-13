@@ -37,7 +37,14 @@ export enum AppRoutes {
   PUBLISH_WIDGETS_CREATE = 'publish_widgets_create',
   PUBLISH_WIDGETS_EDIT = 'publish_widgets_edit',
   PRICES = 'prices',
-  MODELS = 'models'
+  MODELS = 'models',
+  LEGAL = 'legal',
+  LEGAL_TERMS = 'legal_terms',
+  LEGAL_PRIVACY = 'legal_privacy',
+  LEGAL_DPA = 'legal_dpa',
+  LEGAL_PUBLIC_OFFER = 'legal_public_offer',
+  LEGAL_PERSONAL_DATA = 'legal_personal_data',
+  LEGAL_LIABILITY = 'legal_liability'
 }
 
 export const getRouteMain = () => '/'
@@ -81,6 +88,13 @@ export const getRoutePublishWidgetsCreate = () => '/publish/widgets/create'
 export const getRoutePublishWidgetsEdit = (id: string) => `/publish/widgets/${id}`
 export const getRoutePrices = () => '/admin/prices'
 export const getRouteModels = () => '/admin/models'
+export const getRouteLegal = () => '/legal'
+export const getRouteLegalTerms = () => '/legal/terms-of-service'
+export const getRouteLegalPrivacy = () => '/legal/privacy-policy'
+export const getRouteLegalDpa = () => '/legal/dpa'
+export const getRouteLegalPublicOffer = () => '/legal/public-offer'
+export const getRouteLegalPersonalData = () => '/legal/personal-data-policy'
+export const getRouteLegalLiability = () => '/legal/liability-disclaimer'
 
 
 export const AppRouteByPathPattern: Record<string, AppRoutes> = {
@@ -121,5 +135,12 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRoutePublishWidgetsCreate()]: AppRoutes.PUBLISH_WIDGETS_CREATE,
   [getRoutePublishWidgetsEdit(':id')]: AppRoutes.PUBLISH_WIDGETS_EDIT,
   [getRoutePrices()]: AppRoutes.PRICES,
-  [getRouteModels()]: AppRoutes.MODELS
+  [getRouteModels()]: AppRoutes.MODELS,
+  [getRouteLegal()]: AppRoutes.LEGAL,
+  [getRouteLegalTerms()]: AppRoutes.LEGAL_TERMS,
+  [getRouteLegalPrivacy()]: AppRoutes.LEGAL_PRIVACY,
+  [getRouteLegalDpa()]: AppRoutes.LEGAL_DPA,
+  [getRouteLegalPublicOffer()]: AppRoutes.LEGAL_PUBLIC_OFFER,
+  [getRouteLegalPersonalData()]: AppRoutes.LEGAL_PERSONAL_DATA,
+  [getRouteLegalLiability()]: AppRoutes.LEGAL_LIABILITY
 }

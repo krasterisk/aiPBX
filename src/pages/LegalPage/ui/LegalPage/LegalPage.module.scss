@@ -1,0 +1,105 @@
+.LegalPage {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 24px;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 32px;
+    color: var(--text-primary);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 24px;
+    border-radius: 16px;
+    background: var(--bg-card, rgba(255, 255, 255, 0.06));
+    border: 1px solid var(--border-light, rgba(255, 255, 255, 0.08));
+    backdrop-filter: blur(12px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        border-color: var(--border-hover, rgba(255, 255, 255, 0.15));
+    }
+}
+
+.cardTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.cardDescription {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.legalContent {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 24px;
+}
+
+.backLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    margin-bottom: 24px;
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: var(--text-primary);
+    }
+}
+
+.contentTitle {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.lastUpdated {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+}
+
+.section {
+    margin-bottom: 28px;
+}
+
+.sectionTitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
+
+.text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    white-space: pre-line;
+}

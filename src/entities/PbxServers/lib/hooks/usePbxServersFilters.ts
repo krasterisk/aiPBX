@@ -13,7 +13,6 @@ import {
 import { pbxServersPageActions } from '../../model/slices/pbxServersPageSlice'
 import { usePbxServers } from '../../api/pbxServersApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
-import { ClientOptions } from '../../../User/model/types/user'
 
 export function usePbxServersFilters() {
   const page = useSelector(getPbxServersPageNum)
@@ -24,13 +23,11 @@ export function usePbxServersFilters() {
   const search = useSelector(getPbxServersPageSearch)
   const clientId = useSelector(getPbxServersUserId)
 
-  const userId = clientId || undefined
-
   const dispatch = useAppDispatch()
   const [newSearch, setNewSearch] = useState<string>('')
 
   const {
-    data,
+    data: rawData,
     isLoading,
     isError,
     error,
@@ -39,14 +36,21 @@ export function usePbxServersFilters() {
   } = usePbxServers({
     page,
     limit,
-    search: newSearch,
-    userId
+    search: newSearch
   }, {
     // pollingInterval: 60000,
     refetchOnMountOrArgChange: true,
     refetchOnFocus,
     refetchOnReconnect: true
   })
+
+  // Client-side filtering by userId
+  const data = rawData && clientId
+    ? {
+      count: rawData.rows.filter(s => String(s.userId) === clientId).length,
+      rows: rawData.rows.filter(s => String(s.userId) === clientId)
+    }
+    : rawData
 
   const onRefetch = useCallback(() => {
     refetch()

@@ -43,7 +43,14 @@ import {
   getRouteModels,
   getRouteDashboardOverview,
   getRouteDashboardAIAnalytics,
-  getRouteDashboardCallRecords
+  getRouteDashboardCallRecords,
+  getRouteLegal,
+  getRouteLegalTerms,
+  getRouteLegalPrivacy,
+  getRouteLegalDpa,
+  getRouteLegalPublicOffer,
+  getRouteLegalPersonalData,
+  getRouteLegalLiability
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 
@@ -78,6 +85,15 @@ import {
 import { DashboardOverviewPage } from '@/pages/DashboardOverviewPage'
 import { AIAnalyticsPage } from '@/pages/AIAnalyticsPage'
 import { DashboardCallRecordsPage } from '@/pages/DashboardCallRecordsPage'
+import {
+  LegalPage,
+  TermsOfServicePage,
+  PrivacyPolicyPage,
+  DpaPage,
+  PublicOfferPage,
+  PersonalDataPolicyPage,
+  LiabilityDisclaimerPage
+} from '@/pages/LegalPage'
 import { Navigate } from 'react-router-dom'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
@@ -275,6 +291,41 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     element: <ModelsPage />,
     authOnly: true,
     roles: [UserRolesValues.ADMIN]
+  },
+  [AppRoutes.LEGAL]: {
+    path: getRouteLegal(),
+    element: <LegalPage />,
+    authOnly: false
+  },
+  [AppRoutes.LEGAL_TERMS]: {
+    path: getRouteLegalTerms(),
+    element: <TermsOfServicePage />,
+    authOnly: false
+  },
+  [AppRoutes.LEGAL_PRIVACY]: {
+    path: getRouteLegalPrivacy(),
+    element: <PrivacyPolicyPage />,
+    authOnly: false
+  },
+  [AppRoutes.LEGAL_DPA]: {
+    path: getRouteLegalDpa(),
+    element: <DpaPage />,
+    authOnly: false
+  },
+  [AppRoutes.LEGAL_PUBLIC_OFFER]: {
+    path: getRouteLegalPublicOffer(),
+    element: <PublicOfferPage />,
+    authOnly: false
+  },
+  [AppRoutes.LEGAL_PERSONAL_DATA]: {
+    path: getRouteLegalPersonalData(),
+    element: <PersonalDataPolicyPage />,
+    authOnly: false
+  },
+  [AppRoutes.LEGAL_LIABILITY]: {
+    path: getRouteLegalLiability(),
+    element: <LiabilityDisclaimerPage />,
+    authOnly: false
   }
 
 }

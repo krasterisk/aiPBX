@@ -1,0 +1,174 @@
+@import '@/app/styles/variables/mixins';
+
+.ReportExpandedPanel {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    @include glass-card-secondary;
+    border: 1px solid var(--glass-border-secondary);
+}
+
+// ─── Tab Bar ───────────────────────────────────────────
+.tabBar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 4px 8px 0;
+    border-bottom: 1px solid var(--glass-border-secondary);
+    background: var(--glass-bg-secondary);
+    overflow-x: auto;
+    overflow-y: hidden;
+    @include custom-scrollbar;
+}
+
+.tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px 14px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--text-redesigned);
+    opacity: 0.55;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: var(--transition-medium);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+
+    &:hover {
+        opacity: 0.85;
+        background: rgba(var(--accent-redesigned-rgb), 0.05);
+    }
+}
+
+.tabActive {
+    opacity: 1;
+    color: var(--accent-redesigned);
+    background: rgba(var(--accent-redesigned-rgb), 0.06);
+}
+
+.tabIcon {
+    flex-shrink: 0;
+    transition: var(--transition-medium);
+}
+
+.tabLabel {
+    user-select: none;
+}
+
+.tabBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px 8px;
+    min-width: 22px;
+    height: 20px;
+    border-radius: var(--radius-full);
+    background: rgba(var(--accent-redesigned-rgb), 0.15);
+    color: var(--accent-redesigned);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.tabIndicator {
+    position: absolute;
+    bottom: -1px;
+    left: 12px;
+    right: 12px;
+    height: 2px;
+    border-radius: 2px 2px 0 0;
+    background: var(--accent-redesigned);
+    animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: scaleX(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+}
+
+// ─── Tab Content ───────────────────────────────────────
+.tabContent {
+    padding: 20px;
+    min-height: 120px;
+}
+
+.fadeIn {
+    animation: fadeInContent 0.25s ease-out;
+}
+
+@keyframes fadeInContent {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ─── Empty State (Analytics) ───────────────────────────
+.emptyState {
+    padding: 40px 20px;
+}
+
+.emptyIcon {
+    color: var(--accent-redesigned);
+    opacity: 0.4;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.08);
+    }
+}
+
+.getAnalyticsBtn {
+    margin-top: 8px;
+}
+
+.btnLoader {
+    transform: scale(0.3);
+    margin: -28px;
+}
+
+// ─── Responsive ───────────────────────────────────────
+@include tablet {
+    .tabBar {
+        padding: 4px 4px 0;
+    }
+
+    .tab {
+        padding: 10px 14px 12px;
+        font-size: 13px;
+        gap: 6px;
+    }
+
+    .tabContent {
+        padding: 16px 12px;
+    }
+
+    .tabBadge {
+        display: none;
+    }
+}

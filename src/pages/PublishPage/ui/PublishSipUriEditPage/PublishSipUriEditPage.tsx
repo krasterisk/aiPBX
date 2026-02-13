@@ -51,7 +51,8 @@ const PublishSipUriEditPage = memo((props: PublishSipUriEditPageProps) => {
                 ip: assistant.sipAccount?.ipAddress || '',
                 records: assistant.sipAccount?.records,
                 tls: assistant.sipAccount?.tls,
-                active: assistant.sipAccount?.active
+                active: assistant.sipAccount?.active,
+                userId: assistant.userId ? String(assistant.userId) : ''
             }))
         }
     }, [assistant, dispatch, pbxServer])

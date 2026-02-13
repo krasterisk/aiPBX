@@ -48,13 +48,14 @@ export const publishSipUrisFormSlice = createSlice({
             state.active = true
             state.userId = ''
         },
-        initForm: (state, action: PayloadAction<{ assistant: AssistantOptions, pbx: PbxServerOptions, ip: string, records?: boolean, tls?: boolean, active?: boolean }>) => {
+        initForm: (state, action: PayloadAction<{ assistant: AssistantOptions, pbx: PbxServerOptions, ip: string, records?: boolean, tls?: boolean, active?: boolean, userId?: string }>) => {
             state.selectedAssistant = action.payload.assistant
             state.selectedPbx = action.payload.pbx
             state.ipAddress = action.payload.ip
             state.records = action.payload.records ?? true
             state.tls = action.payload.tls ?? true
             state.active = action.payload.active ?? true
+            state.userId = action.payload.userId ?? ''
         }
     }
 })

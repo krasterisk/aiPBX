@@ -18,6 +18,7 @@
   "Сумма": "Amount",
   "Валюта": "Currency",
   "Статус": "Status",
+  "Метод оплаты": "Payment Method",
   "Детали": "Details",
   "Чек": "Receipt",
   "История платежей пуста": "Payment history is empty",

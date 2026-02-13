@@ -3,6 +3,7 @@ export type {
   Report,
   ReportEvent,
   ReportFilters,
+  BillingRecord,
   AIAnalyticsResponse,
   AggregatedAIMetrics,
   TimeSeriesPoint,

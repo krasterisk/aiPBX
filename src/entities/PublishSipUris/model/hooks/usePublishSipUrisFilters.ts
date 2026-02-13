@@ -13,13 +13,15 @@ export const usePublishSipUrisFilters = () => {
     const userData = useSelector(getUserAuthData)
     const isAdmin = useSelector(isUserAdmin)
 
-    const { data: assistants = [], isLoading, isError, error, refetch } = useAssistantsAll({
-        userId: clientId || undefined
-    })
+    const { data: assistants = [], isLoading, isError, error, refetch } = useAssistantsAll({})
 
-    const filteredAssistants = isAdmin
-        ? assistants
-        : assistants.filter(a => a.userId === userData?.id)
+    // Filter by user permissions and selected client
+    let filteredAssistants = assistants
+    if (!isAdmin) {
+        filteredAssistants = assistants.filter(a => String(a.userId) === String(userData?.id))
+    } else if (clientId) {
+        filteredAssistants = assistants.filter(a => String(a.userId) === clientId)
+    }
 
     // Filter by search
     const searchedAssistants = search
