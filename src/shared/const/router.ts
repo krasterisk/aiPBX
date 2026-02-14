@@ -44,7 +44,10 @@ export enum AppRoutes {
   LEGAL_DPA = 'legal_dpa',
   LEGAL_PUBLIC_OFFER = 'legal_public_offer',
   LEGAL_PERSONAL_DATA = 'legal_personal_data',
-  LEGAL_LIABILITY = 'legal_liability'
+  LEGAL_LIABILITY = 'legal_liability',
+  MCP_SERVERS = 'mcp_servers',
+  MCP_SERVER_CREATE = 'mcp_server_create',
+  MCP_SERVER_EDIT = 'mcp_server_edit'
 }
 
 export const getRouteMain = () => '/'
@@ -95,6 +98,9 @@ export const getRouteLegalDpa = () => '/legal/dpa'
 export const getRouteLegalPublicOffer = () => '/legal/public-offer'
 export const getRouteLegalPersonalData = () => '/legal/personal-data-policy'
 export const getRouteLegalLiability = () => '/legal/liability-disclaimer'
+export const getRouteMcpServers = () => '/mcp-servers'
+export const getRouteMcpServerCreate = () => '/mcp-servers/create'
+export const getRouteMcpServerEdit = (id: string) => `/mcp-servers/${id}`
 
 
 export const AppRouteByPathPattern: Record<string, AppRoutes> = {
@@ -142,5 +148,8 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteLegalDpa()]: AppRoutes.LEGAL_DPA,
   [getRouteLegalPublicOffer()]: AppRoutes.LEGAL_PUBLIC_OFFER,
   [getRouteLegalPersonalData()]: AppRoutes.LEGAL_PERSONAL_DATA,
-  [getRouteLegalLiability()]: AppRoutes.LEGAL_LIABILITY
+  [getRouteLegalLiability()]: AppRoutes.LEGAL_LIABILITY,
+  [getRouteMcpServers()]: AppRoutes.MCP_SERVERS,
+  [getRouteMcpServerCreate()]: AppRoutes.MCP_SERVER_CREATE,
+  [getRouteMcpServerEdit(':id')]: AppRoutes.MCP_SERVER_EDIT
 }

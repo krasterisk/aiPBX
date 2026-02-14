@@ -1,0 +1,52 @@
+.McpToolsList {
+    width: 100%;
+}
+
+.searchInput {
+    width: 100%;
+}
+
+.toolItem {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--glass-bg-tertiary);
+    border-radius: 10px;
+    border: var(--glass-border-subtle);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        border: var(--glass-border-accent);
+        background: var(--glass-overlay-light);
+    }
+}
+
+.toolItemActive {
+    border: var(--glass-border-accent);
+    background: var(--glass-overlay-light);
+}
+
+.toolName {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-redesigned);
+}
+
+.toolDescription {
+    color: var(--hint-redesigned);
+    font-size: 12px;
+}
+
+.toggleSwitch {
+    flex-shrink: 0;
+}
+
+.emptyState {
+    padding: 24px;
+    text-align: center;
+    color: var(--hint-redesigned);
+}
+
+.label {
+    color: var(--hint-redesigned);
+}

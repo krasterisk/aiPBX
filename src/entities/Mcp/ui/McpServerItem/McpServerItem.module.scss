@@ -1,0 +1,143 @@
+@import '@/app/styles/variables/mixins';
+
+.McpServerItem {
+    @include glass-card-primary;
+    @include hover-lift-card;
+
+    &:hover {
+        .avatar {
+            transform: var(--hover-scale-md);
+            background: rgba(94, 211, 243, 0.25);
+        }
+
+        .arrowIcon {
+            transform: translateX(4px);
+            color: var(--accent-redesigned);
+        }
+
+        .editLabel {
+            opacity: 1;
+        }
+    }
+}
+
+.content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding: var(--card-padding-md);
+}
+
+.avatar {
+    @include icon-avatar(44px);
+    flex-shrink: 0;
+}
+
+.title {
+    color: var(--text-redesigned);
+    font-family: 'Outfit', sans-serif;
+    word-break: break-word;
+}
+
+.subtitle {
+    opacity: 0.6;
+}
+
+.subIcon {
+    opacity: 0.5;
+    color: var(--accent-redesigned);
+}
+
+.chip {
+    border: 1px solid rgba(94, 211, 243, 0.3);
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background: var(--icon-bg-primary);
+    border-radius: var(--radius-sm);
+    color: var(--accent-redesigned) !important;
+}
+
+.statusChip {
+    border: 1px solid rgba(94, 211, 243, 0.3);
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background: var(--icon-bg-primary);
+    border-radius: var(--radius-sm);
+    color: var(--accent-redesigned) !important;
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-right: 6px;
+}
+
+.statusActive {
+    background: var(--status-active, #4caf50);
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
+}
+
+.statusInactive {
+    background: var(--status-inactive, #9e9e9e);
+}
+
+.statusError {
+    background: var(--status-error, #f44336);
+    box-shadow: 0 0 6px rgba(244, 67, 54, 0.5);
+}
+
+.divider {
+    @include divider-gradient;
+    margin: var(--space-2) 0;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    flex-grow: 1;
+}
+
+.detailIcon {
+    @include icon-container(30px);
+}
+
+.detailText {
+    @include text-clamp(2);
+    color: var(--text-redesigned);
+    opacity: 0.8;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    word-break: break-all;
+}
+
+.footer {
+    margin-top: var(--space-2);
+}
+
+.editLabel {
+    opacity: 0;
+    transition: var(--transition-normal);
+    font-weight: 500;
+}
+
+.arrowIcon {
+    transition: var(--transition-normal);
+    color: rgba(255, 255, 255, 0.3);
+    margin-left: var(--space-1);
+}
+
+@include mobile {
+    .content {
+        padding: var(--space-4);
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+    }
+}

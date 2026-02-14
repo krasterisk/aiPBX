@@ -1,6 +1,7 @@
 import { User } from '../../../User'
 import { HTMLAttributeAnchorTarget } from 'react'
 import { Tool } from '@/entities/Tools'
+import { McpServer } from '@/entities/Mcp'
 
 export interface AllAssistants {
   count: number
@@ -47,6 +48,7 @@ export interface Assistant {
   temperature?: string
   max_response_output_tokens?: string
   tools?: Tool[]
+  mcpServers?: McpServer[]
   user?: User
   userId?: string
   sipAccount?: AssistantSipAccount

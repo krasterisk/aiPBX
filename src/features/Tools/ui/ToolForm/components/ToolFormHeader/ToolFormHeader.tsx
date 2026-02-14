@@ -47,7 +47,18 @@ export const ToolFormHeader = memo((props: ToolFormHeaderProps) => {
                 </VStack>
             )}
 
-            <HStack gap="16" className={cls.actions}>
+            <HStack gap="8" className={cls.actions}>
+                {isEdit && onDelete && (
+                    <Button
+                        variant="clear"
+                        color="error"
+                        onClick={onDelete}
+                        disabled={isLoading}
+                    >
+                        {t('Удалить')}
+                    </Button>
+                )}
+
                 <Button
                     variant="clear"
                     onClick={onClose}

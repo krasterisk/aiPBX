@@ -15,7 +15,8 @@ import {
   getRoutePrices,
   getRouteModels,
   getRoutePublishSipUris,
-  getRoutePublishWidgets
+  getRoutePublishWidgets,
+  getRouteMcpServers
 } from '@/shared/const/router'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
@@ -33,6 +34,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import AnalyticsIcon from '@mui/icons-material/Analytics'
 import DescriptionIcon from '@mui/icons-material/Description'
 import BarChartIcon from '@mui/icons-material/BarChart'
+import HubIcon from '@mui/icons-material/Hub'
 import { MenubarItemType } from '../types/menubar'
 import { useTranslation } from 'react-i18next'
 
@@ -87,6 +89,12 @@ export const useMenubarItems = () => {
         path: getRouteTools(),
         Icon: BuildIcon,
         text: t('Функции'),
+        authOnly: true
+      },
+      {
+        path: getRouteMcpServers(),
+        Icon: HubIcon,
+        text: t('MCP Серверы'),
         authOnly: true
       },
       {

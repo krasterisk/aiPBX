@@ -50,7 +50,10 @@ import {
   getRouteLegalDpa,
   getRouteLegalPublicOffer,
   getRouteLegalPersonalData,
-  getRouteLegalLiability
+  getRouteLegalLiability,
+  getRouteMcpServers,
+  getRouteMcpServerCreate,
+  getRouteMcpServerEdit
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 
@@ -94,6 +97,7 @@ import {
   PersonalDataPolicyPage,
   LiabilityDisclaimerPage
 } from '@/pages/LegalPage'
+import { McpServersPage, McpServerEditPage, McpServerCreatePage } from '@/pages/McpServersPage'
 import { Navigate } from 'react-router-dom'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
@@ -326,6 +330,21 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     path: getRouteLegalLiability(),
     element: <LiabilityDisclaimerPage />,
     authOnly: false
+  },
+  [AppRoutes.MCP_SERVERS]: {
+    path: getRouteMcpServers(),
+    authOnly: true,
+    element: <McpServersPage />
+  },
+  [AppRoutes.MCP_SERVER_CREATE]: {
+    path: getRouteMcpServerCreate(),
+    authOnly: true,
+    element: <McpServerCreatePage />
+  },
+  [AppRoutes.MCP_SERVER_EDIT]: {
+    path: getRouteMcpServerEdit(':id'),
+    authOnly: true,
+    element: <McpServerEditPage />
   }
 
 }

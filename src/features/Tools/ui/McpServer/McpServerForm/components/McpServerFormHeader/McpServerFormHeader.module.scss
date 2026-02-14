@@ -1,0 +1,30 @@
+.McpServerFormHeader {
+    padding: 24px;
+    background: var(--glass-bg-primary);
+    backdrop-filter: blur(10px);
+    border: var(--glass-border-secondary);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    width: 100%;
+
+    &:hover {
+        border: var(--glass-border-accent);
+        box-shadow: 0 8px 32px var(--glass-overlay-dark);
+    }
+
+    &.bottom {
+        margin-top: 16px;
+    }
+
+    @media (max-width: 600px) {
+        padding: 16px;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 16px;
+
+        .actions {
+            width: 100%;
+            justify-content: flex-end;
+        }
+    }
+}

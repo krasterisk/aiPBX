@@ -1,0 +1,83 @@
+.AuthMcpServerCard {
+    background: var(--card-bg-redesigned);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    width: 100%;
+
+    &:hover {
+        border-color: var(--accent-redesigned);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 800px) {
+        padding: 16px !important;
+    }
+}
+
+.label {
+    opacity: 0.6;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.credentialsContainer {
+    width: 100%;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.headerRow {
+    width: 100%;
+}
+
+.headerRowInputs {
+    flex: 1;
+}
+
+.removeBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-redesigned);
+    opacity: 0.5;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+        opacity: 1;
+        color: var(--color-error);
+        background: rgba(255, 0, 0, 0.08);
+    }
+}
+
+.addBtn {
+    background: none;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    color: var(--text-redesigned);
+    opacity: 0.6;
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    width: 100%;
+    justify-content: center;
+
+    &:hover {
+        opacity: 1;
+        border-color: var(--accent-redesigned);
+        color: var(--accent-redesigned);
+    }
+}

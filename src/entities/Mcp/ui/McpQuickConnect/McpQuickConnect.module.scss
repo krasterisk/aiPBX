@@ -1,0 +1,116 @@
+@import '@/app/styles/variables/mixins';
+
+.quickConnect {
+    @include glass-card-tertiary;
+    padding: var(--card-padding-sm);
+    width: 100%;
+}
+
+.zapIcon {
+    color: var(--accent-primary);
+}
+
+.stripWrapper {
+    overflow-x: auto;
+    width: 100%;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.strip {
+    min-width: max-content;
+}
+
+.quickItem {
+    @include interactive-element;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    transition: var(--transition-normal);
+    min-width: 72px;
+
+    &:hover {
+        background: var(--glass-bg-secondary);
+    }
+
+    &.loading {
+        pointer-events: none;
+        opacity: 0.6;
+    }
+}
+
+.quickIcon {
+    @include icon-container(36px, var(--icon-bg-primary));
+    @include hover-scale;
+    transition: var(--transition-normal);
+
+    svg {
+        width: 18px;
+        height: 18px;
+        color: var(--accent-primary);
+    }
+
+    // Brand colors via CSS classes
+    &.gmail svg {
+        color: #EA4335;
+    }
+
+    &.google_calendar svg {
+        color: #4285F4;
+    }
+
+    &.outlook svg {
+        color: #0078D4;
+    }
+
+    &.telegram svg {
+        color: #26A5E4;
+    }
+
+    &.whatsapp svg {
+        color: #25D366;
+    }
+
+    &.slack svg {
+        color: #4A154B;
+    }
+
+    // Brand glow on hover
+    .quickItem:hover &.gmail {
+        box-shadow: 0 0 12px rgba(234, 67, 53, 0.25);
+    }
+
+    .quickItem:hover &.google_calendar {
+        box-shadow: 0 0 12px rgba(66, 133, 244, 0.25);
+    }
+
+    .quickItem:hover &.outlook {
+        box-shadow: 0 0 12px rgba(0, 120, 212, 0.25);
+    }
+
+    .quickItem:hover &.telegram {
+        box-shadow: 0 0 12px rgba(38, 165, 228, 0.25);
+    }
+
+    .quickItem:hover &.whatsapp {
+        box-shadow: 0 0 12px rgba(37, 211, 102, 0.25);
+    }
+
+    .quickItem:hover &.slack {
+        box-shadow: 0 0 12px rgba(74, 21, 75, 0.25);
+    }
+}
+
+.quickName {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    @include text-truncate;
+    max-width: 80px;
+
+    .quickItem:hover & {
+        color: var(--text-primary);
+    }
+}

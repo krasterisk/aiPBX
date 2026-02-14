@@ -9,6 +9,7 @@ import { Combobox } from '@/shared/ui/mui/Combobox'
 import { Tool } from '@/entities/Tools'
 import { ToolAddParam } from '../../../ToolAddParam/ToolAddParam'
 import { HeadersEditor } from '../../../HeadersEditor/HeadersEditor'
+import { McpServerCard } from '../../../McpServer/McpServerCard/McpServerCard'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './FunctionToolCard.module.scss'
 
@@ -148,33 +149,9 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
                     </VStack>
                 )}
 
-                {/* 6. MCP params (if MCP) */}
+                {/* 6. MCP Server Management (if MCP) */}
                 {isMcp && (
-                    <VStack gap="8" max>
-                        <Text text={t('Параметры MCP сервера') || ''} size="s" bold className={cls.label} />
-                        <Textarea
-                            multiline
-                            minRows={10}
-                            onChange={(e) => {
-                                const val = e.target.value
-                                if (!val) {
-                                    onChangeField('toolData', {})
-                                    return
-                                }
-                                try {
-                                    onChangeField('toolData', JSON.parse(val))
-                                } catch (err) {
-                                    onChangeField('toolData', val)
-                                }
-                            }}
-                            value={
-                                formFields?.toolData && typeof formFields.toolData === 'object'
-                                    ? (Object.keys(formFields.toolData).length === 0 ? '' : JSON.stringify(formFields.toolData, null, 2))
-                                    : (formFields?.toolData ?? '')
-                            }
-                            className={cls.fullWidth}
-                        />
-                    </VStack>
+                    <McpServerCard />
                 )}
             </VStack>
         </Card>

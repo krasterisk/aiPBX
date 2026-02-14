@@ -1,0 +1,39 @@
+.ConnectionMcpServerCard {
+    background: var(--glass-bg-primary);
+    backdrop-filter: blur(10px);
+    border: var(--glass-border-secondary);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    width: 100%;
+
+    &:hover {
+        border: var(--glass-border-accent);
+        box-shadow: 0 8px 32px var(--glass-overlay-dark);
+    }
+
+    @media (max-width: 800px) {
+        padding: 16px !important;
+    }
+}
+
+.label {
+    color: var(--hint-redesigned);
+}
+
+.errorText {
+    color: var(--cancel-redesigned);
+}
+
+.tooltipIcon {
+    display: inline-flex;
+    align-items: center;
+    color: var(--hint-redesigned);
+    cursor: help;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+        opacity: 1;
+        color: var(--accent-redesigned);
+    }
+}

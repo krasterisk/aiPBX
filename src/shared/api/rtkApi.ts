@@ -25,7 +25,9 @@ export const rtkApi = createApi({
     'Organization',
     'WidgetKeys',
     'Prices',
-    'AIAnalytics'
+    'AIAnalytics',
+    'McpServers',
+    'McpTools'
   ],
   endpoints: (builder) => ({})
 })

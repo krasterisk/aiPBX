@@ -1,0 +1,29 @@
+@import '@/app/styles/variables/mixins';
+
+.McpServersList {
+    width: 100%;
+}
+
+.listWrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--space-5);
+    width: 100%;
+}
+
+.loader {
+    height: 300px;
+}
+
+.emptyState {
+    padding: var(--space-16) var(--space-5);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-xl);
+    border: 1px dashed var(--divider-solid);
+}
+
+@include tablet {
+    .listWrapper {
+        grid-template-columns: 1fr;
+    }
+}

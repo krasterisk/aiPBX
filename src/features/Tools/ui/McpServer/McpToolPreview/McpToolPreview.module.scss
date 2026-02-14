@@ -1,0 +1,37 @@
+.McpToolPreview {
+    width: 100%;
+}
+
+.label {
+    color: var(--hint-redesigned);
+}
+
+.previewBlock {
+    width: 100%;
+    padding: 12px;
+    background: var(--code-bg);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--save-redesigned);
+    line-height: 1.5;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.tooltipIcon {
+    display: inline-flex;
+    align-items: center;
+    color: var(--hint-redesigned);
+    cursor: help;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+        opacity: 1;
+        color: var(--accent-redesigned);
+    }
+}

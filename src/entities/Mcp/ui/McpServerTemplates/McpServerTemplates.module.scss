@@ -1,0 +1,126 @@
+@import '@/app/styles/variables/mixins';
+
+.templateSection {
+    width: 100%;
+}
+
+.templateGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-4);
+    width: 100%;
+
+    @include tablet {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: var(--space-3);
+    }
+
+    @include mobile {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-3);
+    }
+}
+
+.templateCard {
+    @include glass-card-secondary;
+    @include hover-lift-card;
+    padding: var(--card-padding-md);
+    cursor: pointer;
+    text-align: center;
+    min-height: 160px;
+
+    &.loading {
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    @include mobile {
+        padding: var(--card-padding-sm);
+        min-height: 130px;
+    }
+}
+
+.iconWrapper {
+    @include icon-container(48px, var(--icon-bg-primary));
+    @include hover-scale;
+    margin-bottom: var(--space-2);
+    transition: var(--transition-normal);
+
+    svg {
+        width: 24px;
+        height: 24px;
+        color: var(--accent-primary);
+        transition: var(--transition-colors);
+    }
+
+    // Brand colors via CSS classes
+    &.gmail svg {
+        color: #EA4335;
+    }
+
+    &.google_calendar svg {
+        color: #4285F4;
+    }
+
+    &.outlook svg {
+        color: #0078D4;
+    }
+
+    &.telegram svg {
+        color: #26A5E4;
+    }
+
+    &.whatsapp svg {
+        color: #25D366;
+    }
+
+    &.slack svg {
+        color: #4A154B;
+    }
+
+    // Brand glow on hover of the parent card
+    .templateCard:hover &.gmail {
+        box-shadow: 0 0 16px rgba(234, 67, 53, 0.3);
+    }
+
+    .templateCard:hover &.google_calendar {
+        box-shadow: 0 0 16px rgba(66, 133, 244, 0.3);
+    }
+
+    .templateCard:hover &.outlook {
+        box-shadow: 0 0 16px rgba(0, 120, 212, 0.3);
+    }
+
+    .templateCard:hover &.telegram {
+        box-shadow: 0 0 16px rgba(38, 165, 228, 0.3);
+    }
+
+    .templateCard:hover &.whatsapp {
+        box-shadow: 0 0 16px rgba(37, 211, 102, 0.3);
+    }
+
+    .templateCard:hover &.slack {
+        box-shadow: 0 0 16px rgba(74, 21, 75, 0.3);
+    }
+}
+
+.templateName {
+    font-weight: 600;
+    font-size: var(--font-size-m);
+}
+
+.templateDesc {
+    font-size: var(--font-size-s);
+    color: var(--text-secondary);
+    @include text-clamp(2);
+}
+
+.connectLabel {
+    @include chip-base;
+    margin-top: var(--space-1);
+    transition: var(--transition-normal);
+
+    .templateCard:hover & {
+        color: var(--accent-primary);
+    }
+}

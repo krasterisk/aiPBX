@@ -1,0 +1,32 @@
+.ConnectButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: background-color 0.3s ease;
+}
+
+.active {
+    background-color: var(--save-redesigned);
+    box-shadow: 0 0 8px var(--status-success-bg);
+}
+
+.inactive {
+    background-color: var(--hint-redesigned);
+}
+
+.error {
+    background-color: var(--cancel-redesigned);
+    box-shadow: 0 0 8px var(--status-error-bg);
+}
+
+.errorText {
+    color: var(--cancel-redesigned);
+    font-size: 12px;
+}

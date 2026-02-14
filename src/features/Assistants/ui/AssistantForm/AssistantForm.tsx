@@ -13,6 +13,7 @@ import {
 } from '@/entities/Assistants'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { Tool, toolsPageActions } from '@/entities/Tools'
+import { McpServer } from '@/entities/Mcp'
 import { PromptSection } from './components/PromptSection'
 import { MainInfoCard } from './components/MainInfoCard'
 import { ModelParametersCard } from './components/ModelParametersCard'
@@ -119,6 +120,17 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
         dispatch(assistantFormActions.updateForm(updatedFields))
     }, [dispatch, formFields])
 
+    const onChangeMcpServersHandler = useCallback((
+        event: any,
+        value: McpServer[]
+    ) => {
+        const updatedFields = {
+            ...formFields,
+            mcpServers: value
+        }
+        dispatch(assistantFormActions.updateForm(updatedFields))
+    }, [dispatch, formFields])
+
     const onChangeClientHandler = useCallback((id: string) => {
         const updatedForm = {
             ...formFields,
@@ -197,6 +209,7 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
                             onChangeSelectHandler={onChangeSelectHandler}
                             onChangeClientHandler={onChangeClientHandler}
                             onChangeToolsHandler={onChangeToolsHandler}
+                            onChangeMcpServersHandler={onChangeMcpServersHandler}
                             onChangeCheckboxHandler={onChangeCheckboxHandler}
                         />
 

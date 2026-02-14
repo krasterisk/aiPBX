@@ -10,6 +10,7 @@ import { Info } from 'lucide-react'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { ClientSelect, getUserAuthData, isUserAdmin } from '@/entities/User'
 import { Tool, ToolsSelect } from '@/entities/Tools'
+import { McpServer, McpServerSelect } from '@/entities/Mcp'
 import { Check } from '@/shared/ui/mui/Check'
 import { VoiceSelect } from '@/entities/Assistants/ui/VoiceSelect/VoiceSelect'
 import { ModelSelect } from '@/entities/Assistants/ui/ModelSelect/ModelSelect'
@@ -23,6 +24,7 @@ interface MainInfoCardProps {
     onChangeSelectHandler?: (field: keyof Assistant) => (event: any, newValue: string) => void
     onChangeClientHandler?: (clientId: string) => void
     onChangeToolsHandler?: (event: any, value: Tool[]) => void
+    onChangeMcpServersHandler?: (event: any, value: McpServer[]) => void
     onChangeCheckboxHandler?: (field: keyof Assistant) => (event: ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -33,6 +35,7 @@ export const MainInfoCard = memo((props: MainInfoCardProps) => {
         onChangeSelectHandler,
         onChangeClientHandler,
         onChangeToolsHandler,
+        onChangeMcpServersHandler,
         onChangeCheckboxHandler
     } = props
 
@@ -91,6 +94,13 @@ export const MainInfoCard = memo((props: MainInfoCardProps) => {
                     value={formFields?.tools || []}
                     userId={userId}
                     onChangeTool={onChangeToolsHandler}
+                />
+
+                <McpServerSelect
+                    label={t('MCP серверы') || ''}
+                    value={formFields?.mcpServers || []}
+                    userId={userId}
+                    onChangeMcpServers={onChangeMcpServersHandler}
                 />
 
                 <VStack gap="4">
