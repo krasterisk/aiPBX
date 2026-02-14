@@ -30,5 +30,8 @@
     "Error loading models": "Error loading models",
     "Cancel": "Cancel",
     "Save": "Save",
-    "Create": "Create"
+    "Create": "Create",
+    "Publish": "Publish",
+    "Publish Name": "Publish Name",
+    "Actions": "Actions"
 }

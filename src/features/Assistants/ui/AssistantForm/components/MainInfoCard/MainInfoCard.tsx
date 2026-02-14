@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
+import { Tooltip } from '@mui/material'
+import { Info } from 'lucide-react'
 
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { ClientSelect, getUserAuthData, isUserAdmin } from '@/entities/User'
@@ -44,7 +46,7 @@ export const MainInfoCard = memo((props: MainInfoCardProps) => {
     return (
         <div className={classNames(cls.MainInfoCard, {}, [className])}>
             <Text
-                title={t('Основные настройки')}
+                title={t('Настройки')}
                 className={cls.cardTitle}
                 bold
             />
@@ -91,11 +93,67 @@ export const MainInfoCard = memo((props: MainInfoCardProps) => {
                     onChangeTool={onChangeToolsHandler}
                 />
 
-                <Check
-                    checked={formFields?.analytic ?? true}
-                    onChange={onChangeCheckboxHandler?.('analytic')}
-                    label={t('Аналитика разговора') ?? ''}
-                />
+                <VStack gap="4">
+                    <Check
+                        checked={formFields?.analytic ?? true}
+                        onChange={onChangeCheckboxHandler?.('analytic')}
+                        label={
+                            <HStack gap="4" align="center">
+                                {t('Аналитика разговора')}
+                                <Tooltip
+                                    title={t('analyticTooltip')}
+                                    arrow
+                                    placement="top"
+                                    enterTouchDelay={0}
+                                    leaveTouchDelay={3000}
+                                    slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                >
+                                    <span className={cls.tooltipIcon}><Info size={16} /></span>
+                                </Tooltip>
+                            </HStack>
+                        }
+                    />
+
+                    <Check
+                        checked={formFields?.allowHangup ?? false}
+                        onChange={onChangeCheckboxHandler?.('allowHangup')}
+                        label={
+                            <HStack gap="4" align="center">
+                                {t('Завершать вызов')}
+                                <Tooltip
+                                    title={t('allowHangupTooltip')}
+                                    arrow
+                                    placement="top"
+                                    enterTouchDelay={0}
+                                    leaveTouchDelay={3000}
+                                    slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                >
+                                    <span className={cls.tooltipIcon}><Info size={16} /></span>
+                                </Tooltip>
+                            </HStack>
+                        }
+                    />
+
+                    <Check
+                        checked={formFields?.allowTransfer ?? false}
+                        onChange={onChangeCheckboxHandler?.('allowTransfer')}
+                        label={
+                            <HStack gap="4" align="center">
+                                {t('Переводить вызов')}
+                                <Tooltip
+                                    title={t('allowTransferTooltip')}
+                                    arrow
+                                    placement="top"
+                                    enterTouchDelay={0}
+                                    leaveTouchDelay={3000}
+                                    slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                >
+                                    <span className={cls.tooltipIcon}><Info size={16} /></span>
+                                </Tooltip>
+                            </HStack>
+                        }
+                    />
+                </VStack>
 
                 <Textarea
                     label={t('Комментарий') ?? ''}

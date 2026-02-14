@@ -10,6 +10,8 @@ interface QueryArgs {
   startDate?: string
   endDate?: string
   userId?: string
+  sortField?: string
+  sortOrder?: 'ASC' | 'DESC'
 }
 
 interface AIAnalyticsDashboardArgs {

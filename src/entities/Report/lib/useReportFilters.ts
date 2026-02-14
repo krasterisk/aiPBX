@@ -13,7 +13,9 @@ import {
   getReportsPageView,
   getReportsTab,
   getReportStartDate,
-  getReportUserId
+  getReportUserId,
+  getReportSortField,
+  getReportSortOrder
 } from '../model/selectors/reportSelectors'
 import { reportsPageActions } from '../model/slices/reportsPageSlice'
 import { useGetReports } from '../api/reportApi'
@@ -34,6 +36,8 @@ export function useReportFilters() {
   const assistantId = useSelector(getReportAssistantId)
   const assistants = useSelector(getReportAssistants)
   const isInited = useSelector(getReportsInited)
+  const sortField = useSelector(getReportSortField)
+  const sortOrder = useSelector(getReportSortOrder)
 
   const authData = useSelector(getUserAuthData)
   const isAdmin = useSelector(isUserAdmin)
@@ -56,7 +60,9 @@ export function useReportFilters() {
     userId,
     assistantId,
     startDate,
-    endDate
+    endDate,
+    sortField,
+    sortOrder
   }, {
     refetchOnFocus: false,
     refetchOnReconnect: false
@@ -133,6 +139,16 @@ export function useReportFilters() {
     dispatch(reportsPageActions.setEndDate(value))
   }, [dispatch])
 
+  const onChangeSort = useCallback((field: string) => {
+    if (sortField === field) {
+      dispatch(reportsPageActions.setSortOrder(sortOrder === 'ASC' ? 'DESC' : 'ASC'))
+    } else {
+      dispatch(reportsPageActions.setSortField(field))
+      dispatch(reportsPageActions.setSortOrder('ASC'))
+    }
+    dispatch(reportsPageActions.setPage(1))
+  }, [dispatch, sortField, sortOrder])
+
   return {
     hasMore,
     page,
@@ -150,6 +166,8 @@ export function useReportFilters() {
     isInited,
     assistantId,
     assistants,
+    sortField,
+    sortOrder,
     onChangeAssistant,
     onChangeUserId,
     onChangeStartDate,
@@ -158,6 +176,7 @@ export function useReportFilters() {
     onChangeSearch,
     onChangeHasMore,
     onChangePage,
+    onChangeSort,
     onRefetch,
     onLoadNext
   }

@@ -1,5 +1,7 @@
 import { memo, useCallback, ChangeEvent, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
+import { useSearchParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
@@ -15,6 +17,7 @@ import { PromptSection } from './components/PromptSection'
 import { MainInfoCard } from './components/MainInfoCard'
 import { ModelParametersCard } from './components/ModelParametersCard'
 import { SpeechSettingsCard } from './components/SpeechSettingsCard'
+import { assistantTemplates } from '@/entities/Assistants/model/const/assistantTemplates'
 import cls from './AssistantForm.module.scss'
 
 interface AssistantFormProps {
@@ -29,10 +32,13 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
     } = props
 
     const dispatch = useAppDispatch()
+    const { i18n } = useTranslation()
     const isAdmin = useSelector(isUserAdmin)
     const clientData = useSelector(getUserAuthData)
     const formFields = useSelector(getAssistantFormData)
     const isFormInited = useRef(false)
+    const isTemplateApplied = useRef(false)
+    const [searchParams] = useSearchParams()
 
     const { data: assistant } = useAssistant(assistantId ?? '', {
         skip: !assistantId
@@ -49,6 +55,24 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
             isFormInited.current = true
         }
     }, [assistant, dispatch, isEdit, formFields])
+
+    // Apply template effect
+    useEffect(() => {
+        if (!isEdit && isFormInited.current && !isTemplateApplied.current && formFields) {
+            const templateId = searchParams.get('template')
+            if (templateId) {
+                const template = assistantTemplates.find(t => t.id === templateId)
+                if (template) {
+                    const lang = i18n.language?.substring(0, 2) ?? 'ru'
+                    const prompt = template.prompts[lang] ?? template.prompts.en ?? template.prompts.ru
+                    dispatch(assistantFormActions.updateForm({
+                        instruction: prompt
+                    }))
+                    isTemplateApplied.current = true
+                }
+            }
+        }
+    }, [isEdit, formFields, searchParams, dispatch, i18n.language])
 
     // Set user data effect
     useEffect(() => {

@@ -84,29 +84,28 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
         }
 
         return (
-            <VStack max align="center" justify="center" gap="16" className={cls.emptyState}>
-                <Sparkles size={48} className={cls.emptyIcon} />
-                <Text
-                    text={t('Получить аналитику')}
-                    size="m"
-                />
-                <Button
-                    variant="filled"
-                    onClick={onGetAnalytics}
-                    disabled={isAnalyticsLoading}
-                    className={cls.getAnalyticsBtn}
+            <VStack
+                max
+                align="center"
+                justify="center"
+                className={cls.emptyState}
+            >
+                <VStack
+                    align="center"
+                    gap="16"
+                    className={cls.emptyAction}
+                    onClick={isAnalyticsLoading ? undefined : onGetAnalytics}
                     id="get-analytics-button"
                 >
                     {isAnalyticsLoading
                         ? <Loader className={cls.btnLoader} />
-                        : (
-                            <HStack gap="8" align="center">
-                                <Sparkles size={18} />
-                                <span>{t('Получить аналитику')}</span>
-                            </HStack>
-                        )
+                        : <Sparkles size={48} className={cls.emptyIcon} />
                     }
-                </Button>
+                    <Text
+                        text={t('Получить аналитику')}
+                        size="m"
+                    />
+                </VStack>
             </VStack>
         )
     }

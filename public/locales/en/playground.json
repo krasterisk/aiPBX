@@ -42,5 +42,13 @@
     "Выбор ассистента": "Assistant Selection",
     "Промпт": "Prompt",
     "Настройки модели": "Model Settings",
-    "Введите инструкции для ИИ...": "Enter instructions for AI..."
+    "Введите инструкции для ИИ...": "Enter instructions for AI...",
+    "Аналитика разговора": "Conversation Analytics",
+    "Завершать вызов": "Hang Up Call",
+    "Переводить вызов": "Transfer Call",
+    "analyticTooltip": "When enabled, analytics are automatically generated after each conversation: dialogue quality score (CSAT), intent recognition, sentiment analysis, scenario efficiency, and key metrics. Data is available in reports.",
+    "allowHangupTooltip": "When enabled, the assistant can independently end the conversation when the task is completed or at the caller's request. When disabled, only the caller can end the call.",
+    "allowTransferTooltip": "When enabled, the assistant can redirect the call to an operator, employee, or queue. For proper operation, specify a directory with numbers in the prompt or functions. ⚠️ Call transfer does not work in Playground as there is no PBX connection.",
+    "Температура": "Temperature",
+    "tooltip_temperature": "Controls the model's 'creativity'. Lower values (0.6) produce more stable and predictable responses. Higher values (1.2) produce more diverse but less precise responses."
 }

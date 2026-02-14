@@ -46,8 +46,19 @@
     font-family: var(--font-family-monospace);
 }
 
-.icon {
+.tooltipIcon {
     color: var(--icon-redesigned);
+    opacity: 0.5;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    &:hover {
+        opacity: 1;
+        color: var(--accent-redesigned);
+    }
 }
 
 .vadContainer {
@@ -67,8 +78,11 @@
 
 .promptTextarea {
     :global(.MuiInputBase-root) {
-        max-height: calc(100vh - 300px);
         min-height: 400px;
-        overflow-y: auto;
+    }
+
+    textarea {
+        max-height: calc(100vh - 350px);
+        overflow-y: auto !important;
     }
 }

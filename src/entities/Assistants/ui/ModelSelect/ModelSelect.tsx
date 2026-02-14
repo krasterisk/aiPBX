@@ -33,6 +33,7 @@ export const ModelSelect = memo((props: ModelSelectProps) => {
 
   const modelItems = data?.map(item => ({
     name: String(item.name),
+    publishName: item.publishName || item.name,
     id: item.id
   })) || []
 
@@ -53,7 +54,7 @@ export const ModelSelect = memo((props: ModelSelectProps) => {
       value={selectedValue}
       onChange={onChangeHandler}
       className={className}
-      getOptionLabel={(option: { name: string }) => option.name}
+      getOptionLabel={(option: { name: string; publishName: string }) => option.publishName}
       isOptionEqualToValue={(option: { name: string }, value: { name: string }) => option.name === value.name}
       {...otherProps}
     />

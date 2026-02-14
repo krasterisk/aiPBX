@@ -70,7 +70,7 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
 
           <SearchInput
             className={cls.searchInput}
-            placeholder={t('Поиск по звонку...') ?? ''}
+            placeholder={t('Поиск...') ?? ''}
             onChange={onChangeSearch}
             value={search}
           />

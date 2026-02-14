@@ -23,7 +23,7 @@
 .section {
     @include glass-card-primary;
     padding: 32px;
-    margin-bottom: 0; // Gap is handled by container
+    margin-bottom: 0;
     border: 1px solid rgba(255, 255, 255, 0.05);
     background: rgba(255, 255, 255, 0.02);
 
@@ -170,4 +170,111 @@
 .codeBlockContainer {
     margin-top: 24px;
     width: 100%;
+}
+
+// ──────── Tip block ────────
+.tip {
+    margin-top: 20px;
+    padding: 16px 20px;
+    background: rgba(46, 204, 113, 0.06);
+    border-left: 4px solid #2ecc71;
+    border-radius: var(--radius-md);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.tipIcon {
+    color: #2ecc71;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.tipContent {
+    flex: 1;
+}
+
+.tipTitle {
+    color: #2ecc71 !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+}
+
+// ──────── Warning block ────────
+.warning {
+    margin-top: 20px;
+    padding: 16px 20px;
+    background: rgba(243, 156, 18, 0.06);
+    border-left: 4px solid #f39c12;
+    border-radius: var(--radius-md);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.warningIcon {
+    color: #f39c12;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.warningContent {
+    flex: 1;
+}
+
+.warningTitle {
+    color: #f39c12 !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+}
+
+// ──────── Table ────────
+.tableContainer {
+    margin-top: 20px;
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+
+    th,
+    td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        color: var(--text-redesigned);
+    }
+
+    th {
+        background: rgba(255, 255, 255, 0.04);
+        font-weight: 700;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: var(--accent-redesigned);
+        white-space: nowrap;
+    }
+
+    td {
+        line-height: 1.5;
+        opacity: 0.9;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background: rgba(255, 255, 255, 0.02);
+    }
 }

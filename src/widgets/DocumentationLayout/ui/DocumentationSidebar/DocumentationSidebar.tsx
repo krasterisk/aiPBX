@@ -45,8 +45,10 @@ const DOC_SECTIONS: DocSection[] = [
         subsections: [
             { id: 'assistants-create', titleKey: 'Creating Your First Assistant' },
             { id: 'assistants-config', titleKey: 'Configuration' },
+            { id: 'assistants-fields', titleKey: 'Field Descriptions' },
             { id: 'assistants-models', titleKey: 'Model Selection' },
             { id: 'assistants-voices', titleKey: 'Voice Options' },
+            { id: 'assistants-prompting', titleKey: 'Prompting Guide' },
             { id: 'assistants-speech', titleKey: 'Speech Settings' },
             { id: 'assistants-publish', titleKey: 'Publishing' }
         ]
@@ -58,6 +60,8 @@ const DOC_SECTIONS: DocSection[] = [
             { id: 'tools-understanding', titleKey: 'Understanding Tools' },
             { id: 'tools-create', titleKey: 'Creating Tools' },
             { id: 'tools-config', titleKey: 'Tool Configuration' },
+            { id: 'tools-fc-examples', titleKey: 'Function Calling Examples' },
+            { id: 'tools-builtin', titleKey: 'Built-in Functions' },
             { id: 'tools-auth', titleKey: 'Authentication' },
             { id: 'tools-mcp', titleKey: 'MCP Servers' }
         ]

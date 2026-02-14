@@ -29,3 +29,16 @@
         font-size: 14px;
     }
 }
+
+.tooltipIcon {
+    color: var(--icon-redesigned);
+    opacity: 0.5;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    flex-shrink: 0;
+
+    &:hover {
+        opacity: 1;
+        color: var(--accent-redesigned);
+    }
+}

@@ -13,3 +13,5 @@ export const getReportAssistantId = (state: StateSchema) => state.reportsPage?.a
 export const getReportAssistants = (state: StateSchema) => state.reportsPage?.assistants ?? []
 export const getReportsInited = (state: StateSchema) => state.reportsPage?._inited
 export const getReportsPageSearch = (state: StateSchema) => state.reportsPage?.search ?? ''
+export const getReportSortField = (state: StateSchema) => state.reportsPage?.sortField
+export const getReportSortOrder = (state: StateSchema) => state.reportsPage?.sortOrder

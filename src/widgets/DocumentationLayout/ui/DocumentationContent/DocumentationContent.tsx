@@ -5,6 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { getDocumentationContent } from '../../lib/getDocumentationContent'
 import { CodeBlock } from '@/shared/ui/redesigned/CodeBlock/CodeBlock'
 import { Text } from '@/shared/ui/redesigned/Text'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined'
+import TipsAndUpdatesOutlinedIcon from '@mui/icons-material/TipsAndUpdatesOutlined'
 import cls from './DocumentationContent.module.scss'
 
 export const DocumentationContent = memo(() => {
@@ -61,6 +64,29 @@ export const DocumentationContent = memo(() => {
                             </Box>
                         )}
 
+                        {section.table && (
+                            <Box className={cls.tableContainer}>
+                                <table className={cls.table}>
+                                    <thead>
+                                        <tr>
+                                            {section.table.headers.map((header, i) => (
+                                                <th key={i}>{t(header)}</th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {section.table.rows.map((row, i) => (
+                                            <tr key={i}>
+                                                {row.map((cell, j) => (
+                                                    <td key={j}>{t(cell)}</td>
+                                                ))}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </Box>
+                        )}
+
                         {section.image && (
                             <Box className={cls.imageContainer}>
                                 <img
@@ -75,6 +101,34 @@ export const DocumentationContent = memo(() => {
                                         className={cls.imageCaption}
                                     />
                                 )}
+                            </Box>
+                        )}
+
+                        {section.tip && (
+                            <Box className={cls.tip}>
+                                <Box className={cls.tipIcon}>
+                                    <TipsAndUpdatesOutlinedIcon fontSize="small" />
+                                </Box>
+                                <Box className={cls.tipContent}>
+                                    <Typography variant="subtitle2" className={cls.tipTitle}>
+                                        {t('Совет')}
+                                    </Typography>
+                                    <Text text={t(section.tip)} size="s" />
+                                </Box>
+                            </Box>
+                        )}
+
+                        {section.warning && (
+                            <Box className={cls.warning}>
+                                <Box className={cls.warningIcon}>
+                                    <WarningAmberOutlinedIcon fontSize="small" />
+                                </Box>
+                                <Box className={cls.warningContent}>
+                                    <Typography variant="subtitle2" className={cls.warningTitle}>
+                                        {t('Внимание')}
+                                    </Typography>
+                                    <Text text={t(section.warning)} size="s" />
+                                </Box>
                             </Box>
                         )}
 

@@ -4,13 +4,12 @@ import { useSelector } from 'react-redux'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { Slider, Typography } from '@mui/material'
-import { Tooltip } from '@/shared/ui/redesign-v3/Tooltip'
+import { Slider, Typography, Tooltip } from '@mui/material'
+import { Info } from 'lucide-react'
 import { Assistant } from '@/entities/Assistants/model/types/assistants'
 import { getAssistantFormData } from '@/entities/Assistants/model/selectors/assistantFormSelectors'
 import GraphicEqIcon from '@mui/icons-material/GraphicEq'
 import ThermostatIcon from '@mui/icons-material/Thermostat'
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import cls from './ModelParametersCard.module.scss'
 
 interface ModelParametersCardProps {
@@ -149,8 +148,15 @@ export const ModelParametersCard = memo((props: ModelParametersCardProps) => {
                             <Typography className={cls.label}>
                                 {t('Температура')}
                             </Typography>
-                            <Tooltip title={t('tooltip_temperature')} placement="top">
-                                <HelpOutlineIcon fontSize="small" className={cls.helpIcon} />
+                            <Tooltip
+                                title={t('tooltip_temperature')}
+                                arrow
+                                placement="top"
+                                enterTouchDelay={0}
+                                leaveTouchDelay={3000}
+                                slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                            >
+                                <span className={cls.helpIcon}><Info size={16} /></span>
                             </Tooltip>
                         </HStack>
                         <Text
@@ -211,8 +217,15 @@ export const ModelParametersCard = memo((props: ModelParametersCardProps) => {
                                     <Typography className={cls.label}>
                                         {t(param.labelKey)}
                                     </Typography>
-                                    <Tooltip title={t(param.tooltipKey)} placement="top">
-                                        <HelpOutlineIcon fontSize="small" className={cls.helpIcon} />
+                                    <Tooltip
+                                        title={t(param.tooltipKey)}
+                                        arrow
+                                        placement="top"
+                                        enterTouchDelay={0}
+                                        leaveTouchDelay={3000}
+                                        slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                    >
+                                        <span className={cls.helpIcon}><Info size={16} /></span>
                                     </Tooltip>
                                 </HStack>
                                 <Text

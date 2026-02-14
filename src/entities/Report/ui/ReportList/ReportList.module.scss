@@ -30,6 +30,25 @@
     border-bottom: 1px solid var(--glass-border-secondary);
 }
 
+.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition-fast);
+    white-space: nowrap;
+
+    &:hover {
+        opacity: 1;
+        color: var(--accent-redesigned);
+    }
+}
+
+.sortIcon {
+    color: var(--accent-redesigned);
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+
 .tdCheck {
     width: 60px;
     text-align: center;

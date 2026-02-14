@@ -30,5 +30,8 @@
     "Error loading models": "Fehler beim Laden der Modelle",
     "Cancel": "Abbrechen",
     "Save": "Speichern",
-    "Create": "Erstellen"
+    "Create": "Erstellen",
+    "Publish": "Veröffentlicht",
+    "Publish Name": "Veröffentlichungsname",
+    "Actions": "Aktionen"
 }

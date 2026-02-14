@@ -7,7 +7,7 @@ import {
   userActions,
   useTelegramLoginUser
 } from '@/entities/User'
-import { getRouteDashboard, getRouteSignup } from '@/shared/const/router'
+import { getRouteAssistants, getRouteSignup } from '@/shared/const/router'
 import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin'
 import { useTelegramLogin } from '@/shared/lib/hooks/useTelegramLogin/useTelegramLogin'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
@@ -18,7 +18,7 @@ import {
   getLoginActivationCode
 } from '../../model/selectors/login/getLoginActivationCode/getLoginActivationCode'
 
-export function useLoginData () {
+export function useLoginData() {
   const email = useSelector(getLoginEmail)
   const activationLoginCode = useSelector(getLoginActivationCode)
   const [isLoginError, setLoginError] = useState<boolean>(false)
@@ -64,7 +64,7 @@ export function useLoginData () {
       .unwrap()
       .then((data) => {
         dispatch(userActions.setToken(data))
-        navigate(getRouteDashboard())
+        navigate(getRouteAssistants())
       })
       .catch(() => {
         setLoginError(true)
@@ -81,7 +81,7 @@ export function useLoginData () {
       .then((data) => {
         if (data.token && data.user) {
           dispatch(userActions.setToken(data))
-          navigate(getRouteDashboard())
+          navigate(getRouteAssistants())
         }
       })
       .catch(() => {
@@ -96,7 +96,7 @@ export function useLoginData () {
       .unwrap()
       .then((response) => {
         dispatch(userActions.setToken(response))
-        navigate(getRouteDashboard())
+        navigate(getRouteAssistants())
       })
       .catch(() => {
         setLoginError(true)

@@ -15,6 +15,8 @@ import FileSaver from 'file-saver'
 import { formatDate } from '@/shared/lib/functions/formatDate'
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { ReportListActions } from '../ReportListActions/ReportListActions'
+import { useReportFilters } from '../../lib/useReportFilters'
+import { ArrowUp, ArrowDown } from 'lucide-react'
 
 export const ReportList = (props: ReportsListProps) => {
   const {
@@ -29,6 +31,15 @@ export const ReportList = (props: ReportsListProps) => {
 
   const [checkedBox, setCheckedBox] = useState<string[]>([])
   const [indeterminateBox, setIndeterminateBox] = useState<boolean>(false)
+
+  const { sortField, sortOrder, onChangeSort } = useReportFilters()
+
+  const renderSortIcon = (field: string) => {
+    if (sortField !== field) return null
+    return sortOrder === 'ASC'
+      ? <ArrowUp size={14} className={cls.sortIcon} />
+      : <ArrowDown size={14} className={cls.sortIcon} />
+  }
 
   const handleCheckChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
@@ -134,14 +145,30 @@ export const ReportList = (props: ReportsListProps) => {
             <thead className={cls.TableHeader}>
               <tr>
                 <th className={cls.tdCheck}></th>
-                <th>{t('Дата')}</th>
-                <th>{t('Ассистент')}</th>
-                <th>{t('Звонивший')}</th>
-                <th>{t('Длительность')}</th>
-                <th>{t('Токены')}</th>
-                <th>{t('Стоимость')}</th>
-                <th>{t('CSAT')}</th>
-                <th>{t('Результат')}</th>
+                <th className={cls.sortable} onClick={() => onChangeSort('createdAt')}>
+                  {t('Дата')} {renderSortIcon('createdAt')}
+                </th>
+                <th className={cls.sortable} onClick={() => onChangeSort('assistantName')}>
+                  {t('Ассистент')} {renderSortIcon('assistantName')}
+                </th>
+                <th className={cls.sortable} onClick={() => onChangeSort('callerId')}>
+                  {t('Звонивший')} {renderSortIcon('callerId')}
+                </th>
+                <th className={cls.sortable} onClick={() => onChangeSort('duration')}>
+                  {t('Длительность')} {renderSortIcon('duration')}
+                </th>
+                <th className={cls.sortable} onClick={() => onChangeSort('tokens')}>
+                  {t('Токены')} {renderSortIcon('tokens')}
+                </th>
+                <th className={cls.sortable} onClick={() => onChangeSort('cost')}>
+                  {t('Стоимость')} {renderSortIcon('cost')}
+                </th>
+                <th className={cls.sortable} onClick={() => onChangeSort('csat')}>
+                  {t('CSAT')} {renderSortIcon('csat')}
+                </th>
+                <th className={cls.sortable} onClick={() => onChangeSort('scenarioSuccess')}>
+                  {t('Результат')} {renderSortIcon('scenarioSuccess')}
+                </th>
                 <th className={cls.tdActions}></th>
               </tr>
             </thead>

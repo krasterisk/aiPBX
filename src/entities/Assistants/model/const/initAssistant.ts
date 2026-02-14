@@ -19,6 +19,8 @@ export const initAssistant: Assistant = {
   idle_timeout_ms: '10000',
   tools: [],
   analytic: true,
+  allowHangup: false,
+  allowTransfer: false,
   comment: '',
   userId: '',
   user: {

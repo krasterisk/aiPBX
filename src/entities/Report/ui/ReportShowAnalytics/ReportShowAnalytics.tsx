@@ -6,7 +6,6 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Analytics } from '../../model/types/report'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 import {
     GitBranch,
     Smile,

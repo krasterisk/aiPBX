@@ -30,5 +30,8 @@
     "Error loading models": "加载模型失败",
     "Cancel": "取消",
     "Save": "保存",
-    "Create": "创建"
+    "Create": "创建",
+    "Publish": "已发布",
+    "Publish Name": "发布名称",
+    "Actions": "操作"
 }

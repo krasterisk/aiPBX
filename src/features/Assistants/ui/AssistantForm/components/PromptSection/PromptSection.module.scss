@@ -41,6 +41,7 @@
 .generateBtn {
     transition: var(--transition-normal);
     flex-shrink: 0;
+    color: var(--text-redesigned);
 
     &:hover {
         transform: var(--hover-scale-sm);
@@ -64,12 +65,21 @@
 
     textarea {
         font-family: 'Fira Code', 'Roboto Mono', monospace !important;
+        max-height: calc(100vh - 350px);
+        overflow-y: auto !important;
+    }
+
+    :global(.MuiOutlinedInput-root) {
+
+        &:hover,
+        &:global(.Mui-focused) {
+            background-color: var(--code-bg) !important;
+            color: var(--text-redesigned) !important;
+        }
     }
 
     :global(.MuiInputBase-root) {
-        max-height: calc(100vh - 300px);
         min-height: 400px;
-        overflow-y: auto;
     }
 }
 

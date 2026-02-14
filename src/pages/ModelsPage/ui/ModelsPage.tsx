@@ -5,6 +5,7 @@ import { VStack, HStack } from '@/shared/ui/redesigned/Stack';
 import { Text } from '@/shared/ui/redesigned/Text';
 import { Button } from '@/shared/ui/redesigned/Button';
 import { Textarea } from '@/shared/ui/mui/Textarea';
+import { Check } from '@/shared/ui/mui/Check';
 import { Modal } from '@/shared/ui/redesigned/Modal';
 import {
     useAiModels,
@@ -30,7 +31,7 @@ export const ModelsPage = memo(() => {
     const [modelToDeleteId, setModelToDeleteId] = useState<number | null>(null);
 
     // Form State
-    const [formData, setFormData] = useState<CreateAiModelDto>({ name: '', comment: '' });
+    const [formData, setFormData] = useState<CreateAiModelDto>({ name: '', comment: '', publish: false, publishName: '' });
 
     // API
     const { data: models, isLoading, isError } = useAiModels();
@@ -43,7 +44,7 @@ export const ModelsPage = memo(() => {
         try {
             await createAiModel(formData).unwrap();
             setIsCreateModalOpen(false);
-            setFormData({ name: '', comment: '' });
+            setFormData({ name: '', comment: '', publish: false, publishName: '' });
         } catch (e) {
             console.error('Failed to create model', e);
         }
@@ -77,13 +78,13 @@ export const ModelsPage = memo(() => {
     };
 
     const openCreateModal = () => {
-        setFormData({ name: '', comment: '' });
+        setFormData({ name: '', comment: '', publish: false, publishName: '' });
         setIsCreateModalOpen(true);
     };
 
     const openEditModal = (model: AiModel) => {
         setSelectedModel(model);
-        setFormData({ name: model.name, comment: model.comment });
+        setFormData({ name: model.name, comment: model.comment, publish: model.publish, publishName: model.publishName });
         setIsEditModalOpen(true);
     };
 
@@ -111,9 +112,19 @@ export const ModelsPage = memo(() => {
                             onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                         />
                         <Textarea
+                            label={t('Publish Name')}
+                            value={formData.publishName}
+                            onChange={(e) => setFormData(prev => ({ ...prev, publishName: e.target.value }))}
+                        />
+                        <Textarea
                             label={t('Comment')}
                             value={formData.comment}
                             onChange={(e) => setFormData(prev => ({ ...prev, comment: e.target.value }))}
+                        />
+                        <Check
+                            checked={formData.publish}
+                            onChange={(e) => setFormData(prev => ({ ...prev, publish: e.target.checked }))}
+                            label={t('Publish') ?? ''}
                         />
                         <HStack justify="end" gap="16" max>
                             <Button onClick={() => setIsCreateModalOpen(false)} variant="clear">{t('Cancel')}</Button>
@@ -132,9 +143,19 @@ export const ModelsPage = memo(() => {
                             onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                         />
                         <Textarea
+                            label={t('Publish Name')}
+                            value={formData.publishName}
+                            onChange={(e) => setFormData(prev => ({ ...prev, publishName: e.target.value }))}
+                        />
+                        <Textarea
                             label={t('Comment')}
                             value={formData.comment}
                             onChange={(e) => setFormData(prev => ({ ...prev, comment: e.target.value }))}
+                        />
+                        <Check
+                            checked={formData.publish}
+                            onChange={(e) => setFormData(prev => ({ ...prev, publish: e.target.checked }))}
+                            label={t('Publish') ?? ''}
                         />
                         <HStack justify="end" gap="16" max>
                             <Button onClick={() => setIsEditModalOpen(false)} variant="clear">{t('Cancel')}</Button>

@@ -1,6 +1,8 @@
 export interface AiModel {
     id: number;
     name: string;
+    publish: boolean;
+    publishName: string;
     comment: string;
     createdAt?: string;
     updatedAt?: string;
@@ -8,6 +10,8 @@ export interface AiModel {
 
 export interface CreateAiModelDto {
     name: string;
+    publish: boolean;
+    publishName: string;
     comment: string;
 }
 

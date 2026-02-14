@@ -64,7 +64,7 @@ const areaStyles = {
       transform: 'translate(14px, -9px) scale(0.75)', // Позиция при фокусе (сверху)
     },
     '&.Mui-focused': {
-      color: 'var(--accent-redesigned)',
+      color: 'var(--text-redesigned)',
     },
   },
   '& .MuiSvgIcon-root': {

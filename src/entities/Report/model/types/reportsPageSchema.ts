@@ -17,4 +17,7 @@ export interface ReportsPageSchema {
   search: string
   userId: string
   user?: ClientOptions
+  // sorting
+  sortField?: string
+  sortOrder?: 'ASC' | 'DESC'
 }

@@ -81,9 +81,9 @@ export const BillingBreakdown = memo((props: BillingBreakdownProps) => {
                             const isAnalytic = record.type === 'analytic'
                             return (
                                 <tr key={record.id} id={`billing-record-${record.id}`}>
-                                    <td>{index + 1}</td>
-                                    <td>{formatTime(record.createdAt)}</td>
-                                    <td>
+                                    <td data-label="#">{index + 1}</td>
+                                    <td data-label={t('Время')}>{formatTime(record.createdAt)}</td>
+                                    <td data-label={t('Тип')}>
                                         <span className={classNames(cls.typeBadge, {
                                             [cls.typeRealtime]: !isAnalytic,
                                             [cls.typeAnalytic]: isAnalytic
@@ -91,12 +91,12 @@ export const BillingBreakdown = memo((props: BillingBreakdownProps) => {
                                             {t(record.type)}
                                         </span>
                                     </td>
-                                    <td>{isAnalytic ? '—' : record.audioTokens.toLocaleString()}</td>
-                                    <td>{isAnalytic ? '—' : record.textTokens.toLocaleString()}</td>
-                                    <td>{record.totalTokens.toLocaleString()}</td>
-                                    <td>{isAnalytic ? '—' : formatCurrency(record.audioCost, userCurrency, 4)}</td>
-                                    <td>{isAnalytic ? '—' : formatCurrency(record.textCost, userCurrency, 4)}</td>
-                                    <td className={cls.totalCell}>
+                                    <td data-label={t('Audio токены')}>{isAnalytic ? '—' : record.audioTokens.toLocaleString()}</td>
+                                    <td data-label={t('Text токены')}>{isAnalytic ? '—' : record.textTokens.toLocaleString()}</td>
+                                    <td data-label={t('Всего')}>{record.totalTokens.toLocaleString()}</td>
+                                    <td data-label={t('Audio стоимость')}>{isAnalytic ? '—' : formatCurrency(record.audioCost, userCurrency, 4)}</td>
+                                    <td data-label={t('Text стоимость')}>{isAnalytic ? '—' : formatCurrency(record.textCost, userCurrency, 4)}</td>
+                                    <td data-label={t('Итого')} className={cls.totalCell}>
                                         {formatCurrency(record.totalCost, userCurrency, 4)}
                                     </td>
                                 </tr>
@@ -106,15 +106,15 @@ export const BillingBreakdown = memo((props: BillingBreakdownProps) => {
                     {totals && (
                         <tfoot>
                             <tr className={cls.totalsRow}>
-                                <td colSpan={3}>
+                                <td colSpan={3} data-label="">
                                     <strong>{t('Итого')}</strong>
                                 </td>
-                                <td><strong>{totals.audioTokens.toLocaleString()}</strong></td>
-                                <td><strong>{totals.textTokens.toLocaleString()}</strong></td>
-                                <td><strong>{totals.totalTokens.toLocaleString()}</strong></td>
-                                <td><strong>{formatCurrency(totals.audioCost, userCurrency, 4)}</strong></td>
-                                <td><strong>{formatCurrency(totals.textCost, userCurrency, 4)}</strong></td>
-                                <td className={cls.totalCell}>
+                                <td data-label={t('Audio токены')}><strong>{totals.audioTokens.toLocaleString()}</strong></td>
+                                <td data-label={t('Text токены')}><strong>{totals.textTokens.toLocaleString()}</strong></td>
+                                <td data-label={t('Всего')}><strong>{totals.totalTokens.toLocaleString()}</strong></td>
+                                <td data-label={t('Audio стоимость')}><strong>{formatCurrency(totals.audioCost, userCurrency, 4)}</strong></td>
+                                <td data-label={t('Text стоимость')}><strong>{formatCurrency(totals.textCost, userCurrency, 4)}</strong></td>
+                                <td data-label={t('Итого')} className={cls.totalCell}>
                                     <strong>{formatCurrency(totals.totalCost, userCurrency, 4)}</strong>
                                 </td>
                             </tr>

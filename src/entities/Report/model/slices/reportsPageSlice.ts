@@ -10,7 +10,10 @@ const initialState: ReportsPageSchema = {
   // filters
   _inited: false,
   search: '',
-  userId: ''
+  userId: '',
+  // sorting
+  sortField: 'createdAt',
+  sortOrder: 'DESC'
 }
 
 export const reportsPageSlice = createSlice({
@@ -50,6 +53,12 @@ export const reportsPageSlice = createSlice({
     setUser: (state, action: PayloadAction<ClientOptions>) => {
       state.user = action.payload
       state.userId = action.payload.id
+    },
+    setSortField: (state, action: PayloadAction<string | undefined>) => {
+      state.sortField = action.payload
+    },
+    setSortOrder: (state, action: PayloadAction<'ASC' | 'DESC' | undefined>) => {
+      state.sortOrder = action.payload
     },
     initState: (state) => {
       state.limit = 25

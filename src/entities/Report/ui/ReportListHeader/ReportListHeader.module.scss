@@ -3,10 +3,16 @@
 .ReportListHeader {
     margin-bottom: var(--space-6);
     width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg-redesigned);
+    padding: var(--space-4) 0;
 }
 
 .headerContent {
     width: 100%;
+    flex-wrap: wrap;
 
     @include tablet {
         flex-direction: column;
@@ -25,11 +31,11 @@
     justify-content: flex-end;
     align-items: center;
     gap: var(--space-4);
+    flex-wrap: wrap;
 
     @include tablet {
         width: 100%;
         justify-content: flex-start;
-        flex-wrap: wrap;
     }
 }
 

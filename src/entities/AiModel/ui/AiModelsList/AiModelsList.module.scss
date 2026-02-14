@@ -8,3 +8,16 @@
 .table {
     width: 100%;
 }
+
+.publishActive {
+    color: var(--save-redesigned);
+    display: inline-flex;
+    align-items: center;
+}
+
+.publishInactive {
+    color: var(--cancel-redesigned);
+    opacity: 0.4;
+    display: inline-flex;
+    align-items: center;
+}

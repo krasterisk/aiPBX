@@ -1,11 +1,11 @@
-import { memo } from 'react'
+import { memo, ReactNode } from 'react'
 import { Checkbox, CheckboxProps, FormControlLabel } from '@mui/material'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from '../../Combobox/ui/Combobox.module.scss'
 
 interface CheckProps extends CheckboxProps {
   className?: string
-  label?: string
+  label?: ReactNode
 
 }
 
@@ -24,13 +24,13 @@ export const Check = memo((props: CheckProps) => {
   }
 
   return (
-      <FormControlLabel
-          label={label}
-          control={<Checkbox
-              className={classNames(cls.Check, {}, [className])}
-              sx={style}
-              {...otherProps}
-          />}
-      />
+    <FormControlLabel
+      label={label}
+      control={<Checkbox
+        className={classNames(cls.Check, {}, [className])}
+        sx={style}
+        {...otherProps}
+      />}
+    />
   )
 })

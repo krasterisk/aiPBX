@@ -30,5 +30,8 @@
     "Error loading models": "Ошибка загрузки моделей",
     "Cancel": "Отмена",
     "Save": "Сохранить",
-    "Create": "Создать"
+    "Create": "Создать",
+    "Publish": "Опубликовано",
+    "Publish Name": "Имя публикации",
+    "Actions": "Действия"
 }

@@ -98,11 +98,13 @@
 
 // ─── Tab Content ───────────────────────────────────────
 .tabContent {
+    width: 100%;
     padding: 20px;
     min-height: 120px;
 }
 
 .fadeIn {
+    width: 100%;
     animation: fadeInContent 0.25s ease-out;
 }
 
@@ -123,10 +125,30 @@
     padding: 40px 20px;
 }
 
+.emptyAction {
+    cursor: pointer;
+    padding: 16px 24px;
+    border-radius: var(--radius-md);
+    transition: var(--transition-medium);
+
+    &:hover {
+        background: var(--glass-bg-tertiary);
+
+        .emptyIcon {
+            opacity: 1;
+            color: var(--accent-redesigned);
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 8px var(--accent-redesigned));
+            animation: none;
+        }
+    }
+}
+
 .emptyIcon {
     color: var(--accent-redesigned);
     opacity: 0.4;
     animation: pulse 2s ease-in-out infinite;
+    transition: var(--transition-medium);
 }
 
 @keyframes pulse {

@@ -1,3 +1,18 @@
 .Check {
     color: var(--icon-redesigned)
 }
+
+.Combobox {
+    :global(.MuiOutlinedInput-root) {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    :global(.MuiInputBase-input.MuiAutocomplete-input) {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+}

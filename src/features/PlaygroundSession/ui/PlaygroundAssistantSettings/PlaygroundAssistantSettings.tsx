@@ -8,14 +8,15 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { ModelSelect, VoiceSelect } from '@/entities/Assistants'
 import { Tool, ToolsSelect } from '@/entities/Tools'
 import { Slider } from '@/shared/ui/mui/Slider/Slider'
-import { Tooltip, IconButton } from '@mui/material'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import { Tooltip } from '@mui/material'
+import { Info } from 'lucide-react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getPlaygroundFormData, getPlaygroundFormLoading, playgroundAssistantFormActions } from '@/pages/Playground'
 import { useUpdateAssistant } from '@/entities/Assistants/api/assistantsApi'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { Assistant } from '@/entities/Assistants'
 import { Textarea } from '@/shared/ui/mui/Textarea'
+import { Check } from '@/shared/ui/mui/Check'
 import { toast } from 'react-toastify'
 import { SectionCard } from '../components/SectionCard/SectionCard'
 import { MessageSquareText, Settings2, Save } from 'lucide-react'
@@ -63,6 +64,10 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
         dispatch(playgroundAssistantFormActions.updateFormField({ [field]: event.target.value }))
     }, [dispatch])
 
+    const onChangeCheckboxHandler = useCallback((field: keyof Assistant) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(playgroundAssistantFormActions.updateFormField({ [field]: event.target.checked }))
+    }, [dispatch])
+
     const handleApply = useCallback(async () => {
         if (!formData || !formData.id) return
 
@@ -74,10 +79,14 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
                 voice: formData.voice,
                 tools: formData.tools,
                 instruction: formData.instruction,
+                temperature: formData.temperature,
                 turn_detection_threshold: formData.turn_detection_threshold,
                 turn_detection_prefix_padding_ms: formData.turn_detection_prefix_padding_ms,
                 turn_detection_silence_duration_ms: formData.turn_detection_silence_duration_ms,
-                idle_timeout_ms: formData.idle_timeout_ms
+                idle_timeout_ms: formData.idle_timeout_ms,
+                analytic: formData.analytic,
+                allowHangup: formData.allowHangup,
+                allowTransfer: formData.allowTransfer
             }).unwrap()
             dispatch(playgroundAssistantFormActions.setError(undefined))
             toast.success(t('Сохранено успешно'))
@@ -162,6 +171,95 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
                                 fullWidth
                             />
 
+                            <VStack gap="4">
+                                <Check
+                                    checked={formData.analytic ?? true}
+                                    onChange={onChangeCheckboxHandler('analytic')}
+                                    label={
+                                        <HStack gap="4" align="center">
+                                            {t('Аналитика разговора')}
+                                            <Tooltip
+                                                title={t('analyticTooltip')}
+                                                arrow
+                                                placement="top"
+                                                enterTouchDelay={0}
+                                                leaveTouchDelay={3000}
+                                                slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                            >
+                                                <span className={cls.tooltipIcon}><Info size={16} /></span>
+                                            </Tooltip>
+                                        </HStack>
+                                    }
+                                />
+
+                                <Check
+                                    checked={formData.allowHangup ?? false}
+                                    onChange={onChangeCheckboxHandler('allowHangup')}
+                                    label={
+                                        <HStack gap="4" align="center">
+                                            {t('Завершать вызов')}
+                                            <Tooltip
+                                                title={t('allowHangupTooltip')}
+                                                arrow
+                                                placement="top"
+                                                enterTouchDelay={0}
+                                                leaveTouchDelay={3000}
+                                                slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                            >
+                                                <span className={cls.tooltipIcon}><Info size={16} /></span>
+                                            </Tooltip>
+                                        </HStack>
+                                    }
+                                />
+
+                                <Check
+                                    checked={formData.allowTransfer ?? false}
+                                    onChange={onChangeCheckboxHandler('allowTransfer')}
+                                    label={
+                                        <HStack gap="4" align="center">
+                                            {t('Переводить вызов')}
+                                            <Tooltip
+                                                title={t('allowTransferTooltip')}
+                                                arrow
+                                                placement="top"
+                                                enterTouchDelay={0}
+                                                leaveTouchDelay={3000}
+                                                slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                            >
+                                                <span className={cls.tooltipIcon}><Info size={16} /></span>
+                                            </Tooltip>
+                                        </HStack>
+                                    }
+                                />
+                            </VStack>
+
+                            {/* Temperature */}
+                            <div className={cls.vadItem}>
+                                <div className={cls.vadHeader}>
+                                    <div className={cls.vadLabel}>
+                                        {t('Температура')}
+                                        <Tooltip
+                                            title={t('tooltip_temperature') || ''}
+                                            arrow
+                                            placement="top"
+                                            enterTouchDelay={0}
+                                            leaveTouchDelay={3000}
+                                            slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                        >
+                                            <span className={cls.tooltipIcon}><Info size={16} /></span>
+                                        </Tooltip>
+                                    </div>
+                                    <span className={cls.vadValue}>{parseFloat(formData.temperature || '0.8').toFixed(1)}</span>
+                                </div>
+                                <Slider
+                                    value={parseFloat(formData.temperature || '0.8') || 0.8}
+                                    onChange={onChangeSliderHandler('temperature')}
+                                    min={0.6}
+                                    max={1.2}
+                                    step={0.1}
+                                />
+                            </div>
+
                             {/* VAD Settings */}
                             <VStack gap="16" max className={cls.vadContainer}>
                                 <Text text={t('Настройки VAD')} bold />
@@ -171,10 +269,15 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
                                     <div className={cls.vadHeader}>
                                         <div className={cls.vadLabel}>
                                             {t('Порог')}
-                                            <Tooltip title={t('tooltip_threshold') || ''} arrow>
-                                                <IconButton size="small">
-                                                    <InfoOutlinedIcon fontSize="small" className={cls.icon} />
-                                                </IconButton>
+                                            <Tooltip
+                                                title={t('tooltip_threshold') || ''}
+                                                arrow
+                                                placement="top"
+                                                enterTouchDelay={0}
+                                                leaveTouchDelay={3000}
+                                                slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                            >
+                                                <span className={cls.tooltipIcon}><Info size={16} /></span>
                                             </Tooltip>
                                         </div>
                                         <span className={cls.vadValue}>{formData.turn_detection_threshold || '0.5'}</span>
@@ -193,10 +296,15 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
                                     <div className={cls.vadHeader}>
                                         <div className={cls.vadLabel}>
                                             {t('Префиксный отступ (мс)')}
-                                            <Tooltip title={t('tooltip_prefix_padding') || ''} arrow>
-                                                <IconButton size="small">
-                                                    <InfoOutlinedIcon fontSize="small" className={cls.icon} />
-                                                </IconButton>
+                                            <Tooltip
+                                                title={t('tooltip_prefix_padding') || ''}
+                                                arrow
+                                                placement="top"
+                                                enterTouchDelay={0}
+                                                leaveTouchDelay={3000}
+                                                slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                            >
+                                                <span className={cls.tooltipIcon}><Info size={16} /></span>
                                             </Tooltip>
                                         </div>
                                         <span className={cls.vadValue}>{formData.turn_detection_prefix_padding_ms || '500'}</span>
@@ -215,10 +323,15 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
                                     <div className={cls.vadHeader}>
                                         <div className={cls.vadLabel}>
                                             {t('Длительность тишины (мс)')}
-                                            <Tooltip title={t('tooltip_silence_duration') || ''} arrow>
-                                                <IconButton size="small">
-                                                    <InfoOutlinedIcon fontSize="small" className={cls.icon} />
-                                                </IconButton>
+                                            <Tooltip
+                                                title={t('tooltip_silence_duration') || ''}
+                                                arrow
+                                                placement="top"
+                                                enterTouchDelay={0}
+                                                leaveTouchDelay={3000}
+                                                slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                            >
+                                                <span className={cls.tooltipIcon}><Info size={16} /></span>
                                             </Tooltip>
                                         </div>
                                         <span className={cls.vadValue}>{formData.turn_detection_silence_duration_ms || '1000'}</span>
@@ -237,10 +350,15 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
                                     <div className={cls.vadHeader}>
                                         <div className={cls.vadLabel}>
                                             {t('Время простоя (мс)')}
-                                            <Tooltip title={t('tooltip_idle_timeout') || ''} arrow>
-                                                <IconButton size="small">
-                                                    <InfoOutlinedIcon fontSize="small" className={cls.icon} />
-                                                </IconButton>
+                                            <Tooltip
+                                                title={t('tooltip_idle_timeout') || ''}
+                                                arrow
+                                                placement="top"
+                                                enterTouchDelay={0}
+                                                leaveTouchDelay={3000}
+                                                slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                            >
+                                                <span className={cls.tooltipIcon}><Info size={16} /></span>
                                             </Tooltip>
                                         </div>
                                         <span className={cls.vadValue}>{formData.idle_timeout_ms || '10000'}</span>

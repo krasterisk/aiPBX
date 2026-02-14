@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Textarea } from '@/shared/ui/mui/Textarea'
-import { Button } from '@/shared/ui/redesign-v3/Button'
+import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Assistant } from '@/entities/Assistants/model/types/assistants'
 import { getAssistantFormData } from '@/entities/Assistants/model/selectors/assistantFormSelectors'
@@ -74,7 +74,7 @@ export const PromptSection = memo((props: PromptSectionProps) => {
     return (
         <>
             <div className={classNames(cls.PromptSection, {}, [className])}>
-                <HStack max justify="between" align="center" className={cls.promptHeader}>
+                <HStack max justify="between" align="center" wrap={'wrap'} className={cls.promptHeader}>
                     <Text
                         title={t('Системные инструкции')}
                         className={cls.sectionTitle}
@@ -140,15 +140,14 @@ export const PromptSection = memo((props: PromptSectionProps) => {
                     <HStack max justify="end" gap="8">
                         <Button
                             onClick={handleClosePopover}
-                            variant="outline"
+                            variant="clear"
                             size="m"
                         >
                             {t('Отмена')}
                         </Button>
                         <Button
                             onClick={handleGenerate}
-                            color="success"
-                            variant="clear"
+                            variant="outline"
                             disabled={!userPrompt.trim() || isLoading}
                             size="m"
                         >

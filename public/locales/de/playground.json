@@ -33,5 +33,19 @@
     "tooltip_silence_duration": "Erforderliche Stilledauer, um Sprache als beendet zu betrachten (in Millisekunden).",
     "tooltip_idle_timeout": "Maximale Inaktivitätsdauer vor Beendigung der Sitzung (in Millisekunden).",
     "Микрофон недоступен. Для работы микрофона требуется HTTPS или localhost.": "Mikrofon nicht verfügbar. HTTPS oder localhost ist für den Mikrofonzugriff erforderlich.",
-    "Подключение...": "Verbinden..."
+    "Подключение...": "Verbinden...",
+    "Сохранено успешно": "Erfolgreich gespeichert",
+    "Ошибка при сохранении": "Fehler beim Speichern",
+    "Выбор ассистента": "Assistentenauswahl",
+    "Промпт": "Prompt",
+    "Настройки модели": "Modelleinstellungen",
+    "Введите инструкции для ИИ...": "KI-Anweisungen eingeben...",
+    "Аналитика разговора": "Gesprächsanalyse",
+    "Завершать вызов": "Anruf beenden",
+    "Переводить вызов": "Anruf weiterleiten",
+    "analyticTooltip": "Wenn aktiviert, wird nach jedem Gespräch automatisch eine Analyse erstellt: Dialogqualitätsbewertung (CSAT), Absichtserkennung, Stimmungsanalyse, Szenarioeffizienz und Schlüsselmetriken. Daten sind in Berichten verfügbar.",
+    "allowHangupTooltip": "Wenn aktiviert, kann der Assistent das Gespräch selbstständig beenden, wenn die Aufgabe erledigt ist oder auf Wunsch des Anrufers. Wenn deaktiviert, kann nur der Anrufer den Anruf beenden.",
+    "allowTransferTooltip": "Wenn aktiviert, kann der Assistent den Anruf an einen Operator, Mitarbeiter oder eine Warteschlange weiterleiten. Geben Sie für den korrekten Betrieb ein Verzeichnis mit Nummern im Prompt oder in den Funktionen an. ⚠️ Die Anrufweiterleitung funktioniert nicht im Playground, da keine TK-Anlage angeschlossen ist.",
+    "Температура": "Temperatur",
+    "tooltip_temperature": "Steuert die 'Kreativität' des Modells. Niedrigere Werte (0.6) erzeugen stabilere und vorhersehbarere Antworten. Höhere Werte (1.2) erzeugen vielfältigere, aber weniger präzise Antworten."
 }

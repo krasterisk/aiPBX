@@ -46,6 +46,12 @@ export const useMenubarItems = () => {
   if (userData) {
     menubarItemsList.push(
       {
+        path: getRouteAssistants(),
+        Icon: SmartToyIcon,
+        text: t('Ассистенты'),
+        authOnly: true
+      },
+      {
         path: '/dashboards',
         Icon: BarChartIcon,
         text: t('Dashboards'),
@@ -75,12 +81,6 @@ export const useMenubarItems = () => {
         path: getRoutePlayground(),
         Icon: ScienceIcon,
         text: t('Playground'),
-        authOnly: true
-      },
-      {
-        path: getRouteAssistants(),
-        Icon: SmartToyIcon,
-        text: t('Ассистенты'),
         authOnly: true
       },
       {

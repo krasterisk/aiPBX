@@ -29,7 +29,7 @@ export const Combobox = memo((props: ComboBoxProps) => {
       borderRadius: 'var(--radius-lg)',
       padding: '4px 12px',
       transition: 'var(--transition-colors)',
-      color: 'var(--icon-redesigned)', // Цвет для иконок (svg) по умолчанию
+      color: 'var(--icon-redesigned)',
       '& fieldset': {
         border: '1px solid rgba(94, 211, 243, 0.2)',
         transition: 'var(--transition-colors)',
@@ -61,11 +61,15 @@ export const Combobox = memo((props: ComboBoxProps) => {
       },
     },
 
-    // Лейбл (если есть, хотя в редизайне часто внешний лейбл)
+    // Лейбл
     '& .MuiInputLabel-root': {
       color: 'var(--text-redesigned)',
+      transform: 'translate(14px, 12px) scale(1)',
+      '&.MuiInputLabel-shrink': {
+        transform: 'translate(14px, -9px) scale(0.75)',
+      },
       '&.Mui-focused': {
-        color: 'var(--accent-redesigned)',
+        color: 'var(--text-redesigned)',
       },
     },
 

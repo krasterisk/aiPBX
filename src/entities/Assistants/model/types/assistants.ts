@@ -52,6 +52,8 @@ export interface Assistant {
   sipAccount?: AssistantSipAccount
   comment?: string
   analytic?: boolean
+  allowHangup?: boolean
+  allowTransfer?: boolean
 }
 
 export interface AssistantsListProps {

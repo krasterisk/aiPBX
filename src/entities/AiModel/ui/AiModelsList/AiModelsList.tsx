@@ -8,7 +8,7 @@ import { Table } from '@/shared/ui/redesigned/Table/Table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { Edit, Trash2 } from 'lucide-react'
+import { Edit, Trash2, Check, X } from 'lucide-react'
 
 interface AiModelsListProps {
     className?: string
@@ -44,6 +44,21 @@ export const AiModelsList = memo((props: AiModelsListProps) => {
         columnHelper.accessor('comment', {
             header: (t('Comment') ?? '') as string,
             cell: info => info.getValue()
+        }),
+        columnHelper.accessor('publish', {
+            header: (t('Publish') ?? '') as string,
+            cell: info => (
+                <span className={info.getValue() ? cls.publishActive : cls.publishInactive}>
+                    {info.getValue()
+                        ? <Check size={16} />
+                        : <X size={16} />
+                    }
+                </span>
+            )
+        }),
+        columnHelper.accessor('publishName', {
+            header: (t('Publish Name') ?? '') as string,
+            cell: info => info.getValue() || '—'
         }),
         columnHelper.display({
             id: 'actions',
