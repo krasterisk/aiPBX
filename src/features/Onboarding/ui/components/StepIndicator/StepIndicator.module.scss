@@ -1,0 +1,48 @@
+@import "@/app/styles/variables/mixins";
+
+.progressTrack {
+    height: 3px;
+    border-radius: var(--radius-full);
+    background: var(--glass-overlay-medium);
+    overflow: hidden;
+}
+
+.progressFill {
+    width: var(--progress, 0%);
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: var(--accent-redesigned);
+    transition: width var(--duration-medium) var(--ease-spring);
+    box-shadow: var(--shadow-accent-sm);
+}
+
+.stepDot {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    transition: var(--transition-normal);
+    font-size: 14px;
+}
+
+// Upcoming step
+.upcoming {
+    background: var(--glass-overlay-light);
+    border: var(--glass-border-subtle);
+    color: var(--hint-redesigned);
+    opacity: 0.5;
+}
+
+// Active step
+.active {
+    background: var(--icon-bg-accent);
+    border: 1px solid var(--accent-redesigned);
+    color: var(--accent-redesigned);
+    box-shadow: var(--shadow-accent-md);
+}
+
+// Completed step
+.completed {
+    background: var(--status-success-bg);
+    border: 1px solid var(--status-success-border);
+    color: var(--status-success);
+}

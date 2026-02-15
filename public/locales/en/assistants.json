@@ -187,6 +187,8 @@
   "Скопировать ID": "Copy ID",
   "По умолчанию": "Default",
   "Инструменты": "Tools",
+  "Да": "Yes",
+  "Нет": "No",
   "Начните с шаблона": "Start with a Template",
   "Выберите шаблон для быстрого старта": "Choose a ready-made template to quickly create a voice assistant",
   "template_appliance_repair": "Appliance Repair",

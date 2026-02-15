@@ -57,3 +57,36 @@
         height: 44px;
     }
 }
+
+.agreeRow {
+    width: 100%;
+    padding: 4px 0;
+}
+
+.checkbox {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    margin-top: 2px;
+    accent-color: var(--accent-redesigned);
+    cursor: pointer;
+}
+
+.agreeLabel {
+    font-size: 0.8rem;
+    color: var(--text-redesigned);
+    opacity: 0.8;
+    cursor: pointer;
+    line-height: 1.4;
+    user-select: none;
+}
+
+.legalLink {
+    color: var(--accent-redesigned);
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}

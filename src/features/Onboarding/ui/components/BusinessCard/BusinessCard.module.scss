@@ -1,0 +1,95 @@
+@import "@/app/styles/variables/mixins";
+
+.BusinessCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100px;
+  height: 90px;
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--glass-overlay-light);
+  border: var(--glass-border-subtle);
+  cursor: pointer;
+  transition: var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--glass-bg-tertiary);
+    opacity: 0;
+    transition: opacity var(--duration-normal) var(--ease-in-out);
+  }
+
+  &:hover {
+    transform: var(--hover-lift-sm);
+    border-color: var(--glass-border-accent);
+    box-shadow: var(--shadow-accent-sm);
+
+    &::before {
+      opacity: 1;
+    }
+
+    .iconBox {
+      background: var(--icon-bg-accent);
+      color: var(--accent-redesigned);
+      box-shadow: var(--shadow-accent-sm);
+    }
+  }
+
+  &.selected {
+    border-color: var(--accent-redesigned);
+    box-shadow: var(--shadow-accent-md);
+
+    &::before {
+      opacity: 1;
+    }
+
+    .iconBox {
+      background: var(--icon-bg-accent);
+      color: var(--accent-redesigned);
+      box-shadow: var(--shadow-accent-sm);
+    }
+
+    .label {
+      color: var(--accent-redesigned);
+    }
+  }
+
+  @include mobile {
+    width: 90px;
+    height: 80px;
+    padding: var(--space-2);
+  }
+}
+
+.iconBox {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--icon-bg-secondary);
+  color: var(--icon-redesigned);
+  transition: var(--transition-normal);
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--hint-redesigned);
+  text-align: center;
+  line-height: 1.2;
+  transition: color var(--duration-normal) var(--ease-in-out);
+}

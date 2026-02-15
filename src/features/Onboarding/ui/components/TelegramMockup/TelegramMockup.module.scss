@@ -1,0 +1,53 @@
+@import "@/app/styles/variables/mixins";
+
+.TelegramMockup {
+    width: 280px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    flex-shrink: 0;
+    border: var(--glass-border-subtle);
+
+    @include mobile {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+.header {
+    padding: var(--space-3) var(--space-4);
+    background: var(--glass-bg-tertiary);
+    border-bottom: var(--glass-border-subtle);
+}
+
+.avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-full);
+    background: var(--icon-bg-accent);
+    color: var(--accent-redesigned);
+    flex-shrink: 0;
+}
+
+.message {
+    padding: var(--space-4);
+    background: var(--glass-overlay-dark);
+}
+
+.bubble {
+    @include glass-card-tertiary;
+    padding: var(--space-3) var(--space-4);
+    max-width: 100%;
+}
+
+.detailLine {
+    opacity: 0.85;
+}
+
+.timeIcon {
+    color: var(--hint-redesigned);
+}
+
+.timeText {
+    color: var(--hint-redesigned);
+}

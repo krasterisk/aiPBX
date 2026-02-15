@@ -74,5 +74,7 @@
   "PBXs": "PBXs",
   "Клиент": "Customer",
   "Цены": "Prices",
-  "AI Модели": "Models"
+  "MCP Серверы": "MCP Servers",
+  "AI Модели": "Models",
+  "Онбординг": "Onboarding"
 }

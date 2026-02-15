@@ -1,7 +1,7 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './SignupForm.module.scss'
 import { useTranslation } from 'react-i18next'
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Loader } from '@/shared/ui/Loader'
@@ -11,6 +11,8 @@ import { Divider } from '@/shared/ui/Divider'
 import GoogleIcon from '@/shared/assets/icons/googleIcon.svg'
 import TelegramIcon from '@mui/icons-material/Telegram'
 import { useSignupData } from '../../lib/hooks/useSignupData'
+import { getRouteLegal } from '@/shared/const/router'
+import { Link } from 'react-router-dom'
 
 interface SignupFormProps {
     className?: string
@@ -19,6 +21,7 @@ interface SignupFormProps {
 export const SignupForm = memo((props: SignupFormProps) => {
     const { className } = props
     const { t } = useTranslation('login')
+    const [agreeTerms, setAgreeTerms] = useState(false)
 
     const {
         email,
@@ -135,15 +138,37 @@ export const SignupForm = memo((props: SignupFormProps) => {
                             </HStack>
                         </VStack>
                     ) : (
-                        <Button
-                            variant="filled"
-                            fullWidth
-                            onClick={onSignupClick}
-                            disabled={isLoading || !email}
-                            className={cls.submitBtn}
-                        >
-                            {t('Регистрация')}
-                        </Button>
+                        <>
+                            <HStack gap="8" align="start" className={cls.agreeRow}>
+                                <input
+                                    type="checkbox"
+                                    id="agree-terms"
+                                    checked={agreeTerms}
+                                    onChange={(e) => setAgreeTerms(e.target.checked)}
+                                    className={cls.checkbox}
+                                />
+                                <label htmlFor="agree-terms" className={cls.agreeLabel}>
+                                    {t('Регистрируясь, я принимаю')}{' '}
+                                    <Link
+                                        to={getRouteLegal()}
+                                        target="_blank"
+                                        className={cls.legalLink}
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        {t('пользовательское соглашение')}
+                                    </Link>
+                                </label>
+                            </HStack>
+                            <Button
+                                variant="filled"
+                                fullWidth
+                                onClick={onSignupClick}
+                                disabled={isLoading || !email || !agreeTerms}
+                                className={cls.submitBtn}
+                            >
+                                {t('Регистрация')}
+                            </Button>
+                        </>
                     )}
                 </VStack>
 

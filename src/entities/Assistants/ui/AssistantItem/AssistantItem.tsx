@@ -9,7 +9,7 @@ import { Assistant } from '../../model/types/assistants'
 import { getRouteAssistantEdit } from '@/shared/const/router'
 import { ContentView } from '@/entities/Content'
 import { useNavigate } from 'react-router-dom'
-import { Bot, Mic, Cpu, Wrench, Terminal, User } from 'lucide-react'
+import { Bot, Mic, Cpu, BarChart3, User } from 'lucide-react'
 import { Button } from '@/shared/ui/redesigned/Button'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import { toast } from 'react-toastify'
@@ -76,7 +76,7 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
                     </HStack>
                 </HStack>
 
-                <VStack gap="16" max className={cls.detailsGrid}>
+                <VStack gap="12" max className={cls.detailsGrid}>
                     <HStack gap="12" align="center">
                         <HStack className={cls.detailIcon} align="center" justify="center">
                             <Cpu size={14} />
@@ -99,11 +99,11 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
 
                     <HStack gap="12" align="center">
                         <HStack className={cls.detailIcon} align="center" justify="center">
-                            <Wrench size={14} />
+                            <BarChart3 size={14} />
                         </HStack>
                         <VStack>
-                            <Text text={t('Инструменты')} variant="accent" size="xs" />
-                            <Text text={assistant.tools?.length ? String(assistant.tools.length) : '0'} className={cls.truncatedText} />
+                            <Text text={t('Аналитика разговора')} variant="accent" size="xs" />
+                            <Text text={assistant.analytic ? t('Да') : t('Нет')} className={cls.truncatedText} />
                         </VStack>
                     </HStack>
                 </VStack>

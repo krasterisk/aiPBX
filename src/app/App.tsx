@@ -13,6 +13,8 @@ import { Theme } from '@/shared/const/theme'
 import { useLocation } from 'react-router-dom'
 import { getRouteDocs } from '@/shared/const/router'
 
+import { OnboardingWizard } from '@/features/Onboarding'
+
 const App = (): any => {
   const userData = useSelector(getUserAuthData)
   // const toolbar = useAppToolbar()
@@ -43,11 +45,14 @@ const App = (): any => {
       <div id='app' className={classNames('app_redesigned', {}, [])}>
         {(userData && !isDocsPage)
           ? (
-            <MainLayout
-              header={<Navbar />}
-              content={<AppRouter />}
-              sidebar={<Menubar />}
-            />
+            <>
+              <MainLayout
+                header={<Navbar />}
+                content={<AppRouter />}
+                sidebar={<Menubar />}
+              />
+              <OnboardingWizard />
+            </>
           )
           : (
             <AppRouter />

@@ -51,6 +51,7 @@ export function useSignupData() {
     googleSignup({ id_token: idToken })
       .unwrap()
       .then((data) => {
+        localStorage.setItem('onboarding_is_signup', 'true')
         dispatch(userActions.setToken(data))
         navigate(getRouteAssistants())
       })
@@ -65,6 +66,7 @@ export function useSignupData() {
     telegramSignup(data)
       .unwrap()
       .then((response) => {
+        localStorage.setItem('onboarding_is_signup', 'true')
         dispatch(userActions.setToken(response))
         navigate(getRouteAssistants())
       })
@@ -109,6 +111,7 @@ export function useSignupData() {
     signupActivateUser({ email, activationCode: activationSignupCode, type: 'signup' })
       .unwrap()
       .then((data) => {
+        localStorage.setItem('onboarding_is_signup', 'true')
         dispatch(userActions.setToken(data))
         navigate(getRouteAssistants())
       })

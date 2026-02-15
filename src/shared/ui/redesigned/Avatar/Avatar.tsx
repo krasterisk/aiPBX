@@ -25,32 +25,29 @@ export const Avatar = ({
   username,
   createdAt
 }: AvatarProps) => {
-  const styles = useMemo<CSSProperties>(() => {
-    return {
-      width: size,
-      height: size
-    }
-  }, [size])
+  const wrapperStyle = useMemo<CSSProperties>(() => ({
+    '--avatar-size': `${size}px`,
+  } as CSSProperties), [size])
 
   const errorFallback = <Icon
-      width={size}
-      height={size}
-      Svg={UserIcon}
+    width={size}
+    height={size}
+    Svg={UserIcon}
   />
   const fallback = <Skeleton width={size} height={size} border={'50%'} />
 
   return (
-      <HStack gap={'8'}>
-        <AppImage
-            fallback={fallback}
-            errorFallback={errorFallback}
-            src={src}
-            alt={alt}
-            className={classNames(cls.Avatar, {}, [className])}
-            style={styles}
-        />
-        {username && <Text text={username} bold/> }
-        {createdAt && <Text text={createdAt.slice(0, 10)} size={'s'}/> }
-      </HStack>
+    <HStack gap={'8'} style={wrapperStyle}>
+      <AppImage
+        fallback={fallback}
+        errorFallback={errorFallback}
+        src={src}
+        alt={alt}
+        className={classNames(cls.Avatar, {}, [className])}
+      />
+      {username && <Text text={username} bold />}
+      {createdAt && <Text text={createdAt.slice(0, 10)} size={'s'} />}
+    </HStack>
   )
 }
+

@@ -1,0 +1,285 @@
+@import "@/app/styles/variables/mixins";
+
+// ========================================
+// WIZARD CONTAINER
+// ========================================
+
+.OnboardingWizard {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-max);
+    padding: var(--space-4);
+    display: grid;
+    place-items: center;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--glass-overlay-darker);
+    backdrop-filter: var(--glass-blur-md);
+    -webkit-backdrop-filter: var(--glass-blur-md);
+}
+
+.wizardContainer {
+    position: relative;
+    z-index: 1;
+    max-width: var(--container-width-md);
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: auto;
+    background: var(--card-bg);
+    border-radius: var(--radius-xl);
+    border: var(--glass-border-primary);
+    box-shadow: var(--shadow-xl);
+    animation: wizardAppear var(--duration-slow) var(--ease-spring);
+    @include custom-scrollbar;
+}
+
+.stickyHeader {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--card-bg);
+    padding: var(--space-4) var(--space-6) var(--space-2);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.wizardContent {
+    padding: var(--space-4) var(--space-6) var(--space-8);
+
+    @include mobile {
+        padding: var(--space-4) var(--space-4) var(--space-6);
+    }
+}
+
+@keyframes wizardAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+// ========================================
+// STEP ANIMATION WRAPPER
+// ========================================
+
+.stepWrapper {
+    animation: stepSlide var(--duration-medium) var(--ease-out);
+}
+
+@keyframes stepSlide {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+// ========================================
+// ICON CONTAINER STYLES
+// (can't be expressed via Stack props — need bg, border, etc.)
+// ========================================
+
+.featureIconBox {
+    width: var(--icon-size-2xl);
+    height: var(--icon-size-2xl);
+    border-radius: var(--radius-sm);
+    background: var(--icon-bg-secondary);
+    color: var(--accent-redesigned);
+    flex-shrink: 0;
+    transition: var(--transition-fast);
+}
+
+.publishCardIconBox {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: var(--icon-bg-secondary);
+    color: var(--accent-redesigned);
+    flex-shrink: 0;
+    transition: var(--transition-fast);
+}
+
+.nextStepIcon {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    background: var(--icon-bg-primary);
+    color: var(--accent-redesigned);
+    flex-shrink: 0;
+}
+
+.instructionNum {
+    width: var(--space-6);
+    height: var(--space-6);
+    border-radius: var(--radius-full);
+    background: var(--icon-bg-secondary);
+    color: var(--accent-redesigned);
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+// ========================================
+// ICON UTILITY CLASSES (color only)
+// ========================================
+
+.hintIcon {
+    color: var(--hint-redesigned);
+    flex-shrink: 0;
+}
+
+.checkIcon {
+    color: var(--accent-redesigned);
+    flex-shrink: 0;
+}
+
+.checkIconSuccess {
+    color: var(--status-success);
+    flex-shrink: 0;
+}
+
+.checkIconSkipped {
+    color: var(--hint-redesigned);
+    flex-shrink: 0;
+}
+
+.errorIcon {
+    color: var(--status-error);
+    flex-shrink: 0;
+}
+
+.loadingSpinnerIcon {
+    @include spin-animation;
+    flex-shrink: 0;
+    color: var(--accent-redesigned);
+}
+
+// (featureList removed — WelcomeStep simplified)
+
+// ========================================
+// BUSINESS FEATURES BLOCK
+// ========================================
+
+.featuresBlock {
+    max-width: 420px;
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    background: var(--icon-bg-primary);
+    border: var(--glass-border-accent);
+    animation: stepSlide var(--duration-medium) var(--ease-out);
+}
+
+// ========================================
+// CUSTOM DESCRIPTION BLOCK
+// ========================================
+
+.customBlock {
+    max-width: 480px;
+    animation: stepSlide var(--duration-medium) var(--ease-out);
+}
+
+// ========================================
+// LOADING & ERROR BLOCKS
+// ========================================
+
+.loadingBlock {
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--icon-bg-primary);
+    border: var(--glass-border-accent);
+    animation: stepSlide var(--duration-medium) var(--ease-out);
+}
+
+// ========================================
+// TELEGRAM STEP
+// ========================================
+
+.telegramLayout {
+    @include tablet {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.connectedBanner {
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    background: var(--status-success-bg);
+    border: 1px solid var(--status-success-border);
+    animation: stepSlide var(--duration-medium) var(--ease-out);
+}
+
+.botLink {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--accent-redesigned);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition-fast);
+
+    &:hover {
+        text-decoration: underline;
+        filter: brightness(1.2);
+    }
+}
+
+// ========================================
+// PUBLISH STEP
+// ========================================
+
+.publishCard {
+    @include glass-card-tertiary;
+    padding: var(--space-4) var(--space-5);
+    transition: var(--transition-normal);
+
+    &:hover {
+        border-color: var(--glass-border-accent);
+        background: var(--glass-overlay-medium);
+
+        .publishCardIconBox {
+            background: var(--icon-bg-accent);
+            box-shadow: var(--shadow-accent-sm);
+        }
+    }
+}
+
+// ========================================
+// COMPLETION STEP
+// ========================================
+
+.completionChecklist {
+    max-width: 400px;
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    background: var(--glass-overlay-light);
+    border: var(--glass-border-subtle);
+}
+
+.completionActions {
+    max-width: 480px;
+}
+
+// ========================================
+// SKIP LINK (uses Button clear, just opacity)
+// ========================================
+
+.skipLink {
+    opacity: 0.7;
+    transition: opacity var(--duration-normal) var(--ease-in-out);
+
+    &:hover {
+        opacity: 1;
+    }
+}

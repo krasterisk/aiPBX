@@ -59,17 +59,11 @@
 }
 
 .avatar {
-    width: 48px;
-    height: 48px;
-    min-width: 48px;
-    background: rgba(94, 211, 243, 0.2);
     border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--accent-redesigned);
-    transition: transform 0.3s ease;
     flex-shrink: 0;
+    overflow: hidden;
+    object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
 .title {
