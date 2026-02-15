@@ -1,0 +1,213 @@
+@import '@/app/styles/variables/mixins';
+
+.modalBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    outline: none;
+}
+
+.modalContent {
+    @include glass-card-primary;
+    padding: var(--card-padding-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    flex-shrink: 0;
+}
+
+.toolSlug {
+    font-family: 'JetBrains Mono', monospace;
+    opacity: 0.7;
+    font-size: var(--font-size-xs);
+}
+
+.closeBtn {
+    @include interactive-element;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-normal);
+
+    &:hover {
+        color: var(--text-primary);
+        background: var(--glass-bg-secondary);
+    }
+}
+
+.modeBtn {
+    @include interactive-element;
+    background: none;
+    border: 1px solid var(--glass-border-color, rgba(255, 255, 255, 0.1));
+    color: var(--text-secondary);
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-normal);
+
+    &.active {
+        background: rgba(94, 211, 243, 0.1);
+        border-color: rgba(94, 211, 243, 0.3);
+        color: var(--accent-redesigned);
+    }
+}
+
+.scrollArea {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 100px;
+    max-height: 40vh;
+    padding-right: 4px;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+    }
+}
+
+.fieldLabel {
+    color: var(--text-primary);
+}
+
+.reqMark {
+    color: #ef4444;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.typeBadge {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: rgba(94, 211, 243, 0.1);
+    color: var(--accent-redesigned);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.fieldDesc {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.inputField {
+    width: 100%;
+}
+
+.selectField {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--glass-bg-tertiary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: var(--font-size-s);
+    outline: none;
+    transition: var(--transition-normal);
+
+    &:focus {
+        border-color: rgba(94, 211, 243, 0.4);
+    }
+
+    option {
+        background: var(--bg-primary, #1a1a2e);
+        color: var(--text-primary);
+    }
+}
+
+.jsonTextarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 12px;
+    background: var(--glass-bg-tertiary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--font-size-s);
+    resize: vertical;
+    outline: none;
+    transition: var(--transition-normal);
+
+    &:focus {
+        border-color: rgba(94, 211, 243, 0.4);
+    }
+}
+
+.hint {
+    color: var(--text-secondary);
+    opacity: 0.6;
+    font-style: italic;
+}
+
+// ─── Result Section ────────────────────────────
+
+.resultSection {
+    flex-shrink: 0;
+}
+
+.resultBlock {
+    width: 100%;
+    max-height: 200px;
+    overflow: auto;
+    padding: 12px;
+    background: rgba(34, 197, 94, 0.05);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--font-size-xs);
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin: 0;
+
+    &.errorResult {
+        background: rgba(239, 68, 68, 0.05);
+        border-color: rgba(239, 68, 68, 0.2);
+    }
+}
+
+.successIcon {
+    color: #22c55e;
+}
+
+.errorIcon {
+    color: #ef4444;
+}
+
+// ─── Actions ───────────────────────────────────
+
+.actions {
+    flex-shrink: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: var(--space-3);
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

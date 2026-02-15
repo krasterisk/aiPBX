@@ -33,6 +33,31 @@
     flex-shrink: 0;
 }
 
+.composioAvatar {
+    background: rgba(124, 58, 237, 0.15);
+
+    svg {
+        color: var(--accent-primary);
+    }
+}
+
+.composioBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: rgba(124, 58, 237, 0.15);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: var(--radius-sm);
+    color: #a78bfa;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+
+    svg {
+        flex-shrink: 0;
+    }
+}
+
 .title {
     color: var(--text-redesigned);
     font-family: 'Outfit', sans-serif;

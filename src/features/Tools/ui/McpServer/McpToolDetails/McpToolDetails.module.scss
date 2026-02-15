@@ -1,61 +1,175 @@
 .McpToolDetails {
+    position: relative;
     width: 100%;
-    padding: 16px;
-    background: var(--glass-bg-tertiary);
-    border-radius: 12px;
-    border: var(--glass-border-subtle);
+    padding: 24px;
 }
 
-.label {
-    color: var(--hint-redesigned);
-}
-
-.schemaBlock {
-    width: 100%;
-    padding: 12px;
-    background: var(--code-bg);
+.closeBtn {
+    position: sticky;
+    top: 8px;
+    align-self: flex-end;
+    margin-bottom: -32px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    font-size: 12px;
-    overflow-x: auto;
+    color: var(--hint-redesigned);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-redesigned);
+    }
+}
+
+.toolTitle {
+    word-break: break-word;
+    padding-right: 36px;
+}
+
+.description {
+    color: var(--hint-redesigned);
     white-space: pre-wrap;
     word-break: break-word;
-    color: var(--text-redesigned);
     line-height: 1.5;
-    max-height: 300px;
-    overflow-y: auto;
 }
 
-.metaRow {
+/* ─── Status ─────────────────────────────────── */
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--hint-redesigned);
+    flex-shrink: 0;
+}
+
+.statusDotEnabled {
+    background: #22c55e;
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.4);
+}
+
+.statusText {
     font-size: 12px;
-    color: var(--hint-redesigned);
+    color: var(--text-redesigned);
 }
 
-.statusEnabled {
-    color: var(--save-redesigned);
+.metaText {
+    font-size: 11px;
+    color: var(--hint-redesigned);
+    margin-left: auto;
 }
 
-.statusDisabled {
+/* ─── Parameters List ────────────────────────── */
+
+.sectionLabel {
     color: var(--hint-redesigned);
+    font-size: 12px !important;
+    font-weight: 500;
 }
+
+.paramsList {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 4px;
+
+    &::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+    }
+}
+
+.paramItem {
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    transition: background 0.15s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.06);
+    }
+}
+
+.paramHeader {
+    gap: 6px;
+}
+
+.paramTypeIcon {
+    color: var(--accent-redesigned);
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.paramName {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-redesigned);
+}
+
+.paramType {
+    font-size: 10px;
+    color: var(--hint-redesigned);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.paramRequired {
+    display: inline-flex;
+    align-items: center;
+    color: #f59e0b;
+    flex-shrink: 0;
+}
+
+.paramDesc {
+    margin: 4px 0 0 22px;
+    font-size: 11px;
+    color: var(--hint-redesigned);
+    line-height: 1.4;
+}
+
+.paramEnum {
+    margin: 2px 0 0 22px;
+    font-size: 10px;
+    color: var(--accent-redesigned);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    opacity: 0.8;
+}
+
+/* ─── Divider ────────────────────────────────── */
 
 .sectionDivider {
     width: 100%;
     height: 1px;
-    background: var(--glass-overlay-medium);
+    background: rgba(255, 255, 255, 0.06);
     margin: 4px 0;
 }
 
-.tooltipIcon {
-    display: inline-flex;
-    align-items: center;
-    color: var(--hint-redesigned);
-    cursor: help;
-    opacity: 0.7;
-    transition: opacity 0.2s ease;
+/* ─── Test Button ────────────────────────────── */
+
+.testBtn {
+    flex-shrink: 0;
+    border-color: rgba(124, 58, 237, 0.4) !important;
+    color: #a78bfa !important;
 
     &:hover {
-        opacity: 1;
-        color: var(--accent-redesigned);
+        background: rgba(124, 58, 237, 0.1) !important;
     }
 }

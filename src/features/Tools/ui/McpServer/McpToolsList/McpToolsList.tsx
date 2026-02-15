@@ -5,7 +5,7 @@ import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Check } from '@/shared/ui/mui/Check'
-import { McpTool, useGetMcpServerTools, useToggleMcpTool } from '@/entities/Mcp'
+import { McpTool, useGetMcpServerTools, useToggleMcpTool, useBulkToggleMcpTools } from '@/entities/Mcp'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './McpToolsList.module.scss'
@@ -23,6 +23,7 @@ export const McpToolsList = memo((props: McpToolsListProps) => {
 
     const { data: tools, isLoading } = useGetMcpServerTools(serverId)
     const [toggleTool] = useToggleMcpTool()
+    const [bulkToggle, { isLoading: bulkLoading }] = useBulkToggleMcpTools()
     const [filter, setFilter] = useState('')
 
     const filteredTools = useMemo(() => {
@@ -35,6 +36,16 @@ export const McpToolsList = memo((props: McpToolsListProps) => {
         )
     }, [tools, filter])
 
+    const allEnabled = useMemo(
+        () => filteredTools.length > 0 && filteredTools.every(t => t.isEnabled),
+        [filteredTools],
+    )
+
+    const someEnabled = useMemo(
+        () => filteredTools.some(t => t.isEnabled) && !allEnabled,
+        [filteredTools, allEnabled],
+    )
+
     const onToggle = useCallback(async (e: React.ChangeEvent<HTMLInputElement>, tool: McpTool) => {
         e.stopPropagation()
         try {
@@ -43,6 +54,18 @@ export const McpToolsList = memo((props: McpToolsListProps) => {
             toast.error(getErrorMessage(err))
         }
     }, [toggleTool])
+
+    const onToggleAll = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.stopPropagation()
+        if (!filteredTools.length) return
+
+        const newEnabled = !allEnabled
+        try {
+            await bulkToggle({ serverId, enabled: newEnabled }).unwrap()
+        } catch (err) {
+            toast.error(getErrorMessage(err))
+        }
+    }, [filteredTools, allEnabled, bulkToggle, serverId])
 
     if (isLoading) {
         return (
@@ -65,18 +88,32 @@ export const McpToolsList = memo((props: McpToolsListProps) => {
     }
 
     return (
-        <VStack gap="12" max className={classNames(cls.McpToolsList, {}, [className])}>
+        <VStack gap="4" max className={classNames(cls.McpToolsList, {}, [className])}>
 
-            {/* Filter */}
-            {tools.length > 5 && (
-                <Textarea
-                    placeholder={t('Поиск tools...') ?? ''}
-                    value={filter}
-                    onChange={(e) => setFilter(e.target.value)}
-                    className={cls.searchInput}
-                    size="small"
-                />
-            )}
+            {/* Filter + Check All */}
+            <HStack gap="8" max align="center" justify="between" className={cls.toolbar}>
+                {tools.length > 5 && (
+                    <Textarea
+                        placeholder={t('Поиск tools...') ?? ''}
+                        value={filter}
+                        onChange={(e) => setFilter(e.target.value)}
+                        className={cls.searchInput}
+                        size="small"
+                    />
+                )}
+                <div
+                    className={cls.checkAllRow}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <Check
+                        checked={allEnabled}
+                        indeterminate={someEnabled}
+                        onChange={onToggleAll}
+                        disabled={bulkLoading}
+                        className={cls.toggleSwitch}
+                    />
+                </div>
+            </HStack>
 
             {/* Tools list */}
             {filteredTools.map(tool => (
@@ -90,17 +127,19 @@ export const McpToolsList = memo((props: McpToolsListProps) => {
                     })}
                     onClick={() => onSelectTool?.(tool)}
                 >
-                    <VStack gap="4" max>
-                        <Text text={tool.name} size="s" className={cls.toolName} />
-                        {tool.description && (
-                            <Text text={tool.description} size="s" className={cls.toolDescription} />
+                    <HStack gap="4" align="center" className={cls.toolNameRow}>
+                        <Text text={tool.name} size="s" bold className={cls.toolName} />
+                        {tool.name.startsWith('composio_') && (
+                            <span className={cls.composioBadge}>Composio</span>
                         )}
-                    </VStack>
-                    <Check
-                        checked={tool.isEnabled}
-                        onChange={(e) => onToggle(e, tool)}
-                        className={cls.toggleSwitch}
-                    />
+                    </HStack>
+                    <div onClick={(e) => e.stopPropagation()}>
+                        <Check
+                            checked={tool.isEnabled}
+                            onChange={(e) => onToggle(e, tool)}
+                            className={cls.toggleSwitch}
+                        />
+                    </div>
                 </HStack>
             ))}
         </VStack>

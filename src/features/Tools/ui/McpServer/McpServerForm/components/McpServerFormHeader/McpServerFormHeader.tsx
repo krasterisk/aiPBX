@@ -15,6 +15,7 @@ interface McpServerFormHeaderProps {
     onDelete?: () => void
     isLoading?: boolean
     variant?: 'diviner-top' | 'diviner-bottom'
+    hideActions?: boolean
 }
 
 export const McpServerFormHeader = memo((props: McpServerFormHeaderProps) => {
@@ -26,7 +27,8 @@ export const McpServerFormHeader = memo((props: McpServerFormHeaderProps) => {
         onClose,
         onDelete,
         isLoading,
-        variant = 'diviner-top'
+        variant = 'diviner-top',
+        hideActions
     } = props
 
     const { t } = useTranslation('tools')
@@ -50,7 +52,7 @@ export const McpServerFormHeader = memo((props: McpServerFormHeaderProps) => {
             <HStack gap="8" className={cls.actions}>
                 {isEdit && onDelete && (
                     <Button
-                        variant="clear"
+                        variant="glass-action"
                         color="error"
                         onClick={onDelete}
                         disabled={isLoading}
@@ -60,19 +62,21 @@ export const McpServerFormHeader = memo((props: McpServerFormHeaderProps) => {
                 )}
 
                 <Button
-                    variant="clear"
+                    variant="glass-action"
                     onClick={onClose}
                     disabled={isLoading}
                 >
                     {t('Закрыть')}
                 </Button>
-                <Button
-                    variant="outline"
-                    onClick={onSave}
-                    disabled={isLoading}
-                >
-                    {isEdit ? t('Сохранить') : t('Создать')}
-                </Button>
+                {!hideActions && (
+                    <Button
+                        variant="glass-action"
+                        onClick={onSave}
+                        disabled={isLoading}
+                    >
+                        {isEdit ? t('Сохранить') : t('Создать')}
+                    </Button>
+                )}
             </HStack>
         </HStack>
     )

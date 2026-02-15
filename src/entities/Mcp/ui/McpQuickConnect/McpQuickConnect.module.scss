@@ -40,6 +40,38 @@
         pointer-events: none;
         opacity: 0.6;
     }
+
+    &.connected {
+        cursor: default;
+        opacity: 0.85;
+    }
+}
+
+.iconWithStatus {
+    position: relative;
+    display: inline-flex;
+}
+
+.connectedDot {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    color: #22c55e;
+    background: var(--bg-primary, #1a1a2e);
+    border-radius: 50%;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .quickIcon {
@@ -66,6 +98,10 @@
         color: #0078D4;
     }
 
+    &.outlook_calendar svg {
+        color: #0078D4;
+    }
+
     &.telegram svg {
         color: #26A5E4;
     }
@@ -76,6 +112,10 @@
 
     &.slack svg {
         color: #4A154B;
+    }
+
+    &.bitrix24 svg {
+        color: #2FC7F7;
     }
 
     // Brand glow on hover
@@ -91,6 +131,10 @@
         box-shadow: 0 0 12px rgba(0, 120, 212, 0.25);
     }
 
+    .quickItem:hover &.outlook_calendar {
+        box-shadow: 0 0 12px rgba(0, 120, 212, 0.25);
+    }
+
     .quickItem:hover &.telegram {
         box-shadow: 0 0 12px rgba(38, 165, 228, 0.25);
     }
@@ -102,6 +146,10 @@
     .quickItem:hover &.slack {
         box-shadow: 0 0 12px rgba(74, 21, 75, 0.25);
     }
+
+    .quickItem:hover &.bitrix24 {
+        box-shadow: 0 0 12px rgba(47, 199, 247, 0.25);
+    }
 }
 
 .quickName {
@@ -112,5 +160,27 @@
 
     .quickItem:hover & {
         color: var(--text-primary);
+    }
+}
+
+// ─── API Key Dialog ────────────────────────────────────
+
+.spinner {
+    @include spin-animation;
+}
+
+.botLink {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--accent-redesigned);
+    font-weight: 600;
+    font-size: var(--font-size-m);
+    text-decoration: none;
+    transition: var(--transition-normal);
+
+    &:hover {
+        filter: brightness(1.2);
+        text-decoration: underline;
     }
 }

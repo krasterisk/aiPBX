@@ -12,7 +12,9 @@ import {
     useMcpServersAll,
     useCreateMcpServer,
     useUpdateMcpServer,
-    useDeleteMcpServer
+    useDeleteMcpServer,
+    useDeleteComposioConnection,
+    useSyncMcpTools,
 } from '@/entities/Mcp'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { getRouteMcpServers } from '@/shared/const/router'
@@ -21,6 +23,7 @@ import { McpServerFormHeader } from './components/McpServerFormHeader/McpServerF
 import { GeneralMcpServerCard } from './components/GeneralMcpServerCard/GeneralMcpServerCard'
 import { ConnectionMcpServerCard } from './components/ConnectionMcpServerCard/ConnectionMcpServerCard'
 import { McpToolsCard } from './components/McpToolsCard/McpToolsCard'
+import { ComposioInfoCard } from './components/ComposioInfoCard/ComposioInfoCard'
 import cls from './McpServerForm.module.scss'
 
 interface HeaderEntry {
@@ -52,9 +55,13 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
         [servers, serverId]
     )
 
+    const isComposio = !!server?.composioToolkit
+
     const [createMcpServer, { isLoading: isCreating }] = useCreateMcpServer()
     const [updateMcpServer, { isLoading: isUpdating }] = useUpdateMcpServer()
     const [deleteMcpServer, { isLoading: isDeleting }] = useDeleteMcpServer()
+    const [deleteComposioConnection] = useDeleteComposioConnection()
+    const [syncTools, { isLoading: isSyncing }] = useSyncMcpTools()
     const isSaving = isCreating || isUpdating || isDeleting
 
     // Form state
@@ -158,16 +165,32 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
 
     const onDelete = useCallback(async () => {
         if (!server) return
-        if (!window.confirm(t('Вы уверены, что хотите удалить MCP сервер?') || '')) return
+        const confirmMsg = isComposio
+            ? t('composio_disconnect_confirm')
+            : t('Вы уверены, что хотите удалить MCP сервер?')
+        if (!window.confirm(confirmMsg || '')) return
 
         try {
+            if (isComposio && server.composioAccountId) {
+                await deleteComposioConnection(server.composioAccountId).unwrap()
+            }
             await deleteMcpServer(server.id).unwrap()
             toast.success(t('MCP сервер удалён'))
             navigate(getRouteMcpServers())
         } catch (e) {
             toast.error(getErrorMessage(e))
         }
-    }, [deleteMcpServer, server, navigate, t])
+    }, [deleteMcpServer, deleteComposioConnection, server, navigate, t, isComposio])
+
+    const onResync = useCallback(async () => {
+        if (!server) return
+        try {
+            const tools = await syncTools(server.id).unwrap()
+            toast.success(t('Синхронизировано tools: {{count}}', { count: tools.length }))
+        } catch (e) {
+            toast.error(getErrorMessage(e))
+        }
+    }, [server, syncTools, t])
 
     const onClose = useCallback(() => {
         navigate(getRouteMcpServers())
@@ -181,6 +204,47 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
         )
     }
 
+    // ─── Composio Read-Only View ─────────────────────────
+    if (isEdit && isComposio && server) {
+        return (
+            <VStack gap="16" max className={classNames(cls.McpServerForm, {}, [className])}>
+                <McpServerFormHeader
+                    onSave={onSave}
+                    onClose={onClose}
+                    onDelete={onDelete}
+                    isEdit={isEdit}
+                    isLoading={isSaving}
+                    serverName={name}
+                    hideActions
+                />
+
+                <HStack
+                    gap={isMobile ? '16' : '24'}
+                    max
+                    align="start"
+                    wrap="wrap"
+                    className={cls.contentWrapper}
+                >
+                    <VStack gap="24" max className={cls.leftColumn}>
+                        <ComposioInfoCard
+                            server={server}
+                            isSyncing={isSyncing}
+                            onResync={onResync}
+                        />
+                    </VStack>
+
+                    <VStack gap="24" max className={cls.rightColumn}>
+                        <McpToolsCard
+                            serverId={server.id}
+                            serverStatus={server.status}
+                        />
+                    </VStack>
+                </HStack>
+            </VStack>
+        )
+    }
+
+    // ─── Regular MCP Server Form ─────────────────────────
     return (
         <VStack gap="16" max className={classNames(cls.McpServerForm, {}, [className])}>
             <McpServerFormHeader
@@ -199,7 +263,7 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
                 wrap="wrap"
                 className={cls.contentWrapper}
             >
-                {/* Left Column — General + Auth (single card) */}
+                {/* Left Column — General + Auth */}
                 <VStack gap="24" max className={cls.leftColumn}>
                     <GeneralMcpServerCard
                         name={name}
@@ -224,16 +288,19 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
                     />
                 </VStack>
 
-                {/* Right Column — Connection + Tools (edit mode only) */}
-                {isEdit && server && (
-                    <VStack gap="24" max className={cls.rightColumn}>
-                        <ConnectionMcpServerCard server={server} />
+                {/* Right Column — Connection (always) + Tools (edit mode only) */}
+                <VStack gap="24" max className={cls.rightColumn}>
+                    <ConnectionMcpServerCard
+                        server={isEdit ? server : undefined}
+                        url={url}
+                    />
+                    {isEdit && server && (
                         <McpToolsCard
                             serverId={server.id}
                             serverStatus={server.status}
                         />
-                    </VStack>
-                )}
+                    )}
+                </VStack>
             </HStack>
 
             <McpServerFormHeader

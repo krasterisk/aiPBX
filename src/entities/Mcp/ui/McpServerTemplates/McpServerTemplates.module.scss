@@ -28,15 +28,94 @@
     cursor: pointer;
     text-align: center;
     min-height: 160px;
+    position: relative;
+    transition: var(--transition-normal);
 
     &.loading {
         pointer-events: none;
         opacity: 0.6;
     }
 
+    &.connected {
+        border-color: rgba(34, 197, 94, 0.3);
+        cursor: default;
+
+        &:hover {
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+    }
+
     @include mobile {
         padding: var(--card-padding-sm);
         min-height: 130px;
+    }
+}
+
+.connectedBadge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: var(--border-radius-sm);
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    animation: fadeIn 0.3s ease;
+
+    svg {
+        flex-shrink: 0;
+    }
+}
+
+.disconnectBtn {
+    @include chip-base;
+    margin-top: var(--space-1);
+    cursor: pointer;
+    border: none;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-normal);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    &:hover {
+        background: rgba(239, 68, 68, 0.2);
+        color: #dc2626;
+    }
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -66,6 +145,10 @@
         color: #0078D4;
     }
 
+    &.outlook_calendar svg {
+        color: #0078D4;
+    }
+
     &.telegram svg {
         color: #26A5E4;
     }
@@ -76,6 +159,10 @@
 
     &.slack svg {
         color: #4A154B;
+    }
+
+    &.bitrix24 svg {
+        color: #2FC7F7;
     }
 
     // Brand glow on hover of the parent card
@@ -91,6 +178,10 @@
         box-shadow: 0 0 16px rgba(0, 120, 212, 0.3);
     }
 
+    .templateCard:hover &.outlook_calendar {
+        box-shadow: 0 0 16px rgba(0, 120, 212, 0.3);
+    }
+
     .templateCard:hover &.telegram {
         box-shadow: 0 0 16px rgba(38, 165, 228, 0.3);
     }
@@ -101,6 +192,10 @@
 
     .templateCard:hover &.slack {
         box-shadow: 0 0 16px rgba(74, 21, 75, 0.3);
+    }
+
+    .templateCard:hover &.bitrix24 {
+        box-shadow: 0 0 16px rgba(47, 199, 247, 0.3);
     }
 }
 
@@ -122,5 +217,96 @@
 
     .templateCard:hover & {
         color: var(--accent-primary);
+    }
+}
+
+// ─── API Key Badge ─────────────────────────────────────
+
+.apiKeyBadge {
+    font-size: 10px;
+    color: var(--hint-redesigned);
+    opacity: 0.7;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+// ─── API Key Dialog ────────────────────────────────────
+
+.spinner {
+    @include spin-animation;
+}
+
+.botLink {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--accent-redesigned);
+    font-weight: 600;
+    font-size: var(--font-size-m);
+    text-decoration: none;
+    transition: var(--transition-normal);
+
+    &:hover {
+        filter: brightness(1.2);
+        text-decoration: underline;
+    }
+}
+
+.apiKeyOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--modal-z-index);
+    @include flex-center;
+    background: var(--glass-overlay-darker);
+    backdrop-filter: var(--glass-blur-sm);
+    -webkit-backdrop-filter: var(--glass-blur-sm);
+    animation: fadeIn var(--duration-normal) var(--ease-out);
+}
+
+.apiKeyModal {
+    @include glass-card-primary;
+    background: var(--light-bg-redesigned);
+    padding: var(--card-padding-lg);
+    min-width: 400px;
+    max-width: 500px;
+    box-shadow: var(--shadow-xl);
+
+    @include mobile {
+        min-width: auto;
+        width: 95%;
+        padding: var(--card-padding-md);
+    }
+}
+
+.apiKeyHint {
+    color: var(--hint-redesigned);
+    line-height: 1.5;
+}
+
+.apiKeyInput {
+    @include input-base;
+    font-family: 'Fira Code', 'Roboto Mono', monospace;
+}
+
+.cancelBtn {
+    @include button-outline;
+    padding: var(--button-padding-sm);
+    font-size: var(--font-size-s);
+}
+
+.submitBtn {
+    @include button-base;
+    padding: var(--button-padding-sm);
+    background: var(--accent-redesigned);
+    color: #fff;
+    font-size: var(--font-size-s);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+
+    &:hover:not(:disabled) {
+        filter: brightness(1.1);
+        transform: var(--hover-scale-sm);
     }
 }

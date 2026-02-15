@@ -1,12 +1,15 @@
 import { Mail, Calendar, Send, MessageCircle, Hash, type LucideIcon } from 'lucide-react'
+import { Bitrix24Icon } from '@/shared/ui/icons/Bitrix24Icon'
+import { type ComponentType } from 'react'
 
 export interface McpServerTemplate {
     id: string
     toolkit: string
     nameKey: string
     descriptionKey: string
-    Icon: LucideIcon
+    Icon: LucideIcon | ComponentType<{ size?: number }>
     colorClass: string
+    authType: 'oauth' | 'api_key' | 'chat_id' | 'webhook'
 }
 
 export const mcpServerTemplates: McpServerTemplate[] = [
@@ -17,6 +20,7 @@ export const mcpServerTemplates: McpServerTemplate[] = [
         descriptionKey: 'template_gmail_desc',
         Icon: Mail,
         colorClass: 'gmail',
+        authType: 'oauth',
     },
     {
         id: 'google_calendar',
@@ -25,14 +29,25 @@ export const mcpServerTemplates: McpServerTemplate[] = [
         descriptionKey: 'template_google_calendar_desc',
         Icon: Calendar,
         colorClass: 'google_calendar',
+        authType: 'oauth',
     },
     {
-        id: 'outlook_mail',
+        id: 'outlook',
         toolkit: 'outlook',
-        nameKey: 'template_outlook_mail',
-        descriptionKey: 'template_outlook_mail_desc',
+        nameKey: 'template_outlook',
+        descriptionKey: 'template_outlook_desc',
         Icon: Mail,
         colorClass: 'outlook',
+        authType: 'oauth',
+    },
+    {
+        id: 'bitrix24',
+        toolkit: 'bitrix24',
+        nameKey: 'template_bitrix24',
+        descriptionKey: 'template_bitrix24_desc',
+        Icon: Bitrix24Icon,
+        colorClass: 'bitrix24',
+        authType: 'webhook',
     },
     {
         id: 'telegram',
@@ -41,6 +56,7 @@ export const mcpServerTemplates: McpServerTemplate[] = [
         descriptionKey: 'template_telegram_desc',
         Icon: Send,
         colorClass: 'telegram',
+        authType: 'chat_id',
     },
     {
         id: 'whatsapp',
@@ -49,6 +65,7 @@ export const mcpServerTemplates: McpServerTemplate[] = [
         descriptionKey: 'template_whatsapp_desc',
         Icon: MessageCircle,
         colorClass: 'whatsapp',
+        authType: 'api_key',
     },
     {
         id: 'slack',
@@ -57,5 +74,6 @@ export const mcpServerTemplates: McpServerTemplate[] = [
         descriptionKey: 'template_slack_desc',
         Icon: Hash,
         colorClass: 'slack',
+        authType: 'oauth',
     },
 ]

@@ -135,7 +135,7 @@ export const AuthMcpServerCard = memo((props: AuthMcpServerCardProps) => {
                                     />
                                 </HStack>
                                 <Button
-                                    variant="clear"
+                                    variant="glass-action"
                                     square
                                     size="s"
                                     className={cls.removeBtn}
@@ -146,7 +146,7 @@ export const AuthMcpServerCard = memo((props: AuthMcpServerCardProps) => {
                             </HStack>
                         ))}
                         <Button
-                            variant="clear"
+                            variant="glass-action"
                             size="s"
                             className={cls.addBtn}
                             onClick={onAddHeader}

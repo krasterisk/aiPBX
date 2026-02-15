@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
+import { Modal } from '@/shared/ui/redesigned/Modal'
 import { Tooltip } from '@mui/material'
 import { Info } from 'lucide-react'
 import { McpTool } from '@/entities/Mcp'
@@ -24,7 +25,11 @@ export const McpToolsCard = memo((props: McpToolsCardProps) => {
     const [selectedTool, setSelectedTool] = useState<McpTool | null>(null)
 
     const onSelectTool = useCallback((tool: McpTool) => {
-        setSelectedTool(prev => prev?.id === tool.id ? null : tool)
+        setSelectedTool(tool)
+    }, [])
+
+    const onCloseModal = useCallback(() => {
+        setSelectedTool(null)
     }, [])
 
     return (
@@ -49,22 +54,29 @@ export const McpToolsCard = memo((props: McpToolsCardProps) => {
                     </Tooltip>
                 </HStack>
 
-                {/* Tools list */}
+                {/* Tools list — names only */}
                 <McpToolsList
                     serverId={serverId}
                     selectedToolId={selectedTool?.id}
                     onSelectTool={onSelectTool}
                     className={cls.fullWidth}
                 />
-
-                {/* Selected tool details */}
-                {selectedTool && (
-                    <VStack gap="16" max className={cls.detailsSection}>
-                        <div className={cls.divider} />
-                        <McpToolDetails tool={selectedTool} />
-                    </VStack>
-                )}
             </VStack>
+
+            {/* Tool details modal */}
+            <Modal
+                isOpen={!!selectedTool}
+                onClose={onCloseModal}
+                lazy
+                contentClassName={cls.modalContent}
+            >
+                {selectedTool && (
+                    <McpToolDetails
+                        tool={selectedTool}
+                        onClose={onCloseModal}
+                    />
+                )}
+            </Modal>
         </Card>
     )
 })

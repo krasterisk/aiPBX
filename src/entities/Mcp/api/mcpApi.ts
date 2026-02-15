@@ -7,7 +7,11 @@ import {
     McpCallLog,
     CreateMcpServerDto,
     UpdateMcpServerDto,
-    CreateMcpPolicyDto
+    CreateMcpPolicyDto,
+    ComposioTemplate,
+    ComposioConnectionStatus,
+    ComposioConnection,
+    ComposioAction
 } from '../model/types/mcpTypes'
 
 export interface McpQueryArgs {
@@ -83,7 +87,7 @@ export const mcpApi = rtkApi.injectEndpoints({
         }),
         deleteMcpServer: build.mutation<void, number>({
             query: (id) => ({ url: `/mcp/servers/${id}`, method: 'DELETE' }),
-            invalidatesTags: [{ type: 'McpServers', id: 'LIST' }],
+            invalidatesTags: [{ type: 'McpServers', id: 'LIST' }, 'ComposioConnections'],
         }),
 
         // ─── Server Connection ───────────────────────────────
@@ -97,8 +101,60 @@ export const mcpApi = rtkApi.injectEndpoints({
         }),
 
         // ─── Composio Integration ────────────────────────────
-        composioConnect: build.mutation<{ redirectUrl: string }, { toolkit: string }>({
+        composioConnect: build.mutation<{ redirectUrl: string; connectedAccountId: string }, { toolkit: string }>({
             query: (body) => ({ url: '/mcp/composio/connect', method: 'POST', body }),
+            invalidatesTags: [{ type: 'McpServers', id: 'LIST' }, 'ComposioConnections'],
+        }),
+        composioConnectApiKey: build.mutation<any, { toolkit: string; apiKey?: string; chatId?: string }>({
+            query: (body) => ({ url: '/mcp/composio/connect-apikey', method: 'POST', body }),
+            invalidatesTags: [{ type: 'McpServers', id: 'LIST' }, 'ComposioConnections'],
+        }),
+
+        // ─── Bitrix24 Integration ────────────────────────────
+        bitrix24Connect: build.mutation<any, { webhookUrl: string }>({
+            query: (body) => ({ url: '/mcp/bitrix24/connect', method: 'POST', body }),
+            invalidatesTags: [{ type: 'McpServers', id: 'LIST' }, 'ComposioConnections'],
+        }),
+
+        getComposioTemplates: build.query<ComposioTemplate[], void>({
+            query: () => '/mcp/composio/templates',
+        }),
+
+        getComposioStatus: build.query<ComposioConnectionStatus[], void>({
+            query: () => '/mcp/composio/status',
+            providesTags: ['ComposioConnections'],
+        }),
+
+        getComposioConnections: build.query<ComposioConnection[], string | void>({
+            query: (toolkit) => ({
+                url: '/mcp/composio/connections',
+                params: toolkit ? { toolkit } : {},
+            }),
+            providesTags: ['ComposioConnections'],
+        }),
+
+        deleteComposioConnection: build.mutation<{ deleted: true }, string>({
+            query: (id) => ({
+                url: `/mcp/composio/connections/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['ComposioConnections', { type: 'McpServers', id: 'LIST' }],
+        }),
+
+        getComposioActions: build.query<ComposioAction[], string>({
+            query: (toolkit) => `/mcp/composio/actions/${toolkit}`,
+            providesTags: ['ComposioActions'],
+        }),
+
+        executeComposioAction: build.mutation<
+            { result: string },
+            { toolSlug: string; arguments: Record<string, any> }
+        >({
+            query: (body) => ({
+                url: '/mcp/composio/execute',
+                method: 'POST',
+                body,
+            }),
         }),
 
         // ─── Tools ─────────────────────────────────────────
@@ -112,6 +168,14 @@ export const mcpApi = rtkApi.injectEndpoints({
         }),
         toggleMcpTool: build.mutation<McpTool, number>({
             query: (toolId) => ({ url: `/mcp/tools/${toolId}/toggle`, method: 'PATCH' }),
+            invalidatesTags: ['McpTools'],
+        }),
+        bulkToggleMcpTools: build.mutation<{ updated: number }, { serverId: number; enabled: boolean }>({
+            query: ({ serverId, enabled }) => ({
+                url: `/mcp/servers/${serverId}/tools/toggle-all`,
+                method: 'PATCH',
+                body: { enabled },
+            }),
             invalidatesTags: ['McpTools'],
         }),
 
@@ -152,8 +216,17 @@ export const useDisconnectMcpServer = mcpApi.useDisconnectMcpServerMutation
 export const useSyncMcpTools = mcpApi.useSyncMcpToolsMutation
 export const useGetMcpServerTools = mcpApi.useGetMcpServerToolsQuery
 export const useToggleMcpTool = mcpApi.useToggleMcpToolMutation
+export const useBulkToggleMcpTools = mcpApi.useBulkToggleMcpToolsMutation
 export const useCreateMcpToolPolicy = mcpApi.useCreateMcpToolPolicyMutation
 export const useGetMcpToolPolicies = mcpApi.useGetMcpToolPoliciesQuery
 export const useDeleteMcpToolPolicy = mcpApi.useDeleteMcpToolPolicyMutation
 export const useGetMcpLogs = mcpApi.useGetMcpLogsQuery
 export const useComposioConnect = mcpApi.useComposioConnectMutation
+export const useComposioConnectApiKey = mcpApi.useComposioConnectApiKeyMutation
+export const useGetComposioTemplates = mcpApi.useGetComposioTemplatesQuery
+export const useGetComposioStatus = mcpApi.useGetComposioStatusQuery
+export const useGetComposioConnections = mcpApi.useGetComposioConnectionsQuery
+export const useDeleteComposioConnection = mcpApi.useDeleteComposioConnectionMutation
+export const useGetComposioActions = mcpApi.useGetComposioActionsQuery
+export const useExecuteComposioAction = mcpApi.useExecuteComposioActionMutation
+export const useBitrix24Connect = mcpApi.useBitrix24ConnectMutation

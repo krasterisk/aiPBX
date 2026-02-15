@@ -1,16 +1,49 @@
 .McpToolsList {
     width: 100%;
+    max-height: 360px;
+    overflow-y: auto;
+    padding-right: 4px;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+    }
 }
 
 .searchInput {
+    flex: 1;
+    min-width: 0;
+}
+
+.toolbar {
     width: 100%;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 2px;
+}
+
+.checkAllRow {
+    flex-shrink: 0;
+    cursor: pointer;
+    user-select: none;
+    padding-right: 10px;
+}
+
+.checkAllLabel {
+    font-size: 11px;
+    color: var(--hint-redesigned);
+    white-space: nowrap;
 }
 
 .toolItem {
     width: 100%;
-    padding: 12px 16px;
+    padding: 6px 10px;
     background: var(--glass-bg-tertiary);
-    border-radius: 10px;
+    border-radius: 8px;
     border: var(--glass-border-subtle);
     cursor: pointer;
     transition: all 0.2s ease;
@@ -28,17 +61,36 @@
 
 .toolName {
     font-weight: 600;
-    font-size: 14px;
+    font-size: 12px;
     color: var(--text-redesigned);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.toolDescription {
-    color: var(--hint-redesigned);
-    font-size: 12px;
+.toolNameRow {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.composioBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 5px;
+    background: rgba(124, 58, 237, 0.15);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: 3px;
+    color: #a78bfa;
+    font-size: 9px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .toggleSwitch {
     flex-shrink: 0;
+    transform: scale(0.85);
 }
 
 .emptyState {

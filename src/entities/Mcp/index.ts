@@ -6,7 +6,11 @@ export type {
     McpCallLog,
     CreateMcpServerDto,
     UpdateMcpServerDto,
-    CreateMcpPolicyDto
+    CreateMcpPolicyDto,
+    ComposioTemplate,
+    ComposioConnectionStatus,
+    ComposioConnection,
+    ComposioAction
 } from './model/types/mcpTypes'
 
 export type { McpServersPageSchema } from './model/types/mcpServersPageSchema'
@@ -45,11 +49,19 @@ export {
     useSyncMcpTools,
     useGetMcpServerTools,
     useToggleMcpTool,
+    useBulkToggleMcpTools,
     useCreateMcpToolPolicy,
     useGetMcpToolPolicies,
     useDeleteMcpToolPolicy,
     useGetMcpLogs,
-    useComposioConnect
+    useComposioConnect,
+    useComposioConnectApiKey,
+    useGetComposioTemplates,
+    useGetComposioStatus,
+    useGetComposioConnections,
+    useDeleteComposioConnection,
+    useGetComposioActions,
+    useExecuteComposioAction
 } from './api/mcpApi'
 
 export { McpServerItem } from './ui/McpServerItem/McpServerItem'
@@ -60,3 +72,4 @@ export { McpServerTemplates } from './ui/McpServerTemplates/McpServerTemplates'
 export { McpQuickConnect } from './ui/McpQuickConnect/McpQuickConnect'
 export { mcpServerTemplates } from './model/const/mcpServerTemplates'
 export type { McpServerTemplate } from './model/const/mcpServerTemplates'
+

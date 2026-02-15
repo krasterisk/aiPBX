@@ -17,6 +17,8 @@ export interface McpServer {
     lastError: string | null;
     userId: number;
     user?: User;
+    composioToolkit?: string;
+    composioAccountId?: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -53,10 +55,42 @@ export interface McpCallLog {
     duration: number | null;
     status: 'success' | 'error' | 'blocked';
     channelId: string | null;
-    source: 'webhook' | 'mcp' | 'builtin';
+    source: 'webhook' | 'mcp' | 'builtin' | 'composio';
     mcpServerId: number | null;
     userId: number;
     createdAt: string;
+}
+
+// ─── Composio Types ────────────────────────────────────────
+
+export interface ComposioTemplate {
+    key: string;
+    slug: string;
+    name: string;
+}
+
+export interface ComposioConnectionStatus {
+    key: string;
+    slug: string;
+    name: string;
+    isConnected: boolean;
+    connectedAccountId: string | null;
+}
+
+export interface ComposioConnection {
+    id: string;
+    toolkit: string;
+    toolkitName: string;
+    status: string;
+    createdAt: string;
+}
+
+export interface ComposioAction {
+    slug: string;
+    name: string;
+    description: string;
+    inputSchema: Record<string, any>;
+    tags: string[];
 }
 
 // ─── DTOs (request bodies) ─────────────────────────────────

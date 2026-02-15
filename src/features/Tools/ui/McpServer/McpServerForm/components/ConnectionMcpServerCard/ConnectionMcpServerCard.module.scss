@@ -37,3 +37,23 @@
         color: var(--accent-redesigned);
     }
 }
+
+.composioStatusOk {
+    color: #22c55e;
+}
+
+.composioStatusErr {
+    color: var(--cancel-redesigned);
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: background-color 0.3s ease;
+}
+
+.inactive {
+    background-color: var(--hint-redesigned);
+}

@@ -24,16 +24,6 @@
     width: 100%;
 }
 
-.detailsSection {
-    width: 100%;
-}
-
-.divider {
-    width: 100%;
-    height: 1px;
-    background: var(--glass-overlay-medium);
-}
-
 .tooltipIcon {
     display: inline-flex;
     align-items: center;
@@ -45,5 +35,33 @@
     &:hover {
         opacity: 1;
         color: var(--accent-redesigned);
+    }
+}
+
+.modalContent {
+    max-width: 700px;
+    width: 90vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 0;
+    background: var(--glass-bg-primary);
+    backdrop-filter: blur(24px);
+    border: var(--glass-border-secondary);
+    border-radius: 20px;
+    box-shadow:
+        0 24px 80px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+    }
+
+    @media (max-width: 800px) {
+        width: 95vw;
     }
 }
