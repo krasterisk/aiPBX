@@ -121,6 +121,7 @@ export const UserItem = memo((props: UserItemProps) => {
         )}
 
         {isCurrentUserAdmin && onTopUp && (
+
           <HStack className={cls.footer} justify={'end'} max align="center">
             <Button
               variant={'clear'}

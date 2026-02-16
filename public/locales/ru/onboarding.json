@@ -129,8 +129,10 @@
     "completion_next_playground": "Протестируйте ассистента голосом в Playground",
     "completion_next_publish": "Опубликуйте — добавьте виджет или подключите к телефонии",
     "completion_next_customize": "Настройте детали — голос, инструкции, интеграции",
+    "completion_next_docs": "Изучите документацию — подробные гайды и примеры",
     "completion_go_playground": "Перейти в Playground",
     "completion_go_dashboard": "Перейти в Dashboard",
+    "completion_go_docs": "Документация",
     "back": "Назад",
     "next": "Далее"
 }

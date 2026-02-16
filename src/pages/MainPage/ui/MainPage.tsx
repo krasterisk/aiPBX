@@ -35,7 +35,7 @@ import { useNavigate } from 'react-router-dom'
 import { getRouteDashboard, getRouteSignup, getRouteLogin } from '@/shared/const/router'
 import { getUserAuthData } from '@/entities/User'
 import { useSelector } from 'react-redux'
-import { Button } from '@/shared/ui/redesign-v3/Button'
+import { Button } from '@/shared/ui/redesigned/Button'
 import LogoIcon from '@/shared/assets/icons/aipbx_logo_v3.svg'
 
 const fadeInUp = {
@@ -92,6 +92,11 @@ const MainPage: FC = memo(() => {
 
   return (
     <Page data-testid={'MainPage'} className={cls.MainPage}>
+      <div className={cls.loginBtn}>
+        <Button variant="glass-action" onClick={onLogin}>
+          {t('Login')}
+        </Button>
+      </div>
       <div className={cls.lang}>
         <LangSwitcher short={isMobile} />
       </div>
@@ -130,6 +135,7 @@ const MainPage: FC = memo(() => {
               <Button
                 color="accent"
                 size="l"
+                variant='glass-action'
                 onClick={onRegister}
               >
                 {t('Hero.CTA_Start')}
@@ -361,15 +367,16 @@ const MainPage: FC = memo(() => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
           >
-            <h2 style={{ fontSize: isMobile ? '2rem' : '3rem', fontWeight: 800, marginBottom: '1.5rem' }}>
+            <h2 style={{ fontSize: isMobile ? '2rem' : '3rem', fontWeight: 800, lineHeight: 1.2, marginBottom: '2rem' }}>
               {t('FinalCTA.Title')}
             </h2>
-            <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.6)', marginBottom: '2.5rem' }}>
+            <p style={{ fontSize: '1.25rem', lineHeight: 1.6, color: 'rgba(255,255,255,0.6)', marginBottom: '2.5rem' }}>
               {t('FinalCTA.SubTitle')}
             </p>
             <Button
               color="accent"
               size="l"
+              variant="glass-action"
               onClick={onRegister}
             >
               {t('FinalCTA.Button')}

@@ -11,7 +11,7 @@ import { onboardingActions } from '../../model/slices/onboardingSlice'
 import {
     getOnboardingTelegramConnected
 } from '../../model/selectors/onboardingSelectors'
-import { getRoutePlayground, getRouteDashboardOverview } from '@/shared/const/router'
+import { getRoutePlayground, getRouteDashboardOverview, getRouteDocs } from '@/shared/const/router'
 import { AppLogo } from '@/shared/ui/redesigned/AppLogo'
 import {
     CheckCircle2,
@@ -19,7 +19,8 @@ import {
     Mic,
     Globe,
     Settings,
-    LayoutDashboard
+    LayoutDashboard,
+    BookOpen
 } from 'lucide-react'
 
 interface CompletionStepProps {
@@ -40,6 +41,11 @@ export const CompletionStep = memo(({ className }: CompletionStepProps) => {
     const onGoDashboard = useCallback(() => {
         dispatch(onboardingActions.completeOnboarding())
         navigate(getRouteDashboardOverview())
+    }, [dispatch, navigate])
+
+    const onGoDocs = useCallback(() => {
+        dispatch(onboardingActions.completeOnboarding())
+        navigate(getRouteDocs())
     }, [dispatch, navigate])
 
     return (
@@ -110,6 +116,15 @@ export const CompletionStep = memo(({ className }: CompletionStepProps) => {
                         size="xs"
                     />
                 </HStack>
+                <HStack gap="12">
+                    <HStack justify="center" align="center" className={cls.nextStepIcon}>
+                        <BookOpen size={14} />
+                    </HStack>
+                    <Text
+                        text={t('completion_next_docs', 'Изучите документацию — подробные гайды и примеры') as string}
+                        size="xs"
+                    />
+                </HStack>
             </VStack>
 
             <Button
@@ -121,15 +136,26 @@ export const CompletionStep = memo(({ className }: CompletionStepProps) => {
                 {t('completion_go_playground', 'Перейти в Playground')}
             </Button>
 
-            <Button
-                variant="clear"
-                size="s"
-                onClick={onGoDashboard}
-                addonLeft={<LayoutDashboard size={14} />}
-                className={cls.skipLink}
-            >
-                {t('completion_go_dashboard', 'Перейти в Dashboard')}
-            </Button>
+            <HStack gap="12" justify="center">
+                <Button
+                    variant="clear"
+                    size="s"
+                    onClick={onGoDashboard}
+                    addonLeft={<LayoutDashboard size={14} />}
+                    className={cls.skipLink}
+                >
+                    {t('completion_go_dashboard', 'Перейти в Dashboard')}
+                </Button>
+                <Button
+                    variant="clear"
+                    size="s"
+                    onClick={onGoDocs}
+                    addonLeft={<BookOpen size={14} />}
+                    className={cls.skipLink}
+                >
+                    {t('completion_go_docs', 'Документация')}
+                </Button>
+            </HStack>
         </VStack>
     )
 })

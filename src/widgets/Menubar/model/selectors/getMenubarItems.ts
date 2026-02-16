@@ -129,12 +129,6 @@ export const useMenubarItems = () => {
         text: t('Оплата'),
         authOnly: true
       },
-      {
-        path: getRouteDocs(),
-        Icon: MenuBookIcon,
-        text: t('Документация'),
-        authOnly: true
-      },
       ...(isAdmin
         ? [
           {

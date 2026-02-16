@@ -8,9 +8,9 @@ const initialReducers: ReducersList = {
 
 const LoginPage = memo(() => {
   return (
-      <DynamicModuleLoader reducers={initialReducers} removeAfterUnmount>
-         <Login />
-      </DynamicModuleLoader>
+    <DynamicModuleLoader reducers={initialReducers} removeAfterUnmount>
+      <Login />
+    </DynamicModuleLoader>
   )
 })
 

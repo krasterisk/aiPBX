@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
@@ -17,96 +17,8 @@ import { getRouteMain } from '@/shared/const/router'
 import { ThemeSwitcher } from '@/entities/ThemeSwitcher'
 import { LangSwitcher } from '@/entities/LangSwitcher'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import { DOC_SECTIONS } from '../../lib/getDocumentationContent'
 import cls from './DocumentationSidebar.module.scss'
-
-interface DocSection {
-    id: string
-    titleKey: string
-    subsections?: Array<{ id: string; titleKey: string }>
-}
-
-const DOC_SECTIONS: DocSection[] = [
-    {
-        id: 'getting-started',
-        titleKey: 'Getting Started'
-    },
-    {
-        id: 'dashboard',
-        titleKey: 'Dashboard',
-        subsections: [
-            { id: 'dashboard-overview', titleKey: 'Overview' },
-            { id: 'dashboard-metrics', titleKey: 'Metrics' },
-            { id: 'dashboard-navigation', titleKey: 'Navigation' }
-        ]
-    },
-    {
-        id: 'assistants',
-        titleKey: 'Assistants',
-        subsections: [
-            { id: 'assistants-create', titleKey: 'Creating Your First Assistant' },
-            { id: 'assistants-config', titleKey: 'Configuration' },
-            { id: 'assistants-fields', titleKey: 'Field Descriptions' },
-            { id: 'assistants-models', titleKey: 'Model Selection' },
-            { id: 'assistants-voices', titleKey: 'Voice Options' },
-            { id: 'assistants-prompting', titleKey: 'Prompting Guide' },
-            { id: 'assistants-speech', titleKey: 'Speech Settings' },
-            { id: 'assistants-publish', titleKey: 'Publishing' }
-        ]
-    },
-    {
-        id: 'tools',
-        titleKey: 'Tools (Function Calling)',
-        subsections: [
-            { id: 'tools-understanding', titleKey: 'Understanding Tools' },
-            { id: 'tools-create', titleKey: 'Creating Tools' },
-            { id: 'tools-config', titleKey: 'Tool Configuration' },
-            { id: 'tools-fc-examples', titleKey: 'Function Calling Examples' },
-            { id: 'tools-builtin', titleKey: 'Built-in Functions' },
-            { id: 'tools-auth', titleKey: 'Authentication' },
-            { id: 'tools-mcp', titleKey: 'MCP Servers' }
-        ]
-    },
-    {
-        id: 'playground',
-        titleKey: 'Playground',
-        subsections: [
-            { id: 'playground-testing', titleKey: 'Testing Assistants' },
-            { id: 'playground-use-cases', titleKey: 'Use Cases' }
-        ]
-    },
-    {
-        id: 'reports',
-        titleKey: 'Reports & Analytics',
-        subsections: [
-            { id: 'reports-history', titleKey: 'Call History' },
-            { id: 'reports-metrics', titleKey: 'Metrics' },
-            { id: 'reports-visualizations', titleKey: 'Visualizations' },
-            { id: 'reports-export', titleKey: 'Exporting Data' }
-        ]
-    },
-    {
-        id: 'payments',
-        titleKey: 'Payments & Billing',
-        subsections: [
-            { id: 'payments-balance', titleKey: 'Balance Overview' },
-            { id: 'payments-topup', titleKey: 'Top Up Balance' },
-            { id: 'payments-notifications', titleKey: 'Notification Thresholds' },
-            { id: 'payments-history', titleKey: 'Payment History' },
-            { id: 'payments-organizations', titleKey: 'Organizations' }
-        ]
-    },
-    {
-        id: 'publish',
-        titleKey: 'Publish & Integration',
-        subsections: [
-            { id: 'publish-overview', titleKey: 'Overview' },
-            { id: 'publish-sips', titleKey: 'SIPs (VoIP)' },
-            { id: 'publish-widgets', titleKey: 'Widgets (WebRTC)' },
-            { id: 'publish-pbxs', titleKey: 'PBXs (Servers)' },
-            { id: 'asterisk-config', titleKey: 'Asterisk Configuration' }
-        ]
-    }
-]
 
 interface DocumentationSidebarProps {
     onItemClick?: () => void
@@ -120,39 +32,62 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
     const currentSection = searchParams.get('section') || 'getting-started'
 
     const [expandedSections, setExpandedSections] = useState<string[]>(() => {
-        const parentSection = DOC_SECTIONS.find(section =>
-            section.subsections?.some(sub => sub.id === currentSection)
+        // Auto-expand the parent section if we're on a subsection
+        const parent = DOC_SECTIONS.find(s =>
+            s.id === currentSection || s.subsections?.some(sub => sub.id === currentSection)
         )
-        return parentSection ? [parentSection.id] : []
+        return parent?.subsections ? [parent.id] : []
     })
 
-    const toggleSection = (sectionId: string) => {
+    const toggleSection = useCallback((sectionId: string) => {
         setExpandedSections(prev =>
             prev.includes(sectionId)
                 ? prev.filter(id => id !== sectionId)
                 : [...prev, sectionId]
         )
-    }
+    }, [])
 
-    const handleSectionClick = (sectionId: string, hasSubsections: boolean) => {
+    const handleSectionClick = useCallback((sectionId: string, hasSubsections: boolean) => {
         if (hasSubsections) {
             toggleSection(sectionId)
+            // Also navigate to the section top
+            navigate(`/docs?section=${sectionId}`)
+            onItemClick?.()
         } else {
             navigate(`/docs?section=${sectionId}`)
             onItemClick?.()
         }
-    }
+    }, [navigate, onItemClick, toggleSection])
 
-    const handleSubsectionClick = (subsectionId: string) => {
-        navigate(`/docs?section=${subsectionId}`)
+    const handleSubsectionClick = useCallback((subsectionId: string, anchor?: string) => {
+        navigate(`/docs?section=${subsectionId}${anchor ? `#${anchor}` : ''}`)
         onItemClick?.()
-    }
+
+        // Scroll to anchor with retry (content may need time to load)
+        if (anchor) {
+            let attempts = 0
+            const maxAttempts = 10
+            const tryScroll = () => {
+                const el = document.getElementById(anchor)
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                } else if (attempts < maxAttempts) {
+                    attempts++
+                    setTimeout(tryScroll, 150)
+                }
+            }
+            setTimeout(tryScroll, 100)
+        }
+    }, [navigate, onItemClick])
 
     return (
         <Box className={cls.DocumentationSidebar}>
             <Box className={cls.header}>
                 <Typography variant="h6" className={cls.title}>
-                    {t('Documentation')}
+                    📖 {t('doc_title')}
+                </Typography>
+                <Typography variant="caption" className={cls.subtitle}>
+                    AI PBX Platform
                 </Typography>
             </Box>
 
@@ -161,7 +96,7 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
                     <Box key={section.id}>
                         <ListItem disablePadding>
                             <ListItemButton
-                                selected={currentSection === section.id && !section.subsections}
+                                selected={currentSection === section.id}
                                 onClick={() => handleSectionClick(section.id, !!section.subsections)}
                                 className={cls.sectionButton}
                             >
@@ -171,9 +106,9 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
                                 />
                                 {section.subsections && (
                                     expandedSections.includes(section.id) ? (
-                                        <ChevronDown size={20} className={cls.chevron} />
+                                        <ChevronDown size={18} className={cls.chevron} />
                                     ) : (
-                                        <ChevronRight size={20} className={cls.chevron} />
+                                        <ChevronRight size={18} className={cls.chevron} />
                                     )
                                 )}
                             </ListItemButton>
@@ -185,12 +120,11 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
                                 timeout="auto"
                                 unmountOnExit
                             >
-                                <List component="div" disablePadding>
-                                    {section.subsections.map((subsection) => (
-                                        <ListItem key={subsection.id} disablePadding>
+                                <List component="div" disablePadding className={cls.subsectionList}>
+                                    {section.subsections.map((subsection, idx) => (
+                                        <ListItem key={`${subsection.id}-${idx}`} disablePadding>
                                             <ListItemButton
-                                                selected={currentSection === subsection.id}
-                                                onClick={() => handleSubsectionClick(subsection.id)}
+                                                onClick={() => handleSubsectionClick(subsection.id, subsection.anchor)}
                                                 className={cls.subsectionButton}
                                             >
                                                 <ListItemText
@@ -221,7 +155,7 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
                         >
                             <ArrowLeft size={20} className={cls.backIcon} />
                             <ListItemText
-                                primary={t('Back to App')}
+                                primary={t('doc_back_to_app')}
                                 className={cls.backText}
                             />
                         </ListItemButton>

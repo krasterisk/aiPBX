@@ -150,8 +150,9 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             const result = await createAssistant([{
                 name,
                 instruction: finalPrompt,
-                model: 'gpt-4o-realtime-preview',
+                model: 'gpt-realtime-mini',
                 voice: 'alloy',
+                analytic: true,
                 tools: []
             }]).unwrap()
 
@@ -185,8 +186,9 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             const result = await createAssistant([{
                 name: t('business_custom_name', 'Мой ассистент') as string,
                 instruction: generatedInstruction,
-                model: 'gpt-4o-realtime-preview',
+                model: 'gpt-realtime-mini',
                 voice: 'alloy',
+                analytic: true,
                 tools: []
             }]).unwrap()
 

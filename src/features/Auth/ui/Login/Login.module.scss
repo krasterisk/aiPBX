@@ -5,6 +5,46 @@
     padding: var(--space-6);
     position: relative;
     overflow: hidden;
+
+    // Force dark theme
+    --bg-redesigned: #0c1214;
+    --dark-bg-redesigned: #090f11;
+    --light-bg-redesigned: #151c1f;
+    --text-redesigned: #dbdbdb;
+    --hint-redesigned: #555;
+    --cancel-redesigned: #d95757;
+    --save-redesigned: #6cd98b;
+    --icon-redesigned: #74a2b2;
+    --accent-redesigned: #5ed3f3;
+    --accent-dark: #3aa8c2;
+    --glass-bg-primary: rgba(21, 28, 31, 0.6);
+    --glass-bg-secondary: rgba(21, 28, 31, 0.4);
+    --glass-bg-tertiary: rgba(21, 28, 31, 0.2);
+    --glass-border-primary: 1px solid rgba(85, 85, 85, 0.3);
+    --glass-border-secondary: 1px solid rgba(85, 85, 85, 0.2);
+    --glass-border-accent: 1px solid rgba(94, 211, 243, 0.3);
+    --glass-border-subtle: 1px solid rgba(85, 85, 85, 0.1);
+    --glass-overlay-light: rgba(255, 255, 255, 0.05);
+    --glass-overlay-medium: rgba(255, 255, 255, 0.1);
+    --glass-overlay-dark: rgba(0, 0, 0, 0.2);
+    --glass-overlay-darker: rgba(0, 0, 0, 0.4);
+    --button-primary-bg: #5ed3f3;
+    --button-primary-border: #5ed3f3;
+    --button-primary-hover-bg: #3aa8c2;
+    --button-outline-bg: transparent;
+    --button-outline-border: #555;
+    --button-outline-hover-bg: rgba(255, 255, 255, 0.05);
+    --divider-gradient: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0.05) 100%);
+    --divider-solid: rgba(255, 255, 255, 0.1);
+    --divider-subtle: rgba(255, 255, 255, 0.05);
+    --card-bg: #090f11;
+    --input-placeholder: rgba(255, 255, 255, 0.4);
+    --icon-bg-primary: rgba(94, 211, 243, 0.05);
+    --icon-bg-secondary: rgba(94, 211, 243, 0.1);
+
     background-color: var(--bg-redesigned);
 }
 
@@ -92,18 +132,22 @@
 .loginCard {
     max-width: 440px;
     width: 100%;
-    background: rgba(255, 255, 255, 0.12) !important;
+    background: var(--glass-bg-primary) !important;
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
     box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.3),
         inset 0 0 0 1px rgba(255, 255, 255, 0.08);
     transition: var(--transition-medium);
     color: var(--text-redesigned);
 
+    * {
+        color: var(--text-redesigned);
+    }
+
     &:hover {
-        border-color: rgba(255, 255, 255, 0.3) !important;
+        border-color: rgba(255, 255, 255, 0.25) !important;
         box-shadow:
             0 12px 40px rgba(0, 0, 0, 0.35),
             inset 0 0 0 1px rgba(255, 255, 255, 0.1);

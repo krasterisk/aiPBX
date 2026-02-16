@@ -72,6 +72,19 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
                     isTemplateApplied.current = true
                 }
             }
+
+            // Apply generated custom prompt from sessionStorage
+            const isGenerated = searchParams.get('generated')
+            if (isGenerated === 'true') {
+                const generatedInstruction = sessionStorage.getItem('generated_instruction')
+                if (generatedInstruction) {
+                    dispatch(assistantFormActions.updateForm({
+                        instruction: generatedInstruction
+                    }))
+                    sessionStorage.removeItem('generated_instruction')
+                    isTemplateApplied.current = true
+                }
+            }
         }
     }, [isEdit, formFields, searchParams, dispatch, i18n.language])
 

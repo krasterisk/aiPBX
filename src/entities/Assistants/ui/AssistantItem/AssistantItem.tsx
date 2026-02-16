@@ -1,6 +1,6 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './AssistantItem.module.scss'
-import React, { HTMLAttributeAnchorTarget, memo, useCallback } from 'react'
+import React, { HTMLAttributeAnchorTarget, memo, useCallback, useMemo } from 'react'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { isUserAdmin } from '@/entities/User'
 import PersonIcon from '@mui/icons-material/Person'
+import { useGetAllModels } from '../../api/aiModelApi'
 
 interface AssistantItemProps {
     className?: string
@@ -36,6 +37,13 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
     const { t } = useTranslation('assistants')
     const navigate = useNavigate()
     const isAdmin = useSelector(isUserAdmin)
+    const { data: models } = useGetAllModels(null)
+
+    const displayModelName = useMemo(() => {
+        if (!assistant.model) return ''
+        const found = models?.find(m => m.name === assistant.model)
+        return found?.publishName || found?.name || assistant.model
+    }, [assistant.model, models])
 
     const onCopy = useCallback((e: React.MouseEvent) => {
         e.stopPropagation()
@@ -83,7 +91,7 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
                         </HStack>
                         <VStack>
                             <Text text={t('Модель')} variant="accent" size="xs" />
-                            <Text text={assistant.model || ''} className={cls.truncatedText} />
+                            <Text text={displayModelName} className={cls.truncatedText} />
                         </VStack>
                     </HStack>
 

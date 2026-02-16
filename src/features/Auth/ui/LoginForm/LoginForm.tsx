@@ -110,7 +110,7 @@ export const LoginForm = memo((props: LoginFormProps) => {
                 required
               />
               <Button
-                variant="filled"
+                variant="glass-action"
                 fullWidth
                 onClick={onLoginActivateClick}
                 disabled={isLoading}
@@ -135,7 +135,7 @@ export const LoginForm = memo((props: LoginFormProps) => {
             </VStack>
           ) : (
             <Button
-              variant="filled"
+              variant="glass-action"
               fullWidth
               onClick={onLoginClick}
               disabled={isLoading || !email}

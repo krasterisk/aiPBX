@@ -60,7 +60,8 @@ export function buildPlugins({
       patterns: [
         { from: paths.locales, to: paths.buildLocales },
         { from: paths.favicon, to: paths.build },
-        { from: paths.assets, to: paths.buildAssets }
+        { from: paths.assets, to: paths.buildAssets },
+        { from: 'public/docs', to: 'docs', noErrorOnMissing: true }
       ]
     }))
   }

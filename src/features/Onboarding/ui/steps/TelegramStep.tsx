@@ -11,10 +11,12 @@ import { onboardingActions } from '../../model/slices/onboardingSlice'
 import {
     getOnboardingTemplateId,
     getOnboardingTelegramChatId,
-    getOnboardingTelegramConnected
+    getOnboardingTelegramConnected,
+    getOnboardingCreatedAssistantId
 } from '../../model/selectors/onboardingSelectors'
 import { TelegramMockup } from '../components/TelegramMockup/TelegramMockup'
-import { useComposioConnectApiKey } from '@/entities/Mcp/api/mcpApi'
+import { useComposioConnectApiKey, useMcpServersAll } from '@/entities/Mcp/api/mcpApi'
+import { useUpdateAssistant } from '@/entities/Assistants/api/assistantsApi'
 import {
     ArrowLeft,
     ArrowRight,
@@ -34,7 +36,10 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
     const templateId = useSelector(getOnboardingTemplateId)
     const chatId = useSelector(getOnboardingTelegramChatId)
     const isConnected = useSelector(getOnboardingTelegramConnected)
+    const createdAssistantId = useSelector(getOnboardingCreatedAssistantId)
     const [connectTelegram, { isLoading }] = useComposioConnectApiKey()
+    const [updateAssistant] = useUpdateAssistant()
+    const { refetch: refetchMcpServers } = useMcpServersAll(null)
     const [error, setError] = useState<string | null>(null)
 
     const onChatIdChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -49,10 +54,27 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
             setError(null)
             await connectTelegram({ toolkit: 'telegram', chatId: chatId.trim() }).unwrap()
             dispatch(onboardingActions.setTelegramConnected(true))
+
+            // Attach the Telegram MCP server to the created assistant
+            if (createdAssistantId) {
+                try {
+                    const { data: servers } = await refetchMcpServers()
+                    const telegramServer = servers?.find(s => s.composioToolkit === 'telegram')
+                    if (telegramServer) {
+                        await updateAssistant({
+                            id: createdAssistantId,
+                            mcpServers: [telegramServer]
+                        }).unwrap()
+                    }
+                } catch {
+                    // Non-critical: assistant was created, MCP server exists,
+                    // user can manually attach it later
+                }
+            }
         } catch (err: any) {
             setError(err?.data?.message || t('telegram_error', 'Ошибка подключения') as string)
         }
-    }, [chatId, connectTelegram, dispatch, t])
+    }, [chatId, connectTelegram, dispatch, t, createdAssistantId, refetchMcpServers, updateAssistant])
 
     const onNext = useCallback(() => {
         dispatch(onboardingActions.nextStep())

@@ -114,7 +114,7 @@ export const SignupForm = memo((props: SignupFormProps) => {
                                 required
                             />
                             <Button
-                                variant="filled"
+                                variant="glass-action"
                                 fullWidth
                                 onClick={onSignupActivateClick}
                                 disabled={isLoading}
@@ -160,7 +160,7 @@ export const SignupForm = memo((props: SignupFormProps) => {
                                 </label>
                             </HStack>
                             <Button
-                                variant="filled"
+                                variant="glass-action"
                                 fullWidth
                                 onClick={onSignupClick}
                                 disabled={isLoading || !email || !agreeTerms}
@@ -179,7 +179,7 @@ export const SignupForm = memo((props: SignupFormProps) => {
                         variant="filled"
                         fullWidth
                         onClick={onGoogleSignupClick}
-                        disabled={isLoading}
+                        disabled={isLoading || !agreeTerms}
                         addonLeft={<GoogleIcon className={cls.socialIcon} />}
                         className={cls.socialBtn}
                     >
@@ -189,7 +189,7 @@ export const SignupForm = memo((props: SignupFormProps) => {
                         variant="filled"
                         fullWidth
                         onClick={onTelegramSignupClick}
-                        disabled={isLoading}
+                        disabled={isLoading || !agreeTerms}
                         addonLeft={<TelegramIcon className={cls.socialIcon} />}
                         className={cls.socialBtn}
                     >

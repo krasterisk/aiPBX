@@ -33,6 +33,31 @@
     }
 }
 
+.templateBtn {
+    border-radius: var(--radius-md) !important;
+    height: 42px !important;
+    border: 1px solid rgba(94, 211, 243, 0.15) !important;
+    background: var(--icon-bg-primary) !important;
+    color: var(--text-redesigned) !important;
+    font-weight: 600 !important;
+    padding: 0 var(--space-5) !important;
+    transition: var(--transition-normal) !important;
+
+    &:hover {
+        background: var(--icon-bg-secondary) !important;
+        border-color: var(--accent-redesigned) !important;
+        transform: var(--hover-lift-sm);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    @include mobile {
+        width: 100%;
+    }
+}
+
 .createBtn {
     border-radius: var(--radius-md) !important;
     height: 42px !important;
@@ -59,5 +84,99 @@
 
     @include mobile {
         width: 100%;
+    }
+}
+
+// ========================================
+// TEMPLATES MODAL
+// ========================================
+
+.templatesModalContent {
+    max-width: 720px;
+    width: 90vw;
+    max-height: 85vh;
+    padding: 0 !important;
+    border-radius: var(--radius-xl) !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column;
+
+    @include mobile {
+        width: 100vw;
+        max-width: 100vw;
+        max-height: 100vh;
+        height: 100vh;
+        border-radius: 0 !important;
+    }
+}
+
+.templatesModal {
+    @include glass-card-primary;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--glass-bg-primary);
+    backdrop-filter: var(--glass-blur-md);
+    -webkit-backdrop-filter: var(--glass-blur-md);
+    overflow: hidden;
+}
+
+.templatesModalHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-5) var(--space-6);
+    border-bottom: var(--glass-border-secondary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: inherit;
+    backdrop-filter: inherit;
+    flex-shrink: 0;
+
+    @include mobile {
+        padding: var(--space-4);
+    }
+}
+
+.closeBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    border: var(--glass-border-subtle);
+    background: var(--glass-bg-tertiary);
+    color: var(--icon-redesigned);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    flex-shrink: 0;
+
+    &:hover {
+        background: var(--glass-bg-secondary);
+        color: var(--accent-redesigned);
+        border-color: rgba(94, 211, 243, 0.3);
+        transform: scale(1.05);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+.templatesModalBody {
+    padding: var(--space-6);
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    @include custom-scrollbar;
+
+    @include mobile {
+        padding: var(--space-4);
     }
 }

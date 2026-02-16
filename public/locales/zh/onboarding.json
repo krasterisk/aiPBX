@@ -129,8 +129,10 @@
     "completion_next_playground": "在 Playground 中用语音测试您的助手",
     "completion_next_publish": "发布——添加小部件或连接电话系统",
     "completion_next_customize": "自定义——更改语音、指令、集成",
+    "completion_next_docs": "查阅文档——详细指南和示例",
     "completion_go_playground": "前往 Playground",
     "completion_go_dashboard": "前往 Dashboard",
+    "completion_go_docs": "文档",
     "back": "返回",
     "next": "下一步"
 }

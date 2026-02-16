@@ -82,10 +82,10 @@ export const OnboardingWizard = memo((props: OnboardingWizardProps) => {
     // DynamicModuleLoader's useEffect (child effects run first in React).
     // This guarantees the onboarding reducer is already mounted.
     useEffect(() => {
-        const completed = localStorage.getItem(ONBOARDING_STORAGE_KEY)
         const isSignup = localStorage.getItem('onboarding_is_signup')
-        if (!completed && isSignup) {
+        if (isSignup) {
             localStorage.removeItem('onboarding_is_signup')
+            localStorage.removeItem(ONBOARDING_STORAGE_KEY)
             dispatch(onboardingActions.startOnboarding())
         }
     }, [dispatch])

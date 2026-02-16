@@ -15,6 +15,13 @@
     z-index: var(--z-fixed);
 }
 
+.loginBtn {
+    position: fixed;
+    top: var(--space-4);
+    left: var(--space-4);
+    z-index: var(--z-fixed);
+}
+
 .section {
     padding: var(--space-20) 0;
     position: relative;

@@ -57,3 +57,40 @@
     color: var(--text-secondary);
     @include text-clamp(2);
 }
+
+.customCard {
+    border-style: dashed !important;
+    border-color: rgba(94, 211, 243, 0.3) !important;
+
+    &:hover {
+        border-color: var(--accent-redesigned) !important;
+    }
+}
+
+.customHint {
+    color: var(--hint-redesigned);
+
+    .hintIcon {
+        color: var(--accent-redesigned);
+        flex-shrink: 0;
+    }
+}
+
+.loadingBlock {
+    padding: var(--space-3);
+}
+
+.spinnerIcon {
+    color: var(--accent-redesigned);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

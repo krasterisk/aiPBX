@@ -129,8 +129,10 @@
     "completion_next_playground": "Testen Sie Ihren Assistenten per Sprache im Playground",
     "completion_next_publish": "Veröffentlichen — Widget hinzufügen oder Telefonie verbinden",
     "completion_next_customize": "Anpassen — Stimme, Anweisungen, Integrationen ändern",
+    "completion_next_docs": "Dokumentation erkunden — ausführliche Anleitungen und Beispiele",
     "completion_go_playground": "Zum Playground",
     "completion_go_dashboard": "Zum Dashboard",
+    "completion_go_docs": "Dokumentation",
     "back": "Zurück",
     "next": "Weiter"
 }

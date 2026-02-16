@@ -129,8 +129,10 @@
     "completion_next_playground": "Test your assistant by voice in Playground",
     "completion_next_publish": "Publish — add a widget or connect to telephony",
     "completion_next_customize": "Customize — change voice, instructions, integrations",
+    "completion_next_docs": "Explore documentation — detailed guides and examples",
     "completion_go_playground": "Go to Playground",
     "completion_go_dashboard": "Go to Dashboard",
+    "completion_go_docs": "Documentation",
     "back": "Back",
     "next": "Next"
 }
