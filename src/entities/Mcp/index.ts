@@ -61,7 +61,8 @@ export {
     useGetComposioConnections,
     useDeleteComposioConnection,
     useGetComposioActions,
-    useExecuteComposioAction
+    useExecuteComposioAction,
+    useTelegramConnect
 } from './api/mcpApi'
 
 export { McpServerItem } from './ui/McpServerItem/McpServerItem'

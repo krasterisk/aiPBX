@@ -27,6 +27,15 @@
     border-radius: 12px 12px 0;
     touch-action: none;
     padding: 15px;
+
+    // Разрешаем стандартные touch-жесты для полей ввода (длинное нажатие -> вставка из буфера)
+    input,
+    textarea,
+    [contenteditable="true"],
+    .MuiInputBase-input,
+    .MuiOutlinedInput-root {
+        touch-action: auto;
+    }
 }
 
 .drawerNew {

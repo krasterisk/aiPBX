@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Box, Drawer, IconButton, useMediaQuery } from '@mui/material'
+import { Box, SwipeableDrawer, IconButton, useMediaQuery } from '@mui/material'
 import { Menu as MenuIcon } from 'lucide-react'
 import { DocumentationSidebar } from '../DocumentationSidebar/DocumentationSidebar'
 import { DocumentationContent } from '../DocumentationContent/DocumentationContent'
@@ -31,10 +31,13 @@ export const DocumentationLayout = memo(() => {
             )}
 
             {isMobile ? (
-                <Drawer
+                <SwipeableDrawer
                     variant="temporary"
                     open={mobileOpen}
                     onClose={handleDrawerToggle}
+                    onOpen={() => setMobileOpen(true)}
+                    swipeAreaWidth={20}
+                    disableSwipeToOpen
                     ModalProps={{
                         keepMounted: true
                     }}
@@ -42,15 +45,15 @@ export const DocumentationLayout = memo(() => {
                         '& .MuiDrawer-paper': {
                             boxSizing: 'border-box',
                             width: 300,
-                            background: 'rgba(21, 28, 31, 0.8)',
+                            background: 'var(--bg-redesigned)',
                             backdropFilter: 'blur(20px)',
                             color: 'var(--text-redesigned)',
-                            borderRight: '1px solid rgba(255, 255, 255, 0.1)'
+                            borderRight: '1px solid var(--divider-solid)'
                         }
                     }}
                 >
                     <DocumentationSidebar onItemClick={handleDrawerToggle} />
-                </Drawer>
+                </SwipeableDrawer>
             ) : (
                 <Box className={cls.sidebar}>
                     <DocumentationSidebar />

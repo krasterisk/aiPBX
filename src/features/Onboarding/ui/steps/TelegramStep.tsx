@@ -15,7 +15,7 @@ import {
     getOnboardingCreatedAssistantId
 } from '../../model/selectors/onboardingSelectors'
 import { TelegramMockup } from '../components/TelegramMockup/TelegramMockup'
-import { useComposioConnectApiKey, useMcpServersAll } from '@/entities/Mcp/api/mcpApi'
+import { useTelegramConnect, useMcpServersAll } from '@/entities/Mcp/api/mcpApi'
 import { useUpdateAssistant } from '@/entities/Assistants/api/assistantsApi'
 import {
     ArrowLeft,
@@ -37,7 +37,7 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
     const chatId = useSelector(getOnboardingTelegramChatId)
     const isConnected = useSelector(getOnboardingTelegramConnected)
     const createdAssistantId = useSelector(getOnboardingCreatedAssistantId)
-    const [connectTelegram, { isLoading }] = useComposioConnectApiKey()
+    const [connectTelegram, { isLoading }] = useTelegramConnect()
     const [updateAssistant] = useUpdateAssistant()
     const { refetch: refetchMcpServers } = useMcpServersAll(null)
     const [error, setError] = useState<string | null>(null)
@@ -52,7 +52,7 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
 
         try {
             setError(null)
-            await connectTelegram({ toolkit: 'telegram', chatId: chatId.trim() }).unwrap()
+            await connectTelegram({ chatId: chatId.trim() }).unwrap()
             dispatch(onboardingActions.setTelegramConnected(true))
 
             // Attach the Telegram MCP server to the created assistant

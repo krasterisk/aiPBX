@@ -92,7 +92,7 @@ export const assistantsApi = rtkApi.injectEndpoints({
         )
         queryFulfilled.catch(patchResult.undo)
       },
-      invalidatesTags: (result, error, { id }) => [{ type: 'Assistants', id }]
+      invalidatesTags: (result, error, { id }) => [{ type: 'Assistants', id }, { type: 'Assistants', id: 'LIST' }]
     }),
     deleteAssistant: build.mutation<{ success: boolean, id: string }, string>({
       query(id) {

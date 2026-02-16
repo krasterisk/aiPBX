@@ -10,7 +10,7 @@
 
 .header {
     padding: 28px 24px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--divider-subtle);
     background: transparent;
 }
 
@@ -52,7 +52,7 @@
     position: relative;
 
     &:hover {
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--glass-overlay-light);
         color: var(--accent-redesigned);
     }
 
@@ -95,7 +95,7 @@
     padding-top: 4px !important;
     padding-bottom: 4px !important;
     margin-left: 20px;
-    border-left: 1.5px solid var(--glass-border-secondary);
+    border-left: 1.5px solid var(--divider-solid);
 }
 
 .subsectionButton {
@@ -120,7 +120,7 @@
     }
 
     &:hover {
-        background: rgba(255, 255, 255, 0.04);
+        background: var(--glass-overlay-light);
         color: var(--text-redesigned);
 
         &::before {
@@ -148,7 +148,7 @@
 
 .footer {
     padding: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--divider-subtle);
     margin-top: auto;
     background: transparent;
 }
@@ -157,12 +157,12 @@
     border-radius: var(--radius-lg);
     color: var(--accent-redesigned);
     transition: var(--transition-medium);
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--glass-overlay-light);
+    border: var(--glass-border-subtle);
     padding: 10px 16px;
 
     &:hover {
-        background: rgba(255, 255, 255, 0.08);
+        background: var(--glass-overlay-medium);
         transform: translateX(-4px);
         border-color: var(--accent-redesigned);
     }

@@ -1,5 +1,6 @@
 import { memo, useEffect, useState, useMemo, useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Box, Skeleton } from '@mui/material'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -9,7 +10,9 @@ import cls from './DocumentationContent.module.scss'
 
 export const DocumentationContent = memo(() => {
     const [searchParams] = useSearchParams()
+    const { i18n } = useTranslation('docs')
     const currentSection = searchParams.get('section') || 'getting-started'
+    const lang = i18n.language?.substring(0, 2) ?? 'ru'
     const [markdown, setMarkdown] = useState('')
     const [loading, setLoading] = useState(true)
 
@@ -17,7 +20,7 @@ export const DocumentationContent = memo(() => {
         let cancelled = false
         setLoading(true)
 
-        fetchDocumentationMarkdown(currentSection).then((text) => {
+        fetchDocumentationMarkdown(currentSection, lang).then((text) => {
             if (!cancelled) {
                 setMarkdown(text)
                 setLoading(false)
@@ -40,7 +43,7 @@ export const DocumentationContent = memo(() => {
         })
 
         return () => { cancelled = true }
-    }, [currentSection])
+    }, [currentSection, lang])
 
     // Custom heading renderer: adds id for anchors
     const slugify = useCallback((text: string) => {

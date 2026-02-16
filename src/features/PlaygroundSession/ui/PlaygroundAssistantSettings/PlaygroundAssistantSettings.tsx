@@ -7,6 +7,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { ModelSelect, VoiceSelect } from '@/entities/Assistants'
 import { Tool, ToolsSelect } from '@/entities/Tools'
+import { McpServer, McpServerSelect } from '@/entities/Mcp'
 import { Slider } from '@/shared/ui/mui/Slider/Slider'
 import { Tooltip } from '@mui/material'
 import { Info } from 'lucide-react'
@@ -56,6 +57,10 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
         dispatch(playgroundAssistantFormActions.updateFormField({ tools: value }))
     }, [dispatch])
 
+    const onChangeMcpServersHandler = useCallback((event: any, value: McpServer[]) => {
+        dispatch(playgroundAssistantFormActions.updateFormField({ mcpServers: value }))
+    }, [dispatch])
+
     const onChangeSliderHandler = useCallback((field: keyof Assistant) => (value: number) => {
         dispatch(playgroundAssistantFormActions.updateFormField({ [field]: String(value) }))
     }, [dispatch])
@@ -78,6 +83,7 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
                 model: formData.model,
                 voice: formData.voice,
                 tools: formData.tools,
+                mcpServers: formData.mcpServers,
                 instruction: formData.instruction,
                 temperature: formData.temperature,
                 turn_detection_threshold: formData.turn_detection_threshold,
@@ -168,6 +174,14 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
                                 value={formData.tools || []}
                                 userId={userId}
                                 onChangeTool={onChangeToolsHandler}
+                                fullWidth
+                            />
+
+                            <McpServerSelect
+                                label={t('MCP серверы') || ''}
+                                value={formData.mcpServers || []}
+                                userId={userId}
+                                onChangeMcpServers={onChangeMcpServersHandler}
                                 fullWidth
                             />
 

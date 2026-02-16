@@ -116,6 +116,12 @@ export const mcpApi = rtkApi.injectEndpoints({
             invalidatesTags: [{ type: 'McpServers', id: 'LIST' }, 'ComposioConnections'],
         }),
 
+        // ─── Telegram Integration ────────────────────────────
+        telegramConnect: build.mutation<{ server: any }, { chatId: string }>({
+            query: (body) => ({ url: '/mcp/telegram/connect', method: 'POST', body }),
+            invalidatesTags: [{ type: 'McpServers', id: 'LIST' }, 'ComposioConnections'],
+        }),
+
         getComposioTemplates: build.query<ComposioTemplate[], void>({
             query: () => '/mcp/composio/templates',
         }),
@@ -230,3 +236,4 @@ export const useDeleteComposioConnection = mcpApi.useDeleteComposioConnectionMut
 export const useGetComposioActions = mcpApi.useGetComposioActionsQuery
 export const useExecuteComposioAction = mcpApi.useExecuteComposioActionMutation
 export const useBitrix24Connect = mcpApi.useBitrix24ConnectMutation
+export const useTelegramConnect = mcpApi.useTelegramConnectMutation

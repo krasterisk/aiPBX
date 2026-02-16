@@ -6,6 +6,32 @@
     min-height: 100vh;
     overflow-x: hidden;
     scroll-behavior: smooth;
+
+    // Фиксируем все переменные темы — страница всегда выглядит "тёмной"
+    --text-redesigned: #e1ecef;
+    --hint-redesigned: #74a2b2;
+    --icon-redesigned: #5ed3f3;
+    --accent-redesigned: #5ed3f3;
+    --accent-dark: #4ab8d6;
+    --bg-redesigned: #151c1f;
+    --light-bg-redesigned: #1a2730;
+    --dark-bg-redesigned: #0d1214;
+    --card-bg: #151c1f;
+
+    --glass-bg-primary: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    --glass-bg-secondary: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+    --glass-border-primary: 1px solid rgba(255, 255, 255, 0.12);
+    --glass-border-accent: 1px solid rgba(94, 211, 243, 0.3);
+    --glass-border-subtle: 1px solid rgba(255, 255, 255, 0.05);
+
+    --icon-bg-primary: rgba(94, 211, 243, 0.05);
+    --icon-bg-secondary: rgba(94, 211, 243, 0.1);
+    --icon-bg-accent: rgba(94, 211, 243, 0.15);
+
+    --shadow-accent-lg: 0 0 30px rgba(94, 211, 243, 0.2);
+
+    --cancel-redesigned: #f77;
+    --save-redesigned: #62de85;
 }
 
 .lang {

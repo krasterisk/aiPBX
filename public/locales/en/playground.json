@@ -27,6 +27,7 @@
     "Модель": "Model",
     "Голос": "Voice",
     "Функции": "Tools",
+    "MCP серверы": "MCP Servers",
     "Порог": "Threshold",
     "Префиксный отступ (мс)": "Prefix Padding (ms)",
     "Длительность тишины (мс)": "Silence Duration (ms)",

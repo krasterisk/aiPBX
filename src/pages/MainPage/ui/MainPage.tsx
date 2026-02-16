@@ -133,11 +133,9 @@ const MainPage: FC = memo(() => {
 
             <div className={cls.ctaGroup} style={{ marginTop: 'var(--space-4)' }}>
               <Button
-                color="accent"
                 size="xl"
-                variant='glass-action'
+                variant='outline'
                 onClick={onRegister}
-                style={{ padding: '0 40px', fontSize: '1.2rem', height: 56 }}
               >
                 {t('Hero.CTA_Start')}
                 <ArrowRight size={20} style={{ marginLeft: 8 }} />
@@ -380,7 +378,6 @@ const MainPage: FC = memo(() => {
                 size="xl"
                 variant="glass-action"
                 onClick={onRegister}
-                style={{ padding: '0 40px', fontSize: '1.2rem', height: 56 }}
               >
                 {t('FinalCTA.Button')}
                 <ArrowRight size={20} style={{ marginLeft: 8 }} />

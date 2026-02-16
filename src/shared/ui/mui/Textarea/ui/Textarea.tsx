@@ -79,13 +79,14 @@ const areaStyles = {
 export const Textarea = memo((props: TextAreaProps) => {
   const {
     className,
+    sx,
     ...otherProps
   } = props
   return (
     <div className={classNames(cls.Textarea, {}, [className])}>
       <TextField
         fullWidth
-        sx={areaStyles}
+        sx={[areaStyles, ...(Array.isArray(sx) ? sx : sx ? [sx] : [])]}
         {...otherProps}
       />
     </div>

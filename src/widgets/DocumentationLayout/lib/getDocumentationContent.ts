@@ -100,26 +100,35 @@ const SECTION_FILES: Record<string, string> = {
 
 const cache: Record<string, string> = {}
 
-export async function fetchDocumentationMarkdown(sectionId: string): Promise<string> {
+export async function fetchDocumentationMarkdown(sectionId: string, lang: string = 'ru'): Promise<string> {
     const fileName = SECTION_FILES[sectionId]
     if (!fileName) {
         return '# Раздел не найден\n\nВыберите раздел из бокового меню.'
     }
 
-    if (cache[sectionId]) {
-        return cache[sectionId]
+    const cacheKey = `${lang}:${sectionId}`
+    if (cache[cacheKey]) {
+        return cache[cacheKey]
     }
 
     try {
-        const response = await fetch(`/docs/${fileName}`)
+        const response = await fetch(`/docs/${lang}/${fileName}`)
         if (!response.ok) {
+            // Fallback to Russian if translation not available
+            if (lang !== 'ru') {
+                return fetchDocumentationMarkdown(sectionId, 'ru')
+            }
             throw new Error(`HTTP ${response.status}`)
         }
         const text = await response.text()
-        cache[sectionId] = text
+        cache[cacheKey] = text
         return text
     } catch (error) {
-        console.error(`Failed to load doc: ${fileName}`, error)
+        console.error(`Failed to load doc: ${lang}/${fileName}`, error)
+        // Try Russian fallback on error
+        if (lang !== 'ru') {
+            return fetchDocumentationMarkdown(sectionId, 'ru')
+        }
         return `# Ошибка загрузки\n\nНе удалось загрузить документацию. Попробуйте обновить страницу.`
     }
 }

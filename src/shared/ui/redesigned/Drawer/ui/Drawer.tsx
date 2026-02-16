@@ -60,8 +60,24 @@ export const DrawerContent = memo((props: DrawerProps) => {
       velocity: [, vy],
       direction: [, dy],
       movement: [, my],
-      cancel
+      cancel,
+      event
     }) => {
+      // Не перехватываем touch-события внутри текстовых полей (вставка, выделение)
+      const target = event?.target as HTMLElement | null
+      if (target) {
+        const tagName = target.tagName.toLowerCase()
+        if (
+          tagName === 'input' ||
+          tagName === 'textarea' ||
+          target.isContentEditable ||
+          target.closest('.MuiInputBase-root')
+        ) {
+          cancel()
+          return
+        }
+      }
+
       if (my < -70) cancel()
 
       if (last) {
@@ -92,29 +108,29 @@ export const DrawerContent = memo((props: DrawerProps) => {
   const display = y.to((py) => (py < height ? 'block' : 'none'))
 
   return (
-        <Portal element={document.getElementById('app') ?? document.body}>
-            <div className={classNames(cls.Drawer, {}, [
-              className,
-              theme,
-              'app_drawer',
-              cls.drawerNew
-            ])}>
-                <Overlay onClick={() => {
-                  close()
-                }}/>
-                <Spring.a.div
-                    className={cls.sheet}
-                    style={{
-                      display,
-                      bottom: `calc(-100vh + ${height - 100}px)`,
-                      y
-                    }}
-                    {...bind()}
-                >
-                    {children}
-                </Spring.a.div>
-            </div>
-        </Portal>
+    <Portal element={document.getElementById('app') ?? document.body}>
+      <div className={classNames(cls.Drawer, {}, [
+        className,
+        theme,
+        'app_drawer',
+        cls.drawerNew
+      ])}>
+        <Overlay onClick={() => {
+          close()
+        }} />
+        <Spring.a.div
+          className={cls.sheet}
+          style={{
+            display,
+            bottom: `calc(-100vh + ${height - 100}px)`,
+            y
+          }}
+          {...bind()}
+        >
+          {children}
+        </Spring.a.div>
+      </div>
+    </Portal>
   )
 })
 
@@ -130,8 +146,8 @@ const DrawerAsync = (props: DrawerProps) => {
 
 export const Drawer = (props: DrawerProps) => {
   return (
-        <AnimationProvider>
-            <DrawerAsync {...props} />
-        </AnimationProvider>
+    <AnimationProvider>
+      <DrawerAsync {...props} />
+    </AnimationProvider>
   )
 }

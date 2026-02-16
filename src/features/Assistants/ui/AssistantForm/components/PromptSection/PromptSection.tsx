@@ -103,6 +103,17 @@ export const PromptSection = memo((props: PromptSectionProps) => {
                     multiline
                     required
                     className={cls.promptTextarea}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            backgroundColor: 'var(--code-bg)',
+                            '&:hover': {
+                                backgroundColor: 'var(--code-bg)',
+                            },
+                            '&.Mui-focused': {
+                                backgroundColor: 'var(--code-bg)',
+                            },
+                        },
+                    }}
                 />
             </div>
 

@@ -35,12 +35,14 @@ export const McpServerSelect = memo((props: McpServerSelectProps) => {
     return (
         <Combobox
             multiple
+            disableCloseOnSelect
             label={label}
             options={(servers || []).filter(s => s.id && s.name) as any[]}
             value={(value || []).filter(v => v.id && v.name) as any[]}
             onChange={onChangeMultipleHandler}
             className={className}
             getOptionLabel={(option: any) => option.name || ''}
+            isOptionEqualToValue={(option: any, val: any) => Number(option.id) === Number(val.id)}
             renderOption={(props, option: any, { selected }) => (
                 <li {...props}>
                     <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>

@@ -1,6 +1,6 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { memo, ReactNode } from 'react'
-import { Drawer as MuiDrawer } from '@mui/material'
+import { SwipeableDrawer } from '@mui/material'
 
 interface DrawerProps {
   className?: string
@@ -18,9 +18,12 @@ export const Drawer = memo((props: DrawerProps) => {
   } = props
 
   return (
-    <MuiDrawer
-      open={isOpen}
-      onClose={onClose}
+    <SwipeableDrawer
+      open={!!isOpen}
+      onClose={() => onClose?.()}
+      onOpen={() => { }}
+      swipeAreaWidth={20}
+      disableSwipeToOpen
       className={classNames('', {}, [className])}
       sx={{
         '& .MuiDrawer-paper': {
@@ -40,6 +43,6 @@ export const Drawer = memo((props: DrawerProps) => {
       }}
     >
       {children}
-    </MuiDrawer>
+    </SwipeableDrawer>
   )
 })

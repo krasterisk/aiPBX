@@ -70,6 +70,7 @@
     }
 
     :global(.MuiOutlinedInput-root) {
+        background-color: var(--code-bg) !important;
 
         &:hover,
         &:global(.Mui-focused) {

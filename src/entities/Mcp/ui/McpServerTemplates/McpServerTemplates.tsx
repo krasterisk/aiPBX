@@ -13,6 +13,7 @@ import {
     useComposioConnect,
     useComposioConnectApiKey,
     useBitrix24Connect,
+    useTelegramConnect,
     useGetComposioStatus,
     useDeleteComposioConnection,
     useMcpServersAll,
@@ -30,6 +31,7 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
     const [composioConnect, { isLoading: isConnecting }] = useComposioConnect()
     const [connectApiKey, { isLoading: isConnectingApiKey }] = useComposioConnectApiKey()
     const [connectBitrix24, { isLoading: isConnectingBitrix24 }] = useBitrix24Connect()
+    const [connectTelegramApi, { isLoading: isConnectingTelegram }] = useTelegramConnect()
     const { data: statuses, refetch: refetchStatus } = useGetComposioStatus()
     const { data: allServers } = useMcpServersAll(null)
     const [deleteConnection, { isLoading: isDisconnecting }] = useDeleteComposioConnection()
@@ -109,10 +111,8 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
             if (authType === 'webhook') {
                 await connectBitrix24({ webhookUrl: apiKeyValue.trim() }).unwrap()
             } else if (authType === 'chat_id') {
-                await connectApiKey({
-                    toolkit: apiKeyDialog.toolkit,
-                    chatId: apiKeyValue.trim(),
-                }).unwrap()
+                // Telegram: use dedicated endpoint
+                await connectTelegramApi({ chatId: apiKeyValue.trim() }).unwrap()
             } else {
                 await connectApiKey({
                     toolkit: apiKeyDialog.toolkit,
@@ -123,10 +123,10 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
             toast.success(t('composio_connected'))
             setApiKeyDialog(null)
             setApiKeyValue('')
-        } catch (e) {
-            toast.error(t('Ошибка подключения сервиса'))
+        } catch (e: any) {
+            toast.error(e?.data?.message || t('Ошибка подключения сервиса'))
         }
-    }, [apiKeyDialog, apiKeyValue, connectApiKey, connectBitrix24, t])
+    }, [apiKeyDialog, apiKeyValue, connectApiKey, connectBitrix24, connectTelegramApi, t])
 
     const onDisconnect = useCallback(async (accountId: string) => {
         try {
@@ -137,7 +137,7 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
         }
     }, [deleteConnection, t])
 
-    const isLoading = isConnecting || isDisconnecting || isConnectingApiKey || isConnectingBitrix24
+    const isLoading = isConnecting || isDisconnecting || isConnectingApiKey || isConnectingBitrix24 || isConnectingTelegram
 
     // Determine dialog type
     const isTelegramDialog = apiKeyDialog?.template.authType === 'chat_id'

@@ -36,12 +36,14 @@ export const ToolsSelect = memo((props: ToolsSelectorProps) => {
   return (
     <Combobox
       multiple
+      disableCloseOnSelect
       label={label}
       options={(tools || []).filter(t => t.id && t.name) as any[]}
       value={(value || []).filter(v => v.id && v.name) as any[]}
       onChange={onChangeMultipleHandler}
       className={className}
       getOptionLabel={(option: any) => option.name || ''}
+      isOptionEqualToValue={(option: any, val: any) => option.id === val.id}
       renderOption={(props, option: any, { selected }) => (
         <li {...props}>
           <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
