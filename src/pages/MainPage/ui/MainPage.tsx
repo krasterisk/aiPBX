@@ -134,12 +134,13 @@ const MainPage: FC = memo(() => {
             <div className={cls.ctaGroup} style={{ marginTop: 'var(--space-4)' }}>
               <Button
                 color="accent"
-                size="l"
+                size="xl"
                 variant='glass-action'
                 onClick={onRegister}
+                style={{ padding: '0 40px', fontSize: '1.2rem', height: 56 }}
               >
                 {t('Hero.CTA_Start')}
-                <ArrowRight size={18} style={{ marginLeft: 8 }} />
+                <ArrowRight size={20} style={{ marginLeft: 8 }} />
               </Button>
             </div>
           </motion.div>
@@ -197,7 +198,7 @@ const MainPage: FC = memo(() => {
               style={{ height: isMobile ? '300px' : '400px' }}
             >
               <img
-                src="/assets/hero-visual.png"
+                src="/assets/hero-visual.webp"
                 alt="AI PBX Visual"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }}
               />
@@ -247,7 +248,7 @@ const MainPage: FC = memo(() => {
                     overflow: 'hidden'
                   }}>
                     <img
-                      src={`/assets/how-it-works-${step}.png`}
+                      src={`/assets/how-it-works-${step}.webp`}
                       alt={String(t(`HowItWorks.Step${step}.Title`))}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }}
                     />
@@ -373,15 +374,18 @@ const MainPage: FC = memo(() => {
             <p style={{ fontSize: '1.25rem', lineHeight: 1.6, color: 'rgba(255,255,255,0.6)', marginBottom: '2.5rem' }}>
               {t('FinalCTA.SubTitle')}
             </p>
-            <Button
-              color="accent"
-              size="l"
-              variant="glass-action"
-              onClick={onRegister}
-            >
-              {t('FinalCTA.Button')}
-              <ArrowRight size={18} style={{ marginLeft: 8 }} />
-            </Button>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <Button
+                color="accent"
+                size="xl"
+                variant="glass-action"
+                onClick={onRegister}
+                style={{ padding: '0 40px', fontSize: '1.2rem', height: 56 }}
+              >
+                {t('FinalCTA.Button')}
+                <ArrowRight size={20} style={{ marginLeft: 8 }} />
+              </Button>
+            </div>
           </motion.div>
         </Container>
       </section>
