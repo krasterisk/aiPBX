@@ -8,12 +8,14 @@ import {
     getAIAnalyticsInited,
     getAIAnalyticsStartDate,
     getAIAnalyticsTab,
-    getAIAnalyticsUserId
+    getAIAnalyticsUserId,
+    getAIAnalyticsSource
 } from '../../model/selectors/aiAnalyticsPageSelectors'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 import { aiAnalyticsPageActions } from '../../model/slices/aiAnalyticsPageSlice'
 import { useGetAIAnalyticsDashboard } from '@/entities/Report'
+import { CdrSource } from '@/entities/Report/model/types/report'
 
 export function useAIAnalyticsFilters() {
     const tab = useSelector(getAIAnalyticsTab)
@@ -25,6 +27,7 @@ export function useAIAnalyticsFilters() {
     const assistants = useSelector(getAIAnalyticsAssistants)
     const authData = useSelector(getUserAuthData)
     const isAdmin = useSelector(isUserAdmin)
+    const source = useSelector(getAIAnalyticsSource)
 
     const userId = !isAdmin ? authData?.vpbx_user_id || authData?.id : clientId
 
@@ -41,7 +44,8 @@ export function useAIAnalyticsFilters() {
         startDate,
         endDate,
         userId,
-        assistantId
+        assistantId,
+        source
     }, { skip: !startDate || !endDate })
 
     const onRefetch = useCallback(() => {
@@ -70,6 +74,10 @@ export function useAIAnalyticsFilters() {
         dispatch(aiAnalyticsPageActions.setEndDate(value))
     }, [dispatch])
 
+    const onChangeSource = useCallback((source: CdrSource | undefined) => {
+        dispatch(aiAnalyticsPageActions.setSource(source))
+    }, [dispatch])
+
     return {
         tab,
         isAIAnalyticsError,
@@ -83,11 +91,13 @@ export function useAIAnalyticsFilters() {
         assistants,
         startDate,
         endDate,
+        source,
         onRefetch,
         onChangeUserId,
         onChangeAssistant,
         onChangeStartDate,
         onChangeEndDate,
+        onChangeSource,
         onChangeTab
     }
 }

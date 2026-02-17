@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ReportsPageSchema } from '../types/reportsPageSchema'
 import { ClientOptions } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
+import { CdrSource } from '../types/report'
 
 const initialState: ReportsPageSchema = {
   page: 1,
@@ -59,6 +60,9 @@ export const reportsPageSlice = createSlice({
     },
     setSortOrder: (state, action: PayloadAction<'ASC' | 'DESC' | undefined>) => {
       state.sortOrder = action.payload
+    },
+    setSource: (state, action: PayloadAction<CdrSource | undefined>) => {
+      state.source = action.payload
     },
     initState: (state) => {
       state.limit = 25

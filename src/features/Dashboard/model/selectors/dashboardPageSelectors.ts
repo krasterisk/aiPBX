@@ -7,3 +7,4 @@ export const getDashboardInited = (state: StateSchema) => state.dashboardPage?._
 export const getDashboardUserId = (state: StateSchema) => state.dashboardPage?.userId ?? ''
 export const getDashboardAssistantId = (state: StateSchema) => state.dashboardPage?.assistantId ?? []
 export const getDashboardAssistants = (state: StateSchema) => state.dashboardPage?.assistants ?? []
+export const getDashboardSource = (state: StateSchema) => state.dashboardPage?.source

@@ -1,5 +1,6 @@
 import { ClientOptions } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
+import { CdrSource } from './report'
 
 export interface ReportsPageSchema {
   // pagination
@@ -17,6 +18,7 @@ export interface ReportsPageSchema {
   search: string
   userId: string
   user?: ClientOptions
+  source?: CdrSource
   // sorting
   sortField?: string
   sortOrder?: 'ASC' | 'DESC'

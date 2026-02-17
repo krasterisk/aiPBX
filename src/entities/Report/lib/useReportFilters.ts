@@ -15,13 +15,15 @@ import {
   getReportStartDate,
   getReportUserId,
   getReportSortField,
-  getReportSortOrder
+  getReportSortOrder,
+  getReportSource
 } from '../model/selectors/reportSelectors'
 import { reportsPageActions } from '../model/slices/reportsPageSlice'
 import { useGetReports } from '../api/reportApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
+import { CdrSource } from '../model/types/report'
 
 export function useReportFilters() {
   const page = useSelector(getReportsPageNum)
@@ -38,6 +40,7 @@ export function useReportFilters() {
   const isInited = useSelector(getReportsInited)
   const sortField = useSelector(getReportSortField)
   const sortOrder = useSelector(getReportSortOrder)
+  const source = useSelector(getReportSource)
 
   const authData = useSelector(getUserAuthData)
   const isAdmin = useSelector(isUserAdmin)
@@ -62,7 +65,8 @@ export function useReportFilters() {
     startDate,
     endDate,
     sortField,
-    sortOrder
+    sortOrder,
+    source
   }, {
     refetchOnFocus: false,
     refetchOnReconnect: false
@@ -149,6 +153,11 @@ export function useReportFilters() {
     dispatch(reportsPageActions.setPage(1))
   }, [dispatch, sortField, sortOrder])
 
+  const onChangeSource = useCallback((value: CdrSource | undefined) => {
+    dispatch(reportsPageActions.setSource(value))
+    dispatch(reportsPageActions.setPage(1))
+  }, [dispatch])
+
   return {
     hasMore,
     page,
@@ -168,6 +177,7 @@ export function useReportFilters() {
     assistants,
     sortField,
     sortOrder,
+    source,
     onChangeAssistant,
     onChangeUserId,
     onChangeStartDate,
@@ -177,6 +187,7 @@ export function useReportFilters() {
     onChangeHasMore,
     onChangePage,
     onChangeSort,
+    onChangeSource,
     onRefetch,
     onLoadNext
   }

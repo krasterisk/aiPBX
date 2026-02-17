@@ -154,6 +154,9 @@ export const ReportList = (props: ReportsListProps) => {
                 <th className={cls.sortable} onClick={() => onChangeSort('callerId')}>
                   {t('Звонивший')} {renderSortIcon('callerId')}
                 </th>
+                <th className={cls.sortable} onClick={() => onChangeSort('source')}>
+                  {t('Источник')} {renderSortIcon('source')}
+                </th>
                 <th className={cls.sortable} onClick={() => onChangeSort('duration')}>
                   {t('Длительность')} {renderSortIcon('duration')}
                 </th>

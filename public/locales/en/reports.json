@@ -124,5 +124,12 @@
   "realtime": "Realtime",
   "analytic": "Analytics",
   "№": "#",
-  "Аналитика": "Analytics"
+  "Аналитика": "Analytics",
+  "Источник": "Source",
+  "Все": "All",
+  "Звонок": "Call",
+  "Виджет": "Widget",
+  "Playground": "Playground",
+  "Дата с": "Date from",
+  "Дата по": "Date to"
 }

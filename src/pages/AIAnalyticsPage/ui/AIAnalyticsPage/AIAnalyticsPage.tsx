@@ -29,6 +29,8 @@ const AIAnalyticsPageContent = memo(() => {
         onChangeTab,
         onChangeStartDate,
         onChangeEndDate,
+        source,
+        onChangeSource,
         aiAnalyticsData,
         isAIAnalyticsLoading,
         isAIAnalyticsFetching,
@@ -68,11 +70,13 @@ const AIAnalyticsPageContent = memo(() => {
                 assistants={assistants}
                 startDate={startDate}
                 endDate={endDate}
+                source={source}
                 onChangeTab={onChangeTab}
                 onChangeAssistant={onChangeAssistant}
                 onChangeUserId={onChangeUserId}
                 onChangeEndDate={onChangeEndDate}
                 onChangeStartDate={onChangeStartDate}
+                onChangeSource={onChangeSource}
             />
 
             <AIMetricsOverview

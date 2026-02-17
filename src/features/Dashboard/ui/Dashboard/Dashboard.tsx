@@ -26,7 +26,9 @@ export const Dashboard = memo(() => {
         onChangeUserId,
         onChangeTab,
         onChangeStartDate,
-        onChangeEndDate
+        onChangeEndDate,
+        source,
+        onChangeSource
     } = useDashboardFilters()
 
     if (isError) {
@@ -59,11 +61,13 @@ export const Dashboard = memo(() => {
                 assistants={assistants}
                 startDate={startDate}
                 endDate={endDate}
+                source={source}
                 onChangeTab={onChangeTab}
                 onChangeAssistant={onChangeAssistant}
                 onChangeUserId={onChangeUserId}
                 onChangeEndDate={onChangeEndDate}
                 onChangeStartDate={onChangeStartDate}
+                onChangeSource={onChangeSource}
             />
 
             <DashboardStatistics

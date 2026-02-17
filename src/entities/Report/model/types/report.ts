@@ -6,6 +6,8 @@ export interface AllReports {
   rows: Report[]
 }
 
+export type CdrSource = 'call' | 'widget' | 'playground'
+
 export interface Report {
   id: string
   callerId: string
@@ -21,6 +23,7 @@ export interface Report {
   userId: string
   analytics?: Analytics
   billingRecords?: BillingRecord[]
+  source?: CdrSource
 }
 
 export interface ReportsListProps {

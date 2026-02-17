@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AIAnalyticsPageSchema } from '../types/aiAnalyticsPageSchema'
 import { AssistantOptions } from '@/entities/Assistants'
 import { ClientOptions } from '@/entities/User'
+import { CdrSource } from '@/entities/Report/model/types/report'
 
 const initialState: AIAnalyticsPageSchema = {
     tab: 'week',
@@ -35,6 +36,9 @@ export const aiAnalyticsPageSlice = createSlice({
         setUser: (state, action: PayloadAction<ClientOptions>) => {
             state.user = action.payload
             state.userId = action.payload.id
+        },
+        setSource: (state, action: PayloadAction<CdrSource | undefined>) => {
+            state.source = action.payload
         },
         initState: (state) => {
             state._inited = true

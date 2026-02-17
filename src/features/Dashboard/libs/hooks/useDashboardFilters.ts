@@ -8,12 +8,14 @@ import {
     getDashboardStartDate,
     getDashboardTab,
     getDashboardUserId,
-    getDashboardAssistants
+    getDashboardAssistants,
+    getDashboardSource
 } from '../../model/selectors/dashboardPageSelectors'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 import { dashboardPageActions } from '../../model/slices/dashboardPageSlice'
 import { useDashboard } from '@/entities/Report'
+import { CdrSource } from '@/entities/Report/model/types/report'
 
 export function useDashboardFilters() {
     const tab = useSelector(getDashboardTab)
@@ -25,6 +27,7 @@ export function useDashboardFilters() {
     const assistants = useSelector(getDashboardAssistants)
     const authData = useSelector(getUserAuthData)
     const isAdmin = useSelector(isUserAdmin)
+    const source = useSelector(getDashboardSource)
 
     const userId = !isAdmin ? authData?.vpbx_user_id || authData?.id : clientId
 
@@ -42,7 +45,8 @@ export function useDashboardFilters() {
         endDate,
         tab,
         userId,
-        assistantId
+        assistantId,
+        source
     }, { skip: !startDate || !endDate || !tab })
 
     const onRefetch = useCallback(() => {
@@ -71,6 +75,10 @@ export function useDashboardFilters() {
         dispatch(dashboardPageActions.setEndDate(value))
     }, [dispatch])
 
+    const onChangeSource = useCallback((source: CdrSource | undefined) => {
+        dispatch(dashboardPageActions.setSource(source))
+    }, [dispatch])
+
     return {
         tab,
         isError,
@@ -84,11 +92,13 @@ export function useDashboardFilters() {
         assistants,
         startDate,
         endDate,
+        source,
         onChangeTab,
         onRefetch,
         onChangeUserId,
         onChangeAssistant,
         onChangeStartDate,
-        onChangeEndDate
+        onChangeEndDate,
+        onChangeSource
     }
 }

@@ -15,3 +15,4 @@ export const getReportsInited = (state: StateSchema) => state.reportsPage?._init
 export const getReportsPageSearch = (state: StateSchema) => state.reportsPage?.search ?? ''
 export const getReportSortField = (state: StateSchema) => state.reportsPage?.sortField
 export const getReportSortOrder = (state: StateSchema) => state.reportsPage?.sortOrder
+export const getReportSource = (state: StateSchema) => state.reportsPage?.source

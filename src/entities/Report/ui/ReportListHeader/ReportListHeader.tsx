@@ -28,16 +28,18 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
     assistantId,
     assistants,
     isInited,
+    source,
     onChangeAssistant,
     onChangeTab,
     onChangeUserId,
     onChangeStartDate,
     onChangeEndDate,
-    onChangeSearch
+    onChangeSearch,
+    onChangeSource
   } = useReportFilters()
 
   const { t } = useTranslation('reports')
-  const isMobile = useMediaQuery('(max-width:1024px)') // Adjusted tablet break
+  const isMobile = useMediaQuery('(max-width:1024px)')
 
   const [filterShow, setFilterShow] = useState<boolean>(false)
 
@@ -82,10 +84,12 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
         userId={clientId}
         startDate={startDate}
         endDate={endDate}
+        source={source}
         onChangeUserId={onChangeUserId}
         onChangeAssistant={onChangeAssistant}
         onChangeStartDate={onChangeStartDate}
         onChangeEndDate={onChangeEndDate}
+        onChangeSource={onChangeSource}
         show={filterShow}
         onClose={() => setFilterShow(false)}
       />

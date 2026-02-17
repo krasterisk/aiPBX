@@ -10,6 +10,7 @@ import { PeriodExtendedFilters } from '@/features/PeriodExtendedFilter'
 import { useSelector } from 'react-redux'
 import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
 import { currencySymbols } from "@/entities/User/model/consts/consts"
+import { CdrSource } from '@/entities/Report/model/types/report'
 
 interface FiltersGroupProps {
   className?: string
@@ -26,6 +27,8 @@ interface FiltersGroupProps {
   onChangeTab: (value: string) => void
   onChangeStartDate: (value: string) => void
   onChangeEndDate: (value: string) => void
+  source?: CdrSource
+  onChangeSource?: (value: CdrSource | undefined) => void
 }
 
 export const FiltersGroup = memo((props: FiltersGroupProps) => {
@@ -43,7 +46,9 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
     onChangeAssistant,
     onChangeUserId,
     onChangeStartDate,
-    onChangeEndDate
+    onChangeEndDate,
+    source,
+    onChangeSource
   } = props
 
   const { t } = useTranslation('reports')
@@ -68,10 +73,12 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
             userId={userId}
             startDate={startDate}
             endDate={endDate}
+            source={source}
             onChangeUserId={onChangeUserId}
             onChangeAssistant={onChangeAssistant}
             onChangeStartDate={onChangeStartDate}
             onChangeEndDate={onChangeEndDate}
+            onChangeSource={onChangeSource}
             show={filterShow}
             onClose={() => setFilterShow(false)}
           />

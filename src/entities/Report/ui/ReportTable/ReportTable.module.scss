@@ -121,6 +121,38 @@
     font-size: 13px;
 }
 
+// ─── Source Cell ────────────────────────────────────────
+.sourceCell {
+    white-space: nowrap;
+}
+
+.sourceBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: var(--radius-md);
+    background: var(--glass-overlay-light);
+    color: var(--text-redesigned);
+
+    &[data-source="call"] {
+        color: var(--accent-redesigned);
+        background: rgba(94, 211, 243, 0.1);
+    }
+
+    &[data-source="widget"] {
+        color: #a78bfa;
+        background: rgba(167, 139, 250, 0.1);
+    }
+
+    &[data-source="playground"] {
+        color: var(--save-redesigned);
+        background: rgba(108, 217, 139, 0.1);
+    }
+}
+
 // ─── Mobile / Tablet ───────────────────────────────────
 @include tablet {
     .ReportTableItem {

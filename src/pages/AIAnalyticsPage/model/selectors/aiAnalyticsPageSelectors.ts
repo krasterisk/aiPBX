@@ -7,3 +7,4 @@ export const getAIAnalyticsInited = (state: StateSchema) => state.aiAnalyticsPag
 export const getAIAnalyticsUserId = (state: StateSchema) => state.aiAnalyticsPage?.userId ?? ''
 export const getAIAnalyticsAssistantId = (state: StateSchema) => state.aiAnalyticsPage?.assistantId ?? []
 export const getAIAnalyticsAssistants = (state: StateSchema) => state.aiAnalyticsPage?.assistants ?? []
+export const getAIAnalyticsSource = (state: StateSchema) => state.aiAnalyticsPage?.source

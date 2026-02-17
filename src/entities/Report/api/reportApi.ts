@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { AIAnalyticsResponse, AllReports, Analytics, Report, ReportDialog } from '../model/types/report'
+import { AIAnalyticsResponse, AllReports, Analytics, CdrSource, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
   page?: number
@@ -12,6 +12,7 @@ interface QueryArgs {
   userId?: string
   sortField?: string
   sortOrder?: 'ASC' | 'DESC'
+  source?: CdrSource
 }
 
 interface AIAnalyticsDashboardArgs {
@@ -19,6 +20,7 @@ interface AIAnalyticsDashboardArgs {
   assistantId?: string[]
   startDate?: string
   endDate?: string
+  source?: CdrSource
 }
 
 export const reportApi = rtkApi.injectEndpoints({

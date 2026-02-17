@@ -5,7 +5,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Check } from '@/shared/ui/mui/Check'
 import { Report } from '../../model/types/report'
 import { useTranslation } from 'react-i18next'
-import { ChevronDown, ChevronUp, Star, CheckCircle, AlertCircle } from 'lucide-react'
+import { ChevronDown, ChevronUp, Star, CheckCircle, AlertCircle, Phone, Globe, Monitor } from 'lucide-react'
 import { useGetReportDialogs } from '../../api/reportApi'
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { useMediaQuery } from '@mui/material'
@@ -90,6 +90,18 @@ export const ReportTable = memo((props: ReportTableProps) => {
   const totalTokens = (report.tokens || 0)
   const totalCost = (report.cost || 0)
 
+  const sourceLabel = {
+    call: t('Звонок'),
+    widget: t('Виджет'),
+    playground: t('Playground')
+  }
+
+  const sourceIcon = {
+    call: <Phone size={14} />,
+    widget: <Globe size={14} />,
+    playground: <Monitor size={14} />
+  }
+
   // Analytics-derived fields
   const csat = report.analytics?.csat
   const scenarioSuccess = report.analytics?.metrics?.scenario_analysis?.success
@@ -119,6 +131,14 @@ export const ReportTable = memo((props: ReportTableProps) => {
         </td>
         <td data-label={t('Звонивший')}>
           {report.callerId ? <Text text={report.callerId} /> : ''}
+        </td>
+        <td data-label={t('Источник')} className={cls.sourceCell}>
+          {report.source ? (
+            <span className={cls.sourceBadge} data-source={report.source}>
+              {sourceIcon[report.source]}
+              {sourceLabel[report.source]}
+            </span>
+          ) : '—'}
         </td>
         <td data-label={t('Длительность')}>
           <Text text={String(duration)} />
@@ -169,7 +189,7 @@ export const ReportTable = memo((props: ReportTableProps) => {
       </tr>
       {isExpanded && (
         <tr className={cls.DialogRow}>
-          <td colSpan={10}>
+          <td colSpan={11}>
             <ReportExpandedPanel
               report={report}
               dialogs={Dialogs}

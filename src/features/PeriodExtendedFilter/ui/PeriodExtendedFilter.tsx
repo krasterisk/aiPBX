@@ -1,17 +1,23 @@
 import { useTranslation } from 'react-i18next'
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useMemo } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
-import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import dayjs from 'dayjs'
 import { Modal } from '@/shared/ui/redesigned/Modal'
 import { ClientSelect, isUserAdmin } from '@/entities/User'
 import cls from './PeriodExtendedFilter.module.scss'
 import { useSelector } from 'react-redux'
-import { Filter, Search } from 'lucide-react'
+import { Filter, X } from 'lucide-react'
 import { AssistantOptions, AssistantSelect } from '@/entities/Assistants'
 import { DateSelector } from '@/shared/ui/mui/DateSelector'
 import { classNames } from '@/shared/lib/classNames/classNames'
+import { Combobox } from '@/shared/ui/mui/Combobox'
+import { CdrSource } from '@/entities/Report/model/types/report'
+
+interface SourceOption {
+    label: string
+    value: CdrSource | ''
+}
 
 interface PeriodExtendedFilterProps {
     className?: string
@@ -22,10 +28,12 @@ interface PeriodExtendedFilterProps {
     userId?: string
     assistantId?: string[]
     assistants?: AssistantOptions[]
+    source?: CdrSource
     onChangeStartDate?: (value: string) => void
     onChangeEndDate?: (value: string) => void
     onChangeAssistant: (event: any, assistant: AssistantOptions[]) => void
     onChangeUserId: (clientId: string) => void
+    onChangeSource?: (value: CdrSource | undefined) => void
 }
 
 export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => {
@@ -35,13 +43,14 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
         endDate,
         startDate,
         userId,
-        assistantId,
         assistants,
+        source,
         onChangeStartDate,
         onClose,
         onChangeEndDate,
         onChangeAssistant,
-        onChangeUserId
+        onChangeUserId,
+        onChangeSource
     } = props
 
     const { t } = useTranslation('reports')
@@ -51,25 +60,50 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
         onClose?.()
     }, [onClose])
 
+    const sourceOptions: SourceOption[] = useMemo(() => [
+        { label: t('Все'), value: '' },
+        { label: t('Звонок'), value: 'call' },
+        { label: t('Виджет'), value: 'widget' },
+        { label: t('Playground'), value: 'playground' },
+    ], [t])
+
+    const selectedSource = useMemo(() => {
+        return sourceOptions.find((opt) => opt.value === (source || '')) || sourceOptions[0]
+    }, [source, sourceOptions])
+
+    const handleSourceChange = useCallback((_: any, option: SourceOption | null) => {
+        const val = option?.value || ''
+        onChangeSource?.(val === '' ? undefined : val as CdrSource)
+    }, [onChangeSource])
+
     return (
         <Modal isOpen={show} onClose={onClose} lazy>
-            <VStack
-                gap="24"
-                max
-                className={classNames(cls.filterContainer, {}, [className])}
-            >
-                <VStack max gap="8" align="center" className={cls.title}>
-                    <HStack gap="8" align="center">
-                        <Filter className={cls.icon} size={20} />
-                        <Text title={t('Расширенные фильтры')} bold size="l" />
-                    </HStack>
-                    <Text text={t('Выберите параметры для фильтрации отчетов')} size="s" />
-                </VStack>
+            <div className={classNames(cls.filterContainer, {}, [className])}>
+                {/* Close button — absolute top-right */}
+                <button
+                    type="button"
+                    className={cls.closeBtn}
+                    onClick={handleOnClose}
+                    aria-label="Close"
+                >
+                    <X size={18} />
+                </button>
 
-                <VStack gap="16" max>
+                {/* Header */}
+                <HStack gap="8" align="center" className={cls.header}>
+                    <div className={cls.iconWrapper}>
+                        <Filter size={16} />
+                    </div>
+                    <Text title={t('Расширенные фильтры')} bold size="l" />
+                </HStack>
+
+                <div className={cls.divider} />
+
+                {/* Filter fields */}
+                <VStack gap="16" max className={cls.fieldsSection}>
                     <HStack gap="16" max>
                         <DateSelector
-                            label={t('Дата с')}
+                            label={t('Дата с') ?? ''}
                             className={cls.fullWidth}
                             onChange={(newValue: any) => {
                                 const formattedDate = newValue && dayjs(newValue).isValid() ? dayjs(newValue).format('YYYY-MM-DD') : ''
@@ -80,7 +114,7 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
                         />
 
                         <DateSelector
-                            label={t('Дата по')}
+                            label={t('Дата по') ?? ''}
                             className={cls.fullWidth}
                             onChange={(newValue: any) => {
                                 const formattedDate = newValue && dayjs(newValue).isValid() ? dayjs(newValue).format('YYYY-MM-DD') : ''
@@ -94,7 +128,7 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
                     {isAdmin && (
                         <ClientSelect
                             label={t('Выбор клиента') || ''}
-                            className={cls.clientSelect}
+                            className={cls.fullWidth}
                             clientId={userId}
                             onChangeClient={onChangeUserId}
                             fullWidth
@@ -106,23 +140,25 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
                         value={assistants}
                         userId={userId}
                         label={t('Выбор ассистента') || ''}
-                        className={cls.clientSelect}
+                        className={cls.fullWidth}
                         onChangeAssistant={onChangeAssistant}
                         fullWidth
                     />
-                </VStack>
 
-                <HStack gap="16" justify="end" max className={cls.footer}>
-                    <Button
-                        onClick={handleOnClose}
-                        variant="outline"
-                        addonLeft={<Search size={18} />}
-                        fullWidth
-                    >
-                        {t('Показать результаты')}
-                    </Button>
-                </HStack>
-            </VStack>
+                    {onChangeSource && (
+                        <Combobox
+                            options={sourceOptions}
+                            value={selectedSource}
+                            onChange={handleSourceChange}
+                            getOptionLabel={(option: SourceOption) => option.label}
+                            isOptionEqualToValue={(option: SourceOption, value: SourceOption) => option.value === value.value}
+                            label={t('Источник') ?? ''}
+                            disableClearable
+                            className={cls.fullWidth}
+                        />
+                    )}
+                </VStack>
+            </div>
         </Modal>
     )
 })
