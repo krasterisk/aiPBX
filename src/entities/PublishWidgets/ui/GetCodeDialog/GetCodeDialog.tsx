@@ -10,7 +10,6 @@ import { Icon } from '@/shared/ui/redesigned/Icon'
 import CloseIcon from '@/shared/assets/icons/close.svg'
 import { WidgetKey, WidgetAppearanceSettings, DEFAULT_APPEARANCE_SETTINGS } from '@/entities/WidgetKeys'
 import { generateEmbedCode } from '../../lib/generateEmbedCode'
-import { usePbxServer } from '@/entities/PbxServers'
 import { EmbedCodeCard } from './components/EmbedCodeCard/EmbedCodeCard'
 import { InstructionsCard } from './components/InstructionsCard/InstructionsCard'
 
@@ -36,14 +35,10 @@ export const GetCodeDialog = memo((props: GetCodeDialogProps) => {
         initialAppearance || DEFAULT_APPEARANCE_SETTINGS
     )
 
-    const { data: pbxServer } = usePbxServer(String(widget?.pbxServerId), {
-        skip: !widget?.pbxServerId
-    })
-
     const embedCode = useMemo(() => {
         if (!widget) return ''
-        return generateEmbedCode(widget, appearance, pbxServer?.wss_url || '')
-    }, [widget, appearance, pbxServer?.wss_url])
+        return generateEmbedCode(widget, appearance)
+    }, [widget, appearance])
 
     if (!widget) return null
 

@@ -2,14 +2,11 @@ import { WidgetKey, WidgetAppearanceSettings } from '@/entities/WidgetKeys'
 
 export function generateEmbedCode(
     widget: WidgetKey,
-    settings: WidgetAppearanceSettings,
-    wssUrl: string
+    settings: WidgetAppearanceSettings
 ): string {
     const attributes = [
         `src="https://cdn.jsdelivr.net/gh/krasterisk/aipbx_widget@latest/dist/widget.min.js"`,
-        `data-key="${widget.publicKey}"`,
-        `data-api="${__API__}"`,
-        `data-wss="${wssUrl}"`
+        `data-token="${widget.token}"`
     ]
 
     // Добавляем опциональные атрибуты только если они отличаются от defaults

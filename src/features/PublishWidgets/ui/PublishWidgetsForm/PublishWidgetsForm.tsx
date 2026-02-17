@@ -170,7 +170,8 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
             isActive,
             appearance: JSON.stringify(appearance),
             language: appearance?.language,
-            logo: appearance?.logo
+            logo: appearance?.logo,
+            apiUrl: __API__
         }
 
         try {

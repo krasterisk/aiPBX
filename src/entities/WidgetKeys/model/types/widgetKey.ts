@@ -28,6 +28,8 @@ export interface WidgetKey {
         name?: string
         email?: string
     }
+    apiUrl?: string
+    token?: string
 }
 
 export interface CreateWidgetDto {
@@ -40,6 +42,7 @@ export interface CreateWidgetDto {
     appearance?: string
     language?: string
     logo?: string
+    apiUrl?: string
 }
 
 export interface UpdateWidgetDto {
@@ -53,6 +56,7 @@ export interface UpdateWidgetDto {
     appearance?: string
     language?: string
     logo?: string
+    apiUrl?: string
 }
 
 export interface WidgetAppearanceSettings {
