@@ -115,7 +115,7 @@
     "publish_widget_desc": "Add a widget to your site — clients can call the assistant right from the browser, no apps needed.",
     "publish_telephony_title": "Connect to telephony",
     "publish_telephony_badge": "For those with a PBX",
-    "publish_telephony_desc": "If you already have an office phone system (Asterisk, FreePBX) — connect the assistant as an extension.",
+    "publish_telephony_desc": "If you have an office or cloud PBX — connect the assistant as a SIP extension.",
     "publish_playground_title": "Test in Playground",
     "publish_playground_badge": "Try it right now",
     "publish_playground_desc": "Call your assistant right now using your browser microphone — no telephony setup needed.",
@@ -133,6 +133,7 @@
     "completion_go_playground": "Go to Playground",
     "completion_go_dashboard": "Go to Dashboard",
     "completion_go_docs": "Documentation",
+    "completion_go_assistants": "Go to Assistants",
     "back": "Back",
     "next": "Next"
 }

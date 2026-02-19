@@ -31,6 +31,13 @@ const QWEN_VOICES = [
   'Radio Gol', 'Jada', 'Dylan', 'Li', 'Marcus', 'Roy', 'Peter', 'Sunny', 'Eric', 'Rocky', 'Kiki'
 ]
 
+const YANDEX_VOICES = [
+  'alena', 'filipp', 'ermil', 'jane', 'omazh', 'zahar',
+  'dasha', 'julia', 'lera', 'masha', 'marina',
+  'alexander', 'kirill', 'anton',
+  'madi_ru', 'saule_ru', 'zamira_ru', 'zhanar_ru', 'yulduz_ru'
+]
+
 const getVoicePreviewUrl = (voice: string, model?: string): string => {
   if (model?.startsWith('qwen')) {
     return `https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/en-US/20250804/beuyzk/${voice}.wav`
@@ -56,8 +63,9 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
 
   const topics = useMemo(() => {
     const voiceArray = model?.startsWith('qwen') ? QWEN_VOICES
-      : model?.startsWith('gpt') ? GPT_VOICES
-        : GPT_VOICES
+      : model?.startsWith('yandex') ? YANDEX_VOICES
+        : model?.startsWith('gpt') ? GPT_VOICES
+          : GPT_VOICES
 
     return voiceArray.map(voice => ({ id: voice, name: voice }))
   }, [model])

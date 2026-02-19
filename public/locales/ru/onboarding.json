@@ -115,7 +115,7 @@
     "publish_widget_desc": "Добавьте виджет на сайт — клиенты смогут позвонить ассистенту прямо из браузера, без установки приложений.",
     "publish_telephony_title": "Подключить к телефонии",
     "publish_telephony_badge": "Для тех, у кого есть АТС",
-    "publish_telephony_desc": "Если у вас уже есть офисная телефонная система (Asterisk, FreePBX) — подключите ассистента как внутренний номер.",
+    "publish_telephony_desc": "Если у вас есть офисная или облачная АТС — подключите ассистента как внутренний номер по SIP.",
     "publish_playground_title": "Тест в Playground",
     "publish_playground_badge": "Попробуйте прямо сейчас",
     "publish_playground_desc": "Позвоните ассистенту прямо сейчас с микрофона в браузере — без настройки телефонии.",
@@ -133,6 +133,7 @@
     "completion_go_playground": "Перейти в Playground",
     "completion_go_dashboard": "Перейти в Dashboard",
     "completion_go_docs": "Документация",
+    "completion_go_assistants": "Перейти к ассистентам",
     "back": "Назад",
     "next": "Далее"
 }

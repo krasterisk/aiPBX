@@ -15,7 +15,7 @@ import {
     getOnboardingCreatedAssistantId
 } from '../../model/selectors/onboardingSelectors'
 import { TelegramMockup } from '../components/TelegramMockup/TelegramMockup'
-import { useTelegramConnect, useMcpServersAll } from '@/entities/Mcp/api/mcpApi'
+import { useTelegramConnect, useMcpServersAll, useSyncMcpTools, useToggleMcpTool } from '@/entities/Mcp/api/mcpApi'
 import { useUpdateAssistant } from '@/entities/Assistants/api/assistantsApi'
 import {
     ArrowLeft,
@@ -39,6 +39,8 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
     const createdAssistantId = useSelector(getOnboardingCreatedAssistantId)
     const [connectTelegram, { isLoading }] = useTelegramConnect()
     const [updateAssistant] = useUpdateAssistant()
+    const [syncTools] = useSyncMcpTools()
+    const [toggleTool] = useToggleMcpTool()
     const { refetch: refetchMcpServers } = useMcpServersAll(null)
     const [error, setError] = useState<string | null>(null)
 
@@ -52,8 +54,25 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
 
         try {
             setError(null)
-            await connectTelegram({ chatId: chatId.trim() }).unwrap()
+            const result = await connectTelegram({ chatId: chatId.trim() }).unwrap()
             dispatch(onboardingActions.setTelegramConnected(true))
+
+            const serverId = result?.server?.id
+
+            // Sync tools and enable TELEGRAM_SEND_MESSAGE by default
+            if (serverId) {
+                try {
+                    const tools = await syncTools(serverId).unwrap()
+                    const sendMessageTool = tools?.find(
+                        t => t.name === 'TELEGRAM_SEND_MESSAGE'
+                    )
+                    if (sendMessageTool && !sendMessageTool.isEnabled) {
+                        await toggleTool(sendMessageTool.id).unwrap()
+                    }
+                } catch {
+                    // Non-critical: tools can be enabled manually later
+                }
+            }
 
             // Attach the Telegram MCP server to the created assistant
             if (createdAssistantId) {
@@ -74,7 +93,7 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
         } catch (err: any) {
             setError(err?.data?.message || t('telegram_error', 'Ошибка подключения') as string)
         }
-    }, [chatId, connectTelegram, dispatch, t, createdAssistantId, refetchMcpServers, updateAssistant])
+    }, [chatId, connectTelegram, dispatch, t, createdAssistantId, refetchMcpServers, updateAssistant, syncTools, toggleTool])
 
     const onNext = useCallback(() => {
         dispatch(onboardingActions.nextStep())

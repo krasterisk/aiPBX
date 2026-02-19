@@ -11,7 +11,7 @@ import { onboardingActions } from '../../model/slices/onboardingSlice'
 import {
     getOnboardingTelegramConnected
 } from '../../model/selectors/onboardingSelectors'
-import { getRoutePlayground, getRouteDashboardOverview, getRouteDocs } from '@/shared/const/router'
+import { getRoutePlayground, getRouteDashboardOverview, getRouteDocs, getRouteAssistants } from '@/shared/const/router'
 import { AppLogo } from '@/shared/ui/redesigned/AppLogo'
 import {
     CheckCircle2,
@@ -20,7 +20,8 @@ import {
     Globe,
     Settings,
     LayoutDashboard,
-    BookOpen
+    BookOpen,
+    Bot
 } from 'lucide-react'
 
 interface CompletionStepProps {
@@ -46,6 +47,11 @@ export const CompletionStep = memo(({ className }: CompletionStepProps) => {
     const onGoDocs = useCallback(() => {
         dispatch(onboardingActions.completeOnboarding())
         navigate(getRouteDocs())
+    }, [dispatch, navigate])
+
+    const onGoAssistants = useCallback(() => {
+        dispatch(onboardingActions.completeOnboarding())
+        navigate(getRouteAssistants())
     }, [dispatch, navigate])
 
     return (
@@ -137,6 +143,15 @@ export const CompletionStep = memo(({ className }: CompletionStepProps) => {
             </Button>
 
             <HStack gap="12" justify="center">
+                <Button
+                    variant="clear"
+                    size="s"
+                    onClick={onGoAssistants}
+                    addonLeft={<Bot size={14} />}
+                    className={cls.skipLink}
+                >
+                    {t('completion_go_assistants', 'Перейти к ассистентам')}
+                </Button>
                 <Button
                     variant="clear"
                     size="s"

@@ -10,32 +10,41 @@ interface ErrorBoundaryState {
 }
 
 class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor (props: ErrorBoundaryProps) {
+  constructor(props: ErrorBoundaryProps) {
     super(props)
     this.state = { hasError: false }
   }
 
   // eslint-disable-next-line n/handle-callback-err
-  static getDerivedStateFromError (error: Error) {
-    // Update state so the next render will show the fallback ScrollSave.
+  static getDerivedStateFromError(error: Error) {
     return { hasError: true }
   }
 
-  componentDidCatch (error: Error, errorInfo: ErrorInfo) {
-    // You can also log the error to an error reporting services
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.log(error, errorInfo)
+
+    // Auto-reload once on ChunkLoadError (stale deployment chunks)
+    if (error.name === 'ChunkLoadError') {
+      const reloadKey = 'chunk_error_reload'
+      if (!sessionStorage.getItem(reloadKey)) {
+        sessionStorage.setItem(reloadKey, '1')
+        window.location.reload()
+        return
+      }
+      // Already tried reloading — clear flag and show error page
+      sessionStorage.removeItem(reloadKey)
+    }
   }
 
-  render () {
+  render() {
     const { hasError } = this.state
     const { children } = this.props
 
     if (hasError) {
-      // You can render any custom fallback ScrollSave
       return (
-                <Suspense fallback="">
-                    <PageError />
-                </Suspense>
+        <Suspense fallback="">
+          <PageError />
+        </Suspense>
       )
     }
     return children
@@ -43,3 +52,4 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 }
 
 export default ErrorBoundary
+

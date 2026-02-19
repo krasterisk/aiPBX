@@ -103,10 +103,15 @@ export const reportApi = rtkApi.injectEndpoints({
       providesTags: (result, error, id) => [{ type: 'Reports', id }]
     }),
     getReportDashboard: build.query<Report, QueryArgs>({
-      query: (args) => ({
-        url: '/reports/dashboard',
-        params: args
-      })
+      query: (args) => {
+        const params = Object.fromEntries(
+          Object.entries(args).filter(([, v]) => v !== undefined && v !== '')
+        )
+        return {
+          url: '/reports/dashboard',
+          params
+        }
+      }
     }),
     updateReport: build.mutation<Report, Pick<Report, 'id'> & Partial<Report>>({
       query: ({ id, ...patch }) => ({
@@ -135,13 +140,18 @@ export const reportApi = rtkApi.injectEndpoints({
       invalidatesTags: (result, error, id) => [{ type: 'Reports', id }]
     }),
     getAIAnalyticsDashboard: build.query<AIAnalyticsResponse, AIAnalyticsDashboardArgs>({
-      query: (args) => ({
-        url: '/ai-analytics/dashboard/data',
-        params: {
-          ...args,
-          assistantId: args.assistantId?.length ? args.assistantId.join(',') : undefined
+      query: (args) => {
+        const params = Object.fromEntries(
+          Object.entries({
+            ...args,
+            assistantId: args.assistantId?.length ? args.assistantId.join(',') : undefined
+          }).filter(([, v]) => v !== undefined && v !== '')
+        )
+        return {
+          url: '/ai-analytics/dashboard/data',
+          params
         }
-      }),
+      },
       providesTags: ['AIAnalytics']
     }),
     createCallAnalytics: build.mutation<Analytics, string>({

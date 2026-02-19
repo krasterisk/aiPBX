@@ -115,7 +115,7 @@
     "publish_widget_desc": "Fügen Sie ein Widget auf Ihrer Website hinzu — Kunden können den Assistenten direkt im Browser anrufen.",
     "publish_telephony_title": "Mit Telefonie verbinden",
     "publish_telephony_badge": "Für Unternehmen mit TK-Anlage",
-    "publish_telephony_desc": "Wenn Sie bereits ein Telefonsystem haben (Asterisk, FreePBX) — verbinden Sie den Assistenten als Nebenstelle.",
+    "publish_telephony_desc": "Wenn Sie eine Büro- oder Cloud-Telefonanlage haben — verbinden Sie den Assistenten als SIP-Nebenstelle.",
     "publish_playground_title": "Im Playground testen",
     "publish_playground_badge": "Jetzt ausprobieren",
     "publish_playground_desc": "Rufen Sie Ihren Assistenten jetzt über das Browsermikrofon an — ohne Telefonieeinrichtung.",
@@ -133,6 +133,7 @@
     "completion_go_playground": "Zum Playground",
     "completion_go_dashboard": "Zum Dashboard",
     "completion_go_docs": "Dokumentation",
+    "completion_go_assistants": "Zu den Assistenten",
     "back": "Zurück",
     "next": "Weiter"
 }

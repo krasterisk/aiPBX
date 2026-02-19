@@ -115,7 +115,7 @@
     "publish_widget_desc": "在您的网站上添加小部件——客户可以直接从浏览器中呼叫助手，无需安装应用程序。",
     "publish_telephony_title": "连接电话系统",
     "publish_telephony_badge": "适用于有PBX的企业",
-    "publish_telephony_desc": "如果您已经有办公电话系统（Asterisk、FreePBX）——将助手连接为分机。",
+    "publish_telephony_desc": "如果您有办公或云端电话系统——通过 SIP 将助手连接为分机。",
     "publish_playground_title": "在 Playground 中测试",
     "publish_playground_badge": "立即试用",
     "publish_playground_desc": "立即通过浏览器麦克风呼叫您的助手——无需设置电话系统。",
@@ -133,6 +133,7 @@
     "completion_go_playground": "前往 Playground",
     "completion_go_dashboard": "前往 Dashboard",
     "completion_go_docs": "文档",
+    "completion_go_assistants": "前往助手",
     "back": "返回",
     "next": "下一步"
 }
