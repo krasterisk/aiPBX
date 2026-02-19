@@ -49,7 +49,10 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
     const isAdmin = useSelector(isUserAdmin)
     const authData = useSelector(getUserAuthData)
 
-    const { data: servers, isLoading: isServersLoading } = useMcpServersAll(null, { skip: !isEdit || !serverId })
+    const { data: servers, isLoading: isServersLoading } = useMcpServersAll(null, {
+        skip: !isEdit || !serverId,
+        refetchOnMountOrArgChange: true,
+    })
     const server = useMemo(
         () => servers?.find(s => s.id === Number(serverId)) ?? null,
         [servers, serverId]
