@@ -189,5 +189,10 @@
   "bitrix24_webhook_step1": "1. Öffnen Sie Bitrix24 → Entwickler → Eingehender Webhook (Sonstiges → REST API → Eingehender Webhook).",
   "bitrix24_webhook_step2": "2. Erstellen Sie einen Webhook mit \"CRM\"-Berechtigungen und kopieren Sie die URL. Fügen Sie sie unten ein.",
   "bitrix24_webhook_placeholder": "https://your-domain.bitrix24.de/rest/1/ihr-schlüssel/",
-  "telegram_chat_id_placeholder": "Ihre Chat-ID (z.B. 123456789)"
+  "telegram_chat_id_placeholder": "Ihre Chat-ID (z.B. 123456789)",
+  "tools_count": "{{count}} Tools",
+  "tools_active_total": "{{active}} / {{total}} aktiv",
+  "oauth_success_title": "Verbindung erfolgreich!",
+  "oauth_success_subtitle": "Der Dienst wurde verbunden. Dieses Fenster wird automatisch geschlossen.",
+  "oauth_close_window": "Fenster schließen"
 }

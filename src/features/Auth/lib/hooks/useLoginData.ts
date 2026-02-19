@@ -11,17 +11,20 @@ import { getRouteAssistants, getRouteSignup } from '@/shared/const/router'
 import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin'
 import { useTelegramLogin } from '@/shared/lib/hooks/useTelegramLogin/useTelegramLogin'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useNavigate } from 'react-router-dom'
 import { loginActions } from '../../model/slice/loginSlice'
 import {
   getLoginActivationCode
 } from '../../model/selectors/login/getLoginActivationCode/getLoginActivationCode'
+import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 
 export function useLoginData() {
+  const { t } = useTranslation('login')
   const email = useSelector(getLoginEmail)
   const activationLoginCode = useSelector(getLoginActivationCode)
-  const [isLoginError, setLoginError] = useState<boolean>(false)
+  const [loginError, setLoginError] = useState<string | null>(null)
   const [isLoginActivation, setIsLoginActivation] = useState<boolean>(false)
   const [resendTimer, setResendTimer] = useState<number>(0)
 
@@ -55,9 +58,9 @@ export function useLoginData() {
   }, [dispatch])
 
   const onLoginActivateClick = useCallback(() => {
-    setLoginError(false)
+    setLoginError(null)
     if (!activationLoginCode || !email) {
-      setLoginError(true)
+      setLoginError(t('Заполните все поля'))
       return
     }
     loginActivateUser({ email, activationCode: activationLoginCode, type: 'login' })
@@ -66,8 +69,8 @@ export function useLoginData() {
         dispatch(userActions.setToken(data))
         navigate(getRouteAssistants())
       })
-      .catch(() => {
-        setLoginError(true)
+      .catch((e) => {
+        setLoginError(t(getErrorMessage(e)))
       })
   }, [activationLoginCode, email, loginActivateUser, dispatch, navigate])
 
@@ -76,6 +79,7 @@ export function useLoginData() {
   }, [navigate])
 
   const handleGoogleSuccess = (idToken: string) => {
+    setLoginError(null)
     googleLogin({ id_token: idToken })
       .unwrap()
       .then((data) => {
@@ -84,30 +88,32 @@ export function useLoginData() {
           navigate(getRouteAssistants())
         }
       })
-      .catch(() => {
-        setLoginError(true)
+      .catch((e) => {
+        setLoginError(t(getErrorMessage(e)))
       })
   }
 
   const onGoogleLoginClick = useGoogleLogin(handleGoogleSuccess)
 
   const handleTelegramSuccess = (data: AuthData) => {
+    setLoginError(null)
     telegramLogin(data)
       .unwrap()
       .then((response) => {
         dispatch(userActions.setToken(response))
         navigate(getRouteAssistants())
       })
-      .catch(() => {
-        setLoginError(true)
+      .catch((e) => {
+        setLoginError(t(getErrorMessage(e)))
       })
   }
 
   const onTelegramLoginClick = useTelegramLogin(handleTelegramSuccess)
 
   const onLoginClick = useCallback(() => {
+    setLoginError(null)
     if (!email) {
-      setLoginError(true)
+      setLoginError(t('Введите email'))
       return
     }
     userLogin({ email })
@@ -116,9 +122,9 @@ export function useLoginData() {
         setIsLoginActivation(true)
         setResendTimer(60)
       })
-      .catch(() => {
+      .catch((e) => {
         setIsLoginActivation(false)
-        setLoginError(true)
+        setLoginError(t(getErrorMessage(e)))
       })
   }, [email, userLogin])
 
@@ -132,7 +138,7 @@ export function useLoginData() {
     activationLoginCode,
     loginActivationError,
     resendTimer,
-    isLoginError,
+    loginError,
     isLoginActivation,
     isLoginActivateError,
     isLoginActivateLoading,

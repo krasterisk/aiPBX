@@ -9,6 +9,7 @@ import {
 } from '@/entities/User'
 import { getRouteAssistants, getRouteLogin } from '@/shared/const/router'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useNavigate } from 'react-router-dom'
 import { signupActions } from '../../model/slice/signupSlice'
@@ -17,12 +18,14 @@ import {
 } from '../../model/selectors/signup/getSignupActivationCode/getSignupActivationCode'
 import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin'
 import { useTelegramLogin } from '@/shared/lib/hooks/useTelegramLogin/useTelegramLogin'
+import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 
 export function useSignupData() {
+  const { t } = useTranslation('login')
   const dispatch = useAppDispatch()
   const email = useSelector(getSignupEmail)
   const activationSignupCode = useSelector(getSignupActivationCode)
-  const [isSignupError, setSignupError] = useState<boolean>(false)
+  const [signupError, setSignupError] = useState<string | null>(null)
   const [isSignupActivation, setIsSignupActivation] = useState<boolean>(false)
   const navigate = useNavigate()
   const [userSignup, { isLoading: isSignupLoading }] = useSignupUser()
@@ -48,6 +51,7 @@ export function useSignupData() {
   }, [resendTimer, setResendTimer])
 
   const handleGoogleSignupSuccess = (idToken: string) => {
+    setSignupError(null)
     googleSignup({ id_token: idToken })
       .unwrap()
       .then((data) => {
@@ -55,14 +59,15 @@ export function useSignupData() {
         dispatch(userActions.setToken(data))
         navigate(getRouteAssistants())
       })
-      .catch(() => {
-        setSignupError(true)
+      .catch((e) => {
+        setSignupError(t(getErrorMessage(e)))
       })
   }
 
   const onGoogleSignupClick = useGoogleLogin(handleGoogleSignupSuccess)
 
   const handleTelegramSignupSuccess = (data: AuthData) => {
+    setSignupError(null)
     telegramSignup(data)
       .unwrap()
       .then((response) => {
@@ -70,30 +75,30 @@ export function useSignupData() {
         dispatch(userActions.setToken(response))
         navigate(getRouteAssistants())
       })
-      .catch(() => {
-        setSignupError(true)
+      .catch((e) => {
+        setSignupError(t(getErrorMessage(e)))
       })
   }
 
   const onTelegramSignupClick = useTelegramLogin(handleTelegramSignupSuccess)
 
   const onSignupClick = useCallback(() => {
-    setSignupError(false)
+    setSignupError(null)
     if (!email) {
-      setSignupError(true)
+      setSignupError(t('Введите email'))
       return
     }
 
     userSignup({ email })
       .unwrap()
       .then(() => {
-        setSignupError(false)
+        setSignupError(null)
         setIsSignupActivation(true)
         dispatch(signupActions.setActivationCode(''))
         setResendTimer(60)
       })
-      .catch(() => {
-        setSignupError(true)
+      .catch((e) => {
+        setSignupError(t(getErrorMessage(e)))
       })
   }, [dispatch, email, userSignup])
 
@@ -103,9 +108,9 @@ export function useSignupData() {
   }, [dispatch])
 
   const onSignupActivateClick = useCallback(() => {
-    setSignupError(false)
+    setSignupError(null)
     if (!activationSignupCode || !email) {
-      setSignupError(true)
+      setSignupError(t('Заполните все поля'))
       return
     }
     signupActivateUser({ email, activationCode: activationSignupCode, type: 'signup' })
@@ -116,7 +121,7 @@ export function useSignupData() {
         navigate(getRouteAssistants())
       })
       .catch((e) => {
-        setSignupError(true)
+        setSignupError(getErrorMessage(e))
       })
   }, [activationSignupCode, email, signupActivateUser, dispatch, navigate])
 
@@ -134,7 +139,7 @@ export function useSignupData() {
     activationSignupCode,
     signupActivationError,
     resendTimer,
-    isSignupError,
+    signupError,
     isGoogleLoading,
     isSignupLoading,
     isTelegramLoading,

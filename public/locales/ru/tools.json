@@ -189,5 +189,10 @@
   "bitrix24_webhook_step1": "1. Откройте Битрикс24 → Разработчикам → Входящий вебхук (Другое → REST API → Входящий вебхук).",
   "bitrix24_webhook_step2": "2. Создайте вебхук с правами «CRM» и скопируйте URL. Вставьте его ниже.",
   "bitrix24_webhook_placeholder": "https://your-domain.bitrix24.ru/rest/1/ваш-ключ/",
-  "telegram_chat_id_placeholder": "Ваш Chat ID (например: 123456789)"
+  "telegram_chat_id_placeholder": "Ваш Chat ID (например: 123456789)",
+  "tools_count": "{{count}} инструментов",
+  "tools_active_total": "{{active}} / {{total}} активных",
+  "oauth_success_title": "Подключение успешно!",
+  "oauth_success_subtitle": "Сервис подключён. Это окно закроется автоматически.",
+  "oauth_close_window": "Закрыть окно"
 }

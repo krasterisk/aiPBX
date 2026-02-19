@@ -42,7 +42,7 @@ export const McpServerFormHeader = memo((props: McpServerFormHeaderProps) => {
             {variant === 'diviner-top' && (
                 <VStack gap="4">
                     <Text
-                        title={isEdit ? (serverName || t('Редактирование')) : t('Новый MCP сервер')}
+                        title={isEdit ? (serverName || t('Редактировать сервер')) : t('Новый MCP сервер')}
                         size="l"
                         bold
                     />

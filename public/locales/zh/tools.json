@@ -189,5 +189,10 @@
   "bitrix24_webhook_step1": "1. 打开 Bitrix24 → 开发者 → 入站 webhook（其他 → REST API → 入站 webhook）。",
   "bitrix24_webhook_step2": "2. 创建具有「CRM」权限的 webhook 并复制 URL。粘贴到下方。",
   "bitrix24_webhook_placeholder": "https://your-domain.bitrix24.ru/rest/1/your-key/",
-  "telegram_chat_id_placeholder": "您的 Chat ID（例如：123456789）"
+  "telegram_chat_id_placeholder": "您的 Chat ID（例如：123456789）",
+  "tools_count": "{{count}} 个工具",
+  "tools_active_total": "{{active}} / {{total}} 已激活",
+  "oauth_success_title": "连接成功！",
+  "oauth_success_subtitle": "服务已连接。此窗口将自动关闭。",
+  "oauth_close_window": "关闭窗口"
 }

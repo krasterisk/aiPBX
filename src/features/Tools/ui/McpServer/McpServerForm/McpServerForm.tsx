@@ -214,7 +214,7 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
                     onDelete={onDelete}
                     isEdit={isEdit}
                     isLoading={isSaving}
-                    serverName={name}
+                    serverName={server?.name || name}
                     hideActions
                 />
 
@@ -253,7 +253,7 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
                 onDelete={onDelete}
                 isEdit={isEdit}
                 isLoading={isSaving}
-                serverName={name}
+                serverName={server?.name || name}
             />
 
             <HStack
@@ -309,7 +309,7 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
                 isEdit={isEdit}
                 isLoading={isSaving}
                 variant={'diviner-bottom'}
-                serverName={name}
+                serverName={server?.name || name}
             />
         </VStack>
     )

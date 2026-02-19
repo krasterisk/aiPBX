@@ -52,6 +52,7 @@
     min-width: 0;
     position: relative;
     z-index: 1;
+    overflow-x: clip;
 }
 
 .rightbar {

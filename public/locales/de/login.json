@@ -46,5 +46,9 @@
   "Activation code is wrong": "Der Code ist falsch!",
   "example@mail.com": "example@mail.com",
   "Регистрируясь, я принимаю": "Mit der Registrierung akzeptiere ich die",
-  "пользовательское соглашение": "Nutzungsbedingungen"
+  "пользовательское соглашение": "Nutzungsbedingungen",
+  "Введите email": "Bitte geben Sie Ihre E-Mail ein",
+  "Заполните все поля": "Bitte füllen Sie alle Felder aus",
+  "User already exists!": "Benutzer existiert bereits!",
+  "Incorrect email": "Ungültige E-Mail"
 }

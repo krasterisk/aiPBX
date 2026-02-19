@@ -33,6 +33,7 @@ export const McpServerItem = memo((props: McpServerItemProps) => {
         skip: server.status !== 'active',
     })
     const toolCount = tools?.length ?? 0
+    const enabledCount = tools?.filter(t => t.isEnabled).length ?? 0
 
     const isComposio = !!server.composioToolkit
 
@@ -74,7 +75,7 @@ export const McpServerItem = memo((props: McpServerItemProps) => {
                             <HStack align="center" className={cls.composioBadge}>
                                 <Boxes size={12} />
                                 <Text
-                                    text="Integration"
+                                    text={t('Интеграция')}
                                     size="xs"
                                     bold
                                 />
@@ -113,7 +114,7 @@ export const McpServerItem = memo((props: McpServerItemProps) => {
                         {isAdmin && server.user && (
                             <HStack gap="4" align="center">
                                 <User size={16} className={cls.subIcon} />
-                                <Text text={server.user.name} size="s" bold className={cls.subtitle} />
+                                <Text text={server.user.name || server.user.email || ''} size="s" bold className={cls.subtitle} />
                             </HStack>
                         )}
                     </VStack>
@@ -130,7 +131,7 @@ export const McpServerItem = memo((props: McpServerItemProps) => {
                             <Text text={t('Инструменты сервера') || ''} variant="accent" size="xs" />
                             <Text
                                 text={server.status === 'active'
-                                    ? `${toolCount} tools`
+                                    ? t('tools_active_total', { active: enabledCount, total: toolCount })
                                     : t('Отключён')
                                 }
                                 className={cls.detailText}

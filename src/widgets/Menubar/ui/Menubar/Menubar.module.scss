@@ -15,11 +15,6 @@
     top: var(--space-4);
     z-index: var(--z-index-sidebar);
 
-    &:hover {
-        border-color: var(--accent-redesigned);
-        box-shadow: 0 0 40px rgba(94, 211, 243, 0.1);
-    }
-
     .appLogo {
         display: flex;
         flex-direction: column;

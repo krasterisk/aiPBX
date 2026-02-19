@@ -3,11 +3,11 @@
 .McpServerItem {
     @include glass-card-primary;
     @include hover-lift-card;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 
     &:hover {
         .avatar {
             transform: var(--hover-scale-md);
-            background: rgba(94, 211, 243, 0.25);
         }
 
         .arrowIcon {
@@ -30,14 +30,13 @@
 
 .avatar {
     @include icon-avatar(44px);
+    background: var(--icon-bg-primary);
     flex-shrink: 0;
 }
 
 .composioAvatar {
-    background: rgba(124, 58, 237, 0.15);
-
     svg {
-        color: var(--accent-primary);
+        color: var(--accent-redesigned);
     }
 }
 

@@ -46,5 +46,9 @@
   "Activation code is wrong": "The code is incorrect!",
   "example@mail.com": "example@mail.com",
   "Регистрируясь, я принимаю": "By signing up, I accept the",
-  "пользовательское соглашение": "terms of service"
+  "пользовательское соглашение": "terms of service",
+  "Введите email": "Please enter your email",
+  "Заполните все поля": "Please fill in all fields",
+  "User already exists!": "User already exists!",
+  "Incorrect email": "Incorrect email"
 }

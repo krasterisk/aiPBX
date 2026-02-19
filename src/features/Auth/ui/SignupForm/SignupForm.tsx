@@ -32,6 +32,7 @@ export const SignupForm = memo((props: SignupFormProps) => {
         isTelegramLoading,
         isSignupActivateLoading,
         isSignupActivation,
+        signupError,
         onLogin,
         onChangeActivationCode,
         onSignupActivateClick,
@@ -87,6 +88,12 @@ export const SignupForm = memo((props: SignupFormProps) => {
                     </HStack>
                 )}
 
+                {signupError && (
+                    <HStack max justify="center">
+                        <Text text={signupError} variant="error" size="s" align="center" />
+                    </HStack>
+                )}
+
                 <VStack max gap="16">
                     <Textarea
                         type="email"
@@ -98,6 +105,11 @@ export const SignupForm = memo((props: SignupFormProps) => {
                         fullWidth
                         disabled={isLoading}
                         required
+                        sx={{
+                            '& .MuiOutlinedInput-root:hover': {
+                                backgroundColor: 'var(--light-bg-redesigned)',
+                            },
+                        }}
                     />
 
                     {isSignupActivation ? (

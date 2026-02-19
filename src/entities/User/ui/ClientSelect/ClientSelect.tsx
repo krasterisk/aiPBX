@@ -42,7 +42,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
 
   const clientItems: ClientOption[] = data?.map(item => ({
     id: String(item.id),
-    name: String(item.name)
+    name: item.name || item.email || String(item.id)
   })) || []
 
   const selectedClient = clientId

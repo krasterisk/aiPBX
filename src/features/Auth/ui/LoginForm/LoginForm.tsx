@@ -26,6 +26,7 @@ export const LoginForm = memo((props: LoginFormProps) => {
     isLoginLoading,
     isLoginActivation,
     isLoginActivateLoading,
+    loginError,
     onLoginActivateClick,
     onChangeActivationCode,
     onLoginClick,
@@ -83,6 +84,12 @@ export const LoginForm = memo((props: LoginFormProps) => {
           </HStack>
         )}
 
+        {loginError && (
+          <HStack max justify="center">
+            <Text text={loginError} variant="error" size="s" align="center" />
+          </HStack>
+        )}
+
         <VStack max gap="16">
           <Textarea
             type="email"
@@ -94,6 +101,11 @@ export const LoginForm = memo((props: LoginFormProps) => {
             fullWidth
             disabled={isLoading}
             required
+            sx={{
+              '& .MuiOutlinedInput-root:hover': {
+                backgroundColor: 'var(--light-bg-redesigned)',
+              },
+            }}
           />
 
           {isLoginActivation ? (

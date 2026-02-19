@@ -19,7 +19,8 @@ import {
 } from '../../model/selectors/onboardingSelectors'
 import { BusinessCard } from '../components/BusinessCard/BusinessCard'
 import { assistantTemplates } from '@/entities/Assistants/model/const/assistantTemplates'
-import { useSetAssistants, useGeneratePrompt } from '@/entities/Assistants/api/assistantsApi'
+import { useSetAssistants, useGeneratePrompt, useUpdateAssistant } from '@/entities/Assistants/api/assistantsApi'
+import { useMcpServersAll } from '@/entities/Mcp/api/mcpApi'
 import {
     Wrench,
     UtensilsCrossed,
@@ -80,6 +81,8 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
 
     const [createAssistant] = useSetAssistants()
     const [generatePrompt] = useGeneratePrompt()
+    const [updateAssistant] = useUpdateAssistant()
+    const { refetch: refetchMcpServers } = useMcpServersAll(null)
     const [newFeature, setNewFeature] = useState('')
 
     const isCustom = selectedTemplate === 'custom'
@@ -157,14 +160,30 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             }]).unwrap()
 
             if (result?.[0]?.id) {
-                dispatch(onboardingActions.setCreatedAssistantId(result[0].id))
+                const assistantId = result[0].id
+                dispatch(onboardingActions.setCreatedAssistantId(assistantId))
+
+                // Auto-attach existing Telegram MCP server
+                try {
+                    const { data: servers } = await refetchMcpServers()
+                    const telegramServer = servers?.find(s => s.composioToolkit === 'telegram')
+                    if (telegramServer) {
+                        await updateAssistant({
+                            id: assistantId,
+                            mcpServers: [telegramServer]
+                        }).unwrap()
+                    }
+                } catch {
+                    // Non-critical: user can attach MCP server manually later
+                }
+
                 dispatch(onboardingActions.nextStep())
             }
         } catch (err: any) {
             dispatch(onboardingActions.setError(err?.data?.message || 'Error creating assistant'))
             dispatch(onboardingActions.setCreatingAssistant(false))
         }
-    }, [selectedTemplate, isCustom, dispatch, createAssistant, i18n.language, t, customFeatures])
+    }, [selectedTemplate, isCustom, dispatch, createAssistant, i18n.language, t, customFeatures, refetchMcpServers, updateAssistant])
 
     const onGenerateAndCreate = useCallback(async () => {
         if (!customDescription.trim()) return
@@ -193,7 +212,23 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             }]).unwrap()
 
             if (result?.[0]?.id) {
-                dispatch(onboardingActions.setCreatedAssistantId(result[0].id))
+                const assistantId = result[0].id
+                dispatch(onboardingActions.setCreatedAssistantId(assistantId))
+
+                // Auto-attach existing Telegram MCP server
+                try {
+                    const { data: servers } = await refetchMcpServers()
+                    const telegramServer = servers?.find(s => s.composioToolkit === 'telegram')
+                    if (telegramServer) {
+                        await updateAssistant({
+                            id: assistantId,
+                            mcpServers: [telegramServer]
+                        }).unwrap()
+                    }
+                } catch {
+                    // Non-critical: user can attach MCP server manually later
+                }
+
                 dispatch(onboardingActions.nextStep())
             }
         } catch (err: any) {
@@ -201,7 +236,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             dispatch(onboardingActions.setGeneratingPrompt(false))
             dispatch(onboardingActions.setCreatingAssistant(false))
         }
-    }, [customDescription, dispatch, generatePrompt, createAssistant, t])
+    }, [customDescription, dispatch, generatePrompt, createAssistant, t, refetchMcpServers, updateAssistant])
 
     const onBack = useCallback(() => {
         dispatch(onboardingActions.prevStep())
