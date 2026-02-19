@@ -193,5 +193,7 @@
   "tools_active_total": "{{active}} / {{total}} active",
   "oauth_success_title": "Connection Successful!",
   "oauth_success_subtitle": "The service has been connected. This window will close automatically.",
-  "oauth_close_window": "Close Window"
+  "oauth_close_window": "Close Window",
+  "Интеграция успешно подключена": "Integration connected successfully",
+  "Ошибка подключения интеграции": "Integration connection failed"
 }

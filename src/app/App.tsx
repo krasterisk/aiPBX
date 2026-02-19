@@ -14,7 +14,6 @@ import { useLocation } from 'react-router-dom'
 import { getRouteDocs } from '@/shared/const/router'
 
 import { OnboardingWizard } from '@/features/Onboarding'
-import { OAuthCallbackScreen } from '@/widgets/OAuthCallbackScreen/OAuthCallbackScreen'
 
 const App = (): any => {
   const userData = useSelector(getUserAuthData)
@@ -39,11 +38,6 @@ const App = (): any => {
 
   if (isLoading) {
     return <PageLoader />
-  }
-
-  // If loaded inside an OAuth popup, show the callback screen
-  if (window.opener) {
-    return <OAuthCallbackScreen />
   }
 
   return (

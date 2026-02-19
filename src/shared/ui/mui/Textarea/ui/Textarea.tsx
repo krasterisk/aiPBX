@@ -28,18 +28,22 @@ const areaStyles = {
       transition: 'var(--transition-colors)',
     },
     '&:hover': {
-      backgroundColor: 'var(--bg-color)',
+      backgroundColor: 'var(--light-bg-redesigned)',
       '& fieldset': {
         borderColor: 'rgba(94, 211, 243, 0.4) !important',
       },
     },
     '&.Mui-focused': {
-      backgroundColor: 'var(--card-bg)',
+      backgroundColor: 'var(--light-bg-redesigned)',
       boxShadow: '0 0 0 3px rgba(94, 211, 243, 0.1)',
       '& fieldset': {
         borderColor: 'var(--accent-redesigned) !important',
         borderWidth: '1px !important',
       },
+    },
+    '&.Mui-disabled': {
+      backgroundColor: 'var(--light-bg-redesigned)',
+      opacity: 0.6,
     },
     '&.MuiInputBase-multiline': {
       alignItems: 'flex-start',
@@ -55,6 +59,12 @@ const areaStyles = {
     '&::placeholder': {
       color: 'var(--hint-redesigned)',
       opacity: 1,
+    },
+    '&:-webkit-autofill, &:-webkit-autofill:hover, &:-webkit-autofill:focus, &:-webkit-autofill:active': {
+      WebkitTextFillColor: 'var(--text-redesigned)',
+      WebkitBoxShadow: '0 0 0 1000px var(--light-bg-redesigned) inset !important',
+      transition: 'background-color 5000s ease-in-out 0s',
+      caretColor: 'var(--text-redesigned)',
     },
   },
   '& .MuiInputLabel-root': {

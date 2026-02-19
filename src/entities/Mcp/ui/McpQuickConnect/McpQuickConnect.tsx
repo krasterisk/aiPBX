@@ -32,7 +32,7 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
     const [connectBitrix24, { isLoading: isConnectingBitrix24 }] = useBitrix24Connect()
     const [connectTelegramApi, { isLoading: isConnectingTelegram }] = useTelegramConnect()
     const { data: statuses, refetch: refetchStatus } = useGetComposioStatus()
-    const { data: allServers } = useMcpServersAll(null)
+    const { data: allServers, refetch: refetchServers } = useMcpServersAll(null)
 
     // API key dialog state
     const [apiKeyDialog, setApiKeyDialog] = useState<{ toolkit: string; template: McpServerTemplate } | null>(null)
@@ -62,6 +62,31 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
         }
     }, [])
 
+    // Listen for postMessage from OAuth popup
+    useEffect(() => {
+        const handleMessage = (event: MessageEvent) => {
+            if (event.data?.type !== 'composio_callback') return
+
+            // Clean up popup & polling
+            if (timerRef.current) {
+                clearInterval(timerRef.current)
+                timerRef.current = null
+            }
+            popupRef.current = null
+
+            if (event.data.status === 'success') {
+                toast.success(t('Интеграция успешно подключена'))
+                refetchStatus()
+                refetchServers()
+            } else {
+                toast.error(t('Ошибка подключения интеграции'))
+            }
+        }
+
+        window.addEventListener('message', handleMessage)
+        return () => window.removeEventListener('message', handleMessage)
+    }, [refetchStatus, refetchServers, t])
+
     const startPopupPolling = useCallback(() => {
         if (timerRef.current) clearInterval(timerRef.current)
         timerRef.current = setInterval(() => {
@@ -70,9 +95,10 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
                 timerRef.current = null
                 popupRef.current = null
                 refetchStatus()
+                refetchServers()
             }
         }, 1000)
-    }, [refetchStatus])
+    }, [refetchStatus, refetchServers])
 
     const onTemplateClick = useCallback(async (template: McpServerTemplate) => {
         const status = statusMap[template.toolkit]
