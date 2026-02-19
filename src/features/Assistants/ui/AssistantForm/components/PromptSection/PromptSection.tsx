@@ -64,7 +64,7 @@ export const PromptSection = memo((props: PromptSectionProps) => {
                 handleClosePopover()
             }
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [userPrompt, generatePrompt, onChangeTextHandler, t, handleClosePopover])
 

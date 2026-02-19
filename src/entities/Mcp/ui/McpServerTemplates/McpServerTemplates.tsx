@@ -98,7 +98,7 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
                 startPopupPolling()
             }
         } catch (e) {
-            toast.error(t('Ошибка подключения сервиса'))
+            // Error toast handled by global toastMiddleware
         }
     }, [composioConnect, t, startPopupPolling])
 
@@ -124,7 +124,7 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
             setApiKeyDialog(null)
             setApiKeyValue('')
         } catch (e: any) {
-            toast.error(e?.data?.message || t('Ошибка подключения сервиса'))
+            // Error toast handled by global toastMiddleware
         }
     }, [apiKeyDialog, apiKeyValue, connectApiKey, connectBitrix24, connectTelegramApi, t])
 
@@ -133,7 +133,7 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
             await deleteConnection(accountId).unwrap()
             toast.success(t('composio_disconnected'))
         } catch (e) {
-            toast.error(t('Ошибка подключения сервиса'))
+            // Error toast handled by global toastMiddleware
         }
     }, [deleteConnection, t])
 
@@ -155,7 +155,10 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
                     const status = statusMap[template.toolkit]
                     const composioConnected = status?.isConnected ?? false
                     const hasMcpServer = serversByToolkit.has(template.toolkit)
-                    const isFullyConnected = composioConnected && hasMcpServer
+                    // For webhook/chat_id services (Bitrix24, Telegram), only MCP server existence matters
+                    const isFullyConnected = (template.authType === 'webhook' || template.authType === 'chat_id')
+                        ? hasMcpServer
+                        : composioConnected && hasMcpServer
                     const isOrphaned = composioConnected && !hasMcpServer
 
                     return (

@@ -159,7 +159,7 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
             }
             navigate(getRouteMcpServers())
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [name, url, transport, authType, buildCredentials, isEdit, server, updateMcpServer, createMcpServer, navigate, t])
 
@@ -178,7 +178,7 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
             toast.success(t('MCP сервер удалён'))
             navigate(getRouteMcpServers())
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [deleteMcpServer, deleteComposioConnection, server, navigate, t, isComposio])
 
@@ -188,7 +188,7 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
             const tools = await syncTools(server.id).unwrap()
             toast.success(t('Синхронизировано tools: {{count}}', { count: tools.length }))
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [server, syncTools, t])
 

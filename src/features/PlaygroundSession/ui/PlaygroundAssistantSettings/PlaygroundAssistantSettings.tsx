@@ -98,7 +98,7 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
             toast.success(t('Сохранено успешно'))
         } catch (error) {
             dispatch(playgroundAssistantFormActions.setError(String(error)))
-            toast.error(t('Ошибка при сохранении'))
+            // Error toast handled by global toastMiddleware
         } finally {
             dispatch(playgroundAssistantFormActions.setLoading(false))
         }

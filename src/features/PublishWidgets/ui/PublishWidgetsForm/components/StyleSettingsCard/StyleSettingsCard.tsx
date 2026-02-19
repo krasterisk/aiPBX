@@ -77,7 +77,7 @@ export const StyleSettingsCard = memo((props: StyleSettingsCardProps) => {
                 onChangeAppearance('logo', res.logo)
             }
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [uploadLogo, onChangeAppearance])
 

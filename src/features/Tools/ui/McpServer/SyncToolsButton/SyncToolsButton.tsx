@@ -26,7 +26,7 @@ export const SyncToolsButton = memo((props: SyncToolsButtonProps) => {
             const tools = await syncTools(serverId).unwrap()
             toast.success(t('Синхронизировано tools: {{count}}', { count: tools.length }))
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [syncTools, serverId, t])
 

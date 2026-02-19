@@ -113,7 +113,7 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
             navigate(getRoutePublishSipUris())
             dispatch(publishSipUrisFormActions.resetForm())
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [deleteSip, selectedAssistant, t, navigate, dispatch])
 
@@ -144,7 +144,7 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
             navigate(getRoutePublishSipUris())
             dispatch(publishSipUrisFormActions.resetForm())
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [selectedAssistant, selectedPbx, ipAddress, records, tls, active, updateSip, createSip, t, isEdit, navigate, dispatch])
 

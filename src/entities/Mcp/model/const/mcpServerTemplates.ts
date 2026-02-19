@@ -65,7 +65,7 @@ export const mcpServerTemplates: McpServerTemplate[] = [
         descriptionKey: 'template_whatsapp_desc',
         Icon: MessageCircle,
         colorClass: 'whatsapp',
-        authType: 'api_key',
+        authType: 'oauth',
     },
     {
         id: 'slack',

@@ -60,8 +60,8 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
       .then(() => {
         navigate(getRouteAssistants())
       })
-      .catch((err) => {
-        toast.error(getErrorMessage(err))
+      .catch(() => {
+        // Error toast handled by global toastMiddleware
       })
   }, [assistantCreate, navigate])
 
@@ -85,8 +85,8 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
       .then(() => {
         toast.success(t('Сохранено успешно'))
       })
-      .catch((err) => {
-        toast.error(getErrorMessage(err))
+      .catch(() => {
+        // Error toast handled by global toastMiddleware
       })
   }, [assistantUpdate, t])
 
@@ -96,8 +96,8 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
       .then(() => {
         navigate(getRouteAssistants())
       })
-      .catch((err) => {
-        toast.error(getErrorMessage(err))
+      .catch(() => {
+        // Error toast handled by global toastMiddleware
       })
   }, [assistantDelete, navigate])
 

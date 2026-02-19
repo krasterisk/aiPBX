@@ -51,7 +51,7 @@ export const McpToolsList = memo((props: McpToolsListProps) => {
         try {
             await toggleTool(tool.id).unwrap()
         } catch (err) {
-            toast.error(getErrorMessage(err))
+            // Error toast handled by global toastMiddleware
         }
     }, [toggleTool])
 
@@ -63,7 +63,7 @@ export const McpToolsList = memo((props: McpToolsListProps) => {
         try {
             await bulkToggle({ serverId, enabled: newEnabled }).unwrap()
         } catch (err) {
-            toast.error(getErrorMessage(err))
+            // Error toast handled by global toastMiddleware
         }
     }, [filteredTools, allEnabled, bulkToggle, serverId])
 

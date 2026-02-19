@@ -104,7 +104,7 @@ export const ComposioTestModal = memo((props: ComposioTestModalProps) => {
         } catch (e) {
             setResult(getErrorMessage(e))
             setHasError(true)
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [buildArguments, executeAction, tool.name])
 

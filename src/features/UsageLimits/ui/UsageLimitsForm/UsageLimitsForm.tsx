@@ -49,7 +49,7 @@ export const UsageLimitsForm = memo((props: UsageLimitsFormProps) => {
             }).unwrap()
             toast.success(t('Настройки сохранены'))
         } catch (e) {
-            toast.error(t('Ошибка сохранения'))
+            // Error toast handled by global toastMiddleware
         }
     }, [authData?.id, emails, limitAmount, setUsageLimit, t])
 

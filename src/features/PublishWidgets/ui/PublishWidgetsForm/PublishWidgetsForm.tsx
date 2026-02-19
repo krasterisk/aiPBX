@@ -1,4 +1,5 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
+import { getDomainOrigin, getApiBaseUrl } from '@/shared/lib/domain'
 import cls from './PublishWidgetsForm.module.scss'
 import { memo, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -171,7 +172,7 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
             appearance: JSON.stringify(appearance),
             language: appearance?.language,
             logo: appearance?.logo,
-            apiUrl: __API__
+            apiUrl: `${getDomainOrigin()}${getApiBaseUrl()}`
         }
 
         try {
@@ -185,7 +186,7 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
             navigate(getRoutePublishWidgets())
             dispatch(publishWidgetsFormActions.resetForm())
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [name, selectedAssistant, selectedPbxServer, allowedDomains, maxSessions, maxSessionDuration, isActive, appearance, isEdit, widgetId, updateWidget, createWidget, navigate, dispatch, t])
 
@@ -199,7 +200,7 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
                 navigate(getRoutePublishWidgets())
                 dispatch(publishWidgetsFormActions.resetForm())
             } catch (e) {
-                toast.error(getErrorMessage(e))
+                // Error toast handled by global toastMiddleware
             }
         }
     }, [deleteWidget, dispatch, navigate, t, widgetId])

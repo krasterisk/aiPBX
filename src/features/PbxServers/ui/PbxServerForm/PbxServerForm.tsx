@@ -112,7 +112,7 @@ export const PbxServerForm = memo((props: PbxServerFormProps) => {
       }
       navigate(getRoutePbxServers())
     } catch (e) {
-      toast.error(t('Произошла ошибка при сохранении'))
+      // Error toast handled by global toastMiddleware
     }
   }, [form, isEdit, pbxServerId, updatePbx, createPbx, navigate, t])
 
@@ -128,7 +128,7 @@ export const PbxServerForm = memo((props: PbxServerFormProps) => {
         toast.success(t('Сервер успешно удален'))
         navigate(getRoutePbxServers())
       } catch (e) {
-        toast.error(t('Произошла ошибка при удалении'))
+        // Error toast handled by global toastMiddleware
       }
     }
   }, [pbxServerId, deletePbx, navigate, t])

@@ -57,7 +57,7 @@ export const McpPolicyManager = memo((props: McpPolicyManagerProps) => {
             await deletePolicy(policyId).unwrap()
             toast.success(t('Политика удалена'))
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [deletePolicy, t])
 
@@ -93,7 +93,7 @@ export const McpPolicyManager = memo((props: McpPolicyManagerProps) => {
             toast.success(t('Политика создана'))
             setShowAddForm(false)
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [newPolicyType, maxCallsPerMinute, windowSeconds, blockedParams, createPolicy, toolId, t])
 

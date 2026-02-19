@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import { io, Socket } from 'socket.io-client'
 import { toast } from 'react-toastify'
 import { AUDIO_WORKLET_CODE } from '../lib/audioWorklet'
+import { getWsUrl } from '@/shared/lib/domain'
 
 const SAMPLE_RATE = 24000  // PCM16 from OpenAI Realtime API works at 24kHz
 const INITIAL_BUFFER_DELAY = 0.15 // 150ms buffering
@@ -228,9 +229,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
 
         setStatus('connecting')
 
-        // IMPORTANT: Update this URL to match your environment variable or configuration
-        // Using relative path for typical proxy setup, or allow argument
-        const wsUrl = __WS__ || '/'
+        const wsUrl = getWsUrl()
         // Note: process.env.wsUrl usage depends on build system setup (e.g. webpack DefinePlugin)
 
         const socket = io(wsUrl, {

@@ -170,6 +170,51 @@
         transform: translateY(0);
     }
 
+    &.success {
+        border-color: var(--status-success-border);
+        background: var(--status-success-bg);
+
+        &:hover {
+            border-color: var(--status-success);
+            background: var(--status-success-bg);
+        }
+
+        .addonLeft svg,
+        .addonRight svg {
+            color: var(--status-success);
+        }
+    }
+
+    &.error {
+        border-color: var(--status-error-border);
+        background: var(--status-error-bg);
+
+        &:hover {
+            border-color: var(--status-error);
+            background: var(--status-error-bg);
+        }
+
+        .addonLeft svg,
+        .addonRight svg {
+            color: var(--status-error);
+        }
+    }
+
+    &.accent {
+        border-color: rgba(94, 211, 243, 0.3);
+        background: var(--icon-bg-primary);
+
+        &:hover {
+            border-color: var(--accent-redesigned);
+            background: var(--icon-bg-secondary);
+        }
+
+        .addonLeft svg,
+        .addonRight svg {
+            color: var(--accent-redesigned);
+        }
+    }
+
     @media (max-width: 600px) {
         width: 100%;
     }

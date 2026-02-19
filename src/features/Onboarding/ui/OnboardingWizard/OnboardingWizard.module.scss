@@ -242,17 +242,6 @@
 .publishCard {
     @include glass-card-tertiary;
     padding: var(--space-4) var(--space-5);
-    transition: var(--transition-normal);
-
-    &:hover {
-        border-color: var(--glass-border-accent);
-        background: var(--glass-overlay-medium);
-
-        .publishCardIconBox {
-            background: var(--icon-bg-accent);
-            box-shadow: var(--shadow-accent-sm);
-        }
-    }
 }
 
 // ========================================

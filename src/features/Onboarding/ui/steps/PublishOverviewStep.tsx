@@ -97,10 +97,10 @@ export const PublishOverviewStep = memo(({ className }: PublishOverviewStepProps
             </VStack>
 
             <HStack gap="8" align="center">
-                <Info size={14} className={cls.hintIcon} />
+                <Info size={16} className={cls.hintIcon} />
                 <Text
                     text={t('publish_hint', 'Всё это можно настроить позже в разделе «Публикация»') as string}
-                    size="xs"
+                    size="s"
                 />
             </HStack>
 

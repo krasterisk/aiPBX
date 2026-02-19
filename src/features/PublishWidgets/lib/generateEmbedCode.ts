@@ -1,13 +1,17 @@
 import { WidgetKey, WidgetAppearanceSettings } from '@/entities/WidgetKeys'
+import { getDomainOrigin, getApiBaseUrl } from '@/shared/lib/domain'
 
 export function generateEmbedCode(
     widget: WidgetKey,
     settings: WidgetAppearanceSettings
 ): string {
+    // Embed code runs on external sites — needs absolute URL
+    const apiUrl = `${getDomainOrigin()}${getApiBaseUrl()}`
+
     const attributes = [
         `src="https://cdn.jsdelivr.net/gh/krasterisk/aipbx_widget@latest/dist/widget.min.js"`,
         `data-key="${widget.publicKey}"`,
-        `data-api="${__API__}"`
+        `data-api="${apiUrl}"`
     ]
 
     // Добавляем опциональные атрибуты только если они отличаются от defaults

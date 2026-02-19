@@ -119,7 +119,7 @@ export const ToolForm = memo((props: ToolFormProps) => {
             }
             navigate(getRouteTools())
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [formFields, isEdit, toolId, updateTool, createTool, navigate, t])
 
@@ -132,7 +132,7 @@ export const ToolForm = memo((props: ToolFormProps) => {
             toast.success(t('Функция успешно удалена'))
             navigate(getRouteTools())
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [deleteTool, toolId, navigate, t])
 

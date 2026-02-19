@@ -2,15 +2,16 @@ import { useTranslation } from 'react-i18next'
 import React, { memo, useCallback, useMemo } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
+import { Button } from '@/shared/ui/redesigned/Button'
 import dayjs from 'dayjs'
 import { Modal } from '@/shared/ui/redesigned/Modal'
+import { Divider } from '@/shared/ui/Divider'
 import { ClientSelect, isUserAdmin } from '@/entities/User'
 import cls from './PeriodExtendedFilter.module.scss'
 import { useSelector } from 'react-redux'
-import { Filter, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { AssistantOptions, AssistantSelect } from '@/entities/Assistants'
 import { DateSelector } from '@/shared/ui/mui/DateSelector'
-import { classNames } from '@/shared/lib/classNames/classNames'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { CdrSource } from '@/entities/Report/model/types/report'
 
@@ -78,87 +79,79 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
 
     return (
         <Modal isOpen={show} onClose={onClose} lazy>
-            <div className={classNames(cls.filterContainer, {}, [className])}>
-                {/* Close button — absolute top-right */}
-                <button
-                    type="button"
-                    className={cls.closeBtn}
-                    onClick={handleOnClose}
-                    aria-label="Close"
-                >
-                    <X size={18} />
-                </button>
-
-                {/* Header */}
-                <HStack gap="8" align="center" className={cls.header}>
-                    <div className={cls.iconWrapper}>
-                        <Filter size={16} />
-                    </div>
-                    <Text title={t('Расширенные фильтры')} bold size="l" />
+            <VStack gap="16" max>
+                <HStack gap="8" max justify='between'>
+                    <Text title={t('Расширенные фильтры')} bold size="m" />
+                    <Button
+                        variant="clear"
+                        onClick={handleOnClose}
+                        aria-label="Close"
+                        className={cls.closeBtn}
+                    >
+                        <X size={18} />
+                    </Button>
                 </HStack>
 
-                <div className={cls.divider} />
+                <Divider className={cls.divider} />
 
-                {/* Filter fields */}
-                <VStack gap="16" max className={cls.fieldsSection}>
-                    <HStack gap="16" max>
-                        <DateSelector
-                            label={t('Дата с') ?? ''}
-                            className={cls.fullWidth}
-                            onChange={(newValue: any) => {
-                                const formattedDate = newValue && dayjs(newValue).isValid() ? dayjs(newValue).format('YYYY-MM-DD') : ''
-                                onChangeStartDate?.(formattedDate)
-                            }}
-                            data-testid="CaskDashboardFilterCard.fromDate"
-                            value={startDate ? dayjs(startDate) : null}
-                        />
-
-                        <DateSelector
-                            label={t('Дата по') ?? ''}
-                            className={cls.fullWidth}
-                            onChange={(newValue: any) => {
-                                const formattedDate = newValue && dayjs(newValue).isValid() ? dayjs(newValue).format('YYYY-MM-DD') : ''
-                                onChangeEndDate?.(formattedDate)
-                            }}
-                            data-testid="CaskDashboardFilterCard.issueDate"
-                            value={endDate ? dayjs(endDate) : null}
-                        />
-                    </HStack>
-
-                    {isAdmin && (
-                        <ClientSelect
-                            label={t('Выбор клиента') || ''}
-                            className={cls.fullWidth}
-                            clientId={userId}
-                            onChangeClient={onChangeUserId}
-                            fullWidth
-                        />
-                    )}
-
-                    <AssistantSelect
-                        multiple
-                        value={assistants}
-                        userId={userId}
-                        label={t('Выбор ассистента') || ''}
+                <HStack gap="16" max>
+                    <DateSelector
+                        label={t('Дата с') ?? ''}
                         className={cls.fullWidth}
-                        onChangeAssistant={onChangeAssistant}
-                        fullWidth
+                        onChange={(newValue: any) => {
+                            const formattedDate = newValue && dayjs(newValue).isValid() ? dayjs(newValue).format('YYYY-MM-DD') : ''
+                            onChangeStartDate?.(formattedDate)
+                        }}
+                        data-testid="CaskDashboardFilterCard.fromDate"
+                        value={startDate ? dayjs(startDate) : null}
                     />
 
-                    {onChangeSource && (
-                        <Combobox
-                            options={sourceOptions}
-                            value={selectedSource}
-                            onChange={handleSourceChange}
-                            getOptionLabel={(option: SourceOption) => option.label}
-                            isOptionEqualToValue={(option: SourceOption, value: SourceOption) => option.value === value.value}
-                            label={t('Источник') ?? ''}
-                            disableClearable
-                            className={cls.fullWidth}
-                        />
-                    )}
-                </VStack>
-            </div>
+                    <DateSelector
+                        label={t('Дата по') ?? ''}
+                        className={cls.fullWidth}
+                        onChange={(newValue: any) => {
+                            const formattedDate = newValue && dayjs(newValue).isValid() ? dayjs(newValue).format('YYYY-MM-DD') : ''
+                            onChangeEndDate?.(formattedDate)
+                        }}
+                        data-testid="CaskDashboardFilterCard.issueDate"
+                        value={endDate ? dayjs(endDate) : null}
+                    />
+                </HStack>
+
+                {isAdmin && (
+                    <ClientSelect
+                        label={t('Выбор клиента') || ''}
+                        className={cls.fullWidth}
+                        clientId={userId}
+                        onChangeClient={onChangeUserId}
+                        fullWidth
+                    />
+                )}
+
+                <AssistantSelect
+                    multiple
+                    value={assistants}
+                    userId={userId}
+                    label={t('Выбор ассистента') || ''}
+                    className={cls.fullWidth}
+                    onChangeAssistant={onChangeAssistant}
+                    fullWidth
+                />
+
+                {onChangeSource && (
+                    <Combobox
+                        options={sourceOptions}
+                        value={selectedSource}
+                        onChange={handleSourceChange}
+                        getOptionLabel={(option: SourceOption) => option.label}
+                        isOptionEqualToValue={(option: SourceOption, value: SourceOption) => option.value === value.value}
+                        label={t('Источник') ?? ''}
+                        disableClearable
+                        className={cls.fullWidth}
+                    />
+                )}
+            </VStack>
         </Modal>
     )
 })
+

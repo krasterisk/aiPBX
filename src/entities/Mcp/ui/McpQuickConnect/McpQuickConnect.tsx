@@ -77,8 +77,8 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
     const onTemplateClick = useCallback(async (template: McpServerTemplate) => {
         const status = statusMap[template.toolkit]
         const hasMcpServer = serversByToolkit.has(template.toolkit)
-        // For webhook services, only MCP server existence matters
-        const alreadyConnected = template.authType === 'webhook'
+        // For webhook/chat_id services (Bitrix24, Telegram), only MCP server existence matters
+        const alreadyConnected = (template.authType === 'webhook' || template.authType === 'chat_id')
             ? hasMcpServer
             : status?.isConnected && hasMcpServer
         if (alreadyConnected) return
@@ -102,7 +102,7 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
                 startPopupPolling()
             }
         } catch (e) {
-            toast.error(t('Ошибка подключения сервиса'))
+            // Error toast handled by global toastMiddleware
         }
     }, [composioConnect, t, startPopupPolling, statusMap, serversByToolkit])
 
@@ -130,7 +130,7 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
             setApiKeyDialog(null)
             setApiKeyValue('')
         } catch (e: any) {
-            toast.error(e?.data?.message || t('Ошибка подключения сервиса'))
+            // Error toast handled by global toastMiddleware
         }
     }, [apiKeyDialog, apiKeyValue, connectApiKey, connectBitrix24, connectTelegramApi, t])
 
@@ -153,8 +153,8 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
                         const status = statusMap[template.toolkit]
                         const composioConnected = status?.isConnected ?? false
                         const hasMcpServer = serversByToolkit.has(template.toolkit)
-                        // For webhook-based services (Bitrix24), only MCP server existence matters
-                        const isFullyConnected = template.authType === 'webhook'
+                        // For webhook/chat_id services (Bitrix24, Telegram), only MCP server existence matters
+                        const isFullyConnected = (template.authType === 'webhook' || template.authType === 'chat_id')
                             ? hasMcpServer
                             : composioConnected && hasMcpServer
 

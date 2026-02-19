@@ -88,7 +88,7 @@ const AssistantSipAccount = memo((props: AssistantSipAccountProps) => {
           onClose()
         }
       } catch (e) {
-        toast.error(getErrorMessage(e))
+        // Error toast handled by global toastMiddleware
       }
     }
   }, [assistantId, createSip, ipAddress, selectedPbx, onClose, onSuccess])

@@ -96,7 +96,7 @@ export const UserCard = memo((props: UserCardProps) => {
         navigate(getRouteUsers())
       }
     } catch (e) {
-      toast.error(getErrorMessage(e))
+      // Error toast handled by global toastMiddleware
     }
   }, [formFields, isEdit, userId, userUpdateMutation, userMutation, navigate, isAdmin, dispatch, validateForm, t])
 
@@ -106,7 +106,7 @@ export const UserCard = memo((props: UserCardProps) => {
       toast.success(t('Пользователь удалён'))
       navigate(isAdmin ? getRouteUsers() : getRouteMain())
     } catch (e) {
-      toast.error(getErrorMessage(e))
+      // Error toast handled by global toastMiddleware
     }
   }, [userDeleteMutation, navigate, isAdmin, t])
 

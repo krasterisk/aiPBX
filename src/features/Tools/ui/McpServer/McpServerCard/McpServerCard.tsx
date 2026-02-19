@@ -52,7 +52,7 @@ export const McpServerCard = memo((props: McpServerCardProps) => {
                 setSelectedTool(null)
             }
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [deleteServer, selectedServerId, t])
 

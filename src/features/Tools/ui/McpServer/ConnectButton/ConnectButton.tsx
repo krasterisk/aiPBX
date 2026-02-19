@@ -33,7 +33,7 @@ export const ConnectButton = memo((props: ConnectButtonProps) => {
                 toast.success(t('Сервер подключён'))
             }
         } catch (e) {
-            toast.error(getErrorMessage(e))
+            // Error toast handled by global toastMiddleware
         }
     }, [isActive, server.id, connectServer, disconnectServer, t])
 

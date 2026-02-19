@@ -59,7 +59,7 @@ export const AdminTopUpModal = memo((props: AdminTopUpModalProps) => {
             toast.success(t('Баланс успешно пополнен'))
             onClose()
         } catch (e) {
-            toast.error(t('Ошибка пополнения'))
+            // Error toast handled by global toastMiddleware
             console.error(e)
         }
     }, [adminTopUp, userId, amount, currency, paymentMethod, paymentInfo, onClose, t])

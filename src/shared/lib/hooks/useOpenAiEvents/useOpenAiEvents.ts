@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
+import { getWsUrl } from '@/shared/lib/domain'
 
-const wsUrl = __WS__
+const wsUrl = getWsUrl()
 const socket = io(wsUrl)
 
 interface Event {
@@ -12,7 +13,7 @@ interface Event {
   [key: string]: any
 }
 
-export function useOpenAiEvents (userId: string) {
+export function useOpenAiEvents(userId: string) {
   const [eventMap, setEventMap] = useState<Map<string, Event[]>>(new Map())
 
   useEffect(() => {
