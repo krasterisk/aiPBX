@@ -8,7 +8,7 @@
  * API base URL is always relative (`/api`) — nginx proxies it to the backend.
  */
 
-export type PaymentSystem = 'stripe' | 'yookassa'
+export type PaymentSystem = 'stripe' | 'robokassa'
 
 export interface DomainConfig {
     /** Payment system to use on this domain */
@@ -27,10 +27,15 @@ const DOMAIN_CONFIGS: Record<string, DomainConfig> = {
         region: 'eu',
         label: 'aiPBX EU',
     },
-    'aipbx.com': {
-        paymentSystem: 'yookassa',
+    'aipbx.ru': {
+        paymentSystem: 'robokassa',
         region: 'ru',
         label: 'aiPBX RU',
+    },
+    'aipbx.org': {
+        paymentSystem: 'stripe',
+        region: 'US',
+        label: 'aiPBX US',
     },
 }
 
