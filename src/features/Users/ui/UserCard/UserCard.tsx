@@ -69,7 +69,7 @@ export const UserCard = memo((props: UserCardProps) => {
       toast.error(t('Введите имя'))
       return false
     }
-    if (!formFields.email) {
+    if (!formFields.email && formFields.authType !== 'telegram') {
       toast.error(t('Введите email'))
       return false
     }
