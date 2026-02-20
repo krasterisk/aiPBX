@@ -25,7 +25,7 @@ on:
 jobs:
   # ─── Step 1: Lint & Test ─────────────
   quality:
-    name: 🔍 Quality Checks
+    name: Quality Checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,7 +39,7 @@ jobs:
 
   # ─── Step 2: Determine which servers to deploy ──
   prepare:
-    name: 📋 Prepare Deploy Matrix
+    name: Prepare Deploy Matrix
     runs-on: ubuntu-latest
     outputs:
       servers: ${{ steps.set-matrix.outputs.servers }}
@@ -61,25 +61,25 @@ jobs:
           MSG="${{ github.event.head_commit.message }}"
 
           if [[ "$MSG" == *"[skip deploy]"* ]]; then
-            echo "⏭️ Deploy skipped by commit message"
+            echo "Deploy skipped by commit message"
             echo 'servers=[]' >> $GITHUB_OUTPUT
           elif [[ "$MSG" == *"[deploy:1]"* ]]; then
-            echo "🎯 Deploy only to production-1"
+            echo "Deploy only to production-1"
             echo 'servers=["aipbxnet_production"]' >> $GITHUB_OUTPUT
           elif [[ "$MSG" == *"[deploy:2]"* ]]; then
-            echo "🎯 Deploy only to production-2"
+            echo "Deploy only to production-2"
             echo 'servers=["aipbxorg_production"]' >> $GITHUB_OUTPUT
           elif [[ "$MSG" == *"[deploy:3]"* ]]; then
-            echo "🎯 Deploy only to production-3"
+            echo "Deploy only to production-3"
             echo 'servers=["aipbxru_production"]' >> $GITHUB_OUTPUT
           else
-            echo "🌐 Deploy to all servers"
+            echo "Deploy to all servers"
             echo 'servers=["aipbxnet_production","aipbxorg_production","aipbxru_production"]' >> $GITHUB_OUTPUT
           fi
 
   # ─── Step 3: Deploy to servers ───────
   deploy:
-    name: 🚀 Deploy (${{ matrix.server }})
+    name: Deploy (${{ matrix.server }})
     needs: [quality, prepare]
     runs-on: ubuntu-latest
     strategy:
@@ -97,41 +97,46 @@ jobs:
           script_stop: true
           script: |
             set -e
-            echo "🚀 Starting deployment to ${{ matrix.server }}..."
+            echo "Starting deployment to ${{ matrix.server }}..."
 
             cd /app
 
+            # ── Mark repos as safe (Git 2.35.2+ ownership check) ──
+            git config --global --add safe.directory /app/aiPBX
+            git config --global --add safe.directory /app/aiPBX_backend
+
             # ── Pull latest code ──
-            echo "📥 Pulling frontend..."
+            echo "Pulling frontend..."
             cd /app/aiPBX && git pull origin master
 
-            echo "📥 Pulling backend..."
+            echo "Pulling backend..."
             cd /app/aiPBX_backend && git pull origin master
 
             cd /app
 
             # ── Build & deploy ──
-            echo "🔨 Building and deploying..."
+            echo "Building and deploying..."
             docker compose -f docker-compose.production.yml --env-file .env.production up -d \
               --build \
               --force-recreate frontend backend \
               --remove-orphans
 
             # ── Wait for health checks ──
-            echo "⏳ Waiting for services to start..."
+            echo "Waiting for services to start..."
             sleep 15
 
             # ── Verify deployment ──
-            echo "🏥 Checking health..."
-            if curl -sf --max-time 10 http://localhost/api/health > /dev/null 2>&1; then
-              echo "✅ Health check passed!"
+            echo "Checking health..."
+            if docker compose -f docker-compose.production.yml --env-file .env.production exec -T backend \
+              node -e "require('http').get('http://localhost:5005/api', (r) => { process.exit(r.statusCode < 500 ? 0 : 1) }).on('error', () => process.exit(1))" 2>/dev/null; then
+              echo "Health check passed!"
             else
-              echo "⚠️ Health check failed, checking containers..."
-              docker compose -f docker-compose.production.yml ps
-              docker compose -f docker-compose.production.yml logs --tail=50 backend
+              echo "Health check failed, checking containers..."
+              docker compose -f docker-compose.production.yml --env-file .env.production ps
+              docker compose -f docker-compose.production.yml --env-file .env.production logs --tail=50 backend
               exit 1
             fi
 
             # ── Cleanup ──
             docker image prune -f
-            echo "✅ Deployment to ${{ matrix.server }} successful!"
+            echo "Deployment to ${{ matrix.server }} successful!"
