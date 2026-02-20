@@ -17,17 +17,17 @@ export const Code = memo((props: CodeProps) => {
   } = props
 
   const onCopy = useCallback(() => {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
+    if (navigator.clipboard?.writeText) {
       navigator.clipboard.writeText(text)
         .catch(err => {
           console.error('Failed to copy text: ', err)
         })
     } else {
       // Fallback for older browsers or non-secure contexts
-      const textArea = document.createElement("textarea")
+      const textArea = document.createElement('textarea')
       textArea.value = text
-      textArea.style.position = "fixed"
-      textArea.style.left = "-9999px"
+      textArea.style.position = 'fixed'
+      textArea.style.left = '-9999px'
       document.body.appendChild(textArea)
       textArea.focus()
       textArea.select()

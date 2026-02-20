@@ -102,7 +102,6 @@ export const getRouteMcpServers = () => '/mcp-servers'
 export const getRouteMcpServerCreate = () => '/mcp-servers/create'
 export const getRouteMcpServerEdit = (id: string) => `/mcp-servers/${id}`
 
-
 export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteMain()]: AppRoutes.MAIN,
   [getRouteLogin()]: AppRoutes.LOGIN,

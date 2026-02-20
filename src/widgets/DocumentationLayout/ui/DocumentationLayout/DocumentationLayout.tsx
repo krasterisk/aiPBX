@@ -7,7 +7,7 @@ import { DocumentationContent } from '../DocumentationContent/DocumentationConte
 import cls from './DocumentationLayout.module.scss'
 
 export const DocumentationLayout = memo(() => {
-    const { t } = useTranslation('docs')
+    const { t: _t } = useTranslation('docs')
     const isMobile = useMediaQuery('(max-width:960px)')
     const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -30,35 +30,37 @@ export const DocumentationLayout = memo(() => {
                 </Box>
             )}
 
-            {isMobile ? (
-                <SwipeableDrawer
-                    variant="temporary"
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    onOpen={() => setMobileOpen(true)}
-                    swipeAreaWidth={20}
-                    disableSwipeToOpen
-                    ModalProps={{
-                        keepMounted: true
-                    }}
-                    sx={{
-                        '& .MuiDrawer-paper': {
-                            boxSizing: 'border-box',
-                            width: 300,
-                            background: 'var(--bg-redesigned)',
-                            backdropFilter: 'blur(20px)',
-                            color: 'var(--text-redesigned)',
-                            borderRight: '1px solid var(--divider-solid)'
-                        }
-                    }}
-                >
-                    <DocumentationSidebar onItemClick={handleDrawerToggle} />
-                </SwipeableDrawer>
-            ) : (
-                <Box className={cls.sidebar}>
-                    <DocumentationSidebar />
-                </Box>
-            )}
+            {isMobile
+                ? (
+                    <SwipeableDrawer
+                        variant="temporary"
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        onOpen={() => { setMobileOpen(true) }}
+                        swipeAreaWidth={20}
+                        disableSwipeToOpen
+                        ModalProps={{
+                            keepMounted: true
+                        }}
+                        sx={{
+                            '& .MuiDrawer-paper': {
+                                boxSizing: 'border-box',
+                                width: 300,
+                                background: 'var(--bg-redesigned)',
+                                backdropFilter: 'blur(20px)',
+                                color: 'var(--text-redesigned)',
+                                borderRight: '1px solid var(--divider-solid)'
+                            }
+                        }}
+                    >
+                        <DocumentationSidebar onItemClick={handleDrawerToggle} />
+                    </SwipeableDrawer>
+                )
+                : (
+                    <Box className={cls.sidebar}>
+                        <DocumentationSidebar />
+                    </Box>
+                )}
 
             <Box className={cls.content}>
                 <DocumentationContent />

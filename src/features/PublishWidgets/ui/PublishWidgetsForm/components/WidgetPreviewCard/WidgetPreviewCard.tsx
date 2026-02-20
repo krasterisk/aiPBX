@@ -313,7 +313,7 @@ export const WidgetPreviewCard = memo(({ appearance, className, name }: WidgetPr
                         <Text text={t('Темная тема виджета')} size="s" />
                         <Check
                             checked={previewTheme === 'dark'}
-                            onChange={(e) => setPreviewTheme(e.target.checked ? 'dark' : 'light')}
+                            onChange={(e) => { setPreviewTheme(e.target.checked ? 'dark' : 'light') }}
                         />
                     </HStack>
                 </HStack>
@@ -325,13 +325,13 @@ export const WidgetPreviewCard = memo(({ appearance, className, name }: WidgetPr
                         className={cls.iframe}
                         srcDoc={srcDocContent}
                         onLoad={(e) => {
-                            const iframe = e.currentTarget;
+                            const iframe = e.currentTarget
                             if (iframe.contentWindow) {
                                 iframe.contentWindow.postMessage({
                                     type: 'UPDATE_APPEARANCE',
                                     appearance,
                                     widgetName: name
-                                }, '*');
+                                }, '*')
                             }
                         }}
                     />

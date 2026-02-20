@@ -42,7 +42,8 @@ export const PublishSipUrisList = memo((props: PublishSipUrisListProps) => {
         <VStack gap={'16'} max className={classNames(cls.PublishSipUrisList, {}, [className])}>
             <PublishSipUrisListHeader />
 
-            {assistants.length ? (
+            {assistants.length
+? (
                 <div className={cls.listWrapper}>
                     {assistants.map((assistant) => (
                         <PublishSipUrisItem
@@ -52,7 +53,8 @@ export const PublishSipUrisList = memo((props: PublishSipUrisListProps) => {
                         />
                     ))}
                 </div>
-            ) : (
+            )
+: (
                 <VStack justify={'center'} align={'center'} max className={cls.emptyState} gap={'16'}>
                     <Icon Svg={SearchIcon} width={48} height={48} />
                     <Text align={'center'} text={t('Данные не найдены')} size={'l'} bold />

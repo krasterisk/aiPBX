@@ -1,5 +1,8 @@
 import { rtkApi } from '@/shared/api/rtkApi'
 
+// @ts-ignore
+import { PaymentListResponse } from '../model/types/payment'
+
 interface CreateIntentArgs {
     userId: string
     amount: number
@@ -10,9 +13,6 @@ interface CreateIntentResponse {
     clientSecret: string
     id: string
 }
-
-// @ts-ignore
-import { PaymentListResponse } from '../model/types/payment'
 
 const paymentApi = rtkApi.injectEndpoints({
     endpoints: (build) => ({

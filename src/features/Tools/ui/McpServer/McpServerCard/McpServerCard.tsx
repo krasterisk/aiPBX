@@ -6,12 +6,10 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Trash2 } from 'lucide-react'
 import {
-    McpServer,
     McpTool,
     useMcpServersAll,
     useDeleteMcpServer
 } from '@/entities/Mcp'
-import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { McpServerForm } from '../McpServerForm/McpServerForm'
 import { ConnectButton } from '../ConnectButton/ConnectButton'
 import { SyncToolsButton } from '../SyncToolsButton/SyncToolsButton'
@@ -90,7 +88,7 @@ export const McpServerCard = memo((props: McpServerCardProps) => {
                             <button
                                 type="button"
                                 className={cls.deleteServerBtn}
-                                onClick={(e) => onDeleteServer(e, server.id)}
+                                onClick={async (e) => { await onDeleteServer(e, server.id) }}
                                 title={t('Удалить') || 'Delete'}
                             >
                                 <Trash2 size={14} />
@@ -135,7 +133,7 @@ export const McpServerCard = memo((props: McpServerCardProps) => {
                     <Button
                         variant="outline"
                         size="s"
-                        onClick={() => setShowAddForm(true)}
+                        onClick={() => { setShowAddForm(true) }}
                     >
                         {t('Редактировать сервер')}
                     </Button>
@@ -158,7 +156,7 @@ export const McpServerCard = memo((props: McpServerCardProps) => {
                     <Button
                         variant="outline"
                         size="s"
-                        onClick={() => setShowAddForm(false)}
+                        onClick={() => { setShowAddForm(false) }}
                     >
                         {t('Отмена')}
                     </Button>

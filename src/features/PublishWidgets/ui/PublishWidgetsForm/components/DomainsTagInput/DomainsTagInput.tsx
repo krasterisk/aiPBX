@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from 'react'
+import React, { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { Textarea } from '@/shared/ui/mui/Textarea'
@@ -52,7 +52,7 @@ export const DomainsTagInput = memo(({ className, value, onChange }: DomainsTagI
             value={domainsArray}
             onChange={handleChange}
             inputValue={inputValue}
-            onInputChange={(_, val) => setInputValue(val)}
+            onInputChange={(_, val) => { setInputValue(val) }}
             label={t('Разрешённые домены') || ''}
             placeholder={t('example.com') || ''}
             renderInput={(params) => (

@@ -1,12 +1,10 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'react-toastify'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Check } from '@/shared/ui/mui/Check'
 import { McpTool, useGetMcpServerTools, useToggleMcpTool, useBulkToggleMcpTools } from '@/entities/Mcp'
-import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './McpToolsList.module.scss'
 
@@ -96,14 +94,14 @@ export const McpToolsList = memo((props: McpToolsListProps) => {
                     <Textarea
                         placeholder={t('Поиск tools...') ?? ''}
                         value={filter}
-                        onChange={(e) => setFilter(e.target.value)}
+                        onChange={(e) => { setFilter(e.target.value) }}
                         className={cls.searchInput}
                         size="small"
                     />
                 )}
                 <div
                     className={cls.checkAllRow}
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => { e.stopPropagation() }}
                 >
                     <Check
                         checked={allEnabled}
@@ -133,10 +131,10 @@ export const McpToolsList = memo((props: McpToolsListProps) => {
                             <span className={cls.composioBadge}>Composio</span>
                         )}
                     </HStack>
-                    <div onClick={(e) => e.stopPropagation()}>
+                    <div onClick={(e) => { e.stopPropagation() }}>
                         <Check
                             checked={tool.isEnabled}
-                            onChange={(e) => onToggle(e, tool)}
+                            onChange={async (e) => { await onToggle(e, tool) }}
                             className={cls.toggleSwitch}
                         />
                     </div>

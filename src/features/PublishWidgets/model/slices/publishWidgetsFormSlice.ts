@@ -54,16 +54,20 @@ export const publishWidgetsFormSlice = createSlice({
         initForm: (state, action: PayloadAction<WidgetKey>) => {
             const widget = action.payload
             state.name = widget.name
-            state.selectedAssistant = widget.assistant ? {
+            state.selectedAssistant = widget.assistant
+? {
                 id: String(widget.assistant.id),
                 name: widget.assistant.name || ''
-            } : null
+            }
+: null
 
-            state.selectedPbxServer = widget.pbxServer ? {
+            state.selectedPbxServer = widget.pbxServer
+? {
                 id: String(widget.pbxServer.id),
                 name: widget.pbxServer.name || '',
                 uniqueId: widget.pbxServer.uniqueId
-            } : null
+            }
+: null
 
             // Parse allowedDomains - handle multiple formats and convert to newline-separated string
             if (widget.allowedDomains) {

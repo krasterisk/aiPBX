@@ -102,6 +102,7 @@ export const MenubarItems = memo((props: MenubarItemProps) => {
                 <VStack max gap="8">
                     <VStack max align="center" gap="8" className={cls.appLogo}>
                         <AppLogoV3 className={cls.logoIcon} />
+                        {/* eslint-disable-next-line i18next/no-literal-string */}
                         <span className={cls.brandText}>AI PBX</span>
                     </VStack>
                     {tree}

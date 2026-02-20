@@ -17,7 +17,7 @@ import { PublishWidgetsPageSchema } from '@/entities/PublishWidgets'
 import { PbxServerFormSchema } from '@/features/PbxServers'
 import { AIAnalyticsPageSchema } from '@/pages/AIAnalyticsPage'
 import { McpServersPageSchema } from '@/entities/Mcp'
-import { OnboardingState } from '@/features/Onboarding/model/types/onboarding'
+import { OnboardingState } from '@/features/Onboarding'
 
 export interface StateSchema {
   user: UserSchema

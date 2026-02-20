@@ -5,9 +5,8 @@ import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Textarea } from '@/shared/ui/mui/Textarea'
-import { useAdminTopUp } from '@/entities/User/api/usersApi'
-import { CurrencySelect } from '@/entities/User/ui/CurrencySelect/CurrencySelect'
-import { UserCurrencyValues } from '@/entities/User/model/consts/consts'
+import { useAdminTopUp, CurrencySelect, UserCurrencyValues } from '@/entities/User'
+
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { Wallet } from 'lucide-react'
 import { toast } from 'react-toastify'
@@ -85,12 +84,10 @@ export const AdminTopUpModal = memo((props: AdminTopUpModalProps) => {
                     <Text text={`${t('Пользователь')}: ${userName}`} variant="accent" />
                 )}
 
-
-
                 <Textarea
                     label={t('Сумма') || ''}
                     value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                    onChange={(e) => { setAmount(e.target.value) }}
                     disabled={isLoading}
                     minRows={1}
                     type="number"
@@ -105,7 +102,7 @@ export const AdminTopUpModal = memo((props: AdminTopUpModalProps) => {
                 <Textarea
                     label={t('Метод оплаты') || ''}
                     value={paymentMethod}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    onChange={(e) => { setPaymentMethod(e.target.value) }}
                     disabled={isLoading}
                     minRows={1}
                 />
@@ -113,7 +110,7 @@ export const AdminTopUpModal = memo((props: AdminTopUpModalProps) => {
                 <Textarea
                     label={t('Описание') || ''}
                     value={paymentInfo}
-                    onChange={(e) => setPaymentInfo(e.target.value)}
+                    onChange={(e) => { setPaymentInfo(e.target.value) }}
                     disabled={isLoading}
                     minRows={2}
                 />

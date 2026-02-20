@@ -37,7 +37,7 @@ export const usersApi = rtkApi.injectEndpoints({
         }
       },
       // Refetch when the page arg changes
-      forceRefetch({ currentArg, previousArg }) {
+      forceRefetch ({ currentArg, previousArg }) {
         return JSON.stringify(currentArg) !== JSON.stringify(previousArg)
       },
       providesTags: (result) =>
@@ -149,7 +149,7 @@ export const usersApi = rtkApi.injectEndpoints({
         method: 'PATCH',
         body: formData
       }),
-      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted ({ id, ...patch }, { dispatch, queryFulfilled }) {
         if (!id) return
         const patchResult = dispatch(
           usersApi.util.updateQueryData('getUser', id, (draft) => {
@@ -181,7 +181,7 @@ export const usersApi = rtkApi.injectEndpoints({
         method: 'PATCH',
         body: { id, ...patch }
       }),
-      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted ({ id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           usersApi.util.updateQueryData('getUser', id, (draft) => {
             Object.assign(draft, patch)
@@ -192,7 +192,7 @@ export const usersApi = rtkApi.injectEndpoints({
       invalidatesTags: (result, error, { id }) => [{ type: 'Users', id }]
     }),
     deleteUser: build.mutation<{ success: boolean, id: string }, string>({
-      query(id) {
+      query (id) {
         return {
           url: `/users/${id}`,
           method: 'DELETE'

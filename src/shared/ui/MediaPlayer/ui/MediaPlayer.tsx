@@ -16,6 +16,7 @@ export const MediaPlayer = memo((props: MediaPlayerProps) => {
 
   return (
     <HStack max className={classNames(cls.MediaPlayer, {}, [className])}>
+      {/* eslint-disable-next-line i18next/no-literal-string */}
       <audio controls src={src} preload="auto" className={cls.audio}>
         Your browser does not support the audio element.
       </audio>

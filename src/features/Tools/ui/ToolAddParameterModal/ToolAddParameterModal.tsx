@@ -8,7 +8,7 @@ import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Check } from '@/shared/ui/mui/Check'
 import { ToolParam } from '@/entities/Tools'
 import { classNames } from '@/shared/lib/classNames/classNames'
-import { FileCode, Save, X } from 'lucide-react'
+import { FileCode } from 'lucide-react'
 import cls from './ToolAddParameterModal.module.scss'
 
 export interface ToolAddParameterModalProps {

@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useEffect, useRef, useState } from 'react'
+import { Fragment, ReactNode, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Listbox as HListBox } from '@headlessui/react'
 import { classNames } from '@/shared/lib/classNames/classNames'
@@ -46,7 +46,7 @@ export function ListBox<T extends string>(props: ListBoxProps<T>) {
     multiple
   } = props
 
-  const [direction, setDirection] = useState<DropdownDirection>(baseDirection)
+  const [direction, _setDirection] = useState<DropdownDirection>(baseDirection)
   const [isOpen, setIsOpen] = useState(false)
 
   const { refs, floatingStyles } = useFloating({

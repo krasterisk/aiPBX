@@ -36,7 +36,7 @@ export const ColorGradientPicker = memo(({ className, label, value, onChange, pr
                     <input
                         type="color"
                         value={value}
-                        onChange={(e) => onChange(e.target.value)}
+                        onChange={(e) => { onChange(e.target.value) }}
                         className={cls.colorInput}
                     />
                     <div
@@ -53,7 +53,7 @@ export const ColorGradientPicker = memo(({ className, label, value, onChange, pr
                             key={preset}
                             className={classNames(cls.preset, { [cls.active]: value.toLowerCase() === preset.toLowerCase() })}
                             style={{ backgroundColor: preset }}
-                            onClick={() => onChange(preset)}
+                            onClick={() => { onChange(preset) }}
                         />
                     ))}
                 </HStack>

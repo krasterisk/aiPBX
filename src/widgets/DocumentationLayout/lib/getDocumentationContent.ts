@@ -89,18 +89,18 @@ export const DOC_SECTIONS: DocSection[] = [
 // Map section id → markdown filename
 const SECTION_FILES: Record<string, string> = {
     'getting-started': '01-getting-started.md',
-    'assistants': '02-assistants.md',
-    'tools': '03-tools.md',
+    assistants: '02-assistants.md',
+    tools: '03-tools.md',
     'mcp-servers': '04-mcp-servers.md',
-    'playground': '05-playground.md',
-    'dashboards': '06-dashboards.md',
-    'publish': '07-publish.md',
-    'payments': '08-payments.md'
+    playground: '05-playground.md',
+    dashboards: '06-dashboards.md',
+    publish: '07-publish.md',
+    payments: '08-payments.md'
 }
 
 const cache: Record<string, string> = {}
 
-export async function fetchDocumentationMarkdown(sectionId: string, lang: string = 'ru'): Promise<string> {
+export async function fetchDocumentationMarkdown (sectionId: string, lang: string = 'ru'): Promise<string> {
     const fileName = SECTION_FILES[sectionId]
     if (!fileName) {
         return '# Раздел не найден\n\nВыберите раздел из бокового меню.'
@@ -116,7 +116,7 @@ export async function fetchDocumentationMarkdown(sectionId: string, lang: string
         if (!response.ok) {
             // Fallback to Russian if translation not available
             if (lang !== 'ru') {
-                return fetchDocumentationMarkdown(sectionId, 'ru')
+                return await fetchDocumentationMarkdown(sectionId, 'ru')
             }
             throw new Error(`HTTP ${response.status}`)
         }
@@ -127,8 +127,8 @@ export async function fetchDocumentationMarkdown(sectionId: string, lang: string
         console.error(`Failed to load doc: ${lang}/${fileName}`, error)
         // Try Russian fallback on error
         if (lang !== 'ru') {
-            return fetchDocumentationMarkdown(sectionId, 'ru')
+            return await fetchDocumentationMarkdown(sectionId, 'ru')
         }
-        return `# Ошибка загрузки\n\nНе удалось загрузить документацию. Попробуйте обновить страницу.`
+        return '# Ошибка загрузки\n\nНе удалось загрузить документацию. Попробуйте обновить страницу.'
     }
 }

@@ -63,7 +63,7 @@ export const AssistantsListHeader = memo((props: AssistantsListHeaderProps) => {
                         className={cls.templateBtn}
                         addonLeft={<LayoutGrid size={20} />}
                         variant="outline"
-                        onClick={() => setIsTemplatesOpen(true)}
+                        onClick={() => { setIsTemplatesOpen(true) }}
                     >
                         {t('Шаблоны')}
                     </Button>
@@ -89,7 +89,7 @@ export const AssistantsListHeader = memo((props: AssistantsListHeaderProps) => {
 
             <Modal
                 isOpen={isTemplatesOpen}
-                onClose={() => setIsTemplatesOpen(false)}
+                onClose={() => { setIsTemplatesOpen(false) }}
                 lazy
                 contentClassName={cls.templatesModalContent}
             >
@@ -98,7 +98,7 @@ export const AssistantsListHeader = memo((props: AssistantsListHeaderProps) => {
                         <Text title={t('Шаблоны ассистентов')} bold />
                         <button
                             className={cls.closeBtn}
-                            onClick={() => setIsTemplatesOpen(false)}
+                            onClick={() => { setIsTemplatesOpen(false) }}
                             aria-label="Close"
                         >
                             <X size={20} />

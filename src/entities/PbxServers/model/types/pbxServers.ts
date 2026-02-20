@@ -1,6 +1,5 @@
 import { User } from '@/entities/User'
 import { HTMLAttributeAnchorTarget } from 'react'
-import { AllTools } from '@/entities/Tools'
 
 export interface AllPbxServers {
   count: number

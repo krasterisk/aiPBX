@@ -4,14 +4,12 @@ import {
   getRouteAssistants,
   getRouteDashboardOverview,
   getRouteDashboardAIAnalytics,
-  getRouteDashboardCallRecords,
   getRoutePbxServers,
   getRoutePlayground,
   getRouteReports,
   getRouteTools,
   getRouteUsers,
   getRoutePayment,
-  getRouteDocs,
   getRoutePrices,
   getRouteModels,
   getRoutePublishSipUris,
@@ -27,7 +25,6 @@ import BuildIcon from '@mui/icons-material/Build'
 import DnsIcon from '@mui/icons-material/Dns'
 import PeopleIcon from '@mui/icons-material/People'
 import PaymentsIcon from '@mui/icons-material/Payments'
-import MenuBookIcon from '@mui/icons-material/MenuBook'
 import PublicIcon from '@mui/icons-material/Public'
 import SendIcon from '@mui/icons-material/Send'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'

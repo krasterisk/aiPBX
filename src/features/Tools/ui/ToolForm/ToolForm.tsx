@@ -21,9 +21,8 @@ import {
     useDeleteTool,
     toolsPageReducer
 } from '@/entities/Tools'
-import { getUserAuthData, isUserAdmin, ClientOptions } from '@/entities/User'
+import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { getRouteTools } from '@/shared/const/router'
-import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 
 import { ToolFormHeader } from './components/ToolFormHeader/ToolFormHeader'
 import { GeneralToolCard } from './components/GeneralToolCard/GeneralToolCard'

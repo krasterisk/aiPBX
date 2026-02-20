@@ -43,7 +43,7 @@ export const reportApi = rtkApi.injectEndpoints({
         }
       },
       // Refetch when the page arg changes
-      forceRefetch({ currentArg, previousArg }) {
+      forceRefetch ({ currentArg, previousArg }) {
         return JSON.stringify(currentArg) !== JSON.stringify(previousArg)
       },
       providesTags: (result) =>
@@ -119,7 +119,7 @@ export const reportApi = rtkApi.injectEndpoints({
         method: 'PATCH',
         body: { id, ...patch }
       }),
-      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted ({ id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           reportApi.util.updateQueryData('getReport', id, (draft) => {
             Object.assign(draft, patch)
@@ -130,7 +130,7 @@ export const reportApi = rtkApi.injectEndpoints({
       invalidatesTags: (result, error, { id }) => [{ type: 'Reports', id }]
     }),
     deleteReport: build.mutation<{ success: boolean, id: string }, string>({
-      query(id) {
+      query (id) {
         return {
           url: `/reports/${id}`,
           method: 'DELETE'

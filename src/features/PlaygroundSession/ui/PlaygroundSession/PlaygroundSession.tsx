@@ -7,12 +7,12 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useSelector, useDispatch } from 'react-redux'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
-import { AssistantOptions, AssistantSelect } from '@/entities/Assistants'
+import { AssistantOptions, AssistantSelect, useAssistant } from '@/entities/Assistants'
 import { usePlaygroundSession } from '../../model/usePlaygroundSession'
 import { PlaygroundCall } from '../../ui/PlaygroundCall/PlaygroundCall'
 import { PlaygroundAssistantSettings } from '../PlaygroundAssistantSettings/PlaygroundAssistantSettings'
+// eslint-disable-next-line krasterisk-plugin/layer-imports
 import { playgroundAssistantFormActions } from '@/pages/Playground'
-import { useAssistant } from '@/entities/Assistants/api/assistantsApi'
 import { SectionCard } from '../components/SectionCard/SectionCard'
 import { UserCheck, Play, Square } from 'lucide-react'
 
@@ -60,25 +60,27 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
 
     const RightElement = (
         <HStack gap="8">
-            {!isSessionActive ? (
-                <Button
-                    variant="outline"
-                    disabled={!selectedAssistant || isLoading || !navigator.mediaDevices}
-                    onClick={handleStartSession}
-                    addonLeft={<Play size={18} />}
-                >
-                    {isLoading ? t('Подключение...') : t('Начать сессию')}
-                </Button>
-            ) : (
-                <Button
-                    variant="outline"
-                    color="error"
-                    onClick={handleStopSession}
-                    addonLeft={<Square size={18} />}
-                >
-                    {t('Завершить сессию')}
-                </Button>
-            )}
+            {!isSessionActive
+                ? (
+                    <Button
+                        variant="outline"
+                        disabled={!selectedAssistant || isLoading || !navigator.mediaDevices}
+                        onClick={handleStartSession}
+                        addonLeft={<Play size={18} />}
+                    >
+                        {isLoading ? t('Подключение...') : t('Начать сессию')}
+                    </Button>
+                )
+                : (
+                    <Button
+                        variant="outline"
+                        color="error"
+                        onClick={handleStopSession}
+                        addonLeft={<Square size={18} />}
+                    >
+                        {t('Завершить сессию')}
+                    </Button>
+                )}
         </HStack>
     )
 
@@ -93,7 +95,7 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
                     <AssistantSelect
                         label={t('Выберите ассистента') || 'Assistant'}
                         value={selectedAssistant}
-                        onChangeAssistant={(_, newValue) => setSelectedAssistant(newValue)}
+                        onChangeAssistant={(_, newValue) => { setSelectedAssistant(newValue) }}
                         userId={isAdmin ? undefined : userData?.id}
                         fullWidth
                     />

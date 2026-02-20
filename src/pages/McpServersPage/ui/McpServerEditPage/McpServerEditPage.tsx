@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { ErrorPage } from '../../../ErrorPage'
 import { Page } from '@/widgets/Page'
 import { VStack } from '@/shared/ui/redesigned/Stack'
-import { McpServerForm } from '@/features/Tools/ui/McpServer/McpServerForm/McpServerForm'
+import { McpServerForm } from '@/features/Tools'
 
 const McpServerEditPage = memo(() => {
     const { id } = useParams<{ id: string }>()

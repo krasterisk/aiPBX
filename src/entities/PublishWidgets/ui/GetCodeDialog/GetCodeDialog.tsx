@@ -2,8 +2,7 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './GetCodeDialog.module.scss'
 import { memo, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
-import { Button } from '@/shared/ui/redesigned/Button'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Modal } from '@/shared/ui/redesigned/Modal'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Icon } from '@/shared/ui/redesigned/Icon'
@@ -52,7 +51,7 @@ export const GetCodeDialog = memo((props: GetCodeDialogProps) => {
             <VStack
                 className={classNames(cls.GetCodeDialog, {}, [className])}
                 max
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => { e.stopPropagation() }}
             >
                 <button className={cls.closeBtn} onClick={onClose}>
                     <Icon

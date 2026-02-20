@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import { AUDIO_WORKLET_CODE } from '../lib/audioWorklet'
 import { getWsUrl } from '@/shared/lib/domain'
 
-const SAMPLE_RATE = 24000  // PCM16 from OpenAI Realtime API works at 24kHz
+const SAMPLE_RATE = 24000 // PCM16 from OpenAI Realtime API works at 24kHz
 const INITIAL_BUFFER_DELAY = 0.15 // 150ms buffering
 const RECONNECT_DELAY = 1000
 
@@ -58,7 +58,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
                 })
             }
         }, 100) // Update UI at 10fps max
-        return () => clearInterval(interval)
+        return () => { clearInterval(interval) }
     }, [])
 
     // Helper to stop all audio
@@ -81,7 +81,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
 
     const cleanupAudio = useCallback(() => {
         if (mediaStreamRef.current) {
-            mediaStreamRef.current.getTracks().forEach(t => t.stop())
+            mediaStreamRef.current.getTracks().forEach(t => { t.stop() })
             mediaStreamRef.current = null
         }
         if (audioWorkletNodeRef.current) {
@@ -193,8 +193,8 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             // Create worklet with resampling parameters
             const worklet = new AudioWorkletNode(ctx, 'audio-input-processor', {
                 processorOptions: {
-                    targetSampleRate: SAMPLE_RATE,  // 24kHz for OpenAI
-                    sourceSampleRate: actualSampleRate  // Native rate
+                    targetSampleRate: SAMPLE_RATE, // 24kHz for OpenAI
+                    sourceSampleRate: actualSampleRate // Native rate
                 }
             })
 
@@ -215,7 +215,6 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
 
             audioWorkletNodeRef.current = worklet
             setIsMicAccessGranted(true)
-
         } catch (e: any) {
             console.error('Audio Init Failed:', e)
             toast.error('Microphone initialization failed: ' + e.message)
@@ -286,7 +285,6 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             // Ideally we retry or show status
             // toast.error('Connection error')
         })
-
     }, [cleanupAudio, initAudioInput, interruptPlayback, playAudioChunk])
 
     const disconnect = useCallback(() => {

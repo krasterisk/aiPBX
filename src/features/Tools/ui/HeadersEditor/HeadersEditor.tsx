@@ -30,7 +30,7 @@ interface HeadersEditorProps {
  * - If headers have any keys (excluding auth), mode = 'custom'
  * - Otherwise mode = 'none'
  */
-function detectMode(headers?: Record<string, string>): AuthMode {
+function detectMode (headers?: Record<string, string>): AuthMode {
     if (!headers || Object.keys(headers).length === 0) return 'none'
 
     const authValue = headers.Authorization || headers.authorization
@@ -48,7 +48,7 @@ function detectMode(headers?: Record<string, string>): AuthMode {
 /**
  * Extracts the Bearer token from a headers object.
  */
-function extractBearerToken(headers?: Record<string, string>): string {
+function extractBearerToken (headers?: Record<string, string>): string {
     if (!headers) return ''
     const authValue = headers.Authorization || headers.authorization || ''
     if (authValue.startsWith('Bearer ')) {
@@ -60,7 +60,7 @@ function extractBearerToken(headers?: Record<string, string>): string {
 /**
  * Converts a headers object into an array of HeaderEntry for the key-value editor.
  */
-function headersToEntries(headers?: Record<string, string>): HeaderEntry[] {
+function headersToEntries (headers?: Record<string, string>): HeaderEntry[] {
     if (!headers || Object.keys(headers).length === 0) {
         return [{ key: '', value: '' }]
     }
@@ -71,7 +71,7 @@ function headersToEntries(headers?: Record<string, string>): HeaderEntry[] {
  * Converts an array of HeaderEntry back to a headers object.
  * Skips entries with empty keys.
  */
-function entriesToHeaders(entries: HeaderEntry[]): Record<string, string> {
+function entriesToHeaders (entries: HeaderEntry[]): Record<string, string> {
     const result: Record<string, string> = {}
     for (const entry of entries) {
         const key = entry.key.trim()
@@ -224,14 +224,14 @@ export const HeadersEditor = memo((props: HeadersEditorProps) => {
                                     <Textarea
                                         placeholder="Header"
                                         value={entry.key}
-                                        onChange={(e) => onEntryChange(index, 'key', e.target.value)}
+                                        onChange={(e) => { onEntryChange(index, 'key', e.target.value) }}
                                         className={cls.fullWidth}
                                         size="small"
                                     />
                                     <Textarea
                                         placeholder="Value"
                                         value={entry.value}
-                                        onChange={(e) => onEntryChange(index, 'value', e.target.value)}
+                                        onChange={(e) => { onEntryChange(index, 'value', e.target.value) }}
                                         className={cls.fullWidth}
                                         size="small"
                                     />
@@ -239,7 +239,7 @@ export const HeadersEditor = memo((props: HeadersEditorProps) => {
                                 <button
                                     type="button"
                                     className={cls.removeBtn}
-                                    onClick={() => onRemoveEntry(index)}
+                                    onClick={() => { onRemoveEntry(index) }}
                                     title={t('Удалить') || 'Remove'}
                                 >
                                     <Trash2 size={16} />

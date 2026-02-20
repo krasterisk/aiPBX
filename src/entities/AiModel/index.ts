@@ -3,7 +3,7 @@ export type {
     CreateAiModelDto,
     UpdateAiModelDto,
     DeleteAiModelsDto
-} from './model/types/aiModel';
+} from './model/types/aiModel'
 
 export {
     useAiModels,
@@ -11,7 +11,7 @@ export {
     useCreateAiModel,
     useUpdateAiModel,
     useDeleteAiModels
-} from './api/aiModelApi';
+} from './api/aiModelApi'
 
-export { AiModelsList } from './ui/AiModelsList/AiModelsList';
-export { AiModelsListHeader } from './ui/AiModelsListHeader/AiModelsListHeader';
+export { AiModelsList } from './ui/AiModelsList/AiModelsList'
+export { AiModelsListHeader } from './ui/AiModelsListHeader/AiModelsListHeader'

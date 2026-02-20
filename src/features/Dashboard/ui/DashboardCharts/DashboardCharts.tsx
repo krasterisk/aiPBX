@@ -6,8 +6,8 @@ import { LinesChart } from '@/shared/ui/mui/LinesChart'
 import { Grid } from '@mui/material'
 import { ReportFilters } from '@/entities/Report'
 import { useSelector } from 'react-redux'
-import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
-import { currencySymbols } from '@/entities/User/model/consts/consts'
+import { getUserAuthData, UserCurrencyValues, currencySymbols } from '@/entities/User'
+
 import { Text } from '@/shared/ui/redesigned/Text'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 

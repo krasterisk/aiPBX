@@ -1,12 +1,12 @@
 import { memo, useCallback } from 'react'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './CodeBlock.module.scss'
-import { Icon } from '@/shared/ui/redesigned/Icon'
+import { Icon } from '../Icon'
 import CopyIcon from '@/shared/assets/icons/copy.svg'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
-import { Text } from '@/shared/ui/redesigned/Text'
+import { VStack, HStack } from '../Stack'
+import { Text } from '../Text'
 
 interface CodeBlockProps {
     className?: string

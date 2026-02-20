@@ -1,4 +1,3 @@
-import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './PaymentOrganizations.module.scss'
 import { memo, useState, useCallback } from 'react'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'

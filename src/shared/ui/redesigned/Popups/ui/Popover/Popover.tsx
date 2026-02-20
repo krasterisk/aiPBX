@@ -13,7 +13,7 @@ interface PopoverProps {
   children?: ReactNode
 }
 
-export function Popover(props: PopoverProps) {
+export function Popover (props: PopoverProps) {
   const {
     className,
     trigger,

@@ -10,6 +10,7 @@ import {
     assistantFormActions,
     getAssistantFormData,
     useAssistant
+, assistantTemplates 
 } from '@/entities/Assistants'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { Tool, toolsPageActions } from '@/entities/Tools'
@@ -18,7 +19,7 @@ import { PromptSection } from './components/PromptSection'
 import { MainInfoCard } from './components/MainInfoCard'
 import { ModelParametersCard } from './components/ModelParametersCard'
 import { SpeechSettingsCard } from './components/SpeechSettingsCard'
-import { assistantTemplates } from '@/entities/Assistants/model/const/assistantTemplates'
+
 import cls from './AssistantForm.module.scss'
 
 interface AssistantFormProps {
@@ -148,7 +149,7 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
         const updatedForm = {
             ...formFields,
             user: {
-                id: id,
+                id,
                 name: ''
             },
             userId: id
@@ -225,8 +226,6 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
                             onChangeMcpServersHandler={onChangeMcpServersHandler}
                             onChangeCheckboxHandler={onChangeCheckboxHandler}
                         />
-
-
 
                         {/* Model Parameters Card (VAD + Temp) */}
                         <ModelParametersCard

@@ -50,7 +50,8 @@ export const ConnectionMcpServerCard = memo((props: ConnectionMcpServerCardProps
                 {hasServer && isComposio ? (
                     /* Composio servers: show status only, no connect/sync buttons */
                     <HStack gap="8" align="center">
-                        {server.status === 'active' ? (
+                        {server.status === 'active'
+? (
                             <>
                                 <CheckCircle size={16} className={cls.composioStatusOk} />
                                 <Text
@@ -59,7 +60,8 @@ export const ConnectionMcpServerCard = memo((props: ConnectionMcpServerCardProps
                                     className={cls.composioStatusOk}
                                 />
                             </>
-                        ) : (
+                        )
+: (
                             <>
                                 <AlertCircle size={16} className={cls.composioStatusErr} />
                                 <Text

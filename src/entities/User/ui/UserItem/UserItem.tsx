@@ -6,7 +6,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Avatar } from '@/shared/ui/redesigned/Avatar'
-import { ShieldCheck, Mail, Wallet, UserCircle, KeyRound } from 'lucide-react'
+import { ShieldCheck, Mail, Wallet, KeyRound } from 'lucide-react'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
@@ -82,7 +82,6 @@ export const UserItem = memo((props: UserItemProps) => {
         </HStack>
 
         <Divider />
-
 
         {user.email && (
           <HStack gap="16" align="center">

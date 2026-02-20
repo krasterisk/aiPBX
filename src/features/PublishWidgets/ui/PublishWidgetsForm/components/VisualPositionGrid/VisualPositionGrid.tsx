@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { classNames } from '@/shared/lib/classNames/classNames'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import cls from './VisualPositionGrid.module.scss'
 
@@ -29,8 +29,8 @@ export const VisualPositionGrid = memo(({ className, value, onChange }: VisualPo
                     <div
                         key={pos.value}
                         className={classNames(cls.item, { [cls.active]: value === pos.value })}
-                        onClick={() => onChange(pos.value)}
-                        title={(t(pos.value) as string)}
+                        onClick={() => { onChange(pos.value) }}
+                        title={(t(pos.value))}
                     >
                         <div className={cls.dot} />
                     </div>

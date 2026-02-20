@@ -5,7 +5,7 @@ import i18n from '@/shared/config/i18n/i18n'
 export const toastMiddleware: Middleware = (storeApi) => next => action => {
   if (isRejectedWithValue(action)) {
     // Don't show error toasts for unauthenticated users (landing page, login, signup)
-    const state = storeApi.getState() as any
+    const state = storeApi.getState() 
     if (!state?.user?.authData) {
       return next(action)
     }

@@ -1,7 +1,7 @@
 import { ChangeEvent, memo, useCallback, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card } from '@/shared/ui/redesigned/Card'
-import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Check } from '@/shared/ui/mui/Check'
@@ -72,7 +72,7 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
                     <Text text={t('Наименование') || ''} size="s" bold className={cls.label} />
                     <Textarea
                         placeholder={t('Введите наименование') ?? ''}
-                        onChange={(e) => onChangeField('name', e.target.value)}
+                        onChange={(e) => { onChangeField('name', e.target.value) }}
                         value={formFields?.name || ''}
                         className={cls.fullWidth}
                     />
@@ -86,7 +86,7 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
                             placeholder={t('Опишите назначение функции...') ?? ''}
                             multiline
                             minRows={3}
-                            onChange={(e) => onChangeField('description', e.target.value)}
+                            onChange={(e) => { onChangeField('description', e.target.value) }}
                             value={formFields?.description || ''}
                             className={cls.fullWidth}
                         />
@@ -98,7 +98,7 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
                     <Check
                         label={t('Строгий режим вызова') || ''}
                         checked={formFields?.strict}
-                        onChange={(e) => onChangeField('strict', e.target.checked)}
+                        onChange={(e) => { onChangeField('strict', e.target.checked) }}
                     />
                 )}
 
@@ -122,7 +122,7 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
                                     <Text text={t('Адрес вебхука') || ''} size="s" bold className={cls.label} />
                                     <Textarea
                                         placeholder="https://example.com/webhook"
-                                        onChange={(e) => onChangeField('webhook', e.target.value)}
+                                        onChange={(e) => { onChangeField('webhook', e.target.value) }}
                                         value={formFields?.webhook || ''}
                                         className={cls.fullWidth}
                                     />
@@ -133,7 +133,7 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
                                     <Combobox
                                         options={methods}
                                         value={methods.find(m => m.id === (formFields?.method || 'POST')) || null}
-                                        onChange={(e, v: any) => onChangeField('method', Array.isArray(v) ? undefined : v?.id)}
+                                        onChange={(e, v: any) => { onChangeField('method', Array.isArray(v) ? undefined : v?.id) }}
                                         className={cls.fullWidth}
                                         disableClearable
                                         getOptionLabel={(option: any) => option.name}

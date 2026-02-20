@@ -2,9 +2,8 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './PublishWidgetsList.module.scss'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { Loader } from '@/shared/ui/Loader'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { ContentListItemSkeleton } from '@/entities/Content'
 import { PublishWidgetsItem } from '../PublishWidgetsItem/PublishWidgetsItem'
@@ -49,11 +48,13 @@ export const PublishWidgetsList = memo((props: PublishWidgetsListProps) => {
         <VStack gap={'16'} max className={classNames(cls.PublishWidgetsList, {}, [className])}>
             <PublishWidgetsListHeader />
 
-            {widgets?.rows.length ? (
+            {widgets?.rows.length
+? (
                 <div className={cls.listWrapper}>
                     {widgets.rows.map(renderContent)}
                 </div>
-            ) : (
+            )
+: (
                 <VStack justify={'center'} align={'center'} max className={cls.emptyState} gap={'16'}>
                     <Icon Svg={SearchIcon} width={48} height={48} />
                     <Text align={'center'} text={t('Данные не найдены')} size={'l'} bold />

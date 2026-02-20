@@ -1,4 +1,4 @@
-import React, { memo, ReactNode, useState, useRef, useEffect } from 'react'
+import React, { memo, ReactNode, useState, useRef, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './Tooltip.module.scss'
@@ -41,7 +41,7 @@ export const Tooltip = memo((props: TooltipProps) => {
         }
         checkMobile()
         window.addEventListener('resize', checkMobile)
-        return () => window.removeEventListener('resize', checkMobile)
+        return () => { window.removeEventListener('resize', checkMobile) }
     }, [])
 
     useEffect(() => {
@@ -69,7 +69,7 @@ export const Tooltip = memo((props: TooltipProps) => {
     }, [isMobile, isVisible])
 
     // Вычисляем позицию tooltip
-    const calculatePosition = (): Position => {
+    const calculatePosition = useCallback((): Position => {
         if (!wrapperRef.current) return { top: 0, left: 0 }
 
         const rect = wrapperRef.current.getBoundingClientRect()
@@ -106,13 +106,13 @@ export const Tooltip = memo((props: TooltipProps) => {
         }
 
         return { top, left }
-    }
+    }, [isMobile, placement])
 
     useEffect(() => {
         if (isVisible) {
             setPosition(calculatePosition())
         }
-    }, [isVisible, placement, isMobile])
+    }, [isVisible, placement, isMobile, calculatePosition])
 
     useEffect(() => {
         // Обновляем позицию при скролле
@@ -129,7 +129,7 @@ export const Tooltip = memo((props: TooltipProps) => {
             window.removeEventListener('scroll', updatePosition, true)
             window.removeEventListener('resize', updatePosition)
         }
-    }, [isVisible, placement, isMobile])
+    }, [isVisible, placement, isMobile, calculatePosition])
 
     const showTooltip = () => {
         if (disabled) return

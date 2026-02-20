@@ -1,4 +1,3 @@
-import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './PaymentOverview.module.scss'
 import { memo, useState, useCallback } from 'react'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
@@ -7,16 +6,14 @@ import { StripeContainer } from '@/features/CheckoutByStripe'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { useTranslation } from 'react-i18next'
-import { useGetUserBalance } from '@/entities/User'
+import { useGetUserBalance, UserCurrencyValues } from '@/entities/User'
 import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
-import { UserCurrencyValues } from '@/entities/User'
+
 import { Modal } from '@/shared/ui/redesigned/Modal'
 import HistoryIcon from '@mui/icons-material/History'
 import BusinessIcon from '@mui/icons-material/Business'
 import DataUsageIcon from '@mui/icons-material/DataUsage'
 import { Plus } from 'lucide-react'
-import { Card } from '@/shared/ui/redesigned/Card'
-
 
 interface PaymentOverviewProps {
     onTabChange: (index: number) => void
@@ -67,7 +64,7 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
                     className={cls.balanceAmount}
                 />
                 <Button
-                    onClick={() => setIsTopUpModalOpen(true)}
+                    onClick={() => { setIsTopUpModalOpen(true) }}
                     variant="glass-action"
                     addonLeft={<Plus size={20} />}
                 >
@@ -84,7 +81,7 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
             <HStack gap="16" max wrap="wrap" className={cls.quickActionsGrid}>
                 <Button
                     className={cls.quickActionCard}
-                    onClick={() => onTabChange(1)}
+                    onClick={() => { onTabChange(1) }}
                     variant="glass-action"
                     addonLeft={<HistoryIcon fontSize="small" />}
                 >
@@ -92,7 +89,7 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
                 </Button>
                 <Button
                     className={cls.quickActionCard}
-                    onClick={() => onTabChange(2)}
+                    onClick={() => { onTabChange(2) }}
                     variant="glass-action"
                     addonLeft={<DataUsageIcon fontSize="small" />}
                 >
@@ -100,7 +97,7 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
                 </Button>
                 <Button
                     className={cls.quickActionCard}
-                    onClick={() => onTabChange(3)}
+                    onClick={() => { onTabChange(3) }}
                     variant="glass-action"
                     addonLeft={<BusinessIcon fontSize="small" />}
                 >
@@ -113,9 +110,11 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
                 isTopUpModalOpen && (
                     <Modal isOpen={isTopUpModalOpen} onClose={handleCloseModal}>
                         <VStack className={cls.modalContent}>
-                            {!clientSecret ? (
+                            {!clientSecret
+? (
                                 <TopUpBalance onSuccess={onIntentCreated} />
-                            ) : (
+                            )
+: (
                                 <StripeContainer
                                     clientSecret={clientSecret}
                                     onCancel={onCancel}

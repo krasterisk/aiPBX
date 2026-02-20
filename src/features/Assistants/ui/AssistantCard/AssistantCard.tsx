@@ -14,16 +14,15 @@ import {
   useUpdateAssistant,
   Assistant,
   assistantFormReducer
+, getAssistantFormData 
 } from '@/entities/Assistants'
 
 import { AssistantForm } from '../AssistantForm'
 import { AssistantFormHeader } from '../AssistantFormHeader'
 import { toast } from 'react-toastify'
-import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { useTranslation } from 'react-i18next'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { useSelector } from 'react-redux'
-import { getAssistantFormData } from '@/entities/Assistants/model/selectors/assistantFormSelectors'
 
 export interface AssistantCardProps {
   className?: string

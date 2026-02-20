@@ -20,7 +20,7 @@ import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin
 import { useTelegramLogin } from '@/shared/lib/hooks/useTelegramLogin/useTelegramLogin'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 
-export function useSignupData() {
+export function useSignupData () {
   const { t } = useTranslation('login')
   const dispatch = useAppDispatch()
   const email = useSelector(getSignupEmail)

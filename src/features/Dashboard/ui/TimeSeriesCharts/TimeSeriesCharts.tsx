@@ -32,7 +32,7 @@ const CHART_COLORS = {
     mos: '#f59e0b', // --chart-warning
     automation: '#a78bfa', // --chart-purple
     cost: '#ef4444', // --chart-error
-    tokens: '#3b82f6'  // --chart-info
+    tokens: '#3b82f6' // --chart-info
 }
 
 /** Common MUI chart sx: axis labels & legend use system CSS vars */

@@ -18,7 +18,6 @@ import {
 } from '@/entities/Mcp'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { getRouteMcpServers } from '@/shared/const/router'
-import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { McpServerFormHeader } from './components/McpServerFormHeader/McpServerFormHeader'
 import { GeneralMcpServerCard } from './components/GeneralMcpServerCard/GeneralMcpServerCard'
 import { ConnectionMcpServerCard } from './components/ConnectionMcpServerCard/ConnectionMcpServerCard'
@@ -276,7 +275,7 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
                         isAdmin={isAdmin}
                         onChangeName={setName}
                         onChangeUrl={setUrl}
-                        onChangeTransport={(v) => setTransport(v as TransportType)}
+                        onChangeTransport={(v) => { setTransport(v as TransportType) }}
                         onChangeClient={setUserId}
                         authType={authType}
                         bearerToken={bearerToken}

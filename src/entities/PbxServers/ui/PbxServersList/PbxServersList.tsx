@@ -1,6 +1,6 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './PbxServersList.module.scss'
-import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { PbxServer, PbxServerListProps } from '../../model/types/pbxServers'
 import { PbxServersListHeader } from '../PbxServersListHeader/PbxServersListHeader'
 import { ErrorGetData } from '../../../ErrorGetData'
@@ -52,11 +52,13 @@ export const PbxServersList = (props: PbxServerListProps) => {
     <VStack gap={'16'} max className={classNames(cls.PbxServersList, {}, [className])}>
       <PbxServersListHeader />
 
-      {pbxServers?.rows.length ? (
+      {pbxServers?.rows.length
+? (
         <div className={cls.listWrapper}>
           {pbxServers.rows.map(renderContent)}
         </div>
-      ) : (
+      )
+: (
         <VStack justify={'center'} align={'center'} max className={cls.emptyState} gap={'16'}>
           <Icon Svg={SearchIcon} width={48} height={48} />
           <Text align={'center'} text={t('Данные не найдены')} size={'l'} bold />

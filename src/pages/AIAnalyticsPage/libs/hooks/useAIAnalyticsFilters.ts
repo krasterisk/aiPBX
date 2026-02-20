@@ -14,10 +14,9 @@ import {
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 import { aiAnalyticsPageActions } from '../../model/slices/aiAnalyticsPageSlice'
-import { useGetAIAnalyticsDashboard } from '@/entities/Report'
-import { CdrSource } from '@/entities/Report/model/types/report'
+import { useGetAIAnalyticsDashboard, CdrSource } from '@/entities/Report'
 
-export function useAIAnalyticsFilters() {
+export function useAIAnalyticsFilters () {
     const tab = useSelector(getAIAnalyticsTab)
     const clientId = useSelector(getAIAnalyticsUserId)
     const startDate = useSelector(getAIAnalyticsStartDate)

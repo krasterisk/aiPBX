@@ -25,7 +25,7 @@ import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 import { CdrSource } from '../model/types/report'
 
-export function useReportFilters() {
+export function useReportFilters () {
   const page = useSelector(getReportsPageNum)
   const limit = useSelector(getReportsPageLimit)
   const hasMore = useSelector(getReportsHasMore)

@@ -16,7 +16,7 @@ import { useGetUsers } from '../../api/usersApi'
 import { UserSortField } from '../../model/consts/consts'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
 
-export function useUserFilters() {
+export function useUserFilters () {
   const page = useSelector(getUsersPageNum)
   const limit = useSelector(getUsersPageLimit)
   const order = useSelector(getUsersPageOrder)

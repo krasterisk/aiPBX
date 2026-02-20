@@ -47,8 +47,8 @@ export const AssistantComparisonTable = memo((props: AssistantComparisonTablePro
     }
 
     const sortedAssistants = [...assistants].sort((a, b) => {
-        let aValue: number | string = a[orderBy]
-        let bValue: number | string = b[orderBy]
+        const aValue: number | string = a[orderBy]
+        const bValue: number | string = b[orderBy]
 
         if (orderBy === 'assistantName') {
             return order === 'asc'
@@ -78,7 +78,7 @@ export const AssistantComparisonTable = memo((props: AssistantComparisonTablePro
                                     <TableSortLabel
                                         active={orderBy === 'assistantName'}
                                         direction={orderBy === 'assistantName' ? order : 'asc'}
-                                        onClick={() => handleSort('assistantName')}
+                                        onClick={() => { handleSort('assistantName') }}
                                     >
                                         {t('Assistant')}
                                     </TableSortLabel>
@@ -87,7 +87,7 @@ export const AssistantComparisonTable = memo((props: AssistantComparisonTablePro
                                     <TableSortLabel
                                         active={orderBy === 'callsCount'}
                                         direction={orderBy === 'callsCount' ? order : 'asc'}
-                                        onClick={() => handleSort('callsCount')}
+                                        onClick={() => { handleSort('callsCount') }}
                                     >
                                         {t('Calls')}
                                     </TableSortLabel>
@@ -96,7 +96,7 @@ export const AssistantComparisonTable = memo((props: AssistantComparisonTablePro
                                     <TableSortLabel
                                         active={orderBy === 'avgCsat'}
                                         direction={orderBy === 'avgCsat' ? order : 'asc'}
-                                        onClick={() => handleSort('avgCsat')}
+                                        onClick={() => { handleSort('avgCsat') }}
                                     >
                                         {t('CSAT')}
                                     </TableSortLabel>
@@ -105,7 +105,7 @@ export const AssistantComparisonTable = memo((props: AssistantComparisonTablePro
                                     <TableSortLabel
                                         active={orderBy === 'automationRate'}
                                         direction={orderBy === 'automationRate' ? order : 'asc'}
-                                        onClick={() => handleSort('automationRate')}
+                                        onClick={() => { handleSort('automationRate') }}
                                     >
                                         {t('Automation')}
                                     </TableSortLabel>
@@ -114,7 +114,7 @@ export const AssistantComparisonTable = memo((props: AssistantComparisonTablePro
                                     <TableSortLabel
                                         active={orderBy === 'totalCost'}
                                         direction={orderBy === 'totalCost' ? order : 'asc'}
-                                        onClick={() => handleSort('totalCost')}
+                                        onClick={() => { handleSort('totalCost') }}
                                     >
                                         {t('Cost')}
                                     </TableSortLabel>

@@ -1,7 +1,7 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ToolsList.module.scss'
 import React, { memo } from 'react'
-import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { ToolsListProps } from '../../model/types/tools'
 import { ToolsListHeader } from '../ToolsListHeader/ToolsListHeader'
 import { ErrorGetData } from '../../../ErrorGetData'
@@ -39,7 +39,8 @@ export const ToolsList = memo((props: ToolsListProps) => {
     <VStack gap="16" max className={classNames(cls.ToolsList, {}, [className])}>
       <ToolsListHeader />
 
-      {tools?.rows.length ? (
+      {tools?.rows.length
+? (
         <div className={cls.listWrapper}>
           {tools.rows.map((tool) => (
             <ToolItem
@@ -48,7 +49,8 @@ export const ToolsList = memo((props: ToolsListProps) => {
             />
           ))}
         </div>
-      ) : (
+      )
+: (
         <VStack justify="center" align="center" max className={cls.emptyState} gap="16">
           <Icon Svg={SearchIcon} width={48} height={48} />
           <Text align="center" text={t('Данные не найдены')} size="l" bold />

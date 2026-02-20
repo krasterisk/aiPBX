@@ -21,7 +21,7 @@ interface DropdownProps {
   direction?: DropdownDirection
 }
 
-export function Dropdown(props: DropdownProps) {
+export function Dropdown (props: DropdownProps) {
   const {
     className,
     trigger,

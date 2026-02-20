@@ -119,7 +119,7 @@ export const Redesignv3Demo = memo(() => {
                             label="Выберите технологию"
                             options={demoOptions}
                             value={singleValue}
-                            onChange={(e, value) => setSingleValue(value as DemoOption | null)}
+                            onChange={(e, value) => { setSingleValue(value as DemoOption | null) }}
                             getOptionLabel={(option: any) => option.name}
                             fullWidth
                         />
@@ -134,7 +134,7 @@ export const Redesignv3Demo = memo(() => {
                             label="Выберите технологии"
                             options={demoOptions}
                             value={multiValue || []}
-                            onChange={(e, value) => setMultiValue(value as DemoOption[] | null)}
+                            onChange={(e, value) => { setMultiValue(value as DemoOption[] | null) }}
                             getOptionLabel={(option: any) => option.name}
                             multiple
                             fullWidth
@@ -154,7 +154,7 @@ export const Redesignv3Demo = memo(() => {
                             options={demoOptions}
                             value={searchableValue}
                             getOptionLabel={(option: any) => option.name}
-                            onChange={(e, value) => setSearchableValue(value as DemoOption | null)}
+                            onChange={(e, value) => { setSearchableValue(value as DemoOption | null) }}
                             fullWidth
                             noOptionsText="Технология не найдена"
                         />
@@ -227,7 +227,7 @@ export const Redesignv3Demo = memo(() => {
                         options={demoOptions}
                         value={singleValue}
                         getOptionLabel={(option: any) => option.name}
-                        onChange={(e, value) => setSingleValue(value as DemoOption | null)}
+                        onChange={(e, value) => { setSingleValue(value as DemoOption | null) }}
                         fullWidth
                     />
 
@@ -236,7 +236,7 @@ export const Redesignv3Demo = memo(() => {
                         options={demoOptions}
                         value={multiValue || []}
                         getOptionLabel={(option: any) => option.name}
-                        onChange={(e, value) => setMultiValue(value as DemoOption[] | null)}
+                        onChange={(e, value) => { setMultiValue(value as DemoOption[] | null) }}
                         multiple
                         fullWidth
                     />

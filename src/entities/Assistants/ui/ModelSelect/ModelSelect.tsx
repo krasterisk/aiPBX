@@ -54,7 +54,7 @@ export const ModelSelect = memo((props: ModelSelectProps) => {
       value={selectedValue}
       onChange={onChangeHandler}
       className={className}
-      getOptionLabel={(option: { name: string; publishName: string }) => option.publishName}
+      getOptionLabel={(option: { name: string, publishName: string }) => option.publishName}
       isOptionEqualToValue={(option: { name: string }, value: { name: string }) => option.name === value.name}
       {...otherProps}
     />

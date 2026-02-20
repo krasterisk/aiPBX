@@ -183,13 +183,13 @@ export const PbxServerForm = memo((props: PbxServerFormProps) => {
             <VStack gap="24" className={cls.leftColumn}>
               <GeneralSection
                 name={form?.name || ''}
-                onChangeName={(v: string) => onChangeField('name', v)}
+                onChangeName={(v: string) => { onChangeField('name', v) }}
                 location={form?.location || ''}
-                onChangeLocation={(v: string) => onChangeField('location', v)}
+                onChangeLocation={(v: string) => { onChangeField('location', v) }}
                 comment={form?.comment || ''}
-                onChangeComment={(v: string) => onChangeField('comment', v)}
+                onChangeComment={(v: string) => { onChangeField('comment', v) }}
                 cloudPbx={form?.cloudPbx || false}
-                onChangeCloudPbx={(v: boolean) => onChangeField('cloudPbx', v)}
+                onChangeCloudPbx={(v: boolean) => { onChangeField('cloudPbx', v) }}
                 userId={String(form?.userId || '')}
                 onChangeClient={onChangeClient}
                 isAdmin={isAdmin}
@@ -201,21 +201,21 @@ export const PbxServerForm = memo((props: PbxServerFormProps) => {
             <VStack gap="24" className={cls.rightColumn}>
               <ConnectivitySection
                 sipHost={form?.sip_host || ''}
-                onChangeSipHost={(v: string) => onChangeField('sip_host', v)}
+                onChangeSipHost={(v: string) => { onChangeField('sip_host', v) }}
                 wssUrl={form?.wss_url || ''}
-                onChangeWssUrl={(v: string) => onChangeField('wss_url', v)}
+                onChangeWssUrl={(v: string) => { onChangeField('wss_url', v) }}
                 ariUrl={form?.ari_url || ''}
-                onChangeAriUrl={(v: string) => onChangeField('ari_url', v)}
+                onChangeAriUrl={(v: string) => { onChangeField('ari_url', v) }}
                 ariUser={form?.ari_user || ''}
-                onChangeAriUser={(v: string) => onChangeField('ari_user', v)}
+                onChangeAriUser={(v: string) => { onChangeField('ari_user', v) }}
                 context={form?.context || ''}
-                onChangeContext={(v: string) => onChangeField('context', v)}
+                onChangeContext={(v: string) => { onChangeField('context', v) }}
                 moh={form?.moh || ''}
-                onChangeMoh={(v: string) => onChangeField('moh', v)}
+                onChangeMoh={(v: string) => { onChangeField('moh', v) }}
                 recordFormat={form?.recordFormat || ''}
-                onChangeRecordFormat={(v: string) => onChangeField('recordFormat', v)}
+                onChangeRecordFormat={(v: string) => { onChangeField('recordFormat', v) }}
                 password={form?.password}
-                onChangePassword={(v: string) => onChangeField('password', v)}
+                onChangePassword={(v: string) => { onChangeField('password', v) }}
                 onOpenInstructions={onOpenInstructions}
                 isEdit={isEdit}
                 statusData={statusData}

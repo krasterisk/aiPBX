@@ -3,7 +3,7 @@ import cls from './OnboardingWizard.module.scss'
 import { useSelector } from 'react-redux'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { onboardingActions } from '../../model/slices/onboardingSlice'
+import { onboardingActions, onboardingReducer } from '../../model/slices/onboardingSlice'
 import {
     getOnboardingIsActive,
     getOnboardingStep
@@ -16,7 +16,6 @@ import { TelegramStep } from '../steps/TelegramStep'
 import { PublishOverviewStep } from '../steps/PublishOverviewStep'
 import { CompletionStep } from '../steps/CompletionStep'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
-import { onboardingReducer } from '../../model/slices/onboardingSlice'
 
 const reducers: ReducersList = {
     onboarding: onboardingReducer

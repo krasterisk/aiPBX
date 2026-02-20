@@ -84,7 +84,7 @@ export const Combobox = memo(<T extends ComboboxOption = ComboboxOption>(props: 
             flip({ padding: 10 }),
             shift({ padding: 10 }),
             floatingSize({
-                apply({ rects, elements, availableHeight }) {
+                apply ({ rects, elements, availableHeight }) {
                     Object.assign(elements.floating.style, {
                         width: `${rects.reference.width}px`,
                         maxHeight: `${Math.min(availableHeight, 300)}px`
@@ -255,7 +255,7 @@ export const Combobox = memo(<T extends ComboboxOption = ComboboxOption>(props: 
                                     <button
                                         type="button"
                                         className={cls.chipRemove}
-                                        onClick={(e) => handleRemoveOption(option, e)}
+                                        onClick={(e) => { handleRemoveOption(option, e) }}
                                         aria-label={`Remove ${getOptionLabel(option)}`}
                                     >
                                         <X size={14} />
@@ -343,7 +343,8 @@ export const Combobox = memo(<T extends ComboboxOption = ComboboxOption>(props: 
                             {...getFloatingProps()}
                         >
                             <div ref={listRef}>
-                                {filteredOptions.length > 0 ? (
+                                {filteredOptions.length > 0
+? (
                                     filteredOptions.map((option, index) => {
                                         const selected = isSelected(option)
                                         const highlighted = index === highlightedIndex
@@ -355,12 +356,14 @@ export const Combobox = memo(<T extends ComboboxOption = ComboboxOption>(props: 
                                                     [cls.selected]: selected,
                                                     [cls.highlighted]: highlighted
                                                 })}
-                                                onClick={() => handleSelectOption(option)}
-                                                onMouseEnter={() => setHighlightedIndex(index)}
+                                                onClick={() => { handleSelectOption(option) }}
+                                                onMouseEnter={() => { setHighlightedIndex(index) }}
                                             >
-                                                {renderOption ? (
+                                                {renderOption
+? (
                                                     renderOption(option, selected)
-                                                ) : (
+                                                )
+: (
                                                     <>
                                                         <span className={cls.optionLabel}>{getOptionLabel(option)}</span>
                                                         {selected && (
@@ -373,7 +376,8 @@ export const Combobox = memo(<T extends ComboboxOption = ComboboxOption>(props: 
                                             </div>
                                         )
                                     })
-                                ) : (
+                                )
+: (
                                     <div className={cls.noOptions}>{noOptionsText}</div>
                                 )}
                             </div>

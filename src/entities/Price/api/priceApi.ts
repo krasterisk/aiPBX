@@ -1,5 +1,5 @@
-import { rtkApi } from '@/shared/api/rtkApi';
-import { Price, CreatePriceDto, UpdatePriceDto } from '../model/types/price';
+import { rtkApi } from '@/shared/api/rtkApi'
+import { Price, CreatePriceDto, UpdatePriceDto } from '../model/types/price'
 
 const priceApi = rtkApi.injectEndpoints({
     endpoints: (build) => ({
@@ -25,7 +25,7 @@ const priceApi = rtkApi.injectEndpoints({
             }),
             invalidatesTags: [{ type: 'Prices', id: 'LIST' }],
         }),
-        updatePrice: build.mutation<Price, { id: number; dto: UpdatePriceDto }>({
+        updatePrice: build.mutation<Price, { id: number, dto: UpdatePriceDto }>({
             query: ({ id, dto }) => ({
                 url: `/prices/${id}`,
                 method: 'PUT',
@@ -41,10 +41,10 @@ const priceApi = rtkApi.injectEndpoints({
             invalidatesTags: (result, error, id) => [{ type: 'Prices', id }, { type: 'Prices', id: 'LIST' }],
         }),
     }),
-});
+})
 
-export const usePrices = priceApi.useGetPricesQuery;
-export const usePrice = priceApi.useGetPriceByIdQuery;
-export const useCreatePrice = priceApi.useCreatePriceMutation;
-export const useUpdatePrice = priceApi.useUpdatePriceMutation;
-export const useDeletePrice = priceApi.useDeletePriceMutation;
+export const usePrices = priceApi.useGetPricesQuery
+export const usePrice = priceApi.useGetPriceByIdQuery
+export const useCreatePrice = priceApi.useCreatePriceMutation
+export const useUpdatePrice = priceApi.useUpdatePriceMutation
+export const useDeletePrice = priceApi.useDeletePriceMutation

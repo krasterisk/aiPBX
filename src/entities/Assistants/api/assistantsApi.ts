@@ -30,7 +30,7 @@ export const assistantsApi = rtkApi.injectEndpoints({
         }
       },
       // Refetch when the page arg changes
-      forceRefetch({ currentArg, previousArg }) {
+      forceRefetch ({ currentArg, previousArg }) {
         return JSON.stringify(currentArg) !== JSON.stringify(previousArg)
       },
       providesTags: (result) =>
@@ -84,7 +84,7 @@ export const assistantsApi = rtkApi.injectEndpoints({
         method: 'PATCH',
         body: { id, ...patch }
       }),
-      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted ({ id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           assistantsApi.util.updateQueryData('getAssistant', id!, (draft) => {
             Object.assign(draft, patch)
@@ -95,7 +95,7 @@ export const assistantsApi = rtkApi.injectEndpoints({
       invalidatesTags: (result, error, { id }) => [{ type: 'Assistants', id }, { type: 'Assistants', id: 'LIST' }]
     }),
     deleteAssistant: build.mutation<{ success: boolean, id: string }, string>({
-      query(id) {
+      query (id) {
         return {
           url: `assistants/${id}`,
           method: 'DELETE'

@@ -64,8 +64,8 @@ export const PublishOverviewStep = memo(({ className }: PublishOverviewStepProps
     return (
         <VStack gap="16" align="center" max className={className}>
             <Text
-                title={t('publish_title', 'Как клиенты будут звонить?') as string}
-                text={t('publish_subtitle', 'Ваш ассистент уже создан и готов к работе! Есть 3 способа:') as string}
+                title={t('publish_title', 'Как клиенты будут звонить?') }
+                text={t('publish_subtitle', 'Ваш ассистент уже создан и готов к работе! Есть 3 способа:') }
                 align="center"
                 size="l"
             />
@@ -78,17 +78,17 @@ export const PublishOverviewStep = memo(({ className }: PublishOverviewStepProps
                         </HStack>
                         <VStack gap="4">
                             <Text
-                                title={t(titleKey, titleFallback) as string}
+                                title={t(titleKey, titleFallback) }
                                 size="s"
                                 bold
                             />
                             <Text
-                                text={t(badgeKey, badgeFallback) as string}
+                                text={t(badgeKey, badgeFallback) }
                                 variant="accent"
                                 size="xs"
                             />
                             <Text
-                                text={t(descKey, descFallback) as string}
+                                text={t(descKey, descFallback) }
                                 size="xs"
                             />
                         </VStack>
@@ -99,7 +99,7 @@ export const PublishOverviewStep = memo(({ className }: PublishOverviewStepProps
             <HStack gap="8" align="center">
                 <Info size={16} className={cls.hintIcon} />
                 <Text
-                    text={t('publish_hint', 'Всё это можно настроить позже в разделе «Публикация»') as string}
+                    text={t('publish_hint', 'Всё это можно настроить позже в разделе «Публикация»') }
                     size="s"
                 />
             </HStack>

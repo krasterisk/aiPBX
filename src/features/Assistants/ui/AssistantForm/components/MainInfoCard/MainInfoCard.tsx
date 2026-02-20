@@ -12,10 +12,8 @@ import { ClientSelect, getUserAuthData, isUserAdmin } from '@/entities/User'
 import { Tool, ToolsSelect } from '@/entities/Tools'
 import { McpServer, McpServerSelect } from '@/entities/Mcp'
 import { Check } from '@/shared/ui/mui/Check'
-import { VoiceSelect } from '@/entities/Assistants/ui/VoiceSelect/VoiceSelect'
-import { ModelSelect } from '@/entities/Assistants/ui/ModelSelect/ModelSelect'
-import { Assistant } from '@/entities/Assistants/model/types/assistants'
-import { getAssistantFormData } from '@/entities/Assistants/model/selectors/assistantFormSelectors'
+import { VoiceSelect, ModelSelect, Assistant, getAssistantFormData } from '@/entities/Assistants'
+
 import cls from './MainInfoCard.module.scss'
 
 interface MainInfoCardProps {

@@ -18,9 +18,9 @@ import {
     getOnboardingError
 } from '../../model/selectors/onboardingSelectors'
 import { BusinessCard } from '../components/BusinessCard/BusinessCard'
-import { assistantTemplates } from '@/entities/Assistants/model/const/assistantTemplates'
-import { useSetAssistants, useGeneratePrompt, useUpdateAssistant } from '@/entities/Assistants/api/assistantsApi'
-import { useMcpServersAll } from '@/entities/Mcp/api/mcpApi'
+import { assistantTemplates, useSetAssistants, useGeneratePrompt, useUpdateAssistant } from '@/entities/Assistants'
+
+import { useMcpServersAll } from '@/entities/Mcp'
 import {
     Wrench,
     UtensilsCrossed,
@@ -97,7 +97,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
 
         const features: string[] = []
         for (let i = 1; i <= FEATURES_PER_TEMPLATE; i++) {
-            features.push(t(`business_feature_${prefix}_${i}`) as string)
+            features.push(t(`business_feature_${prefix}_${i}`))
         }
         dispatch(onboardingActions.setCustomFeatures(features))
     }, [selectedTemplate, isCustom, t, dispatch])
@@ -141,7 +141,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
         try {
             const locale = i18n.language || 'en'
             const prompt = template.prompts[locale] || template.prompts.en || Object.values(template.prompts)[0]
-            const name = t(`business_${selectedTemplate === 'appliance_repair' ? 'repair' : selectedTemplate}`, selectedTemplate) as string
+            const name = t(`business_${selectedTemplate === 'appliance_repair' ? 'repair' : selectedTemplate}`, selectedTemplate) 
 
             // Append user-configured features to the prompt
             let finalPrompt = prompt
@@ -203,7 +203,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             dispatch(onboardingActions.setCreatingAssistant(true))
 
             const result = await createAssistant([{
-                name: t('business_custom_name', 'Мой ассистент') as string,
+                name: t('business_custom_name', 'Мой ассистент'),
                 instruction: generatedInstruction,
                 model: 'gpt-realtime-mini',
                 voice: 'alloy',
@@ -245,8 +245,8 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
     return (
         <VStack gap="16" align="center" max className={className}>
             <Text
-                title={t('business_title') as string}
-                text={t('business_subtitle') as string}
+                title={t('business_title') }
+                text={t('business_subtitle') }
                 align="center"
                 size="l"
             />
@@ -257,7 +257,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                         key={card.id}
                         id={card.id}
                         Icon={card.Icon}
-                        label={t(card.labelKey, card.id) as string}
+                        label={t(card.labelKey, card.id) }
                         selected={selectedTemplate === card.id}
                         onClick={onSelectCard}
                     />
@@ -267,7 +267,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             {hasFeatures && (
                 <VStack gap="8" className={cls.featuresBlock}>
                     <Text
-                        text={t('business_features_title') as string}
+                        text={t('business_features_title') }
                         size="xs"
                         bold
                     />
@@ -280,7 +280,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                             <Button
                                 variant="clear"
                                 size="s"
-                                onClick={() => onRemoveFeature(i)}
+                                onClick={() => { onRemoveFeature(i) }}
                                 addonLeft={<X size={12} />}
                             >
                                 {null}
@@ -292,9 +292,9 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                     <HStack gap="8" max align="center">
                         <Input
                             value={newFeature}
-                            onChange={(e) => setNewFeature(e.target.value)}
+                            onChange={(e) => { setNewFeature(e.target.value) }}
                             onKeyDown={onFeatureKeyDown}
-                            placeholder={t('business_features_add_placeholder') as string}
+                            placeholder={t('business_features_add_placeholder') }
                             disabled={isLoading}
                             size="small"
                         />
@@ -314,7 +314,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             {isCustom && (
                 <VStack gap="8" max className={cls.customBlock}>
                     <Text
-                        text={t('business_custom_label') as string}
+                        text={t('business_custom_label') }
                         bold
                         size="s"
                     />
@@ -323,13 +323,13 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                         rows={3}
                         value={customDescription}
                         onChange={onCustomDescriptionChange}
-                        placeholder={t('business_custom_placeholder') as string}
+                        placeholder={t('business_custom_placeholder') }
                         disabled={isLoading}
                     />
                     <HStack gap="4" align="center">
                         <Sparkles size={14} className={cls.hintIcon} />
                         <Text
-                            text={t('business_custom_hint') as string}
+                            text={t('business_custom_hint') }
                             size="xs"
                         />
                     </HStack>
@@ -341,8 +341,8 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                     <Loader2 size={18} className={cls.loadingSpinnerIcon} />
                     <Text
                         text={isGenerating
-                            ? t('business_generating') as string
-                            : t('business_creating') as string
+                            ? t('business_generating') 
+                            : t('business_creating') 
                         }
                         size="s"
                         variant="accent"
@@ -365,7 +365,8 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                     {t('back')}
                 </Button>
 
-                {isCustom ? (
+                {isCustom
+? (
                     <Button
                         variant="glass-action"
                         size="l"
@@ -375,7 +376,8 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                     >
                         {t('business_generate')}
                     </Button>
-                ) : (
+                )
+: (
                     <Button
                         variant="glass-action"
                         size="l"

@@ -13,7 +13,7 @@ import { X } from 'lucide-react'
 import { AssistantOptions, AssistantSelect } from '@/entities/Assistants'
 import { DateSelector } from '@/shared/ui/mui/DateSelector'
 import { Combobox } from '@/shared/ui/mui/Combobox'
-import { CdrSource } from '@/entities/Report/model/types/report'
+import { CdrSource } from '@/entities/Report'
 
 interface SourceOption {
     label: string
@@ -74,7 +74,7 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
 
     const handleSourceChange = useCallback((_: any, option: SourceOption | null) => {
         const val = option?.value || ''
-        onChangeSource?.(val === '' ? undefined : val as CdrSource)
+        onChangeSource?.(val === '' ? undefined : val)
     }, [onChangeSource])
 
     return (
@@ -154,4 +154,3 @@ export const PeriodExtendedFilters = memo((props: PeriodExtendedFilterProps) => 
         </Modal>
     )
 })
-

@@ -5,22 +5,22 @@ import { memo, useCallback, useEffect, useRef } from 'react'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { ModelSelect, VoiceSelect } from '@/entities/Assistants'
+import { ModelSelect, VoiceSelect, Assistant, useUpdateAssistant } from '@/entities/Assistants'
 import { Tool, ToolsSelect } from '@/entities/Tools'
 import { McpServer, McpServerSelect } from '@/entities/Mcp'
 import { Slider } from '@/shared/ui/mui/Slider/Slider'
 import { Tooltip } from '@mui/material'
-import { Info } from 'lucide-react'
+import { Info, MessageSquareText, Settings2, Save } from 'lucide-react'
 import { useSelector, useDispatch } from 'react-redux'
+// eslint-disable-next-line krasterisk-plugin/layer-imports
 import { getPlaygroundFormData, getPlaygroundFormLoading, playgroundAssistantFormActions } from '@/pages/Playground'
-import { useUpdateAssistant } from '@/entities/Assistants/api/assistantsApi'
+
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
-import { Assistant } from '@/entities/Assistants'
+
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Check } from '@/shared/ui/mui/Check'
 import { toast } from 'react-toastify'
 import { SectionCard } from '../components/SectionCard/SectionCard'
-import { MessageSquareText, Settings2, Save } from 'lucide-react'
 
 interface PlaygroundAssistantSettingsProps {
     className?: string

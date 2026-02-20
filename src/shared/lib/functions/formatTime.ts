@@ -5,7 +5,7 @@
  * @param t
  */
 
-export function formatTime(seconds: number, t: (key: string) => string) {
+export function formatTime (seconds: number, t: (key: string) => string) {
   const totalSeconds = Math.round(seconds)
   const hrs = Math.floor(totalSeconds / 3600)
   const mins = Math.floor((totalSeconds % 3600) / 60)

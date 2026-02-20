@@ -10,17 +10,17 @@ interface ErrorBoundaryState {
 }
 
 class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
+  constructor (props: ErrorBoundaryProps) {
     super(props)
     this.state = { hasError: false }
   }
 
   // eslint-disable-next-line n/handle-callback-err
-  static getDerivedStateFromError(error: Error) {
+  static getDerivedStateFromError (error: Error) {
     return { hasError: true }
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch (error: Error, errorInfo: ErrorInfo) {
     console.log(error, errorInfo)
 
     // Auto-reload once on ChunkLoadError (stale deployment chunks)
@@ -36,7 +36,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     }
   }
 
-  render() {
+  render () {
     const { hasError } = this.state
     const { children } = this.props
 
@@ -52,4 +52,3 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 }
 
 export default ErrorBoundary
-

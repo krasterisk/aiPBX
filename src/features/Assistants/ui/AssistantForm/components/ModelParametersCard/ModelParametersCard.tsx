@@ -6,8 +6,8 @@ import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Slider, Typography, Tooltip } from '@mui/material'
 import { Info } from 'lucide-react'
-import { Assistant } from '@/entities/Assistants/model/types/assistants'
-import { getAssistantFormData } from '@/entities/Assistants/model/selectors/assistantFormSelectors'
+import { Assistant, getAssistantFormData } from '@/entities/Assistants'
+
 import GraphicEqIcon from '@mui/icons-material/GraphicEq'
 import ThermostatIcon from '@mui/icons-material/Thermostat'
 import cls from './ModelParametersCard.module.scss'
@@ -25,7 +25,7 @@ interface ModelParameter {
     max: number
     step: number
     unit: string
-    marks: { value: number; label: string }[]
+    marks: Array<{ value: number, label: string }>
 }
 
 export const ModelParametersCard = memo((props: ModelParametersCardProps) => {

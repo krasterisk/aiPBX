@@ -48,10 +48,10 @@ export const PriceItem = memo((props: PriceItemProps) => {
                 </VStack>
 
                 <div className={cls.actions}>
-                    <Button onClick={() => onEdit(price)} variant="outline" size="m">
+                    <Button onClick={() => { onEdit(price) }} variant="outline" size="m">
                         {t('Edit')}
                     </Button>
-                    <Button onClick={() => onDelete(price.id)} variant="outline" color="error" size="m">
+                    <Button onClick={() => { onDelete(price.id) }} variant="outline" color="error" size="m">
                         {t('Delete')}
                     </Button>
                 </div>

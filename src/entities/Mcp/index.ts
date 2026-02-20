@@ -73,4 +73,3 @@ export { McpServerTemplates } from './ui/McpServerTemplates/McpServerTemplates'
 export { McpQuickConnect } from './ui/McpQuickConnect/McpQuickConnect'
 export { mcpServerTemplates } from './model/const/mcpServerTemplates'
 export type { McpServerTemplate } from './model/const/mcpServerTemplates'
-

@@ -10,7 +10,6 @@ import { WidgetKey, WidgetAppearanceSettings, DEFAULT_APPEARANCE_SETTINGS } from
 import { generateEmbedCode } from '../../../PublishWidgets/lib/generateEmbedCode'
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { usePbxServer } from '@/entities/PbxServers'
 
 interface GetCodeDialogProps {
     className?: string
@@ -46,7 +45,7 @@ export const GetCodeDialog = memo((props: GetCodeDialogProps) => {
             <VStack
                 className={classNames(cls.GetCodeDialog, {}, [className])}
                 max
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => { e.stopPropagation() }}
             >
                 <div className={cls.content}>
                     <h2 className={cls.title}>

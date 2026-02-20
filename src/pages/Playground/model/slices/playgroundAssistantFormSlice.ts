@@ -12,12 +12,12 @@ export const playgroundAssistantFormSlice = createSlice({
     name: 'playgroundAssistantForm',
     initialState,
     reducers: {
-        initForm(state, action: PayloadAction<Assistant>) {
+        initForm (state, action: PayloadAction<Assistant>) {
             state.data = action.payload
             state.error = undefined
         },
 
-        updateFormField(state, action: PayloadAction<Partial<Assistant>>) {
+        updateFormField (state, action: PayloadAction<Partial<Assistant>>) {
             if (state.data) {
                 state.data = {
                     ...state.data,
@@ -26,15 +26,15 @@ export const playgroundAssistantFormSlice = createSlice({
             }
         },
 
-        setLoading(state, action: PayloadAction<boolean>) {
+        setLoading (state, action: PayloadAction<boolean>) {
             state.isLoading = action.payload
         },
 
-        setError(state, action: PayloadAction<string | undefined>) {
+        setError (state, action: PayloadAction<string | undefined>) {
             state.error = action.payload
         },
 
-        resetForm() {
+        resetForm () {
             return initialState
         }
     }

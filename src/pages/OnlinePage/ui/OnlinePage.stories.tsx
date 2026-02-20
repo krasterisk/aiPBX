@@ -29,4 +29,3 @@ Dark.decorators = [
   ThemeDecorator(Theme.DARK),
   RouterDecorator
 ]
-

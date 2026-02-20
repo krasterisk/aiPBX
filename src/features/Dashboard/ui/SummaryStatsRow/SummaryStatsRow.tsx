@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Grid, Skeleton } from '@mui/material'
+import { Grid } from '@mui/material'
 import PhoneIcon from '@mui/icons-material/Phone'
 import PaidIcon from '@mui/icons-material/Paid'
 import TokenIcon from '@mui/icons-material/Token'

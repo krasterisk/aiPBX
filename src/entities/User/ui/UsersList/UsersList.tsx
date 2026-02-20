@@ -1,4 +1,3 @@
-import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './UsersList.module.scss'
 import React, { useCallback, useState } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
@@ -14,6 +13,7 @@ import { getRouteUserEdit } from '@/shared/const/router'
 import { Loader } from '@/shared/ui/Loader'
 import { Icon } from '@/shared/ui/redesigned/Icon'
 import SearchIcon from '@/shared/assets/icons/search.svg'
+// eslint-disable-next-line krasterisk-plugin/layer-imports
 import { AdminTopUpModal } from '@/features/AdminTopUp'
 
 export const UsersList = (props: UsersListProps) => {
@@ -66,7 +66,7 @@ export const UsersList = (props: UsersListProps) => {
         key={user.id}
         user={user}
         className={cls.userItem}
-        onEdit={(id) => navigate(getRouteUserEdit(id))}
+        onEdit={(id) => { navigate(getRouteUserEdit(id)) }}
         onTopUp={handleTopUp}
       />
     )

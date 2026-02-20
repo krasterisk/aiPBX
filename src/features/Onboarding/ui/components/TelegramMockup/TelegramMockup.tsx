@@ -31,10 +31,10 @@ export const TelegramMockup = memo(({ templateId, className }: TelegramMockupPro
     const { t } = useTranslation('onboarding')
     const prefix = templateMockupKeys[templateId || 'custom'] || 'custom'
 
-    const title = t(`mockup_${prefix}_title`) as string
+    const title = t(`mockup_${prefix}_title`) 
     const details: string[] = []
     for (let i = 1; i <= DETAILS_PER_MOCKUP; i++) {
-        details.push(t(`mockup_${prefix}_detail_${i}`) as string)
+        details.push(t(`mockup_${prefix}_detail_${i}`))
     }
 
     const now = new Date()
@@ -49,7 +49,7 @@ export const TelegramMockup = memo(({ templateId, className }: TelegramMockupPro
                 <VStack gap="0">
                     <Text text="AI PBX Bot" bold size="xs" />
                     <Text
-                        text={t('telegram_mockup_online') as string}
+                        text={t('telegram_mockup_online') }
                         variant="success"
                         size="xs"
                     />

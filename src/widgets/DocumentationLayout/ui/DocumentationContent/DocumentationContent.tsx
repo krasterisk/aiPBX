@@ -141,6 +141,7 @@ export const DocumentationContent = memo(() => {
                                 navigator.clipboard.writeText(String(children).replace(/\n$/, ''))
                             }}
                         >
+                            {/* eslint-disable-next-line i18next/no-literal-string */}
                             Copy
                         </button>
                     </div>

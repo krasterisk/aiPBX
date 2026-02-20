@@ -52,7 +52,7 @@ export const GeneralSection = memo((props: GeneralSectionProps) => {
                     <Check
                         label={t('Облачная АТС') || ''}
                         checked={cloudPbx}
-                        onChange={(e) => onChangeCloudPbx(e.target.checked)}
+                        onChange={(e) => { onChangeCloudPbx(e.target.checked) }}
                     />
                     <ClientSelect
                         clientId={userId}
@@ -64,7 +64,7 @@ export const GeneralSection = memo((props: GeneralSectionProps) => {
                         fullWidth
                         label={t('Локация') || ''}
                         value={location}
-                        onChange={(e) => onChangeLocation(e.target.value)}
+                        onChange={(e) => { onChangeLocation(e.target.value) }}
                         placeholder={t('Где находится сервер?') ?? ''}
                     />
                 </>
@@ -74,7 +74,7 @@ export const GeneralSection = memo((props: GeneralSectionProps) => {
                 fullWidth
                 label={t('Наименование сервера') || ''}
                 value={name}
-                onChange={(e) => onChangeName(e.target.value)}
+                onChange={(e) => { onChangeName(e.target.value) }}
                 placeholder={t('Введите название...') ?? ''}
             />
 
@@ -82,7 +82,7 @@ export const GeneralSection = memo((props: GeneralSectionProps) => {
                 fullWidth
                 label={t('Комментарий') || ''}
                 value={comment}
-                onChange={(e) => onChangeComment(e.target.value)}
+                onChange={(e) => { onChangeComment(e.target.value) }}
                 multiline
                 minRows={3}
                 placeholder={t('Любая дополнительная информация...') ?? ''}

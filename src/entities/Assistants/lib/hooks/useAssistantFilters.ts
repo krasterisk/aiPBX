@@ -15,7 +15,7 @@ import { useAssistants } from '../../api/assistantsApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
 import { User } from '@/entities/User'
 
-export function useAssistantFilters() {
+export function useAssistantFilters () {
   const page = useSelector(getAssistantsPageNum)
   const limit = useSelector(getAssistantsPageLimit)
   const hasMore = useSelector(getAssistantsHasMore)

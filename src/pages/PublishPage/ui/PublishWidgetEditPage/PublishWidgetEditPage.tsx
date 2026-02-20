@@ -55,4 +55,3 @@ const PublishWidgetEditPage = memo((props: PublishWidgetEditPageProps) => {
 })
 
 export default PublishWidgetEditPage
-

@@ -79,6 +79,7 @@
   "Сервер подключён": "Server verbunden",
   "Сервер отключён": "Server getrennt",
   "Синхронизировать": "Tools synchronisieren",
+  "Синхронизировано": "Synchronisiert",
   "Синхронизировано tools: {{count}}": "Synchronisierte Tools: {{count}}",
   "Загрузка tools...": "Tools werden geladen...",
   "Нет синхронизированных tools": "Keine synchronisierten Tools",
@@ -194,5 +195,7 @@
   "tools_active_total": "{{active}} / {{total}} aktiv",
   "oauth_success_title": "Verbindung erfolgreich!",
   "oauth_success_subtitle": "Der Dienst wurde verbunden. Dieses Fenster wird automatisch geschlossen.",
-  "oauth_close_window": "Fenster schließen"
+  "oauth_close_window": "Fenster schließen",
+  "Интеграция успешно подключена": "Integration erfolgreich verbunden",
+  "Ошибка подключения интеграции": "Fehler bei der Integrationsverbindung"
 }

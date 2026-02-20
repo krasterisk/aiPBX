@@ -1,4 +1,3 @@
-import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './AssistantSipAccount.module.scss'
 import { memo, useCallback, useState, useEffect, ChangeEvent } from 'react'
 import { Modal } from '@/shared/ui/redesigned/Modal'
@@ -7,7 +6,6 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { PbxServerSelect, useCreateSipUri, PbxServerOptions } from '@/entities/PbxServers'
 import { useTranslation } from 'react-i18next'
-import { Input } from '@/shared/ui/redesigned/Input'
 import { toast } from 'react-toastify'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { Loader } from '@/shared/ui/Loader'
@@ -103,7 +101,7 @@ const AssistantSipAccount = memo((props: AssistantSipAccountProps) => {
             <Text text={t('Ваш SIP URI:') || ''} bold />
             <HStack gap={'8'} align={'center'} max wrap={'wrap'}>
               <Text text={sipUri} variant={'accent'} size={'l'} className={cls.sipUri} />
-              <Button onClick={() => handleCopy(sipUri)} variant={'clear'}>
+              <Button onClick={() => { handleCopy(sipUri) }} variant={'clear'}>
                 <ContentCopyIcon fontSize={'small'} />
               </Button>
             </HStack>
@@ -111,20 +109,22 @@ const AssistantSipAccount = memo((props: AssistantSipAccountProps) => {
         )}
 
         <VStack gap={'24'} max>
-          {initialPbxId ? (
+          {initialPbxId
+? (
             <VStack gap={'8'} max>
               <HStack gap={'8'} align={'center'} max wrap={'wrap'}>
                 <Text text={initialSipUri || ''} bold className={cls.sipUri} />
-                <Button onClick={() => handleCopy(initialSipUri || '')} variant={'clear'}>
+                <Button onClick={() => { handleCopy(initialSipUri || '') }} variant={'clear'}>
                   <ContentCopyIcon fontSize={'small'} />
                 </Button>
               </HStack>
             </VStack>
-          ) : (
+          )
+: (
             <PbxServerSelect
               label={t('Выберите сервер') || ''}
               value={selectedPbx}
-              onChangePbxServer={(_, val) => setSelectedPbx(val)}
+              onChangePbxServer={(_, val) => { setSelectedPbx(val) }}
             />
           )}
           <Textarea

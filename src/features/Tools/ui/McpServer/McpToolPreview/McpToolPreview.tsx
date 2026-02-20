@@ -1,8 +1,7 @@
 import { memo, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
-import { Text } from '@/shared/ui/redesigned/Text'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { ChevronRight } from 'lucide-react'
 import { McpTool } from '@/entities/Mcp'
@@ -40,7 +39,7 @@ export const McpToolPreview = memo((props: McpToolPreviewProps) => {
             <button
                 type="button"
                 className={cls.collapseToggle}
-                onClick={() => setExpanded(prev => !prev)}
+                onClick={() => { setExpanded(prev => !prev) }}
             >
                 <ChevronRight
                     size={14}

@@ -1,7 +1,7 @@
 import { WidgetKey, WidgetAppearanceSettings } from '@/entities/WidgetKeys'
 import { getDomainOrigin, getApiBaseUrl } from '@/shared/lib/domain'
 
-export function generateEmbedCode(
+export function generateEmbedCode (
     widget: WidgetKey,
     settings: WidgetAppearanceSettings
 ): string {
@@ -9,7 +9,7 @@ export function generateEmbedCode(
     const apiUrl = `${getDomainOrigin()}${getApiBaseUrl()}`
 
     const attributes = [
-        `src="https://cdn.jsdelivr.net/gh/krasterisk/aipbx_widget@latest/dist/widget.min.js"`,
+        'src="https://cdn.jsdelivr.net/gh/krasterisk/aipbx_widget@latest/dist/widget.min.js"',
         `data-key="${widget.publicKey}"`,
         `data-api="${apiUrl}"`
     ]
@@ -36,7 +36,7 @@ export function generateEmbedCode(
     }
 
     if (!settings.showBranding) {
-        attributes.push(`data-hide-branding="true"`)
+        attributes.push('data-hide-branding="true"')
     }
 
     if (settings.buttonColor !== '#667eea') {

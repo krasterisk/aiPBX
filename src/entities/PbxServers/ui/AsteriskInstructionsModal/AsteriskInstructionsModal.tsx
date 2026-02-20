@@ -10,7 +10,6 @@ import CloseIcon from '@/shared/assets/icons/close.svg'
 import InfoIcon from '@mui/icons-material/Info'
 import NetworkIcon from '@mui/icons-material/NetworkCheck'
 import CodeIcon from '@mui/icons-material/Code'
-import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './AsteriskInstructionsModal.module.scss'
 
 interface AsteriskInstructionsModalProps {
@@ -70,7 +69,7 @@ same => n,Hangup()`
             <VStack
                 className={cls.AsteriskInstructionsModal}
                 max
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => { e.stopPropagation() }}
             >
                 <button className={cls.closeBtn} onClick={onClose}>
                     <Icon Svg={CloseIcon} className={cls.icon} />

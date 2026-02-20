@@ -20,7 +20,7 @@ import {
 } from '../../model/selectors/login/getLoginActivationCode/getLoginActivationCode'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 
-export function useLoginData() {
+export function useLoginData () {
   const { t } = useTranslation('login')
   const email = useSelector(getLoginEmail)
   const activationLoginCode = useSelector(getLoginActivationCode)

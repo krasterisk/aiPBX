@@ -5,7 +5,6 @@ import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { RefreshCw } from 'lucide-react'
 import { useSyncMcpTools } from '@/entities/Mcp'
-import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './SyncToolsButton.module.scss'
 

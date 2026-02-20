@@ -60,14 +60,14 @@ export const UsageLimitsForm = memo((props: UsageLimitsFormProps) => {
             <Textarea
                 label={t('Сумма лимита ($)') || ''}
                 value={limitAmount}
-                onChange={(e) => setLimitAmount(e.target.value)}
+                onChange={(e) => { setLimitAmount(e.target.value) }}
                 placeholder="100"
             />
 
             <Textarea
                 label={t('Email адреса для уведомлений (через запятую или с новой строки)') || ''}
                 value={emails}
-                onChange={(e) => setEmails(e.target.value)}
+                onChange={(e) => { setEmails(e.target.value) }}
                 placeholder="email@example.com"
                 multiline
                 minRows={3}

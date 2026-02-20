@@ -3,7 +3,7 @@ import { ThunkConfig } from '@/app/providers/StoreProvider'
 import { getPublishWidgetsPagePage, getPublishWidgetsPageLimit } from '../../selectors/publishWidgetsPageSelectors'
 
 export const fetchNextPublishWidgetsPage = createAsyncThunk<
-    { hasMore: boolean; page: number },
+    { hasMore: boolean, page: number },
     void,
     ThunkConfig<string>
 >(

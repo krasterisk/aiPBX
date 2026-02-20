@@ -45,12 +45,12 @@ const BillingPage = memo(() => {
                 } else {
                     setVerificationStatus('error')
                     // Redirect to payment page after 3 seconds
-                    setTimeout(() => navigate(getRoutePayment()), 3000)
+                    setTimeout(() => { navigate(getRoutePayment()) }, 3000)
                 }
             } catch (error) {
                 console.error('Payment verification failed:', error)
                 setVerificationStatus('error')
-                setTimeout(() => navigate(getRoutePayment()), 3000)
+                setTimeout(() => { navigate(getRoutePayment()) }, 3000)
             }
         }
 

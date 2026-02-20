@@ -4,7 +4,6 @@ import React, { HTMLAttributeAnchorTarget, memo, useCallback, useMemo } from 're
 import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
-import { Check } from '@/shared/ui/mui/Check'
 import { Assistant } from '../../model/types/assistants'
 import { getRouteAssistantEdit } from '@/shared/const/router'
 import { ContentView } from '@/entities/Content'
@@ -16,7 +15,6 @@ import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { isUserAdmin } from '@/entities/User'
-import PersonIcon from '@mui/icons-material/Person'
 import { useGetAllModels } from '../../api/aiModelApi'
 
 interface AssistantItemProps {

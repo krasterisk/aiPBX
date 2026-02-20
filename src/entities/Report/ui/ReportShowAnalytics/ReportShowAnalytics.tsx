@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next'
 import {
     GitBranch,
     Smile,
-    Star,
     Target,
     TrendingUp,
     MessageSquareText

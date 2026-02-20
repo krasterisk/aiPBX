@@ -14,10 +14,9 @@ import {
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 import { dashboardPageActions } from '../../model/slices/dashboardPageSlice'
-import { useDashboard } from '@/entities/Report'
-import { CdrSource } from '@/entities/Report/model/types/report'
+import { useDashboard, CdrSource } from '@/entities/Report'
 
-export function useDashboardFilters() {
+export function useDashboardFilters () {
     const tab = useSelector(getDashboardTab)
     const clientId = useSelector(getDashboardUserId)
     const startDate = useSelector(getDashboardStartDate)

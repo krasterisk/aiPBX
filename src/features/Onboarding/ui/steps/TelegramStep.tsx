@@ -15,8 +15,8 @@ import {
     getOnboardingCreatedAssistantId
 } from '../../model/selectors/onboardingSelectors'
 import { TelegramMockup } from '../components/TelegramMockup/TelegramMockup'
-import { useTelegramConnect, useMcpServersAll, useSyncMcpTools, useToggleMcpTool } from '@/entities/Mcp/api/mcpApi'
-import { useUpdateAssistant } from '@/entities/Assistants/api/assistantsApi'
+import { useTelegramConnect, useMcpServersAll, useSyncMcpTools, useToggleMcpTool } from '@/entities/Mcp'
+import { useUpdateAssistant } from '@/entities/Assistants'
 import {
     ArrowLeft,
     ArrowRight,
@@ -91,7 +91,7 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
                 }
             }
         } catch (err: any) {
-            setError(err?.data?.message || t('telegram_error', 'Ошибка подключения') as string)
+            setError(err?.data?.message || t('telegram_error', 'Ошибка подключения'))
         }
     }, [chatId, connectTelegram, dispatch, t, createdAssistantId, refetchMcpServers, updateAssistant, syncTools, toggleTool])
 
@@ -106,17 +106,17 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
     return (
         <VStack gap="16" align="center" max className={className}>
             <Text
-                title={t('telegram_title') as string}
+                title={t('telegram_title') }
                 align="center"
                 size="l"
             />
             <Text
-                text={t('telegram_integrations_hint') as string}
+                text={t('telegram_integrations_hint') }
                 align="center"
                 size="s"
             />
             <Text
-                text={t('telegram_subtitle') as string}
+                text={t('telegram_subtitle') }
                 align="center"
                 size="s"
                 bold
@@ -126,20 +126,22 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
                 <TelegramMockup templateId={templateId} />
 
                 <VStack gap="16" max>
-                    {isConnected ? (
+                    {isConnected
+? (
                         <HStack gap="12" className={cls.connectedBanner}>
                             <CheckCircle2 size={22} />
                             <Text
-                                text={t('telegram_connected', 'Telegram подключен!') as string}
+                                text={t('telegram_connected', 'Telegram подключен!') }
                                 bold
                                 variant="success"
                             />
                         </HStack>
-                    ) : (
+                    )
+: (
                         <>
                             <VStack gap="12">
                                 <Text
-                                    text={t('telegram_instruction_title', 'Подключить за 2 шага:') as string}
+                                    text={t('telegram_instruction_title', 'Подключить за 2 шага:') }
                                     bold
                                     size="s"
                                 />
@@ -149,7 +151,7 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
                                     </HStack>
                                     <HStack gap="4" align="center" wrap="wrap">
                                         <Text
-                                            text={t('telegram_instruction_1', 'Откройте нашего бота:') as string}
+                                            text={t('telegram_instruction_1', 'Откройте нашего бота:') }
                                             size="s"
                                         />
                                         <a
@@ -168,7 +170,7 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
                                         2
                                     </HStack>
                                     <Text
-                                        text={t('telegram_instruction_2', 'Нажмите «Start» — бот пришлёт ваш ID. Вставьте его сюда:') as string}
+                                        text={t('telegram_instruction_2', 'Нажмите «Start» — бот пришлёт ваш ID. Вставьте его сюда:') }
                                         size="s"
                                     />
                                 </HStack>
@@ -178,7 +180,7 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
                                 <Input
                                     value={chatId}
                                     onChange={onChatIdChange}
-                                    placeholder={t('telegram_chatid_placeholder', 'Ваш Chat ID') as string}
+                                    placeholder={t('telegram_chatid_placeholder', 'Ваш Chat ID') }
                                     disabled={isLoading}
                                     size="small"
                                 />

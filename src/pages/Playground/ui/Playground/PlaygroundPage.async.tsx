@@ -1,3 +1,3 @@
-import { lazy } from 'react';
+import { lazy } from 'react'
 
-export const PlaygroundPageAsync = lazy(() => import('./Playground'));
+export const PlaygroundPageAsync = lazy(async () => await import('./Playground'))

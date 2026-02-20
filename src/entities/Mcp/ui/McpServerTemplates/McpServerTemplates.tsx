@@ -37,7 +37,7 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
     const [deleteConnection, { isLoading: isDisconnecting }] = useDeleteComposioConnection()
 
     // API key dialog state
-    const [apiKeyDialog, setApiKeyDialog] = useState<{ toolkit: string; template: McpServerTemplate } | null>(null)
+    const [apiKeyDialog, setApiKeyDialog] = useState<{ toolkit: string, template: McpServerTemplate } | null>(null)
     const [apiKeyValue, setApiKeyValue] = useState('')
 
     const popupRef = useRef<Window | null>(null)
@@ -211,7 +211,8 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
                                 </HStack>
                             )}
 
-                            {isFullyConnected ? (
+                            {isFullyConnected
+? (
                                 <button
                                     type="button"
                                     className={cls.disconnectBtn}
@@ -227,14 +228,17 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
                                         : t('composio_disconnect')
                                     }
                                 </button>
-                            ) : isOrphaned ? (
+                            )
+: isOrphaned
+? (
                                 <Text
                                     text={t('composio_reconnect')}
                                     className={cls.connectLabel}
                                     size="xs"
                                     variant="accent"
                                 />
-                            ) : (
+                            )
+: (
                                 <Text
                                     text={t('Подключить')}
                                     className={cls.connectLabel}
@@ -250,7 +254,7 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
             {/* API Key / Chat ID Input Dialog */}
             <Modal
                 isOpen={!!apiKeyDialog}
-                onClose={() => setApiKeyDialog(null)}
+                onClose={() => { setApiKeyDialog(null) }}
                 lazy
             >
                 <VStack gap="16" max>
@@ -263,7 +267,8 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
                         />
                     </HStack>
 
-                    {isTelegramDialog ? (
+                    {isTelegramDialog
+? (
                         <VStack gap="8">
                             <Text text={t('telegram_chat_id_step1')} size="s" />
                             <a
@@ -276,12 +281,15 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
                             </a>
                             <Text text={t('telegram_chat_id_step2')} size="s" />
                         </VStack>
-                    ) : isBitrix24Dialog ? (
+                    )
+: isBitrix24Dialog
+? (
                         <VStack gap="8">
                             <Text text={t('bitrix24_webhook_step1')} size="s" />
                             <Text text={t('bitrix24_webhook_step2')} size="s" />
                         </VStack>
-                    ) : (
+                    )
+: (
                         <Text
                             text={t('api_key_instruction')}
                             size="s"
@@ -290,7 +298,7 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
 
                     <Textarea
                         value={apiKeyValue}
-                        onChange={(e) => setApiKeyValue(e.target.value)}
+                        onChange={(e) => { setApiKeyValue(e.target.value) }}
                         placeholder={
                             isTelegramDialog
                                 ? t('telegram_chat_id_placeholder') ?? 'Chat ID...'
@@ -309,7 +317,7 @@ export const McpServerTemplates = memo((props: McpServerTemplatesProps) => {
                     <HStack gap="8" justify="end" max>
                         <Button
                             variant="clear"
-                            onClick={() => setApiKeyDialog(null)}
+                            onClick={() => { setApiKeyDialog(null) }}
                             size="s"
                         >
                             {t('Отмена')}

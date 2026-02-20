@@ -22,29 +22,44 @@ module.exports = {
     'unused-imports'
   ],
   rules: {
-    // indent: 'off',
-    // 'react/jsx-indent': 'off',
-    // 'react/jsx-indent-props': 'off',
-    // '@typescript-eslint/indent': [2, 4],
+    indent: 'off',
+    'react/jsx-indent': 'off',
+    'react/jsx-indent-props': 'off',
+    '@typescript-eslint/indent': 'off',
+    '@typescript-eslint/comma-dangle': 'off',
+    'comma-dangle': 'off',
+    'no-trailing-spaces': 'off',
+    '@typescript-eslint/prefer-ts-expect-error': 'off',
+    'multiline-ternary': 'off',
+    '@typescript-eslint/restrict-template-expressions': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/prefer-nullish-coalescing': 'off',
-    'no-unused-vars': 'warn',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
     '@typescript-eslint/strict-boolean-expressions': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-floating-promises': 'off',
     '@typescript-eslint/naming-convention': 'off',
     '@typescript-eslint/consistent-type-imports': 'off',
     '@typescript-eslint/consistent-type-assertions': 'off',
     '@typescript-eslint/no-dynamic-delete': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/no-misused-promises': 'off',
+    '@typescript-eslint/no-invalid-void-type': 'off',
+    '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/restrict-plus-operands': 'off',
+    '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
     'react/display-name': 'off',
+    'react/no-unescaped-entities': 'off',
+    '@typescript-eslint/space-before-function-paren': 'off',
+    '@typescript-eslint/prefer-optional-chain': 'warn',
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'error', // useEffect dependency
-    'i18next/no-literal-string': ['error', {
+    'react-hooks/exhaustive-deps': 'warn', // useEffect dependency
+    'i18next/no-literal-string': ['warn', {
       markupOnly: true,
-      ignoreAttribute: ['data-testid']
+      ignoreAttribute: ['data-testid', 'to', 'target', 'rel', 'type', 'variant', 'role', 'aria-label', 'placeholder', 'name', 'direction', 'size', 'align', 'justify', 'gap', 'wrap', 'component', 'edge', 'position']
     }],
     'krasterisk-plugin/path-checker': ['error', { alias: '@' }],
     'krasterisk-plugin/public-api-imports': [

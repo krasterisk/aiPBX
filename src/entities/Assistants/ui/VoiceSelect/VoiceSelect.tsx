@@ -62,9 +62,12 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
   const [playingVoice, setPlayingVoice] = useState<string | null>(null)
 
   const topics = useMemo(() => {
-    const voiceArray = model?.startsWith('qwen') ? QWEN_VOICES
-      : model?.startsWith('yandex') ? YANDEX_VOICES
-        : model?.startsWith('gpt') ? GPT_VOICES
+    const voiceArray = model?.startsWith('qwen')
+? QWEN_VOICES
+      : model?.startsWith('yandex')
+? YANDEX_VOICES
+        : model?.startsWith('gpt')
+? GPT_VOICES
           : GPT_VOICES
 
     return voiceArray.map(voice => ({ id: voice, name: voice }))
@@ -131,12 +134,14 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
               <span className={cls.voiceName}>{option.name}</span>
               <IconButton
                 size="small"
-                onClick={(e) => handlePlayStop(option.id, e)}
+                onClick={(e) => { handlePlayStop(option.id, e) }}
                 className={cls.playButton}
               >
-                {isPlaying ? (
+                {isPlaying
+? (
                   <StopIcon fontSize="small" className={cls.icon} />
-                ) : (
+                )
+: (
                   <PlayArrowIcon fontSize="small" className={cls.icon} />
                 )}
               </IconButton>

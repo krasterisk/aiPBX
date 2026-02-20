@@ -24,6 +24,7 @@ export const Bitrix24Icon = ({ size = 24, ...props }: Bitrix24IconProps) => (
             fontWeight="700"
             fontSize="11"
         >
+            {/* eslint-disable-next-line i18next/no-literal-string */}
             24
         </text>
     </svg>

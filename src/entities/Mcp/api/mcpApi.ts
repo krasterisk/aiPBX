@@ -42,7 +42,7 @@ export const mcpApi = rtkApi.injectEndpoints({
                     return currentCache
                 }
             },
-            forceRefetch({ currentArg, previousArg }) {
+            forceRefetch ({ currentArg, previousArg }) {
                 return JSON.stringify(currentArg) !== JSON.stringify(previousArg)
             },
             providesTags: (result) =>
@@ -101,11 +101,11 @@ export const mcpApi = rtkApi.injectEndpoints({
         }),
 
         // ─── Composio Integration ────────────────────────────
-        composioConnect: build.mutation<{ redirectUrl: string; connectedAccountId: string }, { toolkit: string }>({
+        composioConnect: build.mutation<{ redirectUrl: string, connectedAccountId: string }, { toolkit: string }>({
             query: (body) => ({ url: '/mcp/composio/connect', method: 'POST', body }),
             invalidatesTags: [{ type: 'McpServers', id: 'LIST' }, 'ComposioConnections'],
         }),
-        composioConnectApiKey: build.mutation<any, { toolkit: string; apiKey?: string; chatId?: string }>({
+        composioConnectApiKey: build.mutation<any, { toolkit: string, apiKey?: string, chatId?: string }>({
             query: (body) => ({ url: '/mcp/composio/connect-apikey', method: 'POST', body }),
             invalidatesTags: [{ type: 'McpServers', id: 'LIST' }, 'ComposioConnections'],
         }),
@@ -154,7 +154,7 @@ export const mcpApi = rtkApi.injectEndpoints({
 
         executeComposioAction: build.mutation<
             { result: string },
-            { toolSlug: string; arguments: Record<string, any> }
+            { toolSlug: string, arguments: Record<string, any> }
         >({
             query: (body) => ({
                 url: '/mcp/composio/execute',
@@ -176,7 +176,7 @@ export const mcpApi = rtkApi.injectEndpoints({
             query: (toolId) => ({ url: `/mcp/tools/${toolId}/toggle`, method: 'PATCH' }),
             invalidatesTags: ['McpTools'],
         }),
-        bulkToggleMcpTools: build.mutation<{ updated: number }, { serverId: number; enabled: boolean }>({
+        bulkToggleMcpTools: build.mutation<{ updated: number }, { serverId: number, enabled: boolean }>({
             query: ({ serverId, enabled }) => ({
                 url: `/mcp/servers/${serverId}/tools/toggle-all`,
                 method: 'PATCH',
@@ -204,7 +204,7 @@ export const mcpApi = rtkApi.injectEndpoints({
         }),
 
         // ─── Audit Logs ────────────────────────────────────
-        getMcpLogs: build.query<{ count: number; rows: McpCallLog[] }, { limit?: number; offset?: number }>({
+        getMcpLogs: build.query<{ count: number, rows: McpCallLog[] }, { limit?: number, offset?: number }>({
             query: ({ limit = 50, offset = 0 }) => `/mcp/logs?limit=${limit}&offset=${offset}`,
         }),
     }),

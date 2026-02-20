@@ -30,20 +30,20 @@ export const WelcomeStep = memo(({ className }: WelcomeStepProps) => {
             <AipbxLogo width={56} height={56} />
 
             <Text
-                title={t('welcome_title', 'Добро пожаловать в AI PBX!') as string}
+                title={t('welcome_title', 'Добро пожаловать в AI PBX!') }
                 align="center"
                 size="l"
             />
 
             <Text
-                text={t('welcome_subtitle', 'Голосовые помощники для вашего бизнеса!') as string}
+                text={t('welcome_subtitle', 'Голосовые помощники для вашего бизнеса!') }
                 align="center"
                 size="m"
                 bold
             />
 
             <Text
-                text={t('welcome_description', 'Давайте создадим вашего первого ассистента, чтобы разобраться, как это работает!') as string}
+                text={t('welcome_description', 'Давайте создадим вашего первого ассистента, чтобы разобраться, как это работает!') }
                 align="center"
                 size="s"
             />

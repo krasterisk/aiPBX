@@ -20,7 +20,6 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch
 import { UserForm } from '../UserForm/UserForm'
 import { UserFormHeader } from '../UserFormHeader/UserFormHeader'
 import { toast } from 'react-toastify'
-import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { useTranslation } from 'react-i18next'
 
 export interface UserCardProps {

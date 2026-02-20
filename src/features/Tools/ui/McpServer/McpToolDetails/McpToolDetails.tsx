@@ -18,7 +18,7 @@ interface McpToolDetailsProps {
 }
 
 /** Map JSON Schema type to an icon + label */
-function getTypeIcon(type?: string) {
+function getTypeIcon (type?: string) {
     switch (type) {
         case 'string': return { Icon: Type, label: 'string' }
         case 'number':
@@ -31,7 +31,7 @@ function getTypeIcon(type?: string) {
 }
 
 /** Extract parameters from inputSchema.properties */
-function extractParams(schema: Record<string, any> | undefined) {
+function extractParams (schema: Record<string, any> | undefined) {
     if (!schema) return []
     const props = schema.properties || schema
     const required: string[] = schema.required || []
@@ -55,8 +55,8 @@ export const McpToolDetails = memo((props: McpToolDetailsProps) => {
 
     const isComposioTool = tool.name.startsWith('composio_')
 
-    const onOpenTest = useCallback(() => setTestModalOpen(true), [])
-    const onCloseTest = useCallback(() => setTestModalOpen(false), [])
+    const onOpenTest = useCallback(() => { setTestModalOpen(true) }, [])
+    const onCloseTest = useCallback(() => { setTestModalOpen(false) }, [])
 
     const params = useMemo(() => extractParams(tool.inputSchema ?? undefined), [tool.inputSchema])
 

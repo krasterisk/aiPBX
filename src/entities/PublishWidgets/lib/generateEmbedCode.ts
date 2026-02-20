@@ -1,11 +1,11 @@
 import { WidgetKey, WidgetAppearanceSettings } from '@/entities/WidgetKeys'
 
-export function generateEmbedCode(
+export function generateEmbedCode (
     widget: WidgetKey,
     settings: WidgetAppearanceSettings
 ): string {
     const attributes = [
-        `src="https://cdn.jsdelivr.net/gh/krasterisk/aipbx_widget@latest/dist/widget.min.js"`,
+        'src="https://cdn.jsdelivr.net/gh/krasterisk/aipbx_widget@latest/dist/widget.min.js"',
         `data-token="${widget.token}"`
     ]
 
@@ -31,7 +31,7 @@ export function generateEmbedCode(
     }
 
     if (!settings.showBranding) {
-        attributes.push(`data-hide-branding="true"`)
+        attributes.push('data-hide-branding="true"')
     }
 
     if (settings.buttonColor !== '#667eea') {

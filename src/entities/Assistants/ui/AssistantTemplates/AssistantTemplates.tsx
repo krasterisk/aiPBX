@@ -70,7 +70,7 @@ export const AssistantTemplates = memo(() => {
                     multiline
                     rows={4}
                     value={customDescription}
-                    onChange={(e) => setCustomDescription(e.target.value)}
+                    onChange={(e) => { setCustomDescription(e.target.value) }}
                     placeholder={t('Например: салон красоты с услугами стрижки, маникюра и макияжа') ?? ''}
                     disabled={isGenerating}
                 />
@@ -135,7 +135,7 @@ export const AssistantTemplates = memo(() => {
                         align="center"
                         justify="center"
                         className={cls.templateCard}
-                        onClick={() => onTemplateClick(template.id)}
+                        onClick={() => { onTemplateClick(template.id) }}
                     >
                         <HStack
                             justify="center"

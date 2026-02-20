@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
-import { Button } from '@/shared/ui/redesigned/Button'
 import { Modal } from '@/shared/ui/redesigned/Modal'
 import { AppImage } from '@/shared/ui/redesigned/AppImage'
 import noUser from '../../../../shared/assets/icons/user-filled.svg'
@@ -125,7 +124,7 @@ export const UserAddAvatar = memo((props: UserAddAvatarProps) => {
 
           <button
             className={cls.deleteIconBtn}
-            onClick={() => handleUserClearAvatar(user as User)}
+            onClick={() => { handleUserClearAvatar(user as User) }}
             type="button"
           >
             <DeleteOutlineIcon fontSize="small" />

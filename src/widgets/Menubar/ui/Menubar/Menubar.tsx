@@ -23,6 +23,7 @@ export const Menubar = memo((props: MenubarProps) => {
     >
       <div className={cls.appLogo}>
         <AppLogoV3 className={cls.logoIcon} />
+        {/* eslint-disable-next-line i18next/no-literal-string */}
         <span className={cls.brandText}>AI PBX</span>
       </div>
 

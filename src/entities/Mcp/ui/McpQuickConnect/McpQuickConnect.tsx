@@ -35,7 +35,7 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
     const { data: allServers, refetch: refetchServers } = useMcpServersAll(null)
 
     // API key dialog state
-    const [apiKeyDialog, setApiKeyDialog] = useState<{ toolkit: string; template: McpServerTemplate } | null>(null)
+    const [apiKeyDialog, setApiKeyDialog] = useState<{ toolkit: string, template: McpServerTemplate } | null>(null)
     const [apiKeyValue, setApiKeyValue] = useState('')
 
     const popupRef = useRef<Window | null>(null)
@@ -84,7 +84,7 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
         }
 
         window.addEventListener('message', handleMessage)
-        return () => window.removeEventListener('message', handleMessage)
+        return () => { window.removeEventListener('message', handleMessage) }
     }, [refetchStatus, refetchServers, t])
 
     const startPopupPolling = useCallback(() => {
@@ -193,7 +193,7 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
                                     [cls.loading]: isBusy,
                                     [cls.connected]: isFullyConnected,
                                 })}
-                                onClick={() => onTemplateClick(template)}
+                                onClick={async () => { await onTemplateClick(template) }}
                             >
                                 <div className={cls.iconWithStatus}>
                                     <HStack
@@ -222,7 +222,7 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
             {/* API Key / Chat ID Input Dialog */}
             <Modal
                 isOpen={!!apiKeyDialog}
-                onClose={() => setApiKeyDialog(null)}
+                onClose={() => { setApiKeyDialog(null) }}
                 lazy
             >
                 <VStack gap="16" max>
@@ -235,7 +235,8 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
                         />
                     </HStack>
 
-                    {isTelegramDialog ? (
+                    {isTelegramDialog
+? (
                         <VStack gap="8">
                             <Text text={t('telegram_chat_id_step1')} size="s" />
                             <a
@@ -248,12 +249,15 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
                             </a>
                             <Text text={t('telegram_chat_id_step2')} size="s" />
                         </VStack>
-                    ) : isBitrix24Dialog ? (
+                    )
+: isBitrix24Dialog
+? (
                         <VStack gap="8">
                             <Text text={t('bitrix24_webhook_step1')} size="s" />
                             <Text text={t('bitrix24_webhook_step2')} size="s" />
                         </VStack>
-                    ) : (
+                    )
+: (
                         <Text
                             text={t('api_key_instruction')}
                             size="s"
@@ -262,7 +266,7 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
 
                     <Textarea
                         value={apiKeyValue}
-                        onChange={(e) => setApiKeyValue(e.target.value)}
+                        onChange={(e) => { setApiKeyValue(e.target.value) }}
                         placeholder={
                             isTelegramDialog
                                 ? t('telegram_chat_id_placeholder') ?? 'Chat ID...'
@@ -281,7 +285,7 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
                     <HStack gap="8" justify="end" max>
                         <Button
                             variant="clear"
-                            onClick={() => setApiKeyDialog(null)}
+                            onClick={() => { setApiKeyDialog(null) }}
                             size="s"
                         >
                             {t('Отмена')}

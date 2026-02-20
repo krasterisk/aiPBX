@@ -126,7 +126,7 @@ export const UserForm = memo((props: UserFormProps) => {
                     {isEdit && (
                         <HStack justify="center" max>
                             <div
-                                onClick={() => setIsAvatarModalOpen(true)}
+                                onClick={() => { setIsAvatarModalOpen(true) }}
                                 className={cls.avatarWrap}
                             >
                                 <Avatar size={100} src={avatarSrc} />
@@ -184,7 +184,7 @@ export const UserForm = memo((props: UserFormProps) => {
             {isEdit && (
                 <UserAddAvatar
                     show={isAvatarModalOpen}
-                    onClose={() => setIsAvatarModalOpen(false)}
+                    onClose={() => { setIsAvatarModalOpen(false) }}
                     user={formFields}
                 />
             )}

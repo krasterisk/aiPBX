@@ -24,7 +24,6 @@ import {
 import { publishSipUrisFormActions } from '../../model/slices/publishSipUrisFormSlice'
 import { isUserAdmin, getUserAuthData } from '@/entities/User'
 import { toast } from 'react-toastify'
-import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { useNavigate } from 'react-router-dom'
 import { getRoutePublishSipUris } from '@/shared/const/router'
 import { PublishSipUrisFormHeader } from '../PublishSipUrisFormHeader/PublishSipUrisFormHeader'

@@ -131,7 +131,7 @@ export const GeneralMcpServerCard = memo((props: GeneralMcpServerCardProps) => {
                     <Textarea
                         placeholder={t('Введите имя MCP сервера') ?? ''}
                         value={name}
-                        onChange={(e) => onChangeName(e.target.value)}
+                        onChange={(e) => { onChangeName(e.target.value) }}
                         className={cls.fullWidth}
                     />
                 </VStack>
@@ -154,7 +154,7 @@ export const GeneralMcpServerCard = memo((props: GeneralMcpServerCardProps) => {
                     <Textarea
                         placeholder="https://mcp-server.example.com/sse"
                         value={url}
-                        onChange={(e) => onChangeUrl(e.target.value)}
+                        onChange={(e) => { onChangeUrl(e.target.value) }}
                         className={cls.fullWidth}
                     />
                 </VStack>
@@ -234,7 +234,7 @@ export const GeneralMcpServerCard = memo((props: GeneralMcpServerCardProps) => {
                         <InputPassword
                             placeholder={t('Введите Bearer токен') || ''}
                             value={bearerToken}
-                            onChange={(e) => onChangeBearerToken(e.target.value)}
+                            onChange={(e) => { onChangeBearerToken(e.target.value) }}
                             size="small"
                             className={cls.fullWidth}
                         />
@@ -260,7 +260,7 @@ export const GeneralMcpServerCard = memo((props: GeneralMcpServerCardProps) => {
                         <InputPassword
                             placeholder={t('Введите API ключ') || ''}
                             value={apiKey}
-                            onChange={(e) => onChangeApiKey(e.target.value)}
+                            onChange={(e) => { onChangeApiKey(e.target.value) }}
                             size="small"
                             className={cls.fullWidth}
                         />
@@ -295,14 +295,14 @@ export const GeneralMcpServerCard = memo((props: GeneralMcpServerCardProps) => {
                                     <Textarea
                                         placeholder="Header"
                                         value={entry.key}
-                                        onChange={(e) => onHeaderChange(index, 'key', e.target.value)}
+                                        onChange={(e) => { onHeaderChange(index, 'key', e.target.value) }}
                                         className={cls.fullWidth}
                                         size="small"
                                     />
                                     <Textarea
                                         placeholder="Value"
                                         value={entry.value}
-                                        onChange={(e) => onHeaderChange(index, 'value', e.target.value)}
+                                        onChange={(e) => { onHeaderChange(index, 'value', e.target.value) }}
                                         className={cls.fullWidth}
                                         size="small"
                                     />
@@ -311,7 +311,7 @@ export const GeneralMcpServerCard = memo((props: GeneralMcpServerCardProps) => {
                                     variant="glass-action"
                                     square
                                     size="s"
-                                    onClick={() => onRemoveHeader(index)}
+                                    onClick={() => { onRemoveHeader(index) }}
                                     title={t('Удалить') || 'Remove'}
                                     addonLeft={<Trash2 size={16} />}
                                 />

@@ -82,4 +82,4 @@ class AudioInputProcessor extends AudioWorkletProcessor {
 }
 
 registerProcessor('audio-input-processor', AudioInputProcessor);
-`;
+`

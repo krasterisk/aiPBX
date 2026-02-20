@@ -1,4 +1,3 @@
-import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './AssistantsList.module.scss'
 import React from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
@@ -17,7 +16,6 @@ export const AssistantsList = (props: AssistantsListProps) => {
     assistants,
     target
   } = props
-
 
   const getSkeletons = () => {
     return new Array(4)

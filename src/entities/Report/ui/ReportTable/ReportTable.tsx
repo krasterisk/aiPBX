@@ -6,14 +6,14 @@ import { Check } from '@/shared/ui/mui/Check'
 import { Report } from '../../model/types/report'
 import { useTranslation } from 'react-i18next'
 import { ChevronDown, ChevronUp, Star, CheckCircle, AlertCircle, Phone, Globe, Monitor } from 'lucide-react'
-import { useGetReportDialogs } from '../../api/reportApi'
+import { useGetReportDialogs, useCreateCallAnalytics } from '../../api/reportApi'
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { useMediaQuery } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
 import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { useCreateCallAnalytics } from '../../api/reportApi'
+
 import { ReportExpandedPanel } from '../ReportExpandedPanel/ReportExpandedPanel'
 
 interface ReportTableProps {
@@ -133,12 +133,14 @@ export const ReportTable = memo((props: ReportTableProps) => {
           {report.callerId ? <Text text={report.callerId} /> : ''}
         </td>
         <td data-label={t('Источник')} className={cls.sourceCell}>
-          {report.source ? (
+          {report.source
+? (
             <span className={cls.sourceBadge} data-source={report.source}>
               {sourceIcon[report.source]}
               {sourceLabel[report.source]}
             </span>
-          ) : '—'}
+          )
+: '—'}
         </td>
         <td data-label={t('Длительность')}>
           <Text text={String(duration)} />
@@ -150,12 +152,14 @@ export const ReportTable = memo((props: ReportTableProps) => {
           {totalCost ? <Text text={formatCurrency(totalCost, userCurrency, 4)} bold /> : ''}
         </td>
         <td data-label={t('CSAT')} className={cls.csatCell}>
-          {csat != null ? (
+          {csat != null
+? (
             <span className={cls.csatValue}>
               <Star size={14} className={cls.csatStar} />
               {csat}
             </span>
-          ) : '—'}
+          )
+: '—'}
         </td>
         <td data-label={t('Результат')} className={cls.resultCell}>
           {scenarioSuccess === true && (
@@ -172,7 +176,7 @@ export const ReportTable = memo((props: ReportTableProps) => {
           )}
           {scenarioSuccess == null && '—'}
         </td>
-        <td className={cls.actionsTd} onClick={(e) => e.stopPropagation()}>
+        <td className={cls.actionsTd} onClick={(e) => { e.stopPropagation() }}>
           <div className={cls.actions}>
             <Button
               variant="clear"

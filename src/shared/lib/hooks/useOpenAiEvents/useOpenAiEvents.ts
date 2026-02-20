@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
-import { getWsUrl } from '@/shared/lib/domain'
+import { getWsUrl } from '../../domain'
 
 const wsUrl = getWsUrl()
 const socket = io(wsUrl)
@@ -41,7 +41,7 @@ export function useOpenAiEvents(userId: string) {
     return () => {
       socket.off('openai.event', handleEvent)
     }
-  }, [])
+  }, [userId])
 
   // Преобразуем Map в обычный объект
   const groupedEvents: Record<string, Event[]> = Object.fromEntries(eventMap)

@@ -43,7 +43,8 @@ export const McpServersList = memo((props: McpServersListProps) => {
         <VStack gap="16" max className={classNames(cls.McpServersList, {}, [className])}>
             <McpServersListHeader />
 
-            {mcpServers?.rows?.length ? (
+            {mcpServers?.rows?.length
+? (
                 <>
                     <McpQuickConnect />
                     <div className={cls.listWrapper}>
@@ -55,7 +56,8 @@ export const McpServersList = memo((props: McpServersListProps) => {
                         ))}
                     </div>
                 </>
-            ) : (
+            )
+: (
                 !isMcpServersLoading && <McpServerTemplates />
             )}
 
@@ -67,4 +69,3 @@ export const McpServersList = memo((props: McpServersListProps) => {
         </VStack>
     )
 })
-

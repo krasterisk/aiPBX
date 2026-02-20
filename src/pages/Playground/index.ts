@@ -4,5 +4,5 @@ export { playgroundAssistantFormReducer, playgroundAssistantFormActions } from '
 export { getPlaygroundFormData, getPlaygroundFormLoading, getPlaygroundFormError } from './model/selectors/playgroundAssistantFormSelectors'
 export type { PlaygroundAssistantFormSchema } from './model/types/playgroundAssistantFormSchema'
 
-function PlaygroundSchema() { }
+function PlaygroundSchema () { }
 export { PlaygroundSchema }

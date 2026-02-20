@@ -21,8 +21,9 @@ description: Production deployment plan for aiPBX (Frontend + Backend + Database
             │ Frontend  │  │  Backend    │
             │  (static  │  │  NestJS     │
             │  build)   │  │  :5005      │
-            │  :7003    │  │  + WS :3033 │
-            └───────────┘  └──────┬──────┘
+            │           │  │  + WS :3033 │
+            └───────────┘  │  + UDP:3032 │
+                           └──────┬──────┘
                                   │
                            ┌──────▼──────┐
                            │ PostgreSQL  │
@@ -64,6 +65,7 @@ sudo ufw default allow outgoing
 sudo ufw allow ssh
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
+sudo ufw allow 3032/udp   # Asterisk UDP — идёт напрямую, минуя Cloudflare
 sudo ufw enable
 ```
 
@@ -92,32 +94,52 @@ TZ=UTC
 # === Frontend Build Args ===
 FRONTEND_API_URL=https://aipbx.net/api
 FRONTEND_STATIC_URL=https://aipbx.net/static
-FRONTEND_WS_URL=wss://aipbx.krasterisk.ru
 FRONTEND_PORT=7003
 FRONTEND_TG_BOT_ID=8298793342
-FRONTEND_STRIPE_KEY=pk_live_51Q0CNuRQGiq1R43M...
+FRONTEND_STRIPE_KEY=pk_live_...
 
 # === Backend ===
-BACKEND_PORT=5005
-WS_PORT=3033
-JWT_SECRET=<generated-strong-secret>
-JWT_EXPIRATION=7d
+PORT=5005
+UDP_SERVER_PORT=3032
+EXTERNAL_HOST=<SERVER_IP>:3032
+PRIVATE_KEY=<generated-strong-jwt-secret>
+TIMEZONE=Asia/Krasnoyarsk
+API_URL=https://aipbx.net
+CLIENT_URL=https://aipbx.net
 
 # === Database ===
-POSTGRES_HOST=postgres
-POSTGRES_PORT=5432
-POSTGRES_USER=aipbx_user
-POSTGRES_PASSWORD=<generated-strong-password>
-POSTGRES_DB=aipbx_production
+DB_DIALECT=postgres
+DB_HOST=postgres
+DB_PORT=5432
+DB_USER=aipbx_user
+DB_PASS=<generated-strong-password>
+DB_NAME=aipbx_production
+
+# === OpenAI / LLM ===
+OPENAI_API_KEY=sk-proj-...
+OPENAI_API_URL=wss://api.openai.com/v1/realtime
+DEEPSEEK_API_KEY=sk-...
+QWEN_API_KEY=sk-...
+QWEN_API_URL=wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime
 
 # === External Services ===
 STRIPE_SECRET_KEY=sk_live_...
+VITE_STRIPE_PUBLISHABLE_KEY=pk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
 GOOGLE_CLIENT_ID=833962533381-...
-COMPOSIO_API_KEY=...
-OPENAI_API_KEY=...
+COMPOSIO_API_KEY=ak_...
+ENCRYPTION_KEY=<64-hex-chars>
+CURRENCY_UPDATE_URL=https://openexchangerates.org/api/latest.json?app_id=...
 
-# === Monitoring (optional) ===
-SENTRY_DSN=https://...
+# === Email ===
+MAIL_HOST=smtp.migadu.com
+MAIL_USER=noreply@aipbx.net
+MAIL_PASS=<mail-password>
+
+# === Telegram ===
+TELEGRAM_BOT_TOKEN=<bot-token>
+TELEGRAM_ADMIN_CHATID=<chat-id>
+AIPBX_BOTNAME=aiPBXBot
 ```
 
 ### 1.2 Обновить `.gitignore`
@@ -194,10 +216,11 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 CMD ["nginx", "-g", "daemon off;"]
 ```
 
-### 2.2 Backend — `Dockerfile.backend`
+### 2.2 Backend — `Dockerfile` (aiPBX_backend)
 
-> ⚠️ Этот Dockerfile предполагает, что бэкенд — отдельный NestJS проект.
-> Адаптируйте путь к репозиторию при необходимости.
+Адаптированный Dockerfile для реального проекта `aiPBX_backend` (NestJS + Sequelize + MySQL).
+
+> **Отличия от текущего Dockerfile**: `npm ci` вместо `npm install`, убран PM2 (Docker сам перезапускает контейнер), non-root пользователь, healthcheck, env через docker-compose вместо `COPY .production.env`.
 
 ```dockerfile
 # ============================================
@@ -206,6 +229,11 @@ CMD ["nginx", "-g", "daemon off;"]
 FROM node:22-slim AS builder
 
 WORKDIR /app
+
+# Для native-зависимостей (sharp, bcryptjs и т.д.)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 make g++ && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -218,26 +246,35 @@ RUN npm run build
 # ============================================
 FROM node:22-slim AS production
 
-# Создаём non-root пользователя
-RUN groupadd -r appuser && useradd -r -g appuser appuser
-
 WORKDIR /app
 
-# Копируем только production зависимости
+# Для sharp в рантайме
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libvips-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# Production-зависимости
 COPY package.json package-lock.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
-# Копируем билд
+# Копируем билд и статику
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/static ./static 2>/dev/null || true
+COPY --from=builder /app/public ./public 2>/dev/null || true
 
-# Безопасность
-USER appuser
+# Переменные окружения передаются через docker-compose (env_file),
+# НЕ копируем .production.env в образ!
+ENV NODE_ENV=production
 
-EXPOSE 5005 3033
+# Non-root пользователь (node уже есть в образе node:22-slim)
+USER node
+
+# API:5005, UDP:3032 (Asterisk), WS:3033 (Socket.IO)
+EXPOSE 5005 3032/udp 3033
 
 # Healthcheck
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:5005/api/health', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) })"
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:5005/api', (r) => { process.exit(r.statusCode < 500 ? 0 : 1) }).on('error', () => process.exit(1))"
 
 CMD ["node", "dist/main.js"]
 ```
@@ -291,11 +328,11 @@ server {
 server {
     listen 80;
     server_name aipbx.net www.aipbx.net;
-    
-    # Let's Encrypt challenge
-    location /.well-known/acme-challenge/ {
-        root /var/www/certbot;
-    }
+
+    # Let's Encrypt challenge (только для production-3 / aipbx.ru)
+    # location /.well-known/acme-challenge/ {
+    #     root /var/www/certbot;
+    # }
 
     location / {
         return 301 https://$host$request_uri;
@@ -307,9 +344,14 @@ server {
     listen 443 ssl http2;
     server_name aipbx.net www.aipbx.net;
 
-    # SSL сертификаты (Let's Encrypt / Certbot)
-    ssl_certificate     /etc/letsencrypt/live/aipbx.net/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/aipbx.net/privkey.pem;
+    # === SSL: Cloudflare Origin Certificate (production-1, production-2) ===
+    ssl_certificate     /etc/ssl/origin.pem;
+    ssl_certificate_key /etc/ssl/origin-key.pem;
+
+    # === SSL: Let's Encrypt (production-3 / aipbx.ru) ===
+    # Раскомментировать на сервере aipbx.ru, закомментировать Cloudflare выше
+    # ssl_certificate     /etc/letsencrypt/live/aipbx.ru/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/aipbx.ru/privkey.pem;
 
     # SSL оптимизация
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -326,7 +368,7 @@ server {
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' wss://aipbx.krasterisk.ru https://api.stripe.com;" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' wss: https://api.stripe.com;" always;
 
     # ─── Frontend (SPA) ───
     location / {
@@ -337,8 +379,19 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
+    # ─── Auth Rate Limiting (строже) ───
+    location /api/auth/login {
+        limit_req zone=login burst=5;
+        proxy_pass http://backend:5005;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
     # ─── Backend API ───
     location /api/ {
+        limit_req zone=api burst=20 nodelay;
         proxy_pass http://backend:5005;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -394,24 +447,22 @@ server {
 ### 4.1 `docker-compose.production.yml`
 
 ```yaml
-version: "3.9"
-
 services:
   # ─── PostgreSQL ──────────────────────
   postgres:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./backups/postgres:/backups
     networks:
       - app-internal
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -426,24 +477,20 @@ services:
   # ─── Backend (NestJS) ───────────────
   backend:
     build:
-      context: ./backend  # путь к репозиторию бэкенда
-      dockerfile: Dockerfile.backend
+      context: ./aiPBX_backend
+      dockerfile: Dockerfile
     restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
+    env_file:
+      - .env.production
     environment:
       NODE_ENV: production
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USERNAME: ${POSTGRES_USER}
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
-      DB_DATABASE: ${POSTGRES_DB}
-      JWT_SECRET: ${JWT_SECRET}
-      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      COMPOSIO_API_KEY: ${COMPOSIO_API_KEY}
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      DB_HOST: postgres  # override: указываем на контейнер
+    ports:
+      - "3032:3032/udp"  # Asterisk UDP — напрямую, без Cloudflare
+      # 3033 НЕ экспонируем — WS трафик идёт через Nginx:443 (Cloudflare)
     networks:
       - app-internal
     deploy:
@@ -455,12 +502,11 @@ services:
   # ─── Frontend (React + Webpack) ─────
   frontend:
     build:
-      context: .  # текущий репозиторий (aiPBX)
-      dockerfile: Dockerfile.frontend
+      context: ./aiPBX
+      dockerfile: Dockerfile
       args:
         API_URL: ${FRONTEND_API_URL}
         STATIC_URL: ${FRONTEND_STATIC_URL}
-        WS_URL: ${FRONTEND_WS_URL}
         PORT: ${FRONTEND_PORT}
         TG_BOT_ID: ${FRONTEND_TG_BOT_ID}
         STRIPE_PUBLISHABLE_KEY: ${FRONTEND_STRIPE_KEY}
@@ -485,8 +531,13 @@ services:
       - "443:443"
     volumes:
       - ./nginx/reverse-proxy.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./certbot/conf:/etc/letsencrypt:ro
-      - ./certbot/www:/var/www/certbot:ro
+      # === Cloudflare Origin Certificate (production-1, production-2) ===
+      - ./ssl/origin.pem:/etc/ssl/origin.pem:ro
+      - ./ssl/origin-key.pem:/etc/ssl/origin-key.pem:ro
+      # === Let's Encrypt (production-3 / aipbx.ru) ===
+      # Раскомментировать на сервере aipbx.ru, закомментировать Cloudflare выше
+      # - ./certbot/conf:/etc/letsencrypt:ro
+      # - ./certbot/www:/var/www/certbot:ro
     networks:
       - app-internal
     healthcheck:
@@ -512,14 +563,21 @@ volumes:
 networks:
   app-internal:
     driver: bridge
-    internal: false  # false, чтобы nginx мог принимать внешние подключения
+    internal: false
 ```
 
 ---
 
 ## Фаза 5 — База данных: Бэкапы и миграции
 
-### 5.1 Автоматический бэкап PostgreSQL
+> ⚠️ **Миграция с MySQL на PostgreSQL**: Текущий бэкенд использует `mysql2` драйвер в Sequelize.
+> Для PostgreSQL необходимо:
+> 1. `npm install pg pg-hstore` + `npm uninstall mysql2` в бэкенде
+> 2. Изменить `dialect: 'mysql'` → `dialect: 'postgres'` в конфиге Sequelize
+> 3. Адаптировать переменные окружения (`MYSQL_*` → `POSTGRES_*`)
+> 4. Мигрировать данные из старой MySQL БД
+
+### 5.1 Автоматический бэкап БД (PostgreSQL / MySQL)
 
 Создать `scripts/backup-db.sh`:
 
@@ -527,22 +585,34 @@ networks:
 #!/bin/bash
 set -euo pipefail
 
+# Загрузить переменные
+source /app/.env.production
+
 # Конфигурация
-BACKUP_DIR="/app/backups/postgres"
+BACKUP_DIR="/app/backups/${DB_DIALECT}"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_FILE="${BACKUP_DIR}/aipbx_${TIMESTAMP}.sql.gz"
 RETENTION_DAYS=30
 
-# Создание директории
 mkdir -p ${BACKUP_DIR}
 
-# Дамп базы
-docker compose -f docker-compose.production.yml exec -T postgres \
-  pg_dump -U ${POSTGRES_USER} -d ${POSTGRES_DB} --format=custom \
-  | gzip > ${BACKUP_FILE}
+# Дамп базы в зависимости от диалекта
+if [ "${DB_DIALECT}" = "postgres" ]; then
+  docker compose -f /app/docker-compose.production.yml exec -T postgres \
+    pg_dump -U ${DB_USER} -d ${DB_NAME} --format=custom \
+    | gzip > ${BACKUP_FILE}
+elif [ "${DB_DIALECT}" = "mysql" ]; then
+  docker compose -f /app/docker-compose.production.yml exec -T mysql \
+    mysqldump -u${DB_USER} -p${DB_PASS} ${DB_NAME} \
+    --single-transaction --routines --triggers \
+    | gzip > ${BACKUP_FILE}
+else
+  echo "[$(date)] ERROR: Unknown DB_DIALECT: ${DB_DIALECT}"
+  exit 1
+fi
 
 # Проверка размера
-FILESIZE=$(stat -f%z "${BACKUP_FILE}" 2>/dev/null || stat -c%s "${BACKUP_FILE}")
+FILESIZE=$(stat -c%s "${BACKUP_FILE}")
 echo "[$(date)] Backup created: ${BACKUP_FILE} (${FILESIZE} bytes)"
 
 # Удаление старых бэкапов
@@ -561,15 +631,45 @@ echo "[$(date)] Old backups cleaned (retention: ${RETENTION_DAYS} days)"
 ### 5.3 Восстановление из бэкапа
 
 ```bash
-# Восстановление
+# PostgreSQL:
 gunzip < backups/postgres/aipbx_YYYYMMDD_HHMMSS.sql.gz | \
   docker compose -f docker-compose.production.yml exec -T postgres \
-  pg_restore -U ${POSTGRES_USER} -d ${POSTGRES_DB} --clean --if-exists
+  pg_restore -U ${DB_USER} -d ${DB_NAME} --clean --if-exists
+
+# MySQL:
+gunzip < backups/mysql/aipbx_YYYYMMDD_HHMMSS.sql.gz | \
+  docker compose -f docker-compose.production.yml exec -T mysql \
+  mysql -u${DB_USER} -p${DB_PASS} ${DB_NAME}
 ```
 
 ---
 
 ## Фаза 6 — CI/CD Pipeline (GitHub Actions)
+
+> Деплой на **3 сервера** с разными доменами и env-параметрами.
+> Каждый сервер использует отдельный **GitHub Environment** со своими секретами.
+
+### 6.0 Настройка GitHub Environments
+
+В репозитории: **Settings → Environments** → создать 3 окружения:
+
+| Environment | Домен | Описание |
+|------------|-------|----------|
+| `production-1` | `aipbx.net` | Основной сервер |
+| `production-2` | `aipbx.org` | Второй сервер |
+| `production-3` | `aipbx.ru` | Третий сервер |
+
+В **каждом** Environment задать свои секреты:
+
+```
+SERVER_HOST          — IP сервера
+SERVER_USER          — SSH пользователь
+SSH_PRIVATE_KEY      — SSH ключ
+FRONTEND_API_URL     — https://aipbx.net/api (для каждого домена своё)
+FRONTEND_STATIC_URL  — https://aipbx.net/static
+FRONTEND_STRIPE_KEY  — pk_live_... (может отличаться)
+TG_BOT_ID            — ID бота
+```
 
 ### 6.1 `.github/workflows/deploy.yml`
 
@@ -583,6 +683,20 @@ on:
       - "*.md"
       - ".docs/**"
       - ".loki/**"
+
+  # Ручной запуск с выбором сервера
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Deploy target"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - production-1
+          - production-2
+          - production-3
 
 env:
   REGISTRY: ghcr.io
@@ -604,14 +718,23 @@ jobs:
       - run: npm run lint:scss
       - run: npm run test:unit -- --ci --coverage
 
-  # ─── Step 2: Build & Push Docker Images ─
+  # ─── Step 2: Build & Push per-server Frontend Images ─
   build:
-    name: 🏗️ Build Docker Images
+    name: 🏗️ Build (${{ matrix.server }})
     needs: quality
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    # Выбираем серверы для деплоя
+    if: >
+      github.event_name == 'push' ||
+      github.event.inputs.target == 'all' ||
+      github.event.inputs.target == matrix.server
+    strategy:
+      matrix:
+        server: [production-1, production-2, production-3]
+    environment: ${{ matrix.server }}
     steps:
       - uses: actions/checkout@v4
 
@@ -629,27 +752,34 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfile.frontend
+          file: Dockerfile
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend-${{ matrix.server }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend-${{ matrix.server }}:${{ github.sha }}
           build-args: |
             API_URL=${{ secrets.FRONTEND_API_URL }}
             STATIC_URL=${{ secrets.FRONTEND_STATIC_URL }}
-            WS_URL=${{ secrets.FRONTEND_WS_URL }}
             PORT=7003
             TG_BOT_ID=${{ secrets.TG_BOT_ID }}
-            STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+            STRIPE_PUBLISHABLE_KEY=${{ secrets.FRONTEND_STRIPE_KEY }}
+          cache-from: type=gha,scope=${{ matrix.server }}
+          cache-to: type=gha,scope=${{ matrix.server }},mode=max
 
-  # ─── Step 3: Deploy ─────────────────
+  # ─── Step 3: Deploy to all servers ───
   deploy:
-    name: 🚀 Deploy
+    name: 🚀 Deploy (${{ matrix.server }})
     needs: build
     runs-on: ubuntu-latest
-    environment: production
+    if: >
+      github.event_name == 'push' ||
+      github.event.inputs.target == 'all' ||
+      github.event.inputs.target == matrix.server
+    strategy:
+      matrix:
+        server: [production-1, production-2, production-3]
+      fail-fast: false  # Не останавливать остальные при ошибке на одном
+    environment: ${{ matrix.server }}
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
@@ -658,36 +788,41 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /app/aipbx
-            
+            cd /app
+
             # Pull latest images
             docker compose -f docker-compose.production.yml pull
-            
+
             # Rolling update (zero-downtime)
             docker compose -f docker-compose.production.yml up -d \
               --remove-orphans \
               --force-recreate frontend backend
-            
+
             # Wait for health checks
             sleep 10
-            
+
             # Verify deployment
             curl -sf http://localhost/api/health || exit 1
-            
+
             # Cleanup old images
             docker image prune -f
-            
-            echo "✅ Deployment successful!"
+
+            echo "✅ Deployment to ${{ matrix.server }} successful!"
 
       - name: Notify on failure
         if: failure()
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          text: "❌ Deployment failed! Check GitHub Actions."
+          text: "❌ Deploy to ${{ matrix.server }} failed!"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 ```
+
+> **Почему отдельный образ для каждого сервера?**
+> `API_URL` вкомпилирован в JS-бандл при сборке, поэтому для `aipbx.net` и `aipbx.com`
+> нужны разные Docker-образы фронтенда. Бэкенд одинаковый — он получает
+> конфигурацию из `.env.production` на каждом сервере.
 
 ---
 
@@ -766,16 +901,72 @@ jobs:
     image: prometheuscommunity/postgres-exporter:latest
     restart: unless-stopped
     environment:
-      DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable"
+      DATA_SOURCE_NAME: "postgresql://${DB_USER}:${DB_PASS}@postgres:5432/${DB_NAME}?sslmode=disable"
     networks:
       - app-internal
 ```
 
 ---
 
-## Фаза 8 — SSL сертификаты (Let's Encrypt)
+## Фаза 8 — SSL сертификаты
 
-### 8.1 Первоначальное получение сертификата
+| Сервер | Домен | SSL |
+|--------|-------|-----|
+| `production-1` | `aipbx.net` | Cloudflare Origin Certificate |
+| `production-2` | `aipbx.org` | Cloudflare Origin Certificate |
+| `production-3` | `aipbx.ru` | Let's Encrypt (Certbot) |
+
+### 8.1 Вариант A: Cloudflare Origin Certificate (для production-1, production-2)
+
+> Сертификат выдаётся на **15 лет**, не требует автообновления.
+
+**Шаги:**
+
+1. **Cloudflare Dashboard** → SSL/TLS → Origin Server → Create Certificate
+2. Выбрать домен, срок (15 лет), нажать Create
+3. Скопировать **Origin Certificate** и **Private Key**
+4. На сервере:
+
+```bash
+# Создать папку для сертификатов
+mkdir -p /app/ssl
+
+# Вставить сертификат
+nano /app/ssl/origin.pem       # ← Origin Certificate
+
+# Вставить ключ
+nano /app/ssl/origin-key.pem   # ← Private Key
+
+# Установить права
+chmod 600 /app/ssl/origin-key.pem
+chmod 644 /app/ssl/origin.pem
+```
+
+5. В `reverse-proxy.conf`:
+```nginx
+ssl_certificate     /etc/ssl/origin.pem;
+ssl_certificate_key /etc/ssl/origin-key.pem;
+```
+
+6. В `docker-compose.production.yml` для nginx:
+```yaml
+nginx:
+  volumes:
+    - ./nginx/reverse-proxy.conf:/etc/nginx/conf.d/default.conf:ro
+    # === Cloudflare Origin Certificate (production-1, production-2) ===
+    - ./ssl/origin.pem:/etc/ssl/origin.pem:ro
+    - ./ssl/origin-key.pem:/etc/ssl/origin-key.pem:ro
+    # === Let's Encrypt (production-3 / aipbx.ru) ===
+    # Раскомментировать, закомментировать Cloudflare выше
+    # - ./certbot/conf:/etc/letsencrypt:ro
+    # - ./certbot/www:/var/www/certbot:ro
+```
+
+7. **Cloudflare** → SSL/TLS → Overview → установить режим **Full (Strict)**
+
+> ⚠️ Контейнер `certbot` на этих серверах **не нужен** — можно убрать из docker-compose.
+
+### 8.2 Вариант B: Let's Encrypt / Certbot (для production-3)
 
 ```bash
 # 1. Сначала запустить nginx без SSL
@@ -785,17 +976,24 @@ docker compose -f docker-compose.production.yml up -d nginx
 docker compose -f docker-compose.production.yml run --rm certbot \
   certbot certonly --webroot \
   --webroot-path=/var/www/certbot \
-  --email admin@aipbx.net \
+  --email admin@aipbx.ru \
   --agree-tos \
   --no-eff-email \
-  -d aipbx.net \
-  -d www.aipbx.net
+  -d aipbx.ru \
+  -d www.aipbx.ru
 
 # 3. Перезапустить nginx с SSL конфигом
 docker compose -f docker-compose.production.yml restart nginx
 ```
 
-### 8.2 Автоматическое обновление
+В `reverse-proxy.conf` для этого сервера:
+```nginx
+ssl_certificate     /etc/letsencrypt/live/aipbx.ru/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/aipbx.ru/privkey.pem;
+```
+
+### 8.3 Автоматическое обновление (только Let's Encrypt)
+
 Certbot контейнер уже настроен на автообновление каждые 12 часов (см. Фазу 4).
 
 ---
@@ -818,20 +1016,36 @@ Certbot контейнер уже настроен на автообновлен
 
 ### 9.2 Rate Limiting в Nginx
 
+`limit_req_zone` должен быть в блоке `http {}`, поэтому выносим в **отдельный файл**.
+
+**1. Создать `nginx/rate-limit.conf` на сервере:**
+
 ```nginx
-# Добавить в начало nginx конфига (http блок)
 limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
 limit_req_zone $binary_remote_addr zone=login:10m rate=3r/m;
+```
 
-# В location /api/:
+**2. Добавить volume в `docker-compose.production.yml` для nginx:**
+
+```yaml
+nginx:
+  volumes:
+    - ./nginx/rate-limit.conf:/etc/nginx/conf.d/rate-limit.conf:ro  # загрузится до default.conf
+    - ./nginx/reverse-proxy.conf:/etc/nginx/conf.d/default.conf:ro
+    # ... остальные volumes (ssl, certbot)
+```
+
+**3. В `reverse-proxy.conf` использовать зоны в `location`:**
+
+```nginx
 location /api/ {
     limit_req zone=api burst=20 nodelay;
-    # ...
+    # ... остальные настройки proxy_pass
 }
 
-# В location /api/auth/:
 location /api/auth/login {
     limit_req zone=login burst=5;
+    proxy_pass http://backend:5005;
     # ...
 }
 ```
@@ -844,8 +1058,9 @@ location /api/auth/login {
 
 ```bash
 # 1. Клонировать репозиторий
-git clone git@github.com:krasterisk/aiPBX.git /app/aipbx
-cd /app/aipbx
+cd /app
+git clone git@github.com:krasterisk/aiPBX.git
+git clone git@github.com:krasterisk/aiPBX_backend.git
 
 # 2. Создать .env.production
 cp .env.example .env.production
@@ -868,7 +1083,7 @@ docker compose -f docker-compose.production.yml logs -f
 ### 10.2 Обновление (routine deploy)
 
 ```bash
-cd /app/aipbx
+cd /app
 git pull origin main
 docker compose -f docker-compose.production.yml --env-file .env.production up -d --build --force-recreate frontend backend
 docker image prune -f

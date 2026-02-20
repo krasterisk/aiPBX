@@ -139,37 +139,38 @@ export const ReportList = (props: ReportsListProps) => {
         onExportToExcel={exportToExcel}
       />
 
-      {reports?.rows.length ? (
+      {reports?.rows.length
+? (
         <div className={cls.TableWrapper}>
           <table className={cls.Table}>
             <thead className={cls.TableHeader}>
               <tr>
                 <th className={cls.tdCheck}></th>
-                <th className={cls.sortable} onClick={() => onChangeSort('createdAt')}>
+                <th className={cls.sortable} onClick={() => { onChangeSort('createdAt') }}>
                   {t('Дата')} {renderSortIcon('createdAt')}
                 </th>
-                <th className={cls.sortable} onClick={() => onChangeSort('assistantName')}>
+                <th className={cls.sortable} onClick={() => { onChangeSort('assistantName') }}>
                   {t('Ассистент')} {renderSortIcon('assistantName')}
                 </th>
-                <th className={cls.sortable} onClick={() => onChangeSort('callerId')}>
+                <th className={cls.sortable} onClick={() => { onChangeSort('callerId') }}>
                   {t('Звонивший')} {renderSortIcon('callerId')}
                 </th>
-                <th className={cls.sortable} onClick={() => onChangeSort('source')}>
+                <th className={cls.sortable} onClick={() => { onChangeSort('source') }}>
                   {t('Источник')} {renderSortIcon('source')}
                 </th>
-                <th className={cls.sortable} onClick={() => onChangeSort('duration')}>
+                <th className={cls.sortable} onClick={() => { onChangeSort('duration') }}>
                   {t('Длительность')} {renderSortIcon('duration')}
                 </th>
-                <th className={cls.sortable} onClick={() => onChangeSort('tokens')}>
+                <th className={cls.sortable} onClick={() => { onChangeSort('tokens') }}>
                   {t('Токены')} {renderSortIcon('tokens')}
                 </th>
-                <th className={cls.sortable} onClick={() => onChangeSort('cost')}>
+                <th className={cls.sortable} onClick={() => { onChangeSort('cost') }}>
                   {t('Стоимость')} {renderSortIcon('cost')}
                 </th>
-                <th className={cls.sortable} onClick={() => onChangeSort('csat')}>
+                <th className={cls.sortable} onClick={() => { onChangeSort('csat') }}>
                   {t('CSAT')} {renderSortIcon('csat')}
                 </th>
-                <th className={cls.sortable} onClick={() => onChangeSort('scenarioSuccess')}>
+                <th className={cls.sortable} onClick={() => { onChangeSort('scenarioSuccess') }}>
                   {t('Результат')} {renderSortIcon('scenarioSuccess')}
                 </th>
                 <th className={cls.tdActions}></th>
@@ -180,7 +181,8 @@ export const ReportList = (props: ReportsListProps) => {
             </tbody>
           </table>
         </div>
-      ) : (
+      )
+: (
         !isReportsLoading && (
           <Card padding="48" max border="partial">
             <VStack max align="center" justify="center" gap="16">

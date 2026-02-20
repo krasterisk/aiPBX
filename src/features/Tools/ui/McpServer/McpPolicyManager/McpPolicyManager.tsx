@@ -14,7 +14,6 @@ import {
     useCreateMcpToolPolicy,
     useDeleteMcpToolPolicy
 } from '@/entities/Mcp'
-import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './McpPolicyManager.module.scss'
 
@@ -26,9 +25,9 @@ interface McpPolicyManagerProps {
 }
 
 const POLICY_TYPE_LABELS: Record<PolicyType, string> = {
-    'param_restrict': 'Ограничение параметров',
-    'rate_limit': 'Лимит вызовов',
-    'require_approval': 'Требуется одобрение',
+    param_restrict: 'Ограничение параметров',
+    rate_limit: 'Лимит вызовов',
+    require_approval: 'Требуется одобрение',
 }
 
 export const McpPolicyManager = memo((props: McpPolicyManagerProps) => {
@@ -123,7 +122,8 @@ export const McpPolicyManager = memo((props: McpPolicyManagerProps) => {
             </HStack>
 
             {/* Existing policies */}
-            {policies && policies.length > 0 ? (
+            {policies && policies.length > 0
+? (
                 policies.map(policy => (
                     <HStack key={policy.id} max gap="8" align="center" className={cls.policyItem}>
                         <VStack gap="4" max>
@@ -141,7 +141,7 @@ export const McpPolicyManager = memo((props: McpPolicyManagerProps) => {
                         <Button
                             type="button"
                             className={cls.deleteBtn}
-                            onClick={() => onDeletePolicy(policy.id)}
+                            onClick={async () => { await onDeletePolicy(policy.id) }}
                             title={t('Удалить') || 'Delete'}
                             variant='glass-action'
                         >
@@ -149,12 +149,14 @@ export const McpPolicyManager = memo((props: McpPolicyManagerProps) => {
                         </Button>
                     </HStack>
                 ))
-            ) : (
+            )
+: (
                 <Text text={t('Нет политик')} size="s" className={cls.emptyText} />
             )}
 
             {/* Add form */}
-            {showAddForm ? (
+            {showAddForm
+? (
                 <VStack gap="12" max className={cls.addForm}>
                     <Combobox
                         options={policyTypeOptions}
@@ -172,14 +174,14 @@ export const McpPolicyManager = memo((props: McpPolicyManagerProps) => {
                             <Textarea
                                 placeholder={t('Макс. вызовов в минуту') ?? ''}
                                 value={maxCallsPerMinute}
-                                onChange={(e) => setMaxCallsPerMinute(e.target.value)}
+                                onChange={(e) => { setMaxCallsPerMinute(e.target.value) }}
                                 className={cls.fullWidth}
                                 size="small"
                             />
                             <Textarea
                                 placeholder={t('Окно (секунды)') ?? ''}
                                 value={windowSeconds}
-                                onChange={(e) => setWindowSeconds(e.target.value)}
+                                onChange={(e) => { setWindowSeconds(e.target.value) }}
                                 className={cls.fullWidth}
                                 size="small"
                             />
@@ -192,7 +194,7 @@ export const McpPolicyManager = memo((props: McpPolicyManagerProps) => {
                             multiline
                             minRows={3}
                             value={blockedParams}
-                            onChange={(e) => setBlockedParams(e.target.value)}
+                            onChange={(e) => { setBlockedParams(e.target.value) }}
                             className={cls.fullWidth}
                         />
                     )}
@@ -209,17 +211,18 @@ export const McpPolicyManager = memo((props: McpPolicyManagerProps) => {
                         <Button
                             variant="clear"
                             size="s"
-                            onClick={() => setShowAddForm(false)}
+                            onClick={() => { setShowAddForm(false) }}
                         >
                             {t('Отмена')}
                         </Button>
                     </HStack>
                 </VStack>
-            ) : (
+            )
+: (
                 <Button
                     variant="glass-action"
                     size="s"
-                    onClick={() => setShowAddForm(true)}
+                    onClick={() => { setShowAddForm(true) }}
                 >
                     {t('Добавить политику')}
                 </Button>

@@ -84,9 +84,11 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
         <Box className={cls.DocumentationSidebar}>
             <Box className={cls.header}>
                 <Typography variant="h6" className={cls.title}>
+                    {/* eslint-disable-next-line i18next/no-literal-string */}
                     📖 {t('doc_title')}
                 </Typography>
                 <Typography variant="caption" className={cls.subtitle}>
+                    {/* eslint-disable-next-line i18next/no-literal-string */}
                     AI PBX Platform
                 </Typography>
             </Box>
@@ -97,7 +99,7 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
                         <ListItem disablePadding>
                             <ListItemButton
                                 selected={currentSection === section.id}
-                                onClick={() => handleSectionClick(section.id, !!section.subsections)}
+                                onClick={() => { handleSectionClick(section.id, !!section.subsections) }}
                                 className={cls.sectionButton}
                             >
                                 <ListItemText
@@ -105,11 +107,13 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
                                     className={cls.sectionText}
                                 />
                                 {section.subsections && (
-                                    expandedSections.includes(section.id) ? (
-                                        <ChevronDown size={18} className={cls.chevron} />
-                                    ) : (
-                                        <ChevronRight size={18} className={cls.chevron} />
-                                    )
+                                    expandedSections.includes(section.id)
+                                        ? (
+                                            <ChevronDown size={18} className={cls.chevron} />
+                                        )
+                                        : (
+                                            <ChevronRight size={18} className={cls.chevron} />
+                                        )
                                 )}
                             </ListItemButton>
                         </ListItem>
@@ -124,7 +128,7 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
                                     {section.subsections.map((subsection, idx) => (
                                         <ListItem key={`${subsection.id}-${idx}`} disablePadding>
                                             <ListItemButton
-                                                onClick={() => handleSubsectionClick(subsection.id, subsection.anchor)}
+                                                onClick={() => { handleSubsectionClick(subsection.id, subsection.anchor) }}
                                                 className={cls.subsectionButton}
                                             >
                                                 <ListItemText
@@ -150,7 +154,7 @@ export const DocumentationSidebar = memo(({ onItemClick }: DocumentationSidebarP
 
                     {userData && (
                         <ListItemButton
-                            onClick={() => navigate(getRouteMain())}
+                            onClick={() => { navigate(getRouteMain()) }}
                             className={cls.backButton}
                         >
                             <ArrowLeft size={20} className={cls.backIcon} />

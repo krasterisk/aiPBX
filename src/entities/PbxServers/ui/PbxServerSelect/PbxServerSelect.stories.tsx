@@ -2,7 +2,6 @@ import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { PbxServerSelect } from './PbxServerSelect'
 
-
 export default {
     title: 'shared/PbxServerSelect',
     component: PbxServerSelect,
@@ -17,4 +16,3 @@ export const Normal = Template.bind({})
 Normal.args = {
     
 }
-

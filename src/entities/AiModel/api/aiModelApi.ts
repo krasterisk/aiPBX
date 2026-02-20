@@ -1,5 +1,5 @@
-import { rtkApi } from '@/shared/api/rtkApi';
-import { AiModel, CreateAiModelDto, UpdateAiModelDto, DeleteAiModelsDto } from '../model/types/aiModel';
+import { rtkApi } from '@/shared/api/rtkApi'
+import { AiModel, CreateAiModelDto, UpdateAiModelDto, DeleteAiModelsDto } from '../model/types/aiModel'
 
 const aiModelApi = rtkApi.injectEndpoints({
     endpoints: (build) => ({
@@ -45,10 +45,10 @@ const aiModelApi = rtkApi.injectEndpoints({
             ],
         }),
     }),
-});
+})
 
-export const useAiModels = aiModelApi.useGetAiModelsQuery;
-export const useAiModel = aiModelApi.useGetAiModelByIdQuery;
-export const useCreateAiModel = aiModelApi.useCreateAiModelMutation;
-export const useUpdateAiModel = aiModelApi.useUpdateAiModelMutation;
-export const useDeleteAiModels = aiModelApi.useDeleteAiModelsMutation;
+export const useAiModels = aiModelApi.useGetAiModelsQuery
+export const useAiModel = aiModelApi.useGetAiModelByIdQuery
+export const useCreateAiModel = aiModelApi.useCreateAiModelMutation
+export const useUpdateAiModel = aiModelApi.useUpdateAiModelMutation
+export const useDeleteAiModels = aiModelApi.useDeleteAiModelsMutation

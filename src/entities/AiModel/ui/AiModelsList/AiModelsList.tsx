@@ -38,15 +38,15 @@ export const AiModelsList = memo((props: AiModelsListProps) => {
             cell: info => info.getValue()
         }),
         columnHelper.accessor('name', {
-            header: (t('Name') ?? '') as string,
+            header: (t('Name') ?? ''),
             cell: info => info.getValue()
         }),
         columnHelper.accessor('comment', {
-            header: (t('Comment') ?? '') as string,
+            header: (t('Comment') ?? ''),
             cell: info => info.getValue()
         }),
         columnHelper.accessor('publish', {
-            header: (t('Publish') ?? '') as string,
+            header: (t('Publish') ?? ''),
             cell: info => (
                 <span className={info.getValue() ? cls.publishActive : cls.publishInactive}>
                     {info.getValue()
@@ -57,23 +57,23 @@ export const AiModelsList = memo((props: AiModelsListProps) => {
             )
         }),
         columnHelper.accessor('publishName', {
-            header: (t('Publish Name') ?? '') as string,
+            header: (t('Publish Name') ?? ''),
             cell: info => info.getValue() || '—'
         }),
         columnHelper.display({
             id: 'actions',
-            header: (t('Actions') ?? '') as string,
+            header: (t('Actions') ?? ''),
             cell: (info) => (
                 <HStack gap="8">
                     <Button
-                        onClick={() => onEdit(info.row.original)}
+                        onClick={() => { onEdit(info.row.original) }}
                         variant="clear"
                         size="m"
                     >
                         <Edit size={20} />
                     </Button>
                     <Button
-                        onClick={() => onDelete(info.row.original.id)}
+                        onClick={() => { onDelete(info.row.original.id) }}
                         variant="clear"
                         color="error"
                         size="m"

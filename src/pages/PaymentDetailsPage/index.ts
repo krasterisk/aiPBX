@@ -1,1 +1,1 @@
-export { PaymentDetailsPageAsync as PaymentDetailsPage } from './ui/PaymentDetailsPage/PaymentDetailsPage.async';
+export { PaymentDetailsPageAsync as PaymentDetailsPage } from './ui/PaymentDetailsPage/PaymentDetailsPage.async'

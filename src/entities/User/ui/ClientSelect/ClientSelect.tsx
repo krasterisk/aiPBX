@@ -59,7 +59,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
 
   // Определяем иконку слева
   const leftAddon = addonLeft || (showIcon ? <Users size={18} style={{ marginRight: 8 }} /> : undefined)
-  const placeholderText = placeholder || (t('Все клиенты') as string)
+  const placeholderText = placeholder || (t('Все клиенты'))
 
   return (
     <Combobox
@@ -78,7 +78,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
         <TextField
           {...params}
           label={label}
-          placeholder={isLoading ? (t('Загрузка...') as string) : placeholderText}
+          placeholder={isLoading ? (t('Загрузка...')) : placeholderText}
           error={!!error}
           helperText={error}
           size={size}

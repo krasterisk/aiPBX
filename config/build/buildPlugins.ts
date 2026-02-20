@@ -8,7 +8,7 @@ import CircularDependencyPlugin from 'circular-dependency-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import { buildOptions } from './types/config'
 
-export function buildPlugins({
+export function buildPlugins ({
   paths, isDev, apiUrl, wsUrl, project, staticUrl, googleClientId, tgBotId, stripePublishableKey
 }: buildOptions): webpack.WebpackPluginInstance[] {
   const isProd = !isDev

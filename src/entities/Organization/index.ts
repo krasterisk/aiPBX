@@ -6,5 +6,3 @@ export {
     useDeleteOrganizationMutation
 } from './api/organizationApi'
 export { OrganizationList } from './ui/OrganizationList/OrganizationList'
-
-

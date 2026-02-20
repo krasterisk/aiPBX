@@ -3,7 +3,6 @@ import cls from './PublishSipUrisPage.module.scss'
 import { memo } from 'react'
 import { Page } from '@/widgets/Page'
 import { PublishSipUrisList, publishSipUrisPageReducer, usePublishSipUrisFilters } from '@/entities/PublishSipUris'
-import { publishSipUrisFormReducer } from '@/features/PublishSipUris'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 
 interface PublishSipUrisPageProps {

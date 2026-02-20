@@ -112,7 +112,8 @@ export const SignupForm = memo((props: SignupFormProps) => {
                         }}
                     />
 
-                    {isSignupActivation ? (
+                    {isSignupActivation
+? (
                         <VStack max gap="16">
                             <Textarea
                                 type="text"
@@ -149,14 +150,15 @@ export const SignupForm = memo((props: SignupFormProps) => {
                                 </Button>
                             </HStack>
                         </VStack>
-                    ) : (
+                    )
+: (
                         <>
                             <HStack gap="8" align="start" className={cls.agreeRow}>
                                 <input
                                     type="checkbox"
                                     id="agree-terms"
                                     checked={agreeTerms}
-                                    onChange={(e) => setAgreeTerms(e.target.checked)}
+                                    onChange={(e) => { setAgreeTerms(e.target.checked) }}
                                     className={cls.checkbox}
                                 />
                                 <label htmlFor="agree-terms" className={cls.agreeLabel}>
@@ -165,7 +167,7 @@ export const SignupForm = memo((props: SignupFormProps) => {
                                         to={getRouteLegal()}
                                         target="_blank"
                                         className={cls.legalLink}
-                                        onClick={(e) => e.stopPropagation()}
+                                        onClick={(e) => { e.stopPropagation() }}
                                     >
                                         {t('пользовательское соглашение')}
                                     </Link>

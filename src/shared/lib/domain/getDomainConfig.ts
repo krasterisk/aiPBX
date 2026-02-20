@@ -50,7 +50,7 @@ const DEFAULT_CONFIG: DomainConfig = {
  * Works with both exact matches and subdomain fallback
  * (e.g. `app.aipbx.net` → `aipbx.net`).
  */
-export function getDomainConfig(): DomainConfig {
+export function getDomainConfig (): DomainConfig {
     if (typeof window === 'undefined') return DEFAULT_CONFIG
 
     const hostname = window.location.hostname
@@ -76,7 +76,7 @@ export function getDomainConfig(): DomainConfig {
  * Returns the API base URL for the current domain.
  * Always relative — nginx handles proxying to the backend.
  */
-export function getApiBaseUrl(): string {
+export function getApiBaseUrl (): string {
     return '/api'
 }
 
@@ -85,7 +85,7 @@ export function getApiBaseUrl(): string {
  * Uses `__WS__` build-time variable if set (dev mode),
  * otherwise constructs from current hostname with wss:// protocol.
  */
-export function getWsUrl(): string {
+export function getWsUrl (): string {
     // Build-time override (for local development)
     if (typeof __WS__ !== 'undefined' && __WS__) {
         return __WS__
@@ -106,7 +106,7 @@ export function getWsUrl(): string {
  * Uses `__STATIC__` build-time variable if set (dev mode),
  * otherwise uses relative `/static`.
  */
-export function getStaticUrl(): string {
+export function getStaticUrl (): string {
     if (typeof __STATIC__ !== 'undefined' && __STATIC__ && __STATIC__ !== '/static') {
         return __STATIC__
     }
@@ -119,7 +119,7 @@ export function getStaticUrl(): string {
 /**
  * Returns the current domain's origin (e.g. `https://aipbx.net`).
  */
-export function getDomainOrigin(): string {
+export function getDomainOrigin (): string {
     if (typeof window === 'undefined') return ''
     return window.location.origin
 }

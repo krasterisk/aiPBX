@@ -71,9 +71,11 @@ export const PublishWidgetsItem = memo((props: PublishWidgetsItemProps) => {
                 <HStack gap={'16'} justify={'between'} max align="start">
                     <HStack gap={'16'} max>
                         <div className={cls.logoWrapper}>
-                            {logoUrl ? (
+                            {logoUrl
+? (
                                 <img src={logoUrl} alt={widget.name} className={cls.logo} />
-                            ) : (
+                            )
+: (
                                 <div className={cls.defaultIcon} style={{ background: appearance.buttonColor }}>
                                     <Bot size={24} color="white" />
                                 </div>

@@ -1,7 +1,7 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ReportExpandedPanel.module.scss'
 import React, { memo, useState, useCallback } from 'react'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Report, ReportDialog } from '../../model/types/report'
 import { useTranslation } from 'react-i18next'
@@ -10,7 +10,6 @@ import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
 import { ReportShowDialog } from '../ReportShowDialog/ReportShowDialog'
 import { ReportShowAnalytics } from '../ReportShowAnalytics/ReportShowAnalytics'
 import { BillingBreakdown } from '../BillingBreakdown/BillingBreakdown'
-import { Button } from '@/shared/ui/redesigned/Button'
 import { Loader } from '@/shared/ui/Loader'
 import {
     MessageSquareText,
@@ -54,7 +53,7 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
         setActiveTab(tab)
     }, [])
 
-    const tabs: { key: TabType; label: string; icon: React.ElementType; badge?: string }[] = [
+    const tabs: Array<{ key: TabType, label: string, icon: React.ElementType, badge?: string }> = [
         {
             key: 'dialog',
             label: t('Диалог'),
@@ -130,7 +129,7 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
                             className={classNames(cls.tab, {
                                 [cls.tabActive]: isActive
                             })}
-                            onClick={() => onTabChange(tab.key)}
+                            onClick={() => { onTabChange(tab.key) }}
                         >
                             <Icon size={16} className={cls.tabIcon} />
                             <span className={cls.tabLabel}>{tab.label}</span>

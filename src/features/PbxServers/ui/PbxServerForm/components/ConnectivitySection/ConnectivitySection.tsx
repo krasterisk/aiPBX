@@ -61,7 +61,8 @@ export const ConnectivitySection = memo((props: ConnectivitySectionProps) => {
 
     const { t } = useTranslation('pbx')
 
-    const statusBadge = isEdit ? (
+    const statusBadge = isEdit
+? (
         <HStack gap="8" align="center" className={cls.statusBadgeSection}>
             <div
                 className={classNames(cls.statusIndicator, {
@@ -75,7 +76,8 @@ export const ConnectivitySection = memo((props: ConnectivitySectionProps) => {
                 size="s"
             />
         </HStack>
-    ) : null
+    )
+: null
 
     return (
         <SectionCard
@@ -96,42 +98,42 @@ export const ConnectivitySection = memo((props: ConnectivitySectionProps) => {
                 fullWidth
                 label={t('Адрес сервера (SIP)') || ''}
                 value={sipHost}
-                onChange={(e) => onChangeSipHost(e.target.value)}
+                onChange={(e) => { onChangeSipHost(e.target.value) }}
                 placeholder="sip.example.com"
             />
             <Textarea
                 fullWidth
                 label={t('WSS URL (WebRTC)') || ''}
                 value={wssUrl}
-                onChange={(e) => onChangeWssUrl(e.target.value)}
+                onChange={(e) => { onChangeWssUrl(e.target.value) }}
                 placeholder="wss://sip.example.com:8089/ws"
             />
             <Textarea
                 fullWidth
                 label={t('ARI URL') || ''}
                 value={ariUrl}
-                onChange={(e) => onChangeAriUrl(e.target.value)}
+                onChange={(e) => { onChangeAriUrl(e.target.value) }}
                 placeholder="https://sip.example.com:8088/ari"
             />
             <Textarea
                 fullWidth
                 label={t('ARI USER') || ''}
                 value={ariUser}
-                onChange={(e) => onChangeAriUser(e.target.value)}
+                onChange={(e) => { onChangeAriUser(e.target.value) }}
                 placeholder="asterisk"
             />
             <InputPassword
                 fullWidth
                 label={t('ARI PASSWORD') || ''}
                 value={password}
-                onChange={(e) => onChangePassword(e.target.value)}
+                onChange={(e) => { onChangePassword(e.target.value) }}
                 placeholder="••••••••"
             />
             <Textarea
                 fullWidth
                 label={t('Контекст') || ''}
                 value={context}
-                onChange={(e) => onChangeContext(e.target.value)}
+                onChange={(e) => { onChangeContext(e.target.value) }}
                 placeholder={t('default') ?? ''}
                 helperText={t('Контекст используется для возврата звонка от ассистента в вашу PBX, например при переводе')}
             />
@@ -139,7 +141,7 @@ export const ConnectivitySection = memo((props: ConnectivitySectionProps) => {
                 fullWidth
                 label={t('MOH (Music On Hold)') || ''}
                 value={moh}
-                onChange={(e) => onChangeMoh(e.target.value)}
+                onChange={(e) => { onChangeMoh(e.target.value) }}
                 placeholder="default"
                 helperText={t('Класс музыки во время ожидания. Этот класс будет запускаться как фоновая музыка во время ответов ассистента')}
             />
@@ -147,7 +149,7 @@ export const ConnectivitySection = memo((props: ConnectivitySectionProps) => {
                 fullWidth
                 label={t('Формат записи') || ''}
                 value={recordFormat}
-                onChange={(e) => onChangeRecordFormat(e.target.value)}
+                onChange={(e) => { onChangeRecordFormat(e.target.value) }}
                 placeholder="wav"
                 helperText={t('Формат, в котором будет производиться запись разговоров (например, wav, mp3, sln)')}
             />

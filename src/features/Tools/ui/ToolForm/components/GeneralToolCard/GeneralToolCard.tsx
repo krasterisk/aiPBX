@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { VStack } from '@/shared/ui/redesigned/Stack'
@@ -54,7 +54,7 @@ export const GeneralToolCard = memo((props: GeneralToolCardProps) => {
                     <Text text={t('Тип') || ''} size="s" bold className={cls.label} />
                     <ToolTypeSelect
                         value={formFields?.type}
-                        onChangeToolType={(_, v: ToolType) => onChangeType(v.value)}
+                        onChangeToolType={(_, v: ToolType) => { onChangeType(v.value) }}
                         className={cls.fullWidth}
                     />
                 </VStack>
@@ -64,7 +64,7 @@ export const GeneralToolCard = memo((props: GeneralToolCardProps) => {
                     <Text text={t('Комментарий') || ''} size="s" bold className={cls.label} />
                     <Textarea
                         placeholder={t('Добавьте комментарий...') ?? ''}
-                        onChange={(e) => onChangeField('comment', e.target.value)}
+                        onChange={(e) => { onChangeField('comment', e.target.value) }}
                         value={formFields?.comment || ''}
                         className={cls.fullWidth}
                     />

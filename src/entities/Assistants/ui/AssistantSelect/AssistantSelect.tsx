@@ -50,10 +50,10 @@ export const AssistantSelect = memo((props: AssistantSelectProps) => {
   const onChangeHandler = (event: any, newValue: AssistantOptions | AssistantOptions[] | null) => {
     if (multiple) {
       const arrayValue = Array.isArray(newValue) ? newValue : [];
-      (onChangeAssistant as MultipleAssistantSelectProps['onChangeAssistant'])?.(event, arrayValue)
+      (onChangeAssistant)?.(event, arrayValue)
     } else {
       const singleValue = Array.isArray(newValue) ? null : newValue;
-      (onChangeAssistant as SingleAssistantSelectProps['onChangeAssistant'])?.(event, singleValue)
+      (onChangeAssistant)?.(event, singleValue)
     }
   }
 
@@ -75,7 +75,8 @@ export const AssistantSelect = memo((props: AssistantSelectProps) => {
           helperText={helperText}
         />
       )}
-      renderOption={multiple ? (props, option, { selected }) => (
+      renderOption={multiple
+? (props, option, { selected }) => (
         <li {...props}>
           <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
             <Check
@@ -85,7 +86,8 @@ export const AssistantSelect = memo((props: AssistantSelectProps) => {
             {String(option.name)}
           </div>
         </li>
-      ) : undefined}
+      )
+: undefined}
       {...otherProps}
     />
   )

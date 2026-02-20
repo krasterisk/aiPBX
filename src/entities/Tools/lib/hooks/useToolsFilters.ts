@@ -13,9 +13,8 @@ import {
 import { toolsPageActions } from '../../model/slices/toolsPageSlice'
 import { useTools } from '../../api/toolsApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
-import { ClientOptions } from '../../../User/model/types/user'
 
-export function useToolsFilters() {
+export function useToolsFilters () {
   const page = useSelector(getToolsPageNum)
   const limit = useSelector(getToolsPageLimit)
   const hasMore = useSelector(getToolsHasMore)

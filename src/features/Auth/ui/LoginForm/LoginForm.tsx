@@ -108,7 +108,8 @@ export const LoginForm = memo((props: LoginFormProps) => {
             }}
           />
 
-          {isLoginActivation ? (
+          {isLoginActivation
+? (
             <VStack max gap="16">
               <Textarea
                 type="text"
@@ -145,7 +146,8 @@ export const LoginForm = memo((props: LoginFormProps) => {
                 </Button>
               </HStack>
             </VStack>
-          ) : (
+          )
+: (
             <Button
               variant="glass-action"
               fullWidth

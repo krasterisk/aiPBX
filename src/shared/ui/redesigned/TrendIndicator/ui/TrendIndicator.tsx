@@ -49,6 +49,7 @@ export const TrendIndicator = memo((props: TrendIndicatorProps) => {
             )}
         >
             {renderIcon()}
+            {/* eslint-disable-next-line i18next/no-literal-string */}
             <span className={cls.value}>
                 {value > 0 && '+'}{value.toFixed(1)}%
             </span>

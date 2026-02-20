@@ -1,20 +1,17 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, ChangeEvent, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Palette } from 'lucide-react'
 import { Check } from '@/shared/ui/mui/Check'
-import { Textarea } from '@/shared/ui/mui/Textarea'
 import { SectionCard } from '../SectionCard/SectionCard'
 import { VisualPositionGrid } from '../VisualPositionGrid/VisualPositionGrid'
 import { ColorGradientPicker } from '../ColorGradientPicker/ColorGradientPicker'
 import { useUploadWidgetLogo } from '@/entities/WidgetKeys'
-import { ChangeEvent, useCallback } from 'react'
+
 import { Button as ButtonMui, styled, CircularProgress } from '@mui/material'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { AppImage } from '@/shared/ui/redesigned/AppImage'
 import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
 import { Icon } from '@/shared/ui/redesigned/Icon'
-import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
-import { toast } from 'react-toastify'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import noImage from '@/shared/assets/icons/user-filled.svg' // Using user icon as fallback or a generic image icon
@@ -136,7 +133,7 @@ export const StyleSettingsCard = memo((props: StyleSettingsCardProps) => {
 
             <VisualPositionGrid
                 value={appearance?.buttonPosition || 'bottom-right'}
-                onChange={(val) => onChangeAppearance('buttonPosition', val)}
+                onChange={(val) => { onChangeAppearance('buttonPosition', val) }}
             />
 
             <Combobox
@@ -155,13 +152,13 @@ export const StyleSettingsCard = memo((props: StyleSettingsCardProps) => {
             <ColorGradientPicker
                 label={t('Цвет кнопки')}
                 value={appearance?.buttonColor || '#007AFF'}
-                onChange={(val) => onChangeAppearance('buttonColor', val)}
+                onChange={(val) => { onChangeAppearance('buttonColor', val) }}
             />
 
             <ColorGradientPicker
                 label={t('Основной цвет')}
                 value={appearance?.primaryColor || '#007AFF'}
-                onChange={(val) => onChangeAppearance('primaryColor', val)}
+                onChange={(val) => { onChangeAppearance('primaryColor', val) }}
             />
 
             <Combobox
@@ -180,7 +177,7 @@ export const StyleSettingsCard = memo((props: StyleSettingsCardProps) => {
             <Check
                 label={t('Показать брендинг') || ''}
                 checked={appearance?.showBranding ?? true}
-                onChange={(e) => onChangeAppearance('showBranding', e.target.checked)}
+                onChange={(e) => { onChangeAppearance('showBranding', e.target.checked) }}
             />
         </SectionCard>
     )

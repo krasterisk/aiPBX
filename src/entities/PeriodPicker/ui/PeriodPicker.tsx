@@ -100,7 +100,7 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
         <Button
           variant="clear"
           className={cls.navBtn}
-          onClick={() => handleDateChange('left')}
+          onClick={() => { handleDateChange('left') }}
         >
           <Icon Svg={Left} width={18} height={18} />
         </Button>
@@ -115,7 +115,7 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
         <Button
           variant="clear"
           className={cls.navBtn}
-          onClick={() => handleDateChange('right')}
+          onClick={() => { handleDateChange('right') }}
         >
           <Icon Svg={Right} width={18} height={18} />
         </Button>

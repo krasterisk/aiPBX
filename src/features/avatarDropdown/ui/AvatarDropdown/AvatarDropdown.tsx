@@ -7,6 +7,7 @@ import { getRouteDocs, getRouteLegal, getRouteMain, getRoutePayment, getRouteUse
 import { Avatar } from '@/shared/ui/redesigned/Avatar'
 import { Dropdown } from '@/shared/ui/redesigned/Popups'
 import { useNavigate } from 'react-router-dom'
+// eslint-disable-next-line krasterisk-plugin/layer-imports
 import { onboardingActions, ONBOARDING_STORAGE_KEY } from '@/features/Onboarding'
 
 interface AvatarDropdownProps {

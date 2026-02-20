@@ -5,8 +5,8 @@ import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Textarea } from '@/shared/ui/mui/Textarea'
-import { useCreateOrganizationMutation, useUpdateOrganizationMutation } from '@/entities/Organization'
-import { Organization } from '@/entities/Organization'
+import { useCreateOrganizationMutation, useUpdateOrganizationMutation, Organization } from '@/entities/Organization'
+
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { Building2 } from 'lucide-react'
 
@@ -87,7 +87,7 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
                 <Textarea
                     label={t('Наименование') || ''}
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => { setName(e.target.value) }}
                     disabled={isLoading}
                     minRows={1}
                 />
@@ -95,7 +95,7 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
                 <Textarea
                     label={t('ИНН') || ''}
                     value={tin}
-                    onChange={(e) => setTin(e.target.value)}
+                    onChange={(e) => { setTin(e.target.value) }}
                     disabled={isLoading}
                     minRows={1}
                 />
@@ -103,7 +103,7 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
                 <Textarea
                     label={t('Адрес') || ''}
                     value={address}
-                    onChange={(e) => setAddress(e.target.value)}
+                    onChange={(e) => { setAddress(e.target.value) }}
                     disabled={isLoading}
                 />
 

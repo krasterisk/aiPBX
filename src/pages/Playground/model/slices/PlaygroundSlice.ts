@@ -1,9 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PlaygroundSchema } from '../types/PlaygroundSchema';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { PlaygroundSchema } from '../types/PlaygroundSchema'
 
 const initialState: PlaygroundSchema = {
     
-};
+}
 
 export const PlaygroundSlice = createSlice({
     name: 'Playground',
@@ -27,7 +27,7 @@ export const PlaygroundSlice = createSlice({
     //             state.error = action.payload;
     //         });
     // },
-});
+})
 
-export const { actions: PlaygroundActions } = PlaygroundSlice;
-export const { reducer: PlaygroundReducer } = PlaygroundSlice;
+export const { actions: PlaygroundActions } = PlaygroundSlice
+export const { reducer: PlaygroundReducer } = PlaygroundSlice

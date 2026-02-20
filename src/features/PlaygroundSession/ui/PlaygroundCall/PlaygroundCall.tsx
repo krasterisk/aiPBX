@@ -16,8 +16,6 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
     const { t } = useTranslation('playground')
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
-
-
     // Process Events to determine current text
     // Optimization: Use incremental processing to avoid O(N) iteration on every render
     const cacheRef = useRef<{
@@ -33,7 +31,6 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
     // Text Sync State
     const [revealedLength, setRevealedLength] = useState(0)
     const revealedLengthRef = useRef(0)
-
 
     const { currentText, currentRole, currentItemId } = useMemo(() => {
         const cache = cacheRef.current
@@ -154,14 +151,13 @@ export const PlaygroundCall = memo((props: PlaygroundCallProps) => {
 
         // Default - empty
         return { currentText: '', currentRole: 'system', currentItemId: null }
-
     }, [events])
 
     // Refs for synchronization in animation loop
     const syncStateRef = useRef({
         text: currentText,
         role: currentRole as string,
-        itemId: currentItemId as string | null
+        itemId: currentItemId 
     })
 
     useEffect(() => {

@@ -30,7 +30,7 @@ export const toolsApi = rtkApi.injectEndpoints({
         }
       },
       // Refetch when the page arg changes
-      forceRefetch({ currentArg, previousArg }) {
+      forceRefetch ({ currentArg, previousArg }) {
         return JSON.stringify(currentArg) !== JSON.stringify(previousArg)
       },
       providesTags: (result) =>
@@ -83,7 +83,7 @@ export const toolsApi = rtkApi.injectEndpoints({
         method: 'PATCH',
         body: { id, ...patch }
       }),
-      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted ({ id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           toolsApi.util.updateQueryData('getTool', id!, (draft) => {
             Object.assign(draft, patch)
@@ -94,7 +94,7 @@ export const toolsApi = rtkApi.injectEndpoints({
       invalidatesTags: (result, error, { id }) => [{ type: 'Tools', id }]
     }),
     deleteTool: build.mutation<{ success: boolean, id: string }, string>({
-      query(id) {
+      query (id) {
         return {
           url: `tools/${id}`,
           method: 'DELETE'

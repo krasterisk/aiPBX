@@ -14,7 +14,7 @@ import { pbxServersPageActions } from '../../model/slices/pbxServersPageSlice'
 import { usePbxServers } from '../../api/pbxServersApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
 
-export function usePbxServersFilters() {
+export function usePbxServersFilters () {
   const page = useSelector(getPbxServersPageNum)
   const limit = useSelector(getPbxServersPageLimit)
   const hasMore = useSelector(getPbxServersHasMore)

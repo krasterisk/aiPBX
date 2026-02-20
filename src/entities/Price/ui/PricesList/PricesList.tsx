@@ -39,31 +39,31 @@ export const PricesList = memo((props: PricesListProps) => {
         }),
 
         columnHelper.accessor('user.name', {
-            header: (t('Customer') ?? '') as string,
+            header: (t('Customer') ?? ''),
             cell: info => info.getValue() || info.row.original.user?.username || '-'
         }),
         columnHelper.accessor('realtime', {
-            header: (t('Realtime') ?? '') as string,
+            header: (t('Realtime') ?? ''),
             cell: info => info.getValue()
         }),
         columnHelper.accessor('analytic', {
-            header: (t('Analytic') ?? '') as string,
+            header: (t('Analytic') ?? ''),
             cell: info => info.getValue()
         }),
         columnHelper.display({
             id: 'actions',
-            header: (t('Actions') ?? '') as string,
+            header: (t('Actions') ?? ''),
             cell: (info) => (
                 <HStack gap="8">
                     <Button
-                        onClick={() => onEdit(info.row.original)}
+                        onClick={() => { onEdit(info.row.original) }}
                         variant="clear"
                         size="m"
                     >
                         <Edit size={20} />
                     </Button>
                     <Button
-                        onClick={() => onDelete(info.row.original.id)}
+                        onClick={() => { onDelete(info.row.original.id) }}
                         variant="clear"
                         color="error"
                         size="m"
@@ -93,4 +93,3 @@ export const PricesList = memo((props: PricesListProps) => {
         </div>
     )
 })
-

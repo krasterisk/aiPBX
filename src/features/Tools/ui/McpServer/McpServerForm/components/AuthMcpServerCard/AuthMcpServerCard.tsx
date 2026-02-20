@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
@@ -85,7 +85,7 @@ export const AuthMcpServerCard = memo((props: AuthMcpServerCardProps) => {
                         <InputPassword
                             placeholder={t('Введите Bearer токен') || ''}
                             value={bearerToken}
-                            onChange={(e) => onChangeBearerToken(e.target.value)}
+                            onChange={(e) => { onChangeBearerToken(e.target.value) }}
                             size="small"
                             className={cls.fullWidth}
                         />
@@ -99,7 +99,7 @@ export const AuthMcpServerCard = memo((props: AuthMcpServerCardProps) => {
                         <InputPassword
                             placeholder={t('Введите API ключ') || ''}
                             value={apiKey}
-                            onChange={(e) => onChangeApiKey(e.target.value)}
+                            onChange={(e) => { onChangeApiKey(e.target.value) }}
                             size="small"
                             className={cls.fullWidth}
                         />
@@ -122,14 +122,14 @@ export const AuthMcpServerCard = memo((props: AuthMcpServerCardProps) => {
                                     <Textarea
                                         placeholder="Header"
                                         value={entry.key}
-                                        onChange={(e) => onHeaderChange(index, 'key', e.target.value)}
+                                        onChange={(e) => { onHeaderChange(index, 'key', e.target.value) }}
                                         className={cls.fullWidth}
                                         size="small"
                                     />
                                     <Textarea
                                         placeholder="Value"
                                         value={entry.value}
-                                        onChange={(e) => onHeaderChange(index, 'value', e.target.value)}
+                                        onChange={(e) => { onHeaderChange(index, 'value', e.target.value) }}
                                         className={cls.fullWidth}
                                         size="small"
                                     />
@@ -139,7 +139,7 @@ export const AuthMcpServerCard = memo((props: AuthMcpServerCardProps) => {
                                     square
                                     size="s"
                                     className={cls.removeBtn}
-                                    onClick={() => onRemoveHeader(index)}
+                                    onClick={() => { onRemoveHeader(index) }}
                                     title={t('Удалить') || 'Remove'}
                                     addonLeft={<Trash2 size={16} />}
                                 />

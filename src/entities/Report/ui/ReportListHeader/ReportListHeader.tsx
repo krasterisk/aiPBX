@@ -6,6 +6,7 @@ import { useMediaQuery } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useReportFilters } from '../../lib/useReportFilters'
 import { PeriodPicker } from '../../../PeriodPicker'
+// eslint-disable-next-line krasterisk-plugin/layer-imports
 import { PeriodExtendedFilters } from '@/features/PeriodExtendedFilter'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { SearchInput } from '@/shared/ui/mui/SearchInput/SearchInput'
@@ -66,7 +67,7 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
               endDate={endDate}
               onChangeStartDate={onChangeStartDate}
               onChangeEndDate={onChangeEndDate}
-              onOpenFilters={() => setFilterShow(true)}
+              onOpenFilters={() => { setFilterShow(true) }}
             />
           </HStack>
 
@@ -91,7 +92,7 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
         onChangeEndDate={onChangeEndDate}
         onChangeSource={onChangeSource}
         show={filterShow}
-        onClose={() => setFilterShow(false)}
+        onClose={() => { setFilterShow(false) }}
       />
     </VStack>
   )

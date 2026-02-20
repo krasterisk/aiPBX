@@ -18,17 +18,12 @@ import {
   UserX,
   MessageSquareOff,
   Phone,
-  Settings,
-  Link as LinkIcon,
-  Rocket,
   Headphones,
   LineChart,
   Calendar,
   ShieldCheck,
   Eye,
-  ArrowRight,
-  Sparkles,
-  UserPlus
+  ArrowRight
 } from 'lucide-react'
 import { LangSwitcher } from '@/entities/LangSwitcher'
 import { useNavigate } from 'react-router-dom'

@@ -70,12 +70,14 @@ export const OrganizationList = memo((props: OrganizationListProps) => {
 
     return (
         <VStack gap="16" max className={classNames('', {}, [className])}>
-            {organizations.length ? (
+            {organizations.length
+? (
                 <Table
                     data={organizations}
                     columns={columns}
                 />
-            ) : (
+            )
+: (
                 <Text text={t('Список организаций пуст') || ''} />
             )}
         </VStack>

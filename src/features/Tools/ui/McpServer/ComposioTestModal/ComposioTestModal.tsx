@@ -1,6 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'react-toastify'
 import { Modal, Box } from '@mui/material'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
@@ -27,7 +26,7 @@ interface SchemaProperty {
     default?: any
 }
 
-function parseSchema(inputSchema: Record<string, any> | null): SchemaProperty[] {
+function parseSchema (inputSchema: Record<string, any> | null): SchemaProperty[] {
     if (!inputSchema) return []
     const properties = inputSchema.properties || {}
     const required = inputSchema.required || []
@@ -141,14 +140,14 @@ export const ComposioTestModal = memo((props: ComposioTestModalProps) => {
                             <button
                                 type="button"
                                 className={classNames(cls.modeBtn, { [cls.active]: !useRawMode })}
-                                onClick={() => setUseRawMode(false)}
+                                onClick={() => { setUseRawMode(false) }}
                             >
                                 {t('composio_test_form')}
                             </button>
                             <button
                                 type="button"
                                 className={classNames(cls.modeBtn, { [cls.active]: useRawMode })}
-                                onClick={() => setUseRawMode(true)}
+                                onClick={() => { setUseRawMode(true) }}
                             >
                                 JSON
                             </button>
@@ -157,18 +156,20 @@ export const ComposioTestModal = memo((props: ComposioTestModalProps) => {
 
                     {/* Form Fields */}
                     <div className={cls.scrollArea}>
-                        {useRawMode ? (
+                        {useRawMode
+? (
                             <VStack gap="8" max>
                                 <Text text={t('composio_test_json_hint')} size="xs" className={cls.hint} />
                                 <textarea
                                     className={cls.jsonTextarea}
                                     value={rawJson}
-                                    onChange={(e) => setRawJson(e.target.value)}
+                                    onChange={(e) => { setRawJson(e.target.value) }}
                                     rows={10}
                                     spellCheck={false}
                                 />
                             </VStack>
-                        ) : (
+                        )
+: (
                             <VStack gap="12" max>
                                 {schemaFields.map((field) => (
                                     <VStack key={field.key} gap="4" max>
@@ -189,32 +190,36 @@ export const ComposioTestModal = memo((props: ComposioTestModalProps) => {
                                         {field.description && (
                                             <Text text={field.description} size="xs" className={cls.fieldDesc} />
                                         )}
-                                        {field.enum ? (
+                                        {field.enum
+? (
                                             <select
                                                 className={cls.selectField}
                                                 value={formValues[field.key] ?? ''}
-                                                onChange={(e) => onFieldChange(field.key, e.target.value)}
+                                                onChange={(e) => { onFieldChange(field.key, e.target.value) }}
                                             >
                                                 <option value="">—</option>
                                                 {field.enum.map(v => (
                                                     <option key={v} value={v}>{v}</option>
                                                 ))}
                                             </select>
-                                        ) : field.type === 'boolean' ? (
+                                        )
+: field.type === 'boolean'
+? (
                                             <select
                                                 className={cls.selectField}
                                                 value={formValues[field.key] ?? ''}
-                                                onChange={(e) => onFieldChange(field.key, e.target.value)}
+                                                onChange={(e) => { onFieldChange(field.key, e.target.value) }}
                                             >
                                                 <option value="">—</option>
                                                 <option value="true">true</option>
                                                 <option value="false">false</option>
                                             </select>
-                                        ) : (
+                                        )
+: (
                                             <Textarea
                                                 placeholder={field.description || field.key}
                                                 value={formValues[field.key] ?? ''}
-                                                onChange={(e) => onFieldChange(field.key, e.target.value)}
+                                                onChange={(e) => { onFieldChange(field.key, e.target.value) }}
                                                 className={cls.inputField}
                                                 size="small"
                                                 type={field.type === 'number' || field.type === 'integer' ? 'number' : 'text'}

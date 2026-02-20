@@ -2,7 +2,7 @@ export type {
     Price,
     CreatePriceDto,
     UpdatePriceDto
-} from './model/types/price';
+} from './model/types/price'
 
 export {
     usePrices,
@@ -10,7 +10,7 @@ export {
     useCreatePrice,
     useUpdatePrice,
     useDeletePrice
-} from './api/priceApi';
+} from './api/priceApi'
 
-export { PricesList } from './ui/PricesList/PricesList';
-export { PricesListHeader } from './ui/PricesListHeader/PricesListHeader';
+export { PricesList } from './ui/PricesList/PricesList'
+export { PricesListHeader } from './ui/PricesListHeader/PricesListHeader'

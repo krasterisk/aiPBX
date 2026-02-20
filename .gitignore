@@ -9,4 +9,5 @@ node_modules
 .npmrc
 .aider*
 *.env
+.env.*
 /.docs

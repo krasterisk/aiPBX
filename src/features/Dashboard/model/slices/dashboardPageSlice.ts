@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { DashboardPageSchema } from '../types/dashboardPageSchema'
 import { AssistantOptions } from '@/entities/Assistants'
 import { ClientOptions } from '@/entities/User'
-import { CdrSource } from '@/entities/Report/model/types/report'
+import { CdrSource } from '@/entities/Report'
 
 const initialState: DashboardPageSchema = {
     tab: 'week',

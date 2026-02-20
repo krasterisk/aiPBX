@@ -74,8 +74,6 @@ export const PaymentList = memo((props: PaymentListProps) => {
         }
     ], [t])
 
-
-
     if (isLoading) {
         return <Loader />
     }
@@ -93,12 +91,14 @@ export const PaymentList = memo((props: PaymentListProps) => {
                 </Button>
             </HStack>
 
-            {payments.length ? (
+            {payments.length
+? (
                 <Table
                     data={payments}
                     columns={columns}
                 />
-            ) : (
+            )
+: (
                 <Text text={t('История платежей пуста') || ''} />
             )}
         </VStack>

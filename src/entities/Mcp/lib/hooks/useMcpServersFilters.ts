@@ -14,7 +14,7 @@ import { mcpServersPageActions } from '../../model/slices/mcpServersPageSlice'
 import { useMcpServers } from '../../api/mcpApi'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
 
-export function useMcpServersFilters() {
+export function useMcpServersFilters () {
     const page = useSelector(getMcpServersPageNum)
     const limit = useSelector(getMcpServersPageLimit)
     const hasMore = useSelector(getMcpServersHasMore)

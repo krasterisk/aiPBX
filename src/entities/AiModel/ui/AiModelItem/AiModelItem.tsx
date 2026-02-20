@@ -3,7 +3,7 @@ import { AiModel } from '../../model/types/aiModel'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import cls from './AiModelItem.module.scss'
 import { useTranslation } from 'react-i18next'
 import { classNames } from '@/shared/lib/classNames/classNames'
@@ -40,10 +40,10 @@ export const AiModelItem = memo((props: AiModelItemProps) => {
                 </div>
 
                 <div className={cls.actions}>
-                    <Button onClick={() => onEdit(model)} variant="outline" size="m">
+                    <Button onClick={() => { onEdit(model) }} variant="outline" size="m">
                         {t('Edit')}
                     </Button>
-                    <Button onClick={() => onDelete(model.id)} variant="outline" color="error" size="m">
+                    <Button onClick={() => { onDelete(model.id) }} variant="outline" color="error" size="m">
                         {t('Delete')}
                     </Button>
                 </div>

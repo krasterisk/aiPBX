@@ -94,6 +94,7 @@
   "Сервер подключён": "Server connected",
   "Сервер отключён": "Server disconnected",
   "Синхронизировать": "Sync Tools",
+  "Синхронизировано": "Synced",
   "Синхронизировано tools: {{count}}": "Synced tools: {{count}}",
   "Загрузка tools...": "Loading tools...",
   "Нет синхронизированных tools": "No synced tools",

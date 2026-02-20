@@ -6,12 +6,10 @@ import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { Assistant } from '@/entities/Assistants/model/types/assistants'
-import { getAssistantFormData } from '@/entities/Assistants/model/selectors/assistantFormSelectors'
-import { useGeneratePrompt } from '@/entities/Assistants/api/assistantsApi'
+import { Assistant, getAssistantFormData, useGeneratePrompt } from '@/entities/Assistants'
+
 import { Popover } from '@mui/material'
 import { toast } from 'react-toastify'
-import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import cls from './PromptSection.module.scss'
 
@@ -142,7 +140,7 @@ export const PromptSection = memo((props: PromptSectionProps) => {
                     <Textarea
                         label={t('Задача ассистента') || ''}
                         value={userPrompt}
-                        onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setUserPrompt(e.target.value)}
+                        onChange={(e: ChangeEvent<HTMLTextAreaElement>) => { setUserPrompt(e.target.value) }}
                         placeholder={t('Например: помощник для записи на приём к врачу') || ''}
                         minRows={3}
                         multiline

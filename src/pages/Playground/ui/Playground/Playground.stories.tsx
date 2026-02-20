@@ -1,7 +1,7 @@
-import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import React from 'react'
+import { ComponentStory, ComponentMeta } from '@storybook/react'
 
-import Playground from './Playground';
+import Playground from './Playground'
 
 export default {
     title: 'pages/Playground',
@@ -9,11 +9,11 @@ export default {
     argTypes: {
         backgroundColor: { control: 'color' },
     },
-} as ComponentMeta<typeof Playground>;
+} as ComponentMeta<typeof Playground>
 
-const Template: ComponentStory<typeof Playground> = (args) => <Playground {...args} />;
+const Template: ComponentStory<typeof Playground> = (args) => <Playground {...args} />
 
-export const Normal = Template.bind({});
+export const Normal = Template.bind({})
 Normal.args = {
 
-};
+}

@@ -22,7 +22,6 @@ import {
 import { publishWidgetsFormActions } from '../../model/slices/publishWidgetsFormSlice'
 import { isUserAdmin, getUserAuthData } from '@/entities/User'
 import { toast } from 'react-toastify'
-import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { useNavigate } from 'react-router-dom'
 import { getRoutePublishWidgets } from '@/shared/const/router'
 import {
@@ -230,7 +229,7 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
                 isEdit={isEdit}
                 isLoading={isLoading}
                 widgetName={name}
-                onClose={() => navigate(getRoutePublishWidgets())}
+                onClose={() => { navigate(getRoutePublishWidgets()) }}
                 onDelete={onDelete}
             />
 
@@ -284,7 +283,7 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
                 isLoading={isLoading}
                 variant={'diviner-bottom'}
                 widgetName={name}
-                onClose={() => navigate(getRoutePublishWidgets())}
+                onClose={() => { navigate(getRoutePublishWidgets()) }}
                 onDelete={onDelete}
             />
         </VStack>

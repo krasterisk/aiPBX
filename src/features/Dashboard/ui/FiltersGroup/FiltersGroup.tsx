@@ -3,14 +3,13 @@ import React, { memo, useState } from 'react'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
 
-import { ReportFilters } from '@/entities/Report'
+import { ReportFilters, CdrSource } from '@/entities/Report'
 import { AssistantOptions } from '@/entities/Assistants'
 import { PeriodPicker } from '@/entities/PeriodPicker'
+// eslint-disable-next-line krasterisk-plugin/layer-imports
 import { PeriodExtendedFilters } from '@/features/PeriodExtendedFilter'
 import { useSelector } from 'react-redux'
-import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
-import { currencySymbols } from "@/entities/User/model/consts/consts"
-import { CdrSource } from '@/entities/Report/model/types/report'
+import { getUserAuthData, UserCurrencyValues, currencySymbols } from '@/entities/User'
 
 interface FiltersGroupProps {
   className?: string
@@ -80,7 +79,7 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
             onChangeEndDate={onChangeEndDate}
             onChangeSource={onChangeSource}
             show={filterShow}
-            onClose={() => setFilterShow(false)}
+            onClose={() => { setFilterShow(false) }}
           />
           <PeriodPicker
             userId={userId}
@@ -92,7 +91,7 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
 
             onChangeEndDate={onChangeEndDate}
             onChangeStartDate={onChangeStartDate}
-            onOpenFilters={() => setFilterShow(true)}
+            onOpenFilters={() => { setFilterShow(true) }}
           />
         </VStack>
       </Card>

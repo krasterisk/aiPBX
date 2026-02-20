@@ -22,7 +22,7 @@ interface CustomTabPanelProps {
   index: number
 }
 
-function CustomTabPanel({ children, value, index, ...other }: CustomTabPanelProps) {
+function CustomTabPanel ({ children, value, index, ...other }: CustomTabPanelProps) {
   return (
     <div
       role="tabpanel"
@@ -54,7 +54,7 @@ export const TabsPanel = memo((props: TabsPanelProps) => {
     [cls.TabsMobile]: isMobile
   }
 
-  function a11yProps(index: number) {
+  function a11yProps (index: number) {
     return {
       id: `simple-tab-${index}`,
       'aria-controls': `simple-tabpanel-${index}`
