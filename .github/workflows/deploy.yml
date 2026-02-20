@@ -105,6 +105,9 @@ jobs:
             git config --global --add safe.directory /app/aiPBX
             git config --global --add safe.directory /app/aiPBX_backend
 
+            # ── Fix ownership so current user can pull ──
+            sudo chown -R $(whoami) /app/aiPBX /app/aiPBX_backend
+
             # ── Pull latest code ──
             echo "Pulling frontend..."
             cd /app/aiPBX && git pull origin master
