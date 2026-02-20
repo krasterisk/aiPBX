@@ -101,44 +101,33 @@ jobs:
 
             cd /app
 
-            # ── Mark repos as safe (Git 2.35.2+ ownership check) ──
+            # ── Mark repo as safe (Git 2.35.2+ ownership check) ──
             git config --global --add safe.directory /app/aiPBX
-            git config --global --add safe.directory /app/aiPBX_backend
 
-            # ── Fix ownership so current user can pull ──
-            sudo chown -R $(whoami) /app/aiPBX /app/aiPBX_backend
+            # ── Fix ownership so current user can pull and deploy ──
+            sudo chown -R $(whoami) /app/aiPBX
+            sudo chown $(whoami) /app/.env.production /app/docker-compose.production.yml
 
             # ── Pull latest code ──
             echo "Pulling frontend..."
             cd /app/aiPBX && git pull origin master
 
-            echo "Pulling backend..."
-            cd /app/aiPBX_backend && git pull origin master
-
             cd /app
 
             # ── Build & deploy ──
-            echo "Building and deploying..."
+            echo "Building and deploying frontend..."
             docker compose -f docker-compose.production.yml --env-file .env.production up -d \
               --build \
-              --force-recreate frontend backend \
+              --force-recreate frontend \
               --remove-orphans
 
-            # ── Wait for health checks ──
+            # ── Wait for startup ──
             echo "Waiting for services to start..."
-            sleep 15
+            sleep 10
 
             # ── Verify deployment ──
-            echo "Checking health..."
-            if docker compose -f docker-compose.production.yml --env-file .env.production exec -T backend \
-              node -e "require('http').get('http://localhost:5005/api', (r) => { process.exit(r.statusCode < 500 ? 0 : 1) }).on('error', () => process.exit(1))" 2>/dev/null; then
-              echo "Health check passed!"
-            else
-              echo "Health check failed, checking containers..."
-              docker compose -f docker-compose.production.yml --env-file .env.production ps
-              docker compose -f docker-compose.production.yml --env-file .env.production logs --tail=50 backend
-              exit 1
-            fi
+            echo "Checking containers..."
+            docker compose -f docker-compose.production.yml --env-file .env.production ps frontend
 
             # ── Cleanup ──
             docker image prune -f
