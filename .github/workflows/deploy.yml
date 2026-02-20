@@ -116,7 +116,7 @@ jobs:
 
             # ── Build & deploy ──
             echo "Building and deploying frontend..."
-            docker compose -f docker-compose.production.yml --env-file .env.production up -d \
+            sudo docker compose -f docker-compose.production.yml --env-file .env.production up -d \
               --build \
               --force-recreate frontend \
               --remove-orphans
@@ -127,8 +127,8 @@ jobs:
 
             # ── Verify deployment ──
             echo "Checking containers..."
-            docker compose -f docker-compose.production.yml --env-file .env.production ps frontend
+            sudo docker compose -f docker-compose.production.yml --env-file .env.production ps frontend
 
             # ── Cleanup ──
-            docker image prune -f
+            sudo docker image prune -f
             echo "Deployment to ${{ matrix.server }} successful!"
