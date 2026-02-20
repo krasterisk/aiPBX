@@ -1,5 +1,5 @@
 import cls from './UsersList.module.scss'
-import React, { useCallback, useState } from 'react'
+import React, { Suspense, useCallback, useState } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { ErrorGetData } from '../../../ErrorGetData'
 import { ContentListItemSkeleton } from '../../../Content'
@@ -13,8 +13,9 @@ import { getRouteUserEdit } from '@/shared/const/router'
 import { Loader } from '@/shared/ui/Loader'
 import { Icon } from '@/shared/ui/redesigned/Icon'
 import SearchIcon from '@/shared/assets/icons/search.svg'
+
 // eslint-disable-next-line krasterisk-plugin/layer-imports
-import { AdminTopUpModal } from '@/features/AdminTopUp'
+const AdminTopUpModal = React.lazy(async () => await import('@/features/AdminTopUp/ui/AdminTopUpModal/AdminTopUpModal').then(m => ({ default: m.AdminTopUpModal })))
 
 export const UsersList = (props: UsersListProps) => {
   const {
@@ -88,12 +89,14 @@ export const UsersList = (props: UsersListProps) => {
       }
       {isLoading && getSkeletons()}
 
-      <AdminTopUpModal
-        isOpen={!!topUpUser}
-        onClose={handleCloseTopUp}
-        userId={topUpUser?.id || ''}
-        userName={topUpUser?.name || ''}
-      />
+      <Suspense fallback={null}>
+        <AdminTopUpModal
+          isOpen={!!topUpUser}
+          onClose={handleCloseTopUp}
+          userId={topUpUser?.id || ''}
+          userName={topUpUser?.name || ''}
+        />
+      </Suspense>
     </VStack>
   )
 }

@@ -65,7 +65,6 @@ sudo ufw default allow outgoing
 sudo ufw allow ssh
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
-sudo ufw allow 3032/udp   # Asterisk UDP — идёт напрямую, минуя Cloudflare
 sudo ufw enable
 ```
 
@@ -328,11 +327,11 @@ server {
 server {
     listen 80;
     server_name aipbx.net www.aipbx.net;
-
-    # Let's Encrypt challenge (только для production-3 / aipbx.ru)
-    # location /.well-known/acme-challenge/ {
-    #     root /var/www/certbot;
-    # }
+    
+    # Let's Encrypt challenge
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
 
     location / {
         return 301 https://$host$request_uri;
@@ -344,14 +343,9 @@ server {
     listen 443 ssl http2;
     server_name aipbx.net www.aipbx.net;
 
-    # === SSL: Cloudflare Origin Certificate (production-1, production-2) ===
-    ssl_certificate     /etc/ssl/origin.pem;
-    ssl_certificate_key /etc/ssl/origin-key.pem;
-
-    # === SSL: Let's Encrypt (production-3 / aipbx.ru) ===
-    # Раскомментировать на сервере aipbx.ru, закомментировать Cloudflare выше
-    # ssl_certificate     /etc/letsencrypt/live/aipbx.ru/fullchain.pem;
-    # ssl_certificate_key /etc/letsencrypt/live/aipbx.ru/privkey.pem;
+    # SSL сертификаты (Let's Encrypt / Certbot)
+    ssl_certificate     /etc/letsencrypt/live/aipbx.net/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/aipbx.net/privkey.pem;
 
     # SSL оптимизация
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -368,7 +362,7 @@ server {
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' wss: https://api.stripe.com;" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' wss://aipbx.krasterisk.ru https://api.stripe.com;" always;
 
     # ─── Frontend (SPA) ───
     location / {
@@ -379,19 +373,8 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    # ─── Auth Rate Limiting (строже) ───
-    location /api/auth/login {
-        limit_req zone=login burst=5;
-        proxy_pass http://backend:5005;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
     # ─── Backend API ───
     location /api/ {
-        limit_req zone=api burst=20 nodelay;
         proxy_pass http://backend:5005;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -531,13 +514,8 @@ services:
       - "443:443"
     volumes:
       - ./nginx/reverse-proxy.conf:/etc/nginx/conf.d/default.conf:ro
-      # === Cloudflare Origin Certificate (production-1, production-2) ===
-      - ./ssl/origin.pem:/etc/ssl/origin.pem:ro
-      - ./ssl/origin-key.pem:/etc/ssl/origin-key.pem:ro
-      # === Let's Encrypt (production-3 / aipbx.ru) ===
-      # Раскомментировать на сервере aipbx.ru, закомментировать Cloudflare выше
-      # - ./certbot/conf:/etc/letsencrypt:ro
-      # - ./certbot/www:/var/www/certbot:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot:ro
     networks:
       - app-internal
     healthcheck:
@@ -586,10 +564,10 @@ networks:
 set -euo pipefail
 
 # Загрузить переменные
-source /app/.env.production
+source /app/aipbx/.env.production
 
 # Конфигурация
-BACKUP_DIR="/app/backups/${DB_DIALECT}"
+BACKUP_DIR="/app/aipbx/backups/${DB_DIALECT}"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_FILE="${BACKUP_DIR}/aipbx_${TIMESTAMP}.sql.gz"
 RETENTION_DAYS=30
@@ -598,11 +576,11 @@ mkdir -p ${BACKUP_DIR}
 
 # Дамп базы в зависимости от диалекта
 if [ "${DB_DIALECT}" = "postgres" ]; then
-  docker compose -f /app/docker-compose.production.yml exec -T postgres \
+  docker compose -f /app/aipbx/docker-compose.production.yml exec -T postgres \
     pg_dump -U ${DB_USER} -d ${DB_NAME} --format=custom \
     | gzip > ${BACKUP_FILE}
 elif [ "${DB_DIALECT}" = "mysql" ]; then
-  docker compose -f /app/docker-compose.production.yml exec -T mysql \
+  docker compose -f /app/aipbx/docker-compose.production.yml exec -T mysql \
     mysqldump -u${DB_USER} -p${DB_PASS} ${DB_NAME} \
     --single-transaction --routines --triggers \
     | gzip > ${BACKUP_FILE}
@@ -625,7 +603,7 @@ echo "[$(date)] Old backups cleaned (retention: ${RETENTION_DAYS} days)"
 ```bash
 # Добавить в crontab (crontab -e)
 # Бэкап каждый день в 3:00 AM UTC
-0 3 * * * /app/scripts/backup-db.sh >> /var/log/db-backup.log 2>&1
+0 3 * * * /app/aipbx/scripts/backup-db.sh >> /var/log/db-backup.log 2>&1
 ```
 
 ### 5.3 Восстановление из бэкапа
@@ -788,7 +766,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /app
+            cd /app/aipbx
 
             # Pull latest images
             docker compose -f docker-compose.production.yml pull
@@ -908,65 +886,9 @@ jobs:
 
 ---
 
-## Фаза 8 — SSL сертификаты
+## Фаза 8 — SSL сертификаты (Let's Encrypt)
 
-| Сервер | Домен | SSL |
-|--------|-------|-----|
-| `production-1` | `aipbx.net` | Cloudflare Origin Certificate |
-| `production-2` | `aipbx.org` | Cloudflare Origin Certificate |
-| `production-3` | `aipbx.ru` | Let's Encrypt (Certbot) |
-
-### 8.1 Вариант A: Cloudflare Origin Certificate (для production-1, production-2)
-
-> Сертификат выдаётся на **15 лет**, не требует автообновления.
-
-**Шаги:**
-
-1. **Cloudflare Dashboard** → SSL/TLS → Origin Server → Create Certificate
-2. Выбрать домен, срок (15 лет), нажать Create
-3. Скопировать **Origin Certificate** и **Private Key**
-4. На сервере:
-
-```bash
-# Создать папку для сертификатов
-mkdir -p /app/ssl
-
-# Вставить сертификат
-nano /app/ssl/origin.pem       # ← Origin Certificate
-
-# Вставить ключ
-nano /app/ssl/origin-key.pem   # ← Private Key
-
-# Установить права
-chmod 600 /app/ssl/origin-key.pem
-chmod 644 /app/ssl/origin.pem
-```
-
-5. В `reverse-proxy.conf`:
-```nginx
-ssl_certificate     /etc/ssl/origin.pem;
-ssl_certificate_key /etc/ssl/origin-key.pem;
-```
-
-6. В `docker-compose.production.yml` для nginx:
-```yaml
-nginx:
-  volumes:
-    - ./nginx/reverse-proxy.conf:/etc/nginx/conf.d/default.conf:ro
-    # === Cloudflare Origin Certificate (production-1, production-2) ===
-    - ./ssl/origin.pem:/etc/ssl/origin.pem:ro
-    - ./ssl/origin-key.pem:/etc/ssl/origin-key.pem:ro
-    # === Let's Encrypt (production-3 / aipbx.ru) ===
-    # Раскомментировать, закомментировать Cloudflare выше
-    # - ./certbot/conf:/etc/letsencrypt:ro
-    # - ./certbot/www:/var/www/certbot:ro
-```
-
-7. **Cloudflare** → SSL/TLS → Overview → установить режим **Full (Strict)**
-
-> ⚠️ Контейнер `certbot` на этих серверах **не нужен** — можно убрать из docker-compose.
-
-### 8.2 Вариант B: Let's Encrypt / Certbot (для production-3)
+### 8.1 Первоначальное получение сертификата
 
 ```bash
 # 1. Сначала запустить nginx без SSL
@@ -976,24 +898,17 @@ docker compose -f docker-compose.production.yml up -d nginx
 docker compose -f docker-compose.production.yml run --rm certbot \
   certbot certonly --webroot \
   --webroot-path=/var/www/certbot \
-  --email admin@aipbx.ru \
+  --email admin@aipbx.net \
   --agree-tos \
   --no-eff-email \
-  -d aipbx.ru \
-  -d www.aipbx.ru
+  -d aipbx.net \
+  -d www.aipbx.net
 
 # 3. Перезапустить nginx с SSL конфигом
 docker compose -f docker-compose.production.yml restart nginx
 ```
 
-В `reverse-proxy.conf` для этого сервера:
-```nginx
-ssl_certificate     /etc/letsencrypt/live/aipbx.ru/fullchain.pem;
-ssl_certificate_key /etc/letsencrypt/live/aipbx.ru/privkey.pem;
-```
-
-### 8.3 Автоматическое обновление (только Let's Encrypt)
-
+### 8.2 Автоматическое обновление
 Certbot контейнер уже настроен на автообновление каждые 12 часов (см. Фазу 4).
 
 ---
@@ -1016,36 +931,20 @@ Certbot контейнер уже настроен на автообновлен
 
 ### 9.2 Rate Limiting в Nginx
 
-`limit_req_zone` должен быть в блоке `http {}`, поэтому выносим в **отдельный файл**.
-
-**1. Создать `nginx/rate-limit.conf` на сервере:**
-
 ```nginx
+# Добавить в начало nginx конфига (http блок)
 limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
 limit_req_zone $binary_remote_addr zone=login:10m rate=3r/m;
-```
 
-**2. Добавить volume в `docker-compose.production.yml` для nginx:**
-
-```yaml
-nginx:
-  volumes:
-    - ./nginx/rate-limit.conf:/etc/nginx/conf.d/rate-limit.conf:ro  # загрузится до default.conf
-    - ./nginx/reverse-proxy.conf:/etc/nginx/conf.d/default.conf:ro
-    # ... остальные volumes (ssl, certbot)
-```
-
-**3. В `reverse-proxy.conf` использовать зоны в `location`:**
-
-```nginx
+# В location /api/:
 location /api/ {
     limit_req zone=api burst=20 nodelay;
-    # ... остальные настройки proxy_pass
+    # ...
 }
 
+# В location /api/auth/:
 location /api/auth/login {
     limit_req zone=login burst=5;
-    proxy_pass http://backend:5005;
     # ...
 }
 ```
@@ -1058,9 +957,8 @@ location /api/auth/login {
 
 ```bash
 # 1. Клонировать репозиторий
-cd /app
-git clone git@github.com:krasterisk/aiPBX.git
-git clone git@github.com:krasterisk/aiPBX_backend.git
+git clone git@github.com:krasterisk/aiPBX.git /app/aipbx
+cd /app/aipbx
 
 # 2. Создать .env.production
 cp .env.example .env.production
@@ -1083,7 +981,7 @@ docker compose -f docker-compose.production.yml logs -f
 ### 10.2 Обновление (routine deploy)
 
 ```bash
-cd /app
+cd /app/aipbx
 git pull origin main
 docker compose -f docker-compose.production.yml --env-file .env.production up -d --build --force-recreate frontend backend
 docker image prune -f

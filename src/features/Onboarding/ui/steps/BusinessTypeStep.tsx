@@ -141,7 +141,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
         try {
             const locale = i18n.language || 'en'
             const prompt = template.prompts[locale] || template.prompts.en || Object.values(template.prompts)[0]
-            const name = t(`business_${selectedTemplate === 'appliance_repair' ? 'repair' : selectedTemplate}`, selectedTemplate) 
+            const name = t(`business_${selectedTemplate === 'appliance_repair' ? 'repair' : selectedTemplate}`, selectedTemplate)
 
             // Append user-configured features to the prompt
             let finalPrompt = prompt
@@ -203,7 +203,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             dispatch(onboardingActions.setCreatingAssistant(true))
 
             const result = await createAssistant([{
-                name: t('business_custom_name', 'Мой ассистент'),
+                name: t('business_custom_name', 'Мой ассистент') || '',
                 instruction: generatedInstruction,
                 model: 'gpt-realtime-mini',
                 voice: 'alloy',
@@ -245,8 +245,8 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
     return (
         <VStack gap="16" align="center" max className={className}>
             <Text
-                title={t('business_title') }
-                text={t('business_subtitle') }
+                title={t('business_title')}
+                text={t('business_subtitle')}
                 align="center"
                 size="l"
             />
@@ -257,7 +257,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                         key={card.id}
                         id={card.id}
                         Icon={card.Icon}
-                        label={t(card.labelKey, card.id) }
+                        label={t(card.labelKey, card.id)}
                         selected={selectedTemplate === card.id}
                         onClick={onSelectCard}
                     />
@@ -267,7 +267,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             {hasFeatures && (
                 <VStack gap="8" className={cls.featuresBlock}>
                     <Text
-                        text={t('business_features_title') }
+                        text={t('business_features_title')}
                         size="xs"
                         bold
                     />
@@ -294,7 +294,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                             value={newFeature}
                             onChange={(e) => { setNewFeature(e.target.value) }}
                             onKeyDown={onFeatureKeyDown}
-                            placeholder={t('business_features_add_placeholder') }
+                            placeholder={t('business_features_add_placeholder') || ''}
                             disabled={isLoading}
                             size="small"
                         />
@@ -314,7 +314,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             {isCustom && (
                 <VStack gap="8" max className={cls.customBlock}>
                     <Text
-                        text={t('business_custom_label') }
+                        text={t('business_custom_label')}
                         bold
                         size="s"
                     />
@@ -323,13 +323,13 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                         rows={3}
                         value={customDescription}
                         onChange={onCustomDescriptionChange}
-                        placeholder={t('business_custom_placeholder') }
+                        placeholder={t('business_custom_placeholder') || ''}
                         disabled={isLoading}
                     />
                     <HStack gap="4" align="center">
                         <Sparkles size={14} className={cls.hintIcon} />
                         <Text
-                            text={t('business_custom_hint') }
+                            text={t('business_custom_hint')}
                             size="xs"
                         />
                     </HStack>
@@ -341,8 +341,8 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                     <Loader2 size={18} className={cls.loadingSpinnerIcon} />
                     <Text
                         text={isGenerating
-                            ? t('business_generating') 
-                            : t('business_creating') 
+                            ? t('business_generating')
+                            : t('business_creating')
                         }
                         size="s"
                         variant="accent"
@@ -366,28 +366,28 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                 </Button>
 
                 {isCustom
-? (
-                    <Button
-                        variant="glass-action"
-                        size="l"
-                        onClick={onGenerateAndCreate}
-                        disabled={!customDescription.trim() || isLoading}
-                        addonLeft={<Sparkles size={16} />}
-                    >
-                        {t('business_generate')}
-                    </Button>
-                )
-: (
-                    <Button
-                        variant="glass-action"
-                        size="l"
-                        onClick={onCreateFromTemplate}
-                        disabled={!selectedTemplate || isLoading}
-                        addonLeft={<Sparkles size={16} />}
-                    >
-                        {t('business_create')}
-                    </Button>
-                )}
+                    ? (
+                        <Button
+                            variant="glass-action"
+                            size="l"
+                            onClick={onGenerateAndCreate}
+                            disabled={!customDescription.trim() || isLoading}
+                            addonLeft={<Sparkles size={16} />}
+                        >
+                            {t('business_generate')}
+                        </Button>
+                    )
+                    : (
+                        <Button
+                            variant="glass-action"
+                            size="l"
+                            onClick={onCreateFromTemplate}
+                            disabled={!selectedTemplate || isLoading}
+                            addonLeft={<Sparkles size={16} />}
+                        >
+                            {t('business_create')}
+                        </Button>
+                    )}
             </HStack>
         </VStack>
     )

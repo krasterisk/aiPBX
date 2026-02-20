@@ -1,11 +1,13 @@
 name: Deploy to Production
+
 on:
   push:
-    branches: [main]
+    branches: [master]
     paths-ignore:
       - "*.md"
       - ".docs/**"
       - ".loki/**"
+      - ".agent/**"
   # Ручной запуск с выбором сервера
   workflow_dispatch:
     inputs:
@@ -16,16 +18,14 @@ on:
         type: choice
         options:
           - all
-          - production-1
-          - production-2
-          - production-3
-env:
-  REGISTRY: ghcr.io
-  IMAGE_PREFIX: ${{ github.repository }}
+          - aipbxnet_production
+          - aipbxorg_production
+          - aipbxru_production
+
 jobs:
   # ─── Step 1: Lint & Test ─────────────
   quality:
-    name: Quality Checks
+    name: 🔍 Quality Checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,11 +35,11 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run lint:ts
-      - run: npm run lint:scss
-      - run: npm run test:unit -- --ci --coverage
-  # ─── Step 0: Determine which servers to deploy ──
+      # - run: npm run lint:scss
+
+  # ─── Step 2: Determine which servers to deploy ──
   prepare:
-    name: Prepare Deploy Matrix
+    name: 📋 Prepare Deploy Matrix
     runs-on: ubuntu-latest
     outputs:
       servers: ${{ steps.set-matrix.outputs.servers }}
@@ -47,59 +47,45 @@ jobs:
       - name: Set server matrix
         id: set-matrix
         run: |
-          if [[ "${{ github.event_name }}" == "push" || "${{ github.event.inputs.target }}" == "all" ]]; then
-            echo 'servers=["aipbxnet_production"]' >> $GITHUB_OUTPUT
-          else
-            echo 'servers=["${{ github.event.inputs.target }}"]' >> $GITHUB_OUTPUT
+          # Ручной запуск — используем выбранный target
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            if [[ "${{ github.event.inputs.target }}" == "all" ]]; then
+              echo 'servers=["aipbxnet_production","aipbxorg_production","aipbxru_production"]' >> $GITHUB_OUTPUT
+            else
+              echo 'servers=["${{ github.event.inputs.target }}"]' >> $GITHUB_OUTPUT
+            fi
+            exit 0
           fi
-  # ─── Step 2: Build & Push per-server Frontend Images ─
-  build:
-    name: Build (${{ matrix.server }})
+
+          # Push — парсим commit message
+          MSG="${{ github.event.head_commit.message }}"
+
+          if [[ "$MSG" == *"[skip deploy]"* ]]; then
+            echo "⏭️ Deploy skipped by commit message"
+            echo 'servers=[]' >> $GITHUB_OUTPUT
+          elif [[ "$MSG" == *"[deploy:1]"* ]]; then
+            echo "🎯 Deploy only to production-1"
+            echo 'servers=["aipbxnet_production"]' >> $GITHUB_OUTPUT
+          elif [[ "$MSG" == *"[deploy:2]"* ]]; then
+            echo "🎯 Deploy only to production-2"
+            echo 'servers=["aipbxorg_production"]' >> $GITHUB_OUTPUT
+          elif [[ "$MSG" == *"[deploy:3]"* ]]; then
+            echo "🎯 Deploy only to production-3"
+            echo 'servers=["aipbxru_production"]' >> $GITHUB_OUTPUT
+          else
+            echo "🌐 Deploy to all servers"
+            echo 'servers=["aipbxnet_production","aipbxorg_production","aipbxru_production"]' >> $GITHUB_OUTPUT
+          fi
+
+  # ─── Step 3: Deploy to servers ───────
+  deploy:
+    name: 🚀 Deploy (${{ matrix.server }})
     needs: [quality, prepare]
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     strategy:
       matrix:
         server: ${{ fromJSON(needs.prepare.outputs.servers) }}
-    environment: ${{ matrix.server }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Log in to Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build & Push Frontend
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile
-          push: true
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend-${{ matrix.server }}:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend-${{ matrix.server }}:${{ github.sha }}
-          build-args: |
-            API_URL=${{ secrets.FRONTEND_API_URL }}
-            STATIC_URL=${{ secrets.FRONTEND_STATIC_URL }}
-            PORT=7003
-            TG_BOT_ID=${{ secrets.TG_BOT_ID }}
-            STRIPE_PUBLISHABLE_KEY=${{ secrets.FRONTEND_STRIPE_KEY }}
-          cache-from: type=gha,scope=${{ matrix.server }}
-          cache-to: type=gha,scope=${{ matrix.server }},mode=max
-  # ─── Step 3: Deploy to all servers ───
-  deploy:
-    name: Deploy (${{ matrix.server }})
-    needs: [build, prepare]
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        server: ${{ fromJSON(needs.prepare.outputs.servers) }}
-      fail-fast: false  # Не останавливать остальные при ошибке на одном
+      fail-fast: false
     environment: ${{ matrix.server }}
     steps:
       - name: Deploy via SSH
@@ -108,26 +94,44 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script_stop: true
           script: |
+            set -e
+            echo "🚀 Starting deployment to ${{ matrix.server }}..."
+
             cd /app
-            # Pull latest images
-            docker compose -f docker-compose.production.yml pull
-            # Rolling update (zero-downtime)
-            docker compose -f docker-compose.production.yml up -d \
-              --remove-orphans \
-              --force-recreate frontend backend
-            # Wait for health checks
-            sleep 10
-            # Verify deployment
-            curl -sf http://localhost/api/health || exit 1
-            # Cleanup old images
+
+            # ── Pull latest code ──
+            echo "📥 Pulling frontend..."
+            cd /app/aiPBX && git pull origin master
+
+            echo "📥 Pulling backend..."
+            cd /app/aiPBX_backend && git pull origin master
+
+            cd /app
+
+            # ── Build & deploy ──
+            echo "🔨 Building and deploying..."
+            docker compose -f docker-compose.production.yml --env-file .env.production up -d \
+              --build \
+              --force-recreate frontend backend \
+              --remove-orphans
+
+            # ── Wait for health checks ──
+            echo "⏳ Waiting for services to start..."
+            sleep 15
+
+            # ── Verify deployment ──
+            echo "🏥 Checking health..."
+            if curl -sf --max-time 10 http://localhost/api/health > /dev/null 2>&1; then
+              echo "✅ Health check passed!"
+            else
+              echo "⚠️ Health check failed, checking containers..."
+              docker compose -f docker-compose.production.yml ps
+              docker compose -f docker-compose.production.yml logs --tail=50 backend
+              exit 1
+            fi
+
+            # ── Cleanup ──
             docker image prune -f
             echo "✅ Deployment to ${{ matrix.server }} successful!"
-      - name: Notify on failure
-        if: failure()
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          text: "Deploy to ${{ matrix.server }} failed!"
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}

@@ -36,6 +36,7 @@ export type { AssistantsPageSchema } from './model/types/assistantsPageSchema'
 export type { AssistantFormSchema } from './model/types/assistantFormSchema'
 export type { Assistant, AllAssistants, AssistantsListProps, AssistantOptions } from './model/types/assistants'
 export { initAssistant } from './model/const/initAssistant'
+export { assistantTemplates } from './model/const/assistantTemplates'
 
 export {
   assistantsApi,
@@ -44,5 +45,6 @@ export {
   useAssistants,
   useAssistant,
   useSetAssistants,
-  useUpdateAssistant
+  useUpdateAssistant,
+  useGeneratePrompt
 } from './api/assistantsApi'

@@ -106,17 +106,17 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
     return (
         <VStack gap="16" align="center" max className={className}>
             <Text
-                title={t('telegram_title') }
+                title={t('telegram_title')}
                 align="center"
                 size="l"
             />
             <Text
-                text={t('telegram_integrations_hint') }
+                text={t('telegram_integrations_hint')}
                 align="center"
                 size="s"
             />
             <Text
-                text={t('telegram_subtitle') }
+                text={t('telegram_subtitle')}
                 align="center"
                 size="s"
                 bold
@@ -127,88 +127,88 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
 
                 <VStack gap="16" max>
                     {isConnected
-? (
-                        <HStack gap="12" className={cls.connectedBanner}>
-                            <CheckCircle2 size={22} />
-                            <Text
-                                text={t('telegram_connected', 'Telegram подключен!') }
-                                bold
-                                variant="success"
-                            />
-                        </HStack>
-                    )
-: (
-                        <>
-                            <VStack gap="12">
+                        ? (
+                            <HStack gap="12" className={cls.connectedBanner}>
+                                <CheckCircle2 size={22} />
                                 <Text
-                                    text={t('telegram_instruction_title', 'Подключить за 2 шага:') }
+                                    text={t('telegram_connected', 'Telegram подключен!')}
                                     bold
-                                    size="s"
+                                    variant="success"
                                 />
-                                <HStack gap="12">
-                                    <HStack justify="center" align="center" className={cls.instructionNum}>
-                                        1
-                                    </HStack>
-                                    <HStack gap="4" align="center" wrap="wrap">
-                                        <Text
-                                            text={t('telegram_instruction_1', 'Откройте нашего бота:') }
-                                            size="s"
-                                        />
-                                        <a
-                                            href="https://t.me/AIPBXbot"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={cls.botLink}
-                                        >
-                                            @AIPBXbot
-                                            <ExternalLink size={12} />
-                                        </a>
-                                    </HStack>
-                                </HStack>
-                                <HStack gap="12">
-                                    <HStack justify="center" align="center" className={cls.instructionNum}>
-                                        2
-                                    </HStack>
+                            </HStack>
+                        )
+                        : (
+                            <>
+                                <VStack gap="12">
                                     <Text
-                                        text={t('telegram_instruction_2', 'Нажмите «Start» — бот пришлёт ваш ID. Вставьте его сюда:') }
+                                        text={t('telegram_instruction_title', 'Подключить за 2 шага:')}
+                                        bold
                                         size="s"
                                     />
-                                </HStack>
-                            </VStack>
+                                    <HStack gap="12">
+                                        <HStack justify="center" align="center" className={cls.instructionNum}>
+                                            1
+                                        </HStack>
+                                        <HStack gap="4" align="center" wrap="wrap">
+                                            <Text
+                                                text={t('telegram_instruction_1', 'Откройте нашего бота:')}
+                                                size="s"
+                                            />
+                                            <a
+                                                href="https://t.me/AIPBXbot"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className={cls.botLink}
+                                            >
+                                                @AIPBXbot
+                                                <ExternalLink size={12} />
+                                            </a>
+                                        </HStack>
+                                    </HStack>
+                                    <HStack gap="12">
+                                        <HStack justify="center" align="center" className={cls.instructionNum}>
+                                            2
+                                        </HStack>
+                                        <Text
+                                            text={t('telegram_instruction_2', 'Нажмите «Start» — бот пришлёт ваш ID. Вставьте его сюда:')}
+                                            size="s"
+                                        />
+                                    </HStack>
+                                </VStack>
 
-                            <HStack gap="8" max>
-                                <Input
-                                    value={chatId}
-                                    onChange={onChatIdChange}
-                                    placeholder={t('telegram_chatid_placeholder', 'Ваш Chat ID') }
-                                    disabled={isLoading}
-                                    size="small"
-                                />
-                                <Button
-                                    variant="glass-action"
-                                    size="m"
-                                    onClick={onConnect}
-                                    disabled={!chatId.trim() || isLoading}
-                                    addonLeft={isLoading
-                                        ? <Loader2 size={14} className={cls.loadingSpinnerIcon} />
-                                        : <CheckCircle2 size={14} />
-                                    }
-                                >
-                                    {isLoading
-                                        ? t('telegram_connecting', 'Подключаем...')
-                                        : t('telegram_connect_btn', 'Подключить')
-                                    }
-                                </Button>
-                            </HStack>
-
-                            {error && (
-                                <HStack gap="8">
-                                    <AlertTriangle size={14} className={cls.errorIcon} />
-                                    <Text text={error} variant="error" size="xs" />
+                                <HStack gap="8" max>
+                                    <Input
+                                        value={chatId}
+                                        onChange={onChatIdChange}
+                                        placeholder={t('telegram_chatid_placeholder', 'Ваш Chat ID') || ''}
+                                        disabled={isLoading}
+                                        size="small"
+                                    />
+                                    <Button
+                                        variant="glass-action"
+                                        size="m"
+                                        onClick={onConnect}
+                                        disabled={!chatId.trim() || isLoading}
+                                        addonLeft={isLoading
+                                            ? <Loader2 size={14} className={cls.loadingSpinnerIcon} />
+                                            : <CheckCircle2 size={14} />
+                                        }
+                                    >
+                                        {isLoading
+                                            ? t('telegram_connecting', 'Подключаем...')
+                                            : t('telegram_connect_btn', 'Подключить')
+                                        }
+                                    </Button>
                                 </HStack>
-                            )}
-                        </>
-                    )}
+
+                                {error && (
+                                    <HStack gap="8">
+                                        <AlertTriangle size={14} className={cls.errorIcon} />
+                                        <Text text={error} variant="error" size="xs" />
+                                    </HStack>
+                                )}
+                            </>
+                        )}
                 </VStack>
             </HStack>
 

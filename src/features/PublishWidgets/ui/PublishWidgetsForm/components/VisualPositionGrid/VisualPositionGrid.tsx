@@ -30,7 +30,7 @@ export const VisualPositionGrid = memo(({ className, value, onChange }: VisualPo
                         key={pos.value}
                         className={classNames(cls.item, { [cls.active]: value === pos.value })}
                         onClick={() => { onChange(pos.value) }}
-                        title={(t(pos.value))}
+                        title={t(pos.value) || ''}
                     >
                         <div className={cls.dot} />
                     </div>

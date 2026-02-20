@@ -8,7 +8,8 @@ export type {
   AggregatedAIMetrics,
   TimeSeriesPoint,
   AssistantMetric,
-  TopIssue
+  TopIssue,
+  CdrSource
 } from './model/types/report'
 export type { ReportsPageSchema } from './model/types/reportsPageSchema'
 export {

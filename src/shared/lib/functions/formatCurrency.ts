@@ -1,5 +1,5 @@
-// eslint-disable-next-line krasterisk-plugin/layer-imports
-import { UserCurrencyValues, currencySymbols } from '@/entities/User'
+// eslint-disable-next-line krasterisk-plugin/layer-imports, krasterisk-plugin/public-api-imports
+import { UserCurrencyValues, currencySymbols } from '@/entities/User/model/consts/consts'
 
 /**
  * Универсальная функция для форматирования валюты
