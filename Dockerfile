@@ -5,7 +5,7 @@ FROM node:22-slim AS builder
 WORKDIR /app
 # Кэширование зависимостей
 COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
+RUN npm install --ignore-scripts
 # Копируем исходный код
 COPY . .
 # Build arguments (передаются через docker-compose)
