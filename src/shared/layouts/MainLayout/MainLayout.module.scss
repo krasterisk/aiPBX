@@ -10,7 +10,8 @@
 }
 
 .header {
-    height: 50px;
+    min-height: 50px;
+    height: auto;
     width: 100%;
     position: relative;
     z-index: 2;

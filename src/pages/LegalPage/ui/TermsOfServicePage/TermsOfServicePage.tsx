@@ -386,8 +386,8 @@ const TermsOfServicePage = memo(() => (
                 <p className={cls.text}>
                     The Services integrate with and depend upon third-party platforms,
                     including but not limited to Stripe for payment processing, cloud
-                    infrastructure providers (e.g., AWS, GCP), AI/ML service providers
-                    (e.g., OpenAI), SIP/PBX providers, and email service providers
+                    infrastructure providers (e.g., Vultr, Cloudflare), AI/ML service providers
+                    (e.g., OpenAI, Alibaba Cloud/Qwen), SIP/PBX providers, and email service providers
                     (collectively, &quot;Third-Party Services&quot;). You acknowledge and
                     agree that:
                 </p>

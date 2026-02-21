@@ -104,5 +104,6 @@
     "Рекомендуемый размер 200x200px": "Recommended size 200x200px",
     "Удалить": "Delete",
     "Лимиты": "Limits",
-    "Клиент": "Client"
+    "Пожалуйста добавьте хотя бы один разрешенный домен": "Please add at least one allowed domain",
+    "По одному домену. Нажмите Enter, пробел или запятую.": "One domain per line. Press Enter, Space or Comma."
 }

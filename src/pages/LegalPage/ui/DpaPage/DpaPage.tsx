@@ -423,9 +423,14 @@ const DpaPage = memo(() => (
                         <span>Location</span>
                     </div>
                     <div className={cls.tableRow}>
-                        <span>Amazon Web Services, Inc.</span>
+                        <span>Vultr (The Constant Company, LLC)</span>
                         <span>Hosting, compute, storage</span>
-                        <span>United States</span>
+                        <span>United States / Global</span>
+                    </div>
+                    <div className={cls.tableRow}>
+                        <span>Cloudflare, Inc.</span>
+                        <span>CDN, DNS, Web Application Firewall, DDoS protection</span>
+                        <span>United States / Global</span>
                     </div>
                     <div className={cls.tableRow}>
                         <span>Stripe, Inc.</span>
@@ -438,14 +443,9 @@ const DpaPage = memo(() => (
                         <span>United States</span>
                     </div>
                     <div className={cls.tableRow}>
-                        <span>Twilio Inc.</span>
-                        <span>Voice call routing and connectivity (SIP/PBX)</span>
-                        <span>United States</span>
-                    </div>
-                    <div className={cls.tableRow}>
-                        <span>SendGrid (Twilio Inc.)</span>
-                        <span>Transactional and support emails</span>
-                        <span>United States</span>
+                        <span>Alibaba Cloud (Singapore) Private Limited</span>
+                        <span>AI response generation (Qwen models)</span>
+                        <span>Singapore / Global</span>
                     </div>
                 </div>
                 <p className={cls.text}>

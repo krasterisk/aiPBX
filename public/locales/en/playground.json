@@ -51,5 +51,6 @@
     "allowHangupTooltip": "When enabled, the assistant can independently end the conversation when the task is completed or at the caller's request. When disabled, only the caller can end the call.",
     "allowTransferTooltip": "When enabled, the assistant can redirect the call to an operator, employee, or queue. For proper operation, specify a directory with numbers in the prompt or functions. ⚠️ Call transfer does not work in Playground as there is no PBX connection.",
     "Температура": "Temperature",
-    "tooltip_temperature": "Controls the model's 'creativity'. Lower values (0.6) produce more stable and predictable responses. Higher values (1.2) produce more diverse but less precise responses."
+    "tooltip_temperature": "Controls the model's 'creativity'. Lower values (0.6) produce more stable and predictable responses. Higher values (1.2) produce more diverse but less precise responses.",
+    "Выберите ассистента": "Select an assistant"
 }

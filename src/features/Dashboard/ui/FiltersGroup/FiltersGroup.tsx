@@ -58,43 +58,36 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
   const [filterShow, setFilterShow] = useState<boolean>(false)
 
   return (
-    <VStack gap={'32'} max>
-      <Card
-        variant={'normal'}
-        padding={'16'}
-        border={'partial'}
-        max
-      >
-        <VStack gap={'16'} justify={'center'} align={'center'}>
-          <PeriodExtendedFilters
-            assistantId={assistantId}
-            assistants={assistants}
-            userId={userId}
-            startDate={startDate}
-            endDate={endDate}
-            source={source}
-            onChangeUserId={onChangeUserId}
-            onChangeAssistant={onChangeAssistant}
-            onChangeStartDate={onChangeStartDate}
-            onChangeEndDate={onChangeEndDate}
-            onChangeSource={onChangeSource}
-            show={filterShow}
-            onClose={() => { setFilterShow(false) }}
-          />
-          <PeriodPicker
-            userId={userId}
-            tab={tab}
-            startDate={startDate}
-            endDate={endDate}
-            isInited={isInited}
-            onChangeTab={onChangeTab}
+    <Card variant={'clear'} padding={'16'} max className={className}>
+      <VStack gap={'16'} max justify={'center'} align={'center'}>
+        <PeriodExtendedFilters
+          assistantId={assistantId}
+          assistants={assistants}
+          userId={userId}
+          startDate={startDate}
+          endDate={endDate}
+          source={source}
+          onChangeUserId={onChangeUserId}
+          onChangeAssistant={onChangeAssistant}
+          onChangeStartDate={onChangeStartDate}
+          onChangeEndDate={onChangeEndDate}
+          onChangeSource={onChangeSource}
+          show={filterShow}
+          onClose={() => { setFilterShow(false) }}
+        />
+        <PeriodPicker
+          userId={userId}
+          tab={tab}
+          startDate={startDate}
+          endDate={endDate}
+          isInited={isInited}
+          onChangeTab={onChangeTab}
 
-            onChangeEndDate={onChangeEndDate}
-            onChangeStartDate={onChangeStartDate}
-            onOpenFilters={() => { setFilterShow(true) }}
-          />
-        </VStack>
-      </Card>
-    </VStack>
+          onChangeEndDate={onChangeEndDate}
+          onChangeStartDate={onChangeStartDate}
+          onOpenFilters={() => { setFilterShow(true) }}
+        />
+      </VStack>
+    </Card>
   )
 })

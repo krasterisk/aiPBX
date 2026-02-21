@@ -102,6 +102,7 @@
     "Рекомендуемый размер 200x200px": "Empfohlene Größe 200x200px",
     "Удалить": "Löschen",
     "Управление и настройка виджетов для сайта": "Verwaltung und Konfiguration von Widgets für die Website",
-    "Лимиты": "Limits",
-    "Клиент": "Kunde"
+    "Клиент": "Kunde",
+    "Пожалуйста добавьте хотя бы один разрешенный домен": "Bitte fügen Sie mindestens eine erlaubte Domain hinzu",
+    "По одному домену. Нажмите Enter, пробел или запятую.": "Eine Domain pro Zeile. Drücken Sie Enter, Leerzeichen oder Komma"
 }

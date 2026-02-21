@@ -6,6 +6,7 @@ import Left from '@/shared/assets/icons/left.svg'
 import Right from '@/shared/assets/icons/right.svg'
 import { Icon } from '@/shared/ui/redesigned/Icon'
 import { HStack } from '@/shared/ui/redesigned/Stack'
+import { Flex } from '@/shared/ui/redesigned/Stack/Flex/Flex'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { PeriodTabs } from '@/entities/Filters'
@@ -87,7 +88,14 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
   }
 
   const content = (
-    <HStack gap="8" align="center" wrap={isMobile ? 'wrap' : 'nowrap'} className={classNames(cls.PeriodPicker, {}, [className])}>
+    <Flex
+      direction={isMobile ? 'column' : 'row'}
+      gap={isMobile ? '16' : '8'}
+      align="center"
+      justify={isMobile ? 'center' : 'start'}
+      max={isMobile}
+      className={classNames('', {}, [className])}
+    >
       <PeriodTabs
         tab={tab}
         onChangeTab={onChangeTab}
@@ -96,41 +104,49 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
 
       {!isMobile && <div className={cls.divider} />}
 
-      <HStack gap="4" align="center" wrap='nowrap'>
-        <Button
-          variant="clear"
-          className={cls.navBtn}
-          onClick={() => { handleDateChange('left') }}
-        >
-          <Icon Svg={Left} width={18} height={18} />
-        </Button>
+      <Flex
+        direction="row"
+        max={isMobile}
+        justify={isMobile ? 'between' : 'start'}
+        gap="4"
+        align="center"
+        wrap="nowrap"
+      >
+        <HStack gap="4" align="center" justify="center">
+          <Button
+            variant="clear"
+            className={cls.navBtn}
+            onClick={() => { handleDateChange('left') }}
+          >
+            <Icon Svg={Left} width={18} height={18} />
+          </Button>
 
-        <Text
-          data-testid="PeriodPicker.period"
-          text={`${startDate} - ${endDate}`}
-          className={cls.dateDisplay}
-          size="s"
-        />
+          <Text
+            data-testid="PeriodPicker.period"
+            text={`${startDate} - ${endDate}`}
+            className={cls.dateDisplay}
+            size="s"
+          />
 
-        <Button
-          variant="clear"
-          className={cls.navBtn}
-          onClick={() => { handleDateChange('right') }}
-        >
-          <Icon Svg={Right} width={18} height={18} />
-        </Button>
+          <Button
+            variant="clear"
+            className={cls.navBtn}
+            onClick={() => { handleDateChange('right') }}
+          >
+            <Icon Svg={Right} width={18} height={18} />
+          </Button>
+        </HStack>
 
         {onOpenFilters && (
-          <>
+          <Flex direction="row" align="center" gap="8">
             {!isMobile && <div className={cls.divider} />}
             <Button variant="clear" onClick={onOpenFilters} className={cls.tuneBtn}>
               <TuneIcon />
             </Button>
-          </>
-
+          </Flex>
         )}
-      </HStack>
-    </HStack>
+      </Flex>
+    </Flex>
   )
 
   return content

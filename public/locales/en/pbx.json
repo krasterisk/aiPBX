@@ -60,5 +60,8 @@
   "Настройте транспорт и эндпоинт для работы через WebSocket в файле pjsip.conf:": "Configure transport and endpoint for WebSocket in pjsip.conf:",
   "Скопировано в буфер обмена": "Copied to clipboard",
   "Данные не найдены": "Data not found",
-  "У вас пока нет АТС": "You have no PBX yet"
+  "У вас пока нет АТС": "You have no PBX yet",
+  "Вы уверены, что хотите удалить сервер?": "Are you sure you want to delete server?",
+  "Формат записи": "Recording format",
+  "Формат, в котором будет производиться запись разговоров (например, wav, mp3, sln)": "Format in which conversations will be recorded (e.g. wav, mp3, sln)"
 }

@@ -1,22 +1,5 @@
 @import '@/app/styles/variables/mixins';
 
-.PeriodPicker {
-    @include glass-card-secondary;
-    padding: var(--space-1) var(--space-2);
-    border-radius: var(--radius-xl);
-    border: 1px solid var(--glass-border-secondary);
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    background: var(--glass-bg-primary) !important;
-    backdrop-filter: blur(15px);
-    box-shadow: none !important;
-
-    &:hover {
-        border-color: var(--accent-redesigned);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
-        transform: translateY(-1px);
-    }
-}
-
 .navBtn {
     padding: 0;
     width: 36px;
@@ -88,9 +71,12 @@
         opacity: 0.6;
         transition: all 0.3s ease;
         border-radius: var(--radius-lg) !important;
-        padding: 6px 14px !important;
+        padding: 8px 14px !important;
         border: 1px solid transparent !important;
         box-shadow: none !important;
+        line-height: normal !important;
+        display: flex !important;
+        align-items: center !important;
 
         &:hover {
             opacity: 1;
@@ -113,14 +99,6 @@
 }
 
 @include mobile {
-    .PeriodPicker {
-        flex-direction: column;
-        gap: var(--space-3);
-        padding: var(--space-4);
-        border-radius: var(--radius-lg);
-        width: 100%;
-    }
-
     .divider {
         display: none;
     }

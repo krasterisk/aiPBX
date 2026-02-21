@@ -48,5 +48,6 @@
     "allowHangupTooltip": "Wenn aktiviert, kann der Assistent das Gespräch selbstständig beenden, wenn die Aufgabe erledigt ist oder auf Wunsch des Anrufers. Wenn deaktiviert, kann nur der Anrufer den Anruf beenden.",
     "allowTransferTooltip": "Wenn aktiviert, kann der Assistent den Anruf an einen Operator, Mitarbeiter oder eine Warteschlange weiterleiten. Geben Sie für den korrekten Betrieb ein Verzeichnis mit Nummern im Prompt oder in den Funktionen an. ⚠️ Die Anrufweiterleitung funktioniert nicht im Playground, da keine TK-Anlage angeschlossen ist.",
     "Температура": "Temperatur",
-    "tooltip_temperature": "Steuert die 'Kreativität' des Modells. Niedrigere Werte (0.6) erzeugen stabilere und vorhersehbarere Antworten. Höhere Werte (1.2) erzeugen vielfältigere, aber weniger präzise Antworten."
+    "tooltip_temperature": "Steuert die 'Kreativität' des Modells. Niedrigere Werte (0.6) erzeugen stabilere und vorhersehbarere Antworten. Höhere Werte (1.2) erzeugen vielfältigere, aber weniger präzise Antworten.",
+    "Выберите ассистента": "Assistent auswählen"
 }
