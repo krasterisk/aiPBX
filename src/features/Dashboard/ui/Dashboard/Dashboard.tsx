@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { useDashboardFilters } from '../../libs/hooks/useDashboardFilters'
 import { ErrorGetData } from '@/entities/ErrorGetData'
@@ -8,6 +9,7 @@ import { DashboardStatistics } from '../DashboardStatistics/DashboardStatistics'
 import { DashboardCharts } from '../DashboardCharts/DashboardCharts'
 
 export const Dashboard = memo(() => {
+    const { t } = useTranslation('reports')
     const {
         isError,
         isLoading,
@@ -53,6 +55,7 @@ export const Dashboard = memo(() => {
     return (
         <VStack max gap={'16'}>
             <FiltersGroup
+                title={t('Обзор') ?? undefined}
                 dashboardData={data}
                 tab={tab}
                 isInited={isInited}

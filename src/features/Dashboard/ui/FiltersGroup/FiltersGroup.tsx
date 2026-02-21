@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import React, { memo, useState } from 'react'
-import { VStack } from '@/shared/ui/redesigned/Stack'
+import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
+import { Text } from '@/shared/ui/redesigned/Text'
 
 import { ReportFilters, CdrSource } from '@/entities/Report'
 import { AssistantOptions } from '@/entities/Assistants'
@@ -13,6 +14,7 @@ import { getUserAuthData, UserCurrencyValues, currencySymbols } from '@/entities
 
 interface FiltersGroupProps {
   className?: string
+  title?: string
   tab?: string
   userId?: string
   assistantId?: string[]
@@ -33,6 +35,7 @@ interface FiltersGroupProps {
 export const FiltersGroup = memo((props: FiltersGroupProps) => {
   const {
     className,
+    title,
     tab,
     userId,
     assistantId,
@@ -59,7 +62,23 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
 
   return (
     <Card variant={'clear'} padding={'16'} max className={className}>
-      <VStack gap={'16'} max justify={'center'} align={'center'}>
+      <VStack gap={'16'} max>
+        <HStack max justify="between" align="center" gap="16">
+          {title && (
+            <Text title={title} size="l" bold />
+          )}
+          <PeriodPicker
+            userId={userId}
+            tab={tab}
+            startDate={startDate}
+            endDate={endDate}
+            isInited={isInited}
+            onChangeTab={onChangeTab}
+            onChangeEndDate={onChangeEndDate}
+            onChangeStartDate={onChangeStartDate}
+            onOpenFilters={() => { setFilterShow(true) }}
+          />
+        </HStack>
         <PeriodExtendedFilters
           assistantId={assistantId}
           assistants={assistants}
@@ -74,18 +93,6 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
           onChangeSource={onChangeSource}
           show={filterShow}
           onClose={() => { setFilterShow(false) }}
-        />
-        <PeriodPicker
-          userId={userId}
-          tab={tab}
-          startDate={startDate}
-          endDate={endDate}
-          isInited={isInited}
-          onChangeTab={onChangeTab}
-
-          onChangeEndDate={onChangeEndDate}
-          onChangeStartDate={onChangeStartDate}
-          onOpenFilters={() => { setFilterShow(true) }}
         />
       </VStack>
     </Card>

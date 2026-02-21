@@ -129,18 +129,18 @@ export const ReportTable = memo((props: ReportTableProps) => {
         <td data-label={t('Ассистент')}>
           {report.assistantName ? <Text text={report.assistantName} /> : ''}
         </td>
-        <td data-label={t('Звонивший')}>
+        <td data-label={t('Звонивший')} className={cls.callerCell}>
           {report.callerId ? <Text text={report.callerId} /> : ''}
         </td>
         <td data-label={t('Источник')} className={cls.sourceCell}>
           {report.source
-? (
-            <span className={cls.sourceBadge} data-source={report.source}>
-              {sourceIcon[report.source]}
-              {sourceLabel[report.source]}
-            </span>
-          )
-: '—'}
+            ? (
+              <span className={cls.sourceBadge} data-source={report.source} data-tooltip={sourceLabel[report.source]}>
+                {sourceIcon[report.source]}
+                <span className={cls.badgeText}>{sourceLabel[report.source]}</span>
+              </span>
+            )
+            : '—'}
         </td>
         <td data-label={t('Длительность')}>
           <Text text={String(duration)} />
@@ -149,29 +149,29 @@ export const ReportTable = memo((props: ReportTableProps) => {
           {totalTokens ? <Text text={String(totalTokens)} /> : ''}
         </td>
         <td data-label={t('Стоимость')}>
-          {totalCost ? <Text text={formatCurrency(totalCost, userCurrency, 4)} bold /> : ''}
+          {totalCost ? <Text text={formatCurrency(totalCost, userCurrency, 3)} bold /> : ''}
         </td>
         <td data-label={t('CSAT')} className={cls.csatCell}>
           {csat != null
-? (
-            <span className={cls.csatValue}>
-              <Star size={14} className={cls.csatStar} />
-              {csat}
-            </span>
-          )
-: '—'}
+            ? (
+              <span className={cls.csatValue}>
+                <Star size={14} className={cls.csatStar} />
+                {csat}
+              </span>
+            )
+            : '—'}
         </td>
         <td data-label={t('Результат')} className={cls.resultCell}>
           {scenarioSuccess === true && (
-            <span className={cls.successText}>
+            <span className={cls.successText} data-tooltip={t('Успех')}>
               <CheckCircle size={16} />
-              {t('Успех')}
+              <span className={cls.badgeText}>{t('Успех')}</span>
             </span>
           )}
           {scenarioSuccess === false && (
-            <span className={cls.escalationText}>
+            <span className={cls.escalationText} data-tooltip={t('Эскалация')}>
               <AlertCircle size={16} />
-              {t('Эскалация')}
+              <span className={cls.badgeText}>{t('Эскалация')}</span>
             </span>
           )}
           {scenarioSuccess == null && '—'}

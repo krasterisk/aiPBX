@@ -60,21 +60,21 @@ jobs:
           # Push — парсим commit message
           MSG="${{ github.event.head_commit.message }}"
 
-          if [[ "$MSG" == *"[skip deploy]"* ]]; then
-            echo "Deploy skipped by commit message"
-            echo 'servers=[]' >> $GITHUB_OUTPUT
-          elif [[ "$MSG" == *"[deploy:1]"* ]]; then
-            echo "Deploy only to production-1"
-            echo 'servers=["aipbxnet_production"]' >> $GITHUB_OUTPUT
-          elif [[ "$MSG" == *"[deploy:2]"* ]]; then
-            echo "Deploy only to production-2"
-            echo 'servers=["aipbxorg_production"]' >> $GITHUB_OUTPUT
-          elif [[ "$MSG" == *"[deploy:3]"* ]]; then
-            echo "Deploy only to production-3"
-            echo 'servers=["aipbxru_production"]' >> $GITHUB_OUTPUT
-          else
+          if [[ "$MSG" == *"[deploy all]"* ]]; then
             echo "Deploy to all servers"
             echo 'servers=["aipbxnet_production","aipbxorg_production","aipbxru_production"]' >> $GITHUB_OUTPUT
+          elif [[ "$MSG" == *"[deploy:1]"* ]]; then
+            echo "Deploy only to aipbxnet"
+            echo 'servers=["aipbxnet_production"]' >> $GITHUB_OUTPUT
+          elif [[ "$MSG" == *"[deploy:2]"* ]]; then
+            echo "Deploy only to aipbxorg"
+            echo 'servers=["aipbxorg_production"]' >> $GITHUB_OUTPUT
+          elif [[ "$MSG" == *"[deploy:3]"* ]]; then
+            echo "Deploy only to aipbxru"
+            echo 'servers=["aipbxru_production"]' >> $GITHUB_OUTPUT
+          else
+            echo "No deploy tag found — skipping deployment"
+            echo 'servers=[]' >> $GITHUB_OUTPUT
           fi
 
   # ─── Step 3: Deploy to servers ───────

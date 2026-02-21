@@ -14,7 +14,7 @@ import { PlaygroundAssistantSettings } from '../PlaygroundAssistantSettings/Play
 // eslint-disable-next-line krasterisk-plugin/layer-imports
 import { playgroundAssistantFormActions } from '@/pages/Playground'
 import { SectionCard } from '../components/SectionCard/SectionCard'
-import { UserCheck, Play, Square } from 'lucide-react'
+import { Play, Square } from 'lucide-react'
 
 interface PlaygroundSessionProps {
     className?: string
@@ -63,7 +63,7 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
             {!isSessionActive
                 ? (
                     <Button
-                        variant="outline"
+                        variant="glass-action"
                         disabled={!selectedAssistant || isLoading || !navigator.mediaDevices}
                         onClick={handleStartSession}
                         addonLeft={<Play size={18} />}
@@ -87,8 +87,7 @@ export const PlaygroundSession = memo((props: PlaygroundSessionProps) => {
     return (
         <VStack gap="24" max className={classNames(cls.PlaygroundSession, {}, [className])}>
             <SectionCard
-                title={t('Ассистент')}
-                icon={UserCheck}
+                title={t('Песочница')}
                 rightElement={RightElement}
             >
                 <VStack gap="16" max>

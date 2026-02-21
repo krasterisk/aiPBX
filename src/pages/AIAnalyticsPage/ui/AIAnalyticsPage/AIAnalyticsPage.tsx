@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { Loader } from '@/shared/ui/Loader'
@@ -16,6 +17,8 @@ const reducers: ReducersList = {
 }
 
 const AIAnalyticsPageContent = memo(() => {
+    const { t } = useTranslation('reports')
+
     const {
         isInited,
         tab,
@@ -63,6 +66,7 @@ const AIAnalyticsPageContent = memo(() => {
     return (
         <VStack max gap={'16'} className={cls.AIAnalyticsPage}>
             <FiltersGroup
+                title={t('AI Аналитика') ?? undefined}
                 tab={tab}
                 isInited={isInited}
                 userId={userId}

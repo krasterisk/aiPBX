@@ -8,21 +8,26 @@
     border: 1px solid var(--glass-border-secondary);
 
     td {
-        padding: 16px 20px;
+        padding: 12px 14px;
         vertical-align: middle;
         border-top: 1px solid transparent;
         border-bottom: 1px solid transparent;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        max-width: 180px;
 
         &:first-child {
             border-left: 1px solid transparent;
             border-top-left-radius: var(--radius-lg);
             border-bottom-left-radius: var(--radius-lg);
+            max-width: 52px;
         }
 
         &:last-child {
             border-right: 1px solid transparent;
             border-top-right-radius: var(--radius-lg);
             border-bottom-right-radius: var(--radius-lg);
+            max-width: none;
         }
     }
 
@@ -79,14 +84,20 @@
     margin: -28px;
 }
 
+// ─── Caller Cell ────────────────────────────────────────
+.callerCell {
+    white-space: nowrap;
+}
+
 // ─── CSAT Cell ─────────────────────────────────────────
 .csatCell {
-    white-space: nowrap;
+    min-width: 60px;
 }
 
 .csatValue {
     display: inline-flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 4px;
     font-weight: 600;
     color: var(--text-redesigned);
@@ -98,9 +109,47 @@
     flex-shrink: 0;
 }
 
+// ─── Badge Text (hidden on desktop, shown on mobile) ──────────────────────
+.badgeText {
+    display: none;
+}
+
+// ─── CSS Tooltip via data-tooltip ─────────────────────────────────────────
+.sourceBadge[data-tooltip],
+.successText[data-tooltip],
+.escalationText[data-tooltip] {
+    position: relative;
+
+    &::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + 6px);
+        left: 50%;
+        transform: translateX(-50%) scale(0.9);
+        background: var(--bg-redesigned, #1e1e2e);
+        color: var(--text-redesigned);
+        font-size: 11px;
+        font-weight: 500;
+        white-space: nowrap;
+        padding: 4px 8px;
+        border-radius: 6px;
+        border: 1px solid var(--glass-border-secondary);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease, transform 0.15s ease;
+        z-index: 10;
+    }
+
+    &:hover::after {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+}
+
 // ─── Result Cell ───────────────────────────────────────
 .resultCell {
-    white-space: nowrap;
+    min-width: 80px;
 }
 
 .successText {
@@ -123,12 +172,13 @@
 
 // ─── Source Cell ────────────────────────────────────────
 .sourceCell {
-    white-space: nowrap;
+    min-width: 80px;
 }
 
 .sourceBadge {
     display: inline-flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 6px;
     font-weight: 500;
     font-size: 12px;
@@ -165,11 +215,12 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding: 10px 16px !important;
+            padding: 10px 16px 10px 130px !important;
             border: none !important;
             position: relative;
             text-align: right;
             min-height: 44px;
+            max-width: none;
 
             &::before {
                 content: attr(data-label);
@@ -194,6 +245,7 @@
 
         .tdCheck {
             justify-content: flex-start;
+            padding-left: 16px !important;
 
             &::before {
                 display: none;
@@ -209,5 +261,16 @@
             width: 100%;
             padding: 0 0 16px 0 !important;
         }
+    }
+
+    // On mobile: show text inline, hide tooltip
+    .badgeText {
+        display: inline;
+    }
+
+    .sourceBadge[data-tooltip]::after,
+    .successText[data-tooltip]::after,
+    .escalationText[data-tooltip]::after {
+        display: none;
     }
 }
