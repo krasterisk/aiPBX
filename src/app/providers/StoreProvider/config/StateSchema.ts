@@ -18,6 +18,7 @@ import { PbxServerFormSchema } from '@/features/PbxServers'
 import { AIAnalyticsPageSchema } from '@/pages/AIAnalyticsPage'
 import { McpServersPageSchema } from '@/entities/Mcp'
 import { OnboardingState } from '@/features/Onboarding'
+import { OperatorAnalyticsPageSchema } from '@/pages/OperatorAnalyticsPage'
 
 export interface StateSchema {
   user: UserSchema
@@ -43,6 +44,7 @@ export interface StateSchema {
   aiAnalyticsPage?: AIAnalyticsPageSchema
   mcpServersPage?: McpServersPageSchema
   onboarding?: OnboardingState
+  operatorAnalyticsPage?: OperatorAnalyticsPageSchema
 }
 
 export type StateSchemaKey = keyof StateSchema

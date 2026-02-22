@@ -15,33 +15,16 @@ export const BarsChart = memo((props: BarsChartsProps) => {
   } = props
 
   const chartStyles = {
-    // Стили для осей
-    '& .MuiChartsAxis-root .MuiChartsAxis-tickLabel': {
-      fill: 'var(--chart-axis-label)'
-    },
-    '& .MuiChartsAxis-root .MuiChartsAxis-line': {
-      stroke: 'var(--chart-axis-label)'
-    },
-
-    // Стили для заголовков легенды (именно тот элемент, который вы указали)
-    '& .MuiChartsLabel-root.MuiChartsLegend-label': {
-      fill: 'var(--text-redesigned) !important',
-      color: 'var(--text-redesigned) !important',
-      fontWeight: 500 // при необходимости
-    },
-
-    // Альтернативные селекторы для надежности
-    '& .MuiChartsLegend-root .MuiChartsLabel-root': {
-      fill: 'var(--text-redesigned)',
-      color: 'var(--text-redesigned)'
-    },
-
-    // Стиль для контейнера легенды
-    '& .MuiChartsLegend-root': {
-      '& text': {
-        fill: 'var(--text-redesigned)'
-      }
-    }
+    '& .MuiChartsAxis-line': { stroke: 'var(--text-redesigned) !important', strokeOpacity: '0.4 !important', strokeWidth: '1.5 !important' },
+    '& .MuiChartsAxis-tick': { stroke: 'var(--text-redesigned) !important', strokeOpacity: '0.4 !important', strokeWidth: '1.5 !important' },
+    '& .MuiChartsGrid-line': { stroke: 'var(--text-redesigned) !important', strokeOpacity: '0.1 !important', strokeDasharray: '4 4' },
+    '& .MuiChartsAxis-tickLabel': { fill: 'var(--text-redesigned) !important' },
+    '& .MuiChartsAxis-tickLabel tspan': { fill: 'var(--text-redesigned) !important' },
+    '& .MuiChartsAxis-label': { fill: 'var(--text-redesigned) !important' },
+    '& .MuiChartsLegend-label': { color: 'var(--text-redesigned) !important', fill: 'var(--text-redesigned) !important' },
+    '& .MuiChartsLabel-root': { color: 'var(--text-redesigned) !important' },
+    '& .MuiChartsLegend-root text': { fill: 'var(--text-redesigned) !important' },
+    '& text': { fill: 'var(--text-redesigned) !important' },
   }
 
   return (

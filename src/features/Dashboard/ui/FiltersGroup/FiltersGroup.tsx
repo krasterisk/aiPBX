@@ -28,6 +28,7 @@ interface FiltersGroupProps {
   onChangeTab: (value: string) => void
   onChangeStartDate: (value: string) => void
   onChangeEndDate: (value: string) => void
+  onChangeDateRange?: (startDate: string, endDate: string) => void
   source?: CdrSource
   onChangeSource?: (value: CdrSource | undefined) => void
 }
@@ -49,6 +50,7 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
     onChangeUserId,
     onChangeStartDate,
     onChangeEndDate,
+    onChangeDateRange,
     source,
     onChangeSource
   } = props
@@ -63,7 +65,7 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
   return (
     <Card variant={'clear'} padding={'16'} max className={className}>
       <VStack gap={'16'} max>
-        <HStack max justify="between" align="center" gap="16">
+        <HStack max justify="between" align="center" gap="16" wrap="wrap">
           {title && (
             <Text title={title} size="l" bold />
           )}
@@ -76,6 +78,7 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
             onChangeTab={onChangeTab}
             onChangeEndDate={onChangeEndDate}
             onChangeStartDate={onChangeStartDate}
+            onChangeDateRange={onChangeDateRange}
             onOpenFilters={() => { setFilterShow(true) }}
           />
         </HStack>

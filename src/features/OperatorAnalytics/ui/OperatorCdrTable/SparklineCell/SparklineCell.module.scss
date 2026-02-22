@@ -1,0 +1,13 @@
+.sparkline {
+    display: inline-block;
+    vertical-align: middle;
+
+    rect {
+        transition: opacity 0.15s ease;
+
+        &:hover {
+            opacity: 1 !important;
+            filter: brightness(1.3);
+        }
+    }
+}

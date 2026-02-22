@@ -1,0 +1,173 @@
+// ─── Accordion row ────────────────────────────────────────────────────────────
+
+.accordionRow {
+    background: transparent !important;
+
+    &:hover {
+        background: transparent !important;
+    }
+}
+
+.accordionCell {
+    padding: 0 !important;
+    border-bottom: 1px solid var(--glass-border-subtle);
+}
+
+.accordionContent {
+    padding: 16px 20px 24px;
+    animation: expand 0.22s ease;
+}
+
+@keyframes expand {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ─── Grid layout ──────────────────────────────────────────────────────────────
+
+.detailGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.leftCol,
+.rightCol {
+    width: 100%;
+}
+
+// ─── Transcript / Summary ─────────────────────────────────────────────────────
+
+.summaryIcon {
+    font-size: 14px;
+    color: var(--accent-redesigned);
+}
+
+.summary {
+    font-size: 13px;
+    line-height: 1.65;
+    margin: 0;
+    color: var(--text-redesigned);
+}
+
+// ─── Sentiment badge ──────────────────────────────────────────────────────────
+
+.sentimentBadge {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+// ─── Avg score badge ──────────────────────────────────────────────────────────
+
+.avgBadge {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2px;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1;
+
+    &[data-level='high'] {
+        color: var(--status-success);
+    }
+
+    &[data-level='mid'] {
+        color: var(--status-warning);
+    }
+
+    &[data-level='low'] {
+        color: var(--status-error);
+    }
+}
+
+.avgBadgeMax {
+    font-size: 13px;
+    font-weight: 400;
+    opacity: 0.55;
+}
+
+// ─── Metric bar ───────────────────────────────────────────────────────────────
+
+.metricBar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.metricBarLabel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.metricBarName {
+    font-size: 12px;
+    color: var(--text-redesigned);
+    opacity: 0.85;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+    margin-right: 8px;
+}
+
+.metricBarValue {
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 28px;
+    text-align: right;
+
+    &[data-level='high'] {
+        color: var(--status-success);
+    }
+
+    &[data-level='mid'] {
+        color: var(--status-warning);
+    }
+
+    &[data-level='low'] {
+        color: var(--status-error);
+    }
+}
+
+.metricBarTrack {
+    height: 6px;
+    border-radius: 99px;
+    background: var(--glass-border-subtle);
+    overflow: hidden;
+    width: 100%;
+}
+
+.metricBarFill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &[data-level='high'] {
+        background: var(--status-success);
+        box-shadow: 0 0 6px color-mix(in srgb, var(--status-success) 50%, transparent);
+    }
+
+    &[data-level='mid'] {
+        background: var(--status-warning);
+    }
+
+    &[data-level='low'] {
+        background: var(--status-error);
+    }
+}

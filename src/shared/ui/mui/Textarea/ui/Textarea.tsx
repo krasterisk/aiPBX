@@ -28,13 +28,13 @@ const areaStyles = {
       transition: 'var(--transition-colors)',
     },
     '&:hover': {
-      backgroundColor: 'var(--light-bg-redesigned)',
+      backgroundColor: 'var(--bg-color)',
       '& fieldset': {
         borderColor: 'rgba(94, 211, 243, 0.4) !important',
       },
     },
     '&.Mui-focused': {
-      backgroundColor: 'var(--light-bg-redesigned)',
+      backgroundColor: 'var(--card-bg)',
       boxShadow: '0 0 0 3px rgba(94, 211, 243, 0.1)',
       '& fieldset': {
         borderColor: 'var(--accent-redesigned) !important',

@@ -2,7 +2,7 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './TabsUi.module.scss'
 import { memo, ReactNode, useCallback } from 'react'
 import { Card } from '../Card'
-import { Flex, FlexDirection } from '../Stack/Flex/Flex'
+import { Flex, FlexDirection, FlexWrap } from '../Stack/Flex/Flex'
 
 export interface TabItem {
   value: string
@@ -15,6 +15,7 @@ interface TabsProps {
   value: string
   onTabClick: (tab: TabItem) => void
   direction?: FlexDirection
+  wrap?: FlexWrap
 }
 
 export const TabsUi = memo((props: TabsProps) => {
@@ -23,7 +24,8 @@ export const TabsUi = memo((props: TabsProps) => {
     tabs,
     value,
     onTabClick,
-    direction = 'row'
+    direction = 'row',
+    wrap = 'nowrap'
   } = props
 
   const onClickHandler = useCallback((tab: TabItem) => () => {
@@ -33,6 +35,7 @@ export const TabsUi = memo((props: TabsProps) => {
   return (
     <Flex
       direction={direction}
+      wrap={wrap}
       gap='8'
       align={'start'}
       className={classNames(cls.Tabs, {}, [className])}

@@ -29,7 +29,10 @@ export const rtkApi = createApi({
     'McpServers',
     'McpTools',
     'ComposioConnections',
-    'ComposioActions'
+    'ComposioActions',
+    'OperatorAnalytics',
+    'OperatorProjects',
+    'OperatorApiTokens'
   ],
   endpoints: (builder) => ({})
 })

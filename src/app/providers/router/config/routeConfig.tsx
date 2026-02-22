@@ -53,7 +53,12 @@ import {
   getRouteLegalLiability,
   getRouteMcpServers,
   getRouteMcpServerCreate,
-  getRouteMcpServerEdit
+  getRouteMcpServerEdit,
+  getRouteOperatorAnalytics,
+  getRouteSpeechAnalyticsDashboard,
+  getRouteSpeechAnalyticsCdr,
+  getRouteSpeechAnalyticsProjects,
+  getRouteSpeechAnalyticsTokens
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 
@@ -98,6 +103,12 @@ import {
   LiabilityDisclaimerPage
 } from '@/pages/LegalPage'
 import { McpServersPage, McpServerEditPage, McpServerCreatePage } from '@/pages/McpServersPage'
+import { OperatorAnalyticsPage } from '@/pages/OperatorAnalyticsPage'
+import { lazy } from 'react'
+const SpeechDashboardPage = lazy(() => import('@/pages/OperatorAnalyticsPage/ui/SpeechDashboardPage/SpeechDashboardPage'))
+const SpeechCdrPage = lazy(() => import('@/pages/OperatorAnalyticsPage/ui/SpeechCdrPage/SpeechCdrPage'))
+const SpeechProjectsPage = lazy(() => import('@/pages/OperatorAnalyticsPage/ui/SpeechProjectsPage/SpeechProjectsPage'))
+const SpeechTokensPage = lazy(() => import('@/pages/OperatorAnalyticsPage/ui/SpeechTokensPage/SpeechTokensPage'))
 import { Navigate } from 'react-router-dom'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
@@ -345,6 +356,31 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     path: getRouteMcpServerEdit(':id'),
     authOnly: true,
     element: <McpServerEditPage />
+  },
+  [AppRoutes.OPERATOR_ANALYTICS]: {
+    path: getRouteOperatorAnalytics(),
+    authOnly: true,
+    element: <OperatorAnalyticsPage />
+  },
+  [AppRoutes.SPEECH_ANALYTICS_DASHBOARD]: {
+    path: getRouteSpeechAnalyticsDashboard(),
+    authOnly: true,
+    element: <SpeechDashboardPage />
+  },
+  [AppRoutes.SPEECH_ANALYTICS_CDR]: {
+    path: getRouteSpeechAnalyticsCdr(),
+    authOnly: true,
+    element: <SpeechCdrPage />
+  },
+  [AppRoutes.SPEECH_ANALYTICS_PROJECTS]: {
+    path: getRouteSpeechAnalyticsProjects(),
+    authOnly: true,
+    element: <SpeechProjectsPage />
+  },
+  [AppRoutes.SPEECH_ANALYTICS_TOKENS]: {
+    path: getRouteSpeechAnalyticsTokens(),
+    authOnly: true,
+    element: <SpeechTokensPage />
   }
 
 }

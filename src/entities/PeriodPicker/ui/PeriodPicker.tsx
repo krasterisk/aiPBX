@@ -36,6 +36,7 @@ interface PeriodPickerProps {
   onChangeTab: (tab: string) => void
   onChangeStartDate: (value: string) => void
   onChangeEndDate: (value: string) => void
+  onChangeDateRange?: (startDate: string, endDate: string) => void
 }
 
 export const PeriodPicker = memo((props: PeriodPickerProps) => {
@@ -50,6 +51,7 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
     onChangeTab,
     onChangeEndDate,
     onChangeStartDate,
+    onChangeDateRange,
   } = props
 
   const [date, setDate] = useState<Dayjs>(dayjs())
@@ -72,8 +74,12 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
       const end = dayjs(date).endOf(tab as OpUnitType).format('YYYY-MM-DD')
 
       if (start !== startDate || end !== endDate) {
-        onChangeStartDate(start)
-        onChangeEndDate(end)
+        if (onChangeDateRange) {
+          onChangeDateRange(start, end)
+        } else {
+          onChangeStartDate(start)
+          onChangeEndDate(end)
+        }
       }
     }
   }, [isInited, tab])
@@ -83,8 +89,12 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
     setDate(newDate)
     const start = dayjs(newDate).startOf(tab as OpUnitType).format('YYYY-MM-DD')
     const end = dayjs(newDate).endOf(tab as OpUnitType).format('YYYY-MM-DD')
-    onChangeStartDate(start)
-    onChangeEndDate(end)
+    if (onChangeDateRange) {
+      onChangeDateRange(start, end)
+    } else {
+      onChangeStartDate(start)
+      onChangeEndDate(end)
+    }
   }
 
   const content = (

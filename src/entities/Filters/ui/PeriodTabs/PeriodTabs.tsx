@@ -46,13 +46,13 @@ export const PeriodTabs = memo((props: PeriodTabsProps) => {
   }, [onChangeTab])
 
   return (
-        <TabsUi
-            direction={'row'}
-            data-testid={'PeriodFiltersTabs'}
-            className={classNames('', {}, [className])}
-            tabs={periodTabs}
-            onTabClick={onTabClick}
-            value={tab}
-        />
+    <TabsUi
+      direction={'row'}
+      data-testid={'PeriodFiltersTabs'}
+      className={classNames('', {}, [className])}
+      tabs={periodTabs}
+      onTabClick={onTabClick}
+      value={tab}
+    />
   )
 })

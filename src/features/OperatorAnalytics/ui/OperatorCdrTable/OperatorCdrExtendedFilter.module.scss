@@ -1,0 +1,13 @@
+.closeBtn {
+    flex-shrink: 0;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.row {
+    @media (max-width: 600px) {
+        flex-direction: column;
+    }
+}

@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { AIAnalyticsResponse, AllReports, Analytics, CdrSource, Report, ReportDialog } from '../model/types/report'
+import { AIAnalyticsResponse, AllReports, Analytics, BatchUploadResponse, CdrSource, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorProject, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
   page?: number
@@ -43,7 +43,7 @@ export const reportApi = rtkApi.injectEndpoints({
         }
       },
       // Refetch when the page arg changes
-      forceRefetch ({ currentArg, previousArg }) {
+      forceRefetch({ currentArg, previousArg }) {
         return JSON.stringify(currentArg) !== JSON.stringify(previousArg)
       },
       providesTags: (result) =>
@@ -119,7 +119,7 @@ export const reportApi = rtkApi.injectEndpoints({
         method: 'PATCH',
         body: { id, ...patch }
       }),
-      async onQueryStarted ({ id, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
           reportApi.util.updateQueryData('getReport', id, (draft) => {
             Object.assign(draft, patch)
@@ -130,7 +130,7 @@ export const reportApi = rtkApi.injectEndpoints({
       invalidatesTags: (result, error, { id }) => [{ type: 'Reports', id }]
     }),
     deleteReport: build.mutation<{ success: boolean, id: string }, string>({
-      query (id) {
+      query(id) {
         return {
           url: `/reports/${id}`,
           method: 'DELETE'
@@ -163,6 +163,106 @@ export const reportApi = rtkApi.injectEndpoints({
         { type: 'Reports', id: 'LIST' },
         ...((result && 'channelId' in result) ? [{ type: 'Reports' as const, channelId: result.channelId }] : [])
       ]
+    }),
+
+    // Operator Analytics
+    uploadOperatorFiles: build.mutation<OperatorAnalysisResult | BatchUploadResponse, FormData>({
+      query: (body) => ({
+        url: '/operator-analytics/upload',
+        method: 'POST',
+        body
+      }),
+      invalidatesTags: ['OperatorAnalytics']
+    }),
+    getOperatorAnalysis: build.query<OperatorAnalysisResult, string>({
+      query: (id) => `/operator-analytics/${id}`,
+      providesTags: (result, error, id) => [{ type: 'OperatorAnalytics', id }]
+    }),
+    getOperatorCdrs: build.query<OperatorCdrResponse, {
+      startDate?: string
+      endDate?: string
+      operatorName?: string
+      projectId?: string
+      page?: number
+      limit?: number
+      search?: string
+      sortField?: string
+      sortOrder?: 'ASC' | 'DESC'
+    }>({
+      query: (args) => ({
+        url: '/operator-analytics/cdrs',
+        params: Object.fromEntries(
+          Object.entries(args).filter(([, v]) => v !== undefined && v !== '')
+        )
+      }),
+      providesTags: ['OperatorAnalytics']
+    }),
+    getOperatorDashboard: build.query<OperatorDashboardResponse, {
+      startDate?: string
+      endDate?: string
+      operatorName?: string
+      projectId?: string
+    }>({
+      query: (args) => ({
+        url: '/operator-analytics/dashboard',
+        params: Object.fromEntries(
+          Object.entries(args).filter(([, v]) => v !== undefined && v !== '')
+        )
+      }),
+      providesTags: ['OperatorAnalytics']
+    }),
+    getOperatorProjects: build.query<OperatorProject[], void>({
+      query: () => '/operator-analytics/projects',
+      providesTags: ['OperatorProjects']
+    }),
+    createOperatorProject: build.mutation<OperatorProject, { name: string; description?: string }>({
+      query: (body) => ({
+        url: '/operator-analytics/projects',
+        method: 'POST',
+        body
+      }),
+      invalidatesTags: ['OperatorProjects']
+    }),
+    deleteOperatorProject: build.mutation<void, string>({
+      query: (id) => ({
+        url: `/operator-analytics/projects/${id}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['OperatorProjects']
+    }),
+    generateOperatorApiToken: build.mutation<{ token: string } & OperatorApiToken, { name: string; projectId?: string }>({
+      query: (body) => ({
+        url: '/operator-analytics/tokens/generate',  // POST /api/operator-analytics/tokens/generate
+        method: 'POST',
+        body
+      }),
+      invalidatesTags: ['OperatorApiTokens']
+    }),
+    listOperatorApiTokens: build.query<OperatorApiToken[], void>({
+      query: () => '/operator-analytics/tokens',     // GET /api/operator-analytics/tokens
+      providesTags: ['OperatorApiTokens']
+    }),
+    revokeOperatorApiToken: build.mutation<void, string>({
+      query: (id) => ({
+        url: `/operator-analytics/tokens/${id}/revoke`, // PATCH /api/operator-analytics/tokens/:id/revoke
+        method: 'PATCH'
+      }),
+      invalidatesTags: ['OperatorApiTokens']
+    }),
+    deleteOperatorApiToken: build.mutation<void, string>({
+      query: (id) => ({
+        url: `/operator-analytics/tokens/${id}`,      // DELETE /api/operator-analytics/tokens/:id
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['OperatorApiTokens']
+    }),
+    updateOperatorProject: build.mutation<void, { id: string; name: string; description?: string }>({
+      query: ({ id, ...body }) => ({
+        url: `/operator-analytics/projects/${id}`,   // PATCH /api/operator-analytics/projects/:id
+        method: 'PATCH',
+        body
+      }),
+      invalidatesTags: ['OperatorProjects']
     })
   })
 })
@@ -178,3 +278,17 @@ export const useGetReport = reportApi.useGetReportQuery
 export const useUpdateReport = reportApi.useUpdateReportMutation
 export const useDeleteReport = reportApi.useDeleteReportMutation
 export const useCreateCallAnalytics = reportApi.useCreateCallAnalyticsMutation
+
+// Operator Analytics hooks
+export const useUploadOperatorFiles = reportApi.useUploadOperatorFilesMutation
+export const useGetOperatorAnalysis = reportApi.useGetOperatorAnalysisQuery
+export const useGetOperatorCdrs = reportApi.useGetOperatorCdrsQuery
+export const useGetOperatorDashboard = reportApi.useGetOperatorDashboardQuery
+export const useGetOperatorProjects = reportApi.useGetOperatorProjectsQuery
+export const useCreateOperatorProject = reportApi.useCreateOperatorProjectMutation
+export const useDeleteOperatorProject = reportApi.useDeleteOperatorProjectMutation
+export const useUpdateOperatorProject = reportApi.useUpdateOperatorProjectMutation
+export const useGenerateOperatorApiToken = reportApi.useGenerateOperatorApiTokenMutation
+export const useListOperatorApiTokens = reportApi.useListOperatorApiTokensQuery
+export const useRevokeOperatorApiToken = reportApi.useRevokeOperatorApiTokenMutation
+export const useDeleteOperatorApiToken = reportApi.useDeleteOperatorApiTokenMutation

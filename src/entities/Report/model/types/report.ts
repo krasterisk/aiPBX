@@ -210,3 +210,173 @@ export interface TopIssue {
   intent: string
   count: number
 }
+
+// Operator Analytics Types
+
+export interface OperatorMetrics {
+  greeting_quality: number
+  script_compliance: number
+  politeness_empathy: number
+  active_listening: number
+  objection_handling: number
+  product_knowledge: number
+  problem_resolution: number
+  speech_clarity_pace: number
+  closing_quality: number
+  customer_sentiment: 'Positive' | 'Neutral' | 'Negative'
+  summary?: string
+  success?: boolean
+}
+
+export type OperatorAnalysisStatus = 'processing' | 'completed' | 'error'
+
+export interface OperatorAnalysisResult {
+  id: string
+  filename: string
+  status: OperatorAnalysisStatus
+  source?: 'frontend' | 'api'
+  duration?: number
+  cost?: number
+  llmCost?: number
+  sttCost?: number
+  tokens?: number
+  createdAt: string
+  operatorName?: string
+  clientPhone?: string
+  language?: string
+  transcription?: string
+  recordUrl?: string
+  metrics?: OperatorMetrics
+  customMetrics?: Record<string, any>
+  summary?: string
+  success?: boolean
+  projectId?: string
+  project?: OperatorProject
+}
+
+export interface OperatorCdrResponse {
+  data: OperatorAnalysisResult[]
+  total: number
+  page: number
+  limit: number
+}
+
+export interface OperatorAggregatedMetrics {
+  greeting_quality: number
+  script_compliance: number
+  politeness_empathy: number
+  active_listening: number
+  objection_handling: number
+  product_knowledge: number
+  problem_resolution: number
+  speech_clarity_pace: number
+  closing_quality: number
+}
+
+export interface OperatorDashboardResponse {
+  totalAnalyzed: number
+  totalCost: number
+  avgCost?: number
+  averageDuration: number
+  averageScore: number
+  successRate: number
+  aggregatedMetrics: OperatorAggregatedMetrics
+  sentimentDistribution: {
+    positive: number
+    neutral: number
+    negative: number
+  }
+  timeSeries: Array<{
+    label: string
+    callsCount: number
+    avgScore: number
+    avgDuration: number
+  }>
+}
+
+export interface BatchUploadResponse {
+  items: Array<{
+    id: string
+    filename: string
+    status: OperatorAnalysisStatus
+  }>
+}
+
+// ─── Metric / Dashboard types ─────────────────────────────────────────────────
+
+export interface MetricDefinition {
+  id: string                        // snake_case
+  name: string                      // "Попытка апселла"
+  type: 'boolean' | 'number' | 'enum' | 'string'
+  description: string               // Instruction for LLM (max 500 chars)
+  enumValues?: string[]
+}
+
+export type DefaultMetricKey =
+  | 'greeting_quality' | 'script_compliance' | 'politeness_empathy'
+  | 'active_listening' | 'objection_handling' | 'product_knowledge'
+  | 'problem_resolution' | 'speech_clarity_pace' | 'closing_quality'
+
+export type WidgetType = 'stat-card' | 'bar-chart' | 'line-chart' | 'pie-chart'
+  | 'tag-cloud' | 'sparkline' | 'heatmap'
+
+export interface DashboardWidget {
+  id: string
+  title: string
+  source: 'default' | 'custom'
+  metricId: string
+  widgetType: WidgetType
+  size: 'sm' | 'md' | 'lg'
+  position: number
+}
+
+export interface DashboardConfig {
+  widgets: DashboardWidget[]
+  maxWidgets: number
+}
+
+export type WebhookEvent = 'analysis.completed' | 'analysis.error'
+
+// ─── Project ──────────────────────────────────────────────────────────────────
+
+export interface OperatorProject {
+  id: string
+  name: string
+  description?: string
+  recordCount?: number
+  createdAt: string
+  isDefault?: boolean
+  systemPrompt?: string
+  customMetricsSchema?: MetricDefinition[]
+  currentSchemaVersion?: number
+  visibleDefaultMetrics?: DefaultMetricKey[]
+  dashboardConfig?: DashboardConfig
+  webhookUrl?: string
+  webhookEvents?: WebhookEvent[]
+}
+
+// ─── Project Template ─────────────────────────────────────────────────────────
+
+export interface ProjectTemplate {
+  id: string
+  name: string
+  description: string
+  icon: string
+  systemPrompt: string
+  customMetricsSchema: MetricDefinition[]
+  visibleDefaultMetrics: DefaultMetricKey[]
+}
+
+// ─── API Token ────────────────────────────────────────────────────────────────
+
+export interface OperatorApiToken {
+  id: string
+  name: string
+  preview: string
+  createdAt: string
+  lastUsedAt?: string
+  isActive: boolean
+  projectId?: string
+  projectName?: string
+}
+

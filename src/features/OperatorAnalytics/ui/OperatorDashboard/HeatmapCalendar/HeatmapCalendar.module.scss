@@ -1,0 +1,33 @@
+.heatmapWrapper {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.heatmap {
+    display: block;
+    min-width: 0;
+}
+
+.cell {
+    transition: opacity 0.2s ease, transform 0.15s ease;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 1 !important;
+        filter: brightness(1.3);
+        transform: scale(1.2);
+    }
+}
+
+.dayLabel {
+    font-size: 10px;
+    fill: var(--text-redesigned);
+    opacity: 0.5;
+}
+
+.monthLabel {
+    font-size: 10px;
+    fill: var(--text-redesigned);
+    opacity: 0.6;
+}

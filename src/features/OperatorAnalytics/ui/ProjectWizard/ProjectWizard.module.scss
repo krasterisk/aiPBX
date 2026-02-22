@@ -1,0 +1,264 @@
+@import '@/app/styles/variables/mixins';
+
+.ProjectWizard {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+
+    @include mobile {
+        max-width: 100%;
+    }
+}
+
+.wizardContent {
+    @include glass-card-primary;
+    padding: var(--card-padding-lg);
+    min-height: 400px;
+
+    @include mobile {
+        padding: var(--card-padding-sm);
+        min-height: 300px;
+    }
+}
+
+// ─── Stepper ──────────────────────────────────────────────────────────────────
+
+.stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-6);
+}
+
+.stepDot {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-full);
+    background: var(--glass-border-secondary);
+    transition: var(--transition-normal);
+    cursor: pointer;
+    border: none;
+    padding: 0;
+
+    &.active {
+        background: var(--accent-redesigned);
+        box-shadow: var(--shadow-accent-sm);
+        transform: scale(1.3);
+    }
+
+    &.completed {
+        background: var(--status-success);
+    }
+}
+
+.stepLabel {
+    font-size: var(--font-size-s);
+    color: var(--text-redesigned);
+    opacity: 0.6;
+    text-align: center;
+    margin-top: var(--space-1);
+}
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+
+.navButtons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--space-6);
+    gap: var(--space-3);
+    flex-wrap: wrap;
+
+    @include mobile {
+        flex-direction: column;
+    }
+}
+
+// ─── Template Cards ───────────────────────────────────────────────────────────
+
+.templateGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-4);
+    width: 100%;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.templateCard {
+    @include glass-card-secondary;
+    @include hover-lift-card;
+    padding: var(--card-padding-md);
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transition-medium);
+
+    &.selected {
+        border-color: var(--accent-redesigned);
+        box-shadow: var(--shadow-accent-md);
+    }
+}
+
+.templateIcon {
+    font-size: 36px;
+    margin-bottom: var(--space-3);
+}
+
+// ─── Metric Builder ───────────────────────────────────────────────────────────
+
+.metricsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+}
+
+.metricCard {
+    @include glass-card-secondary;
+    padding: var(--card-padding-md);
+    transition: var(--transition-normal);
+    @include hover-lift-simple;
+}
+
+.metricHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
+}
+
+.metricFields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.promptPreview {
+    @include glass-card-tertiary;
+    padding: var(--card-padding-md);
+    max-height: 300px;
+    overflow-y: auto;
+    @include custom-scrollbar;
+}
+
+.promptText {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--font-size-s);
+    line-height: 1.6;
+    color: var(--text-redesigned);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+// ─── Default Metrics ──────────────────────────────────────────────────────────
+
+.metricsChecklist {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    width: 100%;
+}
+
+.metricCheckRow {
+    @include glass-card-secondary;
+    padding: 12px var(--card-padding-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    transition: var(--transition-fast);
+
+    &.locked {
+        opacity: 0.7;
+    }
+
+    &:hover:not(.locked) {
+        border-color: var(--accent-redesigned);
+    }
+}
+
+// ─── Webhook ──────────────────────────────────────────────────────────────────
+
+.webhookSection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+}
+
+// ─── Chat (Step 1) ────────────────────────────────────────────────────────────
+
+.chatContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-height: 400px;
+    overflow-y: auto;
+    @include custom-scrollbar;
+    padding: var(--space-2);
+}
+
+.chatBubble {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-m);
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease;
+
+    &.ai {
+        align-self: flex-start;
+        background: var(--glass-bg-secondary);
+        border: var(--glass-border-secondary);
+    }
+
+    &.user {
+        align-self: flex-end;
+        background: rgba(94, 211, 243, 0.15);
+        border: 1px solid rgba(94, 211, 243, 0.3);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chatInputRow {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-end;
+    margin-top: var(--space-3);
+
+    @include mobile {
+        flex-direction: column;
+    }
+}
+
+// ─── Undo/Redo toolbar ────────────────────────────────────────────────────────
+
+.undoRedoToolbar {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+}
+
+.skeleton {
+    border-radius: var(--radius-lg) !important;
+    background: var(--glass-bg-secondary) !important;
+}

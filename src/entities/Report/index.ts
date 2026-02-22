@@ -9,7 +9,23 @@ export type {
   TimeSeriesPoint,
   AssistantMetric,
   TopIssue,
-  CdrSource
+  CdrSource,
+  OperatorMetrics,
+  OperatorAnalysisResult,
+  OperatorAnalysisStatus,
+  OperatorCdrResponse,
+  OperatorDashboardResponse,
+  OperatorAggregatedMetrics,
+  BatchUploadResponse,
+  OperatorProject,
+  OperatorApiToken,
+  MetricDefinition,
+  DefaultMetricKey,
+  WidgetType,
+  DashboardWidget,
+  DashboardConfig,
+  WebhookEvent,
+  ProjectTemplate
 } from './model/types/report'
 export type { ReportsPageSchema } from './model/types/reportsPageSchema'
 export {
@@ -43,7 +59,19 @@ export {
   useGetReportEvents,
   useGetReportDialogs,
   useDashboard,
-  useGetAIAnalyticsDashboard
+  useGetAIAnalyticsDashboard,
+  useUploadOperatorFiles,
+  useGetOperatorAnalysis,
+  useGetOperatorCdrs,
+  useGetOperatorDashboard,
+  useGetOperatorProjects,
+  useCreateOperatorProject,
+  useDeleteOperatorProject,
+  useUpdateOperatorProject,
+  useGenerateOperatorApiToken,
+  useListOperatorApiTokens,
+  useRevokeOperatorApiToken,
+  useDeleteOperatorApiToken
 } from './api/reportApi'
 
 export { useReportFilters } from './lib/useReportFilters'

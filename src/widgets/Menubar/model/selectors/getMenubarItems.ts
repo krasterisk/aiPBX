@@ -14,7 +14,11 @@ import {
   getRouteModels,
   getRoutePublishSipUris,
   getRoutePublishWidgets,
-  getRouteMcpServers
+  getRouteMcpServers,
+  getRouteSpeechAnalyticsDashboard,
+  getRouteSpeechAnalyticsCdr,
+  getRouteSpeechAnalyticsProjects,
+  getRouteSpeechAnalyticsTokens
 } from '@/shared/const/router'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
@@ -32,6 +36,7 @@ import AnalyticsIcon from '@mui/icons-material/Analytics'
 import DescriptionIcon from '@mui/icons-material/Description'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import HubIcon from '@mui/icons-material/Hub'
+import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver'
 import { MenubarItemType } from '../types/menubar'
 import { useTranslation } from 'react-i18next'
 
@@ -73,7 +78,7 @@ export const useMenubarItems = () => {
             Icon: DescriptionIcon,
             text: t('Call Records'),
             authOnly: true
-          }
+          },
         ]
       },
       {
@@ -116,6 +121,38 @@ export const useMenubarItems = () => {
             path: getRoutePbxServers(),
             Icon: DnsIcon,
             text: t('PBXs'),
+            authOnly: true
+          }
+        ]
+      },
+      {
+        path: '/speech-analytics',
+        Icon: RecordVoiceOverIcon,
+        text: t('Речевая аналитика'),
+        authOnly: true,
+        subItems: [
+          {
+            path: getRouteSpeechAnalyticsDashboard(),
+            Icon: DashboardIcon,
+            text: t('Дашборд'),
+            authOnly: true
+          },
+          {
+            path: getRouteSpeechAnalyticsCdr(),
+            Icon: DescriptionIcon,
+            text: t('Записи звонков'),
+            authOnly: true
+          },
+          {
+            path: getRouteSpeechAnalyticsProjects(),
+            Icon: BuildIcon,
+            text: t('Проекты'),
+            authOnly: true
+          },
+          {
+            path: getRouteSpeechAnalyticsTokens(),
+            Icon: AnalyticsIcon,
+            text: t('API Токены'),
             authOnly: true
           }
         ]

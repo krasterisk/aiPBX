@@ -50,13 +50,13 @@ export const ReportsListHeader = memo((props: ReportsListHeaderProps) => {
       max
       gap="16"
     >
-      <HStack max justify="between" align="center" gap="16" className={cls.headerContent}>
+      <HStack max justify="between" align="center" gap="16" wrap="wrap" className={cls.headerContent}>
         <HStack className={cls.titleSection}>
           <Text title={t('Звонки')} size="l" bold />
         </HStack>
 
-        <HStack gap="16" align="center" className={cls.controlsSection}>
-          <HStack gap="8" align="center">
+        <HStack gap="16" align="center" wrap="wrap" className={cls.controlsSection}>
+          <HStack gap="8" align="center" wrap="wrap">
             <PeriodPicker
               className={cls.datePicker}
               userId={clientId}

@@ -77,5 +77,10 @@
   "MCP Серверы": "MCP Servers",
   "AI Модели": "Models",
   "Онбординг": "Onboarding",
-  "Обновить": "Refresh"
+  "Обновить": "Refresh",
+  "Речевая аналитика": "Speech Analytics",
+  "Дашборд": "Dashboard",
+  "Записи звонков": "Call Records",
+  "Проекты": "Projects",
+  "API Токены": "API Tokens"
 }
