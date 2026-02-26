@@ -1,0 +1,34 @@
+@import '@/app/styles/variables/mixins';
+
+.SipTrunksList {
+    position: relative;
+    width: 100%;
+
+    .listWrapper {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: var(--space-5);
+        width: 100%;
+        align-items: stretch;
+    }
+}
+
+.loader {
+    padding: var(--space-16);
+}
+
+.emptyState {
+    padding: var(--space-20);
+    background: var(--card-bg-redesigned);
+    backdrop-filter: var(--glass-blur-sm);
+    border-radius: var(--radius-xl);
+    border: 1px dashed var(--divider-solid);
+}
+
+@include tablet {
+    .SipTrunksList {
+        .listWrapper {
+            grid-template-columns: 1fr;
+        }
+    }
+}

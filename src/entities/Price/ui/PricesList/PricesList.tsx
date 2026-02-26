@@ -50,6 +50,10 @@ export const PricesList = memo((props: PricesListProps) => {
             header: (t('Analytic') ?? ''),
             cell: info => info.getValue()
         }),
+        columnHelper.accessor('stt', {
+            header: (t('STT') ?? ''),
+            cell: info => info.getValue()
+        }),
         columnHelper.display({
             id: 'actions',
             header: (t('Actions') ?? ''),

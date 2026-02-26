@@ -86,6 +86,7 @@ export interface BillingRecord {
   audioCost: number
   textCost: number
   totalCost: number
+  sttCost?: number
   createdAt: string
 }
 
@@ -343,7 +344,6 @@ export interface OperatorProject {
   id: string
   name: string
   description?: string
-  recordCount?: number
   createdAt: string
   isDefault?: boolean
   systemPrompt?: string
@@ -352,6 +352,7 @@ export interface OperatorProject {
   visibleDefaultMetrics?: DefaultMetricKey[]
   dashboardConfig?: DashboardConfig
   webhookUrl?: string
+  webhookHeaders?: Record<string, string>
   webhookEvents?: WebhookEvent[]
 }
 

@@ -45,6 +45,10 @@ export const PriceItem = memo((props: PriceItemProps) => {
                         <Text text={t('Analytic Price')} variant="accent" size="s" />
                         <Text text={String(price.analytic)} size="l" bold />
                     </HStack>
+                    <HStack justify="between" max>
+                        <Text text={t('STT Price')} variant="accent" size="s" />
+                        <Text text={String(price.stt)} size="l" bold />
+                    </HStack>
                 </VStack>
 
                 <div className={cls.actions}>

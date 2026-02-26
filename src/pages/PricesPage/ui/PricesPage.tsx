@@ -31,7 +31,7 @@ export const PricesPage = memo(() => {
     const [priceToDeleteId, setPriceToDeleteId] = useState<number | null>(null)
 
     // Form State
-    const [formData, setFormData] = useState<CreatePriceDto>({ userId: 0, realtime: 0, analytic: 0 })
+    const [formData, setFormData] = useState<CreatePriceDto>({ userId: 0, realtime: 0, analytic: 0, stt: 0 })
 
     // API
     const { data: prices, isLoading, isError } = usePrices()
@@ -44,7 +44,7 @@ export const PricesPage = memo(() => {
         try {
             await createPrice(formData).unwrap()
             setIsCreateModalOpen(false)
-            setFormData({ userId: 0, realtime: 0, analytic: 0 })
+            setFormData({ userId: 0, realtime: 0, analytic: 0, stt: 0 })
         } catch (e) {
             console.error('Failed to create price', e)
         }
@@ -57,7 +57,8 @@ export const PricesPage = memo(() => {
                 id: selectedPrice.id,
                 dto: {
                     realtime: formData.realtime,
-                    analytic: formData.analytic
+                    analytic: formData.analytic,
+                    stt: formData.stt
                 }
             }).unwrap()
             setIsEditModalOpen(false)
@@ -84,13 +85,13 @@ export const PricesPage = memo(() => {
     }
 
     const openCreateModal = () => {
-        setFormData({ userId: 0, realtime: 0, analytic: 0 })
+        setFormData({ userId: 0, realtime: 0, analytic: 0, stt: 0 })
         setIsCreateModalOpen(true)
     }
 
     const openEditModal = (price: Price) => {
         setSelectedPrice(price)
-        setFormData({ userId: price.userId, realtime: price.realtime, analytic: price.analytic })
+        setFormData({ userId: price.userId, realtime: price.realtime, analytic: price.analytic, stt: price.stt })
         setIsEditModalOpen(true)
     }
 
@@ -124,12 +125,21 @@ export const PricesPage = memo(() => {
                             value={String(formData.realtime)}
                             onChange={(e) => { setFormData(prev => ({ ...prev, realtime: Number(e.target.value) })) }}
                             type="number"
+                            inputProps={{ step: 0.1 }}
                         />
                         <Textarea
                             label={t('Analytic')}
                             value={String(formData.analytic)}
                             onChange={(e) => { setFormData(prev => ({ ...prev, analytic: Number(e.target.value) })) }}
                             type="number"
+                            inputProps={{ step: 0.1 }}
+                        />
+                        <Textarea
+                            label={t('STT')}
+                            value={String(formData.stt)}
+                            onChange={(e) => { setFormData(prev => ({ ...prev, stt: Number(e.target.value) })) }}
+                            type="number"
+                            inputProps={{ step: 0.1 }}
                         />
                         <HStack justify="end" gap="16" max>
                             <Button onClick={() => { setIsCreateModalOpen(false) }} variant="clear">{t('Cancel')}</Button>
@@ -151,12 +161,21 @@ export const PricesPage = memo(() => {
                             value={String(formData.realtime)}
                             onChange={(e) => { setFormData(prev => ({ ...prev, realtime: Number(e.target.value) })) }}
                             type="number"
+                            inputProps={{ step: 0.1 }}
                         />
                         <Textarea
                             label={t('Analytic')}
                             value={String(formData.analytic)}
                             onChange={(e) => { setFormData(prev => ({ ...prev, analytic: Number(e.target.value) })) }}
                             type="number"
+                            inputProps={{ step: 0.1 }}
+                        />
+                        <Textarea
+                            label={t('STT')}
+                            value={String(formData.stt)}
+                            onChange={(e) => { setFormData(prev => ({ ...prev, stt: Number(e.target.value) })) }}
+                            type="number"
+                            inputProps={{ step: 0.1 }}
                         />
                         <HStack justify="end" gap="16" max>
                             <Button onClick={() => { setIsEditModalOpen(false) }} variant="clear">{t('Cancel')}</Button>

@@ -290,20 +290,20 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                         <div className={cls.metricBars}>
                             {radarMetrics.map(m => {
                                 const level = m.value >= 80 ? 'high' : m.value >= 50 ? 'mid' : 'low'
+                                const color = level === 'high' ? 'var(--status-success)' : level === 'mid' ? 'var(--status-warning)' : 'var(--status-error)'
                                 return (
-                                    <div key={m.label} className={cls.metricBarRow}>
-                                        <div className={cls.metricBarMeta}>
-                                            <span className={cls.metricBarLabel}>{m.label}</span>
-                                            <span className={cls.metricBarScore} data-level={level}>{m.value}</span>
-                                        </div>
+                                    <VStack key={m.label} gap={'4'} max>
+                                        <HStack max justify={'between'}>
+                                            <Text text={m.label} size={'s'} />
+                                            <Text text={String(m.value)} size={'s'} bold variant={level === 'high' ? 'success' : level === 'mid' ? 'warning' : 'error'} />
+                                        </HStack>
                                         <div className={cls.metricBarTrack}>
                                             <div
                                                 className={cls.metricBarFill}
-                                                data-level={level}
-                                                style={{ width: `${m.value}%` }}
+                                                style={{ width: `${m.value}%`, backgroundColor: color }}
                                             />
                                         </div>
-                                    </div>
+                                    </VStack>
                                 )
                             })}
                         </div>

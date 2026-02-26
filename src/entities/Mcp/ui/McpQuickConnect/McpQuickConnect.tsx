@@ -18,6 +18,8 @@ import {
     useMcpServersAll,
 } from '../../api/mcpApi'
 import { ComposioConnectionStatus } from '../../model/types/mcpTypes'
+import { useSelector } from 'react-redux'
+import { getUserAuthData } from '@/entities/User'
 import cls from './McpQuickConnect.module.scss'
 
 interface McpQuickConnectProps {
@@ -32,6 +34,7 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
     const [connectBitrix24, { isLoading: isConnectingBitrix24 }] = useBitrix24Connect()
     const [connectTelegramApi, { isLoading: isConnectingTelegram }] = useTelegramConnect()
     const { data: statuses, refetch: refetchStatus } = useGetComposioStatus()
+    const userData = useSelector(getUserAuthData)
     const { data: allServers, refetch: refetchServers } = useMcpServersAll(null)
 
     // API key dialog state
@@ -47,14 +50,17 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
         return map
     }, [statuses])
 
-    // Build a set of toolkits that have a real MCP server
+    // Build a set of toolkits that have a real MCP server for the current user
     const serversByToolkit = useMemo(() => {
         const set = new Set<string>()
+        const currentUserId = userData?.id ? String(userData.id) : null
         allServers?.forEach(s => {
-            if (s.composioToolkit) set.add(s.composioToolkit)
+            if (s.composioToolkit && (!currentUserId || String(s.userId) === currentUserId)) {
+                set.add(s.composioToolkit)
+            }
         })
         return set
-    }, [allServers])
+    }, [allServers, userData])
 
     useEffect(() => {
         return () => {
@@ -236,33 +242,33 @@ export const McpQuickConnect = memo((props: McpQuickConnectProps) => {
                     </HStack>
 
                     {isTelegramDialog
-? (
-                        <VStack gap="8">
-                            <Text text={t('telegram_chat_id_step1')} size="s" />
-                            <a
-                                href="https://t.me/AIPBXbot"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={cls.botLink}
-                            >
-                                @AIPBXbot
-                            </a>
-                            <Text text={t('telegram_chat_id_step2')} size="s" />
-                        </VStack>
-                    )
-: isBitrix24Dialog
-? (
-                        <VStack gap="8">
-                            <Text text={t('bitrix24_webhook_step1')} size="s" />
-                            <Text text={t('bitrix24_webhook_step2')} size="s" />
-                        </VStack>
-                    )
-: (
-                        <Text
-                            text={t('api_key_instruction')}
-                            size="s"
-                        />
-                    )}
+                        ? (
+                            <VStack gap="8">
+                                <Text text={t('telegram_chat_id_step1')} size="s" />
+                                <a
+                                    href="https://t.me/AIPBXbot"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={cls.botLink}
+                                >
+                                    @AIPBXbot
+                                </a>
+                                <Text text={t('telegram_chat_id_step2')} size="s" />
+                            </VStack>
+                        )
+                        : isBitrix24Dialog
+                            ? (
+                                <VStack gap="8">
+                                    <Text text={t('bitrix24_webhook_step1')} size="s" />
+                                    <Text text={t('bitrix24_webhook_step2')} size="s" />
+                                </VStack>
+                            )
+                            : (
+                                <Text
+                                    text={t('api_key_instruction')}
+                                    size="s"
+                                />
+                            )}
 
                     <Textarea
                         value={apiKeyValue}

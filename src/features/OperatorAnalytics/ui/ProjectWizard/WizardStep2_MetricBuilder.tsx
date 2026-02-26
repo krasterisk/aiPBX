@@ -1,17 +1,18 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useState, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
+import { Card } from '@/shared/ui/redesigned/Card'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import UndoIcon from '@mui/icons-material/Undo'
-import RedoIcon from '@mui/icons-material/Redo'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { MetricDefinition, DefaultMetricKey } from '@/entities/Report'
-import { IconButton } from '@mui/material'
-import cls from './ProjectWizard.module.scss'
+import { isUserAdmin } from '@/entities/User'
 
 const METRIC_TYPES = [
     { label: 'Boolean (Да/Нет)', value: 'boolean' },
@@ -25,10 +26,6 @@ interface WizardStep2Props {
     systemPrompt: string
     visibleDefaultMetrics: DefaultMetricKey[]
     onChangeMetrics: (metrics: MetricDefinition[]) => void
-    canUndo: boolean
-    canRedo: boolean
-    onUndo: () => void
-    onRedo: () => void
 }
 
 const generateId = (name: string): string =>
@@ -37,9 +34,11 @@ const generateId = (name: string): string =>
 export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
     const {
         metrics, systemPrompt, visibleDefaultMetrics,
-        onChangeMetrics, canUndo, canRedo, onUndo, onRedo
+        onChangeMetrics
     } = props
     const { t } = useTranslation('reports')
+    const isAdmin = useSelector(isUserAdmin)
+    const [promptOpen, setPromptOpen] = useState(false)
 
     const handleAdd = useCallback(() => {
         onChangeMetrics([
@@ -87,62 +86,53 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
 
     return (
         <VStack gap={'16'} max>
-            <HStack max justify={'between'} align={'center'} wrap={'wrap'} gap={'8'}>
-                <Text title={String(t('Кастомные метрики'))} bold />
-                <HStack gap={'8'} align={'center'} className={cls.undoRedoToolbar}>
-                    <IconButton size={'small'} onClick={onUndo} disabled={!canUndo} className={cls.iconBtn}>
-                        <UndoIcon fontSize={'small'} />
-                    </IconButton>
-                    <IconButton size={'small'} onClick={onRedo} disabled={!canRedo} className={cls.iconBtn}>
-                        <RedoIcon fontSize={'small'} />
-                    </IconButton>
-                </HStack>
-            </HStack>
-
-            <div className={cls.metricsGrid}>
+            {/* Metric cards */}
+            <VStack gap={'12'} max>
                 {metrics.map((metric, idx) => (
-                    <div key={metric.id + idx} className={cls.metricCard}>
-                        <div className={cls.metricHeader}>
-                            <Text text={metric.name || String(t('Новая метрика'))} bold />
-                            <Button
-                                variant={'glass-action'}
-                                color={'error'}
-                                size={'s'}
-                                onClick={() => handleRemove(idx)}
-                                addonLeft={<DeleteOutlineIcon fontSize={'small'} />}
-                            >
-                                {String(t('Удалить'))}
-                            </Button>
-                        </div>
-                        <div className={cls.metricFields}>
-                            <Textarea
-                                label={String(t('Название метрики'))}
-                                value={metric.name}
-                                onChange={e => handleChange(idx, 'name', e.target.value)}
-                                size={'small'}
-                                fullWidth
-                                multiline={false}
-                            />
-                            <Combobox
-                                options={METRIC_TYPES}
-                                value={METRIC_TYPES.find(o => o.value === metric.type) || null}
-                                onChange={(_, val: any) => handleChange(idx, 'type', val?.value || 'boolean')}
-                                getOptionLabel={(o: any) => o.label || ''}
-                                isOptionEqualToValue={(o: any, v: any) => o.value === v.value}
-                                label={String(t('Тип метрики'))}
-                                disableClearable
-                            />
-                            <Textarea
-                                label={String(t('Описание для LLM'))}
-                                value={metric.description}
-                                onChange={e => handleChange(idx, 'description', e.target.value)}
-                                size={'small'}
-                                fullWidth
-                                multiline
-                                rows={2}
-                                inputProps={{ maxLength: 500 }}
-                                helperText={`${metric.description.length}/500`}
-                            />
+                    <Card
+                        key={idx}
+                        variant={'glass'}
+                        border={'partial'}
+                        padding={'16'}
+                        max
+                    >
+                        <VStack gap={'12'} max>
+                            {/* Card header — name + delete */}
+                            <HStack max justify={'between'} align={'center'}>
+                                <Text text={metric.name || String(t('Новая метрика'))} bold />
+                                <Button
+                                    variant={'glass-action'}
+                                    color={'error'}
+                                    size={'s'}
+                                    onClick={() => handleRemove(idx)}
+                                    addonLeft={<DeleteOutlineIcon fontSize={'small'} />}
+                                >
+                                    {String(t('Удалить'))}
+                                </Button>
+                            </HStack>
+
+                            {/* Fields — name + type side by side */}
+                            <HStack gap={'12'} max wrap={'wrap'}>
+                                <Textarea
+                                    label={String(t('Название метрики'))}
+                                    value={metric.name}
+                                    onChange={e => handleChange(idx, 'name', e.target.value)}
+                                    size={'small'}
+                                    fullWidth
+                                    multiline={false}
+                                />
+                                <Combobox
+                                    options={METRIC_TYPES}
+                                    value={METRIC_TYPES.find(o => o.value === metric.type) || null}
+                                    onChange={(_, val: any) => handleChange(idx, 'type', val?.value || 'boolean')}
+                                    getOptionLabel={(o: any) => o.label || ''}
+                                    isOptionEqualToValue={(o: any, v: any) => o.value === v.value}
+                                    label={String(t('Тип метрики'))}
+                                    disableClearable
+                                />
+                            </HStack>
+
+                            {/* Enum values — before description, only for enum type */}
                             {metric.type === 'enum' && (
                                 <Textarea
                                     label={String(t('Значения (через запятую)'))}
@@ -153,10 +143,22 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                                     multiline={false}
                                 />
                             )}
-                        </div>
-                    </div>
+
+                            {/* Description — full width */}
+                            <Textarea
+                                label={String(t('Описание для LLM'))}
+                                value={metric.description}
+                                onChange={e => handleChange(idx, 'description', e.target.value)}
+                                size={'small'}
+                                fullWidth
+                                multiline
+                                rows={2}
+                                helperText={`${metric.description.length}/500`}
+                            />
+                        </VStack>
+                    </Card>
                 ))}
-            </div>
+            </VStack>
 
             <Button
                 variant={'glass-action'}
@@ -166,13 +168,30 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                 {String(t('Добавить метрику'))}
             </Button>
 
-            {/* Prompt Preview */}
-            <VStack gap={'8'} max>
-                <Text text={String(t('Предпросмотр промпта'))} bold />
-                <div className={cls.promptPreview}>
-                    <pre className={cls.promptText}>{promptPreview}</pre>
-                </div>
-            </VStack>
+            {/* Prompt Preview — collapsible, admin only */}
+            {isAdmin && (
+                <VStack gap={'0'} max>
+                    <Button
+                        variant={'clear'}
+                        onClick={() => setPromptOpen(prev => !prev)}
+                        addonRight={promptOpen
+                            ? <ExpandLessIcon fontSize={'small'} />
+                            : <ExpandMoreIcon fontSize={'small'} />
+                        }
+                    >
+                        {String(t('Предпросмотр промпта'))}
+                    </Button>
+                    {promptOpen && (
+                        <Card variant={'outlined'} border={'partial'} padding={'16'} max>
+                            <Text
+                                text={promptPreview}
+                                size={'s'}
+                            />
+                        </Card>
+                    )}
+                </VStack>
+            )}
         </VStack>
     )
 })
+

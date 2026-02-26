@@ -5,6 +5,10 @@ import { Portal } from '../Portal/Portal'
 import { Overlay } from '../Overlay/Overlay'
 import { useModal } from '@/shared/lib/hooks/useModal/useModal'
 import { useTheme } from '@/shared/lib/hooks/useTheme/useTheme'
+import { Icon } from '../Icon'
+import CloseIcon from '@/shared/assets/icons/close.svg'
+
+export type ModalSize = 'narrow' | 'wide'
 
 interface ModalProps {
   className?: string
@@ -13,6 +17,10 @@ interface ModalProps {
   onClose?: () => void
   lazy?: boolean
   contentClassName?: string
+  /** Modal width preset: 'narrow' (520px) or 'wide' (960px). Default: 'narrow' */
+  size?: ModalSize
+  /** Show a fixed close button in the top-right corner */
+  showClose?: boolean
 }
 
 export const Modal = (props: ModalProps) => {
@@ -22,7 +30,9 @@ export const Modal = (props: ModalProps) => {
     isOpen,
     onClose,
     lazy,
-    contentClassName
+    contentClassName,
+    size = 'narrow',
+    showClose = false
   } = props
 
   const { close, isClosing, isMounted } = useModal({ animationDelay: 300, onClose, isOpen })
@@ -31,7 +41,8 @@ export const Modal = (props: ModalProps) => {
 
   const mods: Mods = {
     [cls.opened]: isOpen,
-    [cls.isClosing]: isClosing
+    [cls.isClosing]: isClosing,
+    [cls.wide]: size === 'wide'
   }
 
   if (lazy && !isMounted) {
@@ -51,6 +62,16 @@ export const Modal = (props: ModalProps) => {
         <div
           className={classNames(cls.content, { [cls.isClosing]: isClosing }, [contentClassName])}
         >
+          {showClose && (
+            <button
+              type='button'
+              className={cls.closeBtn}
+              onClick={close}
+              aria-label='Close'
+            >
+              <Icon Svg={CloseIcon} className={cls.closeBtnIcon} />
+            </button>
+          )}
           {children}
         </div>
       </div>

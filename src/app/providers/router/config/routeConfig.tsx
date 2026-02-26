@@ -20,7 +20,10 @@ import {
   getRouteTools,
   getRouteToolsCreate,
   getRouteToolsEdit,
-  getRouteReports,
+  getRouteCalls,
+  getRouteAnalytics,
+  getRouteAnalyticsProjects,
+  getRouteAnalyticsApi,
   getRouteOnline,
   getRouteDashboard,
   getRoutePayment,
@@ -54,11 +57,9 @@ import {
   getRouteMcpServers,
   getRouteMcpServerCreate,
   getRouteMcpServerEdit,
-  getRouteOperatorAnalytics,
-  getRouteSpeechAnalyticsDashboard,
-  getRouteSpeechAnalyticsCdr,
-  getRouteSpeechAnalyticsProjects,
-  getRouteSpeechAnalyticsTokens
+  getRouteSipTrunks,
+  getRouteSipTrunkCreate,
+  getRouteSipTrunkEdit
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 
@@ -68,7 +69,9 @@ import { ModelsPage } from '@/pages/ModelsPage'
 import { AssistantsCreatePage, AssistantsPage, AssistantsEditPage } from '@/pages/AssistantsPage'
 import { UsersCreatePage, UsersEditPage, UsersPage } from '@/pages/UsersPage'
 import { ToolsCreatePage, ToolsEditPage, ToolsPage } from '@/pages/ToolsPage'
-import { ReportsPage } from '@/pages/ReportPage'
+import { CallsPage } from '@/pages/CallsPage'
+import { AnalyticsProjectsPage } from '@/pages/AnalyticsProjectsPage'
+import { AnalyticsApiPage } from '@/pages/AnalyticsApiPage'
 import { OnlinePage } from '@/pages/OnlinePage'
 import { PaymentPage } from '@/pages/PaymentPage'
 import { LoginPage } from '@/pages/LoginPage'
@@ -103,12 +106,7 @@ import {
   LiabilityDisclaimerPage
 } from '@/pages/LegalPage'
 import { McpServersPage, McpServerEditPage, McpServerCreatePage } from '@/pages/McpServersPage'
-import { OperatorAnalyticsPage } from '@/pages/OperatorAnalyticsPage'
-import { lazy } from 'react'
-const SpeechDashboardPage = lazy(() => import('@/pages/OperatorAnalyticsPage/ui/SpeechDashboardPage/SpeechDashboardPage'))
-const SpeechCdrPage = lazy(() => import('@/pages/OperatorAnalyticsPage/ui/SpeechCdrPage/SpeechCdrPage'))
-const SpeechProjectsPage = lazy(() => import('@/pages/OperatorAnalyticsPage/ui/SpeechProjectsPage/SpeechProjectsPage'))
-const SpeechTokensPage = lazy(() => import('@/pages/OperatorAnalyticsPage/ui/SpeechTokensPage/SpeechTokensPage'))
+import { SipTrunksPage, SipTrunkCreatePage, SipTrunkEditPage } from '@/pages/SipTrunksPage'
 import { Navigate } from 'react-router-dom'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
@@ -159,10 +157,25 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     authOnly: true,
     roles: [UserRolesValues.ADMIN, UserRolesValues.USER]
   },
-  [AppRoutes.REPORTS]: {
-    path: getRouteReports(),
+  [AppRoutes.CALLS]: {
+    path: getRouteCalls(),
     authOnly: true,
-    element: <ReportsPage />
+    element: <CallsPage />
+  },
+  [AppRoutes.ANALYTICS]: {
+    path: getRouteAnalytics(),
+    authOnly: true,
+    element: <Navigate to={getRouteAnalyticsProjects()} replace />
+  },
+  [AppRoutes.ANALYTICS_PROJECTS]: {
+    path: getRouteAnalyticsProjects(),
+    authOnly: true,
+    element: <AnalyticsProjectsPage />
+  },
+  [AppRoutes.ANALYTICS_API]: {
+    path: getRouteAnalyticsApi(),
+    authOnly: true,
+    element: <AnalyticsApiPage />
   },
   [AppRoutes.ASSISTANTS]: {
     path: getRouteAssistants(),
@@ -197,17 +210,20 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.PBX_SERVERS]: {
     path: getRoutePbxServers(),
     authOnly: true,
-    element: <PbxServersPage />
+    element: <PbxServersPage />,
+    roles: [UserRolesValues.ADMIN]
   },
   [AppRoutes.PBX_SERVER_CREATE]: {
     path: getRoutePbxServerCreate(),
     authOnly: true,
-    element: <PbxServerCreatePage />
+    element: <PbxServerCreatePage />,
+    roles: [UserRolesValues.ADMIN]
   },
   [AppRoutes.PBX_SERVER_EDIT]: {
     path: getRoutePbxServerEdit(':id'),
     authOnly: true,
-    element: <PbxServerEditPage />
+    element: <PbxServerEditPage />,
+    roles: [UserRolesValues.ADMIN]
   },
   [AppRoutes.USERS]: {
     path: getRouteUsers(),
@@ -357,30 +373,21 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     authOnly: true,
     element: <McpServerEditPage />
   },
-  [AppRoutes.OPERATOR_ANALYTICS]: {
-    path: getRouteOperatorAnalytics(),
+
+  [AppRoutes.SIP_TRUNKS]: {
+    path: getRouteSipTrunks(),
     authOnly: true,
-    element: <OperatorAnalyticsPage />
+    element: <SipTrunksPage />
   },
-  [AppRoutes.SPEECH_ANALYTICS_DASHBOARD]: {
-    path: getRouteSpeechAnalyticsDashboard(),
+  [AppRoutes.SIP_TRUNK_CREATE]: {
+    path: getRouteSipTrunkCreate(),
     authOnly: true,
-    element: <SpeechDashboardPage />
+    element: <SipTrunkCreatePage />
   },
-  [AppRoutes.SPEECH_ANALYTICS_CDR]: {
-    path: getRouteSpeechAnalyticsCdr(),
+  [AppRoutes.SIP_TRUNK_EDIT]: {
+    path: getRouteSipTrunkEdit(':id'),
     authOnly: true,
-    element: <SpeechCdrPage />
-  },
-  [AppRoutes.SPEECH_ANALYTICS_PROJECTS]: {
-    path: getRouteSpeechAnalyticsProjects(),
-    authOnly: true,
-    element: <SpeechProjectsPage />
-  },
-  [AppRoutes.SPEECH_ANALYTICS_TOKENS]: {
-    path: getRouteSpeechAnalyticsTokens(),
-    authOnly: true,
-    element: <SpeechTokensPage />
+    element: <SipTrunkEditPage />
   }
 
 }

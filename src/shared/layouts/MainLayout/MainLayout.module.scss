@@ -47,13 +47,12 @@
     grid-area: content;
     width: 100%;
     justify-self: center;
-    padding: 20px;
+    padding: 24px;
     height: 100%;
     box-sizing: border-box;
     min-width: 0;
     position: relative;
     z-index: 1;
-    overflow-x: clip;
 }
 
 .rightbar {

@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { AIAnalyticsResponse, AllReports, Analytics, BatchUploadResponse, CdrSource, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorProject, Report, ReportDialog } from '../model/types/report'
+import { AIAnalyticsResponse, AllReports, Analytics, BatchUploadResponse, CdrSource, MetricDefinition, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorProject, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
   page?: number
@@ -172,7 +172,7 @@ export const reportApi = rtkApi.injectEndpoints({
         method: 'POST',
         body
       }),
-      invalidatesTags: ['OperatorAnalytics']
+      invalidatesTags: ['OperatorAnalytics', 'Reports']
     }),
     getOperatorAnalysis: build.query<OperatorAnalysisResult, string>({
       query: (id) => `/operator-analytics/${id}`,
@@ -215,7 +215,16 @@ export const reportApi = rtkApi.injectEndpoints({
       query: () => '/operator-analytics/projects',
       providesTags: ['OperatorProjects']
     }),
-    createOperatorProject: build.mutation<OperatorProject, { name: string; description?: string }>({
+    createOperatorProject: build.mutation<OperatorProject, {
+      name: string
+      description?: string
+      systemPrompt?: string
+      customMetricsSchema?: MetricDefinition[]
+      visibleDefaultMetrics?: string[]
+      webhookUrl?: string
+      webhookHeaders?: Record<string, string>
+      webhookEvents?: string[]
+    }>({
       query: (body) => ({
         url: '/operator-analytics/projects',
         method: 'POST',
@@ -256,13 +265,30 @@ export const reportApi = rtkApi.injectEndpoints({
       }),
       invalidatesTags: ['OperatorApiTokens']
     }),
-    updateOperatorProject: build.mutation<void, { id: string; name: string; description?: string }>({
+    updateOperatorProject: build.mutation<void, {
+      id: string
+      name: string
+      description?: string
+      systemPrompt?: string
+      customMetricsSchema?: MetricDefinition[]
+      visibleDefaultMetrics?: string[]
+      webhookUrl?: string
+      webhookHeaders?: Record<string, string>
+      webhookEvents?: string[]
+    }>({
       query: ({ id, ...body }) => ({
-        url: `/operator-analytics/projects/${id}`,   // PATCH /api/operator-analytics/projects/:id
+        url: `/operator-analytics/projects/${id}`,
         method: 'PATCH',
         body
       }),
       invalidatesTags: ['OperatorProjects']
+    }),
+    generateMetricsFromPrompt: build.mutation<MetricDefinition[], { messages: { role: 'ai' | 'user'; text: string }[]; systemPrompt?: string }>({
+      query: (body) => ({
+        url: '/operator-analytics/projects/generate-schema',
+        method: 'POST',
+        body
+      })
     })
   })
 })
@@ -288,6 +314,7 @@ export const useGetOperatorProjects = reportApi.useGetOperatorProjectsQuery
 export const useCreateOperatorProject = reportApi.useCreateOperatorProjectMutation
 export const useDeleteOperatorProject = reportApi.useDeleteOperatorProjectMutation
 export const useUpdateOperatorProject = reportApi.useUpdateOperatorProjectMutation
+export const useGenerateMetricsFromPrompt = reportApi.useGenerateMetricsFromPromptMutation
 export const useGenerateOperatorApiToken = reportApi.useGenerateOperatorApiTokenMutation
 export const useListOperatorApiTokens = reportApi.useListOperatorApiTokensQuery
 export const useRevokeOperatorApiToken = reportApi.useRevokeOperatorApiTokenMutation

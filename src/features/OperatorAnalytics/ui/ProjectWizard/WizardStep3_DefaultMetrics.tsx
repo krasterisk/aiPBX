@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
@@ -23,24 +23,14 @@ const ALL_DEFAULT_METRICS: Array<{ key: DefaultMetricKey; labelKey: string }> = 
 
 interface WizardStep3Props {
     visibleMetrics: DefaultMetricKey[]
-    onChange: (metrics: DefaultMetricKey[]) => void
+    onToggle: (key: DefaultMetricKey) => void
 }
 
-export const WizardStep3_DefaultMetrics = memo(({ visibleMetrics, onChange }: WizardStep3Props) => {
+export const WizardStep3_DefaultMetrics = memo(({ visibleMetrics, onToggle }: WizardStep3Props) => {
     const { t } = useTranslation('reports')
-
-    const handleToggle = useCallback((key: DefaultMetricKey) => {
-        const isVisible = visibleMetrics.includes(key)
-        if (isVisible) {
-            onChange(visibleMetrics.filter(m => m !== key))
-        } else {
-            onChange([...visibleMetrics, key])
-        }
-    }, [visibleMetrics, onChange])
 
     return (
         <VStack gap={'16'} max>
-            <Text title={String(t('Стандартные метрики'))} bold />
             <Text text={String(t('Выберите метрики для отображения в дашборде'))} />
 
             {/* Locked metrics — always active */}
@@ -65,23 +55,21 @@ export const WizardStep3_DefaultMetrics = memo(({ visibleMetrics, onChange }: Wi
                 <Text text={String(t('Опциональные метрики'))} bold size={'s'} />
                 <div className={cls.metricsChecklist}>
                     {ALL_DEFAULT_METRICS.map(m => (
-                        <div
-                            key={m.key}
-                            className={cls.metricCheckRow}
-                            onClick={() => handleToggle(m.key)}
-                            style={{ cursor: 'pointer' }}
-                        >
+                        <div key={m.key} className={cls.metricCheckRow}>
                             <FormControlLabel
                                 control={
                                     <Checkbox
                                         checked={visibleMetrics.includes(m.key)}
                                         size={'small'}
-                                        sx={{ color: 'var(--icon-redesigned)', '&.Mui-checked': { color: 'var(--accent-redesigned)' } }}
+                                        sx={{
+                                            color: 'var(--icon-redesigned)',
+                                            '&.Mui-checked': { color: 'var(--accent-redesigned)' }
+                                        }}
                                     />
                                 }
                                 label={String(t(m.labelKey))}
-                                sx={{ color: 'var(--text-redesigned)', margin: 0 }}
-                                onClick={e => e.stopPropagation()}
+                                onChange={() => onToggle(m.key)}
+                                sx={{ color: 'var(--text-redesigned)', margin: 0, cursor: 'pointer' }}
                             />
                         </div>
                     ))}

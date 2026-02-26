@@ -214,6 +214,8 @@ export const PbxServerForm = memo((props: PbxServerFormProps) => {
                 onChangeMoh={(v: string) => { onChangeField('moh', v) }}
                 recordFormat={form?.recordFormat || ''}
                 onChangeRecordFormat={(v: string) => { onChangeField('recordFormat', v) }}
+                sipTechnology={form?.sipTechnology || 'pjsip'}
+                onChangeSipTechnology={(v: string) => { onChangeField('sipTechnology', v) }}
                 password={form?.password}
                 onChangePassword={(v: string) => { onChangeField('password', v) }}
                 onOpenInstructions={onOpenInstructions}

@@ -82,5 +82,10 @@
   "Дашборд": "Dashboard",
   "Записи звонков": "Call Records",
   "Проекты": "Projects",
-  "API Токены": "API Tokens"
+  "API Токены": "API Tokens",
+  "SIP Trunks": "SIP Trunks",
+  "Дашборды": "Dashboards",
+  "Звонки": "Calls",
+  "Аналитика": "Analytics",
+  "API": "API"
 }

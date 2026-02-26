@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { PbxServerOptions } from '../../model/types/pbxServers'
 import { usePbxServersAll, usePbxServersCloud, usePbxServersCloudAndUser } from '../../api/pbxServersApi'
@@ -14,7 +14,7 @@ interface PbxServerSelectProps {
   fetchType?: 'all' | 'cloud' | 'cloud-and-user'
 }
 
-export const PbxServerSelect = memo((props: PbxServerSelectProps) => {
+export const PbxServerSelect = (props: PbxServerSelectProps) => {
   const {
     className,
     label,
@@ -48,17 +48,27 @@ export const PbxServerSelect = memo((props: PbxServerSelectProps) => {
       .filter(s => s.id && s.name)
       .sort((a, b) => (a.location || '').localeCompare(b.location || '')) as PbxServerOptions[]
   }, [PbxServers])
+  // Enrich value with full option data (e.g. location) from the fetched list
+  const enrichedValue = useMemo(() => {
+    if (!value) return null
+    const match = options.find(o => o.id === value.id)
+    return match || value
+  }, [value, options])
 
   return (
     <Combobox
       label={label}
       options={options}
-      value={value || null}
+      value={enrichedValue}
       onChange={onChangeHandler}
       className={className}
-      getOptionLabel={(option: PbxServerOptions) => option.name || ''}
+      getOptionLabel={(option: PbxServerOptions) => {
+        const match = options.find(o => o.id === option.id)
+        const loc = match?.location || option.location
+        return loc ? `${option.name} (${loc})` : (option.name || '')
+      }}
       isOptionEqualToValue={(option: PbxServerOptions, value: PbxServerOptions) => option.id === value.id}
       {...otherProps}
     />
   )
-})
+}

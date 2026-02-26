@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Network, Info } from 'lucide-react'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { InputPassword } from '@/shared/ui/mui/InputPassword'
+import { Combobox } from '@/shared/ui/mui/Combobox'
 import { SectionCard } from '../SectionCard/SectionCard'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { HStack } from '@/shared/ui/redesigned/Stack'
@@ -26,6 +27,8 @@ interface ConnectivitySectionProps {
     onChangeMoh: (v: string) => void
     recordFormat: string
     onChangeRecordFormat: (v: string) => void
+    sipTechnology: string
+    onChangeSipTechnology: (v: string) => void
     password?: string
     onChangePassword: (v: string) => void
     onOpenInstructions?: () => void
@@ -51,6 +54,8 @@ export const ConnectivitySection = memo((props: ConnectivitySectionProps) => {
         onChangeMoh,
         recordFormat,
         onChangeRecordFormat,
+        sipTechnology,
+        onChangeSipTechnology,
         password,
         onChangePassword,
         onOpenInstructions,
@@ -62,22 +67,22 @@ export const ConnectivitySection = memo((props: ConnectivitySectionProps) => {
     const { t } = useTranslation('pbx')
 
     const statusBadge = isEdit
-? (
-        <HStack gap="8" align="center" className={cls.statusBadgeSection}>
-            <div
-                className={classNames(cls.statusIndicator, {
-                    [cls.online]: statusData?.online,
-                    [cls.offline]: statusData && !statusData.online,
-                    [cls.loading]: isStatusLoading
-                })}
-            />
-            <Text
-                text={isStatusLoading ? t('Загрузка...') : (statusData?.online ? t('В сети') : t('Не в сети'))}
-                size="s"
-            />
-        </HStack>
-    )
-: null
+        ? (
+            <HStack gap="8" align="center" className={cls.statusBadgeSection}>
+                <div
+                    className={classNames(cls.statusIndicator, {
+                        [cls.online]: statusData?.online,
+                        [cls.offline]: statusData && !statusData.online,
+                        [cls.loading]: isStatusLoading
+                    })}
+                />
+                <Text
+                    text={isStatusLoading ? t('Загрузка...') : (statusData?.online ? t('В сети') : t('Не в сети'))}
+                    size="s"
+                />
+            </HStack>
+        )
+        : null
 
     return (
         <SectionCard
@@ -152,6 +157,19 @@ export const ConnectivitySection = memo((props: ConnectivitySectionProps) => {
                 onChange={(e) => { onChangeRecordFormat(e.target.value) }}
                 placeholder="wav"
                 helperText={t('Формат, в котором будет производиться запись разговоров (например, wav, mp3, sln)')}
+            />
+            <Combobox
+                label={t('SIP Технология') || ''}
+                options={[
+                    { id: 'pjsip', name: 'PJSIP' },
+                    { id: 'sip', name: 'SIP' }
+                ]}
+                value={sipTechnology ? { id: sipTechnology, name: sipTechnology === 'sip' ? 'SIP' : 'PJSIP' } : { id: 'pjsip', name: 'PJSIP' }}
+                onChange={(_: any, v: any) => { onChangeSipTechnology(v?.id || 'pjsip') }}
+                getOptionLabel={(o: any) => o.name}
+                isOptionEqualToValue={(o: any, v: any) => o.id === v.id}
+                disableClearable
+                fullWidth
             />
 
         </SectionCard>

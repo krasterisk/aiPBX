@@ -44,6 +44,7 @@ const PublishSipUriEditPage = memo((props: PublishSipUriEditPageProps) => {
                 pbx: {
                     id: assistant.sipAccount?.pbxId || '',
                     name: pbxServer?.name || '',
+                    location: pbxServer?.location,
                     uniqueId: pbxServer?.uniqueId,
                     sip_host: pbxServer?.sip_host
                 },

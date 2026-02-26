@@ -1,0 +1,11 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 4v10a4 4 0 0 0 4 4v18" stroke="url(#a)" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M8 4v6a4 4 0 0 0 4 4" stroke="#5ED3F3" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M16 4v6a4 4 0 0 1-4 4" stroke="#5ED3F3" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M28 4v8c0 4-4 6-4 6v18" stroke="url(#b)" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M28 4c3 0 4 3 4 6s-1 6-4 6" stroke="#3BA3C7" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <defs>
+    <linearGradient id="a" x1="12" y1="4" x2="16" y2="36"><stop stop-color="#5ED3F3"/><stop offset="1" stop-color="#3BA3C7"/></linearGradient>
+    <linearGradient id="b" x1="24" y1="4" x2="28" y2="36"><stop stop-color="#5ED3F3"/><stop offset="1" stop-color="#3BA3C7"/></linearGradient>
+  </defs>
+</svg>

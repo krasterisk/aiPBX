@@ -1,127 +1,134 @@
-import { classNames } from '@/shared/lib/classNames/classNames'
-import cls from './BillingBreakdown.module.scss'
-import React, { memo, useMemo } from 'react'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
-import { Text } from '@/shared/ui/redesigned/Text'
-import { BillingRecord } from '../../model/types/report'
+import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { createColumnHelper } from '@tanstack/react-table'
+import { HStack } from '@/shared/ui/redesigned/Stack'
+import { Text } from '@/shared/ui/redesigned/Text'
+import { Table } from '@/shared/ui/redesigned/Table/Table'
+import { BillingRecord } from '../../model/types/report'
 import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
 
 interface BillingBreakdownProps {
-    className?: string
     billingRecords?: BillingRecord[]
     userCurrency: string
 }
 
-export const BillingBreakdown = memo((props: BillingBreakdownProps) => {
-    const {
-        className,
-        billingRecords,
-        userCurrency
-    } = props
+const fmt = (v: number | undefined, currency: string) =>
+    v != null && v > 0 ? formatCurrency(v, currency, 4) : '—'
 
+const helper = createColumnHelper<BillingRecord>()
+
+export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingBreakdownProps) => {
     const { t } = useTranslation('reports')
 
     const totals = useMemo(() => {
         if (!billingRecords?.length) return null
         return billingRecords.reduce(
-            (acc, record) => ({
-                audioTokens: acc.audioTokens + record.audioTokens,
-                textTokens: acc.textTokens + record.textTokens,
-                totalTokens: acc.totalTokens + record.totalTokens,
-                audioCost: acc.audioCost + record.audioCost,
-                textCost: acc.textCost + record.textCost,
-                totalCost: acc.totalCost + record.totalCost
+            (acc, r) => ({
+                audioTokens: acc.audioTokens + r.audioTokens,
+                textTokens: acc.textTokens + r.textTokens,
+                totalTokens: acc.totalTokens + r.totalTokens,
+                audioCost: acc.audioCost + r.audioCost,
+                textCost: acc.textCost + r.textCost,
+                sttCost: acc.sttCost + (r.sttCost ?? 0),
+                totalCost: acc.totalCost + r.totalCost
             }),
-            { audioTokens: 0, textTokens: 0, totalTokens: 0, audioCost: 0, textCost: 0, totalCost: 0 }
+            { audioTokens: 0, textTokens: 0, totalTokens: 0, audioCost: 0, textCost: 0, sttCost: 0, totalCost: 0 }
         )
     }, [billingRecords])
 
-    const formatTime = (dateStr: string) => {
-        const date = new Date(dateStr)
-        return date.toLocaleTimeString(undefined, {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
+    const hasStt = billingRecords?.some(r => (r.sttCost ?? 0) > 0) ?? false
+
+    const formatTime = (dateStr: string) =>
+        new Date(dateStr).toLocaleTimeString(undefined, {
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
         })
-    }
+
+    const columns = useMemo(() => {
+        const cols = [
+            helper.display({
+                id: 'index',
+                header: '№',
+                cell: info => info.row.index + 1,
+                footer: () => <Text text={String(t('Итого'))} bold />
+            }),
+            helper.accessor('createdAt', {
+                header: String(t('Время')),
+                cell: info => formatTime(info.getValue()),
+                footer: () => null
+            }),
+            helper.accessor('type', {
+                header: String(t('Тип')),
+                cell: info => (
+                    <Text
+                        text={String(t(info.getValue()))}
+                        variant={info.getValue() === 'realtime' ? 'accent' : 'warning'}
+                        bold
+                    />
+                ),
+                footer: () => null
+            }),
+            helper.accessor('audioTokens', {
+                header: String(t('Audio токены')),
+                cell: info => info.row.original.type === 'analytic'
+                    ? '—'
+                    : info.getValue().toLocaleString(),
+                footer: () => totals ? <Text text={totals.audioTokens.toLocaleString()} bold /> : null
+            }),
+            helper.accessor('textTokens', {
+                header: String(t('Text токены')),
+                cell: info => info.getValue().toLocaleString(),
+                footer: () => totals ? <Text text={totals.textTokens.toLocaleString()} bold /> : null
+            }),
+            helper.accessor('totalTokens', {
+                header: String(t('Всего токенов')),
+                cell: info => info.getValue().toLocaleString(),
+                footer: () => totals ? <Text text={totals.totalTokens.toLocaleString()} bold /> : null
+            }),
+            helper.accessor('audioCost', {
+                header: String(t('Audio стоимость')),
+                cell: info => info.row.original.type === 'analytic'
+                    ? '—'
+                    : fmt(info.getValue(), userCurrency),
+                footer: () => totals ? <Text text={fmt(totals.audioCost, userCurrency)} bold /> : null
+            }),
+            helper.accessor('textCost', {
+                header: String(t('Text стоимость')),
+                cell: info => fmt(info.getValue(), userCurrency),
+                footer: () => totals ? <Text text={fmt(totals.textCost, userCurrency)} bold /> : null
+            }),
+            ...(hasStt ? [
+                helper.accessor('sttCost', {
+                    header: String(t('STT стоимость')),
+                    cell: info => fmt(info.getValue(), userCurrency),
+                    footer: () => totals ? <Text text={fmt(totals.sttCost, userCurrency)} bold /> : null
+                })
+            ] : []),
+            helper.accessor('totalCost', {
+                header: String(t('Итого')),
+                cell: info => (
+                    <Text text={formatCurrency(info.getValue(), userCurrency, 4)} bold variant="accent" />
+                ),
+                footer: () => totals
+                    ? <Text text={formatCurrency(totals.totalCost, userCurrency, 4)} bold variant="accent" />
+                    : null
+            })
+        ]
+        return cols
+    }, [t, userCurrency, hasStt, totals])
 
     if (!billingRecords?.length) {
         return (
-            <HStack max justify="center" className={classNames(cls.BillingBreakdown, {}, [className])}>
-                <Text text={t('Нет данных о биллинге')} />
+            <HStack max justify="center">
+                <Text text={String(t('Нет данных о биллинге'))} />
             </HStack>
         )
     }
 
     return (
-        <VStack
-            gap="8"
-            max
-            className={classNames(cls.BillingBreakdown, {}, [className])}
-        >
-            <div className={cls.tableWrapper}>
-                <table className={cls.table} id="billing-breakdown-table">
-                    <thead>
-                        <tr>
-                            <th>{t('№')}</th>
-                            <th>{t('Время')}</th>
-                            <th>{t('Тип')}</th>
-                            <th>{t('Audio токены')}</th>
-                            <th>{t('Text токены')}</th>
-                            <th>{t('Всего')}</th>
-                            <th>{t('Audio стоимость')}</th>
-                            <th>{t('Text стоимость')}</th>
-                            <th>{t('Итого')}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {billingRecords.map((record, index) => {
-                            const isAnalytic = record.type === 'analytic'
-                            return (
-                                <tr key={record.id} id={`billing-record-${record.id}`}>
-                                    <td data-label="#">{index + 1}</td>
-                                    <td data-label={t('Время')}>{formatTime(record.createdAt)}</td>
-                                    <td data-label={t('Тип')}>
-                                        <span className={classNames(cls.typeBadge, {
-                                            [cls.typeRealtime]: !isAnalytic,
-                                            [cls.typeAnalytic]: isAnalytic
-                                        })}>
-                                            {t(record.type)}
-                                        </span>
-                                    </td>
-                                    <td data-label={t('Audio токены')}>{isAnalytic ? '—' : record.audioTokens.toLocaleString()}</td>
-                                    <td data-label={t('Text токены')}>{isAnalytic ? '—' : record.textTokens.toLocaleString()}</td>
-                                    <td data-label={t('Всего')}>{record.totalTokens.toLocaleString()}</td>
-                                    <td data-label={t('Audio стоимость')}>{isAnalytic ? '—' : formatCurrency(record.audioCost, userCurrency, 4)}</td>
-                                    <td data-label={t('Text стоимость')}>{isAnalytic ? '—' : formatCurrency(record.textCost, userCurrency, 4)}</td>
-                                    <td data-label={t('Итого')} className={cls.totalCell}>
-                                        {formatCurrency(record.totalCost, userCurrency, 4)}
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                    {totals && (
-                        <tfoot>
-                            <tr className={cls.totalsRow}>
-                                <td colSpan={3} data-label="">
-                                    <strong>{t('Итого')}</strong>
-                                </td>
-                                <td data-label={t('Audio токены')}><strong>{totals.audioTokens.toLocaleString()}</strong></td>
-                                <td data-label={t('Text токены')}><strong>{totals.textTokens.toLocaleString()}</strong></td>
-                                <td data-label={t('Всего')}><strong>{totals.totalTokens.toLocaleString()}</strong></td>
-                                <td data-label={t('Audio стоимость')}><strong>{formatCurrency(totals.audioCost, userCurrency, 4)}</strong></td>
-                                <td data-label={t('Text стоимость')}><strong>{formatCurrency(totals.textCost, userCurrency, 4)}</strong></td>
-                                <td data-label={t('Итого')} className={cls.totalCell}>
-                                    <strong>{formatCurrency(totals.totalCost, userCurrency, 4)}</strong>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    )}
-                </table>
-            </div>
-        </VStack>
+        <Table
+            data={billingRecords}
+            columns={columns}
+            rowVariant="clear"
+        />
     )
 })

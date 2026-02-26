@@ -1,0 +1,153 @@
+@import '@/app/styles/variables/mixins';
+
+.SipTrunksItem {
+    @include glass-card-primary;
+    @include hover-lift-card;
+
+    &:hover {
+        .avatar {
+            transform: var(--hover-scale-md);
+        }
+    }
+
+    .content {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        padding: var(--card-padding-md);
+    }
+
+    .avatar {
+        @include icon-avatar(44px);
+    }
+
+    .title {
+        color: var(--text-redesigned);
+        font-family: 'Outfit', sans-serif;
+    }
+
+    .statusDot {
+        @include status-dot(var(--status-success), 6px);
+
+        &.inactive {
+            @include status-dot(var(--status-error), 6px);
+        }
+    }
+
+    .statusText {
+        color: #10b981;
+        font-size: 0.8rem;
+
+        &.inactive {
+            color: #f87171;
+        }
+    }
+
+    .statusBadge {
+        @include chip-base;
+        padding: 4px 10px;
+        font-size: 0.7rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid rgba(248, 113, 113, 0.3);
+        background: rgba(248, 113, 113, 0.08);
+        color: #f87171;
+
+        &.registered {
+            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.08);
+            color: #10b981;
+        }
+    }
+
+    .statusPulse {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #f87171;
+        animation: pulse-red 2s infinite;
+
+        &.registered {
+            background: #10b981;
+            animation: pulse-green 2s infinite;
+        }
+    }
+
+    .chip {
+        @include chip-base;
+        padding: 3px 8px;
+        font-size: 0.65rem;
+    }
+
+    .divider {
+        @include divider-gradient;
+        margin: var(--space-2) 0;
+    }
+
+    .details {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+
+    .detailIcon {
+        @include icon-container(30px);
+    }
+
+    .urlText {
+        color: var(--text-redesigned);
+        opacity: 0.9;
+        font-size: 0.85rem;
+        flex: 1;
+        word-break: break-all;
+        line-height: 1.4;
+    }
+
+    .authBadge {
+        @include chip-base;
+        padding: 3px 10px;
+        font-size: 0.7rem;
+    }
+}
+
+@keyframes pulse-green {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+    }
+
+    70% {
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+@keyframes pulse-red {
+    0% {
+        box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.5);
+    }
+
+    70% {
+        box-shadow: 0 0 0 6px rgba(248, 113, 113, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(248, 113, 113, 0);
+    }
+}
+
+@include mobile {
+    .SipTrunksItem {
+        .content {
+            padding: var(--card-padding-sm);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+        }
+    }
+}

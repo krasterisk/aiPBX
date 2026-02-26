@@ -2,11 +2,8 @@ import { useSelector } from 'react-redux'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import {
   getRouteAssistants,
-  getRouteDashboardOverview,
-  getRouteDashboardAIAnalytics,
   getRoutePbxServers,
   getRoutePlayground,
-  getRouteReports,
   getRouteTools,
   getRouteUsers,
   getRoutePayment,
@@ -15,10 +12,12 @@ import {
   getRoutePublishSipUris,
   getRoutePublishWidgets,
   getRouteMcpServers,
-  getRouteSpeechAnalyticsDashboard,
-  getRouteSpeechAnalyticsCdr,
-  getRouteSpeechAnalyticsProjects,
-  getRouteSpeechAnalyticsTokens
+  getRouteSipTrunks,
+  getRouteCalls,
+  getRouteDashboard,
+  getRouteAnalytics,
+  getRouteAnalyticsProjects,
+  getRouteAnalyticsApi
 } from '@/shared/const/router'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
@@ -36,6 +35,7 @@ import AnalyticsIcon from '@mui/icons-material/Analytics'
 import DescriptionIcon from '@mui/icons-material/Description'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import HubIcon from '@mui/icons-material/Hub'
+import PhoneForwardedIcon from '@mui/icons-material/PhoneForwarded'
 import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver'
 import { MenubarItemType } from '../types/menubar'
 import { useTranslation } from 'react-i18next'
@@ -56,29 +56,35 @@ export const useMenubarItems = () => {
         authOnly: true
       },
       {
-        path: '/dashboards',
-        Icon: BarChartIcon,
-        text: t('Dashboards'),
+        path: getRouteDashboard(),
+        Icon: DashboardIcon,
+        text: t('Дашборды'),
+        authOnly: true
+      },
+      {
+        path: getRouteCalls(),
+        Icon: DescriptionIcon,
+        text: t('Звонки'),
+        authOnly: true
+      },
+      {
+        path: getRouteAnalytics(),
+        Icon: AnalyticsIcon,
+        text: t('Аналитика'),
         authOnly: true,
         subItems: [
           {
-            path: getRouteDashboardOverview(),
-            Icon: DashboardIcon,
-            text: t('Overview'),
+            path: getRouteAnalyticsProjects(),
+            Icon: BuildIcon,
+            text: t('Проекты'),
             authOnly: true
           },
           {
-            path: getRouteDashboardAIAnalytics(),
-            Icon: AnalyticsIcon,
-            text: t('AI Analytics'),
+            path: getRouteAnalyticsApi(),
+            Icon: HubIcon,
+            text: t('API'),
             authOnly: true
-          },
-          {
-            path: getRouteReports(),
-            Icon: DescriptionIcon,
-            text: t('Call Records'),
-            authOnly: true
-          },
+          }
         ]
       },
       {
@@ -112,51 +118,20 @@ export const useMenubarItems = () => {
             authOnly: true
           },
           {
+            path: getRouteSipTrunks(),
+            Icon: PhoneForwardedIcon,
+            text: t('SIP Trunks'),
+            authOnly: true
+          },
+          {
             path: getRoutePublishWidgets(),
             Icon: SmartToyIcon,
             text: t('Виджеты'),
             authOnly: true
-          },
-          {
-            path: getRoutePbxServers(),
-            Icon: DnsIcon,
-            text: t('PBXs'),
-            authOnly: true
           }
         ]
       },
-      {
-        path: '/speech-analytics',
-        Icon: RecordVoiceOverIcon,
-        text: t('Речевая аналитика'),
-        authOnly: true,
-        subItems: [
-          {
-            path: getRouteSpeechAnalyticsDashboard(),
-            Icon: DashboardIcon,
-            text: t('Дашборд'),
-            authOnly: true
-          },
-          {
-            path: getRouteSpeechAnalyticsCdr(),
-            Icon: DescriptionIcon,
-            text: t('Записи звонков'),
-            authOnly: true
-          },
-          {
-            path: getRouteSpeechAnalyticsProjects(),
-            Icon: BuildIcon,
-            text: t('Проекты'),
-            authOnly: true
-          },
-          {
-            path: getRouteSpeechAnalyticsTokens(),
-            Icon: AnalyticsIcon,
-            text: t('API Токены'),
-            authOnly: true
-          }
-        ]
-      },
+
       {
         path: getRoutePayment(),
         Icon: PaymentsIcon,
@@ -187,6 +162,12 @@ export const useMenubarItems = () => {
                 path: getRoutePrices(),
                 Icon: AttachMoneyIcon,
                 text: t('Цены'),
+                authOnly: true
+              },
+              {
+                path: getRoutePbxServers(),
+                Icon: DnsIcon,
+                text: t('PBXs'),
                 authOnly: true
               }
             ]

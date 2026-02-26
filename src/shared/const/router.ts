@@ -5,7 +5,10 @@ export enum AppRoutes {
   ABOUT = 'about',
   ADMIN = 'admin',
   SETTINGS = 'settings',
-  REPORTS = 'reports',
+  CALLS = 'calls',
+  ANALYTICS = 'analytics',
+  ANALYTICS_PROJECTS = 'analytics_projects',
+  ANALYTICS_API = 'analytics_api',
   ONLINE = 'online',
   DASHBOARD = 'dashboard',
   DASHBOARD_OVERVIEW = 'dashboard_overview',
@@ -48,11 +51,10 @@ export enum AppRoutes {
   MCP_SERVERS = 'mcp_servers',
   MCP_SERVER_CREATE = 'mcp_server_create',
   MCP_SERVER_EDIT = 'mcp_server_edit',
-  OPERATOR_ANALYTICS = 'operator_analytics',
-  SPEECH_ANALYTICS_DASHBOARD = 'speech_analytics_dashboard',
-  SPEECH_ANALYTICS_CDR = 'speech_analytics_cdr',
-  SPEECH_ANALYTICS_PROJECTS = 'speech_analytics_projects',
-  SPEECH_ANALYTICS_TOKENS = 'speech_analytics_tokens'
+
+  SIP_TRUNKS = 'sip_trunks',
+  SIP_TRUNK_CREATE = 'sip_trunk_create',
+  SIP_TRUNK_EDIT = 'sip_trunk_edit'
 }
 
 export const getRouteMain = () => '/'
@@ -72,7 +74,10 @@ export const getRouteDashboardAIAnalytics = () => '/dashboard/ai-analytics'
 export const getRouteDashboardCallRecords = () => '/dashboard/call-records'
 export const getRouteAssistantEdit = (id: string) => `/assistants/${id}`
 export const getRouteAssistantCreate = () => '/assistants/create'
-export const getRouteReports = () => '/reports'
+export const getRouteCalls = () => '/calls'
+export const getRouteAnalytics = () => '/analytics'
+export const getRouteAnalyticsProjects = () => '/analytics/projects'
+export const getRouteAnalyticsApi = () => '/analytics/api'
 export const getRouteTools = () => '/tools'
 export const getRouteToolsEdit = (id: string) => `/tools/${id}`
 export const getRouteToolsCreate = () => '/tools/create'
@@ -106,12 +111,10 @@ export const getRouteLegalLiability = () => '/legal/liability-disclaimer'
 export const getRouteMcpServers = () => '/mcp-servers'
 export const getRouteMcpServerCreate = () => '/mcp-servers/create'
 export const getRouteMcpServerEdit = (id: string) => `/mcp-servers/${id}`
-export const getRouteOperatorAnalytics = () => '/operator-analytics'
-export const getRouteSpeechAnalytics = () => '/speech-analytics'
-export const getRouteSpeechAnalyticsDashboard = () => '/speech-analytics/dashboard'
-export const getRouteSpeechAnalyticsCdr = () => '/speech-analytics/cdr'
-export const getRouteSpeechAnalyticsProjects = () => '/speech-analytics/projects'
-export const getRouteSpeechAnalyticsTokens = () => '/speech-analytics/tokens'
+
+export const getRouteSipTrunks = () => '/publish/sip-trunks'
+export const getRouteSipTrunkCreate = () => '/publish/sip-trunks/create'
+export const getRouteSipTrunkEdit = (id: string) => `/publish/sip-trunks/${id}`
 
 export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteMain()]: AppRoutes.MAIN,
@@ -120,7 +123,10 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteAbout()]: AppRoutes.ABOUT,
   [getRouteAdmin()]: AppRoutes.ADMIN,
   [getRouteSettings()]: AppRoutes.SETTINGS,
-  [getRouteReports()]: AppRoutes.REPORTS,
+  [getRouteCalls()]: AppRoutes.CALLS,
+  [getRouteAnalytics()]: AppRoutes.ANALYTICS,
+  [getRouteAnalyticsProjects()]: AppRoutes.ANALYTICS_PROJECTS,
+  [getRouteAnalyticsApi()]: AppRoutes.ANALYTICS_API,
   [getRoutePayment()]: AppRoutes.PAYMENT,
   [getRouteOnline()]: AppRoutes.ONLINE,
   [getRouteDashboard()]: AppRoutes.DASHBOARD,
@@ -162,9 +168,8 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteMcpServers()]: AppRoutes.MCP_SERVERS,
   [getRouteMcpServerCreate()]: AppRoutes.MCP_SERVER_CREATE,
   [getRouteMcpServerEdit(':id')]: AppRoutes.MCP_SERVER_EDIT,
-  [getRouteOperatorAnalytics()]: AppRoutes.OPERATOR_ANALYTICS,
-  [getRouteSpeechAnalyticsDashboard()]: AppRoutes.SPEECH_ANALYTICS_DASHBOARD,
-  [getRouteSpeechAnalyticsCdr()]: AppRoutes.SPEECH_ANALYTICS_CDR,
-  [getRouteSpeechAnalyticsProjects()]: AppRoutes.SPEECH_ANALYTICS_PROJECTS,
-  [getRouteSpeechAnalyticsTokens()]: AppRoutes.SPEECH_ANALYTICS_TOKENS
+
+  [getRouteSipTrunks()]: AppRoutes.SIP_TRUNKS,
+  [getRouteSipTrunkCreate()]: AppRoutes.SIP_TRUNK_CREATE,
+  [getRouteSipTrunkEdit(':id')]: AppRoutes.SIP_TRUNK_EDIT
 }

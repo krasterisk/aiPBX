@@ -3,85 +3,58 @@
 .ProjectWizard {
     position: relative;
     width: 100%;
-    max-width: 720px;
-    margin: 0 auto;
-
-    @include mobile {
-        max-width: 100%;
-    }
+    margin: -8px auto 0;
 }
 
-.wizardContent {
-    @include glass-card-primary;
-    padding: var(--card-padding-lg);
-    min-height: 400px;
-
-    @include mobile {
-        padding: var(--card-padding-sm);
-        min-height: 300px;
-    }
+.wizardHeader {
+    position: sticky;
+    top: -20px;
+    z-index: 10;
+    background: var(--light-bg-redesigned);
+    padding: 12px 0 0;
 }
 
-// ─── Stepper ──────────────────────────────────────────────────────────────────
-
-.stepper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    flex-wrap: wrap;
-    margin-bottom: var(--space-6);
-}
-
-.stepDot {
-    width: 10px;
-    height: 10px;
-    border-radius: var(--radius-full);
-    background: var(--glass-border-secondary);
-    transition: var(--transition-normal);
-    cursor: pointer;
+.headerCloseBtn {
+    @include flex-center;
+    width: 36px;
+    height: 36px;
+    background: var(--bg-redesigned);
     border: none;
-    padding: 0;
-
-    &.active {
-        background: var(--accent-redesigned);
-        box-shadow: var(--shadow-accent-sm);
-        transform: scale(1.3);
-    }
-
-    &.completed {
-        background: var(--status-success);
-    }
-}
-
-.stepLabel {
-    font-size: var(--font-size-s);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: var(--transition-fast);
     color: var(--text-redesigned);
-    opacity: 0.6;
-    text-align: center;
-    margin-top: var(--space-1);
-}
+    flex-shrink: 0;
 
-// ─── Navigation ───────────────────────────────────────────────────────────────
+    &:hover {
+        transform: rotate(90deg);
+        background: var(--light-bg-redesigned);
+        border: 1px solid var(--accent-redesigned);
+    }
 
-.navButtons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: var(--space-6);
-    gap: var(--space-3);
-    flex-wrap: wrap;
-
-    @include mobile {
-        flex-direction: column;
+    &:active {
+        transform: scale(0.9);
     }
 }
 
-// ─── Template Cards ───────────────────────────────────────────────────────────
+.headerCloseBtnIcon {
+    width: 20px;
+    height: 20px;
+}
 
-.templateGrid {
+.clickable {
+    cursor: pointer;
+}
+
+// ─── Method Chooser ───────────────────────────────────────────────────────────
+
+.methodChooser {
+    animation: fadeSlideUp 0.4s ease;
+}
+
+.methodGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-4);
     width: 100%;
 
@@ -90,10 +63,191 @@
     }
 }
 
+.methodCard {
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transition-medium);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        opacity: 0;
+        background: linear-gradient(135deg, var(--accent-redesigned), transparent 60%);
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-accent-md);
+        border-color: var(--accent-redesigned);
+
+        &::before {
+            opacity: 0.06;
+        }
+    }
+
+    &:active {
+        transform: translateY(-2px) scale(0.98);
+    }
+}
+
+.methodIconWrap {
+    @include flex-center;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background: var(--glass-bg-secondary);
+    color: var(--accent-redesigned);
+    transition: var(--transition-medium);
+    margin: 0 auto;
+
+    .methodCard:hover & {
+        background: var(--accent-redesigned);
+        color: var(--bg-redesigned);
+        transform: scale(1.1);
+    }
+}
+
+.methodDescription {
+    opacity: 0.7;
+    min-height: 40px;
+}
+
+.methodBadge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    background: var(--glass-bg-secondary);
+    color: var(--text-redesigned);
+    opacity: 0.7;
+    transition: var(--transition-fast);
+
+    &.accent {
+        background: var(--accent-redesigned);
+        color: var(--bg-redesigned);
+        opacity: 1;
+    }
+}
+
+// ─── Phase Indicator (breadcrumb) ─────────────────────────────────────────────
+
+.phaseIndicator {
+    overflow-x: auto;
+    @include custom-scrollbar;
+}
+
+.phaseStep {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: none;
+    border: none;
+    color: var(--text-redesigned);
+    opacity: 0.45;
+    font-size: var(--font-size-s);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    &:hover:not(:disabled) {
+        opacity: 0.8;
+    }
+
+    &:disabled {
+        cursor: default;
+    }
+
+    &.active {
+        opacity: 1;
+        color: var(--accent-redesigned);
+    }
+
+    &.completed {
+        opacity: 0.75;
+    }
+}
+
+.phaseNumber {
+    @include flex-center;
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-full);
+    background: var(--glass-border-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+    transition: var(--transition-fast);
+
+    .active & {
+        background: var(--accent-redesigned);
+        color: var(--bg-redesigned);
+    }
+
+    .completed & {
+        background: var(--status-success);
+        color: var(--bg-redesigned);
+    }
+}
+
+.phaseConnector {
+    width: 24px;
+    height: 1px;
+    background: var(--glass-border-primary);
+    flex-shrink: 0;
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ─── Step Content ─────────────────────────────────────────────────────────────
+
+.wizardContent {
+    min-height: 300px;
+}
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+
+.navSeparator {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--glass-border-primary);
+}
+
+// ─── Template Cards ───────────────────────────────────────────────────────────
+
+.templateGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--space-3);
+    width: 100%;
+
+    @include mobile {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 .templateCard {
     @include glass-card-secondary;
     @include hover-lift-card;
-    padding: var(--card-padding-md);
+    padding: var(--card-padding-sm);
     cursor: pointer;
     text-align: center;
     transition: var(--transition-medium);
@@ -105,8 +259,14 @@
 }
 
 .templateIcon {
-    font-size: 36px;
-    margin-bottom: var(--space-3);
+    width: 36px;
+    height: 36px;
+    color: var(--accent-redesigned);
+}
+
+.templateIconEmoji {
+    font-size: 32px;
+    line-height: 1;
 }
 
 // ─── Metric Builder ───────────────────────────────────────────────────────────
@@ -194,43 +354,57 @@
     width: 100%;
 }
 
-// ─── Chat (Step 1) ────────────────────────────────────────────────────────────
+// ─── Chat Messenger (Step 1) ──────────────────────────────────────────────────
 
-.chatContainer {
+.chatWrapper {
+    overflow: hidden;
+    height: 440px;
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    max-height: 400px;
+
+    @include mobile {
+        height: 380px;
+    }
+}
+
+.chatHeader {
+    flex-shrink: 0;
+    border-radius: 0 !important;
+}
+
+.chatAvatar {
+    @include flex-center;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    color: var(--icon-redesigned);
+}
+
+.chatStatus {
+    color: var(--status-success) !important;
+}
+
+.chatMessages {
+    flex: 1;
     overflow-y: auto;
     @include custom-scrollbar;
-    padding: var(--space-2);
+    padding: 16px 20px;
 }
 
-.chatBubble {
-    max-width: 80%;
-    padding: 12px 16px;
-    border-radius: var(--radius-lg);
-    font-size: var(--font-size-m);
-    line-height: 1.5;
-    animation: fadeIn 0.3s ease;
-
-    &.ai {
-        align-self: flex-start;
-        background: var(--glass-bg-secondary);
-        border: var(--glass-border-secondary);
-    }
-
-    &.user {
-        align-self: flex-end;
-        background: rgba(94, 211, 243, 0.15);
-        border: 1px solid rgba(94, 211, 243, 0.3);
-    }
+.msgBubble {
+    max-width: 75%;
+    animation: msgSlideIn 0.3s ease;
 }
 
-@keyframes fadeIn {
+.msgTime {
+    opacity: 0.5;
+    text-align: right;
+}
+
+@keyframes msgSlideIn {
     from {
         opacity: 0;
-        transform: translateY(6px);
+        transform: translateY(8px);
     }
 
     to {
@@ -239,26 +413,73 @@
     }
 }
 
-.chatInputRow {
-    display: flex;
-    gap: var(--space-3);
-    align-items: flex-end;
-    margin-top: var(--space-3);
+.chatGenerateBar {
+    flex-shrink: 0;
+    border-radius: 0 !important;
+}
 
-    @include mobile {
-        flex-direction: column;
+.chatInputBar {
+    flex-shrink: 0;
+    border-radius: 0 !important;
+}
+
+// ─── Typing dots animation ────────────────────────────────────────────────────
+
+.typingDots {
+    padding: 4px 0;
+
+    span {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent-redesigned);
+        opacity: 0.4;
+        animation: typingBounce 1.4s infinite ease-in-out both;
+
+        &:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        &:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        &:nth-child(3) {
+            animation-delay: 0.4s;
+        }
     }
 }
 
-// ─── Undo/Redo toolbar ────────────────────────────────────────────────────────
+@keyframes typingBounce {
 
-.undoRedoToolbar {
-    display: flex;
-    gap: var(--space-2);
-    align-items: center;
+    0%,
+    80%,
+    100% {
+        transform: scale(0.6);
+        opacity: 0.3;
+    }
+
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
-.skeleton {
-    border-radius: var(--radius-lg) !important;
-    background: var(--glass-bg-secondary) !important;
+.spinIcon {
+    animation: spinPulse 2s ease-in-out infinite;
 }
+
+@keyframes spinPulse {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+
+    50% {
+        transform: rotate(180deg) scale(1.15);
+    }
+
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
+}
+

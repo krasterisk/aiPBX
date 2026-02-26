@@ -8,6 +8,7 @@ import { Checkbox, FormControlLabel } from '@mui/material'
 import WebhookIcon from '@mui/icons-material/Webhook'
 import SendIcon from '@mui/icons-material/Send'
 import { WebhookEvent } from '@/entities/Report'
+import { HeadersEditor } from '@/features/Tools/ui/HeadersEditor/HeadersEditor'
 import cls from './ProjectWizard.module.scss'
 
 const AVAILABLE_EVENTS: Array<{ value: WebhookEvent; labelKey: string }> = [
@@ -17,12 +18,17 @@ const AVAILABLE_EVENTS: Array<{ value: WebhookEvent; labelKey: string }> = [
 
 interface WizardStep4Props {
     webhookUrl: string
+    webhookHeaders: Record<string, string>
     webhookEvents: WebhookEvent[]
     onChangeUrl: (url: string) => void
+    onChangeHeaders: (headers: Record<string, string>) => void
     onChangeEvents: (events: WebhookEvent[]) => void
 }
 
-export const WizardStep4_Webhook = memo(({ webhookUrl, webhookEvents, onChangeUrl, onChangeEvents }: WizardStep4Props) => {
+export const WizardStep4_Webhook = memo(({
+    webhookUrl, webhookHeaders, webhookEvents,
+    onChangeUrl, onChangeHeaders, onChangeEvents
+}: WizardStep4Props) => {
     const { t } = useTranslation('reports')
 
     const handleToggleEvent = useCallback((event: WebhookEvent) => {
@@ -35,13 +41,11 @@ export const WizardStep4_Webhook = memo(({ webhookUrl, webhookEvents, onChangeUr
     }, [webhookEvents, onChangeEvents])
 
     const handleTestWebhook = useCallback(() => {
-        // Stub: would POST to webhook URL
         alert(`Test webhook → ${webhookUrl}`)
     }, [webhookUrl])
 
     return (
         <VStack gap={'16'} max>
-            <Text title={String(t('Webhooks'))} bold />
             <Text text={String(t('Настройте уведомления о событиях проекта'))} />
 
             <div className={cls.webhookSection}>
@@ -56,6 +60,11 @@ export const WizardStep4_Webhook = memo(({ webhookUrl, webhookEvents, onChangeUr
                     InputProps={{
                         startAdornment: <WebhookIcon sx={{ mr: 1, color: 'var(--icon-redesigned)' }} fontSize={'small'} />
                     }}
+                />
+
+                <HeadersEditor
+                    value={webhookHeaders}
+                    onChange={onChangeHeaders}
                 />
 
                 <VStack gap={'8'} max>

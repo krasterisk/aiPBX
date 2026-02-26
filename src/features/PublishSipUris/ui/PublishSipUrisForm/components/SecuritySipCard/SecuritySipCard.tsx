@@ -14,6 +14,7 @@ interface SecuritySipCardProps {
     onChangeRecords: (e: React.ChangeEvent<HTMLInputElement>) => void
     tls: boolean
     onChangeTls: (e: React.ChangeEvent<HTMLInputElement>) => void
+    isAdmin?: boolean
 }
 
 export const SecuritySipCard = memo((props: SecuritySipCardProps) => {
@@ -23,7 +24,8 @@ export const SecuritySipCard = memo((props: SecuritySipCardProps) => {
         records,
         onChangeRecords,
         tls,
-        onChangeTls
+        onChangeTls,
+        isAdmin
     } = props
     const { t } = useTranslation('publish-sip')
 
@@ -43,11 +45,13 @@ export const SecuritySipCard = memo((props: SecuritySipCardProps) => {
                 variant="accent"
             />
 
-            <Check
-                label={t('Запись разговоров') || ''}
-                checked={records}
-                onChange={onChangeRecords}
-            />
+            {isAdmin && (
+                <Check
+                    label={t('Запись разговоров') || ''}
+                    checked={records}
+                    onChange={onChangeRecords}
+                />
+            )}
 
             <Check
                 label={t('TLS/SRTP Шифрование') || ''}

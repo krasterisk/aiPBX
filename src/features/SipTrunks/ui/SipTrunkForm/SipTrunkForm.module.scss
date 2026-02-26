@@ -1,0 +1,46 @@
+@import '@/app/styles/variables/mixins';
+
+.SipTrunkForm {
+    width: 100%;
+}
+
+.contentWrapper {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 1400px;
+    justify-content: center;
+}
+
+.leftColumn {
+    flex: 1;
+}
+
+.rightColumn {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.item {
+    transition: var(--transition-normal);
+}
+
+.formSection {
+    background: var(--card-bg-redesigned);
+}
+
+@include tablet {
+    .contentWrapper {
+        flex-direction: column !important;
+        gap: var(--space-4) !important;
+    }
+
+    .leftColumn {
+        width: 100% !important;
+    }
+
+    .rightColumn {
+        width: 100% !important;
+    }
+}

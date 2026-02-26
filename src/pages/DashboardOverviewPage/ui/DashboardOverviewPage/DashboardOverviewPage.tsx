@@ -1,24 +1,63 @@
-import { memo } from 'react'
-import { Dashboard, dashboardPageReducer, initDashboardPage } from '@/features/Dashboard'
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitialEffect'
-import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
+import { memo, useState, useCallback } from 'react'
+import { VStack } from '@/shared/ui/redesigned/Stack'
+import { OperatorDashboard } from '@/features/OperatorAnalytics'
+import { useGetOperatorDashboard } from '@/entities/Report'
+import { FiltersGroup } from '@/features/Dashboard'
+import { useTranslation } from 'react-i18next'
+import dayjs from 'dayjs'
 
-const reducers: ReducersList = {
-    dashboardPage: dashboardPageReducer
-}
+type PeriodTab = 'day' | 'week' | 'month' | 'year' | 'custom'
 
 const DashboardOverviewPage = memo(() => {
-    const dispatch = useAppDispatch()
+    const { t } = useTranslation('reports')
 
-    useInitialEffect(() => {
-        dispatch(initDashboardPage())
-    })
+    const [periodTab, setPeriodTab] = useState<PeriodTab>('week')
+    const [startDate, setStartDate] = useState(
+        dayjs().startOf('week').format('YYYY-MM-DD')
+    )
+    const [endDate, setEndDate] = useState(
+        dayjs().endOf('week').format('YYYY-MM-DD')
+    )
+    const [projectId, setProjectId] = useState('')
+
+    const {
+        data: dashboardData,
+        isLoading: isDashboardLoading,
+        isFetching: isDashboardFetching
+    } = useGetOperatorDashboard(
+        { startDate, endDate, projectId },
+        { skip: !startDate || !endDate }
+    )
+
+    const onChangePeriodTab = useCallback((value: string) => {
+        setPeriodTab(value as PeriodTab)
+    }, [])
+
+    const onChangeProjectId = useCallback((value: string) => {
+        setProjectId(value)
+    }, [])
 
     return (
-        <DynamicModuleLoader reducers={reducers} removeAfterUnmount={true}>
-            <Dashboard />
-        </DynamicModuleLoader>
+        <VStack gap={'16'} max>
+            <FiltersGroup
+                title={String(t('Сводный Дашборд'))}
+                tab={periodTab}
+                isInited={true}
+                startDate={startDate}
+                endDate={endDate}
+                onChangeTab={onChangePeriodTab}
+                onChangeAssistant={() => { }}
+                onChangeUserId={() => { }}
+                onChangeStartDate={setStartDate}
+                onChangeEndDate={setEndDate}
+            />
+            <OperatorDashboard
+                data={dashboardData}
+                isLoading={isDashboardLoading || isDashboardFetching}
+                projectId={projectId}
+                onChangeProjectId={onChangeProjectId}
+            />
+        </VStack>
     )
 })
 

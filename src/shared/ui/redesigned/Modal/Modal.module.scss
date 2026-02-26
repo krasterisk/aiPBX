@@ -1,3 +1,5 @@
+@import '@/app/styles/variables/mixins';
+
 .Modal {
     position: fixed;
     top: 0;
@@ -8,28 +10,45 @@
     opacity: 0;
     pointer-events: none;
     display: flex;
-
-    // выравнивание по центру как по горизонтали так и по вертикали
     justify-content: center;
     align-items: center;
 }
 
+// ─── Content container ────────────────────────────────────────────────────────
 .content {
     padding: 20px;
-    border-radius: 12px;
+    border-radius: var(--radius-2xl);
     transition: 0.3s transform;
     transform: scale(0.5);
-    max-width: 60%;
+    max-width: 520px;
+    width: 90%;
     z-index: var(--modal-z-index);
     max-height: calc(100vh - 40px);
     overflow-y: auto;
+    position: relative;
+    @include custom-scrollbar;
 
     @media (max-width: 768px) {
         max-width: 95%;
+        width: 95%;
         padding: 10px;
     }
 }
 
+// ─── Size: wide ───────────────────────────────────────────────────────────────
+.wide {
+    .content {
+        max-width: 960px;
+    }
+
+    @media (max-width: 768px) {
+        .content {
+            max-width: 95%;
+        }
+    }
+}
+
+// ─── Theme backgrounds ───────────────────────────────────────────────────────
 .modalNew {
     .content {
         background: var(--light-bg-redesigned);
@@ -42,6 +61,7 @@
     }
 }
 
+// ─── Opened state ─────────────────────────────────────────────────────────────
 .opened {
     pointer-events: auto;
     opacity: 1;
@@ -52,8 +72,43 @@
     }
 }
 
+// ─── Closing animation ───────────────────────────────────────────────────────
 .isClosing {
     .content {
         transform: scale(0.2);
     }
+}
+
+// ─── Close button ─────────────────────────────────────────────────────────────
+.closeBtn {
+    @include flex-center;
+    position: sticky;
+    top: 0;
+    float: right;
+    z-index: 100;
+    width: 36px;
+    height: 36px;
+    background: var(--bg-redesigned);
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    color: var(--text-redesigned);
+    margin: -4px -4px 0 0;
+    flex-shrink: 0;
+
+    &:hover {
+        transform: rotate(90deg);
+        background: var(--light-bg-redesigned);
+        border: 1px solid var(--accent-redesigned);
+    }
+
+    &:active {
+        transform: scale(0.9);
+    }
+}
+
+.closeBtnIcon {
+    width: 20px;
+    height: 20px;
 }

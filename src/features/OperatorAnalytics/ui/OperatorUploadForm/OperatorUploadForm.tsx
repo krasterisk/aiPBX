@@ -1,7 +1,6 @@
 import { memo, useState, useCallback, useRef, useEffect, DragEvent, ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
-import { Card } from '@/shared/ui/redesigned/Card'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Textarea } from '@/shared/ui/mui/Textarea'
@@ -9,11 +8,11 @@ import { Combobox } from '@/shared/ui/mui/Combobox'
 import { ProjectSelect } from '../ProjectSelect/ProjectSelect'
 import {
     useUploadOperatorFiles,
-    useCreateOperatorProject,
     BatchUploadResponse,
     OperatorAnalysisResult
 } from '@/entities/Report'
 import { toast } from 'react-toastify'
+import CloseIcon from '@mui/icons-material/Close'
 import cls from './OperatorUploadForm.module.scss'
 
 const ALLOWED_TYPES = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/x-m4a', 'audio/mp4', 'audio/webm']
@@ -94,20 +93,32 @@ export const OperatorUploadForm = memo(({ isOpen, onClose }: OperatorUploadFormP
         if (projectId) formData.append('projectId', projectId)
         try {
             const result = await uploadFiles(formData).unwrap()
-            if ('items' in result) {
-                toast.success(`${t('Обработка')}: ${(result as BatchUploadResponse).items.length} ${t('файлов')}`)
+
+            if (result && 'items' in result) {
+                toast.success(`${t('В работу ушло')}: ${(result as BatchUploadResponse).items.length} ${t('файлов')}`)
+            } else if (result && 'filename' in result) {
+                toast.success(`${(result as OperatorAnalysisResult).filename} — ${t('загружен и отправлен в работу')}`)
             } else {
-                toast.success(`${(result as OperatorAnalysisResult).filename} — ${t('Завершено')}`)
+                toast.success(t('Файлы успешно загружены'))
             }
+
             setFiles([])
-            onClose?.()
+            // Longer delay to ensure toast is visible and RTK Query invalidation starts before unmounting
+            setTimeout(() => {
+                onClose?.()
+            }, 800)
         } catch (err: any) {
-            if (!err?.status) toast.error(String(t('Ошибка сети')))
+            console.error('Upload error:', err)
+            const message = err?.data?.message || err?.message || t('Ошибка при загрузке')
+            toast.error(String(message))
         }
     }, [files, operatorName, clientPhone, language, projectId, uploadFiles, t, onClose])
 
     return (
-        <VStack gap={'16'} max>
+        <VStack gap="16" max>
+            {/* Header */}
+            <Text title={String(t('Загрузить звонок'))} bold size="l" />
+
             {/* Drop zone */}
             <div
                 className={`${cls.dropZone} ${isDragging ? cls.dragging : ''}`}
@@ -124,23 +135,28 @@ export const OperatorUploadForm = memo(({ isOpen, onClose }: OperatorUploadFormP
                     className={cls.hiddenInput}
                     onChange={onFileInputChange}
                 />
-                <VStack gap={'8'} align={'center'}>
-                    <Text text={'🎵'} />
+                <VStack gap="8" align="center">
+                    {/* eslint-disable-next-line i18next/no-literal-string */}
+                    <Text text="🎵" />
                     <Text text={String(t('Перетащите файлы сюда'))} bold />
                     <Text text={String(t('или выберите файлы'))} />
                     {/* eslint-disable-next-line i18next/no-literal-string */}
-                    <Text text={'mp3, wav, ogg, m4a • max 50 МБ'} />
+                    <Text text="mp3, wav, ogg, m4a • max 50 МБ" size="s" />
                 </VStack>
             </div>
 
             {/* File list */}
             {files.length > 0 && (
-                <VStack gap={'8'} max>
+                <VStack gap="8" max>
                     {files.map((item, i) => (
-                        <HStack key={i} max justify={'between'} align={'center'} className={cls.fileItem}>
+                        <HStack key={i} max justify="between" align="center" className={cls.fileItem}>
                             <Text text={item.file.name} />
-                            <Button variant={'glass-action'} color={'error'} onClick={() => setFiles(p => p.filter((_, idx) => idx !== i))}>
-                                {'✕'}
+                            <Button
+                                variant="clear"
+                                color="error"
+                                onClick={() => setFiles(p => p.filter((_, idx) => idx !== i))}
+                            >
+                                <CloseIcon fontSize="small" />
                             </Button>
                         </HStack>
                     ))}
@@ -148,45 +164,38 @@ export const OperatorUploadForm = memo(({ isOpen, onClose }: OperatorUploadFormP
             )}
 
             {/* Fields */}
-            <VStack gap={'12'} max>
-                <HStack gap={'12'} max className={cls.fieldsRow}>
-                    <Textarea
-                        label={String(t('Оператор'))}
-                        value={operatorName}
-                        onChange={e => setOperatorName(e.target.value)}
-                        size={'small'}
-                    />
-                    <Textarea
-                        label={String(t('Телефон клиента'))}
-                        value={clientPhone}
-                        onChange={e => setClientPhone(e.target.value)}
-                        size={'small'}
-                    />
-                </HStack>
-                <HStack gap={'12'} max className={cls.fieldsRow}>
-                    <Combobox
-                        label={String(t('Язык записи'))}
-                        options={LANGUAGE_OPTIONS}
-                        value={language}
-                        onChange={(_, v) => setLanguage(v)}
-                        getOptionLabel={(o: { name: string }) => o.name}
-                        isOptionEqualToValue={(o: { id: string }, v: { id: string }) => o.id === v.id}
-                        disableClearable
-                    />
-                    <ProjectSelect
-                        value={projectId}
-                        onChange={setProjectId}
-                    />
-                </HStack>
-            </VStack>
+            <div className={cls.fieldsGrid}>
+                <Textarea
+                    label={String(t('Оператор'))}
+                    value={operatorName}
+                    onChange={e => setOperatorName(e.target.value)}
+                    size="small"
+                />
+                <Textarea
+                    label={String(t('Телефон клиента'))}
+                    value={clientPhone}
+                    onChange={e => setClientPhone(e.target.value)}
+                    size="small"
+                />
+                <Combobox
+                    label={String(t('Язык записи'))}
+                    options={LANGUAGE_OPTIONS}
+                    value={language}
+                    onChange={(_, v) => setLanguage(v)}
+                    getOptionLabel={(o: { name: string }) => o.name}
+                    isOptionEqualToValue={(o: { id: string }, v: { id: string }) => o.id === v.id}
+                    disableClearable
+                />
+                <ProjectSelect value={projectId} onChange={setProjectId} />
+            </div>
 
-            {/* Actions */}
+            {/* Submit */}
             <Button
-                variant={'glass-action'}
+                variant="glass-action"
                 onClick={handleSubmit}
                 disabled={!files.length || isLoading}
             >
-                {isLoading ? String(t('Обработка')) + '...' : String(t('Загрузить звонок'))}
+                {isLoading ? `${String(t('Обработка'))}...` : String(t('Загрузить звонок'))}
             </Button>
         </VStack>
     )

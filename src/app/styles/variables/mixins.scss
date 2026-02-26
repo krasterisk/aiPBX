@@ -21,12 +21,12 @@
 @mixin glass-card-secondary {
     position: relative;
     background: var(--glass-bg-secondary);
-    backdrop-filter: var(--glass-blur-md);
+    backdrop-filter: var(--glass-blur-md); // blur(20px)
     -webkit-backdrop-filter: var(--glass-blur-md);
     border-radius: var(--radius-lg);
-    border: var(--glass-border-secondary);
+    border: var(--glass-border-primary); // 1px solid rgba(255,255,255,0.12)
     box-shadow: var(--shadow-sm);
-    transition: var(--transition-medium);
+    transition: var(--transition-slow); // all 0.4s cubic-bezier(0.16, 1, 0.3, 1)
 }
 
 @mixin glass-card-tertiary {
@@ -42,14 +42,34 @@
 // HOVER EFFECTS
 // ========================================
 
+// Hover for floating cards (safe: uses scale, not translateY)
 @mixin hover-lift-card {
     &:hover {
         cursor: pointer;
-        transform: var(--hover-card-primary);
+        // Scale lifts visually without moving element bounds — no flicker
+        transform: scale(1.01);
         box-shadow: var(--shadow-lg), var(--shadow-accent-md);
         border-color: rgba(94, 211, 243, 0.3);
     }
 }
+
+// Hover for table rows / list items.
+// scale(1.01) grows from CENTER — bottom edge moves ~0.5% of row height (~0.6px), cursor stays inside.
+// translateY physically relocates hit area → cursor exits at bottom edge → flicker loop.
+@mixin hover-card-row {
+    will-change: transform, box-shadow;
+    transition: var(--transition-slow); // all 0.4s cubic-bezier(0.16, 1, 0.3, 1)
+    position: relative;
+
+    &:hover {
+        transform: scale(1.01); // subtle lift without exit
+        box-shadow: var(--shadow-lg), var(--shadow-accent-md); // depth + accent glow
+        border-color: rgba(94, 211, 243, 0.3); // etalon accent border
+        background: var(--glass-bg-tertiary);
+        z-index: 1;
+    }
+}
+
 
 @mixin hover-lift-simple {
     transition: var(--transition-transform);

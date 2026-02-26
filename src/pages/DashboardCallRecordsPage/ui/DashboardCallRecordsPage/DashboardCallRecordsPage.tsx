@@ -1,13 +1,6 @@
 import { memo } from 'react'
-import { ReportList } from '@/entities/Report'
-import { VStack } from '@/shared/ui/redesigned/Stack'
+import { CallsPage } from '@/pages/CallsPage'
 
-const DashboardCallRecordsPage = memo(() => {
-    return (
-        <VStack max gap={'16'}>
-            <ReportList />
-        </VStack>
-    )
-})
+const DashboardCallRecordsPage = memo(() => <CallsPage />)
 
 export default DashboardCallRecordsPage

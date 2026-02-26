@@ -6,6 +6,7 @@ import { rtkApi } from '@/shared/api/rtkApi'
 import { AssistantFormSchema, AssistantsPageSchema } from '@/entities/Assistants'
 import { ToolsPageSchema } from '@/entities/Tools'
 import { ReportsPageSchema } from '@/entities/Report'
+import { ProjectWizardSchema } from '@/entities/Report/model/types/projectWizardSchema'
 import { DashboardPageSchema } from '@/features/Dashboard'
 import { LoginSchema, SignupSchema } from '@/features/Auth'
 import { PbxServersPageSchema } from '@/entities/PbxServers'
@@ -18,7 +19,9 @@ import { PbxServerFormSchema } from '@/features/PbxServers'
 import { AIAnalyticsPageSchema } from '@/pages/AIAnalyticsPage'
 import { McpServersPageSchema } from '@/entities/Mcp'
 import { OnboardingState } from '@/features/Onboarding'
-import { OperatorAnalyticsPageSchema } from '@/pages/OperatorAnalyticsPage'
+
+import { SipTrunksPageSchema } from '@/entities/SipTrunks'
+import { SipTrunkFormSchema } from '@/features/SipTrunks'
 
 export interface StateSchema {
   user: UserSchema
@@ -44,7 +47,10 @@ export interface StateSchema {
   aiAnalyticsPage?: AIAnalyticsPageSchema
   mcpServersPage?: McpServersPageSchema
   onboarding?: OnboardingState
-  operatorAnalyticsPage?: OperatorAnalyticsPageSchema
+
+  sipTrunksPage?: SipTrunksPageSchema
+  sipTrunkForm?: SipTrunkFormSchema
+  projectWizard?: ProjectWizardSchema
 }
 
 export type StateSchemaKey = keyof StateSchema

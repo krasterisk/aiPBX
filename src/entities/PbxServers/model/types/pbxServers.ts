@@ -32,6 +32,7 @@ export interface PbxServer {
   context?: string
   moh?: string
   recordFormat?: string
+  sipTechnology?: string
 }
 
 export interface PbxServerListProps {

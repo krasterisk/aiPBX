@@ -5,6 +5,7 @@ export interface Price {
     userId: number
     realtime: number
     analytic: number
+    stt: number
     userName?: string
     createdAt?: string
     updatedAt?: string
@@ -15,9 +16,11 @@ export interface CreatePriceDto {
     userId: number
     realtime: number
     analytic: number
+    stt: number
 }
 
 export interface UpdatePriceDto {
     realtime?: number
     analytic?: number
+    stt?: number
 }

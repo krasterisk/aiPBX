@@ -1,0 +1,6 @@
+@import '@/app/styles/variables/mixins';
+
+.skeleton {
+    @include glass-card-secondary;
+    width: 100%;
+}

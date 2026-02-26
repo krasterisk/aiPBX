@@ -1,0 +1,292 @@
+@import '@/app/styles/variables/mixins';
+
+.TableWrapper {
+    width: 100%;
+    // No overflow — box-shadow on hovered rows renders freely.
+    // Mobile/tablet scroll is handled by responsive display:block styles below.
+    @include custom-scrollbar;
+    padding-bottom: var(--space-4);
+}
+
+.Table {
+    width: 100%;
+    min-width: 1100px;
+    border-collapse: separate;
+    border-spacing: 0 12px; // slightly more gap — shadow has room between rows
+}
+
+.TableHeader th {
+    text-align: left;
+    padding: 10px 16px;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-redesigned);
+    opacity: 0.55;
+    border-bottom: 1px solid var(--glass-border-secondary);
+    white-space: nowrap;
+}
+
+.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition-fast);
+
+    &:hover {
+        opacity: 1;
+        color: var(--accent-redesigned);
+    }
+}
+
+.sortIcon {
+    color: var(--accent-redesigned);
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.Row {
+    @include glass-card-secondary;
+    @include hover-card-row;
+    cursor: pointer;
+    background: var(--glass-bg-secondary);
+    border: 1px solid var(--glass-border-secondary);
+
+    td {
+        padding: 12px 16px;
+        vertical-align: middle;
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        max-width: 180px;
+
+        &:first-child {
+            border-left: 1px solid transparent;
+            border-top-left-radius: var(--radius-lg);
+            border-bottom-left-radius: var(--radius-lg);
+        }
+
+        &:last-child {
+            border-right: 1px solid transparent;
+            border-top-right-radius: var(--radius-lg);
+            border-bottom-right-radius: var(--radius-lg);
+            max-width: none;
+        }
+    }
+
+    &.expanded {
+        border-color: var(--accent-redesigned);
+        background: var(--glass-bg-tertiary);
+        box-shadow: var(--shadow-accent-sm), var(--shadow-md);
+    }
+}
+
+.expandIcon {
+    color: var(--icon-redesigned);
+    transition: var(--transition-medium);
+}
+
+.DetailRow {
+    td {
+        padding: 0 12px 12px;
+        border: none;
+    }
+}
+
+.badgeText {
+    display: none;
+}
+
+.sourceBadge,
+.successText,
+.escalationText {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.sourceBadge {
+    padding: 4px 10px;
+    border-radius: var(--radius-md);
+    background: var(--glass-overlay-light);
+    color: var(--text-redesigned);
+
+    &[data-source="call"] {
+        color: var(--accent-redesigned);
+        background: rgba(94, 211, 243, 0.1);
+    }
+
+    &[data-source="widget"] {
+        color: #a78bfa;
+        background: rgba(167, 139, 250, 0.1);
+    }
+
+    &[data-source="playground"] {
+        color: var(--save-redesigned);
+        background: rgba(108, 217, 139, 0.1);
+    }
+
+    &[data-source="external-api"],
+    &[data-source="external-front"] {
+        color: #fb923c;
+        background: rgba(251, 146, 60, 0.1);
+    }
+}
+
+.sourceBadge[data-tooltip],
+.successText[data-tooltip],
+.escalationText[data-tooltip] {
+    position: relative;
+
+    &::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + 6px);
+        left: 50%;
+        transform: translateX(-50%) scale(0.9);
+        background: var(--bg-redesigned, #1e1e2e);
+        color: var(--text-redesigned);
+        font-size: 11px;
+        white-space: nowrap;
+        padding: 4px 8px;
+        border-radius: 6px;
+        border: 1px solid var(--glass-border-secondary);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease, transform 0.15s ease;
+        z-index: 10;
+    }
+
+    &:hover::after {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+.successText {
+    color: var(--status-success);
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.escalationText {
+    color: var(--status-warning);
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.csatCell {
+    min-width: 70px;
+}
+
+.csatValue {
+    font-weight: 600;
+    color: var(--text-redesigned);
+}
+
+.csatStar {
+    color: #f5a623;
+    fill: #f5a623;
+    flex-shrink: 0;
+}
+
+.sentimentBadge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 600;
+
+    &[data-sentiment="positive"] {
+        color: var(--status-success);
+        background: var(--status-success-bg);
+    }
+
+    &[data-sentiment="neutral"] {
+        color: var(--status-neutral);
+        background: var(--status-neutral-bg);
+    }
+
+    &[data-sentiment="negative"] {
+        color: var(--status-error);
+        background: var(--status-error-bg);
+    }
+}
+
+@include tablet {
+    .Table {
+        min-width: 100%;
+        display: block;
+    }
+
+    .TableHeader {
+        display: none;
+    }
+
+    .TableBody {
+        display: block;
+        width: 100%;
+    }
+
+    .Row {
+        display: block;
+        margin-bottom: 16px;
+        padding: 8px;
+        border-radius: var(--radius-lg);
+
+        td {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 10px 16px 10px 130px !important;
+            border: none !important;
+            position: relative;
+            text-align: right;
+            min-height: 44px;
+            max-width: none;
+
+            &::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 16px;
+                font-weight: 600;
+                font-size: 12px;
+                color: var(--text-redesigned);
+                opacity: 0.5;
+                text-transform: uppercase;
+            }
+
+            &:last-child {
+                justify-content: center;
+
+                &::before {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .DetailRow {
+        display: block;
+
+        td {
+            display: block;
+            width: 100%;
+            padding: 0 0 16px 0 !important;
+        }
+    }
+
+    .badgeText {
+        display: inline;
+    }
+
+    .sourceBadge[data-tooltip]::after,
+    .successText[data-tooltip]::after,
+    .escalationText[data-tooltip]::after {
+        display: none;
+    }
+}

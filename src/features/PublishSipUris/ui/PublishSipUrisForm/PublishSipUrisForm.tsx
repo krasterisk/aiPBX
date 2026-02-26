@@ -190,6 +190,7 @@ export const PublishSipUrisForm = memo((props: PublishSipUrisFormProps) => {
                             onChangeRecords={onChangeRecords}
                             tls={tls || false}
                             onChangeTls={onChangeTls}
+                            isAdmin={isAdmin}
                         />
                     </VStack>
                 </HStack>

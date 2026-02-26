@@ -3,8 +3,26 @@ import { useTranslation } from 'react-i18next'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Card } from '@/shared/ui/redesigned/Card'
+import { Icon } from '@/shared/ui/redesigned/Icon'
 import { ProjectTemplate } from '@/entities/Report'
+import RealEstateIcon from '@/shared/assets/icons/templates/real-estate.svg'
+import DeliveryIcon from '@/shared/assets/icons/templates/delivery.svg'
+import TechSupportIcon from '@/shared/assets/icons/templates/tech-support.svg'
+import BankingIcon from '@/shared/assets/icons/templates/banking.svg'
+import MedicineIcon from '@/shared/assets/icons/templates/medicine.svg'
+import FoodIcon from '@/shared/assets/icons/templates/food.svg'
+import CustomIcon from '@/shared/assets/icons/templates/custom.svg'
 import cls from './ProjectWizard.module.scss'
+
+const TEMPLATE_ICONS: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
+    real_estate: RealEstateIcon,
+    delivery: DeliveryIcon,
+    tech_support: TechSupportIcon,
+    banking: BankingIcon,
+    medicine: MedicineIcon,
+    food: FoodIcon,
+    custom: CustomIcon,
+}
 
 const TEMPLATES: ProjectTemplate[] = [
     {
@@ -56,6 +74,30 @@ const TEMPLATES: ProjectTemplate[] = [
         visibleDefaultMetrics: ['script_compliance', 'politeness_empathy', 'product_knowledge', 'closing_quality'],
     },
     {
+        id: 'medicine',
+        name: 'Медицина',
+        description: 'Анализ звонков медицинских центров и клиник',
+        icon: '🏥',
+        systemPrompt: 'Контекст: медицинский центр. Операторы записывают пациентов на приём, консультируют по услугам и обрабатывают обращения.',
+        customMetricsSchema: [
+            { id: 'appointment_booked', name: 'Запись на приём', type: 'boolean', description: 'Была ли успешно оформлена запись пациента на приём' },
+            { id: 'urgency_assessed', name: 'Оценка срочности', type: 'boolean', description: 'Оценил ли оператор срочность обращения пациента' },
+        ],
+        visibleDefaultMetrics: ['greeting_quality', 'active_listening', 'politeness_empathy', 'problem_resolution'],
+    },
+    {
+        id: 'food',
+        name: 'Еда и рестораны',
+        description: 'Анализ звонков ресторанов и доставки еды',
+        icon: '🍽️',
+        systemPrompt: 'Контекст: ресторан или сервис доставки еды. Операторы принимают заказы, обрабатывают жалобы и бронируют столики.',
+        customMetricsSchema: [
+            { id: 'order_taken', name: 'Заказ принят', type: 'boolean', description: 'Был ли корректно принят заказ клиента' },
+            { id: 'upsell_suggested', name: 'Допродажа', type: 'boolean', description: 'Предложил ли оператор дополнительные позиции' },
+        ],
+        visibleDefaultMetrics: ['greeting_quality', 'politeness_empathy', 'closing_quality', 'speech_clarity_pace'],
+    },
+    {
         id: 'custom',
         name: 'Свой шаблон',
         description: 'Создать проект с нуля',
@@ -83,22 +125,28 @@ export const WizardStep0_Templates = memo(({ selectedTemplateId, onSelect }: Wiz
             <Text title={String(t('Выберите шаблон'))} bold />
             <Text text={String(t('Шаблон предзаполнит настройки проекта'))} />
             <div className={cls.templateGrid}>
-                {TEMPLATES.map(tpl => (
-                    <Card
-                        key={tpl.id}
-                        variant={'glass'}
-                        border={'partial'}
-                        padding={'16'}
-                        className={`${cls.templateCard} ${selectedTemplateId === tpl.id ? cls.selected : ''}`}
-                        onClick={() => handleSelect(tpl)}
-                    >
-                        <VStack gap={'8'} align={'center'}>
-                            <span className={cls.templateIcon}>{tpl.icon}</span>
-                            <Text text={String(t(tpl.name))} bold />
-                            <Text text={String(t(tpl.description))} size={'s'} />
-                        </VStack>
-                    </Card>
-                ))}
+                {TEMPLATES.map(tpl => {
+                    const SvgIcon = TEMPLATE_ICONS[tpl.id]
+                    return (
+                        <Card
+                            key={tpl.id}
+                            variant={'glass'}
+                            border={'partial'}
+                            padding={'16'}
+                            className={`${cls.templateCard} ${selectedTemplateId === tpl.id ? cls.selected : ''}`}
+                            onClick={() => handleSelect(tpl)}
+                        >
+                            <VStack gap={'8'} align={'center'}>
+                                {SvgIcon
+                                    ? <Icon Svg={SvgIcon} className={cls.templateIcon} />
+                                    : <span className={cls.templateIconEmoji}>{tpl.icon}</span>
+                                }
+                                <Text text={String(t(tpl.name))} bold />
+                                <Text text={String(t(tpl.description))} size={'s'} />
+                            </VStack>
+                        </Card>
+                    )
+                })}
             </div>
         </VStack>
     )

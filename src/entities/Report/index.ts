@@ -68,6 +68,7 @@ export {
   useCreateOperatorProject,
   useDeleteOperatorProject,
   useUpdateOperatorProject,
+  useGenerateMetricsFromPrompt,
   useGenerateOperatorApiToken,
   useListOperatorApiTokens,
   useRevokeOperatorApiToken,
@@ -75,4 +76,27 @@ export {
 } from './api/reportApi'
 
 export { useReportFilters } from './lib/useReportFilters'
-export { ReportList } from './ui/ReportList/ReportList'
+
+// ── Project Wizard Redux ──────────────────────────────────────────────────────
+export type { ProjectWizardSchema, MetricMethod } from './model/types/projectWizardSchema'
+export {
+  projectWizardActions,
+  projectWizardReducer
+} from './model/slices/projectWizardSlice'
+export {
+  getWizardIsOpen,
+  getWizardEditProjectId,
+  getWizardMethod,
+  getWizardMethodStepDone,
+  getWizardName,
+  getWizardDescription,
+  getWizardSystemPrompt,
+  getWizardCustomMetrics,
+  getWizardVisibleDefaultMetrics,
+  getWizardWebhookUrl,
+  getWizardWebhookHeaders,
+  getWizardWebhookEvents,
+  getWizardSelectedTemplateId,
+  getWizardShowWebhooks,
+} from './model/selectors/projectWizardSelectors'
+

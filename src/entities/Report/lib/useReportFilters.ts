@@ -25,7 +25,7 @@ import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 import { CdrSource } from '../model/types/report'
 
-export function useReportFilters () {
+export function useReportFilters() {
   const page = useSelector(getReportsPageNum)
   const limit = useSelector(getReportsPageLimit)
   const hasMore = useSelector(getReportsHasMore)
@@ -49,6 +49,8 @@ export function useReportFilters () {
   const dispatch = useAppDispatch()
   const [newSearch, setNewSearch] = useState<string>('')
 
+  const [pollingInterval, setPollingInterval] = useState(0)
+
   const {
     data,
     isLoading,
@@ -68,9 +70,27 @@ export function useReportFilters () {
     sortOrder,
     source
   }, {
-    refetchOnFocus: false,
-    refetchOnReconnect: false
+    refetchOnFocus: true,
+    refetchOnReconnect: true,
+    pollingInterval
   })
+
+  useEffect(() => {
+    // Check for any items in 'processing' status. 
+    // We check both the top-level status and the analytics status if available.
+    if (data?.rows) {
+      const hasProcessing = data.rows.some((report: any) =>
+        report.status?.toLowerCase() === 'processing' ||
+        report.analytics?.status?.toLowerCase() === 'processing'
+      )
+
+      if (hasProcessing) {
+        if (pollingInterval !== 5000) setPollingInterval(5000)
+      } else if (!isFetching && !isLoading) {
+        if (pollingInterval !== 0) setPollingInterval(0)
+      }
+    }
+  }, [data?.rows, isFetching, isLoading, pollingInterval])
 
   const onRefetch = useCallback(() => {
     refetch()

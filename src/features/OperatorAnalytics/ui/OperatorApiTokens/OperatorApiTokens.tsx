@@ -199,11 +199,22 @@ interface DocEntryProps {
     method: 'POST' | 'GET'
     path: string
     description: string
+    fullUrl: string
     children: React.ReactNode
 }
 
-const DocEntry = memo(({ method, path, description, children }: DocEntryProps) => {
+const DocEntry = memo(({ method, path, description, fullUrl, children }: DocEntryProps) => {
+    const { t } = useTranslation('reports')
     const [open, setOpen] = useState(false)
+    const [copied, setCopied] = useState(false)
+
+    const handleCopy = useCallback((e: React.MouseEvent) => {
+        e.stopPropagation()
+        navigator.clipboard.writeText(fullUrl).then(() => {
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2000)
+        })
+    }, [fullUrl])
 
     return (
         <div className={`${cls.docEntry} ${open ? cls.docEntryOpen : ''}`}>
@@ -219,9 +230,18 @@ const DocEntry = memo(({ method, path, description, children }: DocEntryProps) =
                     <code className={cls.docPath}>{path}</code>
                     <span className={cls.docDesc}>{description}</span>
                 </HStack>
-                <span className={cls.docChevron}>
-                    {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </span>
+                <HStack gap={'8'} align={'center'}>
+                    <span
+                        className={`${cls.baseUrlCopy} ${copied ? cls.baseUrlCopied : ''}`}
+                        onClick={handleCopy}
+                        title={String(t('Скопировать URL'))}
+                    >
+                        <ContentCopyIcon sx={{ fontSize: 14 }} />
+                    </span>
+                    <span className={cls.docChevron}>
+                        {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    </span>
+                </HStack>
             </button>
 
             {open && (
@@ -260,11 +280,11 @@ const ApiDocs = memo(() => {
                     type={'button'}
                     className={`${cls.baseUrlCopy} ${copied ? cls.baseUrlCopied : ''}`}
                     onClick={handleCopyBase}
-                    title={'Copy Base URL'}
+                    title={String(t('Скопировать URL'))}
                 >
                     {copied
-                        ? <><ContentCopyIcon sx={{ fontSize: 14 }} />{' скопировано'}</>
-                        : <><ContentCopyIcon sx={{ fontSize: 14 }} />{' копировать'}</>
+                        ? <><ContentCopyIcon sx={{ fontSize: 14 }} />{` ${String(t('Скопировано'))}`}</>
+                        : <><ContentCopyIcon sx={{ fontSize: 14 }} />{` ${String(t('Скопировать'))}`}</>
                     }
                 </button>
             </HStack>
@@ -280,96 +300,137 @@ const ApiDocs = memo(() => {
 
                 <DocEntry
                     method={'POST'}
-                    path={'/operator-analytics/api/analyze-url'}
-                    description={String(t('Анализ записи по URL'))}
+                    path={'/operator-analytics/analyze-url'}
+                    description={String(t('Анализ записи по URL (single / batch)'))}
+                    fullUrl={`${base}/operator-analytics/analyze-url`}
                 >
                     <VStack gap={'8'}>
-                        <Text text={String(t('Загружает и анализирует аудиозапись по прямой ссылке. Проект определяется автоматически из токена.'))} />
-                        <Text text={'Request headers:'} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`Authorization: Bearer <ваш_токен>
+                        <Text text={String(t('Загружает и анализирует аудиозапись(и) по прямой ссылке. Проект определяется автоматически из токена. Поддерживает одиночный URL (синхронно) и массив URL (асинхронно).'))} />
+                        <Text text={String(t('Заголовки запроса:'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`Authorization: Bearer <${t('ваш_токен')}>
 Content-Type: application/json`}</pre>
-                        <Text text={'Request body:'} bold size={'s'} />
+                        <Text text={String(t('Тело запроса:'))} bold size={'s'} />
                         <pre className={cls.codeBlock}>{`{
-  "url":          "https://example.com/call.mp3",  // обязательно — прямая ссылка на аудио
-  "operatorName": "Иванов Иван",                   // необязательно — имя оператора
-  "clientPhone":  "+7 999 123-45-67",              // необязательно — номер клиента
-  "language":     "auto"                           // авто-определение (по умолчанию)
-                                                   // доступны: auto | ru | en | de | zh | kz | uk
+  "url":          "https://example.com/call.mp3",  // ${t('одиночный URL (синхронно)')}
+  "urls":         ["url1", "url2", "url3"],         // ${t('массив URL (асинхронно)')}
+  "operatorName": "John Doe",                       // ${t('необязательно')}
+  "clientPhone":  "+7 999 123-45-67",              // ${t('необязательно')}
+  "language":     "auto"                           // auto | ru | en | de | zh | kz | uk
 }`}</pre>
-                        <Text text={'Пример:'} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`curl -X POST ${base}/operator-analytics/api/analyze-url \\
+                        <Text text={String(t('Пример (одиночный URL — синхронно):'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`curl -X POST ${base}/operator-analytics/analyze-url \\
   -H "Authorization: Bearer oa_xxx" \\
   -H "Content-Type: application/json" \\
   -d '{
     "url": "https://your-storage.com/call.mp3",
     "operatorName": "Иван Петров",
-    "clientPhone": "+79991234567",
     "language": "ru"
   }'`}</pre>
+                        <Text text={String(t('Пример (массив URL — асинхронно):'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`curl -X POST ${base}/operator-analytics/analyze-url \\
+  -H "Authorization: Bearer oa_xxx" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "urls": [
+      "https://your-storage.com/call1.mp3",
+      "https://your-storage.com/call2.mp3",
+      "https://your-storage.com/call3.mp3"
+    ],
+    "operatorName": "Иван Петров",
+    "language": "ru"
+  }'`}</pre>
+                        <Text text={String(t('Ответ (batch):'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`{
+  "items": [
+    { "id": 42, "filename": "call1.mp3", "url": "https://...", "status": "processing" },
+    { "id": 43, "filename": "call2.mp3", "url": "https://...", "status": "processing" }
+  ]
+}`}</pre>
                     </VStack>
                 </DocEntry>
 
                 <DocEntry
                     method={'POST'}
-                    path={'/operator-analytics/api/upload'}
-                    description={String(t('Загрузка аудиофайла'))}
+                    path={'/operator-analytics/analyze-file'}
+                    description={String(t('Загрузка аудиофайла (single / batch)'))}
+                    fullUrl={`${base}/operator-analytics/analyze-file`}
                 >
                     <VStack gap={'8'}>
-                        <Text text={String(t('Загружает аудиофайл напрямую через multipart/form-data. Проект определяется автоматически из токена.'))} />
-                        <Text text={'Request headers:'} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`Authorization: Bearer <ваш_токен>
+                        <Text text={String(t('Загружает аудиофайл(ы) через multipart/form-data. Проект определяется автоматически из токена. Поддерживает один или несколько файлов.'))} />
+                        <Text text={String(t('Заголовки запроса:'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`Authorization: Bearer <${t('ваш_токен')}>
 Content-Type: multipart/form-data`}</pre>
-                        <Text text={'Form fields:'} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`file          аудиофайл (MP3 / WAV / OGG / M4A, до 50 МБ)  обязательно
-operatorName  имя оператора                                   необязательно
-clientPhone   номер телефона клиента (+7…)                    необязательно
-language      auto | ru | en | de | zh | kz | uk              по умолчанию: auto`}</pre>
-                        <Text text={'Пример:'} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`curl -X POST ${base}/operator-analytics/api/upload \\
+                        <Text text={String(t('Поля формы:'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`file          ${t('аудиофайл')} (MP3/WAV/OGG/M4A/FLAC/WebM, ${t('до')} 50 ${t('МБ')})  ${t('обязательно')}
+operatorName  ${t('имя оператора')}                                       ${t('необязательно')}
+clientPhone   ${t('номер телефона клиента')} (+7…)                        ${t('необязательно')}
+language      auto | ru | en | de | zh | kz | uk                  ${t('по умолчанию')}: auto`}</pre>
+                        <Text text={String(t('Пример (один файл):'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`curl -X POST ${base}/operator-analytics/analyze-file \\
   -H "Authorization: Bearer oa_xxx" \\
   -F "file=@/path/to/call.mp3" \\
   -F "operatorName=Иван Петров" \\
   -F "clientPhone=+79991234567" \\
   -F "language=ru"`}</pre>
+                        <Text text={String(t('Ответ (batch):'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`{
+  "items": [
+    { "id": 42, "filename": "call1.mp3", "status": "processing" },
+    { "id": 43, "filename": "call2.mp3", "status": "processing" }
+  ]
+}`}</pre>
                     </VStack>
                 </DocEntry>
 
                 <DocEntry
                     method={'GET'}
-                    path={'/operator-analytics/api/results'}
+                    path={'/operator-analytics/results'}
                     description={String(t('Список результатов анализа'))}
+                    fullUrl={`${base}/operator-analytics/results`}
                 >
                     <VStack gap={'8'}>
                         <Text text={String(t('Возвращает список проанализированных звонков из проекта токена с пагинацией и фильтрами.'))} />
-                        <Text text={'Query params:'} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`page       номер страницы   (по умолчанию: 1)
-limit      записей на стр.  (по умолчанию: 20)
-startDate  YYYY-MM-DD       (фильтр по дате от)
-endDate    YYYY-MM-DD       (фильтр по дате до)`}</pre>
-                        <Text text={'Пример:'} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`curl "${base}/operator-analytics/api/results?page=1&limit=20&startDate=2025-01-01" \\
+                        <Text text={String(t('Параметры запроса:'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`page       ${t('номер страницы')}   (${t('по умолчанию')}: 1)
+limit      ${t('записей на стр.')}  (${t('по умолчанию')}: 20)
+startDate  YYYY-MM-DD       (${t('фильтр по дате от')})
+endDate    YYYY-MM-DD       (${t('фильтр по дате до')})`}</pre>
+                        <Text text={String(t('Пример:'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`curl "${base}/operator-analytics/results?page=1&limit=20&startDate=2025-01-01" \\
   -H "Authorization: Bearer oa_xxx"`}</pre>
+                        <Text text={String(t('Ответ:'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`{
+  "data": [ ... ],
+  "total": 156,
+  "page": 1,
+  "limit": 20
+}`}</pre>
                     </VStack>
                 </DocEntry>
 
                 <DocEntry
                     method={'GET'}
-                    path={'/operator-analytics/api/results/:id'}
+                    path={'/operator-analytics/results/:id'}
                     description={String(t('Результат анализа конкретного звонка'))}
+                    fullUrl={`${base}/operator-analytics/results/:id`}
                 >
                     <VStack gap={'8'}>
                         <Text text={String(t('Возвращает детальный результат анализа включая транскрипт, метрики и резюме.'))} />
-                        <Text text={'Response:'} bold size={'s'} />
+                        <Text text={String(t('Пример:'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`curl "${base}/operator-analytics/results/42" \\
+  -H "Authorization: Bearer oa_xxx"`}</pre>
+                        <Text text={String(t('Ответ:'))} bold size={'s'} />
                         <pre className={cls.codeBlock}>{`{
-  "id":            "uuid",
-  "status":        "completed | processing | error",
+  "id":            42,
+  "status":        "completed",
   "operatorName":  "Иван Петров",
   "clientPhone":   "+79991234567",
-  "duration":      183,           // секунды
+  "duration":      183,
   "language":      "ru",
   "metrics": {
-    "customer_sentiment":  "Positive | Neutral | Negative",
-    "greeting_quality":    85,    // 0-100
+    "customer_sentiment":  "Positive",
+    "csat":                85,
+    "greeting_quality":    85,
     "script_compliance":   90,
     "politeness_empathy":  88,
     "active_listening":    76,
@@ -377,11 +438,16 @@ endDate    YYYY-MM-DD       (фильтр по дате до)`}</pre>
     "product_knowledge":   95,
     "problem_resolution":  80,
     "speech_clarity_pace": 82,
-    "closing_quality":     78
+    "closing_quality":     78,
+    "summary":             "..."
   },
   "transcript": "...",
   "summary":    "..."
 }`}</pre>
+                        <Text text={String(t('Статус:'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`completed   — ${t('анализ завершён, все поля заполнены')}
+processing  — ${t('ещё анализируется (metrics/transcript будут пустыми)')}
+error       — ${t('ошибка анализа, см. errorMessage')}`}</pre>
                     </VStack>
                 </DocEntry>
 
