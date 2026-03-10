@@ -17,7 +17,34 @@
 }
 
 .header {
-    margin-bottom: var(--space-5);
+    margin-bottom: var(--space-2);
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition-normal);
+
+    &:hover {
+        .cardTitle {
+            color: var(--accent-redesigned);
+        }
+    }
+}
+
+.expandButton {
+    transition: var(--transition-transform) !important;
+    color: var(--hint-redesigned) !important;
+
+    &.expanded {
+        transform: rotate(180deg);
+    }
+
+    &:hover {
+        color: var(--accent-redesigned) !important;
+    }
+}
+
+.content {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--divider-solid);
 }
 
 .headerIcon {

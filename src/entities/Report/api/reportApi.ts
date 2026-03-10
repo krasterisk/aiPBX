@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { AIAnalyticsResponse, AllReports, Analytics, BatchUploadResponse, CdrSource, MetricDefinition, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorProject, Report, ReportDialog } from '../model/types/report'
+import { AIAnalyticsResponse, AllReports, Analytics, BatchUploadResponse, CdrSource, DashboardConfig, MetricDefinition, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorProject, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
   page?: number
@@ -267,11 +267,12 @@ export const reportApi = rtkApi.injectEndpoints({
     }),
     updateOperatorProject: build.mutation<void, {
       id: string
-      name: string
+      name?: string
       description?: string
       systemPrompt?: string
       customMetricsSchema?: MetricDefinition[]
       visibleDefaultMetrics?: string[]
+      dashboardConfig?: DashboardConfig
       webhookUrl?: string
       webhookHeaders?: Record<string, string>
       webhookEvents?: string[]

@@ -89,56 +89,59 @@ export const HeatmapCalendar = memo(({ data, weeks = 26 }: HeatmapCalendarProps)
         <Card max variant={'glass'} border={'partial'} padding={'24'}>
             <VStack gap={'12'} max>
                 <Text title={String(t('Активность'))} bold />
-                <div className={cls.heatmapWrapper}>
-                    <svg width={totalWidth} height={totalHeight} className={cls.heatmap}>
-                        {/* Day labels */}
-                        {DAYS_LABELS.map((label, i) => (
-                            label && (
-                                <text
-                                    key={i}
-                                    x={0}
-                                    y={24 + i * (CELL_SIZE + CELL_GAP) + CELL_SIZE / 2}
-                                    className={cls.dayLabel}
-                                    dominantBaseline={'middle'}
-                                >
-                                    {label}
-                                </text>
-                            )
-                        ))}
-
-                        {/* Month labels */}
-                        {monthLabels.map(({ label, week }, i) => (
+                {/* viewBox + width="100%" растягивает SVG на всю ширину карточки */}
+                <svg
+                    viewBox={`0 0 ${totalWidth} ${totalHeight}`}
+                    preserveAspectRatio="xMinYMid meet"
+                    className={cls.heatmap}
+                >
+                    {/* Day labels */}
+                    {DAYS_LABELS.map((label, i) => (
+                        label && (
                             <text
                                 key={i}
-                                x={30 + week * (CELL_SIZE + CELL_GAP)}
-                                y={12}
-                                className={cls.monthLabel}
+                                x={0}
+                                y={24 + i * (CELL_SIZE + CELL_GAP) + CELL_SIZE / 2}
+                                className={cls.dayLabel}
+                                dominantBaseline={'middle'}
                             >
                                 {label}
                             </text>
-                        ))}
+                        )
+                    ))}
 
-                        {/* Cells */}
-                        {grid.map((week, wIdx) =>
-                            week.map((day, dIdx) => (
-                                <rect
-                                    key={`${wIdx}-${dIdx}`}
-                                    x={30 + wIdx * (CELL_SIZE + CELL_GAP)}
-                                    y={24 + dIdx * (CELL_SIZE + CELL_GAP)}
-                                    width={CELL_SIZE}
-                                    height={CELL_SIZE}
-                                    rx={3}
-                                    ry={3}
-                                    fill={day.count > 0 ? getScoreColor(day.score) : 'var(--glass-border-secondary)'}
-                                    opacity={day.count > 0 ? getOpacity(day.count, maxCount) : 0.3}
-                                    className={cls.cell}
-                                >
-                                    <title>{`${day.date}\n${t('Звонков')}: ${day.count}\n${t('Средняя оценка')}: ${day.score}`}</title>
-                                </rect>
-                            ))
-                        )}
-                    </svg>
-                </div>
+                    {/* Month labels */}
+                    {monthLabels.map(({ label, week }, i) => (
+                        <text
+                            key={i}
+                            x={30 + week * (CELL_SIZE + CELL_GAP)}
+                            y={12}
+                            className={cls.monthLabel}
+                        >
+                            {label}
+                        </text>
+                    ))}
+
+                    {/* Cells */}
+                    {grid.map((week, wIdx) =>
+                        week.map((day, dIdx) => (
+                            <rect
+                                key={`${wIdx}-${dIdx}`}
+                                x={30 + wIdx * (CELL_SIZE + CELL_GAP)}
+                                y={24 + dIdx * (CELL_SIZE + CELL_GAP)}
+                                width={CELL_SIZE}
+                                height={CELL_SIZE}
+                                rx={3}
+                                ry={3}
+                                fill={day.count > 0 ? getScoreColor(day.score) : 'var(--glass-border-secondary)'}
+                                opacity={day.count > 0 ? getOpacity(day.count, maxCount) : 0.3}
+                                className={cls.cell}
+                            >
+                                <title>{`${day.date}\n${t('Звонков')}: ${day.count}\n${t('Средняя оценка')}: ${day.score}`}</title>
+                            </rect>
+                        ))
+                    )}
+                </svg>
             </VStack>
         </Card>
     )

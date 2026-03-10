@@ -4,4 +4,6 @@ export { OperatorProjectManager } from './ui/OperatorProjectManager/OperatorProj
 export { OperatorApiTokens } from './ui/OperatorApiTokens/OperatorApiTokens'
 export { ProjectSelect } from './ui/ProjectSelect/ProjectSelect'
 export { ProjectWizard } from './ui/ProjectWizard/ProjectWizard'
+export { DashboardBuilder } from './ui/DashboardBuilder/DashboardBuilder'
+
 

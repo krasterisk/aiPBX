@@ -1,6 +1,64 @@
-import { memo } from 'react'
-import { CallsPage } from '@/pages/CallsPage'
+import { memo, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { DashboardLayout } from '@/widgets/DashboardLayout'
+import { OperatorDashboard, DashboardBuilder } from '@/features/OperatorAnalytics'
+import { useGetOperatorDashboard, useGetOperatorProjects } from '@/entities/Report'
+import { useDashboardFilters } from '@/features/Dashboard'
+import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
+import { dashboardPageReducer } from '@/features/Dashboard'
 
-const DashboardCallRecordsPage = memo(() => <CallsPage />)
+const reducers: ReducersList = { dashboardPage: dashboardPageReducer }
+
+const DashboardCallRecordsContent = memo(() => {
+    const { t } = useTranslation('reports')
+    const { startDate, endDate } = useDashboardFilters()
+
+    const [projectId, setProjectId] = useState('')
+    const [showBuilder, setShowBuilder] = useState(false)
+
+    const { data: dashboardData, isLoading, isFetching } = useGetOperatorDashboard(
+        { startDate, endDate, projectId },
+        { skip: !startDate || !endDate }
+    )
+
+    const { data: projects } = useGetOperatorProjects()
+    const activeProject = projects?.find(p => p.id === projectId)
+
+    const onChangeProjectId = useCallback((value: string) => {
+        setProjectId(value)
+        setShowBuilder(false)
+    }, [])
+
+    const handleOpenBuilder = useCallback(() => setShowBuilder(true), [])
+    const handleCloseBuilder = useCallback(() => setShowBuilder(false), [])
+
+    if (showBuilder && activeProject) {
+        return (
+            <DashboardBuilder
+                project={activeProject}
+                dashboardData={dashboardData}
+                onClose={handleCloseBuilder}
+            />
+        )
+    }
+
+    return (
+        <DashboardLayout title={String(t('Аналитика проектов'))}>
+            <OperatorDashboard
+                data={dashboardData}
+                isLoading={isLoading || isFetching}
+                projectId={projectId}
+                onChangeProjectId={onChangeProjectId}
+                onOpenDashboardBuilder={handleOpenBuilder}
+            />
+        </DashboardLayout>
+    )
+})
+
+const DashboardCallRecordsPage = memo(() => (
+    <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
+        <DashboardCallRecordsContent />
+    </DynamicModuleLoader>
+))
 
 export default DashboardCallRecordsPage

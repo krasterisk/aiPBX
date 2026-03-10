@@ -1,64 +1,37 @@
-import { memo, useState, useCallback } from 'react'
-import { VStack } from '@/shared/ui/redesigned/Stack'
-import { OperatorDashboard } from '@/features/OperatorAnalytics'
-import { useGetOperatorDashboard } from '@/entities/Report'
-import { FiltersGroup } from '@/features/Dashboard'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import dayjs from 'dayjs'
+import { DashboardLayout } from '@/widgets/DashboardLayout'
+import { DashboardStatistics } from '@/features/Dashboard'
+import { DashboardCharts } from '@/features/Dashboard'
+import { useDashboardFilters } from '@/features/Dashboard'
+import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
+import { dashboardPageReducer } from '@/features/Dashboard'
+import { HStack } from '@/shared/ui/redesigned/Stack'
+import { Loader } from '@/shared/ui/Loader'
 
-type PeriodTab = 'day' | 'week' | 'month' | 'year' | 'custom'
+const reducers: ReducersList = { dashboardPage: dashboardPageReducer }
 
-const DashboardOverviewPage = memo(() => {
+const DashboardOverviewContent = memo(() => {
     const { t } = useTranslation('reports')
-
-    const [periodTab, setPeriodTab] = useState<PeriodTab>('week')
-    const [startDate, setStartDate] = useState(
-        dayjs().startOf('week').format('YYYY-MM-DD')
-    )
-    const [endDate, setEndDate] = useState(
-        dayjs().endOf('week').format('YYYY-MM-DD')
-    )
-    const [projectId, setProjectId] = useState('')
-
-    const {
-        data: dashboardData,
-        isLoading: isDashboardLoading,
-        isFetching: isDashboardFetching
-    } = useGetOperatorDashboard(
-        { startDate, endDate, projectId },
-        { skip: !startDate || !endDate }
-    )
-
-    const onChangePeriodTab = useCallback((value: string) => {
-        setPeriodTab(value as PeriodTab)
-    }, [])
-
-    const onChangeProjectId = useCallback((value: string) => {
-        setProjectId(value)
-    }, [])
+    const { data, isLoading, isFetching } = useDashboardFilters()
 
     return (
-        <VStack gap={'16'} max>
-            <FiltersGroup
-                title={String(t('Сводный Дашборд'))}
-                tab={periodTab}
-                isInited={true}
-                startDate={startDate}
-                endDate={endDate}
-                onChangeTab={onChangePeriodTab}
-                onChangeAssistant={() => { }}
-                onChangeUserId={() => { }}
-                onChangeStartDate={setStartDate}
-                onChangeEndDate={setEndDate}
-            />
-            <OperatorDashboard
-                data={dashboardData}
-                isLoading={isDashboardLoading || isDashboardFetching}
-                projectId={projectId}
-                onChangeProjectId={onChangeProjectId}
-            />
-        </VStack>
+        <DashboardLayout title={String(t('Сводный дашборд'))}>
+            {isLoading && isFetching
+                ? <HStack max justify={'center'}><Loader /></HStack>
+                : <>
+                    <DashboardStatistics data={data} isLoading={isLoading || isFetching} />
+                    <DashboardCharts data={data} />
+                </>
+            }
+        </DashboardLayout>
     )
 })
+
+const DashboardOverviewPage = memo(() => (
+    <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
+        <DashboardOverviewContent />
+    </DynamicModuleLoader>
+))
 
 export default DashboardOverviewPage

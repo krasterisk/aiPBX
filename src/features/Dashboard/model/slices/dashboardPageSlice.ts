@@ -3,11 +3,12 @@ import { DashboardPageSchema } from '../types/dashboardPageSchema'
 import { AssistantOptions } from '@/entities/Assistants'
 import { ClientOptions } from '@/entities/User'
 import { CdrSource } from '@/entities/Report'
+import dayjs from 'dayjs'
 
 const initialState: DashboardPageSchema = {
     tab: 'week',
-    startDate: '',
-    endDate: '',
+    startDate: dayjs().startOf('week').format('YYYY-MM-DD'),
+    endDate: dayjs().endOf('week').format('YYYY-MM-DD'),
     userId: ''
 }
 
@@ -43,6 +44,12 @@ export const dashboardPageSlice = createSlice({
         initState: (state) => {
             state._inited = true
             state.tab = 'week'
+            if (!state.startDate) {
+                state.startDate = dayjs().startOf('week').format('YYYY-MM-DD')
+            }
+            if (!state.endDate) {
+                state.endDate = dayjs().endOf('week').format('YYYY-MM-DD')
+            }
         }
     }
 })

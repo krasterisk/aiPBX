@@ -15,6 +15,9 @@ import {
   getRouteSipTrunks,
   getRouteCalls,
   getRouteDashboard,
+  getRouteDashboardOverview,
+  getRouteDashboardCallRecords,
+  getRouteDashboardAIAnalytics,
   getRouteAnalytics,
   getRouteAnalyticsProjects,
   getRouteAnalyticsApi
@@ -37,6 +40,9 @@ import BarChartIcon from '@mui/icons-material/BarChart'
 import HubIcon from '@mui/icons-material/Hub'
 import PhoneForwardedIcon from '@mui/icons-material/PhoneForwarded'
 import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver'
+import InsightsIcon from '@mui/icons-material/Insights'
+import AssessmentIcon from '@mui/icons-material/Assessment'
+import TimelineIcon from '@mui/icons-material/Timeline'
 import { MenubarItemType } from '../types/menubar'
 import { useTranslation } from 'react-i18next'
 
@@ -59,7 +65,27 @@ export const useMenubarItems = () => {
         path: getRouteDashboard(),
         Icon: DashboardIcon,
         text: t('Дашборды'),
-        authOnly: true
+        authOnly: true,
+        subItems: [
+          {
+            path: getRouteDashboardOverview(),
+            Icon: InsightsIcon,
+            text: t('Сводный'),
+            authOnly: true
+          },
+          {
+            path: getRouteDashboardCallRecords(),
+            Icon: AssessmentIcon,
+            text: t('Аналитика проектов'),
+            authOnly: true
+          },
+          {
+            path: getRouteDashboardAIAnalytics(),
+            Icon: TimelineIcon,
+            text: t('AI Аналитика'),
+            authOnly: true
+          },
+        ]
       },
       {
         path: getRouteCalls(),

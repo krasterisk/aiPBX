@@ -47,7 +47,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
         try {
             await updateProject({
                 id: editProject.id,
-                name: name.trim() || t('Новый проект'),
+                name: name.trim() || String(t('Новый проект')),
                 description: description.trim(),
                 systemPrompt: systemPrompt.trim(),
                 customMetricsSchema: customMetrics,

@@ -1,22 +1,21 @@
-.heatmapWrapper {
-    width: 100%;
-    overflow-x: auto;
-    padding-bottom: 4px;
-}
-
 .heatmap {
     display: block;
-    min-width: 0;
+    width: 100%;
+    height: auto;
 }
 
 .cell {
-    transition: opacity 0.2s ease, transform 0.15s ease;
     cursor: pointer;
+    transition: opacity 0.2s ease, filter 0.15s ease;
+
+    // transform-box: fill-box — задаёт origin относительно самого элемента (не SVG viewport)
+    // Это исправляет "дёрганье" при scale, т.к. origin теперь центр ячейки
+    transform-box: fill-box;
+    transform-origin: center;
 
     &:hover {
         opacity: 1 !important;
-        filter: brightness(1.3);
-        transform: scale(1.2);
+        filter: brightness(1.4) drop-shadow(0 0 3px currentColor);
     }
 }
 

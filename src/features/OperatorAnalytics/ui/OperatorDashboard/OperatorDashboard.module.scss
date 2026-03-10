@@ -1,3 +1,5 @@
+@import '@/app/styles/variables/mixins';
+
 .OperatorDashboard {
     width: 100%;
 }
@@ -5,61 +7,38 @@
 .statsGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    gap: var(--space-3);
     width: 100%;
 
-    @media (max-width: 768px) {
+    @include tablet {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    @media (max-width: 480px) {
+    @include mobile {
         grid-template-columns: 1fr;
     }
 }
 
-.chartsRow {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
 
-    @media (max-width: 768px) {
-        grid-template-columns: 1fr;
-    }
-}
-
-.chartCard {
-    flex: 1;
-    min-width: 0;
-}
-
-// Wrapper forces MUI chart SVG to fill parent width
-.chartWrapper {
-    width: 100%;
-    min-width: 0;
-
-    >svg,
-    >div>svg {
-        width: 100% !important;
-        overflow: visible;
-    }
-}
 
 .projectChip {
     cursor: pointer;
+    transition: var(--transition-fast);
+
+    &:hover {
+        transform: var(--hover-lift-sm);
+    }
 }
 
 // ─── Avg Score metric bars ────────────────────────────────────────────────────
 
 .metricBars {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
     width: 100%;
 }
 
 .metricBarTrack {
     height: 7px;
-    border-radius: 99px;
+    border-radius: var(--radius-full);
     background: var(--glass-border-subtle);
     overflow: hidden;
     width: 100%;
@@ -67,6 +46,6 @@
 
 .metricBarFill {
     height: 100%;
-    border-radius: 99px;
+    border-radius: var(--radius-full);
     transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }

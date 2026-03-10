@@ -4,23 +4,28 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch
 import {
     getAIAnalyticsAssistantId,
     getAIAnalyticsAssistants,
-    getAIAnalyticsEndDate,
     getAIAnalyticsInited,
-    getAIAnalyticsStartDate,
-    getAIAnalyticsTab,
     getAIAnalyticsUserId,
     getAIAnalyticsSource
 } from '../../model/selectors/aiAnalyticsPageSelectors'
+import {
+    getDashboardEndDate,
+    getDashboardStartDate,
+    getDashboardTab,
+} from '@/features/Dashboard/model/selectors/dashboardPageSelectors'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 import { aiAnalyticsPageActions } from '../../model/slices/aiAnalyticsPageSlice'
 import { useGetAIAnalyticsDashboard, CdrSource } from '@/entities/Report'
 
-export function useAIAnalyticsFilters () {
-    const tab = useSelector(getAIAnalyticsTab)
+export function useAIAnalyticsFilters() {
+    // Период берём из общего dashboardPageSlice (синхронизировано с шапкой)
+    const tab = useSelector(getDashboardTab)
+    const startDate = useSelector(getDashboardStartDate)
+    const endDate = useSelector(getDashboardEndDate)
+
+    // Специфичные фильтры — из своего slice
     const clientId = useSelector(getAIAnalyticsUserId)
-    const startDate = useSelector(getAIAnalyticsStartDate)
-    const endDate = useSelector(getAIAnalyticsEndDate)
     const isInited = useSelector(getAIAnalyticsInited)
     const assistantId = useSelector(getAIAnalyticsAssistantId)
     const assistants = useSelector(getAIAnalyticsAssistants)
@@ -65,14 +70,6 @@ export function useAIAnalyticsFilters () {
         dispatch(aiAnalyticsPageActions.setTab(value))
     }, [dispatch])
 
-    const onChangeStartDate = useCallback((value: string) => {
-        dispatch(aiAnalyticsPageActions.setStartDate(value))
-    }, [dispatch])
-
-    const onChangeEndDate = useCallback((value: string) => {
-        dispatch(aiAnalyticsPageActions.setEndDate(value))
-    }, [dispatch])
-
     const onChangeSource = useCallback((source: CdrSource | undefined) => {
         dispatch(aiAnalyticsPageActions.setSource(source))
     }, [dispatch])
@@ -94,8 +91,6 @@ export function useAIAnalyticsFilters () {
         onRefetch,
         onChangeUserId,
         onChangeAssistant,
-        onChangeStartDate,
-        onChangeEndDate,
         onChangeSource,
         onChangeTab
     }

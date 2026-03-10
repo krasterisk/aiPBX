@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { Skeleton, IconButton } from '@mui/material'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import SettingsIcon from '@mui/icons-material/Settings'
 import AddIcon from '@mui/icons-material/Add'
 import FolderOpenIcon from '@mui/icons-material/FolderOpen'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
@@ -42,8 +41,20 @@ const ProjectItem = memo(({ project, onEdit, onDelete }: ProjectItemProps) => {
     const { t } = useTranslation('reports')
     const [confirm, setConfirm] = useState(false)
 
+    const handleCardClick = useCallback(() => {
+        if (!confirm) onEdit(project)
+    }, [confirm, onEdit, project])
+
     return (
-        <Card variant={'glass'} border={'partial'} padding={'16'} max className={cls.projectItem}>
+        <Card
+            variant={'glass'}
+            border={'partial'}
+            padding={'16'}
+            max
+            className={cls.projectItem}
+            onClick={handleCardClick}
+            style={{ cursor: 'pointer' }}
+        >
             <HStack max justify={'between'} align={'center'} gap={'12'}>
                 <HStack gap={'12'} align={'center'}>
                     <FolderOpenIcon sx={{ color: 'var(--accent-redesigned)', fontSize: 22 }} />
@@ -53,7 +64,7 @@ const ProjectItem = memo(({ project, onEdit, onDelete }: ProjectItemProps) => {
                     </VStack>
                 </HStack>
 
-                <HStack gap={'8'} align={'center'}>
+                <HStack gap={'8'} align={'center'} onClick={e => e.stopPropagation()}>
                     {confirm ? (
                         <HStack gap={'8'} align={'center'}>
                             <Text text={String(t('Удалить?'))} />
@@ -66,14 +77,9 @@ const ProjectItem = memo(({ project, onEdit, onDelete }: ProjectItemProps) => {
                             </IconButton>
                         </HStack>
                     ) : (
-                        <>
-                            <IconButton size={'small'} onClick={() => onEdit(project)} className={cls.iconBtn} title={String(t('Настроить'))}>
-                                <SettingsIcon fontSize={'small'} />
-                            </IconButton>
-                            <IconButton size={'small'} onClick={() => setConfirm(true)} className={cls.iconBtnDanger}>
-                                <DeleteOutlineIcon fontSize={'small'} />
-                            </IconButton>
-                        </>
+                        <IconButton size={'small'} onClick={() => setConfirm(true)} className={cls.iconBtnDanger}>
+                            <DeleteOutlineIcon fontSize={'small'} />
+                        </IconButton>
                     )}
                 </HStack>
             </HStack>
