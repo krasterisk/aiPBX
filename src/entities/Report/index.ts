@@ -72,9 +72,11 @@ export {
   useGenerateOperatorApiToken,
   useListOperatorApiTokens,
   useRevokeOperatorApiToken,
-  useDeleteOperatorApiToken
+  useDeleteOperatorApiToken,
+  useCreateCallAnalytics
 } from './api/reportApi'
 
+export { ReportExpandedPanel } from './ui/ReportExpandedPanel/ReportExpandedPanel'
 export { useReportFilters } from './lib/useReportFilters'
 
 // ── Project Wizard Redux ──────────────────────────────────────────────────────

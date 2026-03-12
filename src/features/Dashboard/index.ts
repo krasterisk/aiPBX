@@ -17,3 +17,8 @@ export type { DashboardPageSchema } from './model/types/dashboardPageSchema'
 export { dashboardPageActions, dashboardPageReducer } from './model/slices/dashboardPageSlice'
 export { initDashboardPage } from './model/services/initDashboardPage'
 export { useDashboardFilters } from './libs/hooks/useDashboardFilters'
+export {
+    getDashboardEndDate,
+    getDashboardStartDate,
+    getDashboardTab,
+} from './model/selectors/dashboardPageSelectors'
