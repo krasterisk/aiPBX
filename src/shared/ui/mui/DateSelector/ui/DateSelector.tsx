@@ -64,7 +64,7 @@ const acStyles = {
 
 export const DateSelector = memo((props: DateSelectorProps) => {
   const {
-    className,
+    className: _className,
     ...otherProps
   } = props
   return (

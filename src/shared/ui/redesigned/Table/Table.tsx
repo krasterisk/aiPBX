@@ -9,7 +9,7 @@ import {
   Row,
   SortingState
 } from '@tanstack/react-table'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
+import { VStack, HStack } from '../Stack'
 
 export type TableRowVariant = 'clear' | 'outline' | 'filled' | 'glass'
 

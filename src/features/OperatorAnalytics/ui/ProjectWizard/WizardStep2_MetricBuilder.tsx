@@ -104,7 +104,7 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                                     variant={'glass-action'}
                                     color={'error'}
                                     size={'s'}
-                                    onClick={() => handleRemove(idx)}
+                                    onClick={() => { handleRemove(idx) }}
                                     addonLeft={<DeleteOutlineIcon fontSize={'small'} />}
                                 >
                                     {String(t('Удалить'))}
@@ -116,7 +116,7 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                                 <Textarea
                                     label={String(t('Название метрики'))}
                                     value={metric.name}
-                                    onChange={e => handleChange(idx, 'name', e.target.value)}
+                                    onChange={e => { handleChange(idx, 'name', e.target.value) }}
                                     size={'small'}
                                     fullWidth
                                     multiline={false}
@@ -124,7 +124,7 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                                 <Combobox
                                     options={METRIC_TYPES}
                                     value={METRIC_TYPES.find(o => o.value === metric.type) || null}
-                                    onChange={(_, val: any) => handleChange(idx, 'type', val?.value || 'boolean')}
+                                    onChange={(_, val: any) => { handleChange(idx, 'type', val?.value || 'boolean') }}
                                     getOptionLabel={(o: any) => o.label || ''}
                                     isOptionEqualToValue={(o: any, v: any) => o.value === v.value}
                                     label={String(t('Тип метрики'))}
@@ -137,7 +137,7 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                                 <Textarea
                                     label={String(t('Значения (через запятую)'))}
                                     value={metric.enumValues?.join(', ') || ''}
-                                    onChange={e => handleChange(idx, 'enumValues', e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean))}
+                                    onChange={e => { handleChange(idx, 'enumValues', e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean)) }}
                                     size={'small'}
                                     fullWidth
                                     multiline={false}
@@ -148,7 +148,7 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                             <Textarea
                                 label={String(t('Описание для LLM'))}
                                 value={metric.description}
-                                onChange={e => handleChange(idx, 'description', e.target.value)}
+                                onChange={e => { handleChange(idx, 'description', e.target.value) }}
                                 size={'small'}
                                 fullWidth
                                 multiline
@@ -173,7 +173,7 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                 <VStack gap={'0'} max>
                     <Button
                         variant={'clear'}
-                        onClick={() => setPromptOpen(prev => !prev)}
+                        onClick={() => { setPromptOpen(prev => !prev) }}
                         addonRight={promptOpen
                             ? <ExpandLessIcon fontSize={'small'} />
                             : <ExpandMoreIcon fontSize={'small'} />
@@ -194,4 +194,3 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
         </VStack>
     )
 })
-

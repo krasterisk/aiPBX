@@ -7,9 +7,7 @@ import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { ProjectSelect } from '../ProjectSelect/ProjectSelect'
 import {
-    useUploadOperatorFiles,
-    BatchUploadResponse,
-    OperatorAnalysisResult
+    useUploadOperatorFiles
 } from '@/entities/Report'
 import { toast } from 'react-toastify'
 import CloseIcon from '@mui/icons-material/Close'
@@ -34,10 +32,10 @@ interface OperatorUploadFormProps {
 
 export const OperatorUploadForm = memo(({ isOpen, onClose }: OperatorUploadFormProps) => {
     const { t } = useTranslation('reports')
-    const [files, setFiles] = useState<{ file: File }[]>([])
+    const [files, setFiles] = useState<Array<{ file: File }>>([])
     const [operatorName, setOperatorName] = useState('')
     const [clientPhone, setClientPhone] = useState('')
-    const [language, setLanguage] = useState<{ id: string; name: string } | null>(LANGUAGE_OPTIONS[0])
+    const [language, setLanguage] = useState<{ id: string, name: string } | null>(LANGUAGE_OPTIONS[0])
     const [projectId, setProjectId] = useState('')
     const [isDragging, setIsDragging] = useState(false)
     const fileInputRef = useRef<HTMLInputElement>(null)
@@ -77,7 +75,7 @@ export const OperatorUploadForm = memo(({ isOpen, onClose }: OperatorUploadFormP
     }, [addFiles])
 
     const onDragOver = (e: DragEvent<HTMLDivElement>) => { e.preventDefault(); setIsDragging(true) }
-    const onDragLeave = () => setIsDragging(false)
+    const onDragLeave = () => { setIsDragging(false) }
 
     const onFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) addFiles(Array.from(e.target.files))
@@ -86,7 +84,7 @@ export const OperatorUploadForm = memo(({ isOpen, onClose }: OperatorUploadFormP
     const handleSubmit = useCallback(async () => {
         if (!files.length) return
         const formData = new FormData()
-        files.forEach(({ file }) => formData.append(files.length === 1 ? 'file' : 'files', file))
+        files.forEach(({ file }) => { formData.append(files.length === 1 ? 'file' : 'files', file) })
         if (operatorName) formData.append('operatorName', operatorName)
         if (clientPhone) formData.append('clientPhone', clientPhone)
         if (language && language.id !== 'auto') formData.append('language', language.id)
@@ -95,9 +93,9 @@ export const OperatorUploadForm = memo(({ isOpen, onClose }: OperatorUploadFormP
             const result = await uploadFiles(formData).unwrap()
 
             if (result && 'items' in result) {
-                toast.success(`${t('В работу ушло')}: ${(result as BatchUploadResponse).items.length} ${t('файлов')}`)
+                toast.success(`${t('В работу ушло')}: ${(result).items.length} ${t('файлов')}`)
             } else if (result && 'filename' in result) {
-                toast.success(`${(result as OperatorAnalysisResult).filename} — ${t('загружен и отправлен в работу')}`)
+                toast.success(`${(result).filename} — ${t('загружен и отправлен в работу')}`)
             } else {
                 toast.success(t('Файлы успешно загружены'))
             }
@@ -154,7 +152,7 @@ export const OperatorUploadForm = memo(({ isOpen, onClose }: OperatorUploadFormP
                             <Button
                                 variant="clear"
                                 color="error"
-                                onClick={() => setFiles(p => p.filter((_, idx) => idx !== i))}
+                                onClick={() => { setFiles(p => p.filter((_, idx) => idx !== i)) }}
                             >
                                 <CloseIcon fontSize="small" />
                             </Button>
@@ -168,20 +166,20 @@ export const OperatorUploadForm = memo(({ isOpen, onClose }: OperatorUploadFormP
                 <Textarea
                     label={String(t('Оператор'))}
                     value={operatorName}
-                    onChange={e => setOperatorName(e.target.value)}
+                    onChange={e => { setOperatorName(e.target.value) }}
                     size="small"
                 />
                 <Textarea
                     label={String(t('Телефон клиента'))}
                     value={clientPhone}
-                    onChange={e => setClientPhone(e.target.value)}
+                    onChange={e => { setClientPhone(e.target.value) }}
                     size="small"
                 />
                 <Combobox
                     label={String(t('Язык записи'))}
                     options={LANGUAGE_OPTIONS}
                     value={language}
-                    onChange={(_, v) => setLanguage(v)}
+                    onChange={(_, v) => { setLanguage(v) }}
                     getOptionLabel={(o: { name: string }) => o.name}
                     isOptionEqualToValue={(o: { id: string }, v: { id: string }) => o.id === v.id}
                     disableClearable

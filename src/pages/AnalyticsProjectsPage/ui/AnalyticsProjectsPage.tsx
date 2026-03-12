@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { OperatorProjectManager } from '@/features/OperatorAnalytics/ui/OperatorProjectManager/OperatorProjectManager'
+import { OperatorProjectManager } from '@/features/OperatorAnalytics'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 
 const AnalyticsProjectsPage = () => {
@@ -11,4 +11,3 @@ const AnalyticsProjectsPage = () => {
 }
 
 export default memo(AnalyticsProjectsPage)
-

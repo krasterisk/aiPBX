@@ -10,8 +10,7 @@ import { getRouteSipTrunkEdit } from '@/shared/const/router'
 import { PhoneForwarded, Server, User as UserIcon } from 'lucide-react'
 import { useSelector } from 'react-redux'
 import { isUserAdmin } from '@/entities/User'
-import { SipTrunk } from '../../api/sipTrunksApi'
-import { useSipTrunkStatus } from '../../api/sipTrunksApi'
+import { SipTrunk, useSipTrunkStatus } from '../../api/sipTrunksApi'
 
 interface SipTrunksItemProps {
     className?: string

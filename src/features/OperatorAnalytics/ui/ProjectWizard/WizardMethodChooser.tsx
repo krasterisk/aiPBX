@@ -25,7 +25,7 @@ export const WizardMethodChooser = memo(({ onSelect }: WizardMethodChooserProps)
 
             <div className={cls.methodGrid}>
                 <Card variant={'glass'} border={'partial'} padding={'24'}
-                    className={cls.methodCard} onClick={() => onSelect('template')}>
+                    className={cls.methodCard} onClick={() => { onSelect('template') }}>
                     <VStack gap={'12'} align={'center'}>
                         <div className={cls.methodIconWrap}>
                             <DashboardCustomizeIcon sx={{ fontSize: 36 }} />
@@ -38,7 +38,7 @@ export const WizardMethodChooser = memo(({ onSelect }: WizardMethodChooserProps)
                 </Card>
 
                 <Card variant={'glass'} border={'partial'} padding={'24'}
-                    className={cls.methodCard} onClick={() => onSelect('ai_interview')}>
+                    className={cls.methodCard} onClick={() => { onSelect('ai_interview') }}>
                     <VStack gap={'12'} align={'center'}>
                         <div className={cls.methodIconWrap}>
                             <SmartToyIcon sx={{ fontSize: 36 }} />
@@ -51,7 +51,7 @@ export const WizardMethodChooser = memo(({ onSelect }: WizardMethodChooserProps)
                 </Card>
 
                 <Card variant={'glass'} border={'partial'} padding={'24'}
-                    className={cls.methodCard} onClick={() => onSelect('manual')}>
+                    className={cls.methodCard} onClick={() => { onSelect('manual') }}>
                     <VStack gap={'12'} align={'center'}>
                         <div className={cls.methodIconWrap}>
                             <TuneIcon sx={{ fontSize: 36 }} />

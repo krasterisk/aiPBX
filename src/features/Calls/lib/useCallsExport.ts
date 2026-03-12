@@ -25,7 +25,7 @@ export const useCallsExport = (data: AllReports | undefined) => {
             [String(t('Длительность'))]: report.duration ? formatTime(report.duration, t) ?? '' : '',
             [String(t('Токены'))]: report.tokens ?? '',
             [String(t('Стоимость'))]: report.cost ? formatCurrency(report.cost, 'USD', 4) : '',
-            'CSAT': report.analytics?.csat ?? '',
+            CSAT: report.analytics?.csat ?? '',
             [String(t('Настроение'))]: report.analytics?.sentiment ?? '',
             [String(t('Результат'))]: report.analytics?.metrics?.scenario_analysis?.success != null
                 ? (report.analytics.metrics.scenario_analysis.success ? t('Успех') : t('Эскалация'))

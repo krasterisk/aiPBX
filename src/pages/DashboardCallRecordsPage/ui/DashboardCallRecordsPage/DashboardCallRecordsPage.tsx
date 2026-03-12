@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { DashboardLayout } from '@/widgets/DashboardLayout'
 import { OperatorDashboard, DashboardBuilder } from '@/features/OperatorAnalytics'
 import { useGetOperatorDashboard, useGetOperatorProjects } from '@/entities/Report'
-import { useDashboardFilters } from '@/features/Dashboard'
+import { useDashboardFilters, dashboardPageReducer } from '@/features/Dashboard'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
-import { dashboardPageReducer } from '@/features/Dashboard'
 
 const reducers: ReducersList = { dashboardPage: dashboardPageReducer }
 
@@ -29,8 +28,8 @@ const DashboardCallRecordsContent = memo(() => {
         setShowBuilder(false)
     }, [])
 
-    const handleOpenBuilder = useCallback(() => setShowBuilder(true), [])
-    const handleCloseBuilder = useCallback(() => setShowBuilder(false), [])
+    const handleOpenBuilder = useCallback(() => { setShowBuilder(true) }, [])
+    const handleCloseBuilder = useCallback(() => { setShowBuilder(false) }, [])
 
     if (showBuilder && activeProject) {
         return (

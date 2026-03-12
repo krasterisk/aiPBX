@@ -1,6 +1,6 @@
 import { memo, useState, useCallback } from 'react'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
-import { Text } from '@/shared/ui/redesigned/Text'
+import { VStack, HStack } from '../Stack'
+import { Text } from '../Text'
 
 export interface DonutSegment {
     id: number | string
@@ -79,7 +79,7 @@ export const DonutChart = memo(({ data, size = 200, innerRadius = 50 }: DonutCha
                 height={size}
                 style={{ overflow: 'visible', position: 'relative' }}
                 onMouseMove={onMouseMove}
-                onMouseLeave={() => setHovered(null)}
+                onMouseLeave={() => { setHovered(null) }}
             >
                 {arcs.map(arc => (
                     <path
@@ -93,7 +93,7 @@ export const DonutChart = memo(({ data, size = 200, innerRadius = 50 }: DonutCha
                             transition: 'opacity 0.15s ease, filter 0.15s ease',
                             cursor: 'pointer',
                         }}
-                        onMouseEnter={() => setHovered(arc.idx)}
+                        onMouseEnter={() => { setHovered(arc.idx) }}
                     />
                 ))}
             </svg>

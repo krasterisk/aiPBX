@@ -52,7 +52,7 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
                         onChangeTab={onChangeTab}
                         onChangeStartDate={onChangeStartDate}
                         onChangeEndDate={onChangeEndDate}
-                        onOpenFilters={() => setFilterShow(true)}
+                        onOpenFilters={() => { setFilterShow(true) }}
                     />
                     <SearchInput
                         placeholder={String(t('Поиск...'))}
@@ -66,7 +66,7 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
                 <Button
                     variant="clear"
                     addonLeft={<FilterListIcon fontSize="small" />}
-                    onClick={() => setFilterShow(v => !v)}
+                    onClick={() => { setFilterShow(v => !v) }}
                 >
                     {String(t('Фильтры'))}
                 </Button>
@@ -99,7 +99,7 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
                 onChangeEndDate={onChangeEndDate}
                 onChangeSource={onChangeSource}
                 show={filterShow}
-                onClose={() => setFilterShow(false)}
+                onClose={() => { setFilterShow(false) }}
             />
         </VStack>
     )

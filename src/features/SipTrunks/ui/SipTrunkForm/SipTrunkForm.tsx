@@ -34,8 +34,6 @@ import { TelephonySipTrunkCard } from './components/TelephonySipTrunkCard/Teleph
 import { PropertiesSipTrunkCard } from './components/PropertiesSipTrunkCard/PropertiesSipTrunkCard'
 import { useMediaQuery } from '@mui/material'
 import { useSipTrunkStatus, useCreateSipTrunk, useUpdateSipTrunk, useDeleteSipTrunk } from '@/entities/SipTrunks'
-import { SectionCard } from './components/SectionCard/SectionCard'
-import { Activity } from 'lucide-react'
 import { Text } from '@/shared/ui/redesigned/Text'
 
 interface SipTrunkFormProps {

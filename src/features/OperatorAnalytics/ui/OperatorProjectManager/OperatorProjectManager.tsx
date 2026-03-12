@@ -64,7 +64,7 @@ const ProjectItem = memo(({ project, onEdit, onDelete }: ProjectItemProps) => {
                     </VStack>
                 </HStack>
 
-                <HStack gap={'8'} align={'center'} onClick={e => e.stopPropagation()}>
+                <HStack gap={'8'} align={'center'} onClick={e => { e.stopPropagation() }}>
                     {confirm ? (
                         <HStack gap={'8'} align={'center'}>
                             <Text text={String(t('Удалить?'))} />
@@ -72,12 +72,12 @@ const ProjectItem = memo(({ project, onEdit, onDelete }: ProjectItemProps) => {
                                 onClick={() => { onDelete(project.id); setConfirm(false) }}>
                                 {String(t('Удалить'))}
                             </Button>
-                            <IconButton size={'small'} onClick={() => setConfirm(false)} className={cls.iconBtn}>
+                            <IconButton size={'small'} onClick={() => { setConfirm(false) }} className={cls.iconBtn}>
                                 <span style={{ fontSize: 13 }}>✕</span>
                             </IconButton>
                         </HStack>
                     ) : (
-                        <IconButton size={'small'} onClick={() => setConfirm(true)} className={cls.iconBtnDanger}>
+                        <IconButton size={'small'} onClick={() => { setConfirm(true) }} className={cls.iconBtnDanger}>
                             <DeleteOutlineIcon fontSize={'small'} />
                         </IconButton>
                     )}

@@ -9,7 +9,7 @@ import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { DashboardWidget, WidgetType } from '@/entities/Report'
 
-const WIDGET_TYPE_OPTIONS: { value: WidgetType; label: string }[] = [
+const WIDGET_TYPE_OPTIONS: Array<{ value: WidgetType, label: string }> = [
     { value: 'stat-card', label: 'Stat Card' },
     { value: 'bar-chart', label: 'Bar Chart' },
     { value: 'line-chart', label: 'Line Chart' },
@@ -77,25 +77,25 @@ export const WidgetSettingsPopover = memo((props: WidgetSettingsPopoverProps) =>
                 <Textarea
                     label={String(t('Название'))}
                     value={title}
-                    onChange={e => setTitle(e.target.value)}
+                    onChange={e => { setTitle(e.target.value) }}
                     size={'small'}
                     multiline={false}
                 />
 
                 <Combobox
                     options={WIDGET_TYPE_OPTIONS}
-                    getOptionLabel={(o: { value: string; label: string }) => o.label}
+                    getOptionLabel={(o: { value: string, label: string }) => o.label}
                     value={WIDGET_TYPE_OPTIONS.find(o => o.value === widgetType) ?? null}
-                    onChange={(_, val) => val && setWidgetType((val as { value: WidgetType }).value)}
+                    onChange={(_, val) => { val && setWidgetType((val as { value: WidgetType }).value) }}
                     label={String(t('Тип'))}
                     disableClearable
                 />
 
                 <Combobox
                     options={SIZE_OPTIONS}
-                    getOptionLabel={(o: { value: string; label: string }) => o.label}
+                    getOptionLabel={(o: { value: string, label: string }) => o.label}
                     value={SIZE_OPTIONS.find(o => o.value === size) ?? null}
-                    onChange={(_, val) => val && setSize((val as { value: typeof size }).value)}
+                    onChange={(_, val) => { val && setSize((val as { value: typeof size }).value) }}
                     label={String(t('Размер'))}
                     disableClearable
                 />

@@ -151,7 +151,7 @@ export const DocumentationContent = memo(() => {
                 </div>
             )
         },
-        pre: ({ children, ...props }: any) => (
+        pre: ({ children, ..._props }: any) => (
             <>{children}</>
         ),
         hr: (props: any) => <hr className={cls.divider} {...props} />,
@@ -169,7 +169,7 @@ export const DocumentationContent = memo(() => {
         strong: ({ children, ...props }: any) => (
             <strong className={cls.bold} {...props}>{children}</strong>
         ),
-        input: ({ checked, ...props }: any) => (
+        input: ({ checked, ..._props }: any) => (
             <input type="checkbox" checked={checked} readOnly className={cls.checkbox} />
         ),
         img: ({ src, alt, ...props }: any) => (

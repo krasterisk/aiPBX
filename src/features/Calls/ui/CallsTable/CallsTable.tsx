@@ -4,9 +4,8 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { Report } from '@/entities/Report'
-import { ReportExpandedPanel } from '@/entities/Report/ui/ReportExpandedPanel/ReportExpandedPanel'
-import { useGetReportDialogs, useCreateCallAnalytics } from '@/entities/Report/api/reportApi'
+import { Report, ReportExpandedPanel, useGetReportDialogs, useCreateCallAnalytics } from '@/entities/Report'
+
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
 import { useSelector } from 'react-redux'
@@ -18,7 +17,7 @@ import {
 import cls from './CallsTable.module.scss'
 
 // ── Source config ─────────────────────────────────────────────────────────────
-const SOURCE_CONFIG: Record<string, { icon: React.ReactNode; labelKey: string }> = {
+const SOURCE_CONFIG: Record<string, { icon: React.ReactNode, labelKey: string }> = {
     call: { icon: <Phone size={14} />, labelKey: 'Звонок' },
     widget: { icon: <Globe size={14} />, labelKey: 'Виджет' },
     playground: { icon: <Monitor size={14} />, labelKey: 'Playground' },
@@ -53,14 +52,17 @@ const CallsTableRow = memo(({ report }: CallsTableRowProps) => {
 
     const onGetAnalytics = useCallback(async (e: React.MouseEvent) => {
         e.stopPropagation()
-        try { await createCallAnalytics(report.channelId).unwrap() }
-        catch (err) { console.error(err) }
+        try { await createCallAnalytics(report.channelId).unwrap() } catch (err) { console.error(err) }
     }, [createCallAnalytics, report.channelId])
 
     const formattedDate = report.createdAt
         ? new Intl.DateTimeFormat(undefined, {
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', hour12: false
+            year: 'numeric',
+month: '2-digit',
+day: '2-digit',
+            hour: '2-digit',
+minute: '2-digit',
+hour12: false
         }).format(new Date(report.createdAt))
         : ''
 
@@ -148,7 +150,7 @@ const CallsTableRow = memo(({ report }: CallsTableRowProps) => {
                     {scenarioSuccess == null && '—'}
                 </td>
 
-                <td onClick={e => e.stopPropagation()}>
+                <td onClick={e => { e.stopPropagation() }}>
                     <HStack justify="end">
                         <Button variant="clear" onClick={onToggle} id={`calls-expand-${report.id}`}>
                             {isExpanded
@@ -201,31 +203,31 @@ export const CallsTable = memo(({ reports, sortField, sortOrder, onChangeSort }:
             <table className={cls.Table}>
                 <thead className={cls.TableHeader}>
                     <tr>
-                        <th className={cls.sortable} onClick={() => onChangeSort('createdAt')}>
+                        <th className={cls.sortable} onClick={() => { onChangeSort('createdAt') }}>
                             <HStack gap="4">{String(t('Дата'))} {renderSortIcon('createdAt')}</HStack>
                         </th>
-                        <th className={cls.sortable} onClick={() => onChangeSort('assistantName')}>
+                        <th className={cls.sortable} onClick={() => { onChangeSort('assistantName') }}>
                             <HStack gap="4">{String(t('Ассистент'))} {renderSortIcon('assistantName')}</HStack>
                         </th>
-                        <th className={cls.sortable} onClick={() => onChangeSort('callerId')}>
+                        <th className={cls.sortable} onClick={() => { onChangeSort('callerId') }}>
                             <HStack gap="4">{String(t('Звонивший'))} {renderSortIcon('callerId')}</HStack>
                         </th>
-                        <th className={cls.sortable} onClick={() => onChangeSort('source')}>
+                        <th className={cls.sortable} onClick={() => { onChangeSort('source') }}>
                             <HStack gap="4">{String(t('Источник'))} {renderSortIcon('source')}</HStack>
                         </th>
-                        <th className={cls.sortable} onClick={() => onChangeSort('duration')}>
+                        <th className={cls.sortable} onClick={() => { onChangeSort('duration') }}>
                             <HStack gap="4">{String(t('Длительность'))} {renderSortIcon('duration')}</HStack>
                         </th>
-                        <th className={cls.sortable} onClick={() => onChangeSort('cost')}>
+                        <th className={cls.sortable} onClick={() => { onChangeSort('cost') }}>
                             <HStack gap="4">{String(t('Стоимость'))} {renderSortIcon('cost')}</HStack>
                         </th>
-                        <th className={cls.sortable} onClick={() => onChangeSort('csat')}>
+                        <th className={cls.sortable} onClick={() => { onChangeSort('csat') }}>
                             <HStack gap="4">{String(t('Оценка'))} {renderSortIcon('csat')}</HStack>
                         </th>
-                        <th className={cls.sortable} onClick={() => onChangeSort('sentiment')}>
+                        <th className={cls.sortable} onClick={() => { onChangeSort('sentiment') }}>
                             <HStack gap="4">{String(t('Настроение'))} {renderSortIcon('sentiment')}</HStack>
                         </th>
-                        <th className={cls.sortable} onClick={() => onChangeSort('scenarioSuccess')}>
+                        <th className={cls.sortable} onClick={() => { onChangeSort('scenarioSuccess') }}>
                             <HStack gap="4">{String(t('Результат'))} {renderSortIcon('scenarioSuccess')}</HStack>
                         </th>
                         <th />

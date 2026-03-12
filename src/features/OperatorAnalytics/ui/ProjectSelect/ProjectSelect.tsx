@@ -1,7 +1,7 @@
 import { memo } from 'react'
-import { useGetOperatorProjects } from '@/entities/Report'
+import { useGetOperatorProjects, OperatorProject } from '@/entities/Report'
 import { Combobox } from '@/shared/ui/mui/Combobox'
-import { OperatorProject } from '@/entities/Report'
+
 import { useTranslation } from 'react-i18next'
 
 interface ProjectSelectProps {
@@ -25,7 +25,7 @@ export const ProjectSelect = memo((props: ProjectSelectProps) => {
 
     const selectedValue = options.find(o => o.id === value) || null
 
-    const handleChange = (_: any, newValue: { id: string; name: string } | null) => {
+    const handleChange = (_: any, newValue: { id: string, name: string } | null) => {
         onChange?.(newValue?.id ?? '')
     }
 

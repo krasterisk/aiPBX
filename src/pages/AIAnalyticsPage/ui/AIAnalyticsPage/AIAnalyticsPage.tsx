@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { Loader } from '@/shared/ui/Loader'
-import { AIMetricsOverview } from '@/features/Dashboard'
+import { AIMetricsOverview, dashboardPageReducer } from '@/features/Dashboard'
 import { DashboardLayout } from '@/widgets/DashboardLayout'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
@@ -11,7 +11,6 @@ import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitial
 import { useAIAnalyticsFilters } from '../../libs/hooks/useAIAnalyticsFilters'
 import { aiAnalyticsPageReducer } from '../../model/slices/aiAnalyticsPageSlice'
 import { initAIAnalyticsPage } from '../../model/services/initAIAnalyticsPage'
-import { dashboardPageReducer } from '@/features/Dashboard'
 
 const reducers: ReducersList = {
     aiAnalyticsPage: aiAnalyticsPageReducer,

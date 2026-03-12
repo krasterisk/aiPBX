@@ -8,10 +8,10 @@ import { Checkbox, FormControlLabel } from '@mui/material'
 import WebhookIcon from '@mui/icons-material/Webhook'
 import SendIcon from '@mui/icons-material/Send'
 import { WebhookEvent } from '@/entities/Report'
-import { HeadersEditor } from '@/features/Tools/ui/HeadersEditor/HeadersEditor'
+import { HeadersEditor } from '@/features/Tools'
 import cls from './ProjectWizard.module.scss'
 
-const AVAILABLE_EVENTS: Array<{ value: WebhookEvent; labelKey: string }> = [
+const AVAILABLE_EVENTS: Array<{ value: WebhookEvent, labelKey: string }> = [
     { value: 'analysis.completed', labelKey: 'Событие: анализ завершён' },
     { value: 'analysis.error', labelKey: 'Событие: ошибка анализа' },
 ]
@@ -52,7 +52,7 @@ export const WizardStep4_Webhook = memo(({
                 <Textarea
                     label={String(t('URL вебхука'))}
                     value={webhookUrl}
-                    onChange={e => onChangeUrl(e.target.value)}
+                    onChange={e => { onChangeUrl(e.target.value) }}
                     placeholder={'https://your-api.com/webhook'}
                     size={'small'}
                     fullWidth
@@ -75,7 +75,7 @@ export const WizardStep4_Webhook = memo(({
                             control={
                                 <Checkbox
                                     checked={webhookEvents.includes(evt.value)}
-                                    onChange={() => handleToggleEvent(evt.value)}
+                                    onChange={() => { handleToggleEvent(evt.value) }}
                                     size={'small'}
                                     sx={{ color: 'var(--icon-redesigned)', '&.Mui-checked': { color: 'var(--accent-redesigned)' } }}
                                 />

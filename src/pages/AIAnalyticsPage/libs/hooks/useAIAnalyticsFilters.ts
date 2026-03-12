@@ -12,7 +12,7 @@ import {
     getDashboardEndDate,
     getDashboardStartDate,
     getDashboardTab,
-} from '@/features/Dashboard/model/selectors/dashboardPageSelectors'
+} from '@/features/Dashboard'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 import { aiAnalyticsPageActions } from '../../model/slices/aiAnalyticsPageSlice'

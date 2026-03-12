@@ -13,7 +13,7 @@ import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { StatCard } from '@/features/Dashboard/ui/StatCard/StatCard'
+import { StatCard } from '@/features/Dashboard'
 import {
     DefaultMetricKey,
     OperatorDashboardResponse,
@@ -34,7 +34,7 @@ const normalizeRate = (rate?: number): number => {
 }
 
 // Full default metric key → translation map
-const ALL_DEFAULT_METRICS: { key: DefaultMetricKey; labelKey: string }[] = [
+const ALL_DEFAULT_METRICS: Array<{ key: DefaultMetricKey, labelKey: string }> = [
     { key: 'greeting_quality', labelKey: 'Качество приветствия' },
     { key: 'script_compliance', labelKey: 'Следование скрипту' },
     { key: 'politeness_empathy', labelKey: 'Вежливость и эмпатия' },
@@ -60,7 +60,6 @@ const CHART_SX = {
     '& .MuiLineElement-root': { strokeWidth: 2.5 },
     '& .MuiMarkElement-root': { strokeWidth: 2 },
 }
-
 
 interface OperatorDashboardProps {
     className?: string
@@ -173,7 +172,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                             border={'partial'}
                             variant={!projectId ? 'light' : 'clear'}
                             className={cls.projectChip}
-                            onClick={() => onChangeProjectId('')}
+                            onClick={() => { onChangeProjectId('') }}
                         >
                             <Text text={String(t('Все проекты'))} />
                         </Card>
@@ -184,7 +183,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                                 border={'partial'}
                                 variant={projectId === p.id ? 'light' : 'clear'}
                                 className={cls.projectChip}
-                                onClick={() => onChangeProjectId(p.id)}
+                                onClick={() => { onChangeProjectId(p.id) }}
                             >
                                 <Text text={p.name} />
                             </Card>

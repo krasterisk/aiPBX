@@ -9,7 +9,7 @@ import cls from './ProjectWizard.module.scss'
 
 const LOCKED_METRICS = ['average_score', 'sentiment', 'summary'] as const
 
-const ALL_DEFAULT_METRICS: Array<{ key: DefaultMetricKey; labelKey: string }> = [
+const ALL_DEFAULT_METRICS: Array<{ key: DefaultMetricKey, labelKey: string }> = [
     { key: 'greeting_quality', labelKey: 'Качество приветствия' },
     { key: 'script_compliance', labelKey: 'Следование скрипту' },
     { key: 'politeness_empathy', labelKey: 'Вежливость и эмпатия' },
@@ -68,7 +68,7 @@ export const WizardStep3_DefaultMetrics = memo(({ visibleMetrics, onToggle }: Wi
                                     />
                                 }
                                 label={String(t(m.labelKey))}
-                                onChange={() => onToggle(m.key)}
+                                onChange={() => { onToggle(m.key) }}
                                 sx={{ color: 'var(--text-redesigned)', margin: 0, cursor: 'pointer' }}
                             />
                         </div>

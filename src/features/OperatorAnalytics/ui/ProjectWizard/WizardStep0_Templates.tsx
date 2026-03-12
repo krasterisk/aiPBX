@@ -134,7 +134,7 @@ export const WizardStep0_Templates = memo(({ selectedTemplateId, onSelect }: Wiz
                             border={'partial'}
                             padding={'16'}
                             className={`${cls.templateCard} ${selectedTemplateId === tpl.id ? cls.selected : ''}`}
-                            onClick={() => handleSelect(tpl)}
+                            onClick={() => { handleSelect(tpl) }}
                         >
                             <VStack gap={'8'} align={'center'}>
                                 {SvgIcon

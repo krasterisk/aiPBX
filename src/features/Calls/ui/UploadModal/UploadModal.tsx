@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Modal } from '@/shared/ui/redesigned/Modal'
-import { OperatorUploadForm } from '@/features/OperatorAnalytics/ui/OperatorUploadForm/OperatorUploadForm'
+import { OperatorUploadForm } from '@/features/OperatorAnalytics'
 
 interface UploadModalProps {
     isOpen: boolean

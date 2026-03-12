@@ -67,7 +67,7 @@ const CallsPage = ({ className }: CallsPageProps) => {
                         onChangeEndDate={onChangeEndDate}
                         onChangeSearch={onChangeSearch}
                         onChangeSource={onChangeSource}
-                        onUpload={() => setUploadOpen(true)}
+                        onUpload={() => { setUploadOpen(true) }}
                         onExport={exportToExcel}
                     />
                     <CallsList
@@ -76,11 +76,11 @@ const CallsPage = ({ className }: CallsPageProps) => {
                         sortField={sortField}
                         sortOrder={sortOrder}
                         onChangeSort={onChangeSort}
-                        onUpload={() => setUploadOpen(true)}
+                        onUpload={() => { setUploadOpen(true) }}
                     />
                 </VStack>
 
-                <UploadModal isOpen={uploadOpen} onClose={() => setUploadOpen(false)} />
+                <UploadModal isOpen={uploadOpen} onClose={() => { setUploadOpen(false) }} />
             </Page>
         </DynamicModuleLoader>
     )

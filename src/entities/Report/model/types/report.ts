@@ -306,10 +306,10 @@ export interface BatchUploadResponse {
 // ─── Metric / Dashboard types ─────────────────────────────────────────────────
 
 export interface MetricDefinition {
-  id: string                        // snake_case
-  name: string                      // "Попытка апселла"
+  id: string // snake_case
+  name: string // "Попытка апселла"
   type: 'boolean' | 'number' | 'enum' | 'string'
-  description: string               // Instruction for LLM (max 500 chars)
+  description: string // Instruction for LLM (max 500 chars)
   enumValues?: string[]
 }
 
@@ -380,4 +380,3 @@ export interface OperatorApiToken {
   projectId?: string
   projectName?: string
 }
-

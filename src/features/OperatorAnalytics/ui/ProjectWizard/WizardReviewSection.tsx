@@ -44,7 +44,7 @@ export const WizardReviewSection = memo(() => {
             <Card variant={'glass'} border={'partial'} padding={'16'} max>
                 <VStack gap={'8'} max>
                     <HStack max justify={'between'} align={'center'}
-                        onClick={() => setShowCustom(prev => !prev)}
+                        onClick={() => { setShowCustom(prev => !prev) }}
                         className={cls.clickable}>
                         <Text text={String(t('Кастомные метрики'))} bold />
                         <Text text={showCustom ? '▲' : '▼'} />
@@ -64,7 +64,7 @@ export const WizardReviewSection = memo(() => {
             <Card variant={'glass'} border={'partial'} padding={'16'} max>
                 <VStack gap={'8'} max>
                     <HStack max justify={'between'} align={'center'}
-                        onClick={() => setShowDefault(prev => !prev)}
+                        onClick={() => { setShowDefault(prev => !prev) }}
                         className={cls.clickable}>
                         <Text text={String(t('Стандартные метрики'))} bold />
                         <Text text={showDefault ? '▲' : '▼'} />

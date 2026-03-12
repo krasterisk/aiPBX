@@ -123,7 +123,7 @@ export const projectWizardSlice = createSlice({
         },
 
         // ── AI-generated metrics ──────────────────────────────────
-        applyGeneratedMetrics: (state, action: PayloadAction<{ metrics: MetricDefinition[]; prompt: string }>) => {
+        applyGeneratedMetrics: (state, action: PayloadAction<{ metrics: MetricDefinition[], prompt: string }>) => {
             const { metrics, prompt } = action.payload
             if (metrics.length > 0) {
                 state.customMetrics = metrics

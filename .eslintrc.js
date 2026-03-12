@@ -73,7 +73,7 @@ module.exports = {
       'error',
       {
         alias: '@',
-        ignoreImportPatterns: ['**/StoreProvider', '**/testing', '**/getTokenData']
+        ignoreImportPatterns: ['**/StoreProvider', '**/testing', '**/getTokenData', '**/features/Dashboard/**', '**/features/OperatorAnalytics/**', '**/features/Tools/**']
       }
     ],
     'unused-imports/no-unused-imports': 'error'

@@ -6,7 +6,6 @@ import AddIcon from '@mui/icons-material/Add'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import EditIcon from '@mui/icons-material/Edit'
 import RestoreIcon from '@mui/icons-material/Restore'
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
@@ -56,7 +55,7 @@ interface PresetConfig {
     nameKey: string
     descriptionKey: string
     icon: string
-    widgets: Omit<DashboardWidget, 'id'>[]
+    widgets: Array<Omit<DashboardWidget, 'id'>>
 }
 
 const PRESETS: PresetConfig[] = [
@@ -148,7 +147,7 @@ export const DashboardBuilder = memo((props: DashboardBuilderProps) => {
         })
         ro.observe(el)
         setContainerWidth(el.getBoundingClientRect().width)
-        return () => ro.disconnect()
+        return () => { ro.disconnect() }
     }, [widgets.length])
 
     // Debounced save ref
@@ -292,7 +291,7 @@ export const DashboardBuilder = memo((props: DashboardBuilderProps) => {
                 </HStack>
 
                 <HStack gap={'8'} wrap={'wrap'}>
-                    <Button variant={'glass-action'} size={'s'} onClick={() => setIsEditing(!isEditing)}
+                    <Button variant={'glass-action'} size={'s'} onClick={() => { setIsEditing(!isEditing) }}
                         addonLeft={<EditIcon fontSize={'small'} />}
                     >
                         {isEditing ? String(t('Готово')) : String(t('Редактировать'))}
@@ -319,7 +318,7 @@ export const DashboardBuilder = memo((props: DashboardBuilderProps) => {
                                 key={preset.id}
                                 variant={'glass-action'}
                                 size={'s'}
-                                onClick={() => handleApplyPreset(preset)}
+                                onClick={() => { handleApplyPreset(preset) }}
                                 addonLeft={<DashboardIcon fontSize={'small'} />}
                             >
                                 {`${preset.icon} ${t(preset.nameKey)}`}

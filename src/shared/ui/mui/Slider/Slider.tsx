@@ -18,7 +18,7 @@ export const Slider = memo((props: SliderProps) => {
         min = 0,
         max = 100,
         step = 1,
-        label,
+        label: _label,
         className,
         ...otherProps
     } = props

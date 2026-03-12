@@ -18,7 +18,7 @@ import {
 } from '@/entities/Report'
 import { DEFAULT_METRIC_LABELS } from './useWidgetData'
 
-const WIDGET_TYPE_OPTIONS: { value: WidgetType; label: string }[] = [
+const WIDGET_TYPE_OPTIONS: Array<{ value: WidgetType, label: string }> = [
     { value: 'stat-card', label: 'Stat Card' },
     { value: 'bar-chart', label: 'Bar Chart' },
     { value: 'line-chart', label: 'Line Chart' },
@@ -111,9 +111,9 @@ export const AddWidgetModal = memo((props: AddWidgetModalProps) => {
                 {/* Widget Type */}
                 <Combobox
                     options={WIDGET_TYPE_OPTIONS}
-                    getOptionLabel={(o: { value: string; label: string }) => o.label}
+                    getOptionLabel={(o: { value: string, label: string }) => o.label}
                     value={WIDGET_TYPE_OPTIONS.find(o => o.value === widgetType) ?? null}
-                    onChange={(_, val) => val && setWidgetType((val as { value: WidgetType }).value)}
+                    onChange={(_, val) => { val && setWidgetType((val as { value: WidgetType }).value) }}
                     label={String(t('Тип виджета'))}
                     disableClearable
                 />
@@ -148,10 +148,10 @@ export const AddWidgetModal = memo((props: AddWidgetModalProps) => {
                 {/* Metric */}
                 <Combobox
                     options={metricOptions}
-                    getOptionLabel={(o: { value: string; label: string }) => o.label}
+                    getOptionLabel={(o: { value: string, label: string }) => o.label}
                     value={selectedMetricOption}
                     onChange={(_, val) => {
-                        const v = val as { value: string; label: string } | null
+                        const v = val as { value: string, label: string } | null
                         setMetricId(v?.value ?? '')
                         if (!title.trim() && v) setTitle(v.label)
                     }}
@@ -164,7 +164,7 @@ export const AddWidgetModal = memo((props: AddWidgetModalProps) => {
                     <RadioGroup
                         row
                         value={size}
-                        onChange={e => setSize(e.target.value as 'sm' | 'md' | 'lg')}
+                        onChange={e => { setSize(e.target.value as 'sm' | 'md' | 'lg') }}
                     >
                         {SIZE_OPTIONS.map(opt => (
                             <FormControlLabel
@@ -182,7 +182,7 @@ export const AddWidgetModal = memo((props: AddWidgetModalProps) => {
                 <Textarea
                     label={String(t('Название виджета'))}
                     value={title}
-                    onChange={e => setTitle(e.target.value)}
+                    onChange={e => { setTitle(e.target.value) }}
                     size={'small'}
                     multiline={false}
                 />

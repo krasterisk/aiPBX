@@ -6,9 +6,9 @@ import { Card } from '@/shared/ui/redesigned/Card'
 import cls from './HeatmapCalendar.module.scss'
 
 interface DayData {
-    date: string      // YYYY-MM-DD
+    date: string // YYYY-MM-DD
     callCount: number
-    avgScore: number   // 0–100
+    avgScore: number // 0–100
 }
 
 interface HeatmapCalendarProps {
@@ -45,15 +45,16 @@ export const HeatmapCalendar = memo(({ data, weeks = 26 }: HeatmapCalendarProps)
         const dayOfWeek = startDate.getDay()
         startDate.setDate(startDate.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1))
 
-        const grid: Array<Array<{ date: string; count: number; score: number }>> = []
+        const grid: Array<Array<{ date: string, count: number, score: number }>> = []
         let maxCount = 0
-        const monthLabels: Array<{ label: string; week: number }> = []
+        const monthLabels: Array<{ label: string, week: number }> = []
         let lastMonth = -1
 
         const current = new Date(startDate)
         let weekIdx = 0
+        const endTime = endDate.getTime()
 
-        while (current <= endDate) {
+        while (current.getTime() <= endTime) {
             const week: typeof grid[0] = []
             for (let d = 0; d < 7; d++) {
                 const key = current.toISOString().slice(0, 10)

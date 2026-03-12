@@ -21,8 +21,8 @@ import cls from './OperatorApiTokens.module.scss'
 
 interface TokenItemProps {
     token: OperatorApiToken
-    onRevoke: (id: string) => void   // PATCH /revoke — деактивация
-    onDelete: (id: string) => void   // DELETE — физическое удаление
+    onRevoke: (id: string) => void // PATCH /revoke — деактивация
+    onDelete: (id: string) => void // DELETE — физическое удаление
 }
 
 const TokenItem = memo(({ token, onRevoke, onDelete }: TokenItemProps) => {
@@ -72,14 +72,14 @@ const TokenItem = memo(({ token, onRevoke, onDelete }: TokenItemProps) => {
                             <Button variant={'glass-action'} color={'error'} size={'s'} onClick={handleConfirm}>
                                 {actionLabel}
                             </Button>
-                            <IconButton size={'small'} onClick={() => setConfirm(false)} className={cls.iconBtn}>
+                            <IconButton size={'small'} onClick={() => { setConfirm(false) }} className={cls.iconBtn}>
                                 <span style={{ fontSize: 13 }}>✕</span>
                             </IconButton>
                         </HStack>
                     ) : (
                         <IconButton
                             size={'small'}
-                            onClick={() => setConfirm(true)}
+                            onClick={() => { setConfirm(true) }}
                             className={cls.iconBtnDanger}
                             title={actionTooltip}
                         >
@@ -123,7 +123,7 @@ const GenerateModal = memo(({ open, onClose }: GenerateModalProps) => {
         if (!generatedToken) return
         navigator.clipboard.writeText(generatedToken).then(() => {
             setCopied(true)
-            setTimeout(() => setCopied(false), 2000)
+            setTimeout(() => { setCopied(false) }, 2000)
         })
     }, [generatedToken])
 
@@ -147,7 +147,7 @@ const GenerateModal = memo(({ open, onClose }: GenerateModalProps) => {
                             <Textarea
                                 label={String(t('Название токена'))}
                                 value={tokenName}
-                                onChange={e => setTokenName(e.target.value)}
+                                onChange={e => { setTokenName(e.target.value) }}
                                 size={'small'}
                                 fullWidth
                                 multiline={false}
@@ -212,7 +212,7 @@ const DocEntry = memo(({ method, path, description, fullUrl, children }: DocEntr
         e.stopPropagation()
         navigator.clipboard.writeText(fullUrl).then(() => {
             setCopied(true)
-            setTimeout(() => setCopied(false), 2000)
+            setTimeout(() => { setCopied(false) }, 2000)
         })
     }, [fullUrl])
 
@@ -221,7 +221,7 @@ const DocEntry = memo(({ method, path, description, fullUrl, children }: DocEntr
             <button
                 type={'button'}
                 className={cls.docEntryHeader}
-                onClick={() => setOpen(p => !p)}
+                onClick={() => { setOpen(p => !p) }}
             >
                 <HStack gap={'12'} align={'center'} className={cls.docEntryTitle}>
                     <span className={`${cls.method} ${method === 'GET' ? cls.methodGet : ''}`}>
@@ -263,7 +263,7 @@ const ApiDocs = memo(() => {
     const handleCopyBase = useCallback(() => {
         navigator.clipboard.writeText(base).then(() => {
             setCopied(true)
-            setTimeout(() => setCopied(false), 2000)
+            setTimeout(() => { setCopied(false) }, 2000)
         })
     }, [base])
 
@@ -490,7 +490,7 @@ export const OperatorApiTokens = memo(() => {
                 <Button
                     variant={'glass-action'}
                     addonLeft={<AddIcon fontSize={'small'} />}
-                    onClick={() => setShowModal(true)}
+                    onClick={() => { setShowModal(true) }}
                 >
                     {String(t('Генерировать токен'))}
                 </Button>
@@ -525,7 +525,7 @@ export const OperatorApiTokens = memo(() => {
 
             <ApiDocs />
 
-            <GenerateModal open={showModal} onClose={() => setShowModal(false)} />
+            <GenerateModal open={showModal} onClose={() => { setShowModal(false) }} />
         </VStack>
     )
 })

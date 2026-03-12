@@ -74,6 +74,6 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout = memo(({ title, children }: DashboardLayoutProps) => (
     <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
-        <DashboardLayoutInner title={title} children={children} />
+        <DashboardLayoutInner title={title}>{children}</DashboardLayoutInner>
     </DynamicModuleLoader>
 ))

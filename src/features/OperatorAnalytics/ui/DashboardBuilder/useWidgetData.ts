@@ -27,13 +27,13 @@ export interface WidgetDataResult {
     /** Label */
     label?: string
     /** Array of { label, value } for bar-chart */
-    barData?: Array<{ label: string; value: number }>
+    barData?: Array<{ label: string, value: number }>
     /** Time series data for line-chart / sparkline */
-    timeSeriesData?: Array<{ label: string; value: number }>
+    timeSeriesData?: Array<{ label: string, value: number }>
     /** Distribution data for pie-chart */
-    pieData?: Array<{ id: number; value: number; label: string; color: string }>
+    pieData?: Array<{ id: number, value: number, label: string, color: string }>
     /** Heatmap data */
-    heatmapData?: Array<{ date: string; callCount: number; avgScore: number }>
+    heatmapData?: Array<{ date: string, callCount: number, avgScore: number }>
 }
 
 /**
@@ -124,6 +124,5 @@ export function useWidgetData(
         // TODO: When backend returns aggregatedCustomMetrics, use them here
         // For now return a stub
         return { value: 0, label: widget.title }
-
     }, [widget, dashboardData, project])
 }

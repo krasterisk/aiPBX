@@ -239,16 +239,16 @@ export const reportApi = rtkApi.injectEndpoints({
       }),
       invalidatesTags: ['OperatorProjects']
     }),
-    generateOperatorApiToken: build.mutation<{ token: string } & OperatorApiToken, { name: string; projectId?: string }>({
+    generateOperatorApiToken: build.mutation<{ token: string } & OperatorApiToken, { name: string, projectId?: string }>({
       query: (body) => ({
-        url: '/operator-analytics/tokens/generate',  // POST /api/operator-analytics/tokens/generate
+        url: '/operator-analytics/tokens/generate', // POST /api/operator-analytics/tokens/generate
         method: 'POST',
         body
       }),
       invalidatesTags: ['OperatorApiTokens']
     }),
     listOperatorApiTokens: build.query<OperatorApiToken[], void>({
-      query: () => '/operator-analytics/tokens',     // GET /api/operator-analytics/tokens
+      query: () => '/operator-analytics/tokens', // GET /api/operator-analytics/tokens
       providesTags: ['OperatorApiTokens']
     }),
     revokeOperatorApiToken: build.mutation<void, string>({
@@ -260,7 +260,7 @@ export const reportApi = rtkApi.injectEndpoints({
     }),
     deleteOperatorApiToken: build.mutation<void, string>({
       query: (id) => ({
-        url: `/operator-analytics/tokens/${id}`,      // DELETE /api/operator-analytics/tokens/:id
+        url: `/operator-analytics/tokens/${id}`, // DELETE /api/operator-analytics/tokens/:id
         method: 'DELETE'
       }),
       invalidatesTags: ['OperatorApiTokens']
@@ -284,7 +284,7 @@ export const reportApi = rtkApi.injectEndpoints({
       }),
       invalidatesTags: ['OperatorProjects']
     }),
-    generateMetricsFromPrompt: build.mutation<MetricDefinition[], { messages: { role: 'ai' | 'user'; text: string }[]; systemPrompt?: string }>({
+    generateMetricsFromPrompt: build.mutation<MetricDefinition[], { messages: Array<{ role: 'ai' | 'user', text: string }>, systemPrompt?: string }>({
       query: (body) => ({
         url: '/operator-analytics/projects/generate-schema',
         method: 'POST',

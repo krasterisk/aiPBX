@@ -53,7 +53,7 @@ export const WizardStep1_Chat = memo(({ systemPrompt, onChangeSystemPrompt, onMe
             setMessages([{ role: 'ai', text: AI_QUESTIONS[0], time: getTime() }])
             setIsAiTyping(false)
         }, TYPING_DELAY_MS)
-        return () => clearTimeout(timer)
+        return () => { clearTimeout(timer) }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -225,7 +225,7 @@ export const WizardStep1_Chat = memo(({ systemPrompt, onChangeSystemPrompt, onMe
                     <Textarea
                         inputRef={inputRef}
                         value={input}
-                        onChange={e => setInput(e.target.value)}
+                        onChange={e => { setInput(e.target.value) }}
                         onKeyDown={handleKeyDown}
                         placeholder={allDone ? String(t('Метрики генерируются...')) : String(t('Введите сообщение...'))}
                         size={'small'}

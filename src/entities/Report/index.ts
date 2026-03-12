@@ -99,4 +99,3 @@ export {
   getWizardSelectedTemplateId,
   getWizardShowWebhooks,
 } from './model/selectors/projectWizardSelectors'
-

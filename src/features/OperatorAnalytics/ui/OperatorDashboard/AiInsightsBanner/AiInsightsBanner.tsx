@@ -52,7 +52,7 @@ export const AiInsightsBanner = memo(({ projectName }: AiInsightsBannerProps) =>
     const { t } = useTranslation('reports')
     const [isExpanded, setIsExpanded] = useState(false)
 
-    const toggle = useCallback(() => setIsExpanded(p => !p), [])
+    const toggle = useCallback(() => { setIsExpanded(p => !p) }, [])
 
     return (
         <Card max variant={'glass'} border={'partial'} padding={'16'} className={cls.banner}>

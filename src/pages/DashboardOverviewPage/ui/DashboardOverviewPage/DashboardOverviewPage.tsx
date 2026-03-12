@@ -1,11 +1,8 @@
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DashboardLayout } from '@/widgets/DashboardLayout'
-import { DashboardStatistics } from '@/features/Dashboard'
-import { DashboardCharts } from '@/features/Dashboard'
-import { useDashboardFilters } from '@/features/Dashboard'
+import { DashboardStatistics, DashboardCharts, useDashboardFilters, dashboardPageReducer } from '@/features/Dashboard'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
-import { dashboardPageReducer } from '@/features/Dashboard'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Loader } from '@/shared/ui/Loader'
 

@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import { OperatorApiTokens } from '@/features/OperatorAnalytics/ui/OperatorApiTokens/OperatorApiTokens'
+import { OperatorApiTokens } from '@/features/OperatorAnalytics'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 
 const AnalyticsApiPage = () => {
