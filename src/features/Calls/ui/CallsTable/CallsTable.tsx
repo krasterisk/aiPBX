@@ -112,7 +112,7 @@ const CallsTableRow = memo(({ report }: CallsTableRowProps) => {
                         : '—'}
                 </td>
 
-                <td data-label="CSAT" className={cls.csatCell}>
+                <td data-label={String(t('Оценка'))} className={cls.csatCell}>
                     {csat != null ? (
                         <HStack gap="4" align="center" className={cls.csatValue}>
                             <Star size={14} className={cls.csatStar} />
@@ -220,7 +220,7 @@ export const CallsTable = memo(({ reports, sortField, sortOrder, onChangeSort }:
                             <HStack gap="4">{String(t('Стоимость'))} {renderSortIcon('cost')}</HStack>
                         </th>
                         <th className={cls.sortable} onClick={() => onChangeSort('csat')}>
-                            <HStack gap="4">CSAT {renderSortIcon('csat')}</HStack>
+                            <HStack gap="4">{String(t('Оценка'))} {renderSortIcon('csat')}</HStack>
                         </th>
                         <th className={cls.sortable} onClick={() => onChangeSort('sentiment')}>
                             <HStack gap="4">{String(t('Настроение'))} {renderSortIcon('sentiment')}</HStack>
