@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
 import {
     ChevronDown, ChevronUp, Star, CheckCircle, AlertCircle,
-    Phone, Globe, Monitor, Mic
+    Phone, Globe, Monitor, Save
 } from 'lucide-react'
 import cls from './CallsTable.module.scss'
 
@@ -21,8 +21,8 @@ const SOURCE_CONFIG: Record<string, { icon: React.ReactNode, labelKey: string }>
     call: { icon: <Phone size={14} />, labelKey: 'Звонок' },
     widget: { icon: <Globe size={14} />, labelKey: 'Виджет' },
     playground: { icon: <Monitor size={14} />, labelKey: 'Playground' },
-    'external-api': { icon: <Mic size={14} />, labelKey: 'Аналитика (API)' },
-    'external-front': { icon: <Mic size={14} />, labelKey: 'Аналитика' },
+    'external-api': { icon: <Save size={14} />, labelKey: 'Аналитика (API)' },
+    'external-front': { icon: <Save size={14} />, labelKey: 'Аналитика' },
 }
 
 // ── Row ───────────────────────────────────────────────────────────────────────
@@ -71,6 +71,7 @@ hour12: false
     const duration = report.duration ? formatTime(report.duration, t) : '—'
     const csat = report.analytics?.csat
     const scenarioSuccess = report.analytics?.metrics?.scenario_analysis?.success
+        ?? report.analytics?.metrics?.success
 
     return (
         <>
