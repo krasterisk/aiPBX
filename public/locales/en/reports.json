@@ -307,5 +307,11 @@
   "Business Impact": "Business Impact",
   "Результат": "Result",
   "Эскалация": "Escalation",
-  "Оценка": "Score"
+  "Оценка": "Score",
+  "Обработка файлов": "Processing files",
+  "Обработка завершена: {{completed}} из {{total}} файлов": "Processing complete: {{completed}} of {{total}} files",
+  "В работу ушло": "Sent for processing",
+  "загружен и отправлен в работу": "uploaded and sent for processing",
+  "Файлы успешно загружены": "Files uploaded successfully",
+  "Ошибка при загрузке": "Upload error"
 }

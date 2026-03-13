@@ -17,6 +17,8 @@ export type {
   OperatorDashboardResponse,
   OperatorAggregatedMetrics,
   BatchUploadResponse,
+  BatchStatusResponse,
+  BatchItemStatus,
   OperatorProject,
   OperatorApiToken,
   MetricDefinition,
@@ -73,7 +75,8 @@ export {
   useListOperatorApiTokens,
   useRevokeOperatorApiToken,
   useDeleteOperatorApiToken,
-  useCreateCallAnalytics
+  useCreateCallAnalytics,
+  useLazyGetBatchStatus
 } from './api/reportApi'
 
 export { ReportExpandedPanel } from './ui/ReportExpandedPanel/ReportExpandedPanel'

@@ -11,6 +11,7 @@ import { CdrSource } from '@/entities/Report'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import FilterListIcon from '@mui/icons-material/FilterList'
+import { BatchProgressBar } from '../BatchProgressBar/BatchProgressBar'
 
 interface CallsHeaderProps {
     tab?: string
@@ -26,13 +27,22 @@ interface CallsHeaderProps {
     onUpload: () => void
     onExport: () => void
     onChangeSource?: (v: CdrSource | undefined) => void
+    batchProgress?: {
+        isActive: boolean
+        progress: number
+        completed: number
+        failed: number
+        total: number
+        dismiss: () => void
+    }
 }
 
 export const CallsHeader = memo((props: CallsHeaderProps) => {
     const {
         tab, startDate, endDate, isInited, search, source,
         onChangeTab, onChangeStartDate, onChangeEndDate,
-        onChangeSearch, onUpload, onExport, onChangeSource
+        onChangeSearch, onUpload, onExport, onChangeSource,
+        batchProgress
     } = props
 
     const { t } = useTranslation('reports')
@@ -61,6 +71,16 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
                     />
                 </HStack>
             </HStack>
+
+            {batchProgress?.isActive && (
+                <BatchProgressBar
+                    progress={batchProgress.progress}
+                    completed={batchProgress.completed}
+                    failed={batchProgress.failed}
+                    total={batchProgress.total}
+                    onDismiss={batchProgress.dismiss}
+                />
+            )}
 
             <HStack max justify="between" align="center" gap="12" wrap="wrap">
                 <Button

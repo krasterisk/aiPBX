@@ -28,9 +28,10 @@ const LANGUAGE_OPTIONS = [
 interface OperatorUploadFormProps {
     isOpen?: boolean
     onClose?: () => void
+    onBatchStarted?: (batchId: string) => void
 }
 
-export const OperatorUploadForm = memo(({ isOpen, onClose }: OperatorUploadFormProps) => {
+export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted }: OperatorUploadFormProps) => {
     const { t } = useTranslation('reports')
     const [files, setFiles] = useState<Array<{ file: File }>>([])
     const [operatorName, setOperatorName] = useState('')
@@ -92,25 +93,30 @@ export const OperatorUploadForm = memo(({ isOpen, onClose }: OperatorUploadFormP
         try {
             const result = await uploadFiles(formData).unwrap()
 
-            if (result && 'items' in result) {
+            if (result && 'batchId' in result && result.batchId) {
                 toast.success(`${t('В работу ушло')}: ${(result).items.length} ${t('файлов')}`)
+                setFiles([])
+                onBatchStarted?.(result.batchId)
+                onClose?.()
+            } else if (result && 'items' in result) {
+                toast.success(`${t('В работу ушло')}: ${(result).items.length} ${t('файлов')}`)
+                setFiles([])
+                setTimeout(() => { onClose?.() }, 800)
             } else if (result && 'filename' in result) {
                 toast.success(`${(result).filename} — ${t('загружен и отправлен в работу')}`)
+                setFiles([])
+                setTimeout(() => { onClose?.() }, 800)
             } else {
                 toast.success(t('Файлы успешно загружены'))
+                setFiles([])
+                setTimeout(() => { onClose?.() }, 800)
             }
-
-            setFiles([])
-            // Longer delay to ensure toast is visible and RTK Query invalidation starts before unmounting
-            setTimeout(() => {
-                onClose?.()
-            }, 800)
         } catch (err: any) {
             console.error('Upload error:', err)
             const message = err?.data?.message || err?.message || t('Ошибка при загрузке')
             toast.error(String(message))
         }
-    }, [files, operatorName, clientPhone, language, projectId, uploadFiles, t, onClose])
+    }, [files, operatorName, clientPhone, language, projectId, uploadFiles, t, onClose, onBatchStarted])
 
     return (
         <VStack gap="16" max>

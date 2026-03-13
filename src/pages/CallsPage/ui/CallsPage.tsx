@@ -8,6 +8,7 @@ import { reportsPageReducer, initReportsPage, useReportFilters } from '@/entitie
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { CallsHeader, CallsList, UploadModal, useCallsExport } from '@/features/Calls'
+import { useBatchProgress } from '@/features/Calls/lib/useBatchProgress'
 import cls from './CallsPage.module.scss'
 
 interface CallsPageProps {
@@ -21,6 +22,7 @@ const reducers: ReducersList = {
 const CallsPage = ({ className }: CallsPageProps) => {
     const dispatch = useAppDispatch()
     const [uploadOpen, setUploadOpen] = useState(false)
+    const batch = useBatchProgress()
 
     const {
         data, isLoading, isError, error,
@@ -69,6 +71,7 @@ const CallsPage = ({ className }: CallsPageProps) => {
                         onChangeSource={onChangeSource}
                         onUpload={() => { setUploadOpen(true) }}
                         onExport={exportToExcel}
+                        batchProgress={batch}
                     />
                     <CallsList
                         reports={data}
@@ -80,10 +83,15 @@ const CallsPage = ({ className }: CallsPageProps) => {
                     />
                 </VStack>
 
-                <UploadModal isOpen={uploadOpen} onClose={() => { setUploadOpen(false) }} />
+                <UploadModal
+                    isOpen={uploadOpen}
+                    onClose={() => { setUploadOpen(false) }}
+                    onBatchStarted={batch.startPolling}
+                />
             </Page>
         </DynamicModuleLoader>
     )
 }
 
 export default memo(CallsPage)
+

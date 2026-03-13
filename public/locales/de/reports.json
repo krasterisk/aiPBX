@@ -346,5 +346,11 @@
   "Business Impact": "Geschäftsauswirkung",
   "Результат": "Ergebnis",
   "Эскалация": "Eskalation",
-  "Оценка": "Bewertung"
+  "Оценка": "Bewertung",
+  "Обработка файлов": "Dateien werden verarbeitet",
+  "Обработка завершена: {{completed}} из {{total}} файлов": "Verarbeitung abgeschlossen: {{completed}} von {{total}} Dateien",
+  "В работу ушло": "Zur Verarbeitung gesendet",
+  "загружен и отправлен в работу": "hochgeladen und zur Verarbeitung gesendet",
+  "Файлы успешно загружены": "Dateien erfolgreich hochgeladen",
+  "Ошибка при загрузке": "Fehler beim Hochladen"
 }

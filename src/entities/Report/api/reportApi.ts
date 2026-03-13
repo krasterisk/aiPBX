@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { AIAnalyticsResponse, AllReports, Analytics, BatchUploadResponse, CdrSource, DashboardConfig, MetricDefinition, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorProject, Report, ReportDialog } from '../model/types/report'
+import { AIAnalyticsResponse, AllReports, Analytics, BatchStatusResponse, BatchUploadResponse, CdrSource, DashboardConfig, MetricDefinition, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorProject, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
   page?: number
@@ -290,6 +290,9 @@ export const reportApi = rtkApi.injectEndpoints({
         method: 'POST',
         body
       })
+    }),
+    getBatchStatus: build.query<BatchStatusResponse, string>({
+      query: (batchId) => `/operator-analytics/batch/${batchId}`
     })
   })
 })
@@ -320,3 +323,4 @@ export const useGenerateOperatorApiToken = reportApi.useGenerateOperatorApiToken
 export const useListOperatorApiTokens = reportApi.useListOperatorApiTokensQuery
 export const useRevokeOperatorApiToken = reportApi.useRevokeOperatorApiTokenMutation
 export const useDeleteOperatorApiToken = reportApi.useDeleteOperatorApiTokenMutation
+export const useLazyGetBatchStatus = reportApi.useLazyGetBatchStatusQuery

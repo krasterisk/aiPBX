@@ -126,11 +126,26 @@ export interface SpeechAndInteractionQuality {
 }
 
 export interface AnalyticsMetrics {
+  // Nested bot-call metrics
   business_impact?: BusinessImpact
   scenario_analysis?: ScenarioAnalysis
   user_satisfaction?: UserSatisfaction
   accuracy_and_efficiency?: AccuracyAndEfficiency
   speech_and_interaction_quality?: SpeechAndInteractionQuality
+  // Flat operator metrics (from file-upload analytics)
+  greeting_quality?: number
+  script_compliance?: number
+  politeness_empathy?: number
+  active_listening?: number
+  objection_handling?: number
+  product_knowledge?: number
+  problem_resolution?: number
+  speech_clarity_pace?: number
+  closing_quality?: number
+  customer_sentiment?: string
+  summary?: string
+  success?: boolean
+  csat?: number
 }
 
 export interface Analytics {
@@ -296,11 +311,30 @@ export interface OperatorDashboardResponse {
 }
 
 export interface BatchUploadResponse {
+  batchId: string
+  total: number
   items: Array<{
     id: string
     filename: string
     status: OperatorAnalysisStatus
   }>
+}
+
+export type BatchItemStatus = 'pending' | 'processing' | 'completed' | 'error'
+
+export interface BatchStatusResponse {
+  batchId: string
+  total: number
+  completed: number
+  failed: number
+  progress: number
+  items: Array<{
+    id: string
+    filename: string
+    status: BatchItemStatus
+  }>
+  startedAt: string
+  finishedAt: string | null
 }
 
 // ─── Metric / Dashboard types ─────────────────────────────────────────────────
