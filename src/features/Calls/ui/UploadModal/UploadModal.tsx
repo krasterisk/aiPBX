@@ -13,4 +13,3 @@ export const UploadModal = memo(({ isOpen, onClose, onBatchStarted }: UploadModa
         <OperatorUploadForm isOpen={isOpen} onClose={onClose} onBatchStarted={onBatchStarted} />
     </Modal>
 ))
-

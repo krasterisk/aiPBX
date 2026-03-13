@@ -7,8 +7,7 @@ import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitial
 import { reportsPageReducer, initReportsPage, useReportFilters } from '@/entities/Report'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { VStack } from '@/shared/ui/redesigned/Stack'
-import { CallsHeader, CallsList, UploadModal, useCallsExport } from '@/features/Calls'
-import { useBatchProgress } from '@/features/Calls/lib/useBatchProgress'
+import { CallsHeader, CallsList, UploadModal, useCallsExport, useBatchProgress } from '@/features/Calls'
 import cls from './CallsPage.module.scss'
 
 interface CallsPageProps {
@@ -94,4 +93,3 @@ const CallsPage = ({ className }: CallsPageProps) => {
 }
 
 export default memo(CallsPage)
-

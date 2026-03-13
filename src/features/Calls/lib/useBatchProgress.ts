@@ -11,7 +11,7 @@ export interface BatchProgressState {
     failed: number
     total: number
     isActive: boolean
-    items: Array<{ id: string; filename: string; status: BatchItemStatus }>
+    items: Array<{ id: string, filename: string, status: BatchItemStatus }>
 }
 
 const POLL_INTERVAL = 3000

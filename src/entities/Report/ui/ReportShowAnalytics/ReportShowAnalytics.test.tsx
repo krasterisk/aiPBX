@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { ReportShowAnalytics } from './ReportShowAnalytics'
-import { Analytics } from '../../model/types/report'
+import type { Analytics } from '../../model/types/report'
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 jest.mock('react-i18next', () => ({
@@ -235,4 +235,3 @@ describe('ReportShowAnalytics', () => {
         })
     })
 })
-
