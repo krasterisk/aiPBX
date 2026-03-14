@@ -70,8 +70,8 @@ hour12: false
     const sourceCfg = SOURCE_CONFIG[source]
     const duration = report.duration ? formatTime(report.duration, t) : '—'
     const csat = report.analytics?.csat
-    const scenarioSuccess = report.analytics?.metrics?.scenario_analysis?.success
-        ?? report.analytics?.metrics?.success
+    const scenarioSuccess = report.analytics?.metrics?.scenario_analysis?.success ??
+        report.analytics?.metrics?.success
 
     return (
         <>
