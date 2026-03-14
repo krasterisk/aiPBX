@@ -218,4 +218,13 @@
     @media (max-width: 600px) {
         width: 100%;
     }
+
+    &.xl {
+        height: auto;
+        padding: 14px 40px;
+
+        @media (max-width: 600px) {
+            padding: 12px 24px;
+        }
+    }
 }

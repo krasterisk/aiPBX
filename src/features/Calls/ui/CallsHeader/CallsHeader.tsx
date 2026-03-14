@@ -10,7 +10,6 @@ import { PeriodExtendedFilters } from '@/features/PeriodExtendedFilter'
 import { CdrSource } from '@/entities/Report'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
-import FilterListIcon from '@mui/icons-material/FilterList'
 import { BatchProgressBar } from '../BatchProgressBar/BatchProgressBar'
 import type { UseBatchProgressReturn } from '../../lib/useBatchProgress'
 
@@ -77,14 +76,7 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
                 />
             )}
 
-            <HStack max justify="between" align="center" gap="12" wrap="wrap">
-                <Button
-                    variant="clear"
-                    addonLeft={<FilterListIcon fontSize="small" />}
-                    onClick={() => { setFilterShow(v => !v) }}
-                >
-                    {String(t('Фильтры'))}
-                </Button>
+            <HStack max justify="end" align="center" gap="12" wrap="wrap">
                 <HStack gap="8" wrap="wrap">
                     <Button
                         variant="clear"
@@ -103,7 +95,6 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
                     </Button>
                 </HStack>
             </HStack>
-
             <PeriodExtendedFilters
                 source={source}
                 startDate={startDate ?? undefined}

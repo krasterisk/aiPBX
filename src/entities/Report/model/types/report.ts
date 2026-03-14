@@ -24,6 +24,7 @@ export interface Report {
   analytics?: Analytics
   billingRecords?: BillingRecord[]
   source?: CdrSource
+  transcription?: string
 }
 
 export interface ReportsListProps {

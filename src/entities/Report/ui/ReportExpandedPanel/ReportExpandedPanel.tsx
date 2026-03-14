@@ -151,6 +151,7 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
                             isDialogLoading={isDialogLoading}
                             isDialogError={isDialogError}
                             mediaUrl={mediaUrl}
+                            transcription={report.transcription}
                         />
                     </div>
                 )}

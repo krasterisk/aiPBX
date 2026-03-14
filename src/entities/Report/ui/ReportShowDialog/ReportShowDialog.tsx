@@ -17,6 +17,7 @@ interface ReportShowDialogProps {
   isDialogError: boolean
   Dialogs?: ReportDialog[]
   mediaUrl?: string
+  transcription?: string
 }
 
 export const ReportShowDialog = memo((props: ReportShowDialogProps) => {
@@ -25,7 +26,8 @@ export const ReportShowDialog = memo((props: ReportShowDialogProps) => {
     Dialogs,
     isDialogLoading,
     isDialogError,
-    mediaUrl
+    mediaUrl,
+    transcription
   } = props
 
   const { t } = useTranslation('reports')
@@ -48,12 +50,18 @@ export const ReportShowDialog = memo((props: ReportShowDialogProps) => {
           <Text text={t('Ошибка при загрузке диалога')} variant="error" />
         </HStack>
       }
-      {Dialogs?.length === 0
+      {Dialogs?.length === 0 && !transcription
         ? <HStack max justify={'center'}>
           <Text text={t('Диалог отсутствует')} />
         </HStack>
         : mediaUrl ? <MediaPlayer src={mediaUrl} /> : null
       }
+
+      {!Dialogs?.length && transcription && (
+        <Card border={'partial'} variant={'outlined'} style={{ width: '100%' }}>
+          <Text text={transcription} />
+        </Card>
+      )}
 
       {Dialogs?.map((dialog, index) => (
         <HStack
