@@ -233,7 +233,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding: 10px 16px 10px 130px !important;
+            padding: 10px 16px 10px 160px !important;
             border: none !important;
             position: relative;
             text-align: right;
@@ -244,11 +244,15 @@
                 content: attr(data-label);
                 position: absolute;
                 left: 16px;
+                max-width: 140px;
                 font-weight: 600;
                 font-size: 13px;
                 color: var(--text-redesigned);
                 opacity: 0.5;
                 text-transform: uppercase;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             &:last-child {
@@ -257,6 +261,27 @@
                 &::before {
                     display: none;
                 }
+            }
+        }
+    }
+
+    tfoot {
+        display: block;
+        width: 100%;
+
+        tr {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 12px 16px;
+            align-items: center;
+
+            th {
+                display: inline-flex;
+                padding: 0 !important;
+                border: none !important;
+                max-width: none;
+                min-height: auto;
             }
         }
     }
