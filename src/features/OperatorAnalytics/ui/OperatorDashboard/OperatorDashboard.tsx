@@ -66,12 +66,14 @@ interface OperatorDashboardProps {
     data?: OperatorDashboardResponse
     isLoading?: boolean
     projectId?: string
+    startDate?: string
+    endDate?: string
     onChangeProjectId: (value: string) => void
     onOpenDashboardBuilder?: () => void
 }
 
 export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
-    const { data, isLoading, projectId, onChangeProjectId, onOpenDashboardBuilder } = props
+    const { data, isLoading, projectId, startDate, endDate, onChangeProjectId, onOpenDashboardBuilder } = props
     const { t } = useTranslation('reports')
     const { data: projects } = useGetOperatorProjects()
 
@@ -160,7 +162,16 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
     return (
         <VStack gap={'16'} max className={cls.OperatorDashboard}>
             {/* AI Insights Banner */}
-            <AiInsightsBanner projectName={activeProject?.name} />
+            {data?.insightsAvailable && (
+                <AiInsightsBanner
+                    projectName={activeProject?.name}
+                    queryParams={{
+                        startDate,
+                        endDate,
+                        projectId,
+                    }}
+                />
+            )}
 
             {/* Project filter + Dashboard Builder button */}
             <HStack max justify={'between'} align={'center'} wrap={'wrap'} gap={'12'}>

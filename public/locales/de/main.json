@@ -1,7 +1,7 @@
 {
   "Hero": {
     "Title": "AI PBX: Die Zukunft Ihrer Telefonie beginnt hier",
-    "SubTitle": "Verbinden Sie die Leistung generativer KI mit der Zuverlässigkeit klassischer Kommunikation. Automatisieren Sie Anrufe, Support und Vertrieb mit natürlichen Sprachdialogen.",
+    "SubTitle": "Automatisieren Sie Anrufe mit KI-Assistenten und analysieren Sie die Qualität jedes Gesprächs. Zwei Produkte — eine Plattform.",
     "CTA_Start": "Jetzt starten",
     "CTA_Demo": "Demo anfordern"
   },
@@ -75,6 +75,26 @@
     "Asterisk": {
       "Title": "Kompatibilität",
       "Desc": "Funktioniert mit Asterisk, FreePBX und jedem anderen System über das SIP-Protokoll."
+    }
+  },
+  "SpeechAnalytics": {
+    "Title": "Sprachanalyse",
+    "SubTitle": "Nicht nur Bots — analysieren Sie jede Gesprächsaufnahme",
+    "AnyRecording": {
+      "Title": "Jede Aufnahme analysieren",
+      "Desc": "Laden Sie Audiodateien in jedem Format hoch — von Callcenter-Aufnahmen bis zu Zoom-Meetings. KI transkribiert und bewertet jedes Gespräch."
+    },
+    "Metrics": {
+      "Title": "Flexible Metriken",
+      "Desc": "Erstellen Sie Projekte mit beliebigen Bewertungskriterien — Begrüßung, Empathie, Einwandbehandlung oder Ihre eigenen Metriken. Unbegrenzte Scoring-Anpassung."
+    },
+    "Insights": {
+      "Title": "KI-Insights",
+      "Desc": "KI findet Muster in Ihren Anrufen — Konversionsrückgang, negative Trends, Metrik-Anomalien."
+    },
+    "API": {
+      "Title": "API für Integrationen",
+      "Desc": "REST-API mit Projekt-Token. Senden Sie Aufnahmen automatisch aus Ihrem CRM oder Ihrer TK-Anlage, erhalten Sie Ergebnisse per Webhook."
     }
   },
   "UseCases": {

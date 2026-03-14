@@ -309,6 +309,7 @@ export interface OperatorDashboardResponse {
     avgScore: number
     avgDuration: number
   }>
+  insightsAvailable: boolean
 }
 
 export interface BatchUploadResponse {

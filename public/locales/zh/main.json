@@ -1,7 +1,7 @@
 {
   "Hero": {
     "Title": "AI PBX：您的电话通信未来从这里开始",
-    "SubTitle": "将生成式AI的强大能力与传统通信的可靠性相结合。通过自然语音对话，自动化通话、客户支持和销售。",
+    "SubTitle": "用AI助手自动化通话，分析任何对话的质量。两个产品——一个平台。",
     "CTA_Start": "立即开始",
     "CTA_Demo": "申请演示"
   },
@@ -75,6 +75,26 @@
     "Asterisk": {
       "Title": "兼容性",
       "Desc": "兼容Asterisk、FreePBX及任何其他使用SIP协议的系统。"
+    }
+  },
+  "SpeechAnalytics": {
+    "Title": "语音分析",
+    "SubTitle": "不仅限于机器人——分析任何通话录音",
+    "AnyRecording": {
+      "Title": "分析任何录音",
+      "Desc": "上传任何格式的音频文件——从呼叫中心录音到Zoom会议。AI转录并评估每一次对话。"
+    },
+    "Metrics": {
+      "Title": "灵活指标",
+      "Desc": "创建具有任何评估标准的项目——问候、同理心、异议处理或您自定义的指标。无限评分自定义。"
+    },
+    "Insights": {
+      "Title": "AI 洞察",
+      "Desc": "AI发现通话中的模式——转化率下降、负面趋势、指标异常。"
+    },
+    "API": {
+      "Title": "集成API",
+      "Desc": "带项目令牌的REST API。从CRM或PBX自动发送录音，通过webhook接收结果。"
     }
   },
   "UseCases": {

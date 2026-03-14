@@ -12,21 +12,8 @@
     padding: 10px 12px;
     border-radius: var(--radius-md);
     transition: var(--transition-fast);
-
-    &.success {
-        background: color-mix(in srgb, var(--status-success) 8%, transparent);
-        border-left: 2px solid var(--status-success);
-    }
-
-    &.warning {
-        background: color-mix(in srgb, var(--status-warning) 8%, transparent);
-        border-left: 2px solid var(--status-warning);
-    }
-
-    &.info {
-        background: color-mix(in srgb, var(--accent-redesigned) 8%, transparent);
-        border-left: 2px solid var(--accent-redesigned);
-    }
+    background: color-mix(in srgb, var(--accent-redesigned) 8%, transparent);
+    border-left: 2px solid var(--accent-redesigned);
 }
 
 .insightIcon {
@@ -37,7 +24,6 @@
 
 .hint {
     opacity: 0.6;
-    cursor: pointer;
 }
 
 @keyframes fadeIn {

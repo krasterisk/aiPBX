@@ -127,15 +127,15 @@ export const useMenubarItems = () => {
             authOnly: true
           },
           {
-            path: getRouteDashboardCallRecords(),
-            Icon: AssessmentIcon,
-            text: t('Аналитика проектов'),
+            path: getRouteDashboardAIAnalytics(),
+            Icon: TimelineIcon,
+            text: t('Аналитика ботов'),
             authOnly: true
           },
           {
-            path: getRouteDashboardAIAnalytics(),
-            Icon: TimelineIcon,
-            text: t('AI Аналитика'),
+            path: getRouteDashboardCallRecords(),
+            Icon: AssessmentIcon,
+            text: t('Аналитика звонков'),
             authOnly: true
           },
         ]

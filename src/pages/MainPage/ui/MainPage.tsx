@@ -23,7 +23,10 @@ import {
   Calendar,
   ShieldCheck,
   Eye,
-  ArrowRight
+  ArrowRight,
+  FileAudio,
+  Sparkles,
+  Code
 } from 'lucide-react'
 import { LangSwitcher } from '@/entities/LangSwitcher'
 import { useNavigate } from 'react-router-dom'
@@ -296,6 +299,43 @@ const MainPage: FC = memo(() => {
               title={t('Integrations.Asterisk.Title')}
               desc={t('Integrations.Asterisk.Desc')}
               delay={0.6}
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* Speech Analytics Section */}
+      <section className={cls.section}>
+        <Container maxWidth="lg">
+          <div className={cls.sectionHeader}>
+            <motion.h2 {...fadeInUp}>{t('SpeechAnalytics.Title')}</motion.h2>
+            <motion.p {...fadeInUp}>{t('SpeechAnalytics.SubTitle')}</motion.p>
+          </div>
+
+          <div className={cls.grid} style={{ gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)' }}>
+            <FeatureCard
+              icon={FileAudio}
+              title={t('SpeechAnalytics.AnyRecording.Title')}
+              desc={t('SpeechAnalytics.AnyRecording.Desc')}
+              delay={0.1}
+            />
+            <FeatureCard
+              icon={BarChart3}
+              title={t('SpeechAnalytics.Metrics.Title')}
+              desc={t('SpeechAnalytics.Metrics.Desc')}
+              delay={0.2}
+            />
+            <FeatureCard
+              icon={Sparkles}
+              title={t('SpeechAnalytics.Insights.Title')}
+              desc={t('SpeechAnalytics.Insights.Desc')}
+              delay={0.3}
+            />
+            <FeatureCard
+              icon={Code}
+              title={t('SpeechAnalytics.API.Title')}
+              desc={t('SpeechAnalytics.API.Desc')}
+              delay={0.4}
             />
           </div>
         </Container>

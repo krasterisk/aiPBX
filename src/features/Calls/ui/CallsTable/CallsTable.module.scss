@@ -88,7 +88,7 @@
 }
 
 .DetailRow {
-    td {
+    > td {
         padding: 0 12px 12px;
         border: none;
     }
@@ -273,7 +273,7 @@
     .DetailRow {
         display: block;
 
-        td {
+        > td {
             display: block;
             width: 100%;
             padding: 0 0 16px 0 !important;

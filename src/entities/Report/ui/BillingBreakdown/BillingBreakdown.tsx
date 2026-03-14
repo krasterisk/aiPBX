@@ -6,6 +6,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Table } from '@/shared/ui/redesigned/Table/Table'
 import { BillingRecord } from '../../model/types/report'
 import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
+import cls from './BillingBreakdown.module.scss'
 
 interface BillingBreakdownProps {
     billingRecords?: BillingRecord[]
@@ -72,35 +73,35 @@ export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingB
                 cell: info => info.row.original.type === 'analytic'
                     ? '—'
                     : info.getValue().toLocaleString(),
-                footer: () => totals ? <Text text={totals.audioTokens.toLocaleString()} bold /> : null
+                footer: () => null
             }),
             helper.accessor('textTokens', {
                 header: String(t('Text токены')),
                 cell: info => info.getValue().toLocaleString(),
-                footer: () => totals ? <Text text={totals.textTokens.toLocaleString()} bold /> : null
+                footer: () => null
             }),
             helper.accessor('totalTokens', {
                 header: String(t('Всего токенов')),
                 cell: info => info.getValue().toLocaleString(),
-                footer: () => totals ? <Text text={totals.totalTokens.toLocaleString()} bold /> : null
+                footer: () => null
             }),
             helper.accessor('audioCost', {
                 header: String(t('Audio стоимость')),
                 cell: info => info.row.original.type === 'analytic'
                     ? '—'
                     : fmt(info.getValue(), userCurrency),
-                footer: () => totals ? <Text text={fmt(totals.audioCost, userCurrency)} bold /> : null
+                footer: () => null
             }),
             helper.accessor('textCost', {
                 header: String(t('Text стоимость')),
                 cell: info => fmt(info.getValue(), userCurrency),
-                footer: () => totals ? <Text text={fmt(totals.textCost, userCurrency)} bold /> : null
+                footer: () => null
             }),
             ...(hasStt ? [
                 helper.accessor('sttCost', {
                     header: String(t('STT стоимость')),
                     cell: info => fmt(info.getValue(), userCurrency),
-                    footer: () => totals ? <Text text={fmt(totals.sttCost, userCurrency)} bold /> : null
+                    footer: () => null
                 })
             ] : []),
             helper.accessor('totalCost', {
@@ -125,10 +126,12 @@ export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingB
     }
 
     return (
-        <Table
-            data={billingRecords}
-            columns={columns}
-            rowVariant="clear"
-        />
+        <div className={cls.BillingBreakdown}>
+            <Table
+                data={billingRecords}
+                columns={columns}
+                rowVariant="clear"
+            />
+        </div>
     )
 })

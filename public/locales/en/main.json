@@ -1,7 +1,7 @@
 {
   "Hero": {
     "Title": "AI PBX: The Future of Your Telephony Starts Here",
-    "SubTitle": "Combine the power of generative AI with the reliability of classic communications. Automate calls, support, and sales with natural voice dialogues.",
+    "SubTitle": "Automate calls with AI assistants and analyze the quality of any conversation. Two products — one platform.",
     "CTA_Start": "Start Now",
     "CTA_Demo": "Request Demo"
   },
@@ -75,6 +75,26 @@
     "Asterisk": {
       "Title": "Compatibility",
       "Desc": "Works with Asterisk, FreePBX, and any other system using the SIP protocol."
+    }
+  },
+  "SpeechAnalytics": {
+    "Title": "Speech Analytics",
+    "SubTitle": "Not just bots — analyze any call recording",
+    "AnyRecording": {
+      "Title": "Analyze Any Recording",
+      "Desc": "Upload audio files in any format — from call center recordings to Zoom meetings. AI transcribes and evaluates every conversation."
+    },
+    "Metrics": {
+      "Title": "Flexible Metrics",
+      "Desc": "Create projects with any evaluation criteria — greeting, empathy, objection handling, or your own custom metrics. Unlimited scoring customization."
+    },
+    "Insights": {
+      "Title": "AI Insights",
+      "Desc": "AI finds patterns in your calls — conversion drops, negative trends, metric anomalies."
+    },
+    "API": {
+      "Title": "API for Integrations",
+      "Desc": "REST API with project tokens. Send recordings from your CRM or PBX automatically, receive results via webhook."
     }
   },
   "UseCases": {

@@ -1,1 +1,10 @@
-// BillingBreakdown now uses shared Table component — no custom styles needed
+@import '@/app/styles/variables/mixins';
+
+.BillingBreakdown {
+    // Force container to not grow beyond parent even if children want more
+    width: 0;
+    min-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    @include custom-scrollbar;
+}

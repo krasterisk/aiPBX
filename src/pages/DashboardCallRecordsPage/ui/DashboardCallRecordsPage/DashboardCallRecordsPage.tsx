@@ -47,6 +47,8 @@ const DashboardCallRecordsContent = memo(() => {
                 data={dashboardData}
                 isLoading={isLoading || isFetching}
                 projectId={projectId}
+                startDate={startDate}
+                endDate={endDate}
                 onChangeProjectId={onChangeProjectId}
                 onOpenDashboardBuilder={handleOpenBuilder}
             />
