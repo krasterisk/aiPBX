@@ -298,8 +298,8 @@ export const reportApi = rtkApi.injectEndpoints({
       query: () => '/operator-analytics/batches'
     }),
     getOperatorInsights: build.query<
-      { insights: string[]; generatedAt: string },
-      { startDate?: string; endDate?: string; operatorName?: string; projectId?: string }
+      { insights: string[], generatedAt: string },
+      { startDate?: string, endDate?: string, operatorName?: string, projectId?: string }
     >({
       query: (args) => ({
         url: '/operator-analytics/insights',
