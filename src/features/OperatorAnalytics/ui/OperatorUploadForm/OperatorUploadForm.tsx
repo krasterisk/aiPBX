@@ -92,7 +92,6 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted }: Ope
         if (projectId) formData.append('projectId', projectId)
         try {
             const result = await uploadFiles(formData).unwrap()
-            console.log('[Upload] result:', JSON.stringify(result, null, 2))
 
             if (result && 'batchId' in result && result.batchId) {
                 toast.success(`${t('В работу ушло')}: ${(result).items.length} ${t('файлов')}`)

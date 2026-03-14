@@ -30,7 +30,7 @@ export interface MultiBatchState {
     total: number
 }
 
-const POLL_INTERVAL = 3000
+const POLL_INTERVAL = 5000
 
 export interface UseBatchProgressReturn extends MultiBatchState {
     startPolling: (batchId: string) => void
@@ -42,8 +42,9 @@ export function useBatchProgress(): UseBatchProgressReturn {
     const dispatch = useAppDispatch()
     const [fetchBatchStatus] = useLazyGetBatchStatus()
     const [fetchActiveBatches] = useLazyGetActiveBatches()
-    const intervalsRef = useRef<Map<string, ReturnType<typeof setInterval>>>(new Map())
+    const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
     const mountedRef = useRef(true)
+    const batchIdsRef = useRef<Set<string>>(new Set())
 
     const [batches, setBatches] = useState<Map<string, SingleBatchState>>(new Map())
 
@@ -57,32 +58,23 @@ export function useBatchProgress(): UseBatchProgressReturn {
     const failed = batchArray.reduce((s, b) => s + b.failed, 0)
     const progress = total > 0 ? Math.round(((completed + failed) / total) * 100) : 0
 
-    // DEBUG
-    console.log('[BatchProgress] batches:', batchArray.length, 'isActive:', isActive, 'total:', total, 'completed:', completed)
-
-    // ─── stop polling for one batch ───────────────────────────────────
-    const stopOne = useCallback((batchId: string) => {
-        const timer = intervalsRef.current.get(batchId)
-        if (timer) {
-            clearInterval(timer)
-            intervalsRef.current.delete(batchId)
-        }
-    }, [])
-
-    // ─── stop all polling ─────────────────────────────────────────────
+    // ─── stop polling ─────────────────────────────────────────────────
     const stopAll = useCallback(() => {
-        intervalsRef.current.forEach(timer => { clearInterval(timer) })
-        intervalsRef.current.clear()
+        if (timerRef.current) {
+            clearInterval(timerRef.current)
+            timerRef.current = null
+        }
     }, [])
 
     // ─── dismiss (hide all) ───────────────────────────────────────────
     const dismiss = useCallback(() => {
         stopAll()
+        batchIdsRef.current.clear()
         setBatches(new Map())
     }, [stopAll])
 
     // ─── poll one batch ───────────────────────────────────────────────
-    const pollOne = useCallback(async (batchId: string) => {
+    const pollOneBatch = useCallback(async (batchId: string) => {
         try {
             const status: BatchStatusResponse = await fetchBatchStatus(batchId).unwrap()
             if (!mountedRef.current) return
@@ -104,7 +96,7 @@ export function useBatchProgress(): UseBatchProgressReturn {
             })
 
             if (finished) {
-                stopOne(batchId)
+                batchIdsRef.current.delete(batchId)
 
                 const msg = t('Обработка завершена: {{completed}} из {{total}} файлов', {
                     completed: status.completed,
@@ -120,19 +112,43 @@ export function useBatchProgress(): UseBatchProgressReturn {
                 dispatch(reportApi.util.invalidateTags(['OperatorAnalytics', 'Reports']))
             }
         } catch (err) {
-            console.error('Batch polling error:', err)
+            // Silently skip 429/network errors, will retry on next tick
         }
-    }, [fetchBatchStatus, stopOne, t, dispatch])
+    }, [fetchBatchStatus, t, dispatch])
 
-    // ─── start polling for one batch ──────────────────────────────────
-    const startPollingOne = useCallback((batchId: string, initial?: SingleBatchState) => {
-        // Don't start if already polling this batch
-        if (intervalsRef.current.has(batchId)) return
+    // ─── round-robin poll cycle ────────────────────────────────────────
+    // Instead of one setInterval per batch, use a single timer that
+    // sequentially polls each active batch with a gap between requests.
+    const pollCycleRef = useRef(0)
+
+    const runPollTick = useCallback(() => {
+        const ids = Array.from(batchIdsRef.current)
+        if (ids.length === 0) return
+
+        // Round-robin: poll one batch per tick
+        const idx = pollCycleRef.current % ids.length
+        pollCycleRef.current++
+        pollOneBatch(ids[idx])
+    }, [pollOneBatch])
+
+    // ─── ensure timer is running ──────────────────────────────────────
+    const ensureTimer = useCallback(() => {
+        if (timerRef.current) return
+        // Immediate first poll
+        runPollTick()
+        timerRef.current = setInterval(runPollTick, POLL_INTERVAL)
+    }, [runPollTick])
+
+    // ─── public: start polling (called from upload) ───────────────────
+    const startPolling = useCallback((batchId: string) => {
+        if (batchIdsRef.current.has(batchId)) return
+
+        batchIdsRef.current.add(batchId)
 
         setBatches(prev => {
             const next = new Map(prev)
             if (!next.has(batchId)) {
-                next.set(batchId, initial ?? {
+                next.set(batchId, {
                     batchId,
                     progress: 0,
                     completed: 0,
@@ -145,17 +161,16 @@ export function useBatchProgress(): UseBatchProgressReturn {
             return next
         })
 
-        // Immediate first poll
-        pollOne(batchId)
+        ensureTimer()
+    }, [ensureTimer])
 
-        const timer = setInterval(() => { pollOne(batchId) }, POLL_INTERVAL)
-        intervalsRef.current.set(batchId, timer)
-    }, [pollOne])
-
-    // ─── public: start polling (called from upload) ───────────────────
-    const startPolling = useCallback((batchId: string) => {
-        startPollingOne(batchId)
-    }, [startPollingOne])
+    // ─── auto-stop when all finished ──────────────────────────────────
+    useEffect(() => {
+        if (batchIdsRef.current.size === 0 && timerRef.current) {
+            clearInterval(timerRef.current)
+            timerRef.current = null
+        }
+    })
 
     // ─── on mount: restore unfinished batches ─────────────────────────
     useEffect(() => {
@@ -164,21 +179,30 @@ export function useBatchProgress(): UseBatchProgressReturn {
         const restore = async () => {
             try {
                 const allBatches = await fetchActiveBatches().unwrap()
-                console.log('[BatchProgress] restore: allBatches =', allBatches)
                 if (!mountedRef.current) return
 
                 for (const b of allBatches) {
                     if (!b.finishedAt) {
-                        startPollingOne(b.batchId, {
-                            batchId: b.batchId,
-                            progress: b.progress,
-                            completed: b.completed,
-                            failed: b.failed,
-                            total: b.total,
-                            items: b.items,
-                            finished: false
+                        batchIdsRef.current.add(b.batchId)
+
+                        setBatches(prev => {
+                            const next = new Map(prev)
+                            next.set(b.batchId, {
+                                batchId: b.batchId,
+                                progress: b.progress,
+                                completed: b.completed,
+                                failed: b.failed,
+                                total: b.total,
+                                items: b.items,
+                                finished: false
+                            })
+                            return next
                         })
                     }
+                }
+
+                if (batchIdsRef.current.size > 0) {
+                    ensureTimer()
                 }
             } catch (err) {
                 console.error('Failed to restore active batches:', err)
