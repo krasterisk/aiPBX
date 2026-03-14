@@ -87,7 +87,7 @@ export function useBatchProgress(): UseBatchProgressReturn {
             const status: BatchStatusResponse = await fetchBatchStatus(batchId).unwrap()
             if (!mountedRef.current) return
 
-            const finished = status.finishedAt !== null
+            const finished = Boolean(status.finishedAt)
 
             setBatches(prev => {
                 const next = new Map(prev)
@@ -168,7 +168,7 @@ export function useBatchProgress(): UseBatchProgressReturn {
                 if (!mountedRef.current) return
 
                 for (const b of allBatches) {
-                    if (!b.finishedAt) {
+                    if (!Boolean(b.finishedAt)) {
                         startPollingOne(b.batchId, {
                             batchId: b.batchId,
                             progress: b.progress,
