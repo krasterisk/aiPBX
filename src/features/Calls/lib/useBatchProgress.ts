@@ -57,6 +57,9 @@ export function useBatchProgress(): UseBatchProgressReturn {
     const failed = batchArray.reduce((s, b) => s + b.failed, 0)
     const progress = total > 0 ? Math.round(((completed + failed) / total) * 100) : 0
 
+    // DEBUG
+    console.log('[BatchProgress] batches:', batchArray.length, 'isActive:', isActive, 'total:', total, 'completed:', completed)
+
     // ─── stop polling for one batch ───────────────────────────────────
     const stopOne = useCallback((batchId: string) => {
         const timer = intervalsRef.current.get(batchId)
@@ -161,6 +164,7 @@ export function useBatchProgress(): UseBatchProgressReturn {
         const restore = async () => {
             try {
                 const allBatches = await fetchActiveBatches().unwrap()
+                console.log('[BatchProgress] restore: allBatches =', allBatches)
                 if (!mountedRef.current) return
 
                 for (const b of allBatches) {
