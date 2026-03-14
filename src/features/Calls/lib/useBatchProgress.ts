@@ -168,7 +168,7 @@ export function useBatchProgress(): UseBatchProgressReturn {
                 if (!mountedRef.current) return
 
                 for (const b of allBatches) {
-                    if (!Boolean(b.finishedAt)) {
+                    if (!b.finishedAt) {
                         startPollingOne(b.batchId, {
                             batchId: b.batchId,
                             progress: b.progress,
