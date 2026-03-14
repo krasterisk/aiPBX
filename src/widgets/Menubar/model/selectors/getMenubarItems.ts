@@ -56,11 +56,64 @@ export const useMenubarItems = () => {
   if (userData) {
     menubarItemsList.push(
       {
-        path: getRouteAssistants(),
+        path: '/ai-bots',
         Icon: SmartToyIcon,
-        text: t('Ассистенты'),
-        authOnly: true
+        text: t('AI Боты'),
+        authOnly: true,
+        subItems: [
+          {
+            path: getRouteAssistants(),
+            Icon: SmartToyIcon,
+            text: t('Ассистенты'),
+            authOnly: true
+          },
+          {
+            path: getRoutePlayground(),
+            Icon: ScienceIcon,
+            text: t('Песочница'),
+            authOnly: true
+          },
+          {
+            path: getRouteTools(),
+            Icon: BuildIcon,
+            text: t('Функции'),
+            authOnly: true
+          },
+          {
+            path: getRouteMcpServers(),
+            Icon: HubIcon,
+            text: t('MCP Серверы'),
+            authOnly: true
+          },
+          {
+            path: '/publish',
+            Icon: PublicIcon,
+            text: t('Публикация'),
+            authOnly: true,
+            subItems: [
+              {
+                path: getRoutePublishSipUris(),
+                Icon: SendIcon,
+                text: t('SIPs'),
+                authOnly: true
+              },
+              {
+                path: getRouteSipTrunks(),
+                Icon: PhoneForwardedIcon,
+                text: t('SIP Trunks'),
+                authOnly: true
+              },
+              {
+                path: getRoutePublishWidgets(),
+                Icon: SmartToyIcon,
+                text: t('Виджеты'),
+                authOnly: true
+              }
+            ]
+          },
+        ]
       },
+
       {
         path: getRouteDashboard(),
         Icon: DashboardIcon,
@@ -113,51 +166,6 @@ export const useMenubarItems = () => {
           }
         ]
       },
-      {
-        path: getRoutePlayground(),
-        Icon: ScienceIcon,
-        text: t('Playground'),
-        authOnly: true
-      },
-      {
-        path: getRouteTools(),
-        Icon: BuildIcon,
-        text: t('Функции'),
-        authOnly: true
-      },
-      {
-        path: getRouteMcpServers(),
-        Icon: HubIcon,
-        text: t('MCP Серверы'),
-        authOnly: true
-      },
-      {
-        path: '/publish',
-        Icon: PublicIcon,
-        text: t('Публикация'),
-        authOnly: true,
-        subItems: [
-          {
-            path: getRoutePublishSipUris(),
-            Icon: SendIcon,
-            text: t('SIPs'),
-            authOnly: true
-          },
-          {
-            path: getRouteSipTrunks(),
-            Icon: PhoneForwardedIcon,
-            text: t('SIP Trunks'),
-            authOnly: true
-          },
-          {
-            path: getRoutePublishWidgets(),
-            Icon: SmartToyIcon,
-            text: t('Виджеты'),
-            authOnly: true
-          }
-        ]
-      },
-
       {
         path: getRoutePayment(),
         Icon: PaymentsIcon,

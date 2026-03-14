@@ -1,65 +1,107 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
-import { useLazyGetBatchStatus, reportApi, BatchItemStatus } from '@/entities/Report'
+import {
+    useLazyGetBatchStatus,
+    useLazyGetActiveBatches,
+    reportApi,
+    BatchItemStatus,
+    BatchStatusResponse
+} from '@/entities/Report'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 
-export interface BatchProgressState {
-    batchId: string | null
+export interface SingleBatchState {
+    batchId: string
     progress: number
     completed: number
     failed: number
     total: number
-    isActive: boolean
     items: Array<{ id: string, filename: string, status: BatchItemStatus }>
+    finished: boolean
+}
+
+export interface MultiBatchState {
+    batches: SingleBatchState[]
+    isActive: boolean
+    /** Aggregated across all active batches */
+    progress: number
+    completed: number
+    failed: number
+    total: number
 }
 
 const POLL_INTERVAL = 3000
 
-export function useBatchProgress() {
+export interface UseBatchProgressReturn extends MultiBatchState {
+    startPolling: (batchId: string) => void
+    dismiss: () => void
+}
+
+export function useBatchProgress(): UseBatchProgressReturn {
     const { t } = useTranslation('reports')
     const dispatch = useAppDispatch()
     const [fetchBatchStatus] = useLazyGetBatchStatus()
-    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+    const [fetchActiveBatches] = useLazyGetActiveBatches()
+    const intervalsRef = useRef<Map<string, ReturnType<typeof setInterval>>>(new Map())
+    const mountedRef = useRef(true)
 
-    const [state, setState] = useState<BatchProgressState>({
-        batchId: null,
-        progress: 0,
-        completed: 0,
-        failed: 0,
-        total: 0,
-        isActive: false,
-        items: []
-    })
+    const [batches, setBatches] = useState<Map<string, SingleBatchState>>(new Map())
 
-    const stopPolling = useCallback(() => {
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current)
-            intervalRef.current = null
+    // ─── derived aggregated state ─────────────────────────────────────
+    const batchArray = Array.from(batches.values())
+    const activeBatches = batchArray.filter(b => !b.finished)
+    const isActive = activeBatches.length > 0
+
+    const total = batchArray.reduce((s, b) => s + b.total, 0)
+    const completed = batchArray.reduce((s, b) => s + b.completed, 0)
+    const failed = batchArray.reduce((s, b) => s + b.failed, 0)
+    const progress = total > 0 ? Math.round(((completed + failed) / total) * 100) : 0
+
+    // ─── stop polling for one batch ───────────────────────────────────
+    const stopOne = useCallback((batchId: string) => {
+        const timer = intervalsRef.current.get(batchId)
+        if (timer) {
+            clearInterval(timer)
+            intervalsRef.current.delete(batchId)
         }
     }, [])
 
+    // ─── stop all polling ─────────────────────────────────────────────
+    const stopAll = useCallback(() => {
+        intervalsRef.current.forEach(timer => { clearInterval(timer) })
+        intervalsRef.current.clear()
+    }, [])
+
+    // ─── dismiss (hide all) ───────────────────────────────────────────
     const dismiss = useCallback(() => {
-        stopPolling()
-        setState(prev => ({ ...prev, isActive: false, batchId: null }))
-    }, [stopPolling])
+        stopAll()
+        setBatches(new Map())
+    }, [stopAll])
 
-    const poll = useCallback(async (batchId: string) => {
+    // ─── poll one batch ───────────────────────────────────────────────
+    const pollOne = useCallback(async (batchId: string) => {
         try {
-            const status = await fetchBatchStatus(batchId).unwrap()
+            const status: BatchStatusResponse = await fetchBatchStatus(batchId).unwrap()
+            if (!mountedRef.current) return
 
-            setState({
-                batchId,
-                progress: status.progress,
-                completed: status.completed,
-                failed: status.failed,
-                total: status.total,
-                isActive: true,
-                items: status.items
+            const finished = status.finishedAt !== null
+
+            setBatches(prev => {
+                const next = new Map(prev)
+                next.set(batchId, {
+                    batchId,
+                    progress: status.progress,
+                    completed: status.completed,
+                    failed: status.failed,
+                    total: status.total,
+                    items: status.items,
+                    finished
+                })
+                return next
             })
 
-            if (status.finishedAt) {
-                stopPolling()
+            if (finished) {
+                stopOne(batchId)
 
                 const msg = t('Обработка завершена: {{completed}} из {{total}} файлов', {
                     completed: status.completed,
@@ -72,42 +114,89 @@ export function useBatchProgress() {
                     toast.success(msg)
                 }
 
-                // Invalidate caches so the table refreshes
                 dispatch(reportApi.util.invalidateTags(['OperatorAnalytics', 'Reports']))
             }
         } catch (err) {
             console.error('Batch polling error:', err)
         }
-    }, [fetchBatchStatus, stopPolling, t, dispatch])
+    }, [fetchBatchStatus, stopOne, t, dispatch])
 
-    const startPolling = useCallback((batchId: string) => {
-        stopPolling()
+    // ─── start polling for one batch ──────────────────────────────────
+    const startPollingOne = useCallback((batchId: string, initial?: SingleBatchState) => {
+        // Don't start if already polling this batch
+        if (intervalsRef.current.has(batchId)) return
 
-        setState({
-            batchId,
-            progress: 0,
-            completed: 0,
-            failed: 0,
-            total: 0,
-            isActive: true,
-            items: []
+        setBatches(prev => {
+            const next = new Map(prev)
+            if (!next.has(batchId)) {
+                next.set(batchId, initial ?? {
+                    batchId,
+                    progress: 0,
+                    completed: 0,
+                    failed: 0,
+                    total: 0,
+                    items: [],
+                    finished: false
+                })
+            }
+            return next
         })
 
         // Immediate first poll
-        poll(batchId)
+        pollOne(batchId)
 
-        intervalRef.current = setInterval(() => {
-            poll(batchId)
-        }, POLL_INTERVAL)
-    }, [stopPolling, poll])
+        const timer = setInterval(() => { pollOne(batchId) }, POLL_INTERVAL)
+        intervalsRef.current.set(batchId, timer)
+    }, [pollOne])
 
-    // Cleanup on unmount
+    // ─── public: start polling (called from upload) ───────────────────
+    const startPolling = useCallback((batchId: string) => {
+        startPollingOne(batchId)
+    }, [startPollingOne])
+
+    // ─── on mount: restore unfinished batches ─────────────────────────
     useEffect(() => {
-        return () => { stopPolling() }
-    }, [stopPolling])
+        mountedRef.current = true
+
+        const restore = async () => {
+            try {
+                const allBatches = await fetchActiveBatches().unwrap()
+                if (!mountedRef.current) return
+
+                for (const b of allBatches) {
+                    if (!b.finishedAt) {
+                        startPollingOne(b.batchId, {
+                            batchId: b.batchId,
+                            progress: b.progress,
+                            completed: b.completed,
+                            failed: b.failed,
+                            total: b.total,
+                            items: b.items,
+                            finished: false
+                        })
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to restore active batches:', err)
+            }
+        }
+
+        restore()
+
+        return () => {
+            mountedRef.current = false
+            stopAll()
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return {
-        ...state,
+        batches: batchArray,
+        isActive,
+        progress,
+        completed,
+        failed,
+        total,
         startPolling,
         dismiss
     }

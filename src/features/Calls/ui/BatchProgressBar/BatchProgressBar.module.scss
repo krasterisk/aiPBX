@@ -34,6 +34,10 @@
     margin-top: 6px;
 }
 
+.multiBar {
+    margin-top: 6px;
+}
+
 @keyframes spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
@@ -42,5 +46,10 @@
 .spinner {
     animation: spin 1.2s linear infinite;
     color: var(--accent-redesigned, #7c4dff);
+    flex-shrink: 0;
+}
+
+.doneIcon {
+    color: #4caf50;
     flex-shrink: 0;
 }

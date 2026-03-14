@@ -76,7 +76,8 @@ export {
   useRevokeOperatorApiToken,
   useDeleteOperatorApiToken,
   useCreateCallAnalytics,
-  useLazyGetBatchStatus
+  useLazyGetBatchStatus,
+  useLazyGetActiveBatches
 } from './api/reportApi'
 
 export { ReportExpandedPanel } from './ui/ReportExpandedPanel/ReportExpandedPanel'

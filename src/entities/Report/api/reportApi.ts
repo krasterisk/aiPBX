@@ -293,6 +293,9 @@ export const reportApi = rtkApi.injectEndpoints({
     }),
     getBatchStatus: build.query<BatchStatusResponse, string>({
       query: (batchId) => `/operator-analytics/batch/${batchId}`
+    }),
+    getActiveBatches: build.query<BatchStatusResponse[], void>({
+      query: () => '/operator-analytics/batches'
     })
   })
 })
@@ -324,3 +327,4 @@ export const useListOperatorApiTokens = reportApi.useListOperatorApiTokensQuery
 export const useRevokeOperatorApiToken = reportApi.useRevokeOperatorApiTokenMutation
 export const useDeleteOperatorApiToken = reportApi.useDeleteOperatorApiTokenMutation
 export const useLazyGetBatchStatus = reportApi.useLazyGetBatchStatusQuery
+export const useLazyGetActiveBatches = reportApi.useLazyGetActiveBatchesQuery

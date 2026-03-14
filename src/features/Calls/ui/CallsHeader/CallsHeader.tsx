@@ -12,6 +12,7 @@ import UploadFileIcon from '@mui/icons-material/UploadFile'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import { BatchProgressBar } from '../BatchProgressBar/BatchProgressBar'
+import type { UseBatchProgressReturn } from '../../lib/useBatchProgress'
 
 interface CallsHeaderProps {
     tab?: string
@@ -27,14 +28,7 @@ interface CallsHeaderProps {
     onUpload: () => void
     onExport: () => void
     onChangeSource?: (v: CdrSource | undefined) => void
-    batchProgress?: {
-        isActive: boolean
-        progress: number
-        completed: number
-        failed: number
-        total: number
-        dismiss: () => void
-    }
+    batchProgress?: UseBatchProgressReturn
 }
 
 export const CallsHeader = memo((props: CallsHeaderProps) => {
@@ -74,6 +68,7 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
 
             {batchProgress?.isActive && (
                 <BatchProgressBar
+                    batches={batchProgress.batches}
                     progress={batchProgress.progress}
                     completed={batchProgress.completed}
                     failed={batchProgress.failed}
