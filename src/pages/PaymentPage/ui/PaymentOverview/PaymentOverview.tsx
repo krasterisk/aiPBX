@@ -13,6 +13,7 @@ import { Modal } from '@/shared/ui/redesigned/Modal'
 import HistoryIcon from '@mui/icons-material/History'
 import BusinessIcon from '@mui/icons-material/Business'
 import DataUsageIcon from '@mui/icons-material/DataUsage'
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import { Plus } from 'lucide-react'
 
 interface PaymentOverviewProps {
@@ -83,13 +84,21 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
                     className={cls.quickActionCard}
                     onClick={() => { onTabChange(1) }}
                     variant="glass-action"
+                    addonLeft={<ReceiptLongIcon fontSize="small" />}
+                >
+                    {t('Usage')}
+                </Button>
+                <Button
+                    className={cls.quickActionCard}
+                    onClick={() => { onTabChange(2) }}
+                    variant="glass-action"
                     addonLeft={<HistoryIcon fontSize="small" />}
                 >
                     {t('История платежей')}
                 </Button>
                 <Button
                     className={cls.quickActionCard}
-                    onClick={() => { onTabChange(2) }}
+                    onClick={() => { onTabChange(3) }}
                     variant="glass-action"
                     addonLeft={<DataUsageIcon fontSize="small" />}
                 >
@@ -97,7 +106,7 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
                 </Button>
                 <Button
                     className={cls.quickActionCard}
-                    onClick={() => { onTabChange(3) }}
+                    onClick={() => { onTabChange(4) }}
                     variant="glass-action"
                     addonLeft={<BusinessIcon fontSize="small" />}
                 >

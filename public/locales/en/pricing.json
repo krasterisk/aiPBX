@@ -1,0 +1,104 @@
+{
+  "Hero": {
+    "Title": "Transparent Pricing, No Hidden Fees",
+    "SubTitle": "Pay only for what you use. No subscriptions, minimum packages, or monthly fees."
+  },
+  "BackToMain": "Home",
+  "Loading": "Loading prices...",
+  "Error": "Failed to load prices. Please try again later.",
+  "RateNote": "Prices converted at the rate of 1 USD = {{rate}} {{currency}}",
+  "Services": {
+    "realtime": {
+      "Label": "Voice AI",
+      "Title": "Realtime AI",
+      "Desc": "Real-time voice AI assistant. Handles inbound and outbound calls with natural human-like dialogue.",
+      "Unit": "1M tokens",
+      "UnitFull": "per 1,000,000 tokens",
+      "TableDesc": "Voice dialogue processing cost: speech recognition, LLM response generation, and voice synthesis — all included in one token-based price.",
+      "Features": [
+        "Inbound and outbound call handling",
+        "Natural voice dialogue powered by LLM",
+        "Includes STT + generation + TTS",
+        "Works with Asterisk, FreePBX, and SIP"
+      ]
+    },
+    "text": {
+      "Label": "Text AI",
+      "Title": "Text AI",
+      "Desc": "Text-based AI assistant for chats, messengers, and WebRTC widgets. Processes customer text inquiries.",
+      "Unit": "1M tokens",
+      "UnitFull": "per 1,000,000 tokens",
+      "TableDesc": "Text dialogue processing via LLM: chat widgets, messengers, WebRTC. Billed by the number of input and output tokens.",
+      "Features": [
+        "Chat bots and messengers",
+        "WebRTC widgets for websites",
+        "Context-aware LLM dialogues",
+        "CRM integration via API"
+      ]
+    },
+    "analytic": {
+      "Label": "Speech Analytics",
+      "Title": "Speech Analytics",
+      "Desc": "AI-powered analysis of transcribed call recordings. Quality scoring, metric evaluation, and insights extraction.",
+      "Unit": "1M tokens",
+      "UnitFull": "per 1,000,000 tokens",
+      "TableDesc": "LLM analysis of call transcriptions: scoring by metrics (empathy, greeting, objection handling, etc.), insights generation and recommendations.",
+      "Features": [
+        "Analyze any call recordings",
+        "Flexible metrics and scoring criteria",
+        "AI insights and pattern detection",
+        "REST API for automation"
+      ]
+    },
+    "stt": {
+      "Label": "Speech Recognition",
+      "Title": "Speech-to-Text",
+      "Desc": "Convert audio recordings to text. High-accuracy transcription for subsequent analysis.",
+      "Unit": "min",
+      "UnitFull": "per 1 minute of recording",
+      "TableDesc": "Audio-to-text transcription. Billed per minute of processed audio. Supports multiple languages and formats.",
+      "Features": [
+        "All popular audio formats supported",
+        "High recognition accuracy",
+        "Multi-language support",
+        "Speaker diarization"
+      ]
+    }
+  },
+  "DetailedTable": {
+    "Title": "Detailed Price Breakdown",
+    "SubTitle": "Complete pricing for each service with detailed billing unit descriptions"
+  },
+  "Table": {
+    "Service": "Service",
+    "Price": "Price",
+    "Unit": "Unit",
+    "Description": "Description"
+  },
+  "FAQ": {
+    "Title": "Frequently Asked Questions",
+    "Q1": {
+      "Question": "What are tokens and how are they counted?",
+      "Answer": "A token is a unit of text, roughly 3–4 characters or about ¾ of a word in English. For voice dialogues, tokens from both the recognized speech (input) and the generated response (output) are counted. 1 million tokens ≈ 750,000 words."
+    },
+    "Q2": {
+      "Question": "What's the difference between Realtime AI and Text AI?",
+      "Answer": "Realtime AI handles voice calls — including speech recognition (STT), LLM response generation, and text-to-speech synthesis (TTS). Text AI works with text in chats and widgets only, which is why it's more affordable."
+    },
+    "Q3": {
+      "Question": "How is Speech Analytics billed?",
+      "Answer": "First, the recording is transcribed (billed under STT — per minute). Then the resulting transcription is analyzed via LLM (billed under Analytics — per token). These are two independent steps with different pricing."
+    },
+    "Q4": {
+      "Question": "Is there a minimum payment or subscription?",
+      "Answer": "No. You pay only for actual usage. There are no monthly fees, minimum packages, or mandatory subscriptions. Top up your balance and use services as needed."
+    }
+  },
+  "CTA": {
+    "Title": "Ready to Get Started?",
+    "SubTitle": "Sign up and start using AI PBX today. Pay only for what you use.",
+    "Button": "Start Now"
+  },
+  "PromoLabel": "Limited offer!",
+  "Footer": "© {{year}} AI PBX. All rights reserved."
+}

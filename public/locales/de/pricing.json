@@ -1,0 +1,104 @@
+{
+  "Hero": {
+    "Title": "Transparente Preise ohne versteckte Gebühren",
+    "SubTitle": "Zahlen Sie nur für das, was Sie nutzen. Keine Abonnements, Mindestpakete oder monatlichen Gebühren."
+  },
+  "BackToMain": "Startseite",
+  "Loading": "Preise werden geladen...",
+  "Error": "Preise konnten nicht geladen werden. Bitte versuchen Sie es später erneut.",
+  "RateNote": "Preise umgerechnet zum Kurs von 1 USD = {{rate}} {{currency}}",
+  "Services": {
+    "realtime": {
+      "Label": "Sprach-KI",
+      "Title": "Realtime AI",
+      "Desc": "Echtzeit-Sprach-KI-Assistent. Verarbeitet ein- und ausgehende Anrufe mit natürlichem Dialog.",
+      "Unit": "1M Token",
+      "UnitFull": "pro 1.000.000 Token",
+      "TableDesc": "Kosten für die Sprachdialogverarbeitung: Spracherkennung, LLM-Antwortgenerierung und Sprachsynthese — alles in einem Token-basierten Preis enthalten.",
+      "Features": [
+        "Ein- und ausgehende Anrufbearbeitung",
+        "Natürlicher Sprachdialog mit LLM",
+        "Inklusive STT + Generierung + TTS",
+        "Kompatibel mit Asterisk, FreePBX und SIP"
+      ]
+    },
+    "text": {
+      "Label": "Text-KI",
+      "Title": "Text AI",
+      "Desc": "Textbasierter KI-Assistent für Chats, Messenger und WebRTC-Widgets. Verarbeitet Kundenanfragen per Text.",
+      "Unit": "1M Token",
+      "UnitFull": "pro 1.000.000 Token",
+      "TableDesc": "Textdialogverarbeitung über LLM: Chat-Widgets, Messenger, WebRTC. Abrechnung nach Anzahl der Ein- und Ausgabe-Token.",
+      "Features": [
+        "Chatbots und Messenger",
+        "WebRTC-Widgets für Websites",
+        "Kontextbezogene LLM-Dialoge",
+        "CRM-Integration über API"
+      ]
+    },
+    "analytic": {
+      "Label": "Sprachanalyse",
+      "Title": "Speech Analytics",
+      "Desc": "KI-gestützte Analyse transkribierter Gesprächsaufnahmen. Qualitätsbewertung, Metrik-Scoring und Erkenntnisgewinnung.",
+      "Unit": "1M Token",
+      "UnitFull": "pro 1.000.000 Token",
+      "TableDesc": "LLM-Analyse von Gesprächstranskriptionen: Bewertung nach Metriken (Empathie, Begrüßung, Einwandbehandlung usw.), Generierung von Erkenntnissen und Empfehlungen.",
+      "Features": [
+        "Analyse beliebiger Gesprächsaufnahmen",
+        "Flexible Metriken und Bewertungskriterien",
+        "KI-Erkenntnisse und Mustererkennung",
+        "REST-API für Automatisierung"
+      ]
+    },
+    "stt": {
+      "Label": "Spracherkennung",
+      "Title": "Speech-to-Text",
+      "Desc": "Umwandlung von Audioaufnahmen in Text. Hochpräzise Transkription für nachfolgende Analyse.",
+      "Unit": "Min",
+      "UnitFull": "pro 1 Minute Aufnahme",
+      "TableDesc": "Audio-zu-Text-Transkription. Abrechnung pro Minute verarbeiteter Aufnahme. Unterstützung vieler Sprachen und Formate.",
+      "Features": [
+        "Alle gängigen Audioformate unterstützt",
+        "Hohe Erkennungsgenauigkeit",
+        "Mehrsprachige Unterstützung",
+        "Sprechererkennung (Diarisierung)"
+      ]
+    }
+  },
+  "DetailedTable": {
+    "Title": "Detaillierte Preisübersicht",
+    "SubTitle": "Vollständige Preise für jeden Service mit detaillierten Abrechnungseinheiten"
+  },
+  "Table": {
+    "Service": "Service",
+    "Price": "Preis",
+    "Unit": "Einheit",
+    "Description": "Beschreibung"
+  },
+  "FAQ": {
+    "Title": "Häufig gestellte Fragen",
+    "Q1": {
+      "Question": "Was sind Token und wie werden sie gezählt?",
+      "Answer": "Ein Token ist eine Texteinheit, ungefähr 3–4 Zeichen oder etwa ¾ eines Wortes. Bei Sprachdialogen werden Token sowohl aus der erkannten Sprache (Eingabe) als auch der generierten Antwort (Ausgabe) gezählt. 1 Million Token ≈ 750.000 Wörter."
+    },
+    "Q2": {
+      "Question": "Was ist der Unterschied zwischen Realtime AI und Text AI?",
+      "Answer": "Realtime AI verarbeitet Sprachanrufe — einschließlich Spracherkennung (STT), LLM-Antwortgenerierung und Sprachsynthese (TTS). Text AI arbeitet nur mit Text in Chats und Widgets, weshalb es günstiger ist."
+    },
+    "Q3": {
+      "Question": "Wie wird Speech Analytics abgerechnet?",
+      "Answer": "Zuerst wird die Aufnahme transkribiert (abgerechnet unter STT — pro Minute). Dann wird die Transkription über LLM analysiert (abgerechnet unter Analytics — pro Token). Das sind zwei unabhängige Schritte mit unterschiedlichen Preisen."
+    },
+    "Q4": {
+      "Question": "Gibt es eine Mindestzahlung oder ein Abonnement?",
+      "Answer": "Nein. Sie zahlen nur für die tatsächliche Nutzung. Es gibt keine monatlichen Gebühren, Mindestpakete oder Pflichtabonnements. Laden Sie Ihr Guthaben auf und nutzen Sie die Services nach Bedarf."
+    }
+  },
+  "CTA": {
+    "Title": "Bereit zum Start?",
+    "SubTitle": "Registrieren Sie sich und nutzen Sie AI PBX noch heute. Zahlen Sie nur für die Nutzung.",
+    "Button": "Jetzt starten"
+  },
+  "PromoLabel": "Sonderaktion!",
+  "Footer": "© {{year}} AI PBX. Alle Rechte vorbehalten."
+}

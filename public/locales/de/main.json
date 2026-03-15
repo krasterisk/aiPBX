@@ -135,7 +135,9 @@
     "Button": "Jetzt starten"
   },
   "Login": "Anmelden",
+  "Pricing": "Preise",
   "Footer": {
-    "Copyright": "© {{year}} AI PBX. Alle Rechte vorbehalten."
+    "Copyright": "© {{year}} AI PBX. Alle Rechte vorbehalten.",
+    "Legal": "Rechtliches & Richtlinien"
   }
 }

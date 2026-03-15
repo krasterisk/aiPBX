@@ -1,0 +1,104 @@
+{
+  "Hero": {
+    "Title": "透明定价，无隐藏费用",
+    "SubTitle": "按使用量付费。无订阅、最低消费或月费。"
+  },
+  "BackToMain": "首页",
+  "Loading": "加载价格中...",
+  "Error": "无法加载价格，请稍后再试。",
+  "RateNote": "价格按 1 USD = {{rate}} {{currency}} 的汇率换算",
+  "Services": {
+    "realtime": {
+      "Label": "语音AI",
+      "Title": "Realtime AI",
+      "Desc": "实时语音AI助手。处理来电和去电，进行自然流畅的对话。",
+      "Unit": "100万令牌",
+      "UnitFull": "每 1,000,000 令牌",
+      "TableDesc": "语音对话处理费用：语音识别、LLM响应生成和语音合成——全部包含在一个基于令牌的价格中。",
+      "Features": [
+        "处理来电和去电",
+        "基于LLM的自然语音对话",
+        "包含STT + 生成 + TTS",
+        "兼容Asterisk、FreePBX和SIP"
+      ]
+    },
+    "text": {
+      "Label": "文本AI",
+      "Title": "Text AI",
+      "Desc": "基于文本的AI助手，用于聊天、消息和WebRTC小部件。处理客户文本咨询。",
+      "Unit": "100万令牌",
+      "UnitFull": "每 1,000,000 令牌",
+      "TableDesc": "通过LLM进行文本对话处理：聊天小部件、消息应用、WebRTC。按输入和输出令牌数量计费。",
+      "Features": [
+        "聊天机器人和消息应用",
+        "网站WebRTC小部件",
+        "上下文感知LLM对话",
+        "通过API集成CRM"
+      ]
+    },
+    "analytic": {
+      "Label": "语音分析",
+      "Title": "Speech Analytics",
+      "Desc": "AI驱动的转录通话录音分析。质量评分、指标评估和洞察提取。",
+      "Unit": "100万令牌",
+      "UnitFull": "每 1,000,000 令牌",
+      "TableDesc": "通话转录的LLM分析：按指标评分（同理心、问候、异议处理等），生成洞察和建议。",
+      "Features": [
+        "分析任何通话录音",
+        "灵活的指标和评分标准",
+        "AI洞察和模式检测",
+        "REST API自动化"
+      ]
+    },
+    "stt": {
+      "Label": "语音识别",
+      "Title": "Speech-to-Text",
+      "Desc": "将音频录音转换为文本。高精度转录，用于后续分析。",
+      "Unit": "分钟",
+      "UnitFull": "每1分钟录音",
+      "TableDesc": "音频转文本转录。按处理的音频每分钟计费。支持多种语言和格式。",
+      "Features": [
+        "支持所有主流音频格式",
+        "高识别精度",
+        "多语言支持",
+        "说话人分离（分离化）"
+      ]
+    }
+  },
+  "DetailedTable": {
+    "Title": "详细价格表",
+    "SubTitle": "每项服务的完整定价及详细计费单位说明"
+  },
+  "Table": {
+    "Service": "服务",
+    "Price": "价格",
+    "Unit": "单位",
+    "Description": "说明"
+  },
+  "FAQ": {
+    "Title": "常见问题",
+    "Q1": {
+      "Question": "什么是令牌，如何计算？",
+      "Answer": "令牌是文本的基本单位，大约等于3-4个字符或约¾个单词。在语音对话中，识别的语音（输入）和生成的响应（输出）的令牌都会被计算。100万令牌约等于75万个单词。"
+    },
+    "Q2": {
+      "Question": "Realtime AI和Text AI有什么区别？",
+      "Answer": "Realtime AI处理语音通话——包括语音识别（STT）、LLM响应生成和文本转语音合成（TTS）。Text AI仅处理聊天和小部件中的文本，因此价格更低。"
+    },
+    "Q3": {
+      "Question": "Speech Analytics如何计费？",
+      "Answer": "首先，录音被转录（按STT计费——每分钟）。然后，转录内容通过LLM进行分析（按Analytics计费——每令牌）。这是两个独立的步骤，价格不同。"
+    },
+    "Q4": {
+      "Question": "有最低消费或订阅吗？",
+      "Answer": "没有。您只需为实际使用付费。没有月费、最低消费或强制订阅。充值余额，按需使用服务。"
+    }
+  },
+  "CTA": {
+    "Title": "准备开始了吗？",
+    "SubTitle": "立即注册，开始使用AI PBX。只为使用付费。",
+    "Button": "立即开始"
+  },
+  "PromoLabel": "限时优惠！",
+  "Footer": "© {{year}} AI PBX. 保留所有权利。"
+}

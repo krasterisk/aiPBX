@@ -1,12 +1,14 @@
 export type {
     Price,
     CreatePriceDto,
-    UpdatePriceDto
+    UpdatePriceDto,
+    PublicPriceResponse
 } from './model/types/price'
 
 export {
     usePrices,
     usePrice,
+    usePublicPrices,
     useCreatePrice,
     useUpdatePrice,
     useDeletePrice

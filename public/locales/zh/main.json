@@ -135,7 +135,9 @@
     "Button": "立即开始"
   },
   "Login": "登录",
+  "Pricing": "价格",
   "Footer": {
-    "Copyright": "© {{year}} AI PBX. 保留所有权利。"
+    "Copyright": "© {{year}} AI PBX. 保留所有权利。",
+    "Legal": "法律与政策"
   }
 }

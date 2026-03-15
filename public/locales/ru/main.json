@@ -135,7 +135,9 @@
     "Button": "Начать сейчас"
   },
   "Login": "Вход",
+  "Pricing": "Цены",
   "Footer": {
-    "Copyright": "© {{year}} AI PBX. Все права защищены."
+    "Copyright": "© {{year}} AI PBX. Все права защищены.",
+    "Legal": "Правовая информация"
   }
 }

@@ -12,6 +12,7 @@ import { getUserAuthData } from '@/entities/User'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { PaymentOverview } from './PaymentOverview/PaymentOverview'
 import { PaymentOrganizations } from './PaymentOrganizations/PaymentOrganizations'
+import { UsageTab } from './UsageTab/UsageTab'
 import { Card } from '@/shared/ui/redesigned/Card'
 
 const PaymentPage = memo(() => {
@@ -32,6 +33,7 @@ const PaymentPage = memo(() => {
 
   const tabs: TabPanelItem[] = useMemo(() => [
     { label: t('Обзор'), content: <PaymentOverview onTabChange={onTabChangeByIndex} /> },
+    { label: t('Usage'), content: <UsageTab /> },
     { label: t('История платежей'), content: <PaymentList /> },
     { label: t('Лимиты'), content: <UsageLimitsForm /> },
     { label: t('Организации'), content: <PaymentOrganizations userId={userId} /> }

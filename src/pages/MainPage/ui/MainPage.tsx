@@ -30,11 +30,12 @@ import {
 } from 'lucide-react'
 import { LangSwitcher } from '@/entities/LangSwitcher'
 import { useNavigate } from 'react-router-dom'
-import { getRouteDashboard, getRouteSignup, getRouteLogin } from '@/shared/const/router'
+import { getRouteDashboard, getRouteSignup, getRouteLogin, getRoutePublicPricing, getRouteLegal } from '@/shared/const/router'
 import { getUserAuthData } from '@/entities/User'
 import { useSelector } from 'react-redux'
 import { Button } from '@/shared/ui/redesigned/Button'
 import LogoIcon from '@/shared/assets/icons/aipbx_logo_v3.svg'
+import { getDomainConfig } from '@/shared/lib/domain'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },
@@ -73,6 +74,8 @@ const MainPage: FC = memo(() => {
   const isMobile = useMediaQuery('(max-width:768px)')
   const navigate = useNavigate()
   const auth = useSelector(getUserAuthData)
+  const domainConfig = getDomainConfig()
+  const isRuDomain = domainConfig.region === 'ru'
 
   useEffect(() => {
     if (auth) {
@@ -88,6 +91,10 @@ const MainPage: FC = memo(() => {
     navigate(getRouteLogin())
   }, [navigate])
 
+  const onPricing = useCallback(() => {
+    navigate(getRoutePublicPricing())
+  }, [navigate])
+
   return (
     <Page data-testid={'MainPage'} className={cls.MainPage}>
       <div className={cls.loginBtn}>
@@ -95,8 +102,11 @@ const MainPage: FC = memo(() => {
           {t('Login')}
         </Button>
       </div>
-      <div className={cls.lang}>
-        <LangSwitcher short={isMobile} />
+      <div className={cls.rightNav}>
+        <Button variant="clear" onClick={onPricing}>
+          {t('Pricing', { defaultValue: 'Pricing' })}
+        </Button>
+        {!isRuDomain && <LangSwitcher short={isMobile} />}
       </div>
 
       {/* Hero Section */}
@@ -423,8 +433,18 @@ const MainPage: FC = memo(() => {
 
       <footer style={{ padding: '40px 0', borderTop: 'var(--glass-border-subtle)', textAlign: 'center', color: 'rgba(255,255,255,0.3)' }}>
         <Container maxWidth="lg">
-          <Typography variant="body2">
+          <Typography variant="body2" sx={{ mb: 1 }}>
             {t('Footer.Copyright', { year: new Date().getFullYear() })}
+          </Typography>
+          <Typography variant="body2">
+            <a
+              href={getRouteLegal()}
+              style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--accent-redesigned)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)' }}
+            >
+              {t('Footer.Legal', { defaultValue: 'Legal & Policies' })}
+            </a>
           </Typography>
         </Container>
       </footer>

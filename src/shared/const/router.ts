@@ -54,7 +54,8 @@ export enum AppRoutes {
 
   SIP_TRUNKS = 'sip_trunks',
   SIP_TRUNK_CREATE = 'sip_trunk_create',
-  SIP_TRUNK_EDIT = 'sip_trunk_edit'
+  SIP_TRUNK_EDIT = 'sip_trunk_edit',
+  PUBLIC_PRICING = 'public_pricing'
 }
 
 export const getRouteMain = () => '/'
@@ -115,6 +116,7 @@ export const getRouteMcpServerEdit = (id: string) => `/mcp-servers/${id}`
 export const getRouteSipTrunks = () => '/publish/sip-trunks'
 export const getRouteSipTrunkCreate = () => '/publish/sip-trunks/create'
 export const getRouteSipTrunkEdit = (id: string) => `/publish/sip-trunks/${id}`
+export const getRoutePublicPricing = () => '/pricing'
 
 export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteMain()]: AppRoutes.MAIN,
@@ -171,5 +173,6 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
 
   [getRouteSipTrunks()]: AppRoutes.SIP_TRUNKS,
   [getRouteSipTrunkCreate()]: AppRoutes.SIP_TRUNK_CREATE,
-  [getRouteSipTrunkEdit(':id')]: AppRoutes.SIP_TRUNK_EDIT
+  [getRouteSipTrunkEdit(':id')]: AppRoutes.SIP_TRUNK_EDIT,
+  [getRoutePublicPricing()]: AppRoutes.PUBLIC_PRICING
 }

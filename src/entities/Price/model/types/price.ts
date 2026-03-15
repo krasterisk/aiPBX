@@ -24,3 +24,12 @@ export interface UpdatePriceDto {
     analytic?: number
     stt?: number
 }
+
+export interface PublicPriceResponse {
+    realtime: number
+    text: number
+    analytic: number
+    stt: number
+    currency: string
+    rate: number
+}

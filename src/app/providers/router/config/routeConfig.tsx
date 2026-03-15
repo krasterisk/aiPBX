@@ -59,7 +59,8 @@ import {
   getRouteMcpServerEdit,
   getRouteSipTrunks,
   getRouteSipTrunkCreate,
-  getRouteSipTrunkEdit
+  getRouteSipTrunkEdit,
+  getRoutePublicPricing
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 
@@ -107,6 +108,7 @@ import {
 } from '@/pages/LegalPage'
 import { McpServersPage, McpServerEditPage, McpServerCreatePage } from '@/pages/McpServersPage'
 import { SipTrunksPage, SipTrunkCreatePage, SipTrunkEditPage } from '@/pages/SipTrunksPage'
+import { PublicPricingPage } from '@/pages/PublicPricingPage'
 import { Navigate } from 'react-router-dom'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
@@ -388,6 +390,12 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     path: getRouteSipTrunkEdit(':id'),
     authOnly: true,
     element: <SipTrunkEditPage />
+  },
+
+  [AppRoutes.PUBLIC_PRICING]: {
+    path: getRoutePublicPricing(),
+    element: <PublicPricingPage />,
+    authOnly: false
   }
 
 }

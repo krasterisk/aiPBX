@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { Price, CreatePriceDto, UpdatePriceDto } from '../model/types/price'
+import { Price, CreatePriceDto, UpdatePriceDto, PublicPriceResponse } from '../model/types/price'
 
 const priceApi = rtkApi.injectEndpoints({
     endpoints: (build) => ({
@@ -16,6 +16,10 @@ const priceApi = rtkApi.injectEndpoints({
         getPriceById: build.query<Price, number>({
             query: (id) => `/prices/${id}`,
             providesTags: (result, error, id) => [{ type: 'Prices', id }],
+        }),
+        getPublicPrices: build.query<PublicPriceResponse, string>({
+            query: (currency) => `/prices/public?currency=${currency}`,
+            keepUnusedDataFor: 300,
         }),
         createPrice: build.mutation<Price, CreatePriceDto>({
             query: (dto) => ({
@@ -45,6 +49,7 @@ const priceApi = rtkApi.injectEndpoints({
 
 export const usePrices = priceApi.useGetPricesQuery
 export const usePrice = priceApi.useGetPriceByIdQuery
+export const usePublicPrices = priceApi.useGetPublicPricesQuery
 export const useCreatePrice = priceApi.useCreatePriceMutation
 export const useUpdatePrice = priceApi.useUpdatePriceMutation
 export const useDeletePrice = priceApi.useDeletePriceMutation
