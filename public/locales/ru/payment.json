@@ -78,5 +78,15 @@
   "usage.type.insight": "Инсайт",
   "usage.pagination.showing": "Показано {{from}}-{{to}} из {{total}}",
   "usage.pagination.perPage": "На странице",
-  "usage.details.assistant": "Ассистент"
+  "usage.details.assistant": "Ассистент",
+  "usage.exporting": "Экспорт...",
+  "usage.export.audioTokens": "Аудио токены",
+  "usage.export.textTokens": "Текстовые токены",
+  "usage.export.audioCost": "Стоимость аудио",
+  "usage.export.textCost": "Стоимость текста",
+  "usage.export.sttCost": "Стоимость STT",
+  "usage.export.channelId": "ID канала",
+  "usage.export.callerId": "Звонивший",
+  "usage.export.source": "Источник",
+  "usage.export.duration": "Длительность (с)"
 }

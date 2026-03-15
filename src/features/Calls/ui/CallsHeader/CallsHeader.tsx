@@ -28,6 +28,7 @@ interface CallsHeaderProps {
     onExport: () => void
     onChangeSource?: (v: CdrSource | undefined) => void
     batchProgress?: UseBatchProgressReturn
+    exporting?: boolean
 }
 
 export const CallsHeader = memo((props: CallsHeaderProps) => {
@@ -35,7 +36,7 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
         tab, startDate, endDate, isInited, search, source,
         onChangeTab, onChangeStartDate, onChangeEndDate,
         onChangeSearch, onUpload, onExport, onChangeSource,
-        batchProgress
+        batchProgress, exporting
     } = props
 
     const { t } = useTranslation('reports')
@@ -83,8 +84,11 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
                         color="success"
                         addonLeft={<FileDownloadIcon fontSize="small" />}
                         onClick={onExport}
+                        disabled={exporting}
                     >
-                        {String(t('Выгрузить'))}
+                        {exporting
+                            ? String(t('Экспорт...'))
+                            : String(t('Выгрузить'))}
                     </Button>
                     <Button
                         variant="glass-action"

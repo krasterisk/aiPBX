@@ -2,7 +2,7 @@ import React, { memo, useState, useCallback, useMemo } from 'react'
 import cls from './UsageTab.module.scss'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { useTranslation } from 'react-i18next'
-import { useBillingHistory, BillingRecord } from '@/entities/Billing'
+import { useBillingHistory, useLazyBillingHistory, BillingRecord } from '@/entities/Billing'
 import { useSelector } from 'react-redux'
 import { isUserAdmin, ClientSelect } from '@/entities/User'
 import { DateSelector } from '@/shared/ui/mui/DateSelector'
@@ -78,6 +78,8 @@ export const UsageTab = memo(() => {
     }), [page, limit, startDate, endDate, type, userId, sortField, sortOrder, admin])
 
     const { data, isLoading, isFetching } = useBillingHistory(queryParams)
+    const [fetchAllBilling] = useLazyBillingHistory()
+    const [exporting, setExporting] = useState(false)
 
     // Filter handlers (reset page on change)
     const handleStartDate = useCallback((val: Dayjs | null) => {
@@ -221,39 +223,58 @@ parts.push(
         return <div className={cls.detailsCell}>{parts}</div>
     }
 
-    const exportToExcel = useCallback(() => {
-        if (!data?.rows?.length) return
+    const exportToExcel = useCallback(async () => {
+        if (!data?.count) return
+        setExporting(true)
+        try {
+            // Fetch ALL records matching current filters
+            // Add buffer to count in case new records appear between queries
+            const allData = await fetchAllBilling({
+                limit: data.count + 1000,
+                page: 1,
+                startDate,
+                endDate,
+                type: type || undefined,
+                userId: admin && userId ? userId : undefined,
+                sortField,
+                sortOrder,
+            }).unwrap()
 
-        const exportData = data.rows.map((row) => ({
-            [t('usage.table.date', { defaultValue: 'Date' })]: formatDate(row.createdAt),
-            [t('usage.table.type', { defaultValue: 'Type' })]: row.type,
-            [t('usage.table.description', { defaultValue: 'Description' })]: row.description || row.type,
-            'Audio Tokens': row.audioTokens,
-            'Text Tokens': row.textTokens,
-            [t('usage.table.tokens', { defaultValue: 'Tokens' })]: row.totalTokens,
-            'Audio Cost': row.audioCost,
-            'Text Cost': row.textCost,
-            'STT Cost': row.sttCost,
-            [t('usage.table.cost', { defaultValue: 'Cost' })]: row.totalCost,
-            'Channel ID': row.channelId,
-            ...(row.aiCdr ? {
-                Assistant: row.aiCdr.assistantName || '',
-                'Caller ID': row.aiCdr.callerId || '',
-                Source: row.aiCdr.source || '',
-                'Duration (s)': row.aiCdr.duration || '',
-            } : {}),
-        }))
+            if (!allData?.rows?.length) return
 
-        const worksheet = XLSX.utils.json_to_sheet(exportData)
-        const workbook = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Usage')
-        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
-        const blob = new Blob([excelBuffer], {
-            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
-        })
-        const dateStr = dayjs().format('YYYY-MM-DD')
-        saveAs(blob, `usage_${dateStr}.xlsx`)
-    }, [data, t])
+            const exportData = allData.rows.map((row) => ({
+                [t('usage.table.date', { defaultValue: 'Date' })]: formatDate(row.createdAt),
+                [t('usage.table.type', { defaultValue: 'Type' })]: row.type,
+                [t('usage.table.description', { defaultValue: 'Description' })]: row.description || row.type,
+                [t('usage.export.audioTokens', { defaultValue: 'Audio Tokens' })]: row.audioTokens,
+                [t('usage.export.textTokens', { defaultValue: 'Text Tokens' })]: row.textTokens,
+                [t('usage.table.tokens', { defaultValue: 'Tokens' })]: row.totalTokens,
+                [t('usage.export.audioCost', { defaultValue: 'Audio Cost' })]: row.audioCost,
+                [t('usage.export.textCost', { defaultValue: 'Text Cost' })]: row.textCost,
+                [t('usage.export.sttCost', { defaultValue: 'STT Cost' })]: row.sttCost,
+                [t('usage.table.cost', { defaultValue: 'Cost' })]: row.totalCost,
+                [t('usage.export.channelId', { defaultValue: 'Channel ID' })]: row.channelId,
+                ...(row.aiCdr ? {
+                    [t('usage.details.assistant', { defaultValue: 'Assistant' })]: row.aiCdr.assistantName || '',
+                    [t('usage.export.callerId', { defaultValue: 'Caller ID' })]: row.aiCdr.callerId || '',
+                    [t('usage.export.source', { defaultValue: 'Source' })]: row.aiCdr.source || '',
+                    [t('usage.export.duration', { defaultValue: 'Duration (s)' })]: row.aiCdr.duration || '',
+                } : {}),
+            }))
+
+            const worksheet = XLSX.utils.json_to_sheet(exportData)
+            const workbook = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Usage')
+            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+            const blob = new Blob([excelBuffer], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+            })
+            const dateStr = dayjs().format('YYYY-MM-DD')
+            saveAs(blob, `usage_${dateStr}.xlsx`)
+        } finally {
+            setExporting(false)
+        }
+    }, [data?.count, fetchAllBilling, startDate, endDate, type, userId, admin, sortField, sortOrder, t])
 
     return (
         <VStack gap="16" max className={cls.UsageTab}>
@@ -346,10 +367,12 @@ parts.push(
                         variant="glass-action"
                         size="m"
                         onClick={exportToExcel}
-                        disabled={!data?.rows?.length}
+                        disabled={!data?.rows?.length || exporting}
                         addonLeft={<Download size={16} />}
                     >
-                        {t('Экспорт в Excel')}
+                        {exporting
+                            ? t('usage.exporting', { defaultValue: 'Exporting...' })
+                            : t('Экспорт в Excel')}
                     </Button>
                 </div>
             </div>

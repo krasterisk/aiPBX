@@ -4,4 +4,4 @@ export type {
     BillingQueryParams
 } from './api/billingApi'
 
-export { useBillingHistory } from './api/billingApi'
+export { useBillingHistory, useLazyBillingHistory } from './api/billingApi'

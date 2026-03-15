@@ -78,5 +78,15 @@
   "usage.type.insight": "Insight",
   "usage.pagination.showing": "Showing {{from}}-{{to}} of {{total}}",
   "usage.pagination.perPage": "Per page",
-  "usage.details.assistant": "Assistant"
+  "usage.details.assistant": "Assistant",
+  "usage.exporting": "Exporting...",
+  "usage.export.audioTokens": "Audio Tokens",
+  "usage.export.textTokens": "Text Tokens",
+  "usage.export.audioCost": "Audio Cost",
+  "usage.export.textCost": "Text Cost",
+  "usage.export.sttCost": "STT Cost",
+  "usage.export.channelId": "Channel ID",
+  "usage.export.callerId": "Caller ID",
+  "usage.export.source": "Source",
+  "usage.export.duration": "Duration (s)"
 }

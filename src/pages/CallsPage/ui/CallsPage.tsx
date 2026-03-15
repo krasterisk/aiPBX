@@ -32,7 +32,15 @@ const CallsPage = ({ className }: CallsPageProps) => {
         onChangeSearch, onChangeSource, onChangeSort
     } = useReportFilters()
 
-    const { exportToExcel } = useCallsExport(data)
+    const { exportToExcel, exporting } = useCallsExport({
+        data,
+        startDate,
+        endDate,
+        search,
+        source,
+        sortField,
+        sortOrder,
+    })
 
     useInitialEffect(() => { dispatch(initReportsPage()) })
 
@@ -71,6 +79,7 @@ const CallsPage = ({ className }: CallsPageProps) => {
                         onUpload={() => { setUploadOpen(true) }}
                         onExport={exportToExcel}
                         batchProgress={batch}
+                        exporting={exporting}
                     />
                     <CallsList
                         reports={data}

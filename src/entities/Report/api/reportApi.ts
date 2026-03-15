@@ -316,6 +316,7 @@ export const useGetReportEvents = reportApi.useGetReportEventsQuery
 export const useDashboard = reportApi.useGetReportDashboardQuery
 export const useGetAIAnalyticsDashboard = reportApi.useGetAIAnalyticsDashboardQuery
 export const useGetReports = reportApi.useGetReportsQuery
+export const useLazyGetReports = reportApi.useLazyGetReportsQuery
 export const useGetAllReports = reportApi.useGetAllReportsQuery
 export const useSetReports = reportApi.useSetReportsMutation
 export const useGetReport = reportApi.useGetReportQuery

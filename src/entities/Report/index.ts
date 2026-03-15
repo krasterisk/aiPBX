@@ -78,7 +78,8 @@ export {
   useCreateCallAnalytics,
   useLazyGetBatchStatus,
   useLazyGetActiveBatches,
-  useLazyGetOperatorInsights
+  useLazyGetOperatorInsights,
+  useLazyGetReports
 } from './api/reportApi'
 
 export { ReportExpandedPanel } from './ui/ReportExpandedPanel/ReportExpandedPanel'

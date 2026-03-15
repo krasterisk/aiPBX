@@ -78,5 +78,15 @@
   "usage.type.insight": "洞察",
   "usage.pagination.showing": "显示 {{from}}-{{to}} / 共 {{total}}",
   "usage.pagination.perPage": "每页",
-  "usage.details.assistant": "助手"
+  "usage.details.assistant": "助手",
+  "usage.exporting": "导出中...",
+  "usage.export.audioTokens": "音频令牌",
+  "usage.export.textTokens": "文本令牌",
+  "usage.export.audioCost": "音频费用",
+  "usage.export.textCost": "文本费用",
+  "usage.export.sttCost": "STT费用",
+  "usage.export.channelId": "频道ID",
+  "usage.export.callerId": "呼叫方",
+  "usage.export.source": "来源",
+  "usage.export.duration": "时长 (秒)"
 }

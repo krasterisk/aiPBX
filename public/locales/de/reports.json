@@ -353,5 +353,8 @@
   "В работу ушло": "Zur Verarbeitung gesendet",
   "загружен и отправлен в работу": "hochgeladen und zur Verarbeitung gesendet",
   "Файлы успешно загружены": "Dateien erfolgreich hochgeladen",
-  "Ошибка при загрузке": "Fehler beim Hochladen"
+  "Ошибка при загрузке": "Fehler beim Hochladen",
+  "Экспорт...": "Exportieren...",
+  "Оператор": "Mitarbeiter",
+  "Клиент": "Kunde"
 }

@@ -1,6 +1,6 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ReportShowDialog.module.scss'
-import React, { memo } from 'react'
+import React, { memo, useMemo } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Divider } from '@/shared/ui/Divider'
 import { Loader } from '@/shared/ui/Loader'
@@ -10,6 +10,11 @@ import { Card } from '@/shared/ui/redesigned/Card'
 import { ReportDialog } from '../../model/types/report'
 import { useTranslation } from 'react-i18next'
 import { Code } from '@/shared/ui/redesigned/Code'
+
+interface TranscriptionLine {
+  speaker: 'operator' | 'customer'
+  text: string
+}
 
 interface ReportShowDialogProps {
   className?: string
@@ -31,6 +36,17 @@ export const ReportShowDialog = memo((props: ReportShowDialogProps) => {
   } = props
 
   const { t } = useTranslation('reports')
+
+  const parsedTranscription = useMemo<TranscriptionLine[] | null>(() => {
+    if (!transcription) return null
+    try {
+      const parsed = JSON.parse(transcription)
+      if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].speaker && parsed[0].text) {
+        return parsed as TranscriptionLine[]
+      }
+    } catch { /* plain text fallback */ }
+    return null
+  }, [transcription])
 
   return (
     <VStack
@@ -57,7 +73,40 @@ export const ReportShowDialog = memo((props: ReportShowDialogProps) => {
         : mediaUrl ? <MediaPlayer src={mediaUrl} /> : null
       }
 
-      {!Dialogs?.length && transcription && (
+      {/* Structured transcription (new JSON format) */}
+      {!Dialogs?.length && parsedTranscription && (
+        <VStack gap="12" max className={cls.structuredDialog}>
+          {parsedTranscription.map((line, i) => {
+            const isOperator = line.speaker === 'operator'
+            return (
+              <HStack
+                key={i}
+                max
+                justify={isOperator ? 'start' : 'end'}
+              >
+                <VStack
+                  gap="4"
+                  className={classNames(
+                    cls.messageBubble,
+                    { [cls.operator]: isOperator, [cls.customer]: !isOperator }
+                  )}
+                >
+                  <Text
+                    text={isOperator ? t('Оператор') : t('Клиент')}
+                    size="s"
+                    bold
+                    variant={isOperator ? 'accent' : 'warning'}
+                  />
+                  <Text text={line.text} />
+                </VStack>
+              </HStack>
+            )
+          })}
+        </VStack>
+      )}
+
+      {/* Plain text transcription (legacy fallback) */}
+      {!Dialogs?.length && transcription && !parsedTranscription && (
         <Card border={'partial'} variant={'outlined'} style={{ width: '100%' }}>
           <Text text={transcription} />
         </Card>

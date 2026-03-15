@@ -64,3 +64,4 @@ const billingApi = rtkApi.injectEndpoints({
 })
 
 export const useBillingHistory = billingApi.useGetBillingHistoryQuery
+export const useLazyBillingHistory = billingApi.useLazyGetBillingHistoryQuery

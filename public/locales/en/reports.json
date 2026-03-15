@@ -314,5 +314,8 @@
   "В работу ушло": "Sent for processing",
   "загружен и отправлен в работу": "uploaded and sent for processing",
   "Файлы успешно загружены": "Files uploaded successfully",
-  "Ошибка при загрузке": "Upload error"
+  "Ошибка при загрузке": "Upload error",
+  "Экспорт...": "Exporting...",
+  "Оператор": "Operator",
+  "Клиент": "Customer"
 }
