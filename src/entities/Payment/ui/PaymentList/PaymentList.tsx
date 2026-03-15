@@ -40,7 +40,11 @@ export const PaymentList = memo((props: PaymentListProps) => {
         {
             header: t('Дата'),
             accessorKey: 'createdAt',
-            cell: (info: any) => new Date(info.getValue()).toLocaleString()
+            cell: (info: any) => (
+                <span style={{ whiteSpace: 'nowrap' }}>
+                    {new Date(info.getValue()).toLocaleString()}
+                </span>
+            )
         },
         {
             header: t('Сумма'),

@@ -1,7 +1,7 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { getDomainOrigin, getApiBaseUrl } from '@/shared/lib/domain'
 import cls from './PublishWidgetsForm.module.scss'
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
@@ -31,6 +31,7 @@ import {
 } from '@/entities/WidgetKeys'
 import { PublishWidgetsFormHeader } from '../PublishWidgetsFormHeader/PublishWidgetsFormHeader'
 import { Skeleton } from '@/shared/ui/redesigned/Skeleton'
+import { Text } from '@/shared/ui/redesigned/Text'
 import { TelephonyAiCard } from './components/TelephonyAiCard/TelephonyAiCard'
 import { SecurityLimitsCard } from './components/SecurityLimitsCard/SecurityLimitsCard'
 import { StyleSettingsCard } from './components/StyleSettingsCard/StyleSettingsCard'
@@ -65,6 +66,7 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
     const [updateWidget, { isLoading: isUpdating }] = useUpdateWidgetKey()
     const [deleteWidget, { isLoading: isDeleting }] = useDeleteWidgetKey()
     const isLoading = isCreating || isUpdating || isDeleting
+    const [formError, setFormError] = useState<string | null>(null)
 
     const isMobile = useMediaQuery('(max-width:800px)')
 
@@ -174,6 +176,8 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
             apiUrl: `${getDomainOrigin()}${getApiBaseUrl()}`
         }
 
+        setFormError(null)
+
         try {
             if (isEdit && widgetId) {
                 await updateWidget({ id: Number(widgetId), ...data }).unwrap()
@@ -184,8 +188,11 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
             }
             navigate(getRoutePublishWidgets())
             dispatch(publishWidgetsFormActions.resetForm())
-        } catch (e) {
-            // Error toast handled by global toastMiddleware
+        } catch (e: any) {
+            const message = e?.data?.message || e?.message
+            if (message) {
+                setFormError(message)
+            }
         }
     }, [name, selectedAssistant, selectedPbxServer, allowedDomains, maxSessions, maxSessionDuration, isActive, appearance, isEdit, widgetId, updateWidget, createWidget, navigate, dispatch, t])
 
@@ -276,6 +283,10 @@ export const PublishWidgetsForm = memo((props: PublishWidgetsFormProps) => {
                 {/* Preview: Centered Below */}
                 <WidgetPreviewCard appearance={appearance} name={name} />
             </VStack>
+
+            {formError && (
+                <Text text={formError} variant="error" />
+            )}
 
             <PublishWidgetsFormHeader
                 onSave={onSave}
