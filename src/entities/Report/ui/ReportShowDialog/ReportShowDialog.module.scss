@@ -4,39 +4,3 @@
     overflow: hidden;
     padding: 0 16px;
 }
-
-// ─── Structured Dialog (transcription bubbles) ─────────
-.structuredDialog {
-    width: 100%;
-}
-
-.messageBubble {
-    max-width: 75%;
-    padding: 12px 16px;
-    border-radius: var(--radius-lg);
-    line-height: 1.5;
-    animation: fadeInBubble 0.2s ease-out;
-}
-
-.operator {
-    background: rgba(var(--accent-redesigned-rgb), 0.08);
-    border: 1px solid rgba(var(--accent-redesigned-rgb), 0.15);
-    border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;
-}
-
-.customer {
-    background: var(--glass-bg-secondary);
-    border: 1px solid var(--glass-border-secondary);
-    border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
-}
-
-@keyframes fadeInBubble {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}

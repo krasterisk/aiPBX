@@ -75,30 +75,31 @@ export const ReportShowDialog = memo((props: ReportShowDialogProps) => {
 
       {/* Structured transcription (new JSON format) */}
       {!Dialogs?.length && parsedTranscription && (
-        <VStack gap="12" max className={cls.structuredDialog}>
+        <VStack gap="24" max>
           {parsedTranscription.map((line, i) => {
             const isOperator = line.speaker === 'operator'
             return (
               <HStack
                 key={i}
+                gap="16"
+                justify="between"
                 max
-                justify={isOperator ? 'start' : 'end'}
               >
-                <VStack
-                  gap="4"
-                  className={classNames(
-                    cls.messageBubble,
-                    { [cls.operator]: isOperator, [cls.customer]: !isOperator }
-                  )}
-                >
+                <VStack gap="4" justify="start">
                   <Text
                     text={isOperator ? t('Оператор') : t('Клиент')}
-                    size="s"
-                    bold
                     variant={isOperator ? 'accent' : 'warning'}
+                    size="m"
+                    bold
                   />
-                  <Text text={line.text} />
                 </VStack>
+                <Card
+                  border="partial"
+                  variant={isOperator ? 'outlined' : 'warning'}
+                  style={{ flex: 1, minWidth: 0, width: '100%' }}
+                >
+                  <Text text={line.text} />
+                </Card>
               </HStack>
             )
           })}
