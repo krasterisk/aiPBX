@@ -103,10 +103,10 @@ const MainPage: FC = memo(() => {
         </Button>
       </div>
       <div className={cls.rightNav}>
-        <Button variant="clear" onClick={() => navigate(getRoutePublicSpeechAnalytics())}>
+        <Button variant="clear" onClick={() => { navigate(getRoutePublicSpeechAnalytics()) }}>
           {t('SpeechAnalyticsPage.HeroBadge', { defaultValue: 'Аналитика', ns: 'main' })}
         </Button>
-        <Button variant="clear" onClick={() => navigate(getRoutePublicVoiceAssistants())}>
+        <Button variant="clear" onClick={() => { navigate(getRoutePublicVoiceAssistants()) }}>
           {t('VoiceAssistantsPage.HeroBadge', { defaultValue: 'Ассистенты', ns: 'main' })}
         </Button>
         <Button variant="clear" onClick={onPricing}>

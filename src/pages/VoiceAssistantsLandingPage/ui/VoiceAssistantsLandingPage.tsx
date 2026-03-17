@@ -66,7 +66,7 @@ const VoiceAssistantsLandingPage = () => {
     }, [isPlaying])
 
     // Reset state when audio ends
-    const handleAudioEnded = useCallback(() => setIsPlaying(false), [])
+    const handleAudioEnded = useCallback(() => { setIsPlaying(false) }, [])
 
     return (
         <div className={cls.LandingPage}>
@@ -202,7 +202,6 @@ const VoiceAssistantsLandingPage = () => {
                             >
                                 {isPlaying ? <Square size={28} /> : <Play size={28} style={{ marginLeft: 3 }} />}
                             </button>
-                            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
                             <audio ref={audioRef} src="/assets/landing/sample-call.mp3" preload="none" onEnded={handleAudioEnded} />
                         </div>
                     </motion.div>
