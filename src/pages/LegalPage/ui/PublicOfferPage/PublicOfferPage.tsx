@@ -15,7 +15,7 @@ const PublicOfferPage = memo(() => (
                 <h1 className={cls.title}>ПУБЛИЧНАЯ ОФЕРТА</h1>
                 <p className={cls.meta}>на оказание услуг сервиса AI PBX</p>
                 <p className={cls.meta}>Дата публикации: 13 февраля 2026 г.</p>
-                <p className={cls.meta}>Дата последнего обновления: 13 февраля 2026 г.</p>
+                <p className={cls.meta}>Дата последнего обновления: 17 марта 2026 г.</p>
             </header>
 
             <p className={cls.intro}>
