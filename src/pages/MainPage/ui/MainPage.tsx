@@ -97,22 +97,29 @@ const MainPage: FC = memo(() => {
 
   return (
     <Page data-testid={'MainPage'} className={cls.MainPage}>
-      <div className={cls.loginBtn}>
-        <Button variant="glass-action" onClick={onLogin}>
-          {t('Login')}
-        </Button>
-      </div>
-      <div className={cls.rightNav}>
-        <Button variant="clear" onClick={() => { navigate(getRoutePublicSpeechAnalytics()) }}>
-          {t('SpeechAnalyticsPage.HeroBadge', { defaultValue: 'Аналитика', ns: 'main' })}
-        </Button>
+      {!isRuDomain && (
+        <div className={cls.loginBtn}>
+          <LangSwitcher short={isMobile} />
+        </div>
+      )}
+      <div className={cls.centerNav}>
         <Button variant="clear" onClick={() => { navigate(getRoutePublicVoiceAssistants()) }}>
           {t('VoiceAssistantsPage.HeroBadge', { defaultValue: 'Ассистенты', ns: 'main' })}
+        </Button>
+        <Button variant="clear" onClick={() => { navigate(getRoutePublicSpeechAnalytics()) }}>
+          {t('SpeechAnalyticsPage.HeroBadge', { defaultValue: 'Аналитика', ns: 'main' })}
         </Button>
         <Button variant="clear" onClick={onPricing}>
           {t('Pricing', { defaultValue: 'Pricing' })}
         </Button>
-        {!isRuDomain && <LangSwitcher short={isMobile} />}
+        <Button variant="clear" onClick={() => { navigate(getRouteLegal()) }}>
+          {t('Legal', { defaultValue: 'Legal', ns: 'main' })}
+        </Button>
+      </div>
+      <div className={cls.rightNav}>
+        <Button variant="glass-action" onClick={onLogin}>
+          {t('Login')}
+        </Button>
       </div>
 
       {/* Hero Section */}

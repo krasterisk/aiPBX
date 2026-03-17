@@ -136,6 +136,7 @@
   },
   "Login": "登录",
   "Pricing": "价格",
+  "Legal": "法律信息",
   "Footer": {
     "Copyright": "© {{year}} AI PBX. 保留所有权利。",
     "Legal": "法律与政策"

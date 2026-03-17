@@ -375,7 +375,7 @@ const DpaPage = memo(() => (
                     carry out specific processing activities on behalf of the Controller.
                     A current list of authorized Sub-processors is set out in Annex B of
                     this DPA and is available upon request at{' '}
-                    <a href="mailto:privacy@aipbx.net" className={cls.link}>privacy@aipbx.net</a>.
+                    <a href="mailto:info@aipbx.net" className={cls.link}>info@aipbx.net</a>.
                 </p>
                 <p className={cls.text}>
                     <strong>8.2 Notification of Changes.</strong> The Processor shall inform
@@ -451,7 +451,7 @@ const DpaPage = memo(() => (
                 <p className={cls.text}>
                     The Processor shall maintain the current list of Sub-processors and
                     make it available to the Controller upon request at{' '}
-                    <a href="mailto:privacy@aipbx.net" className={cls.link}>privacy@aipbx.net</a>.
+                    <a href="mailto:info@aipbx.net" className={cls.link}>info@aipbx.net</a>.
                     The Processor reserves the right to update this list in accordance with
                     Section 8.2.
                 </p>
@@ -615,7 +615,7 @@ const DpaPage = memo(() => (
                     Controller with a period of thirty (30) days following termination to
                     export Personal Data via the Services platform or through a data export
                     request to{' '}
-                    <a href="mailto:privacy@aipbx.net" className={cls.link}>privacy@aipbx.net</a>.
+                    <a href="mailto:info@aipbx.net" className={cls.link}>info@aipbx.net</a>.
                 </p>
                 <p className={cls.text}>
                     <strong>12.3 Deletion Timeline.</strong> Unless the Controller instructs
@@ -880,12 +880,12 @@ const DpaPage = memo(() => (
                     Lets Fix LLC<br />
                     Chicago, Illinois, United States<br />
                     Email:{' '}
-                    <a href="mailto:privacy@aipbx.net" className={cls.link}>
-                        privacy@aipbx.net
+                    <a href="mailto:info@aipbx.net" className={cls.link}>
+                        info@aipbx.net
                     </a><br />
                     Legal:{' '}
-                    <a href="mailto:legal@aipbx.net" className={cls.link}>
-                        legal@aipbx.net
+                    <a href="mailto:info@aipbx.net" className={cls.link}>
+                        info@aipbx.net
                     </a>
                 </address>
             </section>

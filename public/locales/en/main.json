@@ -136,6 +136,7 @@
   },
   "Login": "Login",
   "Pricing": "Pricing",
+  "Legal": "Legal",
   "Footer": {
     "Copyright": "© {{year}} AI PBX. All rights reserved.",
     "Legal": "Legal & Policies"

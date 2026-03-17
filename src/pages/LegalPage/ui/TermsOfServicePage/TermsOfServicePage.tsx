@@ -829,7 +829,7 @@ const TermsOfServicePage = memo(() => (
                 <p className={cls.text}>
                     <strong>13.1 Informal Resolution.</strong> Before initiating any formal
                     dispute resolution, you agree to contact us at{' '}
-                    <a href="mailto:legal@aipbx.net" className={cls.link}>legal@aipbx.net</a>{' '}
+                    <a href="mailto:info@aipbx.net" className={cls.link}>info@aipbx.net</a>{' '}
                     with a written description of the dispute. Both parties will attempt to
                     resolve the issue informally within thirty (30) days. <strong>You agree
                         that the informal resolution process is a prerequisite to initiating
@@ -882,7 +882,7 @@ const TermsOfServicePage = memo(() => (
                 <p className={cls.text}>
                     <strong>13.6 Opt-Out Right.</strong> You may opt out of this arbitration
                     agreement by sending written notice to{' '}
-                    <a href="mailto:legal@aipbx.net" className={cls.link}>legal@aipbx.net</a>{' '}
+                    <a href="mailto:info@aipbx.net" className={cls.link}>info@aipbx.net</a>{' '}
                     within thirty (30) days of first accepting these Terms. Your notice must
                     include your name, account email, and a clear statement that you wish to
                     opt out of arbitration. If you opt out, disputes will be resolved in the
@@ -916,7 +916,7 @@ const TermsOfServicePage = memo(() => (
                 <p className={cls.text}>
                     <strong>By Customer.</strong> You may terminate your account at any time
                     via the platform or by contacting us at{' '}
-                    <a href="mailto:support@aipbx.net" className={cls.link}>support@aipbx.net</a>.
+                    <a href="mailto:info@aipbx.net" className={cls.link}>info@aipbx.net</a>.
                     Termination by you does not entitle you to a refund of any fees already
                     paid, and you remain liable for all fees due through the end of the
                     then-current billing period.
@@ -1087,7 +1087,7 @@ const TermsOfServicePage = memo(() => (
                 </p>
                 <p className={cls.text}>
                     <strong>Notices.</strong> All legal notices must be sent to{' '}
-                    <a href="mailto:legal@aipbx.net" className={cls.link}>legal@aipbx.net</a>.
+                    <a href="mailto:info@aipbx.net" className={cls.link}>info@aipbx.net</a>.
                     Notices to you will be sent to the email address associated with your
                     account. Notices are deemed received upon confirmed delivery or, if
                     sent by email, upon transmission (excluding bounce-backs).
@@ -1114,8 +1114,8 @@ const TermsOfServicePage = memo(() => (
                     Lets Fix LLC<br />
                     Chicago, Illinois<br />
                     Email:{' '}
-                    <a href="mailto:legal@aipbx.net" className={cls.link}>
-                        legal@aipbx.net
+                    <a href="mailto:info@aipbx.net" className={cls.link}>
+                        info@aipbx.net
                     </a><br />
                     General inquiries:{' '}
                     <a href="mailto:info@aipbx.net" className={cls.link}>

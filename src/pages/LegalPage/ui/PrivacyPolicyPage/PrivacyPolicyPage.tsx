@@ -237,8 +237,8 @@ const PrivacyPolicyPage = memo(() => (
                     responses are conversational in nature and do not constitute binding
                     decisions, professional advice, or legal determinations. If you believe
                     an automated decision has significantly affected you, contact us at{' '}
-                    <a href="mailto:privacy@aipbx.net" className={cls.link}>
-                        privacy@aipbx.net
+                    <a href="mailto:info@aipbx.net" className={cls.link}>
+                        info@aipbx.net
                     </a>{' '}
                     to request human review.
                 </p>
@@ -448,8 +448,8 @@ const PrivacyPolicyPage = memo(() => (
                     Services without penalty.
                     A current, detailed list of subprocessors is available upon request
                     at{' '}
-                    <a href="mailto:privacy@aipbx.net" className={cls.link}>
-                        privacy@aipbx.net
+                    <a href="mailto:info@aipbx.net" className={cls.link}>
+                        info@aipbx.net
                     </a>.
                 </p>
                 <p className={cls.text}>
@@ -527,8 +527,8 @@ const PrivacyPolicyPage = memo(() => (
                 <p className={cls.text}>
                     If you are located in the European Economic Area, you have the following
                     rights under the GDPR. To exercise these rights, contact us at{' '}
-                    <a href="mailto:privacy@aipbx.net" className={cls.link}>
-                        privacy@aipbx.net
+                    <a href="mailto:info@aipbx.net" className={cls.link}>
+                        info@aipbx.net
                     </a>:
                 </p>
                 <ul className={cls.list}>
@@ -641,8 +641,8 @@ const PrivacyPolicyPage = memo(() => (
                 </ul>
                 <p className={cls.text}>
                     To exercise these rights, contact us at{' '}
-                    <a href="mailto:privacy@aipbx.net" className={cls.link}>
-                        privacy@aipbx.net
+                    <a href="mailto:info@aipbx.net" className={cls.link}>
+                        info@aipbx.net
                     </a>{' '}
                     or call us. We will verify your identity before processing your request.
                     You may designate an authorized agent to make a request on your behalf.
@@ -669,8 +669,8 @@ const PrivacyPolicyPage = memo(() => (
                     may have similar rights to those described in this Section 10.
                     To exercise any rights available under your state&#39;s privacy
                     law, contact us at{' '}
-                    <a href="mailto:privacy@aipbx.net" className={cls.link}>
-                        privacy@aipbx.net
+                    <a href="mailto:info@aipbx.net" className={cls.link}>
+                        info@aipbx.net
                     </a>.
                     We will process your request in accordance with applicable law.
                 </p>
@@ -690,8 +690,8 @@ const PrivacyPolicyPage = memo(() => (
                     from a child under 16, we will take reasonable steps to delete such
                     data promptly. If you believe that a child under 16 has provided us
                     with personal data, please contact us at{' '}
-                    <a href="mailto:privacy@aipbx.net" className={cls.link}>
-                        privacy@aipbx.net
+                    <a href="mailto:info@aipbx.net" className={cls.link}>
+                        info@aipbx.net
                     </a>.
                 </p>
                 <p className={cls.text}>
@@ -848,12 +848,12 @@ const PrivacyPolicyPage = memo(() => (
                     Lets Fix LLC<br />
                     Chicago, Illinois, United States<br />
                     Privacy:{' '}
-                    <a href="mailto:privacy@aipbx.net" className={cls.link}>
-                        privacy@aipbx.net
+                    <a href="mailto:info@aipbx.net" className={cls.link}>
+                        info@aipbx.net
                     </a><br />
                     Legal:{' '}
-                    <a href="mailto:legal@aipbx.net" className={cls.link}>
-                        legal@aipbx.net
+                    <a href="mailto:info@aipbx.net" className={cls.link}>
+                        info@aipbx.net
                     </a><br />
                     General:{' '}
                     <a href="mailto:info@aipbx.net" className={cls.link}>

@@ -638,9 +638,13 @@ const PublicOfferPage = memo(() => (
                     <a href="https://aipbx.ru" className={cls.link}>
                         aipbx.ru
                     </a><br />
+                    Телефон:{' '}
+                    <a href="tel:88002016293" className={cls.link}>
+                        8 800 201 62 93
+                    </a><br />
                     Email:{' '}
-                    <a href="mailto:legal@aipbx.ru" className={cls.link}>
-                        legal@aipbx.ru
+                    <a href="mailto:info@aipbx.ru" className={cls.link}>
+                        info@aipbx.ru
                     </a>
                 </address>
             </section>

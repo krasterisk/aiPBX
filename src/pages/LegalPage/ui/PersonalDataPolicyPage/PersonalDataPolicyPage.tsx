@@ -531,8 +531,8 @@ const PersonalDataPolicyPage = memo(() => (
                     ООО &laquo;Крастериск&raquo;<br />
                     Адрес: 660126, г. Красноярск, ул. 9 Мая, 6, оф. 2-8<br />
                     Email:{' '}
-                    <a href="mailto:privacy@aipbx.ru" className={cls.link}>
-                        privacy@aipbx.ru
+                    <a href="mailto:info@aipbx.ru" className={cls.link}>
+                        info@aipbx.ru
                     </a><br />
                     Телефон: указан на сайте{' '}
                     <a href="https://aipbx.ru" className={cls.link}>
