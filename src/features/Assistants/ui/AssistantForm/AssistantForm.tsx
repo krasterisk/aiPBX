@@ -86,6 +86,22 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
                     isTemplateApplied.current = true
                 }
             }
+
+            // Apply copied assistant data from sessionStorage
+            const isCopy = searchParams.get('copy')
+            if (isCopy === 'true') {
+                const copiedData = sessionStorage.getItem('copied_assistant')
+                if (copiedData) {
+                    try {
+                        const parsed = JSON.parse(copiedData)
+                        dispatch(assistantFormActions.updateForm(parsed))
+                        sessionStorage.removeItem('copied_assistant')
+                        isTemplateApplied.current = true
+                    } catch (e) {
+                        // ignore parse errors
+                    }
+                }
+            }
         }
     }, [isEdit, formFields, searchParams, dispatch, i18n.language])
 

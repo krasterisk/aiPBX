@@ -1,7 +1,7 @@
 import { rtkApi } from '@/shared/api/rtkApi'
 
 // @ts-ignore
-import { PaymentListResponse } from '../model/types/payment'
+import { Payment, PaymentListResponse } from '../model/types/payment'
 
 interface CreateIntentArgs {
     userId: string
@@ -12,6 +12,16 @@ interface CreateIntentArgs {
 interface CreateIntentResponse {
     clientSecret: string
     id: string
+}
+
+interface CreateRobokassaArgs {
+    amount: number
+    description?: string
+}
+
+interface CreateRobokassaResponse {
+    paymentUrl: string
+    invId: number
 }
 
 const paymentApi = rtkApi.injectEndpoints({
@@ -29,8 +39,24 @@ const paymentApi = rtkApi.injectEndpoints({
                 method: 'GET',
                 params
             })
+        }),
+        createRobokassaPayment: build.mutation<CreateRobokassaResponse, CreateRobokassaArgs>({
+            query: (args) => ({
+                url: '/payments/robokassa/create',
+                method: 'POST',
+                body: args
+            })
+        }),
+        getRobokassaStatus: build.query<Payment, string>({
+            query: (invId) => `/payments/robokassa/status/${invId}`
         })
     })
 })
 
-export const { useCreateIntentMutation, useGetPaymentsQuery } = paymentApi
+export const {
+    useCreateIntentMutation,
+    useGetPaymentsQuery,
+    useCreateRobokassaPaymentMutation,
+    useLazyGetRobokassaStatusQuery
+} = paymentApi
+

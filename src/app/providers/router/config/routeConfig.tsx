@@ -60,7 +60,9 @@ import {
   getRouteSipTrunks,
   getRouteSipTrunkCreate,
   getRouteSipTrunkEdit,
-  getRoutePublicPricing
+  getRoutePublicPricing,
+  getRoutePublicSpeechAnalytics,
+  getRoutePublicVoiceAssistants
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 
@@ -109,6 +111,8 @@ import {
 import { McpServersPage, McpServerEditPage, McpServerCreatePage } from '@/pages/McpServersPage'
 import { SipTrunksPage, SipTrunkCreatePage, SipTrunkEditPage } from '@/pages/SipTrunksPage'
 import { PublicPricingPage } from '@/pages/PublicPricingPage'
+import { SpeechAnalyticsLandingPage } from '@/pages/SpeechAnalyticsLandingPage'
+import { VoiceAssistantsLandingPage } from '@/pages/VoiceAssistantsLandingPage'
 import { Navigate } from 'react-router-dom'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
@@ -395,6 +399,18 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.PUBLIC_PRICING]: {
     path: getRoutePublicPricing(),
     element: <PublicPricingPage />,
+    authOnly: false
+  },
+
+  [AppRoutes.PUBLIC_SPEECH_ANALYTICS]: {
+    path: getRoutePublicSpeechAnalytics(),
+    element: <SpeechAnalyticsLandingPage />,
+    authOnly: false
+  },
+
+  [AppRoutes.PUBLIC_VOICE_ASSISTANTS]: {
+    path: getRoutePublicVoiceAssistants(),
+    element: <VoiceAssistantsLandingPage />,
     authOnly: false
   }
 

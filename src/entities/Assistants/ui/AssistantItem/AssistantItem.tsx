@@ -5,10 +5,10 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Assistant } from '../../model/types/assistants'
-import { getRouteAssistantEdit } from '@/shared/const/router'
+import { getRouteAssistantEdit, getRouteAssistantCreate } from '@/shared/const/router'
 import { ContentView } from '@/entities/Content'
 import { useNavigate } from 'react-router-dom'
-import { Bot, Mic, Cpu, BarChart3, User } from 'lucide-react'
+import { Bot, Mic, Cpu, BarChart3, User, Copy } from 'lucide-react'
 import { Button } from '@/shared/ui/redesigned/Button'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import { toast } from 'react-toastify'
@@ -50,6 +50,17 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
             toast.success(t('Скопировано в буфер обмена'))
         }
     }, [assistant.uniqueId, t])
+
+    const onCopyAssistant = useCallback((e: React.MouseEvent) => {
+        e.stopPropagation()
+        const { id, uniqueId, sipAccount, user, userId, ...assistantData } = assistant
+        const copyData = {
+            ...assistantData,
+            name: `${assistant.name || ''} - ${t('копия')}`
+        }
+        sessionStorage.setItem('copied_assistant', JSON.stringify(copyData))
+        navigate(`${getRouteAssistantCreate()}?copy=true`)
+    }, [assistant, navigate, t])
 
     const onOpenEdit = useCallback(() => {
         navigate(getRouteAssistantEdit(assistant.id || ''))
@@ -129,6 +140,15 @@ export const AssistantItem = memo((props: AssistantItemProps) => {
                         size={'s'}
                     >
                         {t('Скопировать ID')}
+                    </Button>
+                    <Button
+                        variant={'clear'}
+                        onClick={onCopyAssistant}
+                        addonLeft={<Copy size={18} />}
+                        className={cls.copyBtn}
+                        size={'s'}
+                    >
+                        {t('Копировать ассистента')}
                     </Button>
                 </HStack>
             </VStack>

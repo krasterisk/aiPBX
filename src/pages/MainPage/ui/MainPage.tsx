@@ -30,7 +30,7 @@ import {
 } from 'lucide-react'
 import { LangSwitcher } from '@/entities/LangSwitcher'
 import { useNavigate } from 'react-router-dom'
-import { getRouteDashboard, getRouteSignup, getRouteLogin, getRoutePublicPricing, getRouteLegal } from '@/shared/const/router'
+import { getRouteDashboard, getRouteSignup, getRouteLogin, getRoutePublicPricing, getRouteLegal, getRoutePublicSpeechAnalytics, getRoutePublicVoiceAssistants } from '@/shared/const/router'
 import { getUserAuthData } from '@/entities/User'
 import { useSelector } from 'react-redux'
 import { Button } from '@/shared/ui/redesigned/Button'
@@ -103,6 +103,12 @@ const MainPage: FC = memo(() => {
         </Button>
       </div>
       <div className={cls.rightNav}>
+        <Button variant="clear" onClick={() => navigate(getRoutePublicSpeechAnalytics())}>
+          {t('SpeechAnalyticsPage.HeroBadge', { defaultValue: 'Аналитика', ns: 'main' })}
+        </Button>
+        <Button variant="clear" onClick={() => navigate(getRoutePublicVoiceAssistants())}>
+          {t('VoiceAssistantsPage.HeroBadge', { defaultValue: 'Ассистенты', ns: 'main' })}
+        </Button>
         <Button variant="clear" onClick={onPricing}>
           {t('Pricing', { defaultValue: 'Pricing' })}
         </Button>

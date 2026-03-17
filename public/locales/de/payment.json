@@ -87,5 +87,18 @@
   "usage.export.channelId": "Kanal-ID",
   "usage.export.callerId": "Anrufer-ID",
   "usage.export.source": "Quelle",
-  "usage.export.duration": "Dauer (s)"
+  "usage.export.duration": "Dauer (s)",
+  "К оплате": "Zu zahlen",
+  "по курсу": "zum Kurs",
+  "Оплатить через Робокассу": "Über Robokassa bezahlen",
+  "Не удалось рассчитать сумму в рублях": "Betrag in Rubel konnte nicht berechnet werden",
+  "Платёж обрабатывается": "Zahlung wird bearbeitet",
+  "Ваш баланс будет обновлён в течение нескольких минут": "Ihr Guthaben wird innerhalb weniger Minuten aktualisiert",
+  "Попробовать снова": "Erneut versuchen",
+  "Оплата прошла успешно": "Zahlung erfolgreich",
+  "Оплата не удалась": "Zahlung fehlgeschlagen",
+  "Verifying Payment": "Zahlung überprüfen",
+  "Please wait...": "Bitte warten...",
+  "Back to Payments": "Zurück zu Zahlungen",
+  "Redirecting...": "Weiterleitung..."
 }

@@ -31,7 +31,7 @@ export const CheckoutForm = memo((props: CheckoutFormProps) => {
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: `${window.location.origin}/billing?status=success`
+                return_url: `${window.location.origin}/billing?provider=stripe&status=success`
             }
         })
 

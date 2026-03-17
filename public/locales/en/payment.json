@@ -88,5 +88,18 @@
   "usage.export.channelId": "Channel ID",
   "usage.export.callerId": "Caller ID",
   "usage.export.source": "Source",
-  "usage.export.duration": "Duration (s)"
+  "usage.export.duration": "Duration (s)",
+  "К оплате": "Amount to pay",
+  "по курсу": "at rate",
+  "Оплатить через Робокассу": "Pay via Robokassa",
+  "Не удалось рассчитать сумму в рублях": "Could not calculate the amount in rubles",
+  "Платёж обрабатывается": "Payment is being processed",
+  "Ваш баланс будет обновлён в течение нескольких минут": "Your balance will be updated within a few minutes",
+  "Попробовать снова": "Try again",
+  "Оплата прошла успешно": "Payment successful",
+  "Оплата не удалась": "Payment failed",
+  "Verifying Payment": "Verifying Payment",
+  "Please wait...": "Please wait...",
+  "Back to Payments": "Back to Payments",
+  "Redirecting...": "Redirecting..."
 }

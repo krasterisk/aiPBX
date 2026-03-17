@@ -3,11 +3,13 @@ import { memo, useState, useCallback } from 'react'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { TopUpBalance } from '@/features/TopUpBalance'
 import { StripeContainer } from '@/features/CheckoutByStripe'
+import { RobokassaCheckout } from '@/features/CheckoutByRobokassa'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { useTranslation } from 'react-i18next'
 import { useGetUserBalance, UserCurrencyValues } from '@/entities/User'
 import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
+import { getDomainConfig } from '@/shared/lib/domain'
 
 import { Modal } from '@/shared/ui/redesigned/Modal'
 import HistoryIcon from '@mui/icons-material/History'
@@ -26,6 +28,9 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
     const [clientSecret, setClientSecret] = useState<string | null>(null)
     const [isTopUpModalOpen, setIsTopUpModalOpen] = useState(false)
 
+    const { paymentSystem } = getDomainConfig()
+    const isRobokassa = paymentSystem === 'robokassa'
+
     const { data: balanceData } = useGetUserBalance(null)
     const formattedBalance = balanceData
         ? formatCurrency(balanceData.balance, UserCurrencyValues.USD, 2)
@@ -41,7 +46,26 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
 
     const handleCloseModal = useCallback(() => {
         setIsTopUpModalOpen(false)
+        setClientSecret(null)
     }, [])
+
+    const renderModalContent = () => {
+        if (isRobokassa) {
+            return <RobokassaCheckout onCancel={handleCloseModal} />
+        }
+
+        // Stripe flow: TopUpBalance → StripeContainer
+        if (!clientSecret) {
+            return <TopUpBalance onSuccess={onIntentCreated} />
+        }
+
+        return (
+            <StripeContainer
+                clientSecret={clientSecret}
+                onCancel={onCancel}
+            />
+        )
+    }
 
     return (
         <VStack gap="16" max className={cls.PaymentOverview}>
@@ -119,16 +143,7 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
                 isTopUpModalOpen && (
                     <Modal isOpen={isTopUpModalOpen} onClose={handleCloseModal}>
                         <VStack className={cls.modalContent}>
-                            {!clientSecret
-? (
-                                <TopUpBalance onSuccess={onIntentCreated} />
-                            )
-: (
-                                <StripeContainer
-                                    clientSecret={clientSecret}
-                                    onCancel={onCancel}
-                                />
-                            )}
+                            {renderModalContent()}
                         </VStack>
                     </Modal>
                 )
