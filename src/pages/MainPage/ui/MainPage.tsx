@@ -111,9 +111,6 @@ const MainPage: FC = memo(() => {
           <Button variant="clear" onClick={onPricing}>
             {t('Pricing', { defaultValue: 'Pricing' })}
           </Button>
-          <Button variant="clear" onClick={() => { navigate(getRouteLegal()) }}>
-            {t('Legal', { defaultValue: 'Legal', ns: 'main' })}
-          </Button>
         </div>
         <div className={cls.topBarRight}>
           <Button variant="glass-action" onClick={onLogin}>
