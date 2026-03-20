@@ -17,9 +17,9 @@ import {
     getLlmModels,
     isLlmFreeText,
     getTtsVoices
+, assistantFormActions 
 } from '@/entities/Assistants'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { assistantFormActions } from '@/entities/Assistants'
 
 import { Collapse, Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material'
 import { Button } from '@/shared/ui/redesign-v3/Button'
