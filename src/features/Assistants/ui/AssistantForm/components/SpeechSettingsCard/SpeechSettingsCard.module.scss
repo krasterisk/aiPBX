@@ -76,6 +76,7 @@
     margin-top: var(--space-5);
     padding-top: var(--space-4);
     border-top: 1px solid var(--divider-solid);
+    width: 100%;
 }
 
 .section {
@@ -83,9 +84,22 @@
     background: var(--glass-overlay-subtle);
     border-radius: var(--radius-md);
     border: 1px solid rgba(255, 255, 255, 0.03);
+    width: 100%;
+    box-sizing: border-box;
 
     &:hover {
         background: var(--glass-overlay-hover);
+    }
+}
+
+// Force MUI Collapse inside this card to stretch full width
+.SpeechSettingsCard {
+    :global(.MuiCollapse-root) {
+        width: 100%;
+    }
+
+    :global(.MuiCollapse-wrapperInner) {
+        width: 100%;
     }
 }
 

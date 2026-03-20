@@ -224,5 +224,15 @@
   "Переводить вызов": "Transfer Call",
   "analyticTooltip": "When enabled, analytics are automatically generated after each conversation: dialog quality score (CSAT), intent recognition, sentiment analysis, scenario effectiveness metrics, and key performance indicators. Data is available in reports.",
   "allowHangupTooltip": "When enabled, the assistant can independently end a conversation when the task is completed or when requested by the caller. When disabled, only the caller can hang up.",
-  "allowTransferTooltip": "When enabled, the assistant can redirect a call to an operator, employee, or queue. For this to work correctly, provide a directory of employee numbers, operator extensions, and SIP addresses of queues in the prompt or tools."
+  "allowTransferTooltip": "When enabled, the assistant can redirect a call to an operator, employee, or queue. For this to work correctly, provide a directory of employee numbers, operator extensions, and SIP addresses of queues in the prompt or tools.",
+  "Режим работы": "Pipeline Mode",
+  "Realtime (потоковый)": "Realtime (streaming)",
+  "Non-Realtime (STT → LLM → TTS)": "Non-Realtime (STT → LLM → TTS)",
+  "Провайдер распознавания речи": "STT Provider",
+  "Провайдер языковой модели": "LLM Provider",
+  "Модель LLM": "LLM Model",
+  "Провайдер синтеза речи": "TTS Provider",
+  "Голос TTS": "TTS Voice",
+  "Non-Realtime Pipeline": "Non-Realtime Pipeline",
+  "Введите название модели": "Enter model name"
 }

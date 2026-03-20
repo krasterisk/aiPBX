@@ -56,6 +56,12 @@ export interface Assistant {
   analytic?: boolean
   allowHangup?: boolean
   allowTransfer?: boolean
+  pipelineMode?: string | null
+  sttProvider?: string | null
+  llmProvider?: string | null
+  llmModel?: string | null
+  ttsProvider?: string | null
+  ttsVoice?: string | null
 }
 
 export interface AssistantsListProps {

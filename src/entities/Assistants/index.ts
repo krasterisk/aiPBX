@@ -37,6 +37,15 @@ export type { AssistantFormSchema } from './model/types/assistantFormSchema'
 export type { Assistant, AllAssistants, AssistantsListProps, AssistantOptions } from './model/types/assistants'
 export { initAssistant } from './model/const/initAssistant'
 export { assistantTemplates } from './model/const/assistantTemplates'
+export {
+  STT_PROVIDERS,
+  LLM_PROVIDERS,
+  TTS_PROVIDERS,
+  NON_REALTIME_DEFAULTS,
+  getLlmModels,
+  isLlmFreeText,
+  getTtsVoices
+} from './model/const/nonRealtimeOptions'
 
 export {
   assistantsApi,

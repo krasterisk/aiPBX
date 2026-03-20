@@ -72,20 +72,24 @@ export const MainInfoCard = memo((props: MainInfoCardProps) => {
                     fullWidth
                 />
 
-                <ModelSelect
-                    label={String(t('Модель'))}
-                    value={formFields?.model || ''}
-                    onChangeValue={onChangeSelectHandler?.('model')}
-                    required
-                />
+                {formFields?.pipelineMode !== 'non-realtime' && (
+                    <>
+                        <ModelSelect
+                            label={String(t('Модель'))}
+                            value={formFields?.model || ''}
+                            onChangeValue={onChangeSelectHandler?.('model')}
+                            required
+                        />
 
-                <VoiceSelect
-                    label={String(t('Голос'))}
-                    value={formFields?.voice ?? ''}
-                    model={formFields?.model}
-                    onChangeValue={onChangeSelectHandler?.('voice')}
-                    required
-                />
+                        <VoiceSelect
+                            label={String(t('Голос'))}
+                            value={formFields?.voice ?? ''}
+                            model={formFields?.model}
+                            onChangeValue={onChangeSelectHandler?.('voice')}
+                            required
+                        />
+                    </>
+                )}
 
                 <ToolsSelect
                     label={t('Функции') || ''}

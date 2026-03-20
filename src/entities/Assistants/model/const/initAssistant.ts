@@ -21,6 +21,12 @@ export const initAssistant: Assistant = {
   analytic: true,
   allowHangup: false,
   allowTransfer: false,
+  pipelineMode: null,
+  sttProvider: null,
+  llmProvider: null,
+  llmModel: null,
+  ttsProvider: null,
+  ttsVoice: null,
   comment: '',
   userId: '',
   user: {

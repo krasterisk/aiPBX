@@ -251,6 +251,7 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
                         {/* Advanced Settings Card (Admin only) */}
                         <SpeechSettingsCard
                             onChangeTextHandler={onChangeTextHandler}
+                            onChangeSelectHandler={onChangeSelectHandler}
                         />
                     </VStack>
                 </div>
