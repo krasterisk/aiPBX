@@ -58,6 +58,38 @@ export const useMenubarItems = () => {
   if (userData) {
     menubarItemsList.push(
       {
+        path: getRouteDashboard(),
+        Icon: DashboardIcon,
+        text: t('Дашборды'),
+        authOnly: true,
+        subItems: [
+          {
+            path: getRouteDashboardOverview(),
+            Icon: InsightsIcon,
+            text: t('Сводный'),
+            authOnly: true
+          },
+          {
+            path: getRouteDashboardAIAnalytics(),
+            Icon: TimelineIcon,
+            text: t('Аналитика ботов'),
+            authOnly: true
+          },
+          {
+            path: getRouteDashboardCallRecords(),
+            Icon: AssessmentIcon,
+            text: t('Аналитика звонков'),
+            authOnly: true
+          },
+        ]
+      },
+      {
+        path: getRouteCalls(),
+        Icon: DescriptionIcon,
+        text: t('Звонки'),
+        authOnly: true
+      },
+      {
         path: '/ai-bots',
         Icon: SmartToyIcon,
         text: t('AI Боты'),
@@ -120,39 +152,6 @@ export const useMenubarItems = () => {
             ]
           },
         ]
-      },
-
-      {
-        path: getRouteDashboard(),
-        Icon: DashboardIcon,
-        text: t('Дашборды'),
-        authOnly: true,
-        subItems: [
-          {
-            path: getRouteDashboardOverview(),
-            Icon: InsightsIcon,
-            text: t('Сводный'),
-            authOnly: true
-          },
-          {
-            path: getRouteDashboardAIAnalytics(),
-            Icon: TimelineIcon,
-            text: t('Аналитика ботов'),
-            authOnly: true
-          },
-          {
-            path: getRouteDashboardCallRecords(),
-            Icon: AssessmentIcon,
-            text: t('Аналитика звонков'),
-            authOnly: true
-          },
-        ]
-      },
-      {
-        path: getRouteCalls(),
-        Icon: DescriptionIcon,
-        text: t('Звонки'),
-        authOnly: true
       },
       {
         path: getRouteAnalytics(),
