@@ -7,7 +7,7 @@ import { Card } from '@/shared/ui/redesigned/Card'
 import { Tool } from '../../model/types/tools'
 import { getRouteToolsEdit } from '@/shared/const/router'
 import { useNavigate } from 'react-router-dom'
-import { Settings, FileCode, MessageSquare, ChevronRight, User } from 'lucide-react'
+import { Settings, FileCode, MessageSquare, ChevronRight, User, BookOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { isUserAdmin } from '@/entities/User'
@@ -15,6 +15,13 @@ import { isUserAdmin } from '@/entities/User'
 interface ToolItemProps {
   className?: string
   tool: Tool
+}
+
+const isKnowledgeBaseTool = (tool: Tool): boolean => {
+  const toolData = typeof tool.toolData === 'string'
+    ? JSON.parse(tool.toolData)
+    : tool.toolData
+  return (toolData as any)?.handler === 'knowledge_base'
 }
 
 export const ToolItem = memo((props: ToolItemProps) => {
@@ -26,6 +33,7 @@ export const ToolItem = memo((props: ToolItemProps) => {
   const { t } = useTranslation('tools')
   const navigate = useNavigate()
   const isAdmin = useSelector(isUserAdmin)
+  const isKb = isKnowledgeBaseTool(tool)
 
   const onOpenEdit = useCallback(() => {
     if (tool.id) {
@@ -52,7 +60,15 @@ export const ToolItem = memo((props: ToolItemProps) => {
               variant="accent"
               className={cls.chip}
             />
-            {tool.webhook && (
+            {isKb ? (
+              <Text
+                text={t('База знаний')}
+                size="xs"
+                bold
+                variant="accent"
+                className={cls.chip}
+              />
+            ) : tool.webhook && (
               <Text
                 text={t('Вебхук')}
                 size="xs"
@@ -66,7 +82,7 @@ export const ToolItem = memo((props: ToolItemProps) => {
 
         <HStack gap="16" max align="center">
           <div className={cls.avatar}>
-            <Settings size={24} />
+            {isKb ? <BookOpen size={24} /> : <Settings size={24} />}
           </div>
           <VStack max gap="4">
             <Text title={tool.name} size="m" bold className={cls.title} />

@@ -35,3 +35,17 @@
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
+
+.kbRow {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: rgba(94, 211, 243, 0.05);
+        border-color: rgba(94, 211, 243, 0.15);
+    }
+}

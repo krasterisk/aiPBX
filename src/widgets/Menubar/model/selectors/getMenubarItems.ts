@@ -20,7 +20,8 @@ import {
   getRouteDashboardAIAnalytics,
   getRouteAnalytics,
   getRouteAnalyticsProjects,
-  getRouteAnalyticsApi
+  getRouteAnalyticsApi,
+  getRouteKnowledgeBases
 } from '@/shared/const/router'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
@@ -39,6 +40,7 @@ import DescriptionIcon from '@mui/icons-material/Description'
 
 import HubIcon from '@mui/icons-material/Hub'
 import PhoneForwardedIcon from '@mui/icons-material/PhoneForwarded'
+import MenuBookIcon from '@mui/icons-material/MenuBook'
 
 import InsightsIcon from '@mui/icons-material/Insights'
 import AssessmentIcon from '@mui/icons-material/Assessment'
@@ -83,6 +85,12 @@ export const useMenubarItems = () => {
             path: getRouteMcpServers(),
             Icon: HubIcon,
             text: t('MCP Серверы'),
+            authOnly: true
+          },
+          {
+            path: getRouteKnowledgeBases(),
+            Icon: MenuBookIcon,
+            text: t('Базы знаний'),
             authOnly: true
           },
           {

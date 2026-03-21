@@ -34,7 +34,9 @@ export const rtkApi = createApi({
     'OperatorProjects',
     'OperatorApiTokens',
     'SipTrunks',
-    'Billing'
+    'Billing',
+    'KnowledgeBases',
+    'KnowledgeDocuments'
   ],
   endpoints: (builder) => ({})
 })

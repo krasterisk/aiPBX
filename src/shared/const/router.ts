@@ -57,7 +57,9 @@ export enum AppRoutes {
   SIP_TRUNK_EDIT = 'sip_trunk_edit',
   PUBLIC_PRICING = 'public_pricing',
   PUBLIC_SPEECH_ANALYTICS = 'public_speech_analytics',
-  PUBLIC_VOICE_ASSISTANTS = 'public_voice_assistants'
+  PUBLIC_VOICE_ASSISTANTS = 'public_voice_assistants',
+  KNOWLEDGE_BASES = 'knowledge_bases',
+  KNOWLEDGE_BASE_DETAIL = 'knowledge_base_detail'
 }
 
 export const getRouteMain = () => '/'
@@ -121,6 +123,8 @@ export const getRouteSipTrunkEdit = (id: string) => `/publish/sip-trunks/${id}`
 export const getRoutePublicPricing = () => '/pricing'
 export const getRoutePublicSpeechAnalytics = () => '/speech-analytics'
 export const getRoutePublicVoiceAssistants = () => '/voice-assistants'
+export const getRouteKnowledgeBases = () => '/knowledge-bases'
+export const getRouteKnowledgeBaseDetail = (id: string) => `/knowledge-bases/${id}`
 
 export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteMain()]: AppRoutes.MAIN,
@@ -180,5 +184,7 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteSipTrunkEdit(':id')]: AppRoutes.SIP_TRUNK_EDIT,
   [getRoutePublicPricing()]: AppRoutes.PUBLIC_PRICING,
   [getRoutePublicSpeechAnalytics()]: AppRoutes.PUBLIC_SPEECH_ANALYTICS,
-  [getRoutePublicVoiceAssistants()]: AppRoutes.PUBLIC_VOICE_ASSISTANTS
+  [getRoutePublicVoiceAssistants()]: AppRoutes.PUBLIC_VOICE_ASSISTANTS,
+  [getRouteKnowledgeBases()]: AppRoutes.KNOWLEDGE_BASES,
+  [getRouteKnowledgeBaseDetail(':id')]: AppRoutes.KNOWLEDGE_BASE_DETAIL
 }

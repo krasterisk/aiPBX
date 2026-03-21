@@ -22,6 +22,7 @@ import { OnboardingState } from '@/features/Onboarding'
 
 import { SipTrunksPageSchema } from '@/entities/SipTrunks'
 import { SipTrunkFormSchema } from '@/features/SipTrunks'
+import { KnowledgeBasesPageSchema } from '@/entities/KnowledgeBases'
 
 export interface StateSchema {
   user: UserSchema
@@ -51,6 +52,7 @@ export interface StateSchema {
   sipTrunksPage?: SipTrunksPageSchema
   sipTrunkForm?: SipTrunkFormSchema
   projectWizard?: ProjectWizardSchema
+  knowledgeBasesPage?: KnowledgeBasesPageSchema
 }
 
 export type StateSchemaKey = keyof StateSchema

@@ -62,7 +62,9 @@ import {
   getRouteSipTrunkEdit,
   getRoutePublicPricing,
   getRoutePublicSpeechAnalytics,
-  getRoutePublicVoiceAssistants
+  getRoutePublicVoiceAssistants,
+  getRouteKnowledgeBases,
+  getRouteKnowledgeBaseDetail
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 
@@ -114,6 +116,7 @@ import { PublicPricingPage } from '@/pages/PublicPricingPage'
 import { SpeechAnalyticsLandingPage } from '@/pages/SpeechAnalyticsLandingPage'
 import { VoiceAssistantsLandingPage } from '@/pages/VoiceAssistantsLandingPage'
 import { Navigate } from 'react-router-dom'
+import { KnowledgeBasesPage, KnowledgeBaseDetailPage } from '@/pages/KnowledgeBasesPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -412,6 +415,17 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     path: getRoutePublicVoiceAssistants(),
     element: <VoiceAssistantsLandingPage />,
     authOnly: false
+  },
+
+  [AppRoutes.KNOWLEDGE_BASES]: {
+    path: getRouteKnowledgeBases(),
+    authOnly: true,
+    element: <KnowledgeBasesPage />
+  },
+  [AppRoutes.KNOWLEDGE_BASE_DETAIL]: {
+    path: getRouteKnowledgeBaseDetail(':id'),
+    authOnly: true,
+    element: <KnowledgeBaseDetailPage />
   }
 
 }

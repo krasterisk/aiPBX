@@ -197,5 +197,13 @@
   "oauth_success_subtitle": "Der Dienst wurde verbunden. Dieses Fenster wird automatisch geschlossen.",
   "oauth_close_window": "Fenster schließen",
   "Интеграция успешно подключена": "Integration erfolgreich verbunden",
-  "Ошибка подключения интеграции": "Fehler bei der Integrationsverbindung"
+  "Ошибка подключения интеграции": "Fehler bei der Integrationsverbindung",
+  "База знаний": "Wissensdatenbank",
+  "Выберите базы знаний": "Wissensdatenbanken auswählen",
+  "чанков": "Chunks",
+  "Нет баз знаний.": "Keine Wissensdatenbanken.",
+  "Создать →": "Erstellen →",
+  "Параметры заполнятся автоматически": "Parameter werden automatisch ausgefüllt",
+  "Режим": "Modus",
+  "Webhook (API)": "Webhook (API)"
 }
