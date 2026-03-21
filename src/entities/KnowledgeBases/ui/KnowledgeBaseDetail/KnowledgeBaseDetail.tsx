@@ -191,13 +191,13 @@ export const KnowledgeBaseDetail = memo((props: KnowledgeBaseDetailProps) => {
         <Button variant="glass-action" size="s" disabled={isUploading}>
           {isUploading ? t('Загрузка...') : t('Выбрать файл')}
         </Button>
-        <Text text={t('Поддерживаемые форматы: PDF, DOCX, TXT, MD')} size="xs" variant="accent" align="center" />
+        <Text text={t('Поддерживаемые форматы: PDF, DOCX, XLSX, XLS, CSV, TXT, MD')} size="xs" variant="accent" align="center" />
         <Text text={t('Макс. размер: 10 МБ')} size="xs" variant="accent" align="center" />
         <input
           ref={fileInputRef}
           type="file"
           className={cls.uploadInput}
-          accept=".pdf,.docx,.txt,.md"
+          accept=".pdf,.docx,.xlsx,.xls,.csv,.txt,.md"
           onChange={async (e) => { await onFileSelect(e.target.files) }}
         />
       </VStack>

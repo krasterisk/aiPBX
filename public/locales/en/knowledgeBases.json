@@ -19,7 +19,7 @@
   "Перетащите файл сюда или": "Drag & drop a file here or",
   "Выбрать файл": "Choose File",
   "Загрузка...": "Uploading...",
-  "Поддерживаемые форматы: PDF, DOCX, TXT, MD": "Supported formats: PDF, DOCX, TXT, MD",
+  "Поддерживаемые форматы: PDF, DOCX, XLSX, XLS, CSV, TXT, MD": "Supported formats: PDF, DOCX, XLSX, XLS, CSV, TXT, MD",
   "Макс. размер: 10 МБ": "Max size: 10 MB",
   "Тестовый поиск": "Test Search",
   "Введите вопрос для проверки...": "Enter a question to test...",

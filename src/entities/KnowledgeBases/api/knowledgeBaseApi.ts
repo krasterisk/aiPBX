@@ -84,7 +84,9 @@ export const knowledgeBaseApi = rtkApi.injectEndpoints({
     }),
     searchKnowledgeBase: build.query<SearchResult[], { kbId: number, query: string, limit?: number }>({
       query: ({ kbId, query, limit }) =>
-        `/knowledge-bases/${kbId}/search?q=${encodeURIComponent(query)}&limit=${limit || 5}`
+        `/knowledge-bases/${kbId}/search?q=${encodeURIComponent(query)}&limit=${limit || 5}`,
+      transformResponse: (response: { query: string, results: SearchResult[] } | SearchResult[]) =>
+        Array.isArray(response) ? response : response.results
     })
   })
 })
