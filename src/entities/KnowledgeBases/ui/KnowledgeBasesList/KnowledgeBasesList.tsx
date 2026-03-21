@@ -1,4 +1,3 @@
-import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './KnowledgeBasesList.module.scss'
 import React, { memo } from 'react'
 import { VStack } from '@/shared/ui/redesigned/Stack'

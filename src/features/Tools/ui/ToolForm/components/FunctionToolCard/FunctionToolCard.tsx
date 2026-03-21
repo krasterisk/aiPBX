@@ -251,7 +251,7 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
                                                 <Check
                                                     label=""
                                                     checked={selectedKbIds.includes(kb.id)}
-                                                    onChange={() => onToggleKb(kb.id)}
+                                                    onChange={() => { onToggleKb(kb.id) }}
                                                 />
                                                 <BookOpen size={16} />
                                                 <Text text={kb.name} size="s" bold />

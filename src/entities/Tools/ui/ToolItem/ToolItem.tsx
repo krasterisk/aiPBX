@@ -21,7 +21,7 @@ const isKnowledgeBaseTool = (tool: Tool): boolean => {
   const toolData = typeof tool.toolData === 'string'
     ? JSON.parse(tool.toolData)
     : tool.toolData
-  return (toolData as any)?.handler === 'knowledge_base'
+  return (toolData)?.handler === 'knowledge_base'
 }
 
 export const ToolItem = memo((props: ToolItemProps) => {

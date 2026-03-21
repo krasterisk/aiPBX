@@ -78,7 +78,7 @@ export const KnowledgeBaseFormModal = memo((props: KnowledgeBaseFormModalProps) 
           <Textarea
             label={t('Название')}
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => { setName(e.target.value) }}
             placeholder={t('Введите название') ?? ''}
             required
             autoFocus
@@ -86,7 +86,7 @@ export const KnowledgeBaseFormModal = memo((props: KnowledgeBaseFormModalProps) 
           <Textarea
             label={t('Описание')}
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => { setDescription(e.target.value) }}
             placeholder={t('Введите описание') ?? ''}
             multiline
             minRows={3}

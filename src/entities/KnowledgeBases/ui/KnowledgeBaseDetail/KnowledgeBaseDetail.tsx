@@ -4,7 +4,7 @@ import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { KnowledgeBase, KnowledgeDocument, SearchResult } from '../../model/types/knowledgeBase'
+import { KnowledgeBase } from '../../model/types/knowledgeBase'
 import { useNavigate } from 'react-router-dom'
 import { getRouteKnowledgeBases } from '@/shared/const/router'
 import {
@@ -26,8 +26,7 @@ import {
   useAddUrl,
   useDeleteDocument,
   useDeleteKnowledgeBase,
-  useLazySearchKnowledgeBase,
-  useUpdateKnowledgeBase
+  useLazySearchKnowledgeBase
 } from '../../api/knowledgeBaseApi'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { KnowledgeBaseFormModal } from '../KnowledgeBaseFormModal/KnowledgeBaseFormModal'
@@ -66,7 +65,7 @@ export const KnowledgeBaseDetail = memo((props: KnowledgeBaseDetailProps) => {
       const interval = setInterval(() => {
         refetchDocs()
       }, 4000)
-      return () => clearInterval(interval)
+      return () => { clearInterval(interval) }
     }
   }, [documents, refetchDocs])
 
@@ -151,7 +150,7 @@ export const KnowledgeBaseDetail = memo((props: KnowledgeBaseDetailProps) => {
             <Button
               variant="glass-action"
               size="s"
-              onClick={() => setIsEditOpen(true)}
+              onClick={() => { setIsEditOpen(true) }}
               addonLeft={<Pencil size={14} />}
             >
               {t('Изменить')}
@@ -160,7 +159,7 @@ export const KnowledgeBaseDetail = memo((props: KnowledgeBaseDetailProps) => {
               variant="glass-action"
               color="error"
               size="s"
-              onClick={() => setShowDeleteConfirm(true)}
+              onClick={() => { setShowDeleteConfirm(true) }}
               addonLeft={<Trash2 size={14} />}
             >
               {t('Удалить')}
@@ -199,7 +198,7 @@ export const KnowledgeBaseDetail = memo((props: KnowledgeBaseDetailProps) => {
           type="file"
           className={cls.uploadInput}
           accept=".pdf,.docx,.txt,.md"
-          onChange={(e) => onFileSelect(e.target.files)}
+          onChange={async (e) => { await onFileSelect(e.target.files) }}
         />
       </VStack>
 
@@ -209,7 +208,7 @@ export const KnowledgeBaseDetail = memo((props: KnowledgeBaseDetailProps) => {
         <HStack gap="8" max className={cls.urlInput}>
           <Textarea
             value={urlValue}
-            onChange={(e) => setUrlValue(e.target.value)}
+            onChange={(e) => { setUrlValue(e.target.value) }}
             placeholder={t('Введите URL') ?? ''}
             size="small"
           />
@@ -248,7 +247,7 @@ export const KnowledgeBaseDetail = memo((props: KnowledgeBaseDetailProps) => {
                     <Button
                       variant="clear"
                       color="error"
-                      onClick={() => onDeleteDocument(doc.id)}
+                      onClick={async () => { await onDeleteDocument(doc.id) }}
                     >
                       <Trash2 size={16} />
                     </Button>
@@ -282,7 +281,7 @@ export const KnowledgeBaseDetail = memo((props: KnowledgeBaseDetailProps) => {
           <HStack gap="8" max className={cls.urlInput}>
             <Textarea
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => { setSearchQuery(e.target.value) }}
               placeholder={t('Введите вопрос для проверки...') ?? ''}
               size="small"
             />
@@ -320,12 +319,12 @@ export const KnowledgeBaseDetail = memo((props: KnowledgeBaseDetailProps) => {
       <KnowledgeBaseFormModal
         isOpen={isEditOpen}
         editingKb={knowledgeBase}
-        onClose={() => setIsEditOpen(false)}
+        onClose={() => { setIsEditOpen(false) }}
       />
 
       <Dialog
         open={showDeleteConfirm}
-        onClose={() => setShowDeleteConfirm(false)}
+        onClose={() => { setShowDeleteConfirm(false) }}
         PaperProps={{
           sx: {
             background: 'var(--card-bg)',
@@ -342,7 +341,7 @@ export const KnowledgeBaseDetail = memo((props: KnowledgeBaseDetailProps) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant="glass-action" onClick={() => setShowDeleteConfirm(false)}>
+          <Button variant="glass-action" onClick={() => { setShowDeleteConfirm(false) }}>
             {t('Отмена')}
           </Button>
           <Button
