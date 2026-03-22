@@ -379,7 +379,7 @@ const ChatPage = () => {
             value={inputValue}
             onChange={(e) => { setInputValue(e.target.value) }}
             onKeyDown={handleKeyDown}
-            placeholder={t('Введите сообщение...') }
+            placeholder={t('Введите сообщение...') ?? ''}
             multiline
             minRows={1}
             maxRows={4}

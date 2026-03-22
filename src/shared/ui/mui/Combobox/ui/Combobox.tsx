@@ -35,13 +35,13 @@ export const Combobox = memo((props: ComboBoxProps) => {
         transition: 'var(--transition-colors)',
       },
       '&:hover': {
-        backgroundColor: 'var(--bg-color)',
+        backgroundColor: 'var(--dark-bg-redesigned)',
         '& fieldset': {
           borderColor: 'rgba(94, 211, 243, 0.4) !important',
         },
       },
       '&.Mui-focused': {
-        backgroundColor: 'var(--card-bg)',
+        backgroundColor: 'var(--dark-bg-redesigned)',
         boxShadow: '0 0 0 3px rgba(94, 211, 243, 0.1)',
         '& fieldset': {
           borderColor: 'var(--accent-redesigned) !important',
