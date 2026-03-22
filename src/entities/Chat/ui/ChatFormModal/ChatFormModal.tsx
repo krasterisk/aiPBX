@@ -7,7 +7,6 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Chat, CreateChatDto } from '../../model/types/chat'
 import { useCreateChat, useUpdateChat } from '../../api/chatApi'
 import { useToolsAll } from '@/entities/Tools'
-import type { Tool } from '@/entities/Tools'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { Slider } from '@/shared/ui/mui/Slider/Slider'
@@ -116,7 +115,7 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
             freeSolo
             options={MODEL_OPTIONS}
             value={model}
-            onInputChange={(_, value) => setModel(value)}
+            onInputChange={(_, value) => { setModel(value) }}
             label={t('Модель') ?? ''}
           />
 
@@ -124,7 +123,7 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
             <Text text={`${t('Температура')}: ${temperature.toFixed(1)}`} size="s" />
             <Slider
               value={temperature}
-              onChange={(value: number) => setTemperature(value)}
+              onChange={(value: number) => { setTemperature(value) }}
               min={0}
               max={2}
               step={0.1}
@@ -151,7 +150,7 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
                     control={
                       <Checkbox
                         checked={selectedToolIds.includes(String(tool.id))}
-                        onChange={() => handleToolToggle(String(tool.id!))}
+                        onChange={() => { handleToolToggle(String(tool.id!)) }}
                         size="small"
                         sx={{
                           color: 'var(--icon-redesigned)',

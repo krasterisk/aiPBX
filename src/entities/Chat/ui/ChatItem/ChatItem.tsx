@@ -31,7 +31,7 @@ export const ChatItem = memo((props: ChatItemProps) => {
 
   const onDeleteChat = useCallback(async (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (window.confirm(t('Вы уверены? Чат будет удалён безвозвратно.') as string)) {
+    if (window.confirm(t('Вы уверены? Чат будет удалён безвозвратно.'))) {
       await deleteChat(chat.id)
     }
   }, [chat.id, deleteChat, t])

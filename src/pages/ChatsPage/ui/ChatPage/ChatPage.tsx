@@ -52,7 +52,7 @@ const ChatPage = () => {
     scrollToBottom()
   }, [messages, scrollToBottom])
 
-  const buildHistory = useCallback((): Array<{ role: string; content: string }> => {
+  const buildHistory = useCallback((): Array<{ role: string, content: string }> => {
     return messages.map(m => ({
       role: m.role,
       content: m.content
@@ -273,7 +273,7 @@ const ChatPage = () => {
             gap="4"
             align="center"
             className={cls.backBtn}
-            onClick={() => navigate(getRouteChats())}
+            onClick={() => { navigate(getRouteChats()) }}
           >
             <ArrowLeft size={18} />
           </HStack>
@@ -377,9 +377,9 @@ const ChatPage = () => {
         <div className={cls.inputField}>
           <Textarea
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(e) => { setInputValue(e.target.value) }}
             onKeyDown={handleKeyDown}
-            placeholder={t('Введите сообщение...') as string}
+            placeholder={t('Введите сообщение...') }
             multiline
             minRows={1}
             maxRows={4}
