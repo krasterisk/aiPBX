@@ -21,7 +21,8 @@ import {
   getRouteAnalytics,
   getRouteAnalyticsProjects,
   getRouteAnalyticsApi,
-  getRouteKnowledgeBases
+  getRouteKnowledgeBases,
+  getRouteChats
 } from '@/shared/const/router'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
@@ -41,6 +42,7 @@ import DescriptionIcon from '@mui/icons-material/Description'
 import HubIcon from '@mui/icons-material/Hub'
 import PhoneForwardedIcon from '@mui/icons-material/PhoneForwarded'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
+import ChatIcon from '@mui/icons-material/Chat'
 
 import InsightsIcon from '@mui/icons-material/Insights'
 import AssessmentIcon from '@mui/icons-material/Assessment'
@@ -209,6 +211,12 @@ export const useMenubarItems = () => {
                 path: getRoutePbxServers(),
                 Icon: DnsIcon,
                 text: t('PBXs'),
+                authOnly: true
+              },
+              {
+                path: getRouteChats(),
+                Icon: ChatIcon,
+                text: t('AI Чаты'),
                 authOnly: true
               }
             ]

@@ -64,7 +64,9 @@ import {
   getRoutePublicSpeechAnalytics,
   getRoutePublicVoiceAssistants,
   getRouteKnowledgeBases,
-  getRouteKnowledgeBaseDetail
+  getRouteKnowledgeBaseDetail,
+  getRouteChats,
+  getRouteChatDetail
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 
@@ -117,6 +119,7 @@ import { SpeechAnalyticsLandingPage } from '@/pages/SpeechAnalyticsLandingPage'
 import { VoiceAssistantsLandingPage } from '@/pages/VoiceAssistantsLandingPage'
 import { Navigate } from 'react-router-dom'
 import { KnowledgeBasesPage, KnowledgeBaseDetailPage } from '@/pages/KnowledgeBasesPage'
+import { ChatsPage, ChatDetailPage } from '@/pages/ChatsPage'
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MAIN]: {
@@ -426,6 +429,19 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     path: getRouteKnowledgeBaseDetail(':id'),
     authOnly: true,
     element: <KnowledgeBaseDetailPage />
+  },
+
+  [AppRoutes.CHATS]: {
+    path: getRouteChats(),
+    authOnly: true,
+    element: <ChatsPage />,
+    roles: [UserRolesValues.ADMIN]
+  },
+  [AppRoutes.CHAT_DETAIL]: {
+    path: getRouteChatDetail(':id'),
+    authOnly: true,
+    element: <ChatDetailPage />,
+    roles: [UserRolesValues.ADMIN]
   }
 
 }

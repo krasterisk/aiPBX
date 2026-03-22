@@ -1,0 +1,16 @@
+@import '@/app/styles/variables/mixins';
+
+.ChatFormModal {
+    width: 100%;
+}
+
+.toolsSection {
+    @include glass-card-tertiary;
+    padding: var(--card-padding-sm);
+    border-radius: var(--radius-md);
+}
+
+.toolsList {
+    max-height: 200px;
+    overflow-y: auto;
+}

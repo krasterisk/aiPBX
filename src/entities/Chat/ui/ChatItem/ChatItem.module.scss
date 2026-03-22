@@ -1,0 +1,83 @@
+@import '@/app/styles/variables/mixins';
+
+.ChatItem {
+    @include glass-card-primary;
+    @include hover-lift-card;
+
+    &:hover {
+        .avatar {
+            transform: var(--hover-scale-md);
+            background: rgba(94, 211, 243, 0.25);
+        }
+
+        .arrowIcon {
+            transform: translateX(4px);
+            color: var(--accent-redesigned);
+        }
+
+        .editLabel {
+            opacity: 1;
+        }
+    }
+}
+
+.content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding: var(--card-padding-md);
+}
+
+.avatar {
+    @include icon-avatar(44px);
+    flex-shrink: 0;
+}
+
+.title {
+    color: var(--text-redesigned);
+    font-family: 'Outfit', sans-serif;
+    word-break: break-word;
+}
+
+.divider {
+    @include divider-gradient;
+    margin: var(--space-2) 0;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    flex-grow: 1;
+}
+
+.detailIcon {
+    @include icon-container(30px);
+}
+
+.footer {
+    margin-top: var(--space-2);
+}
+
+.editLabel {
+    opacity: 0;
+    transition: var(--transition-normal);
+    font-weight: 500;
+}
+
+.arrowIcon {
+    transition: var(--transition-normal);
+    color: rgba(255, 255, 255, 0.3);
+    margin-left: var(--space-1);
+}
+
+@include mobile {
+    .content {
+        padding: var(--space-4);
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+    }
+}
