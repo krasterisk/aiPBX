@@ -355,11 +355,21 @@ const ChatPage = () => {
               {/* Message content */}
               {msg.role === 'assistant' ? (
                 <VStack max className={cls.markdownContent}>
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {msg.content}
-                  </ReactMarkdown>
-                  {isStreaming && idx === messages.length - 1 && (
-                    <span className={cls.cursor}>█</span>
+                  {isStreaming && idx === messages.length - 1 && !msg.content ? (
+                    <div className={cls.typingIndicator}>
+                      <span className={cls.dot} />
+                      <span className={cls.dot} />
+                      <span className={cls.dot} />
+                    </div>
+                  ) : (
+                    <>
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {msg.content}
+                      </ReactMarkdown>
+                      {isStreaming && idx === messages.length - 1 && msg.content && (
+                        <span className={cls.cursor}>▍</span>
+                      )}
+                    </>
                   )}
                 </VStack>
               ) : (

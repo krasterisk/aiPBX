@@ -317,5 +317,7 @@
   "Ошибка при загрузке": "Upload error",
   "Экспорт...": "Exporting...",
   "Оператор": "Operator",
-  "Клиент": "Customer"
+  "Клиент": "Customer",
+  "Загрузка...": "Uploading...",
+  "Файлы": "Files"
 }

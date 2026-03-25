@@ -10,6 +10,8 @@ import {
     useUploadOperatorFiles
 } from '@/entities/Report'
 import { toast } from 'react-toastify'
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import AudioFileIcon from '@mui/icons-material/AudioFile'
 import CloseIcon from '@mui/icons-material/Close'
 import cls from './OperatorUploadForm.module.scss'
 
@@ -24,6 +26,12 @@ const LANGUAGE_OPTIONS = [
     { id: 'kz', name: 'KZ' },
     { id: 'uk', name: 'UK' }
 ]
+
+function formatFileSize(bytes: number): string {
+    if (bytes < 1024) return `${bytes} B`
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
 
 interface OperatorUploadFormProps {
     isOpen?: boolean
@@ -118,6 +126,12 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted }: Ope
         }
     }, [files, operatorName, clientPhone, language, projectId, uploadFiles, t, onClose, onBatchStarted])
 
+    const dropZoneClasses = [
+        cls.dropZone,
+        isDragging ? cls.dragging : '',
+        files.length > 0 ? cls.hasFiles : ''
+    ].filter(Boolean).join(' ')
+
     return (
         <VStack gap="16" max>
             {/* Header */}
@@ -125,7 +139,7 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted }: Ope
 
             {/* Drop zone */}
             <div
-                className={`${cls.dropZone} ${isDragging ? cls.dragging : ''}`}
+                className={dropZoneClasses}
                 onDrop={onDrop}
                 onDragOver={onDragOver}
                 onDragLeave={onDragLeave}
@@ -139,36 +153,61 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted }: Ope
                     className={cls.hiddenInput}
                     onChange={onFileInputChange}
                 />
-                <VStack gap="8" align="center">
-                    {/* eslint-disable-next-line i18next/no-literal-string */}
-                    <Text text="🎵" />
-                    <Text text={String(t('Перетащите файлы сюда'))} bold />
-                    <Text text={String(t('или выберите файлы'))} />
-                    {/* eslint-disable-next-line i18next/no-literal-string */}
-                    <Text text="mp3, wav, ogg, m4a • max 50 МБ" size="s" />
-                </VStack>
+                <div className={cls.iconContainer}>
+                    <CloudUploadIcon className={cls.uploadIcon} />
+                </div>
+                <Text text={String(t('Перетащите файлы сюда'))} bold />
+                <Text text={String(t('или выберите файлы'))} />
+                {/* eslint-disable-next-line i18next/no-literal-string */}
+                <Text text="mp3, wav, ogg, m4a • max 50 MB" size="s" />
             </div>
 
             {/* File list */}
             {files.length > 0 && (
                 <VStack gap="8" max>
-                    {files.map((item, i) => (
-                        <HStack key={i} max justify="between" align="center" className={cls.fileItem}>
-                            <Text text={item.file.name} />
-                            <Button
-                                variant="clear"
-                                color="error"
-                                onClick={() => { setFiles(p => p.filter((_, idx) => idx !== i)) }}
-                            >
-                                <CloseIcon fontSize="small" />
-                            </Button>
-                        </HStack>
-                    ))}
+                    <div className={cls.fileListHeader}>
+                        <Text text={String(t('Файлы'))} bold size="s" />
+                        {/* eslint-disable-next-line i18next/no-literal-string */}
+                        <span className={cls.fileCount}>{files.length}</span>
+                    </div>
+                    <div className={cls.fileList}>
+                        {files.map((item, i) => (
+                            <div key={i} className={cls.fileItem}>
+                                <div className={cls.fileIconWrap}>
+                                    <AudioFileIcon className={cls.uploadIcon} />
+                                </div>
+                                <div className={cls.fileInfo}>
+                                    <span className={cls.fileName}>{item.file.name}</span>
+                                    <span className={cls.fileSize}>{formatFileSize(item.file.size)}</span>
+                                </div>
+                                <button
+                                    type="button"
+                                    className={cls.removeBtn}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        setFiles(p => p.filter((_, idx) => idx !== i))
+                                    }}
+                                >
+                                    <CloseIcon fontSize="small" />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
                 </VStack>
             )}
 
+            {/* Progress bar during upload */}
+            {isLoading && (
+                <div className={cls.progressWrapper}>
+                    <div className={cls.progressBar} />
+                    <span className={cls.progressText}>
+                        {String(t('Загрузка...'))}
+                    </span>
+                </div>
+            )}
+
             {/* Fields */}
-            <div className={cls.fieldsGrid}>
+            <div className={isLoading ? `${cls.fieldsGrid} ${cls.formDisabled}` : cls.fieldsGrid}>
                 <Textarea
                     label={String(t('Оператор'))}
                     value={operatorName}
@@ -194,13 +233,16 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted }: Ope
             </div>
 
             {/* Submit */}
-            <Button
-                variant="glass-action"
-                onClick={handleSubmit}
-                disabled={!files.length || isLoading}
-            >
-                {isLoading ? `${String(t('Обработка'))}...` : String(t('Загрузить звонок'))}
-            </Button>
+            <div className={cls.submitArea}>
+                <Button
+                    variant="glass-action"
+                    onClick={handleSubmit}
+                    disabled={!files.length || isLoading}
+                    fullWidth
+                >
+                    {isLoading ? String(t('Загрузка...')) : String(t('Загрузить звонок'))}
+                </Button>
+            </div>
         </VStack>
     )
 })

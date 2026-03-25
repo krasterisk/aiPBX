@@ -1,16 +1,17 @@
 import cls from './ChatFormModal.module.scss'
 import React, { memo, useCallback, useEffect, useState } from 'react'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Chat, CreateChatDto } from '../../model/types/chat'
 import { useCreateChat, useUpdateChat } from '../../api/chatApi'
-import { useToolsAll } from '@/entities/Tools'
+import { ToolsSelect } from '@/entities/Tools'
+import type { Tool } from '@/entities/Tools'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { Slider } from '@/shared/ui/mui/Slider/Slider'
-import { Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, FormControlLabel } from '@mui/material'
+import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 
 interface ChatFormModalProps {
   isOpen: boolean
@@ -28,11 +29,10 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
   const [model, setModel] = useState('qwen3:8b')
   const [temperature, setTemperature] = useState(0.7)
   const [instruction, setInstruction] = useState('')
-  const [selectedToolIds, setSelectedToolIds] = useState<string[]>([])
+  const [selectedTools, setSelectedTools] = useState<Tool[]>([])
 
   const [createChat, { isLoading: isCreating }] = useCreateChat()
   const [updateChat, { isLoading: isUpdating }] = useUpdateChat()
-  const { data: tools, isLoading: toolsLoading } = useToolsAll(null)
 
   const isEdit = Boolean(editingChat)
   const isSubmitting = isCreating || isUpdating
@@ -44,13 +44,13 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
         setModel(editingChat.model || 'qwen3:8b')
         setTemperature(parseFloat(editingChat.temperature) || 0.7)
         setInstruction(editingChat.instruction || '')
-        setSelectedToolIds(editingChat.tools?.map(t => String(t.id)) || [])
+        setSelectedTools(editingChat.tools || [])
       } else {
         setName('')
         setModel('qwen3:8b')
         setTemperature(0.7)
         setInstruction('')
-        setSelectedToolIds([])
+        setSelectedTools([])
       }
     }
   }, [editingChat, isOpen])
@@ -58,12 +58,13 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
   const onSubmit = useCallback(async () => {
     if (!name.trim()) return
 
+    const toolIds = selectedTools.map(t => String(t.id)).filter(Boolean)
     const data: CreateChatDto = {
       name: name.trim(),
       model,
       temperature: String(temperature),
       instruction: instruction.trim() || undefined,
-      toolIds: selectedToolIds.length > 0 ? selectedToolIds : undefined
+      toolIds: toolIds.length > 0 ? toolIds : undefined
     }
 
     if (isEdit && editingChat) {
@@ -72,14 +73,10 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
       await createChat(data)
     }
     onClose()
-  }, [name, model, temperature, instruction, selectedToolIds, isEdit, editingChat, createChat, updateChat, onClose])
+  }, [name, model, temperature, instruction, selectedTools, isEdit, editingChat, createChat, updateChat, onClose])
 
-  const handleToolToggle = useCallback((toolId: string) => {
-    setSelectedToolIds(prev =>
-      prev.includes(toolId)
-        ? prev.filter(id => id !== toolId)
-        : [...prev, toolId]
-    )
+  const handleToolsChange = useCallback((_event: any, newValue: Tool[]) => {
+    setSelectedTools(newValue)
   }, [])
 
   return (
@@ -139,54 +136,12 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
             minRows={3}
           />
 
-          <VStack gap="8" max className={cls.toolsSection}>
-            <Text text={t('Инструменты')} bold size="s" />
-
-            {!toolsLoading && tools && tools.length > 0 && (
-              <VStack gap="4" max className={cls.toolsList}>
-                {tools.map((tool) => (
-                  <FormControlLabel
-                    key={tool.id}
-                    control={
-                      <Checkbox
-                        checked={selectedToolIds.includes(String(tool.id))}
-                        onChange={() => { handleToolToggle(String(tool.id!)) }}
-                        size="small"
-                        sx={{
-                          color: 'var(--icon-redesigned)',
-                          '&.Mui-checked': { color: 'var(--accent-redesigned)' }
-                        }}
-                      />
-                    }
-                    label={
-                      <HStack gap="4" align="center">
-                        <Text text={tool.name} size="s" />
-                        {tool.description && (
-                          <Text text={`— ${tool.description}`} size="xs" variant="accent" />
-                        )}
-                      </HStack>
-                    }
-                    sx={{
-                      marginLeft: 0,
-                      '& .MuiFormControlLabel-label': {
-                        color: 'var(--text-redesigned)'
-                      }
-                    }}
-                  />
-                ))}
-              </VStack>
-            )}
-
-            {!toolsLoading && (!tools || tools.length === 0) && (
-              <Text text={t('Нет доступных инструментов')} size="s" variant="accent" />
-            )}
-
-            <Text
-              text={t('Инструменты загружаются из раздела «Инструменты»')}
-              size="xs"
-              variant="accent"
-            />
-          </VStack>
+          <ToolsSelect
+            label={t('Инструменты') as string}
+            value={selectedTools}
+            onChangeTool={handleToolsChange}
+            fullWidth
+          />
         </VStack>
       </DialogContent>
       <DialogActions>

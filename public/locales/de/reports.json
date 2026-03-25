@@ -356,5 +356,7 @@
   "Ошибка при загрузке": "Fehler beim Hochladen",
   "Экспорт...": "Exportieren...",
   "Оператор": "Mitarbeiter",
-  "Клиент": "Kunde"
+  "Клиент": "Kunde",
+  "Загрузка...": "Hochladen...",
+  "Файлы": "Dateien"
 }
