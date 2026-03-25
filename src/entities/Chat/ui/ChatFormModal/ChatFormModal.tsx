@@ -137,7 +137,7 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
           />
 
           <ToolsSelect
-            label={t('Инструменты') as string}
+            label={t('Инструменты') }
             value={selectedTools}
             onChangeTool={handleToolsChange}
             fullWidth

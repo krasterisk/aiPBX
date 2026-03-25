@@ -1,6 +1,6 @@
 import { memo, useState, useCallback, useRef, useEffect, DragEvent, ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Textarea } from '@/shared/ui/mui/Textarea'
