@@ -100,7 +100,7 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
       <DialogContent sx={{ paddingTop: '12px !important' }}>
         <VStack gap="16" max className={cls.ChatFormModal}>
           <Textarea
-            label={t('Название')}
+            label={t('Название') ?? ''}
             value={name}
             onChange={(e) => { setName(e.target.value) }}
             placeholder={t('Введите название') ?? ''}
@@ -128,7 +128,7 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
           </VStack>
 
           <Textarea
-            label={t('Инструкция (System Prompt)')}
+            label={t('Инструкция (System Prompt)') ?? ''}
             value={instruction}
             onChange={(e) => { setInstruction(e.target.value) }}
             placeholder={t('Введите инструкцию') ?? ''}
@@ -137,7 +137,7 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
           />
 
           <ToolsSelect
-            label={t('Инструменты') }
+            label={t('Инструменты') ?? ''}
             value={selectedTools}
             onChangeTool={handleToolsChange}
             fullWidth

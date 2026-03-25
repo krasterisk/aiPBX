@@ -1,5 +1,5 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
-import { memo, useEffect, useRef } from 'react'
+import { memo, useEffect } from 'react'
 import { Page } from '@/widgets/Page'
 import { PublishWidgetsForm, publishWidgetsFormReducer, publishWidgetsFormActions } from '@/features/PublishWidgets'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
@@ -25,27 +25,21 @@ const PublishWidgetEditContent = memo(({ className }: { className?: string }) =>
     const { id } = useParams<{ id: string }>()
     const dispatch = useAppDispatch()
 
-    const { data: widget, isLoading } = useWidgetKey(Number(id), { skip: !id })
-
-    // Track whether we have already initialized the form for THIS mount.
-    // DynamicModuleLoader with removeAfterUnmount destroys the slice state
-    // on unmount, but RTK Query may return the same cached `widget` reference
-    // on next mount, so useEffect([widget]) wouldn't re-fire.
-    const initializedRef = useRef(false)
-
-    useEffect(() => {
-        // Reset flag on every mount so we re-init from API data
-        initializedRef.current = false
-        return () => {
-            // Clean up form state when leaving the page
-            dispatch(publishWidgetsFormActions.resetForm())
-        }
-    }, [dispatch])
+    // refetchOnMountOrArgChange: true  — forces a fresh API call each time
+    // this component mounts. This is critical because:
+    //   1. DynamicModuleLoader (parent) registers the reducer in its useEffect
+    //   2. React fires child useEffects BEFORE parent useEffects
+    //   3. Without refetch, RTK Query returns cached data synchronously,
+    //      so initForm dispatches BEFORE the reducer exists → action is lost
+    //   4. With refetch, data arrives asynchronously AFTER the reducer is added
+    const { data: widget, isLoading } = useWidgetKey(Number(id), {
+        skip: !id,
+        refetchOnMountOrArgChange: true
+    })
 
     useEffect(() => {
-        if (widget && !initializedRef.current) {
+        if (widget) {
             dispatch(publishWidgetsFormActions.initForm(widget))
-            initializedRef.current = true
         }
     }, [widget, dispatch])
 
