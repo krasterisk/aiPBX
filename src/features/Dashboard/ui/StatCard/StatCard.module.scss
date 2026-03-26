@@ -1,53 +1,113 @@
 @import '@/app/styles/variables/mixins';
 
 .StatCard {
+    position: relative;
     height: 100%;
-    transition: var(--transition-transform);
+    overflow: hidden;
+    transition: var(--transition-slow);
+
+    // Subtle top accent stripe
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent-redesigned), transparent);
+        opacity: 0.5;
+        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        transition: opacity var(--duration-medium) var(--ease-in-out);
+    }
 
     &:hover {
         transform: var(--hover-lift-sm);
-        box-shadow: var(--shadow-md), var(--shadow-accent-sm);
+        box-shadow: var(--shadow-lg), var(--shadow-accent-sm);
+
+        &::before {
+            opacity: 1;
+        }
     }
 
+    @include mobile {
+        &:hover {
+            transform: none;
+        }
+    }
+
+    // ── Status variants ────────────────────────
     &.success {
         border-color: var(--status-success-border);
+
+        &::before {
+            background: linear-gradient(90deg, var(--status-success), transparent);
+        }
     }
 
     &.warning {
         border-color: var(--status-warning-border);
+
+        &::before {
+            background: linear-gradient(90deg, var(--status-warning), transparent);
+        }
     }
 
     &.error {
         border-color: var(--status-error-border);
+
+        &::before {
+            background: linear-gradient(90deg, var(--status-error), transparent);
+        }
     }
 }
 
 .title {
-    color: var(--hint-redesigned, #8b96a5);
+    color: var(--hint-redesigned);
     font-size: var(--font-size-s);
     font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
 .value {
-    font-size: var(--font-size-xl);
-    line-height: 1.2;
+    font-size: clamp(1.4rem, 2.2vw, 2rem);
+    line-height: 1.15;
     font-weight: var(--font-weight-bold);
-    color: var(--primary-color);
+    color: var(--text-redesigned);
 }
 
 .description {
-    color: var(--secondary-color);
-    opacity: 0.8;
+    color: var(--hint-redesigned);
+    opacity: 0.75;
     font-size: var(--font-size-xs);
+    line-height: 1.4;
 }
 
 .iconWrapper {
     @include flex-center;
-    @include icon-container(48px, var(--light-bg-redesigned, rgba(255, 255, 255, 0.05)));
-    color: var(--icon-redesigned);
+    @include icon-container(48px, var(--icon-bg-secondary));
+    border-radius: var(--radius-md);
+    color: var(--accent-redesigned);
+    box-shadow: 0 0 16px rgba(94, 211, 243, 0.08);
+    transition: var(--transition-medium);
+
+    .StatCard:hover & {
+        box-shadow: 0 0 20px rgba(94, 211, 243, 0.18);
+        transform: scale(1.05);
+    }
 
     svg {
-        width: 48px;
-        height: 48px;
+        width: 26px;
+        height: 26px;
+    }
+
+    @include mobile {
+        width: 40px;
+        height: 40px;
+
+        svg {
+            width: 22px;
+            height: 22px;
+        }
     }
 }

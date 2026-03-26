@@ -4,6 +4,8 @@
     width: 100%;
 }
 
+// ─── Stats KPI Grid ────────────────────────────────────────────────────────────
+
 .statsGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -19,7 +21,36 @@
     }
 }
 
+// ─── Charts Layout ─────────────────────────────────────────────────────────────
 
+.chartsRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    width: 100%;
+
+    @include tablet {
+        grid-template-columns: 1fr;
+    }
+}
+
+.chartCard {
+    height: 100%;
+    transition: var(--transition-slow);
+
+    &:hover {
+        transform: var(--hover-lift-sm);
+        box-shadow: var(--shadow-lg), var(--shadow-accent-sm);
+    }
+
+    @include mobile {
+        &:hover {
+            transform: none;
+        }
+    }
+}
+
+// ─── Project Chips ─────────────────────────────────────────────────────────────
 
 .projectChip {
     cursor: pointer;
@@ -27,10 +58,11 @@
 
     &:hover {
         transform: var(--hover-lift-sm);
+        box-shadow: var(--shadow-sm), var(--shadow-accent-sm);
     }
 }
 
-// ─── Avg Score metric bars ────────────────────────────────────────────────────
+// ─── Avg Score metric bars ─────────────────────────────────────────────────────
 
 .metricBars {
     width: 100%;
@@ -39,7 +71,7 @@
 .metricBarTrack {
     height: 7px;
     border-radius: var(--radius-full);
-    background: var(--glass-border-subtle);
+    background: var(--glass-overlay-medium);
     overflow: hidden;
     width: 100%;
 }
@@ -47,5 +79,5 @@
 .metricBarFill {
     height: 100%;
     border-radius: var(--radius-full);
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }

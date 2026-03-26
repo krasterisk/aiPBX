@@ -1,0 +1,39 @@
+@import '@/app/styles/variables/mixins';
+
+.DashboardCharts {
+    width: 100%;
+}
+
+.chartsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    width: 100%;
+
+    @include tablet {
+        grid-template-columns: 1fr;
+    }
+}
+
+.chartCard {
+    height: 100%;
+    transition: var(--transition-slow);
+
+    &:hover {
+        transform: var(--hover-lift-sm);
+        box-shadow: var(--shadow-lg), var(--shadow-accent-sm);
+    }
+
+    @include mobile {
+        &:hover {
+            transform: none;
+        }
+    }
+}
+
+.chartWrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    @include custom-scrollbar;
+}

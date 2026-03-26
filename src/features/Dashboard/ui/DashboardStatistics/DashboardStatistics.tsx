@@ -1,7 +1,6 @@
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { Grid } from '@mui/material'
 import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
 import { ReportFilters } from '@/entities/Report'
 import { StatCard } from '../StatCard/StatCard'
@@ -10,9 +9,10 @@ import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
 import PhoneIcon from '@mui/icons-material/Phone'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
-import VpnKeyIcon from '@mui/icons-material/VpnKey' // Using for tokens/key
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn'
+import VpnKeyIcon from '@mui/icons-material/VpnKey'
 import MemoryIcon from '@mui/icons-material/Memory'
+import cls from './DashboardStatistics.module.scss'
 
 interface DashboardStatisticsProps {
     data?: ReportFilters
@@ -37,54 +37,54 @@ export const DashboardStatistics = memo(({ data, isLoading }: DashboardStatistic
             {
                 title: t('Всего звонков'),
                 value: totalCalls,
-                icon: <PhoneIcon sx={{ fontSize: '3rem' }} />,
+                icon: <PhoneIcon />,
                 description: t('Количество совершенных звонков')
             },
             {
                 title: t('Средняя длительность'),
                 value: formatTime(avgDuration, t),
-                icon: <AccessTimeIcon sx={{ fontSize: '3rem' }} />,
+                icon: <AccessTimeIcon />,
                 description: t('Среднее время разговора')
             },
             {
                 title: t('Общая стоимость'),
                 value: formatCurrency(totalCost, userCurrency),
-                icon: <AttachMoneyIcon sx={{ fontSize: '3rem' }} />,
+                icon: <AttachMoneyIcon />,
                 description: t('Суммарные расходы за период')
             },
             {
                 title: t('Средняя стоимость'),
                 value: formatCurrency(avgCost, userCurrency),
-                icon: <MonetizationOnIcon sx={{ fontSize: '3rem' }} />,
+                icon: <MonetizationOnIcon />,
                 description: t('Средняя стоимость разговора')
             },
             {
                 title: t('Всего токенов'),
                 value: new Intl.NumberFormat('ru-RU').format(totalTokens),
-                icon: <VpnKeyIcon sx={{ fontSize: '3rem' }} />,
+                icon: <VpnKeyIcon />,
                 description: t('Использовано AI токенов')
             },
             {
                 title: t('Среднее количество токенов'),
                 value: new Intl.NumberFormat('ru-RU').format(Math.round(totalCalls > 0 ? totalTokens / totalCalls : 0)),
-                icon: <MemoryIcon sx={{ fontSize: '3rem' }} />,
+                icon: <MemoryIcon />,
                 description: t('Среднее потребление токенов за звонок')
             }
         ]
     }, [data, t, userCurrency])
 
     return (
-        <Grid container spacing={3}>
+        <div className={cls.statsGrid}>
             {stats.map((stat, index) => (
-                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
-                    <StatCard
-                        title={stat.title}
-                        value={stat.value}
-                        icon={stat.icon}
-                        description={stat.description}
-                    />
-                </Grid>
+                <StatCard
+                    key={index}
+                    title={stat.title}
+                    value={stat.value}
+                    icon={stat.icon}
+                    description={stat.description}
+                    isLoading={isLoading}
+                />
             ))}
-        </Grid>
+        </div>
     )
 })

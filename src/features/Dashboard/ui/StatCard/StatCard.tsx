@@ -37,6 +37,7 @@ export const StatCard = memo((props: StatCardProps) => {
             <Card
                 padding="24"
                 border="partial"
+                variant="glass"
                 className={classNames(cls.StatCard, {}, [className])}
             >
                 <HStack max justify="between" align="start">
@@ -55,6 +56,7 @@ export const StatCard = memo((props: StatCardProps) => {
         <Card
             padding="24"
             border="partial"
+            variant="glass"
             className={classNames(cls.StatCard, {}, [className, cls[variant]])}
         >
             <HStack max justify="between" align="start">

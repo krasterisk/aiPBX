@@ -25,42 +25,42 @@ export const SummaryStatsRow = memo((props: SummaryStatsRowProps) => {
             title: t('Всего звонков'),
             value: data?.totalCalls ?? 0,
             description: t('Количество совершенных звонков'),
-            icon: <PhoneIcon sx={{ fontSize: '1.5rem' }} />,
+            icon: <PhoneIcon />,
             variant: 'primary' as const
         },
         {
             title: t('Общая стоимость'),
             value: `$${(data?.totalCost ?? 0).toFixed(2)}`,
             description: t('Суммарные расходы за период'),
-            icon: <PaidIcon sx={{ fontSize: '1.5rem' }} />,
+            icon: <PaidIcon />,
             variant: 'warning' as const
         },
         {
             title: t('Всего токенов'),
             value: (data?.totalTokens ?? 0).toLocaleString(),
             description: t('Использовано AI токенов'),
-            icon: <TokenIcon sx={{ fontSize: '1.5rem' }} />,
+            icon: <TokenIcon />,
             variant: 'primary' as const
         },
         {
             title: t('CSAT'),
             value: `${(data?.metrics?.avgCsat ?? 0).toFixed(1)}/5`,
             description: t('Удовлетворенность'),
-            icon: <SentimentSatisfiedIcon sx={{ fontSize: '1.5rem' }} />,
+            icon: <SentimentSatisfiedIcon />,
             variant: (data?.metrics?.avgCsat ?? 0) >= 4 ? 'success' as const : 'warning' as const
         },
         {
             title: t('MOS'),
             value: (data?.metrics?.avgMos ?? 0).toFixed(2),
             description: t('Speech and Interaction Quality'),
-            icon: <SpeedIcon sx={{ fontSize: '1.5rem' }} />,
+            icon: <SpeedIcon />,
             variant: (data?.metrics?.avgMos ?? 0) >= 4 ? 'success' as const : 'warning' as const
         },
         {
             title: t('Automation Rate'),
             value: `${((data?.metrics?.automationRate ?? 0) * 100).toFixed(1)}%`,
             description: t('Business Impact'),
-            icon: <SmartToyIcon sx={{ fontSize: '1.5rem' }} />,
+            icon: <SmartToyIcon />,
             variant: 'success' as const
         }
     ]

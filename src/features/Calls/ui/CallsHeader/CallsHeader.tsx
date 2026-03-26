@@ -29,6 +29,7 @@ interface CallsHeaderProps {
     onChangeSource?: (v: CdrSource | undefined) => void
     batchProgress?: UseBatchProgressReturn
     exporting?: boolean
+    totalCount?: number
 }
 
 export const CallsHeader = memo((props: CallsHeaderProps) => {
@@ -36,7 +37,7 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
         tab, startDate, endDate, isInited, search, source,
         onChangeTab, onChangeStartDate, onChangeEndDate,
         onChangeSearch, onUpload, onExport, onChangeSource,
-        batchProgress, exporting
+        batchProgress, exporting, totalCount
     } = props
 
     const { t } = useTranslation('reports')
@@ -77,7 +78,14 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
                 />
             )}
 
-            <HStack max justify="end" align="center" gap="12" wrap="wrap">
+            <HStack max justify="between" align="center" gap="12" wrap="wrap">
+                {totalCount != null && (
+                    <Text
+                        text={`${String(t('Всего'))}: ${totalCount}`}
+                        size="s"
+                        bold
+                    />
+                )}
                 <HStack gap="8" wrap="wrap">
                     <Button
                         variant="clear"

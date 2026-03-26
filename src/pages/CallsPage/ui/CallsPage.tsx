@@ -80,6 +80,7 @@ const CallsPage = ({ className }: CallsPageProps) => {
                         onExport={exportToExcel}
                         batchProgress={batch}
                         exporting={exporting}
+                        totalCount={data?.count}
                     />
                     <CallsList
                         reports={data}

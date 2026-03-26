@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Skeleton, Grid } from '@mui/material'
+import { Skeleton } from '@mui/material'
 import { LinesChart } from '@/shared/ui/mui/LinesChart'
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk'
 import SpeedIcon from '@mui/icons-material/Speed'
@@ -256,7 +256,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
 
             {/* Time Series Line Chart */}
             {timeSeriesLabels.length > 0 && (
-                <Card max variant={'glass'} border={'partial'} padding={'24'}>
+                <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
                     <VStack gap={'16'} max>
                         <Text title={String(t('Динамика звонков'))} bold />
                         <LinesChart
@@ -276,24 +276,20 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
             )}
 
             {/* Pie Charts Row */}
-            <Grid container spacing={2}>
-                <Grid size={{ xs: 12, md: 6 }}>
-                    <Card max variant={'glass'} border={'partial'} padding={'24'}>
-                        <VStack gap={'12'} max>
-                            <Text title={String(t('Настроение клиента'))} bold />
-                            <DonutChart data={sentimentData} />
-                        </VStack>
-                    </Card>
-                </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
-                    <Card max variant={'glass'} border={'partial'} padding={'24'}>
-                        <VStack gap={'12'} max>
-                            <Text title={String(t('Успешных звонков'))} bold />
-                            <DonutChart data={successData} />
-                        </VStack>
-                    </Card>
-                </Grid>
-            </Grid>
+            <div className={cls.chartsRow}>
+                <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
+                    <VStack gap={'12'} max>
+                        <Text title={String(t('Настроение клиента'))} bold />
+                        <DonutChart data={sentimentData} />
+                    </VStack>
+                </Card>
+                <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
+                    <VStack gap={'12'} max>
+                        <Text title={String(t('Успешных звонков'))} bold />
+                        <DonutChart data={successData} />
+                    </VStack>
+                </Card>
+            </div>
 
             {/* Avg Score — horizontal bar chart (filtered by visibleDefaultMetrics) */}
             {radarMetrics.length > 0 && (
