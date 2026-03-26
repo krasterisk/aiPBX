@@ -37,12 +37,14 @@ async function fetchAllReportsDirect(params: {
     const query = new URLSearchParams()
     query.set('page', '1')
     query.set('limit', String(Math.max(params.count, 10000)))
-    if (params.startDate) query.set('startDate', params.startDate)
-    if (params.endDate) query.set('endDate', params.endDate)
-    if (params.search) query.set('search', params.search)
-    if (params.source) query.set('source', params.source)
+    query.set('search', params.search ?? '')
+    query.set('userId', '')
+    query.set('assistantId', '')
+    query.set('startDate', params.startDate ?? '')
+    query.set('endDate', params.endDate ?? '')
     if (params.sortField) query.set('sortField', params.sortField)
     if (params.sortOrder) query.set('sortOrder', params.sortOrder)
+    if (params.source) query.set('source', params.source)
 
     const token = localStorage.getItem(TOKEN_LOCALSTORAGE_KEY)
     const res = await fetch(`${__API__}/reports/page?${query.toString()}`, {
