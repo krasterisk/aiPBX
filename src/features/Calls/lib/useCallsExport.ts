@@ -50,7 +50,7 @@ async function fetchAllReportsDirect(params: {
     })
 
     if (!res.ok) throw new Error(`Export fetch failed: ${res.status}`)
-    return res.json()
+    return await res.json()
 }
 
 export const useCallsExport = (params: UseCallsExportParams) => {
