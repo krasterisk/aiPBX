@@ -27,9 +27,11 @@ const CallsPage = ({ className }: CallsPageProps) => {
         data, isLoading, isError, error,
         onRefetch, onLoadNext, hasMore,
         tab, startDate, endDate, search, source,
+        clientId, assistants,
         sortField, sortOrder, isInited,
         onChangeTab, onChangeStartDate, onChangeEndDate,
-        onChangeSearch, onChangeSource, onChangeSort
+        onChangeSearch, onChangeSource, onChangeSort,
+        onChangeAssistant, onChangeUserId
     } = useReportFilters()
 
     const { exportToExcel, exporting } = useCallsExport({
@@ -71,11 +73,15 @@ const CallsPage = ({ className }: CallsPageProps) => {
                         isInited={isInited}
                         search={search}
                         source={source}
+                        clientId={clientId}
+                        assistants={assistants}
                         onChangeTab={onChangeTab}
                         onChangeStartDate={onChangeStartDate}
                         onChangeEndDate={onChangeEndDate}
                         onChangeSearch={onChangeSearch}
                         onChangeSource={onChangeSource}
+                        onChangeAssistant={onChangeAssistant}
+                        onChangeUserId={onChangeUserId}
                         onUpload={() => { setUploadOpen(true) }}
                         onExport={exportToExcel}
                         batchProgress={batch}

@@ -8,6 +8,7 @@ import { PeriodPicker } from '@/entities/PeriodPicker'
 // eslint-disable-next-line krasterisk-plugin/layer-imports
 import { PeriodExtendedFilters } from '@/features/PeriodExtendedFilter'
 import { CdrSource } from '@/entities/Report'
+import { AssistantOptions } from '@/entities/Assistants'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import { BatchProgressBar } from '../BatchProgressBar/BatchProgressBar'
@@ -27,6 +28,10 @@ interface CallsHeaderProps {
     onUpload: () => void
     onExport: () => void
     onChangeSource?: (v: CdrSource | undefined) => void
+    onChangeAssistant: (event: any, assistant: AssistantOptions[]) => void
+    onChangeUserId: (clientId: string) => void
+    clientId?: string
+    assistants?: AssistantOptions[]
     batchProgress?: UseBatchProgressReturn
     exporting?: boolean
     totalCount?: number
@@ -37,6 +42,7 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
         tab, startDate, endDate, isInited, search, source,
         onChangeTab, onChangeStartDate, onChangeEndDate,
         onChangeSearch, onUpload, onExport, onChangeSource,
+        onChangeAssistant, onChangeUserId, clientId, assistants,
         batchProgress, exporting, totalCount
     } = props
 
@@ -111,8 +117,10 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
                 source={source}
                 startDate={startDate ?? undefined}
                 endDate={endDate ?? undefined}
-                onChangeAssistant={() => { }}
-                onChangeUserId={() => { }}
+                userId={clientId}
+                assistants={assistants}
+                onChangeAssistant={onChangeAssistant}
+                onChangeUserId={onChangeUserId}
                 onChangeStartDate={onChangeStartDate}
                 onChangeEndDate={onChangeEndDate}
                 onChangeSource={onChangeSource}
