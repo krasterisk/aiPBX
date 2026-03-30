@@ -6,10 +6,9 @@ import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/Dynam
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitialEffect'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { UsersList, usersPageReducer, useUserFilters, initUsersPage, isUserAdmin, isOwnerUser, isSubUser } from '@/entities/User'
-import { useSelector } from 'react-redux'
 // eslint-disable-next-line krasterisk-plugin/layer-imports
-import { SubUsersList } from '@/entities/User/ui/SubUsersList/SubUsersList'
+import { UsersList, usersPageReducer, useUserFilters, initUsersPage, isUserAdmin, isOwnerUser, isSubUser, SubUsersList } from '@/entities/User'
+import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
 import { getRouteMain } from '@/shared/const/router'
 
