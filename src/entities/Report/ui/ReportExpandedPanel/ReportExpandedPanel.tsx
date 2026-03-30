@@ -47,7 +47,7 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
     const authData = useSelector(getUserAuthData)
     const userCurrency = UserCurrencyValues.USD || authData?.currency
 
-    const [activeTab, setActiveTab] = useState<TabType>('dialog')
+    const [activeTab, setActiveTab] = useState<TabType>('analytics')
 
     const onTabChange = useCallback((tab: TabType) => {
         setActiveTab(tab)
@@ -55,9 +55,12 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
 
     const tabs: Array<{ key: TabType, label: string, icon: React.ElementType, badge?: string }> = [
         {
-            key: 'dialog',
-            label: t('Диалог'),
-            icon: MessageSquareText
+            key: 'analytics',
+            label: t('Аналитика'),
+            icon: BarChart3,
+            badge: report.analytics?.csat
+                ? `★ ${report.analytics.csat}`
+                : undefined
         },
         {
             key: 'billing',
@@ -68,12 +71,9 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
                 : undefined
         },
         {
-            key: 'analytics',
-            label: t('Аналитика'),
-            icon: BarChart3,
-            badge: report.analytics?.csat
-                ? `★ ${report.analytics.csat}`
-                : undefined
+            key: 'dialog',
+            label: t('Диалог'),
+            icon: MessageSquareText
         }
     ]
 

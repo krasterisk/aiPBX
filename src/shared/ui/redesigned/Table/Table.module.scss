@@ -229,27 +229,26 @@
         td {
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            padding: 10px 16px 10px 160px !important;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 16px !important;
             border: none !important;
-            position: relative;
             text-align: right;
             min-height: 44px;
             max-width: none;
+            white-space: nowrap;
+            word-break: normal;
+            overflow-wrap: normal;
 
             &::before {
                 content: attr(data-label);
-                position: absolute;
-                left: 16px;
-                max-width: 140px;
+                flex-shrink: 0;
                 font-weight: 600;
                 font-size: 13px;
                 color: var(--text-redesigned);
                 opacity: 0.5;
                 text-transform: uppercase;
                 white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
             }
 
             &:last-child {
