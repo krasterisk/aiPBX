@@ -9,11 +9,14 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './UserCard.module.scss'
 import {
   isUserAdmin,
+  isOwnerUser,
   useDeleteUser,
   User,
   usersApi,
   useSetUsers,
-  useUpdateUser
+  useUpdateUser,
+  useCreateSubUser,
+  CreateSubUserDto
 } from '@/entities/User'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
@@ -42,7 +45,9 @@ export const UserCard = memo((props: UserCardProps) => {
   const [userMutation, { isError: isCreateError, error: createError }] = useSetUsers()
   const [userUpdateMutation, { isError: isUpdateError, isLoading: isUpdateLoading }] = useUpdateUser()
   const [userDeleteMutation, { isError: isDeleteError, isLoading: isDeleteLoading }] = useDeleteUser()
+  const [createSubUserMutation, { isLoading: isSubUserCreating }] = useCreateSubUser()
   const isAdmin = useSelector(isUserAdmin)
+  const isOwner = useSelector(isOwnerUser)
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -83,8 +88,18 @@ export const UserCard = memo((props: UserCardProps) => {
       if (isEdit && userId) {
         await userUpdateMutation(formFields).unwrap()
         toast.success(t('Сохранено успешно'))
-        navigate(isAdmin ? getRouteUsers() : getRouteMain())
+        navigate(isAdmin ? getRouteUsers() : (isOwner ? getRouteUsers() : getRouteMain()))
+      } else if (isOwner && !isAdmin) {
+        // Owner creating a sub-user
+        const subUserDto: CreateSubUserDto = {
+          email: formFields.email || '',
+          name: formFields.name || ''
+        }
+        await createSubUserMutation(subUserDto).unwrap()
+        toast.success(t('Пользователь создан'))
+        navigate(getRouteUsers())
       } else {
+        // Admin creating a user
         const payload = await userMutation({ ...formFields }).unwrap()
         dispatch(
           usersApi.util.updateQueryData('getAllUsers', null, (draft) => {
@@ -97,19 +112,19 @@ export const UserCard = memo((props: UserCardProps) => {
     } catch (e) {
       // Error toast handled by global toastMiddleware
     }
-  }, [formFields, isEdit, userId, userUpdateMutation, userMutation, navigate, isAdmin, dispatch, validateForm, t])
+  }, [formFields, isEdit, userId, userUpdateMutation, userMutation, createSubUserMutation, navigate, isAdmin, isOwner, dispatch, validateForm, t])
 
   const onDelete = useCallback(async (id: string) => {
     try {
       await userDeleteMutation(id).unwrap()
       toast.success(t('Пользователь удалён'))
-      navigate(isAdmin ? getRouteUsers() : getRouteMain())
+      navigate(isAdmin ? getRouteUsers() : (isOwner ? getRouteUsers() : getRouteMain()))
     } catch (e) {
       // Error toast handled by global toastMiddleware
     }
-  }, [userDeleteMutation, navigate, isAdmin, t])
+  }, [userDeleteMutation, navigate, isAdmin, isOwner, t])
 
-  const isBusy = isLoading || isUpdateLoading || isDeleteLoading
+  const isBusy = isLoading || isUpdateLoading || isDeleteLoading || isSubUserCreating
 
   if (!userId && isEdit) {
     return <ErrorGetData />
@@ -138,6 +153,9 @@ export const UserCard = memo((props: UserCardProps) => {
     )
   }
 
+  // Owner can delete sub-users, admin can delete any user
+  const canDelete = isAdmin || (isOwner && isEdit)
+
   return (
     <VStack gap="8" max className={classNames(cls.EndpointCard, {}, [className])}>
       <UserFormHeader
@@ -145,7 +163,7 @@ export const UserCard = memo((props: UserCardProps) => {
         userName={formFields?.name}
         userId={userId}
         onSave={onSave}
-        onDelete={isAdmin ? onDelete : undefined}
+        onDelete={canDelete ? onDelete : undefined}
         isLoading={isBusy}
         variant="diviner-top"
       />
@@ -162,7 +180,7 @@ export const UserCard = memo((props: UserCardProps) => {
         userName={formFields?.name}
         userId={userId}
         onSave={onSave}
-        onDelete={isAdmin ? onDelete : undefined}
+        onDelete={canDelete ? onDelete : undefined}
         isLoading={isBusy}
         variant="diviner-bottom"
       />

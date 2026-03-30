@@ -1,5 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { User, AllUsers, ResetUserPasswordProps, AuthData, UsageLimitProps } from '../model/types/user'
+import { User, AllUsers, ResetUserPasswordProps, AuthData, UsageLimitProps, CreateSubUserDto } from '../model/types/user'
 
 interface QueryArgs {
   page?: number
@@ -208,6 +208,26 @@ export const usersApi = rtkApi.injectEndpoints({
         body: arg
       }),
       invalidatesTags: [{ type: 'Users', id: 'LIST' }]
+    }),
+    getSubUsers: build.query<User[], void>({
+      query: () => ({
+        url: '/users/sub-users'
+      }),
+      providesTags: (result) =>
+        result?.length
+          ? [
+            ...result.map(({ id }) => ({ type: 'Users' as const, id })),
+            { type: 'Users', id: 'SUB_LIST' }
+          ]
+          : [{ type: 'Users', id: 'SUB_LIST' }]
+    }),
+    createSubUser: build.mutation<User, CreateSubUserDto>({
+      query: (arg) => ({
+        url: '/users/sub-user',
+        method: 'POST',
+        body: arg
+      }),
+      invalidatesTags: [{ type: 'Users', id: 'SUB_LIST' }]
     })
   })
 })
@@ -233,3 +253,5 @@ export const useSetUsageLimit = usersApi.useSetUsageLimitMutation
 export const useGetUsageLimit = usersApi.useGetUsageLimitQuery
 export const useDeleteUser = usersApi.useDeleteUserMutation
 export const useAdminTopUp = usersApi.useAdminTopUpMutation
+export const useGetSubUsers = usersApi.useGetSubUsersQuery
+export const useCreateSubUser = usersApi.useCreateSubUserMutation

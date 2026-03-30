@@ -7,7 +7,7 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { getRouteUsers, getRouteMain } from '@/shared/const/router'
 import { useSelector } from 'react-redux'
-import { isUserAdmin } from '@/entities/User'
+import { isUserAdmin, isOwnerUser } from '@/entities/User'
 import cls from './UserFormHeader.module.scss'
 
 interface UserFormHeaderProps {
@@ -36,10 +36,11 @@ export const UserFormHeader = memo((props: UserFormHeaderProps) => {
     const { t } = useTranslation('users')
     const navigate = useNavigate()
     const isAdmin = useSelector(isUserAdmin)
+    const isOwner = useSelector(isOwnerUser)
 
     const handleClose = useCallback(() => {
-        navigate(isAdmin ? getRouteUsers() : getRouteMain())
-    }, [navigate, isAdmin])
+        navigate((isAdmin || isOwner) ? getRouteUsers() : getRouteMain())
+    }, [navigate, isAdmin, isOwner])
 
     const handleDelete = useCallback(() => {
         if (!userId) return
@@ -68,7 +69,7 @@ export const UserFormHeader = memo((props: UserFormHeaderProps) => {
             )}
 
             <HStack gap="8" className={cls.actions}>
-                {isEdit && isAdmin && onDelete && (
+                {isEdit && onDelete && (
                     <Button
                         variant="clear"
                         color="error"

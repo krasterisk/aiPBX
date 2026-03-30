@@ -7,6 +7,8 @@ export {
   isUserClient,
   isUserAdmin,
   isUserUser,
+  isOwnerUser,
+  isSubUser,
   getAllUserRoles,
   getVpbxUser
 } from './model/selectors/roleSelector'
@@ -19,7 +21,8 @@ export type {
   ClientOptions,
   UserCurrency,
   ResetUserPasswordProps,
-  AuthData
+  AuthData,
+  CreateSubUserDto
 } from './model/types/user'
 
 export { getUserAuthData, getUserToken } from './model/selectors/getUserAuthData/getUserAuthData'
@@ -32,6 +35,7 @@ export {
   currencySymbols
 } from './model/consts/consts'
 export { UsersList } from './ui/UsersList/UsersList'
+export { SubUsersList } from './ui/SubUsersList/SubUsersList'
 export { ClientSelect } from './ui/ClientSelect/ClientSelect'
 export { RoleSelect } from './ui/RoleSelect/RoleSelect'
 export { UserBalance } from './ui/UserBalance/UserBalance'
@@ -64,6 +68,8 @@ export {
   useGetMe,
   useSetUsageLimit,
   useGetUsageLimit,
+  useGetSubUsers,
+  useCreateSubUser,
   useAdminTopUp
 } from './api/usersApi'
 export type { AdminTopUpDto } from './api/usersApi'

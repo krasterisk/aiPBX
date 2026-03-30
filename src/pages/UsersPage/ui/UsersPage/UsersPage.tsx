@@ -6,7 +6,12 @@ import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/Dynam
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitialEffect'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { UsersList, usersPageReducer, useUserFilters, initUsersPage } from '@/entities/User'
+import { UsersList, usersPageReducer, useUserFilters, initUsersPage, isUserAdmin, isOwnerUser, isSubUser } from '@/entities/User'
+import { useSelector } from 'react-redux'
+// eslint-disable-next-line krasterisk-plugin/layer-imports
+import { SubUsersList } from '@/entities/User/ui/SubUsersList/SubUsersList'
+import { Navigate } from 'react-router-dom'
+import { getRouteMain } from '@/shared/const/router'
 
 interface UsersPageProps {
   className?: string
@@ -17,6 +22,10 @@ const reducers: ReducersList = {
 }
 
 const UsersPage = ({ className }: UsersPageProps) => {
+  const isAdmin = useSelector(isUserAdmin)
+  const isOwner = useSelector(isOwnerUser)
+  const isSub = useSelector(isSubUser)
+
   const {
     isError,
     isLoading,
@@ -36,9 +45,29 @@ const UsersPage = ({ className }: UsersPageProps) => {
   }, [hasMore, onLoadNext])
 
   useInitialEffect(() => {
-    dispatch(initUsersPage())
+    if (isAdmin) {
+      dispatch(initUsersPage())
+    }
   })
 
+  // Sub-user view: deny access
+  if (isSub) {
+    return <Navigate to={getRouteMain()} replace />
+  }
+
+  // Owner view: show SubUsersList
+  if (isOwner && !isAdmin) {
+    return (
+      <Page
+        data-testid={'UsersPage'}
+        className={classNames(cls.UsersPage, {}, [className])}
+      >
+        <SubUsersList />
+      </Page>
+    )
+  }
+
+  // Admin view: existing behavior
   const content = (
     <Page
       data-testid={'UsersPage'}

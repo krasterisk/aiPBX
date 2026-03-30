@@ -1,0 +1,56 @@
+@import '@/app/styles/variables/mixins';
+
+.SubUsersList {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.loaderWrap {
+    padding: var(--space-20) 0;
+}
+
+.userItem {
+    flex: 0 1 350px;
+    max-width: 100%;
+}
+
+@media (max-width: 600px) {
+    .userItem {
+        flex: 1 1 100%;
+    }
+}
+
+@include mobile {
+    .SubUsersList {
+        padding: 0;
+    }
+}
+
+.emptyState {
+    padding: var(--space-20);
+    background: var(--card-bg-redesigned);
+    backdrop-filter: var(--glass-blur-sm);
+    border-radius: var(--radius-xl);
+    border: 1px dashed var(--divider-solid);
+}
+
+.header {
+    width: 100%;
+}
+
+.headerActions {
+    flex-shrink: 0;
+}
+
+.createBtn {
+    white-space: nowrap;
+}
+
+.plusIcon {
+    margin-right: 4px;
+}
+
+.searchInput {
+    min-width: 200px;
+}

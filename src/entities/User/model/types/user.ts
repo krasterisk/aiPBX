@@ -70,3 +70,8 @@ export interface UsageLimitProps {
   limitAmount: number
   emails: string[]
 }
+
+export interface CreateSubUserDto {
+  email: string
+  name: string
+}

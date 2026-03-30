@@ -10,6 +10,8 @@ import { Avatar } from '@/shared/ui/redesigned/Avatar'
 import {
     getUserAuthData,
     isUserAdmin,
+    isOwnerUser,
+    isSubUser,
     useGetUser,
     User,
     UserCurrencyValues,
@@ -42,7 +44,10 @@ export const UserForm = memo((props: UserFormProps) => {
 
     const { t } = useTranslation('users')
     const isAdmin = useSelector(isUserAdmin)
+    const isOwner = useSelector(isOwnerUser)
     const clientData = useSelector(getUserAuthData)
+
+    const isSub = useSelector(isSubUser)
 
     const { data: userData, isLoading, isError } = useGetUser(userId!, {
         skip: !isEdit || !userId
@@ -109,6 +114,9 @@ export const UserForm = memo((props: UserFormProps) => {
         ? (formFields.avatar.startsWith('http') ? formFields.avatar : `${__STATIC__}/${formFields.avatar}`)
         : ''
 
+    // Owner creating a sub-user: simplified form
+    const isOwnerCreating = isOwner && !isAdmin && !isEdit
+
     return (
         <div className={classNames(cls.UserForm, {}, [className])}>
             <Card
@@ -158,14 +166,16 @@ export const UserForm = memo((props: UserFormProps) => {
                         />
                     </VStack>
 
-                    <VStack gap="8" max>
-                        <Text text={t('Валюта') || ''} size="s" bold className={cls.label} />
-                        <CurrencySelect
-                            value={formFields.currency}
-                            onChange={onChangeCurrency}
-                            label=""
-                        />
-                    </VStack>
+                    {!isOwnerCreating && !isSub && (
+                        <VStack gap="8" max>
+                            <Text text={t('Валюта') || ''} size="s" bold className={cls.label} />
+                            <CurrencySelect
+                                value={formFields.currency}
+                                onChange={onChangeCurrency}
+                                label=""
+                            />
+                        </VStack>
+                    )}
 
                     {isAdmin && (
                         <VStack gap="8" max>
