@@ -34,6 +34,9 @@ export const UserItem = memo((props: UserItemProps) => {
   const isCurrentUserAdmin = useSelector(isUserAdmin)
   const isAdmin = user?.roles?.some(role => role.value === 'ADMIN')
 
+  const isOwnerCard = !isAdmin && (!user.vpbx_user_id || user.vpbx_user_id === user.id)
+  const isSubUserCard = !!user.vpbx_user_id && user.vpbx_user_id !== user.id
+
   const checkedSrc = user.avatar
     ? (user.avatar.startsWith('http') ? user.avatar : `${__STATIC__}/${user.avatar}`)
     : ''
@@ -77,6 +80,12 @@ export const UserItem = memo((props: UserItemProps) => {
                   <Text text={t('Администратор')} size="xs" />
                 </HStack>
               )}
+              {isOwnerCard && (
+                <HStack className={cls.ownerBadge} gap="4" align="center">
+                  <KeyRound size={8} />
+                  <Text text={t('Владелец')} size="xs" />
+                </HStack>
+              )}
             </VStack>
           </HStack>
         </HStack>
@@ -95,7 +104,7 @@ export const UserItem = memo((props: UserItemProps) => {
           </HStack>
         )}
 
-        {formattedBalance !== null && (
+        {!isSubUserCard && formattedBalance !== null && (
           <HStack gap="16" align="center">
             <HStack className={cls.detailIcon}>
               <Wallet size={14} />
