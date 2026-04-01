@@ -10,13 +10,13 @@ const reducers: ReducersList = { dashboardPage: dashboardPageReducer }
 
 const DashboardCallRecordsContent = memo(() => {
     const { t } = useTranslation('reports')
-    const { startDate, endDate } = useDashboardFilters()
+    const { startDate, endDate, userId } = useDashboardFilters()
 
     const [projectId, setProjectId] = useState('')
     const [showBuilder, setShowBuilder] = useState(false)
 
     const { data: dashboardData, isLoading, isFetching } = useGetOperatorDashboard(
-        { startDate, endDate, projectId },
+        { startDate, endDate, projectId, userId },
         { skip: !startDate || !endDate }
     )
 

@@ -202,6 +202,7 @@ export const reportApi = rtkApi.injectEndpoints({
       endDate?: string
       operatorName?: string
       projectId?: string
+      userId?: string
     }>({
       query: (args) => ({
         url: '/operator-analytics/dashboard',
