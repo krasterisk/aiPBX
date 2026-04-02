@@ -67,11 +67,22 @@ export const PeriodPicker = memo((props: PeriodPickerProps) => {
     }
   }, [startDate])
 
+  const prevTabRef = React.useRef(tab)
+
   // Handle Tab change logic
   useEffect(() => {
     if (isInited) {
-      const start = dayjs(date).startOf(tab as OpUnitType).format('YYYY-MM-DD')
-      const end = dayjs(date).endOf(tab as OpUnitType).format('YYYY-MM-DD')
+      let baseDate = date
+
+      // Reset to current date only when the tab ACTUALLY changes
+      if (prevTabRef.current !== tab) {
+        baseDate = dayjs()
+        setDate(baseDate)
+      }
+      prevTabRef.current = tab
+
+      const start = dayjs(baseDate).startOf(tab as OpUnitType).format('YYYY-MM-DD')
+      const end = dayjs(baseDate).endOf(tab as OpUnitType).format('YYYY-MM-DD')
 
       if (start !== startDate || end !== endDate) {
         if (onChangeDateRange) {

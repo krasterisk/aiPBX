@@ -32,7 +32,7 @@ const CELL_GAP = 3
 const DAYS_LABELS = ['Пн', '', 'Ср', '', 'Пт', '', 'Вс']
 
 export const HeatmapCalendar = memo(({ data, weeks = 26 }: HeatmapCalendarProps) => {
-    const { t } = useTranslation('reports')
+    const { t, i18n } = useTranslation('reports')
 
     const { grid, maxCount, monthLabels } = useMemo(() => {
         const map = new Map<string, DayData>()
@@ -64,11 +64,16 @@ export const HeatmapCalendar = memo(({ data, weeks = 26 }: HeatmapCalendarProps)
                 if (count > maxCount) maxCount = count
                 week.push({ date: key, count, score })
 
-                // Month label
+                // Month label - adding only on Monday to align with column
                 const month = current.getMonth()
                 if (month !== lastMonth && d === 0) {
+                    // Prevent overlapping labels: if previous label is too close, remove it
+                    if (monthLabels.length > 0 && weekIdx - monthLabels[monthLabels.length - 1].week < 3) {
+                        monthLabels.pop()
+                    }
+                    
                     monthLabels.push({
-                        label: current.toLocaleDateString(undefined, { month: 'short' }),
+                        label: current.toLocaleDateString(i18n.language, { month: 'short' }),
                         week: weekIdx
                     })
                     lastMonth = month
@@ -81,7 +86,7 @@ export const HeatmapCalendar = memo(({ data, weeks = 26 }: HeatmapCalendarProps)
         }
 
         return { grid, maxCount, monthLabels }
-    }, [data, weeks])
+    }, [data, weeks, i18n.language])
 
     const totalWidth = grid.length * (CELL_SIZE + CELL_GAP) + 30
     const totalHeight = 7 * (CELL_SIZE + CELL_GAP) + 24
@@ -106,7 +111,7 @@ export const HeatmapCalendar = memo(({ data, weeks = 26 }: HeatmapCalendarProps)
                                 className={cls.dayLabel}
                                 dominantBaseline={'middle'}
                             >
-                                {label}
+                                {t(label)}
                             </text>
                         )
                     ))}

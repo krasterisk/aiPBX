@@ -21,4 +21,10 @@ export {
     getDashboardEndDate,
     getDashboardStartDate,
     getDashboardTab,
+    getDashboardUserId,
+    getDashboardInited,
+    getDashboardAssistantId,
+    getDashboardAssistants,
+    getDashboardSource,
 } from './model/selectors/dashboardPageSelectors'
+

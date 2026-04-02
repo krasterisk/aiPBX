@@ -1,16 +1,23 @@
 import { memo, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import { DashboardLayout } from '@/widgets/DashboardLayout'
 import { OperatorDashboard, DashboardBuilder } from '@/features/OperatorAnalytics'
 import { useGetOperatorDashboard, useGetOperatorProjects } from '@/entities/Report'
-import { useDashboardFilters, dashboardPageReducer } from '@/features/Dashboard'
+import { dashboardPageReducer, getDashboardStartDate, getDashboardEndDate, getDashboardUserId } from '@/features/Dashboard'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
+import { getUserAuthData, isUserAdmin } from '@/entities/User'
 
 const reducers: ReducersList = { dashboardPage: dashboardPageReducer }
 
 const DashboardCallRecordsContent = memo(() => {
     const { t } = useTranslation('reports')
-    const { startDate, endDate, userId } = useDashboardFilters()
+    const clientId = useSelector(getDashboardUserId)
+    const startDate = useSelector(getDashboardStartDate)
+    const endDate = useSelector(getDashboardEndDate)
+    const authData = useSelector(getUserAuthData)
+    const isAdmin = useSelector(isUserAdmin)
+    const userId = !isAdmin ? authData?.vpbx_user_id || authData?.id : clientId
 
     const [projectId, setProjectId] = useState('')
     const [showBuilder, setShowBuilder] = useState(false)
