@@ -27,4 +27,3 @@ export {
     getDashboardAssistants,
     getDashboardSource,
 } from './model/selectors/dashboardPageSelectors'
-
