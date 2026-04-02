@@ -145,6 +145,7 @@ export function useReportFilters() {
 
   const onChangeStartDate = useCallback((value: string) => {
     dispatch(reportsPageActions.setStartDate(value))
+    dispatch(reportsPageActions.setPage(1))
   }, [dispatch])
 
   const onChangeUserId = useCallback((clientId: string) => {
@@ -161,6 +162,7 @@ export function useReportFilters() {
 
   const onChangeEndDate = useCallback((value: string) => {
     dispatch(reportsPageActions.setEndDate(value))
+    dispatch(reportsPageActions.setPage(1))
   }, [dispatch])
 
   const onChangeSort = useCallback((field: string) => {
