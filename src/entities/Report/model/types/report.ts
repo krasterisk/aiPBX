@@ -303,12 +303,20 @@ export interface OperatorDashboardResponse {
     neutral: number
     negative: number
   }
-  timeSeries: Array<{
-    label: string
-    callsCount: number
-    avgScore: number
-    avgDuration: number
-  }>
+  timeSeries: {
+    monthly: Array<{
+      label: string
+      callsCount: number
+      avgScore: number
+      avgDuration: number
+    }>
+    daily: Array<{
+      label: string
+      callsCount: number
+      avgScore: number
+      avgDuration: number
+    }>
+  }
   insightsAvailable: boolean
 }
 

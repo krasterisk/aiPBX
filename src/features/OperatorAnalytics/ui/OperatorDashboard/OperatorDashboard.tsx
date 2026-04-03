@@ -108,8 +108,8 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
         return activeProject.customMetricsSchema
     }, [activeProject?.customMetricsSchema])
 
-    const timeSeriesLabels = data?.timeSeries?.map(p => p.label) ?? []
-    const timeSeriesCalls = data?.timeSeries?.map(p => p.callsCount) ?? []
+    const timeSeriesLabels = data?.timeSeries?.monthly?.map(p => p.label) ?? []
+    const timeSeriesCalls = data?.timeSeries?.monthly?.map(p => p.callsCount) ?? []
 
     const sentimentData = [
         { id: 0, value: data?.sentimentDistribution?.positive ?? 0, label: String(t('Positive')), color: '#22c55e' },
@@ -133,11 +133,12 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
 
     // Build heatmap data from timeSeries
     const heatmapData = useMemo(() => {
-        if (!data?.timeSeries) return []
-        return data.timeSeries.map(p => ({
+        if (!data?.timeSeries?.daily) return []
+        
+        return data.timeSeries.daily.map(p => ({
             date: p.label,
             callCount: p.callsCount ?? 0,
-            avgScore: data.averageScore ?? 0
+            avgScore: p.avgScore ?? (data.averageScore ?? 0)
         }))
     }, [data])
 
@@ -254,27 +255,6 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                 />
             </HStack>
 
-            {/* Time Series Line Chart */}
-            {timeSeriesLabels.length > 0 && (
-                <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
-                    <VStack gap={'16'} max>
-                        <Text title={String(t('Динамика звонков'))} bold />
-                        <LinesChart
-                            xAxis={[{ scaleType: 'band', data: timeSeriesLabels }]}
-                            series={[{
-                                data: timeSeriesCalls,
-                                label: String(t('Звонки')),
-                                color: '#5ed3f3',
-                                curve: 'monotoneX',
-                                showMark: true,
-                            }]}
-                            height={300}
-                            margin={{ left: 60, right: 24, top: 16, bottom: 40 }}
-                        />
-                    </VStack>
-                </Card>
-            )}
-
             {/* Pie Charts Row */}
             <div className={cls.chartsRow}>
                 <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
@@ -355,9 +335,39 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                 </Card>
             )}
 
-            {/* Heatmap Calendar */}
-            {heatmapData.length > 0 && (
-                <HeatmapCalendar data={heatmapData} />
+            {/* Bottom Row */}
+            {(timeSeriesLabels.length > 0 || heatmapData.length > 0) && (
+                <div className={cls.chartsRow}>
+                    {timeSeriesLabels.length > 0 ? (
+                        <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
+                            <VStack gap={'16'} max>
+                                <Text title={String(t('Динамика звонков'))} bold />
+                                <div className={cls.chartContainer}>
+                                    <LinesChart
+                                        xAxis={[{ scaleType: 'point', data: timeSeriesLabels }]}
+                                        yAxis={[{ width: 30 }]}
+                                        series={[{
+                                            data: timeSeriesCalls,
+                                            label: String(t('Звонки')),
+                                            color: '#5ed3f3',
+                                            curve: 'monotoneX',
+                                            showMark: true,
+                                        }]}
+                                        height={180}
+                                        margin={{ left: 5, right: 16, top: 16, bottom: 25 }}
+                                    />
+                                </div>
+                            </VStack>
+                        </Card>
+                    ) : <div />}
+
+                    {/* Heatmap Calendar */}
+                    {heatmapData.length > 0 ? (
+                        <div className={cls.chartCard}>
+                            <HeatmapCalendar data={heatmapData} startDate={startDate} endDate={endDate} />
+                        </div>
+                    ) : <div />}
+                </div>
             )}
         </VStack>
     )

@@ -69,7 +69,7 @@ export function useWidgetData(
                 }
 
                 case 'line-chart': {
-                    const timeSeriesData = dashboardData.timeSeries?.map(p => ({
+                    const timeSeriesData = dashboardData.timeSeries?.monthly?.map(p => ({
                         label: p.label,
                         value: p.callsCount,
                     })) ?? []
@@ -99,7 +99,7 @@ export function useWidgetData(
                 }
 
                 case 'sparkline': {
-                    const timeSeriesData = dashboardData.timeSeries?.map(p => ({
+                    const timeSeriesData = dashboardData.timeSeries?.monthly?.map(p => ({
                         label: p.label,
                         value: p.avgScore ?? 0,
                     })) ?? []
@@ -107,10 +107,10 @@ export function useWidgetData(
                 }
 
                 case 'heatmap': {
-                    const heatmapData = dashboardData.timeSeries?.map(p => ({
+                    const heatmapData = dashboardData.timeSeries?.daily?.map(p => ({
                         date: p.label,
                         callCount: p.callsCount ?? 0,
-                        avgScore: dashboardData.averageScore ?? 0,
+                        avgScore: p.avgScore ?? (dashboardData.averageScore ?? 0),
                     })) ?? []
                     return { heatmapData }
                 }

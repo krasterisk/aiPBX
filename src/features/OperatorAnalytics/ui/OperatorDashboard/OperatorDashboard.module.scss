@@ -28,14 +28,23 @@
     grid-template-columns: 1fr 1fr;
     gap: var(--space-4);
     width: 100%;
+    align-items: start;
 
     @include tablet {
         grid-template-columns: 1fr;
     }
 }
 
+
+
+
+
+.chartContainer {
+    width: 100%;
+    min-width: 0;
+}
+
 .chartCard {
-    height: 100%;
     transition: var(--transition-slow);
 
     &:hover {

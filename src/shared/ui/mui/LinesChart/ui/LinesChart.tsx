@@ -32,9 +32,20 @@ export const LinesChart = memo((props: LinesChartProps) => {
     <LineChart
       sx={{
         width: '100%',
+        minWidth: '100%',
+        height: '100%',
+        display: 'flex',
+        flexGrow: 1,
         '--ChartsLegend-itemColor': 'var(--text-redesigned)',
         '--ChartsLegend-label-color': 'var(--text-redesigned)',
         '--ChartsLegend-root-color': 'var(--text-redesigned)',
+        '& .MuiChartsSurface-root': {
+            width: '100% !important',
+            height: '100% !important',
+        },
+        '& .MuiChartsAxis-root': {
+            // override internal translation bounds if needed
+        },
         ...lcStyles
       }}
       className={classNames(cls.LinesChart, {}, [className])}

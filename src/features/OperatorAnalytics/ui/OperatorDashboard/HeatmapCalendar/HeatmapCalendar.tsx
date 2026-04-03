@@ -13,7 +13,8 @@ interface DayData {
 
 interface HeatmapCalendarProps {
     data: DayData[]
-    weeks?: number
+    startDate?: string
+    endDate?: string
 }
 
 const getScoreColor = (score: number): string => {
@@ -27,32 +28,50 @@ const getOpacity = (count: number, maxCount: number): number => {
     return Math.max(0.2, count / maxCount)
 }
 
-const CELL_SIZE = 14
-const CELL_GAP = 3
+const CELL_SIZE = 10
+const CELL_GAP = 2
+const LEFT_OFFSET = 30
+const TOP_OFFSET = 20
 const DAYS_LABELS = ['Пн', '', 'Ср', '', 'Пт', '', 'Вс']
 
-export const HeatmapCalendar = memo(({ data, weeks = 26 }: HeatmapCalendarProps) => {
+export const HeatmapCalendar = memo(({ data, startDate, endDate }: HeatmapCalendarProps) => {
     const { t, i18n } = useTranslation('reports')
 
     const { grid, maxCount, monthLabels } = useMemo(() => {
         const map = new Map<string, DayData>()
         data.forEach(d => map.set(d.date, d))
 
-        const endDate = new Date()
-        const startDate = new Date()
-        startDate.setDate(startDate.getDate() - weeks * 7)
+        let refDate = new Date()
+        if (startDate) refDate = new Date(startDate)
+        else if (endDate) refDate = new Date(endDate)
+        else if (data.length > 0) refDate = new Date(data[data.length - 1].date)
+
+        const calStartDate = new Date(refDate)
+        calStartDate.setMonth(0, 1) // Jan 1st
+        calStartDate.setHours(0, 0, 0, 0)
+        
+        const calEndDate = new Date(refDate)
+        calEndDate.setMonth(11, 31) // Dec 31st
+        calEndDate.setHours(23, 59, 59, 999)
+
         // Align to Monday
-        const dayOfWeek = startDate.getDay()
-        startDate.setDate(startDate.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1))
+        const dayOfWeek = calStartDate.getDay()
+        calStartDate.setDate(calStartDate.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1))
+        
+        // Align end to Sunday
+        const dayOfWeekEnd = calEndDate.getDay()
+        if (dayOfWeekEnd !== 0) {
+            calEndDate.setDate(calEndDate.getDate() + (7 - dayOfWeekEnd))
+        }
 
         const grid: Array<Array<{ date: string, count: number, score: number }>> = []
         let maxCount = 0
         const monthLabels: Array<{ label: string, week: number }> = []
         let lastMonth = -1
 
-        const current = new Date(startDate)
+        const current = new Date(calStartDate)
         let weekIdx = 0
-        const endTime = endDate.getTime()
+        const endTime = calEndDate.getTime()
 
         while (current.getTime() <= endTime) {
             const week: typeof grid[0] = []
@@ -86,19 +105,19 @@ export const HeatmapCalendar = memo(({ data, weeks = 26 }: HeatmapCalendarProps)
         }
 
         return { grid, maxCount, monthLabels }
-    }, [data, weeks, i18n.language])
+    }, [data, startDate, endDate, i18n.language])
 
-    const totalWidth = grid.length * (CELL_SIZE + CELL_GAP) + 30
-    const totalHeight = 7 * (CELL_SIZE + CELL_GAP) + 24
+    const totalWidth = grid.length * (CELL_SIZE + CELL_GAP) + LEFT_OFFSET
+    const totalHeight = 7 * (CELL_SIZE + CELL_GAP) + TOP_OFFSET
 
     return (
-        <Card max variant={'glass'} border={'partial'} padding={'24'}>
+        <Card max fullHeight variant={'glass'} border={'partial'} padding={'24'}>
             <VStack gap={'12'} max>
                 <Text title={String(t('Активность'))} bold />
                 {/* viewBox + width="100%" растягивает SVG на всю ширину карточки */}
                 <svg
                     viewBox={`0 0 ${totalWidth} ${totalHeight}`}
-                    preserveAspectRatio="xMinYMid meet"
+                    preserveAspectRatio="xMinYMin meet"
                     className={cls.heatmap}
                 >
                     {/* Day labels */}
@@ -107,7 +126,7 @@ export const HeatmapCalendar = memo(({ data, weeks = 26 }: HeatmapCalendarProps)
                             <text
                                 key={i}
                                 x={0}
-                                y={24 + i * (CELL_SIZE + CELL_GAP) + CELL_SIZE / 2}
+                                y={TOP_OFFSET + i * (CELL_SIZE + CELL_GAP) + CELL_SIZE / 2}
                                 className={cls.dayLabel}
                                 dominantBaseline={'middle'}
                             >
@@ -120,8 +139,8 @@ export const HeatmapCalendar = memo(({ data, weeks = 26 }: HeatmapCalendarProps)
                     {monthLabels.map(({ label, week }, i) => (
                         <text
                             key={i}
-                            x={30 + week * (CELL_SIZE + CELL_GAP)}
-                            y={12}
+                            x={LEFT_OFFSET + week * (CELL_SIZE + CELL_GAP)}
+                            y={10}
                             className={cls.monthLabel}
                         >
                             {label}
@@ -133,12 +152,12 @@ export const HeatmapCalendar = memo(({ data, weeks = 26 }: HeatmapCalendarProps)
                         week.map((day, dIdx) => (
                             <rect
                                 key={`${wIdx}-${dIdx}`}
-                                x={30 + wIdx * (CELL_SIZE + CELL_GAP)}
-                                y={24 + dIdx * (CELL_SIZE + CELL_GAP)}
+                                x={LEFT_OFFSET + wIdx * (CELL_SIZE + CELL_GAP)}
+                                y={TOP_OFFSET + dIdx * (CELL_SIZE + CELL_GAP)}
                                 width={CELL_SIZE}
                                 height={CELL_SIZE}
-                                rx={3}
-                                ry={3}
+                                rx={2}
+                                ry={2}
                                 fill={day.count > 0 ? getScoreColor(day.score) : 'var(--glass-border-secondary)'}
                                 opacity={day.count > 0 ? getOpacity(day.count, maxCount) : 0.3}
                                 className={cls.cell}
