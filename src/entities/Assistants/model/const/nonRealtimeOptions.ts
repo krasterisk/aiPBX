@@ -10,6 +10,7 @@ export interface LlmProviderOption extends ProviderOption {
 
 export interface TtsProviderOption extends ProviderOption {
   voices: ProviderOption[]
+  supportsCustomUpload?: boolean
 }
 
 export const STT_PROVIDERS: ProviderOption[] = [
@@ -42,6 +43,14 @@ export const LLM_PROVIDERS: LlmProviderOption[] = [
     value: 'ollama',
     label: 'Ollama (Local)',
     models: [],
+    freeText: true,
+  },
+  {
+    value: 'gemma4-audio',
+    label: 'Gemma 4 (Audio Native)',
+    models: [
+      { value: 'gemma4:e4b', label: 'Gemma 4 (e4b)' }
+    ],
     freeText: true,
   },
 ]
@@ -93,14 +102,22 @@ export const TTS_PROVIDERS: TtsProviderOption[] = [
       { value: 'zahar', label: 'Zahar' },
     ],
   },
+  {
+    value: 'omnivoice',
+    label: 'OmniVoice (Zero-shot, GPU)',
+    voices: [
+      { value: 'default', label: 'По умолчанию (Базовый русский голос)' }
+    ],
+    supportsCustomUpload: true,
+  },
 ]
 
 export const NON_REALTIME_DEFAULTS = {
   sttProvider: 'whisper-local',
-  llmProvider: 'openai',
-  llmModel: 'gpt-4o-mini',
-  ttsProvider: 'silero',
-  ttsVoice: 'baya',
+  llmProvider: 'gemma4-audio',
+  llmModel: 'gemma4:e4b',
+  ttsProvider: 'omnivoice',
+  ttsVoice: 'default',
 }
 
 export const getLlmModels = (provider: string): ProviderOption[] => {

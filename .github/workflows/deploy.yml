@@ -129,6 +129,10 @@ jobs:
             echo "Checking containers..."
             sudo docker compose -f docker-compose.production.yml --env-file .env.production ps frontend
 
-            # ── Cleanup ──
-            sudo docker image prune -f
+            # ── Cleanup (prevent disk space accumulation) ──
+            echo "Cleaning up old images and build cache..."
+            sudo docker image prune -a -f
+            sudo docker builder prune -f --keep-storage=2GB
+            echo "Docker disk usage after cleanup:"
+            sudo docker system df
             echo "Deployment to ${{ matrix.server }} successful!"

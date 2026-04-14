@@ -1,0 +1,73 @@
+.VadSettingsCard {
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid rgba(94, 211, 243, 0.1);
+    border-radius: var(--radius-xl);
+    padding: var(--space-16);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+    transition: var(--transition-colors);
+
+    &:hover {
+        border-color: rgba(94, 211, 243, 0.2);
+    }
+}
+
+.header {
+    cursor: pointer;
+    user-select: none;
+}
+
+.headerIcon {
+    color: var(--status-warning) !important;
+}
+
+.cardTitle {
+    color: var(--text-redesigned);
+    font-size: 16px;
+}
+
+.content {
+    margin-top: var(--space-16);
+}
+
+.expandButton {
+    color: var(--icon-redesigned) !important;
+    transition: transform 0.3s ease !important;
+    
+    &:hover {
+        color: var(--status-warning) !important;
+        background: transparent !important;
+    }
+}
+
+.expanded {
+    transform: rotate(180deg);
+}
+
+.label {
+    color: var(--text-redesigned);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.value {
+    color: var(--accent-redesigned);
+    font-size: 14px;
+}
+
+.helpIcon {
+    color: var(--icon-redesigned);
+    display: flex;
+    align-items: center;
+    cursor: help;
+    transition: color 0.2s;
+    
+    &:hover {
+        color: var(--accent-redesigned);
+    }
+}
+
+.slider {
+    padding-top: 12px;
+    margin-bottom: 24px;
+}

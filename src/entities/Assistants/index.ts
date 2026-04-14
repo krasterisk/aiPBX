@@ -55,5 +55,6 @@ export {
   useAssistant,
   useSetAssistants,
   useUpdateAssistant,
-  useGeneratePrompt
+  useGeneratePrompt,
+  useUploadTtsVoice
 } from './api/assistantsApi'

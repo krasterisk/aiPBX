@@ -4,29 +4,20 @@ import { useSelector } from 'react-redux'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
+import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Slider, Typography, Tooltip, Collapse } from '@mui/material'
 import { Info } from 'lucide-react'
 import { Assistant, getAssistantFormData } from '@/entities/Assistants'
+import { isUserAdmin } from '@/entities/User'
 import { Button } from '@/shared/ui/redesign-v3/Button'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import GraphicEqIcon from '@mui/icons-material/GraphicEq'
+import SettingsIcon from '@mui/icons-material/Settings'
 import ThermostatIcon from '@mui/icons-material/Thermostat'
 import cls from './ModelParametersCard.module.scss'
 
 interface ModelParametersCardProps {
     className?: string
     onChangeTextHandler?: (field: keyof Assistant) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
-}
-
-interface ModelParameter {
-    field: keyof Assistant
-    labelKey: string
-    tooltipKey: string
-    min: number
-    max: number
-    step: number
-    unit: string
-    marks: Array<{ value: number, label: string }>
 }
 
 export const ModelParametersCard = memo((props: ModelParametersCardProps) => {
@@ -36,9 +27,12 @@ export const ModelParametersCard = memo((props: ModelParametersCardProps) => {
     } = props
 
     const { t } = useTranslation('assistants')
+    const isAdmin = useSelector(isUserAdmin)
     const formFields = useSelector(getAssistantFormData)
     const [expanded, setExpanded] = useState(false)
 
+    const isNonRealtime = formFields?.pipelineMode === 'non-realtime'
+    
     const handleExpandClick = useCallback(() => {
         setExpanded((prev) => !prev)
     }, [])
@@ -53,85 +47,6 @@ export const ModelParametersCard = memo((props: ModelParametersCardProps) => {
         onChangeTextHandler?.('temperature')(event)
     }
 
-    const vadParameters: ModelParameter[] = [
-        {
-            field: 'turn_detection_threshold',
-            labelKey: 'Порог обнаружения',
-            tooltipKey: 'tooltip_vad_threshold',
-            min: 0,
-            max: 1,
-            step: 0.01,
-            unit: '',
-            marks: [
-                { value: 0, label: '0' },
-                { value: 0.5, label: '0.5' },
-                { value: 1, label: '1' }
-            ]
-        },
-        {
-            field: 'turn_detection_prefix_padding_ms',
-            labelKey: 'Длительность аудио',
-            tooltipKey: 'tooltip_audio_duration',
-            min: 0,
-            max: 1000,
-            step: 50,
-            unit: t('ms'),
-            marks: [
-                { value: 0, label: '0' },
-                { value: 500, label: '500' },
-                { value: 1000, label: '1K' }
-            ]
-        },
-        {
-            field: 'turn_detection_silence_duration_ms',
-            labelKey: 'Тишина',
-            tooltipKey: 'tooltip_silence_duration',
-            min: 100,
-            max: 5000,
-            step: 100,
-            unit: t('ms'),
-            marks: [
-                { value: 100, label: '100' },
-                { value: 2500, label: '2.5K' },
-                { value: 5000, label: '5K' }
-            ]
-        },
-        {
-            field: 'idle_timeout_ms',
-            labelKey: 'Время простоя',
-            tooltipKey: 'tooltip_idle_timeout',
-            min: 6000,
-            max: 60000,
-            step: 1000,
-            unit: t('ms'),
-            marks: [
-                { value: 6000, label: '6K' },
-                { value: 30000, label: '30K' },
-                { value: 60000, label: '60K' }
-            ]
-        }
-    ]
-
-    const handleSliderChange = (field: keyof Assistant) => (_: Event, value: number | number[]) => {
-        const newValue = Array.isArray(value) ? value[0] : value
-        const event = {
-            target: { value: String(newValue) }
-        } as ChangeEvent<HTMLInputElement>
-        onChangeTextHandler?.(field)(event)
-    }
-
-    const getValue = (field: keyof Assistant, defaultValue: number): number => {
-        const value = formFields?.[field]
-        if (value) {
-            return parseFloat(String(value))
-        }
-        // Специальное дефолтное значение для idle_timeout_ms
-        if (field === 'idle_timeout_ms') {
-            return 10000
-        }
-        return defaultValue
-    }
-
     return (
         <div className={classNames(cls.ModelParametersCard, {}, [className])}>
             <HStack
@@ -142,7 +57,7 @@ export const ModelParametersCard = memo((props: ModelParametersCardProps) => {
                 onClick={handleExpandClick}
             >
                 <HStack gap="8" align="center">
-                    <GraphicEqIcon className={cls.headerIcon} />
+                    <SettingsIcon className={cls.headerIcon} />
                     <Text
                         title={t('Параметры Модели')}
                         className={cls.cardTitle}
@@ -231,72 +146,62 @@ export const ModelParametersCard = memo((props: ModelParametersCardProps) => {
                         />
                     </VStack>
 
-                    {vadParameters.map((param) => {
-                        const value = getValue(param.field, param.min)
+                    {isAdmin && (
+                        <VStack max gap="16">
+                            <Textarea
+                                label={t('Максимальное количество токенов в ответе') ?? ''}
+                                onChange={onChangeTextHandler?.('max_response_output_tokens')}
+                                data-testid="AssistantForm.max_response_output_tokens"
+                                value={formFields?.max_response_output_tokens || ''}
+                                minRows={1}
+                                placeholder="4096/inf"
+                            />
 
-                        return (
-                            <VStack key={param.field} max gap="8">
-                                <HStack max justify="between" align="center">
-                                    <HStack gap="8" align="center">
-                                        <Typography className={cls.label}>
-                                            {t(param.labelKey)}
-                                        </Typography>
-                                        <Tooltip
-                                            title={t(param.tooltipKey)}
-                                            arrow
-                                            placement="top"
-                                            enterTouchDelay={0}
-                                            leaveTouchDelay={3000}
-                                            slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
-                                        >
-                                            <span className={cls.helpIcon}><Info size={16} /></span>
-                                        </Tooltip>
-                                    </HStack>
-                                    <Text
-                                        text={`${value}${param.unit}`}
-                                        className={cls.value}
-                                        bold
+                            <Textarea
+                                label={t('Модель распознавания речи') ?? ''}
+                                onChange={onChangeTextHandler?.('input_audio_transcription_model')}
+                                data-testid="AssistantForm.input_audio_transcription_model"
+                                value={formFields?.input_audio_transcription_model || ''}
+                                minRows={1}
+                            />
+
+                            <Textarea
+                                label={t('Язык распознавания речи') ?? ''}
+                                onChange={onChangeTextHandler?.('input_audio_transcription_language')}
+                                data-testid="AssistantForm.input_audio_transcription_language"
+                                value={formFields?.input_audio_transcription_language || ''}
+                                minRows={1}
+                            />
+
+                            <Textarea
+                                label={t('Модель синтеза речи') ?? ''}
+                                onChange={onChangeTextHandler?.('output_audio_transcription_model')}
+                                data-testid="AssistantForm.output_audio_transcription_model"
+                                value={formFields?.output_audio_transcription_model || ''}
+                                minRows={1}
+                            />
+
+                            {!isNonRealtime && (
+                                <>
+                                    <Textarea
+                                        label={t('Формат входящего аудио') ?? ''}
+                                        onChange={onChangeTextHandler?.('input_audio_format')}
+                                        data-testid="AssistantForm.input_audio_format"
+                                        value={formFields?.input_audio_format || ''}
+                                        minRows={1}
                                     />
-                                </HStack>
 
-                                <Slider
-                                    value={value}
-                                    onChange={handleSliderChange(param.field)}
-                                    min={param.min}
-                                    max={param.max}
-                                    step={param.step}
-                                    marks={param.marks}
-                                    className={cls.slider}
-                                    sx={{
-                                        color: 'var(--accent-redesigned)',
-                                        '& .MuiSlider-thumb': {
-                                            backgroundColor: 'var(--accent-redesigned)',
-                                            border: '2px solid var(--light-bg-redesigned)',
-                                            boxShadow: 'var(--shadow-accent-sm)',
-                                            '&:hover, &.Mui-focusVisible': {
-                                                boxShadow: 'var(--glow-accent)',
-                                            },
-                                        },
-                                        '& .MuiSlider-track': {
-                                            background: 'linear-gradient(90deg, var(--accent-redesigned), var(--icon-redesigned))',
-                                            border: 'none',
-                                        },
-                                        '& .MuiSlider-rail': {
-                                            backgroundColor: 'var(--divider-solid)',
-                                            opacity: 0.3,
-                                        },
-                                        '& .MuiSlider-mark': {
-                                            backgroundColor: 'var(--hint-redesigned)',
-                                        },
-                                        '& .MuiSlider-markLabel': {
-                                            color: 'var(--hint-redesigned)',
-                                            fontSize: '12px',
-                                        }
-                                    }}
-                                />
-                            </VStack>
-                        )
-                    })}
+                                    <Textarea
+                                        label={t('Формат исходящего аудио') ?? ''}
+                                        onChange={onChangeTextHandler?.('output_audio_format')}
+                                        data-testid="AssistantForm.output_audio_format"
+                                        value={formFields?.output_audio_format || ''}
+                                        minRows={1}
+                                    />
+                                </>
+                            )}
+                        </VStack>
+                    )}
                 </VStack>
             </Collapse>
         </div>

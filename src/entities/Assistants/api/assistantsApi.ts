@@ -109,6 +109,19 @@ export const assistantsApi = rtkApi.injectEndpoints({
         method: 'POST',
         body: arg
       })
+    }),
+    uploadTtsVoice: build.mutation<Assistant, { id: string; file: File }>({
+      query: ({ id, file }) => {
+        const formData = new FormData()
+        formData.append('file', file)
+        
+        return {
+          url: `/assistants/${id}/tts-voice`,
+          method: 'POST',
+          body: formData
+        }
+      },
+      invalidatesTags: (result, error, { id }) => [{ type: 'Assistants', id }, { type: 'Assistants', id: 'LIST' }]
     })
   })
 })
@@ -121,3 +134,4 @@ export const useAssistant = assistantsApi.useGetAssistantQuery
 export const useUpdateAssistant = assistantsApi.useUpdateAssistantMutation
 export const useDeleteAssistant = assistantsApi.useDeleteAssistantMutation
 export const useGeneratePrompt = assistantsApi.useGeneratePromptMutation
+export const useUploadTtsVoice = assistantsApi.useUploadTtsVoiceMutation

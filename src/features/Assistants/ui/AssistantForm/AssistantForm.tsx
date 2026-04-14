@@ -17,8 +17,9 @@ import { Tool, toolsPageActions } from '@/entities/Tools'
 import { McpServer } from '@/entities/Mcp'
 import { PromptSection } from './components/PromptSection'
 import { MainInfoCard } from './components/MainInfoCard'
-import { ModelParametersCard } from './components/ModelParametersCard'
-import { SpeechSettingsCard } from './components/SpeechSettingsCard'
+import { ModelParametersCard } from './components/ModelParametersCard/ModelParametersCard'
+import { PipelineCard } from './components/PipelineCard/PipelineCard'
+import { VadSettingsCard } from './components/VadSettingsCard/VadSettingsCard'
 
 import cls from './AssistantForm.module.scss'
 
@@ -243,13 +244,15 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
                             onChangeCheckboxHandler={onChangeCheckboxHandler}
                         />
 
-                        {/* Model Parameters Card (VAD + Temp) */}
+                        <PipelineCard assistantId={assistantId} />
+
+                        {/* Model Parameters Card (Temp, Tokens, Models) */}
                         <ModelParametersCard
                             onChangeTextHandler={onChangeTextHandler}
                         />
 
-                        {/* Advanced Settings Card (Admin only) */}
-                        <SpeechSettingsCard
+                        {/* VAD Settings Card */}
+                        <VadSettingsCard
                             onChangeTextHandler={onChangeTextHandler}
                             onChangeSelectHandler={onChangeSelectHandler}
                         />
