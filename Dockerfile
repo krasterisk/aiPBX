@@ -5,7 +5,9 @@ FROM node:22-slim AS builder
 WORKDIR /app
 # Кэширование зависимостей
 COPY package.json package-lock.json ./
-RUN npm install --ignore-scripts
+RUN npm config set fetch-retry-maxtimeout 120000 && \
+    npm config set fetch-retries 5 && \
+    npm ci --legacy-peer-deps --ignore-scripts
 # Копируем исходный код
 COPY . .
 # Build arguments (передаются через docker-compose)
