@@ -5,11 +5,8 @@ FROM node:22-slim AS builder
 WORKDIR /app
 # Кэширование зависимостей
 COPY package.json package-lock.json ./
-RUN NODE_OPTIONS="--max-old-space-size=512" \
-    npm config set fetch-retry-maxtimeout 120000 && \
-    npm config set fetch-retries 5 && \
-    npm config set maxsockets 5 && \
-    npm ci --legacy-peer-deps --ignore-scripts
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --legacy-peer-deps --ignore-scripts --prefer-offline
 # Копируем исходный код
 COPY . .
 # Build arguments (передаются через docker-compose)
