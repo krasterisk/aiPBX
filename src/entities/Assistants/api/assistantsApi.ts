@@ -110,7 +110,7 @@ export const assistantsApi = rtkApi.injectEndpoints({
         body: arg
       })
     }),
-    uploadTtsVoice: build.mutation<Assistant, { id: string; file: File }>({
+    uploadTtsVoice: build.mutation<Assistant, { id: string, file: File }>({
       query: ({ id, file }) => {
         const formData = new FormData()
         formData.append('file', file)

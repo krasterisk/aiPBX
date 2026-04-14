@@ -8,7 +8,6 @@ import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { isUserAdmin } from '@/entities/User'
 import {
-    Assistant,
     getAssistantFormData,
     STT_PROVIDERS,
     LLM_PROVIDERS,
@@ -18,8 +17,8 @@ import {
     isLlmFreeText,
     getTtsVoices,
     assistantFormActions
+, useUploadTtsVoice 
 } from '@/entities/Assistants'
-import { useUploadTtsVoice } from '@/entities/Assistants'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { toast } from 'react-toastify'
 import { Collapse, Radio, RadioGroup, FormControlLabel, FormControl, CircularProgress } from '@mui/material'
