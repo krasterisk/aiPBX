@@ -1,0 +1,266 @@
+@import '@/app/styles/variables/mixins';
+
+.DebugPanel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* --- Tabs --- */
+
+.tabs {
+    display: flex;
+    border-bottom: var(--glass-border-subtle);
+    flex-shrink: 0;
+    background: var(--glass-bg-tertiary);
+}
+
+.tab {
+    flex: 1;
+    padding: var(--space-2) var(--space-3);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    text-align: center;
+    cursor: pointer;
+    color: var(--icon-redesigned);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    transition: var(--transition-fast);
+
+    &:hover {
+        color: var(--text-redesigned);
+        background: var(--glass-overlay-medium);
+    }
+}
+
+.tabActive {
+    composes: tab;
+    color: var(--accent-redesigned);
+    border-bottom-color: var(--accent-redesigned);
+    background: var(--glass-overlay-medium);
+}
+
+.tabContent {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Event Log --- */
+
+.eventFilter {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-3);
+    border-bottom: var(--glass-border-subtle);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    background: var(--glass-bg-tertiary);
+}
+
+.filterChip {
+    @include chip-base;
+    padding: 3px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    background: var(--glass-overlay-medium);
+    border: var(--glass-border-secondary);
+    color: var(--icon-redesigned);
+    cursor: pointer;
+    transition: var(--transition-fast);
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        color: var(--text-redesigned);
+        background: var(--glass-bg-secondary);
+        transform: var(--hover-scale-sm);
+    }
+}
+
+.filterChipActive {
+    composes: filterChip;
+    background: var(--status-info-bg);
+    border-color: var(--status-info-border);
+    color: var(--status-info);
+    box-shadow: var(--glow-info);
+
+    &:hover {
+        background: var(--status-info-bg);
+        color: var(--status-info);
+    }
+}
+
+.eventList {
+    flex: 1;
+    overflow-y: auto;
+    font-family: var(--font-family-monospace, monospace);
+    font-size: 11px;
+
+    &::-webkit-scrollbar {
+        width: var(--scrollbar-width);
+    }
+
+    &::-webkit-scrollbar-track {
+        background: var(--scrollbar-track-bg);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb-bg);
+        border-radius: var(--radius-full);
+
+        &:hover {
+            background: var(--scrollbar-thumb-hover-bg);
+        }
+    }
+}
+
+.eventItem {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border-bottom: 1px solid var(--divider-subtle);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    line-height: 1.4;
+
+    &:hover {
+        background: var(--glass-overlay-medium);
+    }
+}
+
+.eventTime {
+    color: var(--icon-redesigned);
+    opacity: 0.6;
+    flex-shrink: 0;
+    min-width: 56px;
+}
+
+.eventDot {
+    flex-shrink: 0;
+    margin-top: 5px;
+}
+
+// Use status-dot mixin for each category
+.dotSession { @include status-dot(var(--status-info), 6px); }
+.dotTranscript { @include status-dot(var(--status-success), 6px); }
+.dotResponse { @include status-dot(var(--chart-purple), 6px); }
+.dotFunction { @include status-dot(var(--status-warning), 6px); }
+.dotAudio { @include status-dot(var(--status-neutral), 6px); }
+.dotError { @include status-dot(var(--status-error), 6px); }
+.dotVad { @include status-dot(var(--chart-orange), 6px); }
+
+.eventType {
+    color: var(--text-redesigned);
+    word-break: break-all;
+    flex: 1;
+}
+
+.eventDelta {
+    color: var(--icon-redesigned);
+    max-width: 120px;
+    @include text-truncate;
+    font-size: 10px;
+}
+
+.eventExpanded {
+    padding: var(--space-2) var(--space-3) var(--space-2) 80px;
+    background: var(--glass-overlay-darker);
+    border-bottom: var(--glass-border-subtle);
+}
+
+.eventJson {
+    @include code-block;
+    font-size: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* --- Metrics Grid --- */
+
+.metricsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: var(--scrollbar-width);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb-bg);
+        border-radius: var(--radius-full);
+    }
+}
+
+.metricCard {
+    @include glass-card-tertiary;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    transition: var(--transition-normal);
+
+    &:hover {
+        background: var(--glass-bg-secondary);
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+}
+
+.metricCardPrimary {
+    composes: metricCard;
+    @include glass-card-secondary;
+    border: var(--glass-border-accent);
+
+    .metricValue {
+        font-size: 24px;
+        @include text-gradient;
+    }
+}
+
+.metricLabel {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--icon-redesigned);
+    font-weight: 600;
+}
+
+.metricValue {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-redesigned);
+    font-family: var(--font-family-monospace, monospace);
+}
+
+.metricUnit {
+    font-size: 11px;
+    color: var(--icon-redesigned);
+    font-weight: 400;
+}
+
+.metricCardWide {
+    composes: metricCard;
+    grid-column: 1 / -1;
+}
+
+.sparkline {
+    width: 100%;
+    height: 40px;
+    margin-top: var(--space-1);
+}
+
+.metricsEmpty {
+    @include flex-center;
+    padding: var(--space-8);
+    color: var(--icon-redesigned);
+    font-size: 13px;
+}

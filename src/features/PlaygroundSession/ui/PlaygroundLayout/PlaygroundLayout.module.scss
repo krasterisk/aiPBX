@@ -1,0 +1,85 @@
+@import '@/app/styles/variables/mixins';
+
+.PlaygroundLayout {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--navbar-height) - var(--space-4));
+    min-height: 500px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    @include glass-card-primary;
+    box-shadow: var(--shadow-lg);
+}
+
+.panelGroup {
+    flex: 1;
+    min-height: 0;
+}
+
+.resizeHandle {
+    width: 3px;
+    background: transparent;
+    transition: var(--transition-fast);
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--divider-subtle);
+    }
+
+    &:hover,
+    &[data-resize-handle-active] {
+        &::before {
+            background: var(--accent-redesigned);
+        }
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 3px;
+        height: 28px;
+        border-radius: var(--radius-full);
+        background: var(--icon-redesigned);
+        opacity: 0;
+        transition: var(--transition-normal);
+    }
+
+    &:hover::after,
+    &[data-resize-handle-active]::after {
+        opacity: 0.6;
+    }
+}
+
+.panel {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.conversationPanel {
+    composes: panel;
+    background: transparent;
+}
+
+.debugPanel {
+    composes: panel;
+    background: var(--glass-overlay-dark);
+}
+
+@include mobile {
+    .PlaygroundLayout {
+        height: auto;
+        min-height: 100vh;
+        border-radius: 0;
+    }
+}

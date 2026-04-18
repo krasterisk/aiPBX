@@ -1,0 +1,75 @@
+@import '@/app/styles/variables/mixins';
+
+.PlaygroundHeader {
+    @include flex-between;
+    padding: var(--space-3) var(--space-4);
+    background: var(--glass-bg-secondary);
+    backdrop-filter: var(--glass-blur-sm);
+    border-bottom: var(--glass-border-subtle);
+    gap: var(--space-4);
+    flex-shrink: 0;
+    min-height: 48px;
+}
+
+.leftSection {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex: 1;
+    min-width: 0;
+}
+
+.title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-redesigned);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.titleIcon {
+    color: var(--accent-redesigned);
+}
+
+.assistantSelect {
+    min-width: 220px;
+    max-width: 360px;
+}
+
+.rightSection {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-shrink: 0;
+}
+
+.timer {
+    font-family: var(--font-family-monospace, 'JetBrains Mono', monospace);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-redesigned);
+    background: var(--glass-bg-tertiary);
+    backdrop-filter: var(--glass-blur-sm);
+    border: var(--glass-border-subtle);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    letter-spacing: 1px;
+    min-width: 68px;
+    text-align: center;
+}
+
+.timerActive {
+    color: var(--status-success);
+    border-color: var(--status-success-border);
+    box-shadow: var(--glow-success);
+}
+
+.micError {
+    font-size: 12px;
+    color: var(--status-error);
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}

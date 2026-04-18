@@ -27,6 +27,7 @@ export const initAssistant: Assistant = {
   llmModel: null,
   ttsProvider: null,
   ttsVoice: null,
+  interrupt_response: true,
   comment: '',
   userId: '',
   user: {

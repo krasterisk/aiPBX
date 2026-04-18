@@ -287,6 +287,13 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         })
     }, [cleanupAudio, initAudioInput, interruptPlayback, playAudioChunk])
 
+    // Emit session.update for live settings changes (Phase 5)
+    const updateSession = useCallback((params: Record<string, unknown>) => {
+        if (socketRef.current && status === 'connected') {
+            socketRef.current.emit('playground_update_session', params)
+        }
+    }, [status])
+
     const disconnect = useCallback(() => {
         if (socketRef.current) {
             socketRef.current.emit('playground_stop')
@@ -307,8 +314,9 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         status,
         connect,
         disconnect,
+        updateSession,
         isMicAccessGranted,
         events,
         analyserNode
-    }), [status, connect, disconnect, isMicAccessGranted, events, analyserNode])
+    }), [status, connect, disconnect, updateSession, isMicAccessGranted, events, analyserNode])
 }

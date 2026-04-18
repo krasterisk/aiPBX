@@ -255,6 +255,7 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
                         <VadSettingsCard
                             onChangeTextHandler={onChangeTextHandler}
                             onChangeSelectHandler={onChangeSelectHandler}
+                            onChangeCheckboxHandler={onChangeCheckboxHandler}
                         />
                     </VStack>
                 </div>

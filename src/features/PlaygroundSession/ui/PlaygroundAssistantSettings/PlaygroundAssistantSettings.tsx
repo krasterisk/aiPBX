@@ -92,7 +92,8 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
                 idle_timeout_ms: formData.idle_timeout_ms,
                 analytic: formData.analytic,
                 allowHangup: formData.allowHangup,
-                allowTransfer: formData.allowTransfer
+                allowTransfer: formData.allowTransfer,
+                interrupt_response: formData.interrupt_response
             }).unwrap()
             dispatch(playgroundAssistantFormActions.setError(undefined))
             toast.success(t('Сохранено успешно'))
@@ -277,6 +278,26 @@ export const PlaygroundAssistantSettings = memo((props: PlaygroundAssistantSetti
                             {/* VAD Settings */}
                             <VStack gap="16" max className={cls.vadContainer}>
                                 <Text text={t('Настройки VAD')} bold />
+
+                                <Check
+                                    checked={formData.interrupt_response ?? true}
+                                    onChange={onChangeCheckboxHandler('interrupt_response')}
+                                    label={
+                                        <HStack gap="4" align="center">
+                                            {t('Прерывание речи')}
+                                            <Tooltip
+                                                title={t('interruptResponseTooltip')}
+                                                arrow
+                                                placement="top"
+                                                enterTouchDelay={0}
+                                                leaveTouchDelay={3000}
+                                                slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                            >
+                                                <span className={cls.tooltipIcon}><Info size={16} /></span>
+                                            </Tooltip>
+                                        </HStack>
+                                    }
+                                />
 
                                 {/* Threshold */}
                                 <div className={cls.vadItem}>

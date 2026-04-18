@@ -1,0 +1,196 @@
+@import '@/app/styles/variables/mixins';
+
+.SettingsPanel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.scrollArea {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+
+    &::-webkit-scrollbar {
+        width: var(--scrollbar-width);
+    }
+
+    &::-webkit-scrollbar-track {
+        background: var(--scrollbar-track-bg);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb-bg);
+        border-radius: var(--radius-full);
+
+        &:hover {
+            background: var(--scrollbar-thumb-hover-bg);
+        }
+    }
+}
+
+/* --- Collapsible section --- */
+
+.section {
+    @include glass-card-tertiary;
+    overflow: hidden;
+    transition: var(--transition-normal);
+}
+
+.sectionHeader {
+    @include flex-between;
+    padding: var(--space-3) var(--space-4);
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition-fast);
+
+    &:hover {
+        background: var(--glass-overlay-medium);
+    }
+}
+
+.sectionTitle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--icon-redesigned);
+}
+
+.sectionIcon {
+    color: var(--accent-redesigned);
+    flex-shrink: 0;
+}
+
+.sectionChevron {
+    color: var(--icon-redesigned);
+    transition: var(--transition-transform);
+    flex-shrink: 0;
+}
+
+.sectionChevronOpen {
+    transform: rotate(180deg);
+}
+
+.sectionBody {
+    padding: 0 var(--space-4) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.sectionCollapsed {
+    .sectionBody {
+        display: none;
+    }
+}
+
+/* --- VAD Sliders --- */
+
+.vadItem {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+
+    &>span {
+        width: 100%;
+    }
+}
+
+.vadHeader {
+    @include flex-between;
+    gap: var(--space-2);
+    width: 100%;
+}
+
+.vadLabel {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-redesigned);
+}
+
+.vadValue {
+    font-size: 12px;
+    color: var(--accent-redesigned);
+    font-weight: 700;
+    font-family: var(--font-family-monospace, monospace);
+}
+
+.tooltipIcon {
+    color: var(--icon-redesigned);
+    opacity: 0.5;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    &:hover {
+        opacity: 1;
+        color: var(--accent-redesigned);
+    }
+}
+
+/* --- Prompt textarea --- */
+
+.promptTextarea {
+    :global(.MuiInputBase-root) {
+        min-height: 80px; /* 4 lines compact, not 200px */
+    }
+
+    textarea {
+        max-height: 40vh;
+        overflow-y: auto !important;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+}
+
+/* --- Actions footer --- */
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border-top: var(--glass-border-subtle);
+    flex-shrink: 0;
+    background: var(--glass-bg-tertiary);
+    backdrop-filter: var(--glass-blur-sm);
+}
+
+.actionsRow {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.vadContainer {
+    padding-top: var(--space-3);
+    border-top: var(--glass-border-subtle);
+}
+
+/* --- Prompt preview (collapsed) --- */
+
+.promptPreview {
+    font-size: 12px;
+    color: var(--icon-redesigned);
+    padding: 0 var(--space-4) var(--space-3);
+    @include text-clamp(2);
+    line-height: 1.5;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--text-redesigned);
+    }
+}

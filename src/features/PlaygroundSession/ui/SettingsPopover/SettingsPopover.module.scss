@@ -1,0 +1,221 @@
+@import '@/app/styles/variables/mixins';
+
+.popoverOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal-backdrop);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    animation: fadeIn var(--duration-fast) var(--ease-out);
+}
+
+.popover {
+    position: fixed;
+    z-index: var(--z-modal);
+    background: var(--bg-redesigned);
+    backdrop-filter: var(--glass-blur-xl);
+    box-shadow: var(--shadow-xl), var(--shadow-accent-lg);
+    border: 1px solid rgba(94, 211, 243, 0.4);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    animation: slideUp var(--duration-medium) var(--ease-spring);
+    display: flex;
+    flex-direction: column;
+    max-height: 70vh;
+
+    /* Position below header */
+    top: calc(var(--navbar-height) + 56px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 520px;
+    max-width: calc(100vw - var(--space-8));
+}
+
+.popoverWide {
+    composes: popover;
+    width: 640px;
+}
+
+.popoverHeader {
+    @include flex-between;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: var(--glass-border-subtle);
+    flex-shrink: 0;
+}
+
+.popoverTitle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-redesigned);
+}
+
+.popoverTitleIcon {
+    color: var(--accent-redesigned);
+}
+
+.popoverClose {
+    @include interactive-element;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    color: var(--icon-redesigned);
+    transition: var(--transition-fast);
+
+    &:hover {
+        background: var(--glass-overlay-medium);
+        color: var(--text-redesigned);
+    }
+}
+
+.popoverBody {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+
+    &::-webkit-scrollbar {
+        width: var(--scrollbar-width);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb-bg);
+        border-radius: var(--radius-full);
+    }
+}
+
+.popoverFooter {
+    @include flex-between;
+    padding: var(--space-3) var(--space-4);
+    border-top: var(--glass-border-subtle);
+    flex-shrink: 0;
+    gap: var(--space-2);
+    background: var(--glass-bg-tertiary);
+}
+
+/* --- Header buttons --- */
+
+.settingsButtons {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.settingsBtn {
+    @include interactive-element;
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    border: var(--glass-border-subtle);
+    background: var(--glass-overlay-medium);
+    color: var(--icon-redesigned);
+    font-size: 11px;
+    font-weight: 600;
+    transition: var(--transition-fast);
+    white-space: nowrap;
+    backdrop-filter: var(--glass-blur-sm);
+
+    &:hover {
+        background: var(--glass-bg-secondary);
+        color: var(--text-redesigned);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: var(--hover-scale-sm);
+    }
+}
+
+.settingsBtnActive {
+    composes: settingsBtn;
+    background: var(--status-info-bg);
+    border-color: var(--status-info-border);
+    color: var(--status-info);
+    box-shadow: var(--glow-info);
+}
+
+/* --- VAD/Model items inside popover --- */
+
+.vadItem {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+
+    & > span {
+        width: 100%;
+    }
+}
+
+.vadHeader {
+    @include flex-between;
+    gap: var(--space-2);
+}
+
+.vadLabel {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-redesigned);
+}
+
+.vadValue {
+    font-size: 12px;
+    color: var(--accent-redesigned);
+    font-weight: 700;
+    font-family: var(--font-family-monospace, monospace);
+}
+
+.tooltipIcon {
+    color: var(--icon-redesigned);
+    opacity: 0.5;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+
+    &:hover {
+        opacity: 1;
+        color: var(--accent-redesigned);
+    }
+}
+
+.promptTextarea {
+    textarea {
+        max-height: 40vh;
+        overflow-y: auto !important;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+}
+
+.twoCol {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}

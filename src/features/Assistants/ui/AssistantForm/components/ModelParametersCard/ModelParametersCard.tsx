@@ -18,18 +18,20 @@ import cls from './ModelParametersCard.module.scss'
 interface ModelParametersCardProps {
     className?: string
     onChangeTextHandler?: (field: keyof Assistant) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+    initialExpanded?: boolean
 }
 
 export const ModelParametersCard = memo((props: ModelParametersCardProps) => {
     const {
         className,
-        onChangeTextHandler
+        onChangeTextHandler,
+        initialExpanded = false,
     } = props
 
     const { t } = useTranslation('assistants')
     const isAdmin = useSelector(isUserAdmin)
     const formFields = useSelector(getAssistantFormData)
-    const [expanded, setExpanded] = useState(false)
+    const [expanded, setExpanded] = useState(initialExpanded)
 
     const isNonRealtime = formFields?.pipelineMode === 'non-realtime'
     

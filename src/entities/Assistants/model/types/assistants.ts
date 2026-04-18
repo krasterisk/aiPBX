@@ -62,6 +62,7 @@ export interface Assistant {
   llmModel?: string | null
   ttsProvider?: string | null
   ttsVoice?: string | null
+  interrupt_response?: boolean | null
 }
 
 export interface AssistantsListProps {

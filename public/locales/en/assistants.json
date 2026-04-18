@@ -234,5 +234,7 @@
   "Провайдер синтеза речи": "TTS Provider",
   "Голос TTS": "TTS Voice",
   "Non-Realtime Pipeline": "Non-Realtime Pipeline",
-  "Введите название модели": "Enter model name"
+  "Введите название модели": "Enter model name",
+  "Прерывание речи": "Speech Interruption",
+  "interruptResponseTooltip": "Allows the caller to interrupt the AI response by speaking. When disabled, the AI will finish its response before listening."
 }

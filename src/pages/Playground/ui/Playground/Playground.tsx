@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import cls from './Playground.module.scss'
 import { memo } from 'react'
 import { Page } from '@/widgets/Page'
-import { PlaygroundSession } from '@/features/PlaygroundSession'
+import { PlaygroundSessionV2 } from '@/features/PlaygroundSession'
 
 interface PlaygroundPageProps {
     className?: string
@@ -15,7 +15,7 @@ const PlaygroundPage = memo((props: PlaygroundPageProps) => {
 
     return (
         <Page data-testid={'PlaygroundPage'} className={classNames(cls.Playground, {}, [className])}>
-            <PlaygroundSession />
+            <PlaygroundSessionV2 />
         </Page>
     )
 })

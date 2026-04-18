@@ -6,6 +6,7 @@ import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Combobox } from '@/shared/ui/mui/Combobox'
+import { Check } from '@/shared/ui/mui/Check'
 import { Slider, Typography, Tooltip, Collapse } from '@mui/material'
 import { Info } from 'lucide-react'
 import { Assistant, getAssistantFormData, assistantFormActions } from '@/entities/Assistants'
@@ -20,6 +21,8 @@ interface VadSettingsCardProps {
     className?: string
     onChangeTextHandler?: (field: keyof Assistant) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
     onChangeSelectHandler?: (field: keyof Assistant) => (event: any, newValue: string) => void
+    onChangeCheckboxHandler?: (field: keyof Assistant) => (event: ChangeEvent<HTMLInputElement>) => void
+    initialExpanded?: boolean
 }
 
 interface ModelParameter {
@@ -48,13 +51,15 @@ export const VadSettingsCard = memo((props: VadSettingsCardProps) => {
     const {
         className,
         onChangeTextHandler,
+        onChangeCheckboxHandler,
+        initialExpanded = false,
     } = props
 
     const { t } = useTranslation('assistants')
     const isAdmin = useSelector(isUserAdmin)
     const formFields = useSelector(getAssistantFormData)
     const dispatch = useAppDispatch()
-    const [expanded, setExpanded] = useState(false)
+    const [expanded, setExpanded] = useState(initialExpanded)
 
     const isNonRealtime = formFields?.pipelineMode === 'non-realtime'
 
@@ -231,6 +236,28 @@ export const VadSettingsCard = memo((props: VadSettingsCardProps) => {
                                 />
                             )}
                         </VStack>
+                    )}
+
+                    {!isNonRealtime && (
+                        <Check
+                            checked={formFields?.interrupt_response ?? true}
+                            onChange={onChangeCheckboxHandler?.('interrupt_response')}
+                            label={
+                                <HStack gap="8" align="center">
+                                    {t('Прерывание речи')}
+                                    <Tooltip
+                                        title={t('interruptResponseTooltip')}
+                                        arrow
+                                        placement="top"
+                                        enterTouchDelay={0}
+                                        leaveTouchDelay={3000}
+                                        slotProps={{ popper: { modifiers: [{ name: 'preventOverflow', options: { boundary: 'window' } }] } }}
+                                    >
+                                        <span className={cls.helpIcon}><Info size={16} /></span>
+                                    </Tooltip>
+                                </HStack>
+                            }
+                        />
                     )}
 
                     {vadParameters.map((param) => {

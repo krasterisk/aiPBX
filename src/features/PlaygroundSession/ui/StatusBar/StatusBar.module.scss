@@ -1,0 +1,74 @@
+@import '@/app/styles/variables/mixins';
+
+.StatusBar {
+    @include flex-between;
+    padding: var(--space-1) var(--space-4);
+    background: var(--glass-bg-tertiary);
+    backdrop-filter: var(--glass-blur-sm);
+    border-top: var(--glass-border-subtle);
+    font-size: 11px;
+    color: var(--icon-redesigned);
+    flex-shrink: 0;
+    min-height: 28px;
+    gap: var(--space-4);
+    font-family: var(--font-family-monospace, 'JetBrains Mono', monospace);
+}
+
+.leftSection {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.rightSection {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.statusItem {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    white-space: nowrap;
+}
+
+.dot {
+    @include status-dot(var(--status-neutral), 7px);
+}
+
+.dotIdle {
+    composes: dot;
+}
+
+.dotConnected {
+    @include status-dot(var(--status-success), 7px);
+    box-shadow: var(--glow-success);
+    animation: pulse 2s infinite;
+}
+
+.dotListening {
+    @include status-dot(var(--status-warning), 7px);
+    box-shadow: var(--glow-warning);
+    animation: pulse 1s infinite;
+}
+
+.dotSpeaking {
+    @include status-dot(var(--accent-redesigned), 7px);
+    box-shadow: var(--glow-accent);
+    animation: pulse 0.8s infinite;
+}
+
+.dotError {
+    @include status-dot(var(--status-error), 7px);
+}
+
+.separator {
+    @include divider-vertical;
+    height: 14px;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}

@@ -222,5 +222,7 @@
   "Провайдер синтеза речи": "TTS-Anbieter",
   "Голос TTS": "TTS-Stimme",
   "Non-Realtime Pipeline": "Non-Realtime Pipeline",
-  "Введите название модели": "Modellnamen eingeben"
+  "Введите название модели": "Modellnamen eingeben",
+  "Прерывание речи": "Sprachunterbrechung",
+  "interruptResponseTooltip": "Erlaubt dem Anrufer, die KI-Antwort durch Sprechen zu unterbrechen. Wenn deaktiviert, beendet die KI ihre Antwort, bevor sie zuhört."
 }
