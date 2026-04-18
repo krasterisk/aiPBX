@@ -28,7 +28,7 @@ export const PlaygroundLayout = memo((props: PlaygroundLayoutProps) => {
             {header}
 
             <Group
-                direction={isMobile ? 'vertical' : 'horizontal'}
+                orientation={isMobile ? 'vertical' : 'horizontal'}
                 id="playground-layout"
                 className={cls.panelGroup}
             >
