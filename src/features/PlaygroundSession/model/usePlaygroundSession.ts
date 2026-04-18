@@ -96,8 +96,6 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         setAnalyserNode(null)
         interruptPlayback()
         setIsMicAccessGranted(false)
-        setEvents([])
-        eventBufferRef.current = []
     }, [interruptPlayback])
 
     const playAudioChunk = useCallback((arrayBuffer: ArrayBuffer) => {
@@ -225,6 +223,10 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
 
     const connect = useCallback((assistantId: string, micDeviceId?: string) => {
         if (socketRef.current) return
+
+        // Clear events from previous session only when starting a new one
+        setEvents([])
+        eventBufferRef.current = []
 
         setStatus('connecting')
 
