@@ -73,3 +73,33 @@
     align-items: center;
     gap: var(--space-1);
 }
+
+@include mobile {
+    .PlaygroundHeader {
+        flex-direction: column;
+        align-items: stretch;
+        padding: var(--space-3);
+        height: auto;
+    }
+    
+    .leftSection {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .assistantSelect {
+        min-width: 100%;
+        max-width: 100%;
+    }
+    
+    .rightSection {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        
+        > button {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+}

@@ -2,6 +2,7 @@ import { memo, ReactNode } from 'react'
 import { Group, Panel, Separator } from 'react-resizable-panels'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './PlaygroundLayout.module.scss'
+import { useDevice } from '@/shared/lib/hooks/useDevice/useDevice'
 
 interface PlaygroundLayoutProps {
     className?: string
@@ -20,12 +21,14 @@ export const PlaygroundLayout = memo((props: PlaygroundLayoutProps) => {
         statusBar,
     } = props
 
+    const isMobile = useDevice()
+
     return (
         <div className={classNames(cls.PlaygroundLayout, {}, [className])}>
             {header}
 
             <Group
-                orientation="horizontal"
+                direction={isMobile ? 'vertical' : 'horizontal'}
                 id="playground-layout"
                 className={cls.panelGroup}
             >

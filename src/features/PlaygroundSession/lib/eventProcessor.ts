@@ -74,10 +74,13 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
         // --- User transcription ---
         case 'conversation.item.input_audio_transcription.completed':
             if (event.item_id) {
-                const existing = findItem(next.transcript, event.item_id)
-                if (existing) {
-                    existing.text = event.transcript || ''
-                    existing.isStreaming = false
+                const index = next.transcript.findIndex(t => t.id === event.item_id)
+                if (index !== -1) {
+                    next.transcript[index] = {
+                        ...next.transcript[index],
+                        text: event.transcript || '',
+                        isStreaming: false
+                    }
                 } else {
                     const item = createTranscriptItem(event.item_id, 'user', event.transcript || '', timestamp)
                     item.isStreaming = false
@@ -141,13 +144,14 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
         case 'response.text.done':
         case 'response.audio_transcript.done':
             if (event.item_id) {
-                const existing = findItem(next.transcript, event.item_id)
-                if (existing) {
-                    existing.isStreaming = false
+                const index = next.transcript.findIndex(t => t.id === event.item_id)
+                if (index !== -1) {
                     const raw = event._raw as any
                     const transcriptStr = event.transcript || raw?.transcript || ''
-                    if (transcriptStr) {
-                        existing.text = transcriptStr
+                    next.transcript[index] = {
+                        ...next.transcript[index],
+                        isStreaming: false,
+                        text: transcriptStr || next.transcript[index].text
                     }
                 }
             }
@@ -156,10 +160,13 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
         // --- Function call ---
         case 'response.function_call_arguments.delta':
             if (event.item_id) {
-                const existing = findItem(next.transcript, event.item_id)
-                if (existing) {
-                    existing.functionArgs = (existing.functionArgs || '') + (event.delta || '')
-                    existing.isStreaming = true
+                const index = next.transcript.findIndex(t => t.id === event.item_id)
+                if (index !== -1) {
+                    next.transcript[index] = {
+                        ...next.transcript[index],
+                        functionArgs: (next.transcript[index].functionArgs || '') + (event.delta || ''),
+                        isStreaming: true
+                    }
                 } else {
                     const item = createTranscriptItem(event.item_id, 'function', '', timestamp)
                     item.functionArgs = event.delta || ''
@@ -170,10 +177,13 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
 
         case 'response.function_call_arguments.done':
             if (event.item_id) {
-                const existing = findItem(next.transcript, event.item_id)
-                if (existing) {
-                    existing.isStreaming = false
-                    if (event.name) existing.functionName = event.name
+                const index = next.transcript.findIndex(t => t.id === event.item_id)
+                if (index !== -1) {
+                    next.transcript[index] = {
+                        ...next.transcript[index],
+                        isStreaming: false,
+                        functionName: event.name || next.transcript[index].functionName
+                    }
                 }
                 next.metrics.functionCallCount += 1
             }
@@ -195,15 +205,18 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
 
         case 'response.output_item.done': {
             if (event.item_id) {
-                const existing = findItem(next.transcript, event.item_id)
-                if (existing) {
-                    existing.isStreaming = false
+                const index = next.transcript.findIndex(t => t.id === event.item_id)
+                if (index !== -1) {
                     const item = event.item || (event._raw as any)?.item
+                    let fullText = next.transcript[index].text
                     if (item?.content && Array.isArray(item.content)) {
-                        const fullText = item.content.map((c: any) => c.transcript || c.text || '').join('')
-                        if (fullText && existing.text !== fullText) {
-                            existing.text = fullText
-                        }
+                        const extracted = item.content.map((c: any) => c.transcript || c.text || '').join('')
+                        if (extracted) fullText = extracted
+                    }
+                    next.transcript[index] = {
+                        ...next.transcript[index],
+                        isStreaming: false,
+                        text: fullText
                     }
                 }
             }
@@ -213,14 +226,19 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
         // --- Content part events (fallback if deltas are missing) ---
         case 'response.content_part.done' as any: {
             if (event.item_id) {
-                const existing = findItem(next.transcript, event.item_id)
-                if (existing) {
+                const index = next.transcript.findIndex(t => t.id === event.item_id)
+                if (index !== -1) {
                     const raw = event._raw as any
+                    let newText = next.transcript[index].text
                     if (raw?.part) {
                         const partText = raw.part.transcript || raw.part.text || ''
-                        if (partText && existing.text !== partText) {
-                            existing.text = existing.text && existing.text.length >= partText.length ? existing.text : partText
+                        if (partText && newText.length < partText.length) {
+                            newText = partText
                         }
+                    }
+                    next.transcript[index] = {
+                        ...next.transcript[index],
+                        text: newText
                     }
                 }
             }
@@ -246,8 +264,10 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
         case 'stt.completed':
             if (event.item_id) {
                 upsertTranscriptItem(next.transcript, event.item_id, 'user', event.transcript || '', timestamp)
-                const item = findItem(next.transcript, event.item_id)
-                if (item) item.isStreaming = false
+                const index = next.transcript.findIndex(t => t.id === event.item_id)
+                if (index !== -1) {
+                    next.transcript[index] = { ...next.transcript[index], isStreaming: false }
+                }
             }
             next.lastSpeechStoppedAt = timestamp
             break
@@ -276,8 +296,10 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
 
         case 'llm.completed':
             if (event.item_id) {
-                const existing = findItem(next.transcript, event.item_id)
-                if (existing) existing.isStreaming = false
+                const index = next.transcript.findIndex(t => t.id === event.item_id)
+                if (index !== -1) {
+                    next.transcript[index] = { ...next.transcript[index], isStreaming: false }
+                }
             }
             next.metrics.turnCount += 1
             if (event.usage) {
@@ -337,9 +359,11 @@ function upsertTranscriptItem(
     text: string,
     timestamp: number
 ): void {
-    const existing = findItem(transcript, itemId)
-    if (existing) {
-        if (text) existing.text = text
+    const index = transcript.findIndex(t => t.id === itemId)
+    if (index !== -1) {
+        if (text) {
+            transcript[index] = { ...transcript[index], text }
+        }
     } else {
         transcript.push(createTranscriptItem(itemId, role, text, timestamp))
     }
@@ -352,10 +376,13 @@ function appendDelta(
     delta: string,
     timestamp: number
 ): void {
-    const existing = findItem(transcript, itemId)
-    if (existing) {
-        existing.text += delta
-        existing.isStreaming = true
+    const index = transcript.findIndex(t => t.id === itemId)
+    if (index !== -1) {
+        transcript[index] = {
+            ...transcript[index],
+            text: transcript[index].text + delta,
+            isStreaming: true
+        }
     } else {
         const item = createTranscriptItem(itemId, role, delta, timestamp)
         item.isStreaming = true

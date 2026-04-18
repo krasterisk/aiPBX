@@ -219,3 +219,25 @@
         transform: translateX(-50%) translateY(0);
     }
 }
+
+@include mobile {
+    .settingsButtons {
+        flex-wrap: wrap;
+        width: 100%;
+        
+        button {
+            flex: 1;
+            justify-content: center;
+        }
+    }
+    
+    .popover {
+        width: calc(100vw - var(--space-4));
+        top: calc(var(--navbar-height) + 12px);
+        max-height: 85vh;
+    }
+    
+    .popoverWide {
+        width: calc(100vw - var(--space-4));
+    }
+}
