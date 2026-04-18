@@ -104,12 +104,15 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
             const item = event.item
             if (item) {
                 const role: TranscriptRole = item.type === 'function_call' ? 'function' : 'assistant'
-                const newItem = createTranscriptItem(item.id, role, '', timestamp)
-                if (role === 'function') {
-                    newItem.functionName = item.name
-                    newItem.callId = item.call_id
+                const index = next.transcript.findIndex(t => t.id === item.id)
+                if (index === -1) {
+                    const newItem = createTranscriptItem(item.id, role, '', timestamp)
+                    if (role === 'function') {
+                        newItem.functionName = item.name
+                        newItem.callId = item.call_id
+                    }
+                    next.transcript.push(newItem)
                 }
-                next.transcript.push(newItem)
 
                 // Latency tracking: first assistant item after user speech
                 if (role === 'assistant' && next.lastSpeechStoppedAt && !next.lastResponseStartedAt) {
@@ -189,12 +192,16 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
             }
             break
 
-        // --- Response completion ---
         case 'response.done':
             next.vadState = 'idle'
             next.metrics.turnCount += 1
             next.lastSpeechStoppedAt = null
             next.lastResponseStartedAt = null
+
+            // Fallback: forcefully clear any stuck streaming indicators
+            next.transcript = next.transcript.map(t => 
+                t.isStreaming ? { ...t, isStreaming: false } : t
+            )
 
             // Extract token usage
             if (event.usage) {
