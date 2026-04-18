@@ -95,12 +95,12 @@ export interface PlaygroundEventItem {
 export type EventCategory = 'audio' | 'transcript' | 'function' | 'response' | 'session' | 'error' | 'vad'
 
 /** Map event type to category for filtering */
-export function getEventCategory(type: PlaygroundEventType): EventCategory {
-    if (type.startsWith('response.audio') || type === 'response.audio.delta' || type === 'response.audio.done') {
-        return 'audio'
-    }
+export function getEventCategory(type: PlaygroundEventType | string): EventCategory {
     if (type.includes('transcript') || type.includes('text')) {
         return 'transcript'
+    }
+    if (type.startsWith('response.audio') || type === 'response.audio.delta' || type === 'response.audio.done') {
+        return 'audio'
     }
     if (type.includes('function_call')) {
         return 'function'

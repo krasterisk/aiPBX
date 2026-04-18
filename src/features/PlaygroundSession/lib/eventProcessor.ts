@@ -130,7 +130,11 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
         case 'response.text.delta':
         case 'response.audio_transcript.delta':
             if (event.item_id) {
-                appendDelta(next.transcript, event.item_id, 'assistant', event.delta || '', timestamp)
+                const raw = event._raw as any
+                const deltaStr = event.delta || event.transcript || raw?.delta || raw?.transcript || ''
+                if (deltaStr) {
+                    appendDelta(next.transcript, event.item_id, 'assistant', deltaStr, timestamp)
+                }
             }
             break
 
@@ -140,6 +144,11 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
                 const existing = findItem(next.transcript, event.item_id)
                 if (existing) {
                     existing.isStreaming = false
+                    const raw = event._raw as any
+                    const transcriptStr = event.transcript || raw?.transcript || ''
+                    if (transcriptStr) {
+                        existing.text = transcriptStr
+                    }
                 }
             }
             break
@@ -189,6 +198,41 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
                 const existing = findItem(next.transcript, event.item_id)
                 if (existing) {
                     existing.isStreaming = false
+                    const item = event.item || (event._raw as any)?.item
+                    if (item?.content && Array.isArray(item.content)) {
+                        const fullText = item.content.map((c: any) => c.transcript || c.text || '').join('')
+                        if (fullText && existing.text !== fullText) {
+                            existing.text = fullText
+                        }
+                    }
+                }
+            }
+            break
+        }
+
+        // --- Content part events (fallback if deltas are missing) ---
+        case 'response.content_part.done' as any: {
+            if (event.item_id) {
+                const existing = findItem(next.transcript, event.item_id)
+                if (existing) {
+                    const raw = event._raw as any
+                    if (raw?.part) {
+                        const partText = raw.part.transcript || raw.part.text || ''
+                        if (partText && existing.text !== partText) {
+                            existing.text = existing.text && existing.text.length >= partText.length ? existing.text : partText
+                        }
+                    }
+                }
+            }
+            break
+        }
+
+        case 'response.content_part.delta' as any: {
+            if (event.item_id) {
+                const raw = event._raw as any
+                const deltaStr = event.delta || raw?.delta?.transcript || raw?.delta?.text || ''
+                if (deltaStr) {
+                    appendDelta(next.transcript, event.item_id, 'assistant', deltaStr, timestamp)
                 }
             }
             break
