@@ -82,13 +82,13 @@ export const ConversationPanel = memo((props: ConversationPanelProps) => {
                 </span>
                 <div className={cls.toolbarActions}>
                     {onExportTranscript && (
-                        <button className={cls.toolbarBtn} onClick={onExportTranscript} title={t('Экспорт JSON') }>
+                        <button className={cls.toolbarBtn} onClick={onExportTranscript} title={t('Экспорт JSON') || ''}>
                             <Download size={14} />
                             {t('Экспорт')}
                         </button>
                     )}
                     {onClearTranscript && (
-                        <button className={cls.toolbarBtn} onClick={onClearTranscript} title={t('Очистить') }>
+                        <button className={cls.toolbarBtn} onClick={onClearTranscript} title={t('Очистить') || ''}>
                             <Trash2 size={14} />
                         </button>
                     )}

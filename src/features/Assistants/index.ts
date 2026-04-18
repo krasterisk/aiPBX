@@ -1,3 +1,6 @@
 export { AssistantCard } from './ui/AssistantCard/AssistantCard'
 export { AssistantForm } from './ui/AssistantForm'
 export { AssistantFormHeader } from './ui/AssistantFormHeader'
+export { MainInfoCard } from './ui/AssistantForm/components/MainInfoCard/MainInfoCard'
+export { ModelParametersCard } from './ui/AssistantForm/components/ModelParametersCard/ModelParametersCard'
+export { VadSettingsCard } from './ui/AssistantForm/components/VadSettingsCard/VadSettingsCard'
