@@ -5,7 +5,7 @@ function createEvent(props: Partial<PlaygroundEvent>): PlaygroundEvent {
     return {
         _raw: {},
         ...props
-    } as PlaygroundEvent;
+    } as PlaygroundEvent
 }
 
 describe('eventProcessor', () => {
