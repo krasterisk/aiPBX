@@ -1,4 +1,4 @@
-import { ChangeEvent, memo, useCallback, useState, useEffect } from 'react'
+import { ChangeEvent, memo, useCallback, useMemo, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
@@ -42,6 +42,10 @@ const isKnowledgeBaseTool = (formFields?: Partial<Tool>): boolean => {
         : formFields?.toolData
     return toolData?.handler === 'knowledge_base'
 }
+
+/** Only latin letters, digits, and underscores are valid for OpenAI function names */
+const TOOL_NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9_]*$/
+const TOOL_NAME_SANITIZE = /[^a-zA-Z0-9_]/g
 
 export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
     const {
@@ -138,6 +142,22 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
     const isFunction = formFields?.type === 'function'
     const isMcp = formFields?.type === 'mcp'
 
+    const nameError = useMemo(() => {
+        const name = formFields?.name || ''
+        if (!name) return ''
+        if (!TOOL_NAME_REGEX.test(name)) {
+            return t('tool_name_error', 'Имя может содержать только латинские буквы (a-z), цифры (0-9) и нижнее подчёркивание (_). Должно начинаться с буквы.')
+        }
+        return ''
+    }, [formFields?.name, t])
+
+    const onChangeName = useCallback((e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const raw = e.target.value
+        // Auto-sanitize: replace invalid characters with underscore
+        const sanitized = raw.replace(TOOL_NAME_SANITIZE, '_')
+        onChangeField('name', sanitized)
+    }, [onChangeField])
+
     return (
         <Card
             max
@@ -147,14 +167,25 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
         >
             <VStack gap="24" max align="start">
                 {/* 1. Tool Name */}
-                <VStack gap="8" max>
+                <VStack gap="4" max>
                     <Text text={t('Наименование') || ''} size="s" bold className={cls.label} />
                     <Textarea
-                        placeholder={t('Введите наименование') ?? ''}
-                        onChange={(e) => { onChangeField('name', e.target.value) }}
+                        placeholder={t('tool_name_placeholder', 'get_order_status') ?? ''}
+                        onChange={onChangeName}
                         value={formFields?.name || ''}
                         className={cls.fullWidth}
+                        error={!!nameError}
                     />
+                    {nameError
+                        ? <Text text={nameError} size="xs" variant="error" />
+                        : (
+                            <Text
+                                text={t('tool_name_hint', 'Имя должно отражать действие функции в формате глагол_объект: get_weather, create_order, send_email. Только a-z, 0-9, «_». Начинается с буквы.')}
+                                size="xs"
+                                variant="accent"
+                            />
+                        )
+                    }
                 </VStack>
 
                 {/* 2. Description */}

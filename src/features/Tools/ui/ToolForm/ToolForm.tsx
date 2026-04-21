@@ -108,6 +108,12 @@ export const ToolForm = memo((props: ToolFormProps) => {
             return
         }
 
+        // Validate tool name: only latin letters, digits, underscores; starts with letter
+        if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(formFields.name)) {
+            toast.error(t('tool_name_error', 'Имя может содержать только латинские буквы (a-z), цифры (0-9) и нижнее подчёркивание (_). Должно начинаться с буквы.'))
+            return
+        }
+
         try {
             if (isEdit && toolId) {
                 await updateTool(formFields).unwrap()

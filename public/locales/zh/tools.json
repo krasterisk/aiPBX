@@ -205,5 +205,8 @@
   "Создать →": "创建 →",
   "Параметры заполнятся автоматически": "参数将自动填充",
   "Режим": "模式",
-  "Webhook (API)": "Webhook (API)"
+  "Webhook (API)": "Webhook (API)",
+  "tool_name_error": "名称只能包含拉丁字母 (a-z)、数字 (0-9) 和下划线 (_)。必须以字母开头。",
+  "tool_name_hint": "名称应描述功能的动作，使用 动词_对象 格式：get_weather、create_order、send_email。仅限 a-z、0-9 和「_」。必须以字母开头。",
+  "tool_name_placeholder": "get_order_status"
 }

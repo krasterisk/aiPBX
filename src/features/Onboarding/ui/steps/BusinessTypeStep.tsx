@@ -18,7 +18,7 @@ import {
     getOnboardingError
 } from '../../model/selectors/onboardingSelectors'
 import { BusinessCard } from '../components/BusinessCard/BusinessCard'
-import { assistantTemplates, useSetAssistants, useGeneratePrompt, useUpdateAssistant } from '@/entities/Assistants'
+import { assistantTemplates, useSetAssistants, useGeneratePrompt, useUpdateAssistant, initAssistant } from '@/entities/Assistants'
 
 import { useMcpServersAll } from '@/entities/Mcp'
 import {
@@ -151,11 +151,9 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             }
 
             const result = await createAssistant([{
+                ...initAssistant,
                 name,
                 instruction: finalPrompt,
-                model: 'gpt-realtime-mini',
-                voice: 'alloy',
-                analytic: true,
                 tools: []
             }]).unwrap()
 
@@ -203,11 +201,9 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             dispatch(onboardingActions.setCreatingAssistant(true))
 
             const result = await createAssistant([{
+                ...initAssistant,
                 name: t('business_custom_name', 'Мой ассистент') || '',
                 instruction: generatedInstruction,
-                model: 'gpt-realtime-mini',
-                voice: 'alloy',
-                analytic: true,
                 tools: []
             }]).unwrap()
 

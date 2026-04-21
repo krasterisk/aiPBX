@@ -205,5 +205,8 @@
   "Создать →": "Erstellen →",
   "Параметры заполнятся автоматически": "Parameter werden automatisch ausgefüllt",
   "Режим": "Modus",
-  "Webhook (API)": "Webhook (API)"
+  "Webhook (API)": "Webhook (API)",
+  "tool_name_error": "Der Name darf nur lateinische Buchstaben (a-z), Ziffern (0-9) und Unterstriche (_) enthalten. Muss mit einem Buchstaben beginnen.",
+  "tool_name_hint": "Der Name sollte die Aktion im Format Verb_Objekt beschreiben: get_weather, create_order, send_email. Nur a-z, 0-9 und «_». Muss mit einem Buchstaben beginnen.",
+  "tool_name_placeholder": "get_order_status"
 }
