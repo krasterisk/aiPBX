@@ -1,6 +1,16 @@
 import { rtkApi } from '@/shared/api/rtkApi'
 import { Chat, CreateChatDto, UpdateChatDto } from '../model/types/chat'
 
+export interface OllamaModel {
+  name: string
+  model: string
+  size: number
+  family: string
+  parameterSize: string
+  quantizationLevel: string
+  modifiedAt: string
+}
+
 export const chatApi = rtkApi.injectEndpoints({
   endpoints: (build) => ({
     getChats: build.query<Chat[], void>({
@@ -39,6 +49,10 @@ export const chatApi = rtkApi.injectEndpoints({
         method: 'DELETE'
       }),
       invalidatesTags: [{ type: 'Chats', id: 'LIST' }]
+    }),
+    getOllamaModels: build.query<OllamaModel[], void>({
+      query: () => '/aiModels/ollama',
+      providesTags: [{ type: 'AiModels', id: 'LIST' }]
     })
   })
 })
@@ -48,3 +62,4 @@ export const useChatById = chatApi.useGetChatByIdQuery
 export const useCreateChat = chatApi.useCreateChatMutation
 export const useUpdateChat = chatApi.useUpdateChatMutation
 export const useDeleteChat = chatApi.useDeleteChatMutation
+export const useOllamaModels = chatApi.useGetOllamaModelsQuery

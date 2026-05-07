@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Chat, CreateChatDto } from '../../model/types/chat'
-import { useCreateChat, useUpdateChat } from '../../api/chatApi'
+import { useCreateChat, useUpdateChat, useOllamaModels } from '../../api/chatApi'
 import { ToolsSelect } from '@/entities/Tools'
 import type { Tool } from '@/entities/Tools'
 import { Textarea } from '@/shared/ui/mui/Textarea'
@@ -19,8 +19,6 @@ interface ChatFormModalProps {
   onClose: () => void
 }
 
-const MODEL_OPTIONS = ['qwen3:8b', 'llama3.1:8b', 'mistral', 'gemma3:12b']
-
 export const ChatFormModal = memo((props: ChatFormModalProps) => {
   const { isOpen, editingChat, onClose } = props
   const { t } = useTranslation('aichat')
@@ -33,6 +31,9 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
 
   const [createChat, { isLoading: isCreating }] = useCreateChat()
   const [updateChat, { isLoading: isUpdating }] = useUpdateChat()
+  const { data: ollamaModels, isLoading: isModelsLoading } = useOllamaModels()
+
+  const modelOptions = ollamaModels?.map(m => m.name) ?? []
 
   const isEdit = Boolean(editingChat)
   const isSubmitting = isCreating || isUpdating
@@ -110,10 +111,11 @@ export const ChatFormModal = memo((props: ChatFormModalProps) => {
 
           <Combobox
             freeSolo
-            options={MODEL_OPTIONS}
+            options={modelOptions}
             value={model}
             onInputChange={(_, value) => { setModel(value) }}
             label={t('Модель') ?? ''}
+            disabled={isModelsLoading}
           />
 
           <VStack gap="8" max>

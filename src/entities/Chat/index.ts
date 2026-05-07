@@ -33,5 +33,8 @@ export {
   useChatById,
   useCreateChat,
   useUpdateChat,
-  useDeleteChat
+  useDeleteChat,
+  useOllamaModels
 } from './api/chatApi'
+
+export type { OllamaModel } from './api/chatApi'
