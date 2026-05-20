@@ -1,1 +1,1 @@
-export { UsageLimitsForm } from './ui/UsageLimitsForm/UsageLimitsForm'
+export { UsageLimitsPanel } from './ui/UsageLimitsPanel/UsageLimitsPanel'

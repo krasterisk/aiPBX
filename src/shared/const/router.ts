@@ -41,6 +41,7 @@ export enum AppRoutes {
   PUBLISH_WIDGETS_EDIT = 'publish_widgets_edit',
   PRICES = 'prices',
   MODELS = 'models',
+  OUR_ORGANIZATIONS = 'our_organizations',
   LEGAL = 'legal',
   LEGAL_TERMS = 'legal_terms',
   LEGAL_PRIVACY = 'legal_privacy',
@@ -108,6 +109,7 @@ export const getRoutePublishWidgetsCreate = () => '/publish/widgets/create'
 export const getRoutePublishWidgetsEdit = (id: string) => `/publish/widgets/${id}`
 export const getRoutePrices = () => '/admin/prices'
 export const getRouteModels = () => '/admin/models'
+export const getRouteOurOrganizations = () => '/admin/our-organizations'
 export const getRouteLegal = () => '/legal'
 export const getRouteLegalTerms = () => '/legal/terms-of-service'
 export const getRouteLegalPrivacy = () => '/legal/privacy-policy'
@@ -172,6 +174,7 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRoutePublishWidgetsEdit(':id')]: AppRoutes.PUBLISH_WIDGETS_EDIT,
   [getRoutePrices()]: AppRoutes.PRICES,
   [getRouteModels()]: AppRoutes.MODELS,
+  [getRouteOurOrganizations()]: AppRoutes.OUR_ORGANIZATIONS,
   [getRouteLegal()]: AppRoutes.LEGAL,
   [getRouteLegalTerms()]: AppRoutes.LEGAL_TERMS,
   [getRouteLegalPrivacy()]: AppRoutes.LEGAL_PRIVACY,

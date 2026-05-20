@@ -2,11 +2,66 @@
 
 .PaymentOrganizations {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
 }
 
 .header {
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    gap: var(--space-4);
+
+    @include tablet {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-3);
+    }
+
     @include mobile {
+        gap: var(--space-2);
+    }
+}
+
+.title {
+    flex: 1 1 auto;
+    min-width: 0;
+
+    @include tablet {
+        width: 100%;
+    }
+}
+
+.actions {
+    flex: 0 1 auto;
+    min-width: 0;
+    justify-content: flex-end;
+
+    @include tablet {
+        width: 100%;
         flex-direction: column;
         align-items: stretch;
     }
+
+    @include mobile {
+        gap: var(--space-2);
+    }
+}
+
+.actionBtn {
+    flex-shrink: 0;
+    white-space: normal;
+    text-align: center;
+
+    @include tablet {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+    }
+}
+
+.list {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
 }

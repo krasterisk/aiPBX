@@ -9,8 +9,8 @@ import { AssistantOptions } from '@/entities/Assistants'
 import { PeriodPicker } from '@/entities/PeriodPicker'
 // eslint-disable-next-line krasterisk-plugin/layer-imports
 import { PeriodExtendedFilters } from '@/features/PeriodExtendedFilter'
-import { useSelector } from 'react-redux'
-import { getUserAuthData, UserCurrencyValues, currencySymbols } from '@/entities/User'
+import { currencySymbols } from '@/entities/User'
+import { getTenantCurrencyCode } from '@/shared/lib/domain'
 
 interface FiltersGroupProps {
   className?: string
@@ -56,9 +56,8 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
   } = props
 
   const { t } = useTranslation('reports')
-  const authData = useSelector(getUserAuthData)
-  const userCurrency = authData?.currency || UserCurrencyValues.USD
-  const currencySymbol = currencySymbols[userCurrency] || '$'
+  const tenantCurrency = getTenantCurrencyCode()
+  const currencySymbol = currencySymbols[tenantCurrency] || '$'
 
   const [filterShow, setFilterShow] = useState<boolean>(false)
 

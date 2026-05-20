@@ -15,7 +15,7 @@ interface RobokassaCheckoutProps {
 export const RobokassaCheckout = memo((props: RobokassaCheckoutProps) => {
     const { onCancel } = props
     const { t } = useTranslation('payment')
-    const [amountUsd, setAmountUsd] = useState('10')
+    const [amountRub, setAmountRub] = useState('1000')
     const [error, setError] = useState<string | null>(null)
 
     const [createPayment, { isLoading }] = useCreateRobokassaPaymentMutation()
@@ -23,44 +23,50 @@ export const RobokassaCheckout = memo((props: RobokassaCheckoutProps) => {
 
     const rate = priceData?.rate ?? 0
 
-    const amountRub = useMemo(() => {
-        const num = Number(amountUsd)
-        if (!amountUsd || isNaN(num) || num <= 0 || !rate) return 0
-        return Math.ceil(num * rate)
-    }, [amountUsd, rate])
+    const amountUsdCredit = useMemo(() => {
+        const num = Number(amountRub)
+        if (!amountRub || isNaN(num) || num <= 0 || !rate) return 0
+        return Math.round((num / rate) * 100) / 100
+    }, [amountRub, rate])
 
     const onAmountChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const value = e.target.value
-        if (/^\d*\.?\d*$/.test(value)) {
-            setAmountUsd(value)
+        if (/^\d*\.?\d{0,2}$/.test(value)) {
+            setAmountRub(value)
             setError(null)
         }
     }, [])
 
     const onPay = useCallback(async () => {
-        const numAmount = Number(amountUsd)
-        if (!amountUsd || isNaN(numAmount) || numAmount <= 0) {
+        const numRub = Number(amountRub)
+        if (!amountRub || isNaN(numRub) || numRub <= 0) {
             setError(t('Некорректная сумма'))
             return
         }
 
-        if (!amountRub || amountRub <= 0) {
-            setError(t('Не удалось рассчитать сумму в рублях'))
+        const payRub = Math.round(numRub * 100) / 100
+        if (payRub <= 0) {
+            setError(t('Некорректная сумма'))
             return
         }
 
         try {
             const result = await createPayment({
-                amount: amountRub
+                amount: payRub,
             }).unwrap()
 
             if (result.paymentUrl) {
                 window.location.href = result.paymentUrl
             }
-        } catch (e: any) {
-            setError(e?.data?.message || t('Ошибка сохранения'))
+        } catch (e: unknown) {
+            const err = e as { data?: { message?: string } }
+            setError(err?.data?.message || t('Ошибка сохранения'))
         }
-    }, [amountUsd, amountRub, createPayment, t])
+    }, [amountRub, createPayment, t])
+
+    const rubDisplay = amountRub && Number(amountRub) > 0
+        ? `${parseFloat(Number(amountRub).toFixed(2))} ₽`
+        : ''
 
     return (
         <VStack gap="24" max>
@@ -69,27 +75,27 @@ export const RobokassaCheckout = memo((props: RobokassaCheckoutProps) => {
                 <Text title={t('Пополнить баланс')} bold />
             </HStack>
 
-            <Text
-                text={t('Укажите сумму пополнения в долларах США')}
-                size="s"
-            />
+            <Text text={t('billing.topup.rubHint')} size="s" />
 
             <Textarea
-                label={t('Сумма (USD)') || ''}
-                value={amountUsd}
+                label={t('billing.topup.amountRub') || ''}
+                value={amountRub}
                 onChange={onAmountChange}
-                placeholder="0.00"
+                placeholder="0"
             />
 
-            {rate > 0 && amountRub > 0 && (
+            {rate > 0 && amountUsdCredit > 0 && (
                 <VStack gap="4" max>
                     <Text
-                        text={`${t('К оплате')}: ₽${amountRub.toLocaleString()}`}
+                        text={`${t('К оплате')}: ${rubDisplay}`}
                         bold
                         size="l"
                     />
                     <Text
-                        text={`≈ $${Number(amountUsd).toFixed(2)} ${t('по курсу')} 1$ = ₽${rate.toFixed(2)}`}
+                        text={t('billing.topup.creditUsd', {
+                            usd: amountUsdCredit.toFixed(2),
+                            rate: rate.toFixed(2),
+                        })}
                         size="s"
                     />
                 </VStack>
@@ -108,7 +114,7 @@ export const RobokassaCheckout = memo((props: RobokassaCheckoutProps) => {
                     variant="filled"
                     color="success"
                     onClick={onPay}
-                    disabled={isLoading || isRateLoading || amountRub <= 0}
+                    disabled={isLoading || isRateLoading || amountUsdCredit <= 0}
                     fullWidth
                     size="l"
                 >

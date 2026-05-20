@@ -49,5 +49,17 @@
     "Вы уверены, что хотите удалить пользователя?": "Are you sure you want to delete this user?",
     "Добавить пользователя": "Add User",
     "Подчинённый пользователь": "Sub-user",
-    "Владелец": "Owner"
+    "Владелец": "Owner",
+    "Баланс подсказка админ": "Balance is stored in USD. Enter the new value — it is saved when you click Save.",
+    "Валюта тенанта подсказка": "Currency is set by the deployment domain (aipbx.ru → RUB, others → USD). It cannot be changed manually.",
+    "Пополнение USD подсказка": "The user balance is always credited in USD. If another currency is selected, the amount is converted at the current rate used for public prices.",
+    "Загрузка курса": "Loading exchange rate…",
+    "Курс недоступен": "Exchange rate for the selected currency is unavailable. Try USD or retry later.",
+    "Ошибка загрузки курса": "Failed to load the exchange rate. Try again later or use USD.",
+    "На баланс зачисление USD": "Amount to credit: {{amount}} {{currency}}",
+    "ourOrg.fieldLabel": "Our organization for billing",
+    "ourOrg.fieldHint": "Which legal entity issues invoices and UPD for this tenant. Admin only.",
+    "ourOrg.selectPlaceholder": "Select organization",
+    "ourOrg.notFound": "No organizations found",
+    "ourOrg.primaryBadge": "primary"
 }

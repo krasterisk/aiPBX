@@ -7,9 +7,10 @@ import { RobokassaCheckout } from '@/features/CheckoutByRobokassa'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { useTranslation } from 'react-i18next'
-import { useGetUserBalance, UserCurrencyValues } from '@/entities/User'
-import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
+import { useGetUserBalance } from '@/entities/User'
+import { formatTenantMoney } from '@/shared/lib/functions/formatDisplayMoney'
 import { getDomainConfig } from '@/shared/lib/domain'
+import { PaymentBillingExplainer } from '../PaymentBillingExplainer/PaymentBillingExplainer'
 
 import { Modal } from '@/shared/ui/redesigned/Modal'
 import HistoryIcon from '@mui/icons-material/History'
@@ -20,10 +21,11 @@ import { Plus } from 'lucide-react'
 
 interface PaymentOverviewProps {
     onTabChange: (index: number) => void
+    organizationsTabIndex?: number
 }
 
 export const PaymentOverview = memo((props: PaymentOverviewProps) => {
-    const { onTabChange } = props
+    const { onTabChange, organizationsTabIndex } = props
     const { t } = useTranslation('payment')
     const [clientSecret, setClientSecret] = useState<string | null>(null)
     const [isTopUpModalOpen, setIsTopUpModalOpen] = useState(false)
@@ -31,10 +33,13 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
     const { paymentSystem } = getDomainConfig()
     const isRobokassa = paymentSystem === 'robokassa'
 
-    const { data: balanceData } = useGetUserBalance(null)
+    const { data: balanceData } = useGetUserBalance(null, {
+        refetchOnFocus: true,
+        refetchOnReconnect: true,
+    })
     const formattedBalance = balanceData
-        ? formatCurrency(balanceData.balance, UserCurrencyValues.USD, 2)
-        : '$0.00'
+        ? formatTenantMoney(balanceData.balance, 2)
+        : formatTenantMoney(0, 2)
 
     const onIntentCreated = useCallback((secret: string) => {
         setClientSecret(secret)
@@ -54,7 +59,6 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
             return <RobokassaCheckout onCancel={handleCloseModal} />
         }
 
-        // Stripe flow: TopUpBalance → StripeContainer
         if (!clientSecret) {
             return <TopUpBalance onSuccess={onIntentCreated} />
         }
@@ -69,9 +73,9 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
 
     return (
         <VStack gap="16" max className={cls.PaymentOverview}>
-            {/* Balance Section */}
+            <PaymentBillingExplainer />
             <Text
-                title={t('Оплата снимается по факту использования')}
+                title={t('billing.explainer.paygShort')}
                 bold
                 size='s'
             />
@@ -97,7 +101,6 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
                 </Button>
             </VStack>
 
-            {/* Quick Actions Section */}
             <Text
                 title={t('Быстрые действия')}
                 bold
@@ -110,7 +113,7 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
                     variant="glass-action"
                     addonLeft={<ReceiptLongIcon fontSize="small" />}
                 >
-                    {t('Usage')}
+                    {t('tabs.usage')}
                 </Button>
                 <Button
                     className={cls.quickActionCard}
@@ -118,7 +121,7 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
                     variant="glass-action"
                     addonLeft={<HistoryIcon fontSize="small" />}
                 >
-                    {t('История платежей')}
+                    {t('tabs.history')}
                 </Button>
                 <Button
                     className={cls.quickActionCard}
@@ -126,19 +129,20 @@ export const PaymentOverview = memo((props: PaymentOverviewProps) => {
                     variant="glass-action"
                     addonLeft={<DataUsageIcon fontSize="small" />}
                 >
-                    {t('Лимиты')}
+                    {t('tabs.limits')}
                 </Button>
-                <Button
-                    className={cls.quickActionCard}
-                    onClick={() => { onTabChange(4) }}
-                    variant="glass-action"
-                    addonLeft={<BusinessIcon fontSize="small" />}
-                >
-                    {t('Организации')}
-                </Button>
+                {organizationsTabIndex !== undefined && (
+                    <Button
+                        className={cls.quickActionCard}
+                        onClick={() => { onTabChange(organizationsTabIndex) }}
+                        variant="glass-action"
+                        addonLeft={<BusinessIcon fontSize="small" />}
+                    >
+                        {t('tabs.organizations')}
+                    </Button>
+                )}
             </HStack>
 
-            {/* Top Up Modal */}
             {
                 isTopUpModalOpen && (
                     <Modal isOpen={isTopUpModalOpen} onClose={handleCloseModal}>

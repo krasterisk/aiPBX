@@ -4,8 +4,8 @@ import { Card } from '@/shared/ui/redesigned/Card'
 import { BarsChart } from '@/shared/ui/mui/BarsChart'
 import { LinesChart } from '@/shared/ui/mui/LinesChart'
 import { ReportFilters } from '@/entities/Report'
-import { useSelector } from 'react-redux'
-import { getUserAuthData, UserCurrencyValues, currencySymbols } from '@/entities/User'
+import { currencySymbols } from '@/entities/User'
+import { getTenantCurrencyCode } from '@/shared/lib/domain'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import cls from './DashboardCharts.module.scss'
@@ -16,9 +16,8 @@ interface DashboardChartsProps {
 
 export const DashboardCharts = memo(({ data }: DashboardChartsProps) => {
     const { t } = useTranslation('reports')
-    const authData = useSelector(getUserAuthData)
-    const userCurrency = UserCurrencyValues.USD || authData?.currency
-    const currencySymbol = currencySymbols[userCurrency] || '$'
+    const tenantCurrency = getTenantCurrencyCode()
+    const currencySymbol = currencySymbols[tenantCurrency] || '$'
 
     const ringsCount = data?.chartData?.map(item => Number(item.allCount)) || []
     const tokensCount = data?.chartData?.map(item => Number(item.tokensCount)) || []

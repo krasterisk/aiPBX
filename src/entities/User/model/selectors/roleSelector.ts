@@ -7,6 +7,18 @@ const getUserRoles = (state: StateSchema) => state.user.authData?.roles
 export const getVpbxUser = (state: StateSchema) => state.user.authData?.vpbx_user_id || state.user.authData?.vpbxUser?.id
 export const getUserId = (state: StateSchema) => state.user.authData?.id
 
+/** Billing tenant id: owner account for sub-users (organizations, invoices). */
+export const getBillingOwnerUserId = createSelector(
+  [getUserId, getVpbxUser],
+  (userId, vpbxUserId) => {
+    if (userId == null || userId === '') return ''
+    if (vpbxUserId != null && vpbxUserId !== '' && String(vpbxUserId) !== String(userId)) {
+      return String(vpbxUserId)
+    }
+    return String(userId)
+  },
+)
+
 export const getAllUserRoles = createSelector(getUserRoles, (roles) => {
   return roles?.map(role => role.value)
 })

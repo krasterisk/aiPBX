@@ -4,6 +4,8 @@ export {
     getWsUrl,
     getStaticUrl,
     getDomainOrigin,
+    isPaymentOrganizationsTabVisible,
+    getTenantCurrencyCode,
 } from './getDomainConfig'
 
-export type { DomainConfig, PaymentSystem } from './getDomainConfig'
+export type { DomainConfig, PaymentSystem, TenantCurrencyCode } from './getDomainConfig'

@@ -18,8 +18,10 @@ import {
     UserRolesValues,
     UserAddAvatar,
     RoleSelect,
-    CurrencySelect
+    currencySymbols,
 } from '@/entities/User'
+import { OurOrganizationSelect } from '@/entities/OurOrganization'
+import { getTenantCurrencyCode } from '@/shared/lib/domain'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import { Loader } from '@/shared/ui/Loader'
 import { ErrorGetData } from '@/entities/ErrorGetData'
@@ -57,9 +59,19 @@ export const UserForm = memo((props: UserFormProps) => {
 
     useEffect(() => {
         if (isEdit && userData) {
-            setFormFields(userData)
+            if (isAdmin) {
+                setFormFields({
+                    ...userData,
+                    balance:
+                        userData.balance != null && !Number.isNaN(Number(userData.balance))
+                            ? Number(userData.balance)
+                            : 0,
+                })
+            } else {
+                setFormFields(userData)
+            }
         }
-    }, [isEdit, userData, setFormFields])
+    }, [isEdit, userData, setFormFields, isAdmin])
 
     useEffect(() => {
         if (!isEdit && !isAdmin && clientData) {
@@ -91,12 +103,17 @@ export const UserForm = memo((props: UserFormProps) => {
         })
     }, [formFields, setFormFields])
 
-    const onChangeCurrency = useCallback((_event: any, value: UserCurrencyValues) => {
-        setFormFields({
-            ...formFields,
-            currency: value
-        })
-    }, [formFields, setFormFields])
+    const tenantCurrency = getTenantCurrencyCode()
+
+    useEffect(() => {
+        if (!isEdit && formFields.currency !== tenantCurrency) {
+            setFormFields({
+                ...formFields,
+                currency: tenantCurrency as UserCurrencyValues,
+            })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isEdit, tenantCurrency])
 
     if (isLoading) {
         return (
@@ -169,10 +186,44 @@ export const UserForm = memo((props: UserFormProps) => {
                     {!isOwnerCreating && !isSub && (
                         <VStack gap="8" max>
                             <Text text={t('Валюта') || ''} size="s" bold className={cls.label} />
-                            <CurrencySelect
-                                value={formFields.currency}
-                                onChange={onChangeCurrency}
-                                label=""
+                            <Text
+                                text={t('Валюта тенанта подсказка')}
+                                size="xs"
+                                variant="accent"
+                            />
+                            <Text
+                                text={`${tenantCurrency} (${currencySymbols[tenantCurrency] || tenantCurrency})`}
+                                size="m"
+                                bold
+                            />
+                        </VStack>
+                    )}
+
+                    {isAdmin && isEdit && (
+                        <VStack gap="8" max>
+                            <Text text={t('Баланс') || ''} size="s" bold className={cls.label} />
+                            <Text
+                                text={t('Баланс подсказка админ')}
+                                size="xs"
+                                variant="accent"
+                            />
+                            <Textarea
+                                placeholder="0.00"
+                                onChange={(e) => {
+                                    const v = e.target.value.replace(',', '.').trim()
+                                    if (v === '') {
+                                        setFormFields({ ...formFields, balance: undefined })
+                                        return
+                                    }
+                                    const n = Number(v)
+                                    if (!Number.isFinite(n)) return
+                                    setFormFields({ ...formFields, balance: n })
+                                }}
+                                data-testid="UserCard.balance"
+                                value={formFields.balance === undefined || formFields.balance === null ? '' : String(formFields.balance)}
+                                className={cls.fullWidth}
+                                minRows={1}
+                                type="number"
                             />
                         </VStack>
                     )}
@@ -185,6 +236,28 @@ export const UserForm = memo((props: UserFormProps) => {
                                 onChange={onChangeRole}
                                 label=""
                                 data-testid="UserCard.RoleSelect"
+                            />
+                        </VStack>
+                    )}
+
+                    {isAdmin && (
+                        <VStack gap="8" max>
+                            <Text text={t('ourOrg.fieldLabel')} size="s" bold className={cls.label} />
+                            <Text text={t('ourOrg.fieldHint')} size="xs" variant="accent" />
+                            <OurOrganizationSelect
+                                label=""
+                                organizationId={
+                                    formFields.ourOrganizationId != null
+                                        ? String(formFields.ourOrganizationId)
+                                        : formFields.our_organization_id
+                                }
+                                onChangeOrganization={(id) => {
+                                    setFormFields({
+                                        ...formFields,
+                                        ourOrganizationId: id ? Number(id) : null,
+                                        our_organization_id: id || undefined,
+                                    })
+                                }}
                             />
                         </VStack>
                     )}

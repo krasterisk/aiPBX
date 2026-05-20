@@ -9,6 +9,7 @@ import {
   getRoutePayment,
   getRoutePrices,
   getRouteModels,
+  getRouteOurOrganizations,
   getRoutePublishSipUris,
   getRoutePublishWidgets,
   getRouteMcpServers,
@@ -46,6 +47,7 @@ import ChatIcon from '@mui/icons-material/Chat'
 
 import InsightsIcon from '@mui/icons-material/Insights'
 import AssessmentIcon from '@mui/icons-material/Assessment'
+import CorporateFareIcon from '@mui/icons-material/CorporateFare'
 import TimelineIcon from '@mui/icons-material/Timeline'
 import { MenubarItemType } from '../types/menubar'
 import { useTranslation } from 'react-i18next'
@@ -217,6 +219,12 @@ export const useMenubarItems = () => {
                 path: getRoutePrices(),
                 Icon: AttachMoneyIcon,
                 text: t('Цены'),
+                authOnly: true
+              },
+              {
+                path: getRouteOurOrganizations(),
+                Icon: CorporateFareIcon,
+                text: t('Наши организации'),
                 authOnly: true
               },
               {

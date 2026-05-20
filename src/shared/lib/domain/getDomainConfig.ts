@@ -10,9 +10,13 @@
 
 export type PaymentSystem = 'stripe' | 'robokassa'
 
+export type TenantCurrencyCode = 'USD' | 'RUB'
+
 export interface DomainConfig {
     /** Payment system to use on this domain */
     paymentSystem: PaymentSystem
+    /** Tenant billing currency for usage display and closing documents */
+    currency: TenantCurrencyCode
     /** Region code (for analytics, localization hints, etc.) */
     region: string
     /** Human-readable domain label (for UI, logs) */
@@ -24,16 +28,19 @@ export interface DomainConfig {
 const DOMAIN_CONFIGS: Record<string, DomainConfig> = {
     'aipbx.net': {
         paymentSystem: 'stripe',
+        currency: 'USD',
         region: 'eu',
         label: 'aiPBX EU',
     },
     'aipbx.ru': {
         paymentSystem: 'robokassa',
+        currency: 'RUB',
         region: 'ru',
         label: 'aiPBX RU',
     },
     'aipbx.org': {
         paymentSystem: 'stripe',
+        currency: 'USD',
         region: 'US',
         label: 'aiPBX US',
     },
@@ -41,8 +48,26 @@ const DOMAIN_CONFIGS: Record<string, DomainConfig> = {
 
 const DEFAULT_CONFIG: DomainConfig = {
     paymentSystem: 'stripe',
+    currency: 'USD',
     region: 'eu',
     label: 'aiPBX',
+}
+
+const LOCAL_DEV_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]'])
+
+/**
+ * Whether the Payment page should show the «Organizations» (B2B RU) tab.
+ * In production only on `aipbx.ru` (region `ru`). In dev also on localhost
+ * so jur.-lic. billing UI can be exercised without hosts-file tricks.
+ * Does not change {@link getDomainConfig} `paymentSystem` / `region` for the rest of the app.
+ */
+export function isPaymentOrganizationsTabVisible (): boolean {
+    if (typeof window === 'undefined') return false
+    if (getDomainConfig().region === 'ru') return true
+    if (typeof __IS_DEV__ !== 'undefined' && __IS_DEV__ && LOCAL_DEV_HOSTNAMES.has(window.location.hostname)) {
+        return true
+    }
+    return false
 }
 
 /**
@@ -122,4 +147,28 @@ export function getStaticUrl (): string {
 export function getDomainOrigin (): string {
     if (typeof window === 'undefined') return ''
     return window.location.origin
+}
+
+/**
+ * Returns tenant billing currency code based on current domain.
+ * For `aipbx.ru` (region `ru`) and local dev hostnames we treat currency as RUB,
+ * for all other domains we use USD.
+ */
+export function getTenantCurrencyCode (): TenantCurrencyCode {
+    if (typeof window === 'undefined') return 'USD'
+
+    const hostname = window.location.hostname
+    // Local dev: DEFAULT_CONFIG has currency USD — still treat as RU tenant for billing display
+    if (typeof __IS_DEV__ !== 'undefined' && __IS_DEV__ && LOCAL_DEV_HOSTNAMES.has(hostname)) {
+        return 'RUB'
+    }
+
+    const config = getDomainConfig()
+    if (config.currency === 'RUB' || config.region === 'ru') {
+        return 'RUB'
+    }
+    if (config.currency === 'USD') {
+        return 'USD'
+    }
+    return 'USD'
 }

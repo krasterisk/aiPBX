@@ -1,11 +1,9 @@
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
-import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
 import { ReportFilters } from '@/entities/Report'
 import { StatCard } from '../StatCard/StatCard'
 import { formatTime } from '@/shared/lib/functions/formatTime'
-import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
+import { formatTenantMoney } from '@/shared/lib/functions/formatDisplayMoney'
 import PhoneIcon from '@mui/icons-material/Phone'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
@@ -21,9 +19,6 @@ interface DashboardStatisticsProps {
 
 export const DashboardStatistics = memo(({ data, isLoading }: DashboardStatisticsProps) => {
     const { t } = useTranslation('reports')
-    const authData = useSelector(getUserAuthData)
-    const userCurrency = UserCurrencyValues.USD || authData?.currency
-
     const stats = useMemo(() => {
         const totalCalls = data?.allCount || 0
         const totalCost = data?.allCost || 0
@@ -48,13 +43,13 @@ export const DashboardStatistics = memo(({ data, isLoading }: DashboardStatistic
             },
             {
                 title: t('Общая стоимость'),
-                value: formatCurrency(totalCost, userCurrency),
+                value: formatTenantMoney(totalCost, 2),
                 icon: <AttachMoneyIcon />,
                 description: t('Суммарные расходы за период')
             },
             {
                 title: t('Средняя стоимость'),
-                value: formatCurrency(avgCost, userCurrency),
+                value: formatTenantMoney(avgCost, 2),
                 icon: <MonetizationOnIcon />,
                 description: t('Средняя стоимость разговора')
             },
@@ -71,7 +66,7 @@ export const DashboardStatistics = memo(({ data, isLoading }: DashboardStatistic
                 description: t('Среднее потребление токенов за звонок')
             }
         ]
-    }, [data, t, userCurrency])
+    }, [data, t])
 
     return (
         <div className={cls.statsGrid}>

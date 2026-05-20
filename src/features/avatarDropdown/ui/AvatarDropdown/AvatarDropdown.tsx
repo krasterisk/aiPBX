@@ -3,6 +3,7 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserAuthData, isUserAdmin, userActions } from '@/entities/User'
+import { rtkApi } from '@/shared/api/rtkApi'
 import { getRouteDocs, getRouteLegal, getRouteMain, getRoutePayment, getRouteUserEdit } from '@/shared/const/router'
 import { Avatar } from '@/shared/ui/redesigned/Avatar'
 import { Dropdown } from '@/shared/ui/redesigned/Popups'
@@ -26,6 +27,7 @@ export const AvatarDropdown = memo((props: AvatarDropdownProps) => {
 
   const onLogout = useCallback(() => {
     dispatch(userActions.logout())
+    dispatch(rtkApi.util.resetApiState())
     navigate(getRouteMain())
   }, [dispatch, navigate])
 

@@ -1,0 +1,35 @@
+@import '@/app/styles/variables/mixins';
+
+.OrganizationList {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.tableWrap {
+    width: 100%;
+    min-width: 0;
+}
+
+.actionsCell {
+    @include tablet {
+        justify-content: flex-start;
+        width: 100%;
+    }
+}
+
+.actionBtn {
+    @include tablet {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    @include mobile {
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+}
+
+.iconBtn {
+    flex-shrink: 0;
+}

@@ -8,3 +8,8 @@
         padding: var(--space-2);
     }
 }
+
+.personalAccountNumber {
+    font-family: var(--font-family-mono, ui-monospace, monospace);
+    letter-spacing: 0.04em;
+}

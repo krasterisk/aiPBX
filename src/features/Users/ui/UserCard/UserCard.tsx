@@ -64,7 +64,8 @@ export const UserCard = memo((props: UserCardProps) => {
     token: '',
     vpbxUser: { id: '', name: '' },
     vpbx_user_id: '',
-    roles: []
+    roles: [],
+    ourOrganizationId: null,
   }
 
   const [formFields, setFormFields] = useState<User>(initUser)

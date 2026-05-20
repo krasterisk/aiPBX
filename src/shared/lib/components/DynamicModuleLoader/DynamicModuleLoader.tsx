@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react'
+import { ReactNode, useEffect, useRef } from 'react'
 import { useDispatch, useStore } from 'react-redux'
 import { ReduxStoreWithManager, StateSchema, StateSchemaKey } from '@/app/providers/StoreProvider'
 import { Reducer } from '@reduxjs/toolkit'
@@ -22,6 +22,11 @@ export const DynamicModuleLoader = (props: DynamicModuleLoaderProps) => {
   const store = useStore() as ReduxStoreWithManager
   const dispatch = useDispatch()
 
+  // Track which reducers were newly added on this mount so we can
+  // dispatch @INIT in a useEffect (not during render) to avoid the
+  // "setState during render" React warning.
+  const newlyAddedRef = useRef<string[]>([])
+
   // Register reducers SYNCHRONOUSLY so they exist before children render/fire effects.
   // This prevents a race condition where child useEffects (e.g. initForm) dispatch
   // actions before the reducer is added to the store.
@@ -31,8 +36,16 @@ export const DynamicModuleLoader = (props: DynamicModuleLoaderProps) => {
     const mounted = mountedReducers[name as StateSchemaKey]
     if (!mounted) {
       store.reducerManager.add(name as StateSchemaKey, reducer)
-      dispatch({ type: `@INIT ${name} reducer` })
+      newlyAddedRef.current.push(name)
     }
+  })
+
+  useEffect(() => {
+    // Dispatch @INIT after render to avoid updating App state while rendering.
+    newlyAddedRef.current.forEach((name) => {
+      dispatch({ type: `@INIT ${name} reducer` })
+    })
+    newlyAddedRef.current = []
   })
 
   useEffect(() => {

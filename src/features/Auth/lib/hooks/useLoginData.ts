@@ -19,6 +19,7 @@ import {
   getLoginActivationCode
 } from '../../model/selectors/login/getLoginActivationCode/getLoginActivationCode'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
+import { buildLegalAcceptanceItems } from '@/shared/lib/legal/versions'
 
 export function useLoginData () {
   const { t } = useTranslation('login')
@@ -41,6 +42,7 @@ export function useLoginData () {
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const legalAcceptance = buildLegalAcceptanceItems()
 
   useEffect(() => {
     if (resendTimer > 0) {
@@ -63,7 +65,12 @@ export function useLoginData () {
       setLoginError(t('Заполните все поля'))
       return
     }
-    loginActivateUser({ email, activationCode: activationLoginCode, type: 'login' })
+    loginActivateUser({
+      email,
+      activationCode: activationLoginCode,
+      type: 'login',
+      legalAcceptance,
+    })
       .unwrap()
       .then((data) => {
         dispatch(userActions.setToken(data))
@@ -80,7 +87,7 @@ export function useLoginData () {
 
   const handleGoogleSuccess = (idToken: string) => {
     setLoginError(null)
-    googleLogin({ id_token: idToken })
+    googleLogin({ id_token: idToken, legalAcceptance })
       .unwrap()
       .then((data) => {
         if (data.token && data.user) {
@@ -97,7 +104,7 @@ export function useLoginData () {
 
   const handleTelegramSuccess = (data: AuthData) => {
     setLoginError(null)
-    telegramLogin(data)
+    telegramLogin({ ...data, legalAcceptance })
       .unwrap()
       .then((response) => {
         dispatch(userActions.setToken(response))
@@ -116,7 +123,7 @@ export function useLoginData () {
       setLoginError(t('Введите email'))
       return
     }
-    userLogin({ email })
+    userLogin({ email, legalAcceptance })
       .unwrap()
       .then(() => {
         setIsLoginActivation(true)

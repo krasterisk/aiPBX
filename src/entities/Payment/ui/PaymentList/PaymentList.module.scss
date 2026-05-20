@@ -39,3 +39,15 @@
 .failed {
     color: var(--status-error);
 }
+
+.detailsCell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.82rem;
+}
+
+.detailsRate {
+    color: var(--hint-redesigned);
+    font-size: 0.78rem;
+}

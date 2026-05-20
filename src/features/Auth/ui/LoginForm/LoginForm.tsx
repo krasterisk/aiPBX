@@ -1,6 +1,8 @@
 import cls from './LoginForm.module.scss'
 import { useTranslation } from 'react-i18next'
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { getRouteLegalPublicOffer, getRouteLegalPersonalData } from '@/shared/const/router'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Loader } from '@/shared/ui/Loader'
@@ -18,6 +20,7 @@ interface LoginFormProps {
 export const LoginForm = memo((props: LoginFormProps) => {
   const { className } = props
   const { t } = useTranslation('login')
+  const [agreeTerms, setAgreeTerms] = useState(false)
 
   const {
     email,
@@ -148,15 +151,46 @@ export const LoginForm = memo((props: LoginFormProps) => {
             </VStack>
           )
 : (
-            <Button
-              variant="glass-action"
-              fullWidth
-              onClick={onLoginClick}
-              disabled={isLoading || !email}
-              className={cls.submitBtn}
-            >
-              {t('Вход')}
-            </Button>
+            <>
+              <HStack gap="8" align="start" className={cls.agreeRow}>
+                <input
+                  type="checkbox"
+                  id="agree-terms-login"
+                  checked={agreeTerms}
+                  onChange={(e) => { setAgreeTerms(e.target.checked) }}
+                  className={cls.checkbox}
+                />
+                <label htmlFor="agree-terms-login" className={cls.agreeLabel}>
+                  {t('Входя в систему, я принимаю условия')}{' '}
+                  <Link
+                    to={getRouteLegalPublicOffer()}
+                    target="_blank"
+                    className={cls.legalLink}
+                    onClick={(e) => { e.stopPropagation() }}
+                  >
+                    {t('Публичной оферты')}
+                  </Link>{' '}
+                  {t('и')}{' '}
+                  <Link
+                    to={getRouteLegalPersonalData()}
+                    target="_blank"
+                    className={cls.legalLink}
+                    onClick={(e) => { e.stopPropagation() }}
+                  >
+                    {t('Политики обработки персональных данных')}
+                  </Link>
+                </label>
+              </HStack>
+              <Button
+                variant="glass-action"
+                fullWidth
+                onClick={onLoginClick}
+                disabled={isLoading || !email || !agreeTerms}
+                className={cls.submitBtn}
+              >
+                {t('Вход')}
+              </Button>
+            </>
           )}
         </VStack>
 
@@ -167,7 +201,7 @@ export const LoginForm = memo((props: LoginFormProps) => {
             variant="filled"
             fullWidth
             onClick={onGoogleLoginClick}
-            disabled={isLoading}
+            disabled={isLoading || !agreeTerms}
             addonLeft={<GoogleIcon className={cls.socialIcon} />}
             className={cls.socialBtn}
           >
@@ -177,7 +211,7 @@ export const LoginForm = memo((props: LoginFormProps) => {
             variant="filled"
             fullWidth
             onClick={onTelegramLoginClick}
-            disabled={isLoading}
+            disabled={isLoading || !agreeTerms}
             addonLeft={<TelegramIcon className={cls.socialIcon} />}
             className={cls.socialBtn}
           >

@@ -13,6 +13,11 @@ export interface BillingRecord {
     textCost: number
     sttCost: number
     totalCost: number
+    currency?: string
+    amountCurrency?: number | null
+    fxRateUsdToCurrency?: number | null
+    fxRateSource?: string | null
+    fxCapturedAt?: string | null
     createdAt: string
     updatedAt: string
     aiCdr: {
@@ -28,6 +33,7 @@ export interface BillingResponse {
     rows: BillingRecord[]
     count: number
     totalCost: number
+    totalAmountCurrency?: number | null
     page: number
     limit: number
 }

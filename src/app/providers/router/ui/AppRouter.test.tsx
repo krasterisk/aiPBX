@@ -1,7 +1,17 @@
+import React from 'react'
 import { componentRender } from '@/shared/lib/tests/componentRender/componentRender'
 import AppRouter from './AppRouter'
-import { getRouteAbout, getRouteAdmin, getRouteProfile } from '@/shared/const/router'
+import { getRouteAbout, getRouteAdmin, getRoutePayment } from '@/shared/const/router'
+import { UserRolesValues } from '@/entities/User'
 import { screen } from '@testing-library/react'
+
+jest.mock('@/pages/MainPage', () => ({
+  MainPage: () => <main data-testid="MainPage" />,
+}))
+
+jest.mock('@/pages/PaymentPage', () => ({
+  PaymentPage: () => <main data-testid="PaymentPage" />,
+}))
 
 describe('app/router/AppRouter', function () {
   test('Page must be render', async () => {
@@ -20,28 +30,27 @@ describe('app/router/AppRouter', function () {
   })
   test('Redirect not auth user to MainPage', async () => {
     componentRender(<AppRouter/>, {
-      route: getRouteProfile('1'),
+      route: getRoutePayment(),
       initialState: {}
     })
     const page = await screen.findByTestId('MainPage')
     expect(page).toBeInTheDocument()
   })
-  test('Profile page for auth user', async () => {
+  test('Payment page for auth user', async () => {
     componentRender(<AppRouter/>, {
-      route: getRouteProfile('1'),
+      route: getRoutePayment(),
       initialState: {
         user: {
           authData: {
             id: '1',
             username: 'test',
-            password: 'test',
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMiIsImVtYWlsIjoiYWRtaW4yQGtyYXN0ZXJpc2sucnUiLCJpZCI6MSwiYXZhdGFyIjoiaHR0cHM6Ly9rcmFzdGVyaXNrLnJ1L2xvZ29zL2FkbS5qcGciLCJ2cGJ4X3VzZXJfaWQiOjEsInJvbGVzIjpbeyJpZCI6MSwidmFsdWUiOiJBRE1JTiIsImRlc2NyaXB0aW9uIjoi0KDQvtC70YwgQURNSU4iLCJjcmVhdGVkQXQiOiIyMDIzLTA0LTI5VDA2OjQzOjM1LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIzLTA0LTI5VDA2OjQzOjM1LjAwMFoiLCJVc2VyUm9sZXMiOnsiaWQiOjEsInJvbGVJZCI6MSwidXNlcklkIjoxfX1dLCJpYXQiOjE2ODQwNDE3MTEsImV4cCI6MTY4NDEyODExMX0.OaqoXbxvESceks0bDCsoYT-EN2hq0fFtk9sWxav_2Qg'
+            roles: [{ value: UserRolesValues.USER }],
           },
           _mounted: true
         }
       }
     })
-    const page = await screen.findByTestId('ProfilePage')
+    const page = await screen.findByTestId('PaymentPage')
     expect(page).toBeInTheDocument()
   })
 
@@ -71,8 +80,7 @@ describe('app/router/AppRouter', function () {
           authData: {
             id: '1',
             username: 'test',
-            password: 'test',
-            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMiIsImVtYWlsIjoiYWRtaW4yQGtyYXN0ZXJpc2sucnUiLCJpZCI6MSwiYXZhdGFyIjoiaHR0cHM6Ly9rcmFzdGVyaXNrLnJ1L2xvZ29zL2FkbS5qcGciLCJ2cGJ4X3VzZXJfaWQiOjEsInJvbGVzIjpbeyJpZCI6MSwidmFsdWUiOiJBRE1JTiIsImRlc2NyaXB0aW9uIjoi0KDQvtC70YwgQURNSU4iLCJjcmVhdGVkQXQiOiIyMDIzLTA0LTI5VDA2OjQzOjM1LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDIzLTA0LTI5VDA2OjQzOjM1LjAwMFoiLCJVc2VyUm9sZXMiOnsiaWQiOjEsInJvbGVJZCI6MSwidXNlcklkIjoxfX1dLCJpYXQiOjE2ODQwNDE3MTEsImV4cCI6MTY4NDEyODExMX0.OaqoXbxvESceks0bDCsoYT-EN2hq0fFtk9sWxav_2Qg'
+            roles: [{ value: UserRolesValues.ADMIN }],
           },
           _mounted: true
         }

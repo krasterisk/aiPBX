@@ -10,7 +10,8 @@ export {
   isOwnerUser,
   isSubUser,
   getAllUserRoles,
-  getVpbxUser
+  getVpbxUser,
+  getBillingOwnerUserId,
 } from './model/selectors/roleSelector'
 
 export type {
@@ -37,6 +38,8 @@ export {
 export { UsersList } from './ui/UsersList/UsersList'
 export { SubUsersList } from './ui/SubUsersList/SubUsersList'
 export { ClientSelect } from './ui/ClientSelect/ClientSelect'
+export { TenantNotifyEmailsSelect, parseNotifyEmails } from './ui/TenantNotifyEmailsSelect/TenantNotifyEmailsSelect'
+export type { NotifyEmailOption } from './ui/TenantNotifyEmailsSelect/TenantNotifyEmailsSelect'
 export { RoleSelect } from './ui/RoleSelect/RoleSelect'
 export { UserBalance } from './ui/UserBalance/UserBalance'
 export { UserAddAvatar } from './ui/UserAddAvatar/UserAddAvatar'
@@ -69,6 +72,7 @@ export {
   useSetUsageLimit,
   useGetUsageLimit,
   useGetSubUsers,
+  useGetTenantMembers,
   useCreateSubUser,
   useAdminTopUp
 } from './api/usersApi'

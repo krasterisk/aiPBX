@@ -110,7 +110,9 @@ export const Table = <T extends object>(props: TableProps<T>) => {
                         : ''
                     }
                   >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <span className={cls.cellValue}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </span>
                   </td>
                 ))}
               </tr>

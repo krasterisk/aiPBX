@@ -11,7 +11,7 @@ import { Divider } from '@/shared/ui/Divider'
 import GoogleIcon from '@/shared/assets/icons/googleIcon.svg'
 import TelegramIcon from '@mui/icons-material/Telegram'
 import { useSignupData } from '../../lib/hooks/useSignupData'
-import { getRouteLegal } from '@/shared/const/router'
+import { getRouteLegalPublicOffer, getRouteLegalPersonalData } from '@/shared/const/router'
 import { Link } from 'react-router-dom'
 
 interface SignupFormProps {
@@ -162,14 +162,23 @@ export const SignupForm = memo((props: SignupFormProps) => {
                                     className={cls.checkbox}
                                 />
                                 <label htmlFor="agree-terms" className={cls.agreeLabel}>
-                                    {t('Регистрируясь, я принимаю')}{' '}
+                                    {t('Регистрируясь, я принимаю условия')}{' '}
                                     <Link
-                                        to={getRouteLegal()}
+                                        to={getRouteLegalPublicOffer()}
                                         target="_blank"
                                         className={cls.legalLink}
                                         onClick={(e) => { e.stopPropagation() }}
                                     >
-                                        {t('пользовательское соглашение')}
+                                        {t('Публичной оферты')}
+                                    </Link>{' '}
+                                    {t('и')}{' '}
+                                    <Link
+                                        to={getRouteLegalPersonalData()}
+                                        target="_blank"
+                                        className={cls.legalLink}
+                                        onClick={(e) => { e.stopPropagation() }}
+                                    >
+                                        {t('Политики обработки персональных данных')}
                                     </Link>
                                 </label>
                             </HStack>

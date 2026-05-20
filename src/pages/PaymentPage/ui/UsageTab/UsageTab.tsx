@@ -11,6 +11,10 @@ import { ChevronLeft, ChevronRight, FileX2, Download } from 'lucide-react'
 import dayjs, { Dayjs } from 'dayjs'
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
+import { formatDisplayMoney } from '@/shared/lib/functions/formatDisplayMoney'
+import { formatFxRateUsdToCurrency } from '@/shared/lib/functions/formatFxRateDisplay'
+import { getTenantCurrencyCode } from '@/shared/lib/domain'
+import { Text } from '@/shared/ui/redesigned/Text'
 
 type SortField = 'createdAt' | 'type' | 'totalTokens' | 'totalCost'
 type SortOrder = 'ASC' | 'DESC'
@@ -27,9 +31,14 @@ const PAGE_SIZES = [10, 20, 50, 100]
 
 // ── helpers ──────────────────────────────────────────────
 
-const formatCost = (cost: number) => `$${cost.toFixed(6)}`
-const formatTotalCost = (cost: number) => `$${cost.toFixed(2)}`
 const formatTokens = (tokens: number) => tokens.toLocaleString()
+
+const formatBillingMoney = (row: BillingRecord, usd: number, decimals = 6) =>
+    formatDisplayMoney({
+        costUsd: usd,
+        amountCurrency: row.amountCurrency,
+        costCurrency: row.currency,
+    }, decimals)
 
 const formatDate = (iso: string) => {
     const d = new Date(iso)
@@ -155,14 +164,14 @@ export const UsageTab = memo(() => {
             if (row.audioCost > 0) {
 parts.push(
                 <span key="audio" className={cls.detailsRow}>
-                    <span>Audio:</span> <span>{formatCost(row.audioCost)}</span>
+                    <span>Audio:</span> <span>{formatBillingMoney(row, row.audioCost)}</span>
                 </span>
             )
 }
             if (row.textCost > 0) {
 parts.push(
                 <span key="text" className={cls.detailsRow}>
-                    <span>Text:</span> <span>{formatCost(row.textCost)}</span>
+                    <span>Text:</span> <span>{formatBillingMoney(row, row.textCost)}</span>
                 </span>
             )
 }
@@ -185,14 +194,14 @@ parts.push(
             if (row.textCost > 0) {
 parts.push(
                 <span key="text" className={cls.detailsRow}>
-                    <span>Text:</span> <span>{formatCost(row.textCost)}</span>
+                    <span>Text:</span> <span>{formatBillingMoney(row, row.textCost)}</span>
                 </span>
             )
 }
             if (row.sttCost > 0) {
 parts.push(
                 <span key="stt" className={cls.detailsRow}>
-                    <span>STT:</span> <span>{formatCost(row.sttCost)}</span>
+                    <span>STT:</span> <span>{formatBillingMoney(row, row.sttCost)}</span>
                 </span>
             )
 }
@@ -217,6 +226,16 @@ parts.push(
                 <span key="tokens" className={cls.detailsRow}>
                     <span>Tokens:</span> <span>{formatTokens(row.textTokens)}</span>
                 </span>
+            )
+        }
+
+        const rateStr = formatFxRateUsdToCurrency(row.fxRateUsdToCurrency)
+        if (rateStr !== '—') {
+            parts.push(
+                <span key="fx" className={cls.detailsRow}>
+                    <span>{t('usage.table.fxRate', { defaultValue: 'Rate' })}:</span>
+                    <span>{rateStr}</span>
+                </span>,
             )
         }
 
@@ -252,7 +271,8 @@ parts.push(
                 [t('usage.export.audioCost', { defaultValue: 'Audio Cost' })]: row.audioCost,
                 [t('usage.export.textCost', { defaultValue: 'Text Cost' })]: row.textCost,
                 [t('usage.export.sttCost', { defaultValue: 'STT Cost' })]: row.sttCost,
-                [t('usage.table.cost', { defaultValue: 'Cost' })]: row.totalCost,
+                [t('usage.table.cost', { defaultValue: 'Cost' })]: row.amountCurrency ?? row.totalCost,
+                [t('usage.table.fxRate', { defaultValue: 'Rate' })]: formatFxRateUsdToCurrency(row.fxRateUsdToCurrency),
                 [t('usage.export.channelId', { defaultValue: 'Channel ID' })]: row.channelId,
                 ...(row.aiCdr ? {
                     [t('usage.details.assistant', { defaultValue: 'Assistant' })]: row.aiCdr.assistantName || '',
@@ -276,8 +296,13 @@ parts.push(
         }
     }, [data?.count, fetchAllBilling, startDate, endDate, type, userId, admin, sortField, sortOrder, t])
 
+    const isRubTenant = getTenantCurrencyCode() === 'RUB'
+
     return (
         <VStack gap="16" max className={cls.UsageTab}>
+            {isRubTenant && (
+                <Text text={t('billing.usage.hint')} size="s" />
+            )}
             {/* Summary Cards */}
             <div className={cls.summaryGrid}>
                 <div className={cls.summaryCard}>
@@ -293,7 +318,12 @@ parts.push(
                         {t('usage.totalCost', { defaultValue: 'Total Cost' })}
                     </span>
                     <span className={cls.summaryValue}>
-                        {data ? formatTotalCost(data.totalCost) : '—'}
+                        {data
+                            ? formatDisplayMoney({
+                                costUsd: data.totalCost,
+                                amountCurrency: data.totalAmountCurrency ?? undefined,
+                            }, 2)
+                            : '—'}
                     </span>
                 </div>
                 <div className={cls.summaryCard}>
@@ -429,7 +459,7 @@ parts.push(
                                             {formatTokens(row.totalTokens)}
                                         </td>
                                         <td className={cls.costCell}>
-                                            {formatCost(row.totalCost)}
+                                            {formatBillingMoney(row, row.totalCost)}
                                         </td>
                                         <td>{renderDetails(row)}</td>
                                     </tr>

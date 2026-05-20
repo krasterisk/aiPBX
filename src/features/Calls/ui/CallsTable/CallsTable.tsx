@@ -4,12 +4,16 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { Report, ReportExpandedPanel, useGetReportDialogs, useCreateCallAnalytics } from '@/entities/Report'
+import {
+    Report,
+    ReportExpandedPanel,
+    reportDisplayMoneyInput,
+    useGetReportDialogs,
+    useCreateCallAnalytics,
+} from '@/entities/Report'
 
 import { formatTime } from '@/shared/lib/functions/formatTime'
-import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
-import { useSelector } from 'react-redux'
-import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
+import { formatDisplayMoney } from '@/shared/lib/functions/formatDisplayMoney'
 import {
     ChevronDown, ChevronUp, Star, CheckCircle, AlertCircle,
     Phone, Globe, Monitor, Save
@@ -32,8 +36,6 @@ interface CallsTableRowProps {
 
 const CallsTableRow = memo(({ report }: CallsTableRowProps) => {
     const { t } = useTranslation('reports')
-    const authData = useSelector(getUserAuthData)
-    const userCurrency = UserCurrencyValues.USD || authData?.currency
     const [isExpanded, setIsExpanded] = useState(false)
 
     const { data: dialogs, isLoading: isDialogLoading, isError: isDialogError } =
@@ -110,8 +112,13 @@ hour12: false
                 </td>
 
                 <td data-label={String(t('Стоимость'))}>
-                    {report.cost
-                        ? <Text text={formatCurrency(report.cost, userCurrency, 4)} bold />
+                    {(report.cost || report.amountCurrency)
+                        ? (
+                            <Text
+                                text={formatDisplayMoney(reportDisplayMoneyInput(report), 4)}
+                                bold
+                            />
+                        )
                         : '—'}
                 </td>
 

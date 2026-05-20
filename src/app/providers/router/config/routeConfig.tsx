@@ -44,6 +44,7 @@ import {
   getRoutePublishWidgetsEdit,
   getRoutePrices,
   getRouteModels,
+  getRouteOurOrganizations,
   getRouteDashboardOverview,
   getRouteDashboardAIAnalytics,
   getRouteDashboardCallRecords,
@@ -73,6 +74,7 @@ import { AppRoutesProps } from '@/shared/types/router'
 import { SettingPage } from '@/pages/SettingsPage'
 import { PricesPage } from '@/pages/PricesPage'
 import { ModelsPage } from '@/pages/ModelsPage'
+import { OurOrganizationsPage } from '@/pages/OurOrganizationsPage'
 import { AssistantsCreatePage, AssistantsPage, AssistantsEditPage } from '@/pages/AssistantsPage'
 import { UsersCreatePage, UsersEditPage, UsersPage } from '@/pages/UsersPage'
 import { ToolsCreatePage, ToolsEditPage, ToolsPage } from '@/pages/ToolsPage'
@@ -332,6 +334,12 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.MODELS]: {
     path: getRouteModels(),
     element: <ModelsPage />,
+    authOnly: true,
+    roles: [UserRolesValues.ADMIN]
+  },
+  [AppRoutes.OUR_ORGANIZATIONS]: {
+    path: getRouteOurOrganizations(),
+    element: <OurOrganizationsPage />,
     authOnly: true,
     roles: [UserRolesValues.ADMIN]
   },

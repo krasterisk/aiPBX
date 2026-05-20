@@ -1,17 +1,22 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import cls from './PaymentList.module.scss'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Table } from '@/shared/ui/redesigned/Table'
 
-import { useGetPaymentsQuery } from '../../api/paymentApi'
+import { useGetPaymentsQuery, type GetPaymentsQueryArgs } from '../../api/paymentApi'
 import { Loader } from '@/shared/ui/Loader'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 import { classNames } from '@/shared/lib/classNames/classNames'
+import { ClientSelect, isUserAdmin } from '@/entities/User'
+import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
+import { formatPaymentFxRate } from '../../lib/formatPaymentFxRate'
+import type { Payment } from '../../model/types/payment'
 
 interface PaymentListProps {
     className?: string
@@ -20,15 +25,34 @@ interface PaymentListProps {
 export const PaymentList = memo((props: PaymentListProps) => {
     const { className } = props
     const { t } = useTranslation('payment')
+    const { t: tUsers } = useTranslation('users')
+    const isAdmin = useSelector(isUserAdmin)
 
-    const { data, isLoading, isError } = useGetPaymentsQuery({})
+    const [filterClientId, setFilterClientId] = useState('')
+
+    const queryArgs = useMemo((): GetPaymentsQueryArgs => {
+        const base: GetPaymentsQueryArgs = {
+            page: 1,
+            limit: isAdmin ? 500 : 100,
+        }
+        if (isAdmin && filterClientId) {
+            base.userId = filterClientId
+        }
+        return base
+    }, [isAdmin, filterClientId])
+
+    const { data, isLoading, isError } = useGetPaymentsQuery(queryArgs)
 
     const payments = data?.rows || []
 
     const exportToExcel = useCallback(() => {
         if (!payments.length) return
 
-        const worksheet = XLSX.utils.json_to_sheet(payments)
+        const exportRows = payments.map((row: Payment) => ({
+            ...row,
+            fxRateDisplay: formatPaymentFxRate(row),
+        }))
+        const worksheet = XLSX.utils.json_to_sheet(exportRows)
         const workbook = XLSX.utils.book_new()
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Payments')
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
@@ -48,7 +72,12 @@ export const PaymentList = memo((props: PaymentListProps) => {
         {
             header: t('Сумма'),
             accessorKey: 'amount',
-            cell: (info: any) => info.getValue()
+            cell: (info: any) => {
+                const row = info.row.original as { amount?: number, currency?: string }
+                const amount = Number(row.amount)
+                if (!Number.isFinite(amount)) return '—'
+                return formatCurrency(amount, (row.currency || 'USD').toUpperCase(), 2)
+            },
         },
         {
             header: t('Валюта'),
@@ -67,14 +96,30 @@ export const PaymentList = memo((props: PaymentListProps) => {
         },
         {
             header: t('Детали'),
-            accessorKey: 'receiptUrl',
+            id: 'details',
             cell: (info: any) => {
-                const url = info.getValue()
-                return url
-                    ? <a href={url} target="_blank" rel="noopener noreferrer">{t('Чек')}</a>
-                    : '-'
-            }
-        }
+                const row = info.row.original as Payment
+                const url = row.receiptUrl
+                const description = row.description?.trim()
+                const rate = formatPaymentFxRate(row)
+                const hasRate = rate !== '—'
+
+                return (
+                    <div className={cls.detailsCell}>
+                        {url
+                            ? (
+                                <a href={url} target="_blank" rel="noopener noreferrer">
+                                    {t('Чек')}
+                                </a>
+                            )
+                            : (description || (!hasRate ? '—' : null))}
+                        {hasRate && (
+                            <span className={cls.detailsRate}>{rate}</span>
+                        )}
+                    </div>
+                )
+            },
+        },
     ], [t])
 
     if (isLoading) {
@@ -94,16 +139,25 @@ export const PaymentList = memo((props: PaymentListProps) => {
                 </Button>
             </HStack>
 
-            {payments.length
-? (
-                <Table
-                    data={payments}
-                    columns={columns}
+            {isAdmin && (
+                <ClientSelect
+                    label={String(tUsers('Пользователь'))}
+                    clientId={filterClientId || undefined}
+                    onChangeClient={(id) => { setFilterClientId(id || '') }}
+                    fullWidth
                 />
-            )
-: (
-                <Text text={t('История платежей пуста') || ''} />
             )}
+
+            {payments.length
+                ? (
+                    <Table
+                        data={payments}
+                        columns={columns}
+                    />
+                )
+                : (
+                    <Text text={t('История платежей пуста') || ''} />
+                )}
         </VStack>
     )
 })

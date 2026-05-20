@@ -5,7 +5,7 @@ import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Table } from '@/shared/ui/redesigned/Table/Table'
 import { BillingRecord } from '../../model/types/report'
-import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
+import { formatDisplayMoney } from '@/shared/lib/functions/formatDisplayMoney'
 import cls from './BillingBreakdown.module.scss'
 
 interface BillingBreakdownProps {
@@ -13,8 +13,21 @@ interface BillingBreakdownProps {
     userCurrency: string
 }
 
-const fmt = (v: number | undefined, currency: string) =>
-    v != null && v > 0 ? formatCurrency(v, currency, 4) : '—'
+/** Line cost in USD; use row FX snapshot only for the total column (amountCurrency is for totalCost). */
+const fmtCost = (row: BillingRecord, usd: number | undefined) => {
+    if (usd == null || usd <= 0) return '—'
+    const isRowTotal = Math.abs(Number(usd) - Number(row.totalCost)) < 1e-9
+    return formatDisplayMoney(
+        isRowTotal
+            ? {
+                costUsd: usd,
+                amountCurrency: row.amountCurrency,
+                costCurrency: row.currency,
+            }
+            : { costUsd: usd, costCurrency: row.currency },
+        4,
+    )
+}
 
 const helper = createColumnHelper<BillingRecord>()
 
@@ -31,9 +44,21 @@ export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingB
                 audioCost: acc.audioCost + r.audioCost,
                 textCost: acc.textCost + r.textCost,
                 sttCost: acc.sttCost + (r.sttCost ?? 0),
-                totalCost: acc.totalCost + r.totalCost
+                totalCost: acc.totalCost + r.totalCost,
+                amountCurrency: acc.amountCurrency + (Number(r.amountCurrency) || 0),
+                currency: acc.currency || r.currency || null,
             }),
-            { audioTokens: 0, textTokens: 0, totalTokens: 0, audioCost: 0, textCost: 0, sttCost: 0, totalCost: 0 }
+            {
+                audioTokens: 0,
+                textTokens: 0,
+                totalTokens: 0,
+                audioCost: 0,
+                textCost: 0,
+                sttCost: 0,
+                totalCost: 0,
+                amountCurrency: 0,
+                currency: null as string | null,
+            },
         )
     }, [billingRecords])
 
@@ -89,28 +114,46 @@ export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingB
                 header: String(t('Audio стоимость')),
                 cell: info => info.row.original.type === 'analytic'
                     ? '—'
-                    : fmt(info.getValue(), userCurrency),
+                    : fmtCost(info.row.original, info.getValue()),
                 footer: () => null
             }),
             helper.accessor('textCost', {
                 header: String(t('Text стоимость')),
-                cell: info => fmt(info.getValue(), userCurrency),
+                cell: info => fmtCost(info.row.original, info.getValue()),
                 footer: () => null
             }),
             ...(hasStt ? [
                 helper.accessor('sttCost', {
                     header: String(t('STT стоимость')),
-                    cell: info => fmt(info.getValue(), userCurrency),
+                    cell: info => fmtCost(info.row.original, info.getValue()),
                     footer: () => null
                 })
             ] : []),
             helper.accessor('totalCost', {
                 header: String(t('Итого')),
                 cell: info => (
-                    <Text text={formatCurrency(info.getValue(), userCurrency, 4)} bold variant="accent" />
+                    <Text
+                        text={formatDisplayMoney({
+                            costUsd: info.getValue(),
+                            amountCurrency: info.row.original.amountCurrency,
+                            costCurrency: info.row.original.currency,
+                        }, 4)}
+                        bold
+                        variant="accent"
+                    />
                 ),
                 footer: () => totals
-                    ? <Text text={formatCurrency(totals.totalCost, userCurrency, 4)} bold variant="accent" />
+                    ? (
+                        <Text
+                            text={formatDisplayMoney({
+                                costUsd: totals.totalCost,
+                                amountCurrency: totals.amountCurrency,
+                                costCurrency: totals.currency || userCurrency,
+                            }, 4)}
+                            bold
+                            variant="accent"
+                        />
+                    )
                     : null
             })
         ]

@@ -16,6 +16,8 @@ interface ClientSelectProps {
   placeholder?: string
   addonLeft?: ReactNode
   showIcon?: boolean
+  required?: boolean
+  disabled?: boolean
 }
 
 interface ClientOption {
@@ -35,7 +37,9 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
     error,
     placeholder,
     addonLeft,
-    showIcon = true
+    showIcon = true,
+    required,
+    disabled: disabledProp,
   } = props
 
   const { data, isLoading } = useGetAllUsers(null)
@@ -70,7 +74,8 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
       value={selectedClient}
       onChange={handleChange}
       fullWidth={fullWidth}
-      disabled={isLoading}
+      required={required}
+      disabled={isLoading || disabledProp}
       noOptionsText={t('Клиенты не найдены') ?? ''}
       getOptionLabel={(option: ClientOption) => option.name}
       isOptionEqualToValue={(option: ClientOption, value: ClientOption) => option.id === value.id}
@@ -78,6 +83,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
         <TextField
           {...params}
           label={label}
+          required={required}
           placeholder={isLoading ? (t('Загрузка...')) : placeholderText}
           error={!!error}
           helperText={error}

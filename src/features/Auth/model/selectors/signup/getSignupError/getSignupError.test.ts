@@ -1,12 +1,12 @@
 import { StateSchema } from '@/app/providers/StoreProvider'
 import { getSignupError } from './getSignupError'
 
-describe('getLoginError.test', () => {
+describe('getSignupError', () => {
   test('should return error', () => {
     const state: DeepPartial<StateSchema> = {
-      loginForm: {
+      signupForm: {
         error: 'error',
-        username: 'admin',
+        email: 'user@test.com',
         password: '123'
       }
     }

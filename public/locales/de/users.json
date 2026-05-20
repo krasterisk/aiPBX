@@ -49,5 +49,17 @@
     "Вы уверены, что хотите удалить пользователя?": "Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?",
     "Добавить пользователя": "Benutzer hinzufügen",
     "Подчинённый пользователь": "Unterbenutzer",
-    "Владелец": "Eigentümer"
+    "Владелец": "Eigentümer",
+    "Баланс подсказка админ": "Das Guthaben wird in USD geführt. Neuer Wert — mit Speichern übernehmen.",
+    "Валюта тенанта подсказка": "Die Währung wird durch die Domain des Instanz festgelegt (aipbx.ru → RUB, sonst USD). Manuelle Änderung ist nicht möglich.",
+    "Пополнение USD подсказка": "Das Guthaben wird immer in USD gutgeschrieben. Bei anderer Währung erfolgt Umrechnung zum aktuellen Kurs (öffentliche Preise).",
+    "Загрузка курса": "Wechselkurs wird geladen…",
+    "Курс недоступен": "Wechselkurs nicht verfügbar. Bitte USD wählen oder später erneut versuchen.",
+    "Ошибка загрузки курса": "Wechselkurs konnte nicht geladen werden. Später erneut versuchen oder USD wählen.",
+    "На баланс зачисление USD": "Gutschreibung: {{amount}} {{currency}}",
+    "ourOrg.fieldLabel": "Unsere Organisation für Rechnungen",
+    "ourOrg.fieldHint": "Welches Unternehmen Rechnungen und UPD für diesen Mandanten ausstellt. Nur für Admins.",
+    "ourOrg.selectPlaceholder": "Organisation wählen",
+    "ourOrg.notFound": "Keine Organisationen gefunden",
+    "ourOrg.primaryBadge": "primär"
 }

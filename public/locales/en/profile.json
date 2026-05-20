@@ -56,6 +56,7 @@
   " из ": " of ",
   "Всего": "Total",
   "Баланс": "Balance",
+  "balanceUsdTooltip": "Ledger balance: {{amount}}",
   "Рубль": "Ruble",
   "Доллар": "Dollar",
   "Евро": "Euro",

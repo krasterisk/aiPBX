@@ -19,6 +19,7 @@ import {
 import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin'
 import { useTelegramLogin } from '@/shared/lib/hooks/useTelegramLogin/useTelegramLogin'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
+import { buildLegalAcceptanceItems } from '@/shared/lib/legal/versions'
 
 export function useSignupData () {
   const { t } = useTranslation('login')
@@ -50,9 +51,11 @@ export function useSignupData () {
     }
   }, [resendTimer, setResendTimer])
 
+  const legalAcceptance = buildLegalAcceptanceItems()
+
   const handleGoogleSignupSuccess = (idToken: string) => {
     setSignupError(null)
-    googleSignup({ id_token: idToken })
+    googleSignup({ id_token: idToken, legalAcceptance })
       .unwrap()
       .then((data) => {
         localStorage.setItem('onboarding_is_signup', 'true')
@@ -89,7 +92,7 @@ export function useSignupData () {
       return
     }
 
-    userSignup({ email })
+    userSignup({ email, legalAcceptance })
       .unwrap()
       .then(() => {
         setSignupError(null)
@@ -113,7 +116,12 @@ export function useSignupData () {
       setSignupError(t('Заполните все поля'))
       return
     }
-    signupActivateUser({ email, activationCode: activationSignupCode, type: 'signup' })
+    signupActivateUser({
+      email,
+      activationCode: activationSignupCode,
+      type: 'signup',
+      legalAcceptance,
+    })
       .unwrap()
       .then((data) => {
         localStorage.setItem('onboarding_is_signup', 'true')

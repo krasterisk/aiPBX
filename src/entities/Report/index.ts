@@ -84,6 +84,7 @@ export {
 
 export { ReportExpandedPanel } from './ui/ReportExpandedPanel/ReportExpandedPanel'
 export { useReportFilters } from './lib/useReportFilters'
+export { reportDisplayMoneyInput } from './lib/reportDisplayMoneyInput'
 
 // ── Project Wizard Redux ──────────────────────────────────────────────────────
 export type { ProjectWizardSchema, MetricMethod } from './model/types/projectWizardSchema'

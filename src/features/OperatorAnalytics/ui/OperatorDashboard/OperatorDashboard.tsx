@@ -14,6 +14,7 @@ import { Card } from '@/shared/ui/redesigned/Card'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { StatCard } from '@/features/Dashboard'
+import { formatTenantMoney } from '@/shared/lib/functions/formatDisplayMoney'
 import {
     DefaultMetricKey,
     OperatorDashboardResponse,
@@ -118,8 +119,9 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
     ]
 
     const successRatePct = normalizeRate(data?.successRate)
+    const totalDisplayCost = data?.totalAmountCurrency ?? data?.totalCost ?? 0
     const avgCost = data?.totalAnalyzed
-        ? (data.totalCost ?? 0) / data.totalAnalyzed
+        ? totalDisplayCost / data.totalAnalyzed
         : 0
 
     const successData = [
@@ -243,13 +245,13 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                 />
                 <StatCard
                     title={String(t('Общая стоимость'))}
-                    value={`$${(data?.totalCost ?? 0).toFixed(4)}`}
+                    value={formatTenantMoney(totalDisplayCost, 2)}
                     description={String(t('Суммарные расходы за период'))}
                     icon={<AttachMoneyIcon />}
                 />
                 <StatCard
                     title={String(t('Средняя стоимость'))}
-                    value={`$${avgCost.toFixed(4)}`}
+                    value={formatTenantMoney(avgCost, 2)}
                     description={String(t('Средняя стоимость разговора'))}
                     icon={<AccountBalanceWalletIcon />}
                 />

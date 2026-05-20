@@ -41,6 +41,8 @@ export interface User {
   roles?: UserRoles[]
   vpbxUser?: ClientOptions
   vpbx_user_id?: string
+  our_organization_id?: string
+  ourOrganizationId?: string | number | null
   authType?: string
 }
 

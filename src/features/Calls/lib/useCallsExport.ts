@@ -2,10 +2,10 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import * as XLSX from 'xlsx'
 import FileSaver from 'file-saver'
-import { AllReports, CdrSource } from '@/entities/Report'
+import { AllReports, CdrSource, reportDisplayMoneyInput } from '@/entities/Report'
 import { formatDate } from '@/shared/lib/functions/formatDate'
 import { formatTime } from '@/shared/lib/functions/formatTime'
-import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
+import { formatDisplayMoney } from '@/shared/lib/functions/formatDisplayMoney'
 import { TOKEN_LOCALSTORAGE_KEY } from '@/shared/const/localstorage'
 
 const FILE_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
@@ -85,7 +85,9 @@ export const useCallsExport = (params: UseCallsExportParams) => {
                 [String(t('Источник'))]: report.source ?? '',
                 [String(t('Длительность'))]: report.duration ? formatTime(report.duration, t) ?? '' : '',
                 [String(t('Токены'))]: report.tokens ?? '',
-                [String(t('Стоимость'))]: report.cost ? formatCurrency(report.cost, 'USD', 4) : '',
+                [String(t('Стоимость'))]: (report.cost || report.amountCurrency || report.billingRecords?.length)
+                    ? formatDisplayMoney(reportDisplayMoneyInput(report), 4)
+                    : '',
                 CSAT: report.analytics?.csat ?? '',
                 [String(t('Настроение'))]: report.analytics?.sentiment ?? '',
                 [String(t('Результат'))]: report.analytics?.metrics?.scenario_analysis?.success != null

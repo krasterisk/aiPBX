@@ -3,6 +3,8 @@ import { HTMLAttributeAnchorTarget } from 'react'
 export interface AllReports {
   count: number
   totalCost: number
+  /** Sum in tenant currency (RUB on aipbx.ru); null on USD tenants */
+  totalAmountCurrency?: number | null
   rows: Report[]
 }
 
@@ -16,6 +18,8 @@ export interface Report {
   assistantId?: string
   tokens?: number
   cost?: number
+  costCurrency?: string | null
+  amountCurrency?: number | null
   duration?: number
   recordUrl?: string
   events?: ReportEvent[]
@@ -87,6 +91,8 @@ export interface BillingRecord {
   audioCost: number
   textCost: number
   totalCost: number
+  currency?: string
+  amountCurrency?: number | null
   sttCost?: number
   createdAt: string
 }
@@ -292,7 +298,10 @@ export interface OperatorAggregatedMetrics {
 
 export interface OperatorDashboardResponse {
   totalAnalyzed: number
+  /** Display total: RUB sum on RU tenant, else USD */
   totalCost: number
+  /** Sum of amountCurrency on aiCdr (RU tenant) */
+  totalAmountCurrency?: number | null
   avgCost?: number
   averageDuration: number
   averageScore: number

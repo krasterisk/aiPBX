@@ -3,62 +3,94 @@ import { useTranslation } from 'react-i18next'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Table } from '@/shared/ui/redesigned/Table'
+import { Button } from '@/shared/ui/redesigned/Button'
 import { useGetOrganizationsQuery } from '../../api/organizationApi'
 import { Loader } from '@/shared/ui/Loader'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { IconButton } from '@mui/material'
 import { Organization } from '../../model/types/organization'
+import { OrganizationDocumentsList } from '@/entities/OrganizationDocument'
+import cls from './OrganizationList.module.scss'
 
 interface OrganizationListProps {
     className?: string
     userId?: string
     onEdit?: (organization: Organization) => void
     onDelete?: (organization: Organization) => void
+    onIssueInvoice?: (organization: Organization) => void
+}
+
+function formatOrgTableCell(info: { getValue: () => string | null | undefined }) {
+    const value = info.getValue()
+    return value?.trim() ? value : ''
 }
 
 export const OrganizationList = memo((props: OrganizationListProps) => {
-    const { className, userId, onEdit, onDelete } = props
+    const { className, userId, onEdit, onDelete, onIssueInvoice } = props
     const { t } = useTranslation('payment')
 
-    const { data, isLoading, isError } = useGetOrganizationsQuery({ userId }, {
-        skip: !userId
-    })
+    const { data, isLoading, isError } = useGetOrganizationsQuery(
+        { userId: userId! },
+        {
+            skip: !userId,
+            refetchOnMountOrArgChange: true,
+        },
+    )
 
-    const organizations = data?.rows || []
+    const organizations = userId ? (data?.rows || []) : []
 
     const columns = useMemo(() => [
         {
             header: t('Наименование'),
             accessorKey: 'name',
-            cell: (info: any) => info.getValue()
+            cell: formatOrgTableCell,
         },
         {
             header: t('ИНН'),
             accessorKey: 'tin',
-            cell: (info: any) => info.getValue()
+            cell: formatOrgTableCell,
+        },
+        {
+            header: t('organization.table.kpp'),
+            accessorKey: 'kpp',
+            cell: formatOrgTableCell,
         },
         {
             header: t('Адрес'),
             accessorKey: 'address',
-            cell: (info: any) => info.getValue()
+            cell: formatOrgTableCell,
         },
         {
             id: 'actions',
-            cell: (info: any) => (
-                <HStack gap="8">
-                    <IconButton color="primary" onClick={() => onEdit?.(info.row.original)}>
-                        <EditIcon />
-                    </IconButton>
-                    <IconButton color="error" onClick={() => onDelete?.(info.row.original)}>
-                        <DeleteIcon />
-                    </IconButton>
+            header: t('organization.table.actions'),
+            cell: (info: { row: { original: Organization } }) => (
+                <HStack gap="8" wrap="wrap" className={cls.actionsCell}>
+                    <Button
+                        className={cls.actionBtn}
+                        variant="glass-action"
+                        onClick={() => { onIssueInvoice?.(info.row.original) }}
+                    >
+                        {t('invoice.issue')}
+                    </Button>
+                    <Button
+                        className={cls.iconBtn}
+                        variant="clear"
+                        addonLeft={<EditIcon fontSize="small" />}
+                        onClick={() => { onEdit?.(info.row.original) }}
+                    />
+                    <Button
+                        className={cls.iconBtn}
+                        variant="clear"
+                        color="error"
+                        addonLeft={<DeleteIcon fontSize="small" />}
+                        onClick={() => { onDelete?.(info.row.original) }}
+                    />
                 </HStack>
             )
         }
-    ], [t, onEdit, onDelete])
+    ], [t, onEdit, onDelete, onIssueInvoice])
 
     if (isLoading) {
         return <VStack max align="center"><Loader /></VStack>
@@ -69,17 +101,23 @@ export const OrganizationList = memo((props: OrganizationListProps) => {
     }
 
     return (
-        <VStack gap="16" max className={classNames('', {}, [className])}>
+        <VStack gap="16" max className={classNames(cls.OrganizationList, {}, [className])}>
             {organizations.length
-? (
-                <Table
-                    data={organizations}
-                    columns={columns}
-                />
-            )
-: (
-                <Text text={t('Список организаций пуст') || ''} />
-            )}
+                ? (
+                    <div className={cls.tableWrap}>
+                        <Table
+                            data={organizations}
+                            columns={columns}
+                            rowVariant="glass"
+                            renderExpandedRow={(row) => (
+                                <OrganizationDocumentsList organizationId={String(row.original.id)} />
+                            )}
+                        />
+                    </div>
+                )
+                : (
+                    <Text text={t('Список организаций пуст') || ''} />
+                )}
         </VStack>
     )
 })

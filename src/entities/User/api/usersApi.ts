@@ -60,7 +60,13 @@ export const usersApi = rtkApi.injectEndpoints({
           ]
           : [{ type: 'Users', id: 'LIST' }]
     }),
-    getUserBalance: build.query<{ balance: number, currency: string }, null>({
+    getUserBalance: build.query<{
+        balance: number
+        balanceUsd: number
+        currency: string
+        rate: number
+        personalAccountNumber?: string
+    }, null>({
       query: () => ({
         url: '/users/balance'
       })
@@ -80,28 +86,28 @@ export const usersApi = rtkApi.injectEndpoints({
         body: arg
       })
     }),
-    signupUser: build.mutation<{ success: boolean }, { email: string }>({
+    signupUser: build.mutation<{ success: boolean }, { email: string, legalAcceptance?: Array<{ kind: string, version: string, contentHash: string }> }>({
       query: (arg) => ({
         url: '/auth/signup',
         method: 'POST',
         body: arg
       })
     }),
-    loginUser: build.mutation<AuthData, { email: string }>({
+    loginUser: build.mutation<AuthData, { email: string, legalAcceptance?: Array<{ kind: string, version: string, contentHash: string }> }>({
       query: (arg) => ({
         url: '/auth/login',
         method: 'POST',
         body: arg
       })
     }),
-    googleLoginUser: build.mutation<AuthData, { id_token: string }>({
+    googleLoginUser: build.mutation<AuthData, { id_token: string, legalAcceptance?: Array<{ kind: string, version: string, contentHash: string }> }>({
       query: (arg) => ({
         url: '/auth/google/login',
         method: 'POST',
         body: arg
       })
     }),
-    googleSignupUser: build.mutation<AuthData, { id_token: string }>({
+    googleSignupUser: build.mutation<AuthData, { id_token: string, legalAcceptance?: Array<{ kind: string, version: string, contentHash: string }> }>({
       query: (arg) => ({
         url: '/auth/google/signup',
         method: 'POST',
@@ -122,7 +128,12 @@ export const usersApi = rtkApi.injectEndpoints({
         body: arg
       })
     }),
-    activateUser: build.mutation<AuthData, { email: string, activationCode: string, type: string }>({
+    activateUser: build.mutation<AuthData, {
+      email: string
+      activationCode: string
+      type: string
+      legalAcceptance?: Array<{ kind: string, version: string, contentHash: string }>
+    }>({
       query: (arg) => ({
         url: '/auth/activation',
         method: 'POST',
@@ -207,7 +218,19 @@ export const usersApi = rtkApi.injectEndpoints({
         method: 'POST',
         body: arg
       }),
-      invalidatesTags: [{ type: 'Users', id: 'LIST' }]
+      invalidatesTags: (result, error, arg) => [
+        { type: 'Users', id: arg.userId },
+        { type: 'Users', id: 'LIST' },
+      ],
+    }),
+    getTenantMembers: build.query<User[], string>({
+      query: (ownerUserId) => ({
+        url: '/users/tenant-members',
+        params: ownerUserId ? { ownerUserId } : undefined,
+      }),
+      providesTags: (_r, _e, ownerUserId) => [
+        { type: 'Users', id: `TENANT_${ownerUserId || 'self'}` },
+      ],
     }),
     getSubUsers: build.query<User[], void>({
       query: () => ({
@@ -254,4 +277,5 @@ export const useGetUsageLimit = usersApi.useGetUsageLimitQuery
 export const useDeleteUser = usersApi.useDeleteUserMutation
 export const useAdminTopUp = usersApi.useAdminTopUpMutation
 export const useGetSubUsers = usersApi.useGetSubUsersQuery
+export const useGetTenantMembers = usersApi.useGetTenantMembersQuery
 export const useCreateSubUser = usersApi.useCreateSubUserMutation
