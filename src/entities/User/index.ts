@@ -37,7 +37,7 @@ export {
 } from './model/consts/consts'
 export { UsersList } from './ui/UsersList/UsersList'
 export { SubUsersList } from './ui/SubUsersList/SubUsersList'
-export { ClientSelect } from './ui/ClientSelect/ClientSelect'
+export { ClientSelect, ALL_CLIENTS_ID } from './ui/ClientSelect/ClientSelect'
 export { TenantNotifyEmailsSelect, parseNotifyEmails } from './ui/TenantNotifyEmailsSelect/TenantNotifyEmailsSelect'
 export type { NotifyEmailOption } from './ui/TenantNotifyEmailsSelect/TenantNotifyEmailsSelect'
 export { RoleSelect } from './ui/RoleSelect/RoleSelect'

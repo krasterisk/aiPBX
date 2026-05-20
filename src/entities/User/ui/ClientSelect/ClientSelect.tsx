@@ -5,6 +5,8 @@ import { useGetAllUsers } from '../../api/usersApi'
 import { Users } from 'lucide-react'
 import { TextField } from '@mui/material'
 
+export const ALL_CLIENTS_ID = ''
+
 interface ClientSelectProps {
   label?: string
   clientId?: string
@@ -18,6 +20,8 @@ interface ClientSelectProps {
   showIcon?: boolean
   required?: boolean
   disabled?: boolean
+  /** When true, user can pick "all clients" (empty id). */
+  allowAll?: boolean
 }
 
 interface ClientOption {
@@ -40,6 +44,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
     showIcon = true,
     required,
     disabled: disabledProp,
+    allowAll = false,
   } = props
 
   const { data, isLoading } = useGetAllUsers(null)
@@ -49,9 +54,14 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
     name: item.name || item.email || String(item.id)
   })) || []
 
-  const selectedClient = clientId
-    ? clientItems.find(item => item.id === clientId) || null
-    : null
+  const allClientsOption: ClientOption = { id: ALL_CLIENTS_ID, name: t('Все клиенты') }
+  const options = allowAll ? [allClientsOption, ...clientItems] : clientItems
+
+  const selectedClient = allowAll && (clientId === ALL_CLIENTS_ID || clientId == null || clientId === undefined)
+    ? allClientsOption
+    : clientId
+      ? clientItems.find(item => item.id === clientId) || null
+      : null
 
   const handleChange = useCallback((event: any, value: ClientOption | null) => {
     if (!value) {
@@ -70,7 +80,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
       className={className}
       label={label}
       size={size}
-      options={clientItems}
+      options={options}
       value={selectedClient}
       onChange={handleChange}
       fullWidth={fullWidth}

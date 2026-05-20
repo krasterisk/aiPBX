@@ -17,6 +17,7 @@ import cls from './OrganizationList.module.scss'
 interface OrganizationListProps {
     className?: string
     userId?: string
+    canDeleteDocuments?: boolean
     onEdit?: (organization: Organization) => void
     onDelete?: (organization: Organization) => void
     onIssueInvoice?: (organization: Organization) => void
@@ -28,18 +29,15 @@ function formatOrgTableCell(info: { getValue: () => string | null | undefined })
 }
 
 export const OrganizationList = memo((props: OrganizationListProps) => {
-    const { className, userId, onEdit, onDelete, onIssueInvoice } = props
+    const { className, userId, canDeleteDocuments, onEdit, onDelete, onIssueInvoice } = props
     const { t } = useTranslation('payment')
 
     const { data, isLoading, isError } = useGetOrganizationsQuery(
-        { userId: userId! },
-        {
-            skip: !userId,
-            refetchOnMountOrArgChange: true,
-        },
+        userId ? { userId } : {},
+        { refetchOnMountOrArgChange: true },
     )
 
-    const organizations = userId ? (data?.rows || []) : []
+    const organizations = data?.rows || []
 
     const columns = useMemo(() => [
         {
@@ -110,7 +108,10 @@ export const OrganizationList = memo((props: OrganizationListProps) => {
                             columns={columns}
                             rowVariant="glass"
                             renderExpandedRow={(row) => (
-                                <OrganizationDocumentsList organizationId={String(row.original.id)} />
+                                <OrganizationDocumentsList
+                                    organizationId={String(row.original.id)}
+                                    canDeleteDocuments={canDeleteDocuments}
+                                />
                             )}
                         />
                     </div>

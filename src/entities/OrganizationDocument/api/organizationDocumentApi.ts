@@ -48,6 +48,18 @@ const organizationDocumentApi = rtkApi.injectEndpoints({
                 { type: 'OrganizationDocument', id: organizationId },
             ],
         }),
+        deleteOrganizationDocument: build.mutation<
+            void,
+            { organizationId: string, documentId: string }
+        >({
+            query: ({ organizationId, documentId }) => ({
+                url: `/organizations/${organizationId}/documents/${encodeURIComponent(documentId)}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: (_res, _err, arg) => [
+                { type: 'OrganizationDocument', id: arg.organizationId },
+            ],
+        }),
     }),
 })
 
@@ -55,6 +67,7 @@ export const {
     useGetOrganizationDefaultSubjectQuery,
     useCreateOrganizationInvoiceMutation,
     useGetOrganizationDocumentsQuery,
+    useDeleteOrganizationDocumentMutation,
 } = organizationDocumentApi
 
 /**

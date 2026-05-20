@@ -8,6 +8,7 @@ export {
     useGetOrganizationDefaultSubjectQuery,
     useCreateOrganizationInvoiceMutation,
     useGetOrganizationDocumentsQuery,
+    useDeleteOrganizationDocumentMutation,
     getOrganizationDocumentPdfUrl,
     joinApiUrl,
     normalizeDocumentId,

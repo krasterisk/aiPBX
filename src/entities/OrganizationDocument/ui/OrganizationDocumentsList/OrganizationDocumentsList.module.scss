@@ -3,3 +3,12 @@
     padding: var(--space-6) var(--space-4);
     text-align: center;
 }
+
+.actionsCell {
+    flex-wrap: wrap;
+}
+
+.iconBtn {
+    min-width: auto;
+    padding: var(--space-2);
+}

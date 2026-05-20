@@ -153,10 +153,10 @@ export const PaymentOrganizations = memo((props: PaymentOrganizationsProps) => {
 
                     clientId={listUserId}
 
-                    required
+                    allowAll
 
                     onChangeClient={(id) => {
-                        setListUserId(id || billingOwnerUserId || userId)
+                        setListUserId(id)
                     }}
 
                 />
@@ -167,7 +167,9 @@ export const PaymentOrganizations = memo((props: PaymentOrganizationsProps) => {
 
                 className={cls.list}
 
-                userId={listUserId}
+                userId={listUserId || undefined}
+
+                canDeleteDocuments={isAdmin}
 
                 onEdit={handleEdit}
 
@@ -185,11 +187,11 @@ export const PaymentOrganizations = memo((props: PaymentOrganizationsProps) => {
 
                     onClose={handleCloseModal}
 
-                    userId={listUserId}
+                    userId={listUserId || userId}
 
                     organization={organizationToEdit}
 
-                    onCreatedForTenant={isAdmin ? setListUserId : undefined}
+                    onCreatedForTenant={isAdmin && listUserId ? setListUserId : undefined}
 
                 />
 
@@ -203,7 +205,7 @@ export const PaymentOrganizations = memo((props: PaymentOrganizationsProps) => {
 
                     onClose={handleCloseInvoice}
 
-                    userId={listUserId}
+                    userId={listUserId || userId}
 
                     preselectedOrganizationId={invoiceOrgId}
 

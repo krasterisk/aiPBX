@@ -1,14 +1,19 @@
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import type { CellContext } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { ExternalLink } from 'lucide-react'
-import { VStack } from '@/shared/ui/redesigned/Stack'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Table } from '@/shared/ui/redesigned/Table'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Loader } from '@/shared/ui/Loader'
 import { ErrorGetData } from '@/entities/ErrorGetData'
-import { useGetOrganizationDocumentsQuery, openOrganizationDocumentPdf } from '../../api/organizationDocumentApi'
+import {
+    useGetOrganizationDocumentsQuery,
+    useDeleteOrganizationDocumentMutation,
+    openOrganizationDocumentPdf,
+} from '../../api/organizationDocumentApi'
 import type { OrganizationDocument } from '../../model/types/organizationDocument'
 import cls from './OrganizationDocumentsList.module.scss'
 
@@ -19,11 +24,13 @@ function formatDocCell(info: { getValue: () => string | null | undefined }) {
 
 interface OrganizationDocumentsListProps {
     organizationId: string
+    canDeleteDocuments?: boolean
 }
 
 export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListProps) => {
-    const { organizationId } = props
+    const { organizationId, canDeleteDocuments } = props
     const { t } = useTranslation('payment')
+    const [deleteDocument, { isLoading: isDeleting }] = useDeleteOrganizationDocumentMutation()
 
     const { data, isLoading, isError } = useGetOrganizationDocumentsQuery(organizationId, {
         skip: !organizationId,
@@ -37,6 +44,20 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
     })
 
     const rows = data || []
+
+    const handleDeleteDocument = useCallback(async (doc: OrganizationDocument) => {
+        if (!window.confirm(String(t('documents.confirmDelete')))) {
+            return
+        }
+        try {
+            await deleteDocument({
+                organizationId,
+                documentId: doc.id,
+            }).unwrap()
+        } catch (e) {
+            console.error(e)
+        }
+    }, [deleteDocument, organizationId, t])
 
     const columns = useMemo(() => [
         {
@@ -124,23 +145,42 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
         },
         {
             id: 'actions',
-            header: t('documents.table.pdf'),
+            header: canDeleteDocuments
+                ? t('documents.table.actions')
+                : t('documents.table.pdf'),
             cell: (info: CellContext<OrganizationDocument, unknown>) => {
                 const doc = info.row.original
-                if (!doc.pdfPath && !doc.sbisId) return null
+                const showPdf = Boolean(doc.pdfPath || doc.sbisId)
+                if (!showPdf && !canDeleteDocuments) return null
                 return (
-                    <Button
-                        variant="glass-action"
-                        onClick={() => {
-                            void openOrganizationDocumentPdf(organizationId, doc.id)
-                        }}
-                    >
-                        {t('documents.actions.openPdf')}
-                    </Button>
+                    <HStack gap="8" wrap="wrap" className={cls.actionsCell}>
+                        {showPdf && (
+                            <Button
+                                variant="glass-action"
+                                onClick={() => {
+                                    void openOrganizationDocumentPdf(organizationId, doc.id)
+                                }}
+                            >
+                                {t('documents.actions.openPdf')}
+                            </Button>
+                        )}
+                        {canDeleteDocuments && (
+                            <Button
+                                className={cls.iconBtn}
+                                variant="clear"
+                                color="error"
+                                disabled={isDeleting}
+                                addonLeft={<DeleteIcon fontSize="small" />}
+                                onClick={() => {
+                                    void handleDeleteDocument(doc)
+                                }}
+                            />
+                        )}
+                    </HStack>
                 )
             },
         },
-    ], [t, organizationId])
+    ], [t, organizationId, canDeleteDocuments, handleDeleteDocument, isDeleting])
 
     if (isLoading) {
         return (

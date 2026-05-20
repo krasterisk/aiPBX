@@ -1,0 +1,32 @@
+.lookupHint {
+    color: var(--secondary-text, #6b7280);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.lookupHintWarn {
+    color: var(--warning-text, #b45309);
+}
+
+.lookupStatus {
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--hint-bg, rgba(59, 130, 246, 0.08));
+    border: 1px solid var(--hint-border, rgba(59, 130, 246, 0.2));
+}
+
+.candidateList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.candidateBtn {
+    justify-content: flex-start;
+    text-align: left;
+    white-space: normal;
+    height: auto;
+    min-height: 40px;
+    padding: 10px 12px;
+}
