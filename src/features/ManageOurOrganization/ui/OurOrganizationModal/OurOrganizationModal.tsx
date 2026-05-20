@@ -13,10 +13,8 @@ import {
     useUpdateOurOrganizationMutation,
     type OurOrganization,
 } from '@/entities/OurOrganization'
-import { useLazyLookupCounterpartyQuery } from '@/entities/Organization'
-import type { CounterpartyLookupItem, CounterpartyLookupResponse } from '@/entities/Organization/model/types/counterpartyLookup'
-import { applyCounterpartyToForm } from '@/entities/Organization/lib/applyCounterpartyData'
-import { isValidOrganizationKpp, normalizeOrganizationInn } from '@/entities/Organization/lib/validateOrganizationKpp'
+import { useLazyLookupCounterpartyQuery, applyCounterpartyToForm, isValidOrganizationKpp, normalizeOrganizationInn } from '@/entities/Organization'
+import type { CounterpartyLookupItem, CounterpartyLookupResponse } from '@/entities/Organization'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
 import { Building2 } from 'lucide-react'
 import { classNames } from '@/shared/lib/classNames/classNames'
@@ -175,8 +173,8 @@ export const OurOrganizationModal = memo((props: OurOrganizationModalProps) => {
 
     const isLoading = isCreating || isUpdating
     const selectedLegal = legalOptions.find((o) => o.value === extra.legalForm) || legalOptions[0]
-    const canSubmit = !!name.trim() && !!normalizeOrganizationInn(tin) && !!address.trim()
-        && (!isLegalEntityInn || isValidOrganizationKpp(kppDigits, innDigits))
+    const canSubmit = !!name.trim() && !!normalizeOrganizationInn(tin) && !!address.trim() &&
+        (!isLegalEntityInn || isValidOrganizationKpp(kppDigits, innDigits))
 
     return (
         <Modal className={classNames('', {}, [className])} isOpen={isOpen} onClose={onClose}>

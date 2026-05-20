@@ -7,5 +7,17 @@ export {
     useLookupCounterpartyQuery,
     useLazyLookupCounterpartyQuery,
 } from './api/organizationApi'
-export type { CounterpartyLookupResponse } from './model/types/counterpartyLookup'
+export type {
+    CounterpartyLookupItem,
+    CounterpartyLookupResponse,
+} from './model/types/counterpartyLookup'
+export {
+    applyCounterpartyToForm,
+    clearLookupPopulatedFields,
+} from './lib/applyCounterpartyData'
+export {
+    isValidOrganizationKpp,
+    normalizeOrganizationInn,
+    normalizeOrganizationKpp,
+} from './lib/validateOrganizationKpp'
 export { OrganizationList } from './ui/OrganizationList/OrganizationList'

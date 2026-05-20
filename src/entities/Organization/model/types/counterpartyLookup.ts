@@ -14,6 +14,6 @@ export interface CounterpartyLookupItem {
 }
 
 export type CounterpartyLookupResponse =
-    | { status: 'single'; data: CounterpartyLookupItem }
-    | { status: 'choose'; inn: string; candidates: CounterpartyLookupItem[] }
-    | { status: 'requires_kpp'; inn: string }
+    | { status: 'single', data: CounterpartyLookupItem }
+    | { status: 'choose', inn: string, candidates: CounterpartyLookupItem[] }
+    | { status: 'requires_kpp', inn: string }

@@ -1,7 +1,7 @@
 import type { CounterpartyLookupItem } from '../model/types/counterpartyLookup'
 import { isValidOrganizationKpp, normalizeOrganizationInn } from './validateOrganizationKpp'
 
-type LookupPopulatedExtra = {
+interface LookupPopulatedExtra {
     kpp: string
     ogrn: string
     legalForm: '' | 'ul' | 'ip'

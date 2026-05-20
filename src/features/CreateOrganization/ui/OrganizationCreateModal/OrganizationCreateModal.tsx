@@ -13,11 +13,12 @@ import {
     useUpdateOrganizationMutation,
     useLazyLookupCounterpartyQuery,
     Organization,
+ applyCounterpartyToForm, clearLookupPopulatedFields, isValidOrganizationKpp, normalizeOrganizationInn, normalizeOrganizationKpp 
 } from '@/entities/Organization'
-import type { CounterpartyLookupItem, CounterpartyLookupResponse } from '@/entities/Organization/model/types/counterpartyLookup'
-import { applyCounterpartyToForm, clearLookupPopulatedFields } from '@/entities/Organization/lib/applyCounterpartyData'
+import type { CounterpartyLookupItem, CounterpartyLookupResponse } from '@/entities/Organization'
+
 import { isPaymentOrganizationsTabVisible } from '@/shared/lib/domain'
-import { isValidOrganizationKpp, normalizeOrganizationInn, normalizeOrganizationKpp } from '@/entities/Organization/lib/validateOrganizationKpp'
+
 import { useGetOrganizationDefaultSubjectQuery } from '@/entities/OrganizationDocument'
 import { ClientSelect, isUserAdmin } from '@/entities/User'
 import { classNames } from '@/shared/lib/classNames/classNames'
@@ -76,8 +77,8 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
     const innDigits = normalizeInn(tin)
     const kppDigits = normalizeKpp(extra.kpp)
     const isLegalEntityInn = innDigits.length === 10
-    const kppRequired = sbisEnabled && isLegalEntityInn
-        && (lookupState === 'requires_kpp' || !!kppDigits || lookupState === 'choose')
+    const kppRequired = sbisEnabled && isLegalEntityInn &&
+        (lookupState === 'requires_kpp' || !!kppDigits || lookupState === 'choose')
 
     const legalOptions = useMemo(() => [
         { label: t('organization.form.legalForm.ul'), value: 'ul' as const },
