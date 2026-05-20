@@ -58,5 +58,7 @@
     "ourOrg.form.legalForm.ul": "Legal entity",
     "ourOrg.form.legalForm.ip": "Individual entrepreneur",
     "ourOrg.form.lookupSuccess": "Loaded by TIN",
-    "ourOrg.form.lookupFailed": "Organization not found by TIN"
+    "ourOrg.form.lookupFailed": "Organization not found by TIN",
+    "ourOrg.form.lookupRequiresKpp": "Enter KPP (9 digits) to load full details",
+    "ourOrg.form.chooseBranch": "Multiple organizations match this TIN — select one:",
 }

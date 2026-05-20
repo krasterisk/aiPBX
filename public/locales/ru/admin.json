@@ -58,5 +58,7 @@
     "ourOrg.form.legalForm.ul": "Юридическое лицо",
     "ourOrg.form.legalForm.ip": "ИП",
     "ourOrg.form.lookupSuccess": "Данные загружены по ИНН",
-    "ourOrg.form.lookupFailed": "Не удалось найти организацию по ИНН"
+    "ourOrg.form.lookupFailed": "Не удалось найти организацию по ИНН",
+    "ourOrg.form.lookupRequiresKpp": "Укажите КПП (9 цифр) для уточнения реквизитов",
+    "ourOrg.form.chooseBranch": "Несколько организаций с этим ИНН — выберите нужную:",
 }

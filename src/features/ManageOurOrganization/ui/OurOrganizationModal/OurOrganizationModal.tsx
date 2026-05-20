@@ -14,6 +14,9 @@ import {
     type OurOrganization,
 } from '@/entities/OurOrganization'
 import { useLazyLookupCounterpartyQuery } from '@/entities/Organization'
+import type { CounterpartyLookupItem, CounterpartyLookupResponse } from '@/entities/Organization/model/types/counterpartyLookup'
+import { applyCounterpartyToForm } from '@/entities/Organization/lib/applyCounterpartyData'
+import { isValidOrganizationKpp, normalizeOrganizationInn } from '@/entities/Organization/lib/validateOrganizationKpp'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
 import { Building2 } from 'lucide-react'
 import { classNames } from '@/shared/lib/classNames/classNames'
@@ -52,35 +55,70 @@ export const OurOrganizationModal = memo((props: OurOrganizationModalProps) => {
     const [tin, setTin] = useState('')
     const [address, setAddress] = useState('')
     const [extra, setExtra] = useState(emptyFields)
+    const [candidates, setCandidates] = useState<CounterpartyLookupItem[]>([])
+
+    const innDigits = normalizeInn(tin)
+    const kppDigits = extra.kpp.replace(/\D/g, '')
+    const isLegalEntityInn = innDigits.length === 10
 
     const legalOptions = useMemo(() => [
         { label: t('ourOrg.form.legalForm.ul'), value: 'ul' as const },
         { label: t('ourOrg.form.legalForm.ip'), value: 'ip' as const },
     ], [t])
 
-    const runLookup = useCallback(async (innRaw: string) => {
-        const digits = normalizeInn(innRaw)
-        if (digits.length !== 10 && digits.length !== 12) return
-        try {
-            const data = await lookupCounterparty({ inn: digits }).unwrap()
-            if (data.name) setName(data.name)
-            if (data.address) setAddress(data.address)
-            setExtra((s) => ({
-                ...s,
-                kpp: data.kpp || s.kpp,
-                ogrn: data.ogrn || s.ogrn,
-                legalForm: data.legalForm || s.legalForm || 'ul',
-                director: data.director || s.director,
-            }))
+    const applyLookupResult = useCallback((response: CounterpartyLookupResponse) => {
+        if (response.status === 'single') {
+            applyCounterpartyToForm(response.data, setName, setAddress, setExtra)
+            setCandidates([])
             toast.success(t('ourOrg.form.lookupSuccess'))
+            return
+        }
+        if (response.status === 'choose') {
+            setCandidates(response.candidates)
+            setExtra((s) => ({ ...s, legalForm: 'ul' }))
+            return
+        }
+        if (response.status === 'requires_kpp') {
+            setCandidates([])
+            setExtra((s) => ({ ...s, legalForm: 'ul' }))
+            toast.info(t('ourOrg.form.lookupRequiresKpp'))
+        }
+    }, [t])
+
+    const runLookup = useCallback(async (innRaw: string, kppRaw?: string) => {
+        const digits = normalizeOrganizationInn(innRaw)
+        if (digits.length !== 10 && digits.length !== 12) return
+        const kpp = kppRaw ? kppRaw.replace(/\D/g, '') : ''
+        if (digits.length === 10 && kpp && !isValidOrganizationKpp(kpp, digits)) return
+        if (digits.length === 10 && kpp && kpp.length !== 9) return
+
+        try {
+            const response = await lookupCounterparty({
+                inn: digits,
+                ...(kpp.length === 9 ? { kpp } : {}),
+            }).unwrap()
+            applyLookupResult(response)
         } catch {
+            setCandidates([])
             toast.info(t('ourOrg.form.lookupFailed'))
         }
-    }, [lookupCounterparty, t])
+    }, [lookupCounterparty, applyLookupResult, t])
 
     const debouncedLookup = useDebounce((innRaw: string) => {
         void runLookup(innRaw)
     }, 500)
+
+    const debouncedKppLookup = useDebounce((innRaw: string, kppRaw: string) => {
+        void runLookup(innRaw, kppRaw)
+    }, 500)
+
+    const handleSelectCandidate = useCallback(async (candidate: CounterpartyLookupItem) => {
+        applyCounterpartyToForm(candidate, setName, setAddress, setExtra)
+        setCandidates([])
+        if (candidate.kpp) {
+            await runLookup(candidate.inn, candidate.kpp)
+        }
+    }, [runLookup])
 
     useEffect(() => {
         if (organization && isOpen) {
@@ -137,7 +175,8 @@ export const OurOrganizationModal = memo((props: OurOrganizationModalProps) => {
 
     const isLoading = isCreating || isUpdating
     const selectedLegal = legalOptions.find((o) => o.value === extra.legalForm) || legalOptions[0]
-    const canSubmit = !!name.trim() && !!normalizeInn(tin) && !!address.trim()
+    const canSubmit = !!name.trim() && !!normalizeOrganizationInn(tin) && !!address.trim()
+        && (!isLegalEntityInn || isValidOrganizationKpp(kppDigits, innDigits))
 
     return (
         <Modal className={classNames('', {}, [className])} isOpen={isOpen} onClose={onClose}>
@@ -158,10 +197,27 @@ export const OurOrganizationModal = memo((props: OurOrganizationModalProps) => {
                     onChange={(e) => {
                         const v = e.target.value
                         setTin(v)
+                        setCandidates([])
                         debouncedLookup(v)
                     }}
                     disabled={isLoading || isLookupLoading}
                 />
+
+                {candidates.length > 0 && (
+                    <VStack gap="8" max>
+                        <Text text={t('ourOrg.form.chooseBranch')} size="s" />
+                        {candidates.map((c) => (
+                            <Button
+                                key={`${c.kpp || 'no-kpp'}-${c.name}`}
+                                variant="outline"
+                                onClick={() => { void handleSelectCandidate(c) }}
+                                disabled={isLoading || isLookupLoading}
+                            >
+                                {c.name}{c.kpp ? ` · ${c.kpp}` : ''}
+                            </Button>
+                        ))}
+                    </VStack>
+                )}
 
                 <Textarea
                     label={t('Name')}
@@ -195,7 +251,13 @@ export const OurOrganizationModal = memo((props: OurOrganizationModalProps) => {
                 <Textarea
                     label={t('ourOrg.table.kpp')}
                     value={extra.kpp}
-                    onChange={(e) => { setExtra((s) => ({ ...s, kpp: e.target.value })) }}
+                    onChange={(e) => {
+                        const v = e.target.value
+                        setExtra((s) => ({ ...s, kpp: v }))
+                        if (v.replace(/\D/g, '').length === 9 && isValidOrganizationKpp(v, tin)) {
+                            debouncedKppLookup(tin, v)
+                        }
+                    }}
                     disabled={isLoading}
                 />
 

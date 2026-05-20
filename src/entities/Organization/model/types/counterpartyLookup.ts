@@ -1,4 +1,4 @@
-export interface CounterpartyLookupResponse {
+export interface CounterpartyLookupItem {
     inn: string
     kpp: string | null
     name: string
@@ -12,3 +12,8 @@ export interface CounterpartyLookupResponse {
     sbisCounterpartyId: string | null
     fromCache?: boolean
 }
+
+export type CounterpartyLookupResponse =
+    | { status: 'single'; data: CounterpartyLookupItem }
+    | { status: 'choose'; inn: string; candidates: CounterpartyLookupItem[] }
+    | { status: 'requires_kpp'; inn: string }

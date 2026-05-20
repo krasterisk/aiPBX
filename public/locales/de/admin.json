@@ -58,5 +58,7 @@
     "ourOrg.form.legalForm.ul": "Juristische Person",
     "ourOrg.form.legalForm.ip": "Einzelunternehmer",
     "ourOrg.form.lookupSuccess": "Per INN geladen",
-    "ourOrg.form.lookupFailed": "Organisation per INN nicht gefunden"
+    "ourOrg.form.lookupFailed": "Organisation per INN nicht gefunden",
+    "ourOrg.form.lookupRequiresKpp": "KPP (9 Ziffern) für vollständige Daten angeben",
+    "ourOrg.form.chooseBranch": "Mehrere Organisationen mit dieser INN — bitte auswählen:",
 }

@@ -58,5 +58,7 @@
     "ourOrg.form.legalForm.ul": "法人",
     "ourOrg.form.legalForm.ip": "个体工商户",
     "ourOrg.form.lookupSuccess": "已按税号加载",
-    "ourOrg.form.lookupFailed": "未找到该税号对应的组织"
+    "ourOrg.form.lookupFailed": "未找到该税号对应的组织",
+    "ourOrg.form.lookupRequiresKpp": "请填写 KPP（9 位）以加载完整信息",
+    "ourOrg.form.chooseBranch": "找到多个相同税号的组织 — 请选择：",
 }
