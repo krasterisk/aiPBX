@@ -44,6 +44,8 @@ export interface User {
   our_organization_id?: string
   ourOrganizationId?: string | number | null
   authType?: string
+  /** Tenant owner l/s (read-only); same for all sub-users of the tenant */
+  personalAccountNumber?: string | null
 }
 
 export interface UserSchema {

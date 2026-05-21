@@ -57,6 +57,8 @@
     "Курс недоступен": "Exchange rate for the selected currency is unavailable. Try USD or retry later.",
     "Ошибка загрузки курса": "Failed to load the exchange rate. Try again later or use USD.",
     "На баланс зачисление USD": "Amount to credit: {{amount}} {{currency}}",
+    "personalAccount.label": "Personal account number",
+    "personalAccount.hint": "Used for invoice payments (tenant); read-only",
     "ourOrg.fieldLabel": "Our organization for billing",
     "ourOrg.fieldHint": "Which legal entity issues invoices and UPD for this tenant. Admin only.",
     "ourOrg.selectPlaceholder": "Select organization",

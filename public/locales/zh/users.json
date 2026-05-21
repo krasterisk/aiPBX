@@ -57,6 +57,8 @@
     "Курс недоступен": "所选货币汇率不可用。请改用美元或稍后重试。",
     "Ошибка загрузки курса": "加载汇率失败。请稍后重试或选择美元。",
     "На баланс зачисление USD": "将入账：{{amount}} {{currency}}",
+    "personalAccount.label": "个人账户号",
+    "personalAccount.hint": "用于账单付款（租户）；不可编辑",
     "ourOrg.fieldLabel": "开票我方组织",
     "ourOrg.fieldHint": "为该租户开具发票和 UPD 的法律实体。仅管理员可见。",
     "ourOrg.selectPlaceholder": "选择组织",

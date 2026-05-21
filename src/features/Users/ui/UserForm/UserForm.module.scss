@@ -32,6 +32,11 @@
     opacity: 0.6;
 }
 
+.personalAccountNumber {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+}
+
 .fullWidth {
     width: 100%;
 }

@@ -57,6 +57,8 @@
     "Курс недоступен": "Wechselkurs nicht verfügbar. Bitte USD wählen oder später erneut versuchen.",
     "Ошибка загрузки курса": "Wechselkurs konnte nicht geladen werden. Später erneut versuchen oder USD wählen.",
     "На баланс зачисление USD": "Gutschreibung: {{amount}} {{currency}}",
+    "personalAccount.label": "Persönliche Kontonummer",
+    "personalAccount.hint": "Für Rechnungszahlungen (Mandant); nicht editierbar",
     "ourOrg.fieldLabel": "Unsere Organisation für Rechnungen",
     "ourOrg.fieldHint": "Welches Unternehmen Rechnungen und UPD für diesen Mandanten ausstellt. Nur für Admins.",
     "ourOrg.selectPlaceholder": "Organisation wählen",

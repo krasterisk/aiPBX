@@ -4,38 +4,33 @@
     width: 100%;
 }
 
-// ========================================
-// Balance Section
-// ========================================
-
+.balanceSection {
+    align-items: flex-start;
+}
 
 .balanceAmount {
     @include text-gradient;
 }
 
-// ========================================
-// Quick Actions Grid
-// ========================================
+.balanceActions {
+    width: 100%;
+}
 
-.quickActionsGrid {
+.navGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+    width: 100%;
+
     @include mobile {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
 }
 
-.quickActionCard {
-    flex: 1 1 0;
-    min-width: 0;
-
-    @include mobile {
-        width: 100%;
-        flex: unset;
-    }
+.navCard {
+    width: 100%;
+    justify-content: flex-start;
 }
-
-// ========================================
-// Modal
-// ========================================
 
 .modalContent {
     padding: var(--card-padding-md);

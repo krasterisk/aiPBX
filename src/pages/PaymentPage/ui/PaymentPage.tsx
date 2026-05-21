@@ -2,7 +2,7 @@ import React, { memo, useState, useMemo, useCallback } from 'react'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './PaymentPage.module.scss'
 import { Page } from '@/widgets/Page'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { useTranslation } from 'react-i18next'
 import { TabsPanel, TabPanelItem } from '@/shared/ui/mui/TabsPanel'
 import { PaymentList } from '@/entities/Payment'
@@ -13,8 +13,6 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { PaymentOverview } from './PaymentOverview/PaymentOverview'
 import { PaymentOrganizations } from './PaymentOrganizations/PaymentOrganizations'
 import { UsageTab } from './UsageTab/UsageTab'
-import { Card } from '@/shared/ui/redesigned/Card'
-
 import { isPaymentOrganizationsTabVisible } from '@/shared/lib/domain'
 
 const PaymentPage = memo(() => {
@@ -33,17 +31,24 @@ const PaymentPage = memo(() => {
     }, [])
 
     const showOrganizationsTab = isPaymentOrganizationsTabVisible()
+    const organizationsTabIndex = showOrganizationsTab ? 4 : undefined
 
     const { data: balanceData } = useGetUserBalance(null, {
         skip: !showOrganizationsTab,
         refetchOnFocus: true,
     })
 
-    const organizationsTabIndex = showOrganizationsTab ? 4 : undefined
-
     const tabs: TabPanelItem[] = useMemo(() => {
         const base: TabPanelItem[] = [
-            { label: t('tabs.overview'), content: <PaymentOverview onTabChange={onTabChangeByIndex} organizationsTabIndex={organizationsTabIndex} /> },
+            {
+                label: t('tabs.overview'),
+                content: (
+                    <PaymentOverview
+                        onTabChange={onTabChangeByIndex}
+                        organizationsTabIndex={organizationsTabIndex}
+                    />
+                ),
+            },
             { label: t('tabs.usage'), content: <UsageTab /> },
             { label: t('tabs.history'), content: <PaymentList /> },
             { label: t('tabs.limits'), content: <UsageLimitsPanel /> },
@@ -58,31 +63,28 @@ const PaymentPage = memo(() => {
     }, [t, userId, onTabChangeByIndex, showOrganizationsTab, organizationsTabIndex])
 
     return (
-        <Page data-testid={'PaymentPage'} className={classNames(cls.PaymentPage, {}, [])}>
+        <Page data-testid="PaymentPage" className={classNames(cls.PaymentPage, {}, [])}>
             <VStack gap="24" max>
-                <Text title={t('page.title')} />
-                {showOrganizationsTab && balanceData?.personalAccountNumber && (
-                    <Card max variant="glass" border="partial" padding="16">
-                        <VStack gap="8" align="start" max>
-                            <Text text={t('personalAccount.label')} size="s" bold />
-                            <HStack gap="8" align="center" wrap="wrap">
-                                <Text
-                                    text={balanceData.personalAccountNumber}
-                                    size="l"
-                                    bold
-                                    className={cls.personalAccountNumber}
-                                />
-                            </HStack>
+                <VStack gap="8" align="start" max className={cls.pageHeader}>
+                    <Text title={t('page.title')} />
+                    {showOrganizationsTab && balanceData?.personalAccountNumber && (
+                        <VStack gap="4" align="start">
+                            <Text text={t('personalAccount.label')} size="s" variant="accent" />
+                            <Text
+                                text={balanceData.personalAccountNumber}
+                                size="xl"
+                                bold
+                                className={cls.personalAccountNumber}
+                            />
                         </VStack>
-                    </Card>
-                )}
-                <Card max variant='glass' border='partial' padding='0'>
-                    <TabsPanel
-                        tabItems={tabs}
-                        value={tabIndex}
-                        onChange={handleTabChange}
-                    />
-                </Card>
+                    )}
+                </VStack>
+
+                <TabsPanel
+                    tabItems={tabs}
+                    value={tabIndex}
+                    onChange={handleTabChange}
+                />
             </VStack>
         </Page>
     )

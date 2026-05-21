@@ -21,7 +21,7 @@ import {
     currencySymbols,
 } from '@/entities/User'
 import { OurOrganizationSelect } from '@/entities/OurOrganization'
-import { getTenantCurrencyCode } from '@/shared/lib/domain'
+import { getTenantCurrencyCode, isPaymentOrganizationsTabVisible } from '@/shared/lib/domain'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import { Loader } from '@/shared/ui/Loader'
 import { ErrorGetData } from '@/entities/ErrorGetData'
@@ -104,6 +104,8 @@ export const UserForm = memo((props: UserFormProps) => {
     }, [formFields, setFormFields])
 
     const tenantCurrency = getTenantCurrencyCode()
+    const showPersonalAccount = isPaymentOrganizationsTabVisible()
+    const personalAccountNumber = (formFields.personalAccountNumber || '').trim()
 
     useEffect(() => {
         if (!isEdit && formFields.currency !== tenantCurrency) {
@@ -182,6 +184,19 @@ export const UserForm = memo((props: UserFormProps) => {
                             minRows={1}
                         />
                     </VStack>
+
+                    {isEdit && showPersonalAccount && personalAccountNumber && (
+                        <VStack gap="8" max>
+                            <Text text={t('personalAccount.label')} size="s" bold className={cls.label} />
+                            <Text text={t('personalAccount.hint')} size="xs" variant="accent" />
+                            <Text
+                                text={personalAccountNumber}
+                                size="m"
+                                bold
+                                className={cls.personalAccountNumber}
+                            />
+                        </VStack>
+                    )}
 
                     {!isOwnerCreating && !isSub && (
                         <VStack gap="8" max>
