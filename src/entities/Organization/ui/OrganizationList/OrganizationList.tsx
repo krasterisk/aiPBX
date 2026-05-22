@@ -1,16 +1,25 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Table } from '@/shared/ui/redesigned/Table'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { useGetOrganizationsQuery } from '../../api/organizationApi'
+import {
+    useGetOrganizationsQuery,
+    useSyncEdoInvitationMutation,
+} from '../../api/organizationApi'
 import { Loader } from '@/shared/ui/Loader'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { classNames } from '@/shared/lib/classNames/classNames'
+import { isPaymentOrganizationsTabVisible } from '@/shared/lib/domain'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import RefreshIcon from '@mui/icons-material/Refresh'
 import { Organization } from '../../model/types/organization'
+import {
+    canSyncOrganizationEdoInvitation,
+    getOrganizationEdoStatusLabel,
+} from '../../lib/edoStatusLabel'
 import { OrganizationDocumentsList } from '@/entities/OrganizationDocument'
 import cls from './OrganizationList.module.scss'
 
@@ -31,6 +40,8 @@ function formatOrgTableCell(info: { getValue: () => string | null | undefined })
 export const OrganizationList = memo((props: OrganizationListProps) => {
     const { className, userId, canDeleteDocuments, onEdit, onDelete, onIssueInvoice } = props
     const { t } = useTranslation('payment')
+    const sbisEnabled = isPaymentOrganizationsTabVisible()
+    const [syncEdoInvitation, { isLoading: isSyncingEdo }] = useSyncEdoInvitationMutation()
 
     const { data, isLoading, isError } = useGetOrganizationsQuery(
         userId ? { userId } : {},
@@ -38,6 +49,14 @@ export const OrganizationList = memo((props: OrganizationListProps) => {
     )
 
     const organizations = data?.rows || []
+
+    const handleSyncEdo = useCallback(async (org: Organization) => {
+        try {
+            await syncEdoInvitation({ organizationId: org.id }).unwrap()
+        } catch (e) {
+            console.error(e)
+        }
+    }, [syncEdoInvitation])
 
     const columns = useMemo(() => [
         {
@@ -60,6 +79,29 @@ export const OrganizationList = memo((props: OrganizationListProps) => {
             accessorKey: 'address',
             cell: formatOrgTableCell,
         },
+        ...(sbisEnabled ? [{
+            id: 'edoStatus',
+            header: t('organization.table.edoStatus'),
+            cell: (info: { row: { original: Organization } }) => {
+                const org = info.row.original
+                const showRefresh = canSyncOrganizationEdoInvitation(org)
+                return (
+                    <HStack gap="8" align="center" className={cls.edoStatusCell}>
+                        <Text text={getOrganizationEdoStatusLabel(org, t)} size="s" />
+                        {showRefresh && (
+                            <Button
+                                className={cls.iconBtn}
+                                variant="clear"
+                                title={String(t('organization.edo.refresh'))}
+                                addonLeft={<RefreshIcon fontSize="small" />}
+                                disabled={isSyncingEdo}
+                                onClick={() => { void handleSyncEdo(org) }}
+                            />
+                        )}
+                    </HStack>
+                )
+            },
+        }] : []),
         {
             id: 'actions',
             header: t('organization.table.actions'),
@@ -88,7 +130,7 @@ export const OrganizationList = memo((props: OrganizationListProps) => {
                 </HStack>
             )
         }
-    ], [t, onEdit, onDelete, onIssueInvoice])
+    ], [t, onEdit, onDelete, onIssueInvoice, sbisEnabled, handleSyncEdo, isSyncingEdo])
 
     if (isLoading) {
         return <VStack max align="center"><Loader /></VStack>

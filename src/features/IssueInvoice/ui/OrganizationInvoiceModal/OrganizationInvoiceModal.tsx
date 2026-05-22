@@ -122,6 +122,9 @@ export const OrganizationInvoiceModal = memo((props: OrganizationInvoiceModalPro
     }, [isOpen, isAdmin, selectedOrg, defaultSubjectData?.defaultSubject])
 
     const parsedAmount = parseFloat(amountRub.replace(',', '.'))
+    const edoReady = selectedOrg?.edo?.edoReady === true ||
+        selectedOrg?.edoInvitationStateCode === 7
+    const edoPending = selectedOrg?.edoInvitationStateCode === 2
     const canSubmit = !!selectedOrg &&
         !!effectiveUserId &&
         !Number.isNaN(parsedAmount) &&
@@ -241,8 +244,18 @@ export const OrganizationInvoiceModal = memo((props: OrganizationInvoiceModalPro
                         checked={sendViaEdo}
                         onChange={(e) => { setSendViaEdo(e.target.checked) }}
                         label={String(t('invoice.sendViaEdo'))}
-                        disabled={busy}
+                        disabled={busy || !edoReady}
                     />
+                    {sendViaEdo && !edoReady && (
+                        <Text
+                            text={
+                                edoPending
+                                    ? t('invoice.sendViaEdoPending')
+                                    : t('invoice.sendViaEdoNotReady')
+                            }
+                            size="s"
+                        />
+                    )}
 
                     <HStack gap="8" max justify="end">
                         <Button variant="clear" onClick={handleClose} disabled={busy}>

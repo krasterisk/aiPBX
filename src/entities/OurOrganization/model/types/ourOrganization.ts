@@ -13,6 +13,8 @@ export interface OurOrganization {
     bankBic?: string | null
     bankAccount?: string | null
     bankCorrAccount?: string | null
+    edoParticipantId?: string | null
+    sbisCertThumbprint?: string | null
 }
 
 export interface CreateOurOrganizationDto {
@@ -29,6 +31,8 @@ export interface CreateOurOrganizationDto {
     bankBic?: string | null
     bankAccount?: string | null
     bankCorrAccount?: string | null
+    edoParticipantId?: string | null
+    sbisCertThumbprint?: string | null
 }
 
 export interface UpdateOurOrganizationDto extends CreateOurOrganizationDto {

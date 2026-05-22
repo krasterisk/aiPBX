@@ -30,3 +30,18 @@
     min-height: 40px;
     padding: 10px 12px;
 }
+
+.edoIdRow {
+    align-items: flex-end;
+    flex-wrap: wrap;
+
+    > *:first-child {
+        flex: 1 1 200px;
+        min-width: 0;
+    }
+}
+
+.edoCheckBtn {
+    flex-shrink: 0;
+    white-space: nowrap;
+}

@@ -1,5 +1,9 @@
 import { rtkApi } from '@/shared/api/rtkApi'
-import { Organization, OrganizationListResponse } from '../model/types/organization'
+import {
+    CreateOrganizationResponse,
+    Organization,
+    OrganizationListResponse,
+} from '../model/types/organization'
 import type { CounterpartyLookupResponse } from '../model/types/counterpartyLookup'
 
 export interface CreateOrganizationArgs {
@@ -17,6 +21,8 @@ export interface CreateOrganizationArgs {
     bankBic?: string | null
     bankName?: string | null
     subject?: string | null
+    edoParticipantId?: string | null
+    sendEdoInvitation?: boolean
 }
 
 const organizationApi = rtkApi.injectEndpoints({
@@ -31,7 +37,7 @@ const organizationApi = rtkApi.injectEndpoints({
                 { type: 'Organization', id: arg?.userId ?? 'current' },
             ],
         }),
-        createOrganization: build.mutation<Organization, CreateOrganizationArgs>({
+        createOrganization: build.mutation<CreateOrganizationResponse, CreateOrganizationArgs>({
             query: (args) => {
                 const { ownerUserId, ...body } = args
                 return {
@@ -57,6 +63,44 @@ const organizationApi = rtkApi.injectEndpoints({
             }),
             invalidatesTags: ['Organization']
         }),
+        sendEdoInvitation: build.mutation<
+            { edo: Organization['edo'], invitation?: unknown },
+            { organizationId: string }
+        >({
+            query: ({ organizationId }) => ({
+                url: `/organizations/${organizationId}/edo-invitation`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['Organization'],
+        }),
+        syncEdoInvitation: build.mutation<{ edo: Organization['edo'] }, { organizationId: string }>({
+            query: ({ organizationId }) => ({
+                url: `/organizations/${organizationId}/edo-invitation/sync`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['Organization'],
+        }),
+        checkEdoRoute: build.mutation<
+            { edo: Organization['edo'], source?: 'list' | 'probe' | 'none' },
+            { organizationId: string }
+        >({
+            query: ({ organizationId }) => ({
+                url: `/organizations/${organizationId}/edo-invitation/check-route`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['Organization'],
+        }),
+        syncPendingEdoInvitations: build.mutation<
+            { synced: number, organizations: Organization[] },
+            { userId?: string }
+        >({
+            query: (params) => ({
+                url: '/organizations/edo-invitation/sync-pending',
+                method: 'POST',
+                ...(params?.userId ? { params: { userId: params.userId } } : {}),
+            }),
+            invalidatesTags: ['Organization'],
+        }),
         lookupCounterparty: build.query<CounterpartyLookupResponse, { inn: string, kpp?: string }>({
             query: ({ inn, kpp }) => ({
                 url: '/sbis/counterparty',
@@ -74,4 +118,8 @@ export const {
     useDeleteOrganizationMutation,
     useLookupCounterpartyQuery,
     useLazyLookupCounterpartyQuery,
+    useSendEdoInvitationMutation,
+    useSyncEdoInvitationMutation,
+    useCheckEdoRouteMutation,
+    useSyncPendingEdoInvitationsMutation,
 } = organizationApi

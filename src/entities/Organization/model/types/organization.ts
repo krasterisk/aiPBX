@@ -14,6 +14,19 @@ export interface Organization {
     bankBic?: string | null
     bankName?: string | null
     subject?: string | null
+    edoParticipantId?: string | null
+    edoInvitationId?: string | null
+    edoInvitationStateCode?: number | null
+    edoInvitationStateAt?: string | null
+    edo?: {
+        edoParticipantId: string | null
+        edoOperatorLabel: string | null
+        edoInvitationId: string | null
+        edoInvitationStateCode: number | null
+        edoInvitationStateDescription: string | null
+        edoInvitationStateAt: string | null
+        edoReady: boolean
+    }
     createdAt?: string
     updatedAt?: string
 }
@@ -21,4 +34,15 @@ export interface Organization {
 export interface OrganizationListResponse {
     rows: Organization[]
     count: number
+}
+
+export type OrganizationEdoStatus = Organization['edo']
+
+export type CreateOrganizationEdoResult =
+    | { success: true, edo: OrganizationEdoStatus }
+    | { success: false, error: string }
+
+export interface CreateOrganizationResponse {
+    organization: Organization
+    edo?: CreateOrganizationEdoResult
 }

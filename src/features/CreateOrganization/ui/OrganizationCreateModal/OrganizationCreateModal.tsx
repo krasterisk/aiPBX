@@ -8,12 +8,19 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Combobox } from '@/shared/ui/mui/Combobox'
+import { Check } from '@/shared/ui/mui/Check'
 import {
     useCreateOrganizationMutation,
     useUpdateOrganizationMutation,
+    useCheckEdoRouteMutation,
     useLazyLookupCounterpartyQuery,
     Organization,
- applyCounterpartyToForm, clearLookupPopulatedFields, isValidOrganizationKpp, normalizeOrganizationInn, normalizeOrganizationKpp 
+    getOrganizationEdoStatusLabel,
+    applyCounterpartyToForm,
+    clearLookupPopulatedFields,
+    isValidOrganizationKpp,
+    normalizeOrganizationInn,
+    normalizeOrganizationKpp,
 } from '@/entities/Organization'
 import type { CounterpartyLookupItem, CounterpartyLookupResponse } from '@/entities/Organization'
 
@@ -72,7 +79,12 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
     const [advancedOpen, setAdvancedOpen] = useState(false)
     const [lookupState, setLookupState] = useState<LookupUiState>('idle')
     const [candidates, setCandidates] = useState<CounterpartyLookupItem[]>([])
+    const [edoParticipantId, setEdoParticipantId] = useState('')
+    const [sendEdoInvitation, setSendEdoInvitation] = useState(false)
+    const [edoStatusAfterCheck, setEdoStatusAfterCheck] = useState<Organization['edo'] | null>(null)
     const lookupRequestId = useRef(0)
+
+    const [checkEdoRoute, { isLoading: isCheckingEdoStatus }] = useCheckEdoRouteMutation()
 
     const innDigits = normalizeInn(tin)
     const kppDigits = normalizeKpp(extra.kpp)
@@ -177,6 +189,9 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
                 subject: organization.subject || '',
             })
             setSelectedClientId(normalizeUserId(organization.userId ?? userId))
+            setEdoParticipantId(organization.edoParticipantId || '')
+            setSendEdoInvitation(false)
+            setEdoStatusAfterCheck(null)
             setLookupState('idle')
             setCandidates([])
         } else if (!organization && isOpen) {
@@ -188,6 +203,8 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
             setAdvancedOpen(false)
             setLookupState('idle')
             setCandidates([])
+            setEdoParticipantId('')
+            setSendEdoInvitation(false)
         }
     }, [organization, isOpen, userId])
 
@@ -201,38 +218,115 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
 
     const subjectPlaceholder = defaultSubjectRes?.defaultSubject || ''
 
-    const handleSubmit = useCallback(async () => {
+    const buildSharedOrgPayload = useCallback(() => {
+        const lf = extra.legalForm || (innDigits.length === 12 ? 'ip' : 'ul')
+        return {
+            name,
+            tin,
+            address,
+            legalForm: lf,
+            kpp: sbisEnabled ? (extra.kpp || null) : null,
+            ogrn: sbisEnabled ? (extra.ogrn || null) : null,
+            director: sbisEnabled ? (extra.director || null) : null,
+            email: sbisEnabled ? (extra.email || null) : null,
+            phone: sbisEnabled ? (extra.phone || null) : null,
+            bankAccount: null,
+            bankBic: null,
+            bankName: null,
+            ...(isAdmin && sbisEnabled ? { subject: extra.subject?.trim() || null } : {}),
+        }
+    }, [name, tin, address, extra, innDigits, isAdmin, sbisEnabled])
+
+    const handleCheckEdoStatus = useCallback(async () => {
+        if (!organization || !isAdmin) return
+
+        const edoId = edoParticipantId.trim()
+        if (!edoId) {
+            toast.error(t('organization.form.edoCheckRequiresId'))
+            return
+        }
+
         try {
-            const lf = extra.legalForm || (innDigits.length === 12 ? 'ip' : 'ul')
-            const shared = {
-                name,
-                tin,
-                address,
-                legalForm: lf,
-                kpp: sbisEnabled ? (extra.kpp || null) : null,
-                ogrn: sbisEnabled ? (extra.ogrn || null) : null,
-                director: sbisEnabled ? (extra.director || null) : null,
-                email: sbisEnabled ? (extra.email || null) : null,
-                phone: sbisEnabled ? (extra.phone || null) : null,
-                bankAccount: null,
-                bankBic: null,
-                bankName: null,
-                ...(isAdmin && sbisEnabled ? { subject: extra.subject?.trim() || null } : {}),
+            const savedId = (organization.edoParticipantId || '').trim()
+            if (edoId !== savedId) {
+                await updateOrganization({
+                    id: organization.id,
+                    ...buildSharedOrgPayload(),
+                    edoParticipantId: edoId,
+                }).unwrap()
             }
 
+            const result = await checkEdoRoute({ organizationId: organization.id }).unwrap()
+            setEdoStatusAfterCheck(result.edo ?? null)
+
+            const code = result.edo?.edoInvitationStateCode
+            if (result.edo?.edoReady || code === 7) {
+                toast.success(t('organization.form.edoCheckConnected'))
+            } else if (code === 2) {
+                toast.info(
+                    result.source === 'probe'
+                        ? t('organization.form.edoCheckProbePending')
+                        : t('organization.form.edoCheckPending'),
+                )
+            } else {
+                toast.warning(t('organization.form.edoCheckNotFound'))
+            }
+        } catch (e: unknown) {
+            const apiMessage = (e as { data?: { message?: string | string[] } })?.data?.message
+            const msg = Array.isArray(apiMessage)
+                ? apiMessage.join('; ')
+                : (typeof apiMessage === 'string' ? apiMessage : null)
+            toast.error(msg || t('organization.form.edoCheckFailed'))
+            console.error(e)
+        }
+    }, [
+        organization,
+        isAdmin,
+        edoParticipantId,
+        buildSharedOrgPayload,
+        updateOrganization,
+        checkEdoRoute,
+        t,
+    ])
+
+    const handleSubmit = useCallback(async () => {
+        try {
+            const shared = buildSharedOrgPayload()
+
             if (organization) {
-                await updateOrganization({ id: organization.id, ...shared }).unwrap()
+                await updateOrganization({
+                    id: organization.id,
+                    ...shared,
+                    ...(isAdmin && sbisEnabled && edoParticipantId.trim()
+                        ? { edoParticipantId: edoParticipantId.trim() }
+                        : {}),
+                }).unwrap()
             } else {
                 const ownerId = isAdmin ? normalizeUserId(selectedClientId).trim() : normalizeUserId(userId)
                 if (isAdmin && !ownerId) return
 
-                await createOrganization({
+                const result = await createOrganization({
                     ...shared,
                     ...(isAdmin ? { ownerUserId: Number(ownerId) } : {}),
+                    ...(sbisEnabled && sendEdoInvitation ? {
+                        edoParticipantId: edoParticipantId.trim(),
+                        sendEdoInvitation: true,
+                    } : {}),
                 }).unwrap()
 
                 if (isAdmin && onCreatedForTenant) {
                     onCreatedForTenant(ownerId)
+                }
+
+                if (result.edo?.success === false) {
+                    toast.error(
+                        t('organization.form.edoCreatePartial', { error: result.edo.error }),
+                    )
+                    return
+                }
+
+                if (sendEdoInvitation && result.edo?.success) {
+                    toast.success(t('organization.form.edoInviteSent'))
                 }
             }
 
@@ -244,7 +338,14 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
             setSelectedClientId(normalizeUserId(userId))
             setLookupState('idle')
             setCandidates([])
-        } catch (e) {
+            setEdoParticipantId('')
+            setSendEdoInvitation(false)
+        } catch (e: unknown) {
+            const apiMessage = (e as { data?: { message?: string | string[] } })?.data?.message
+            const msg = Array.isArray(apiMessage)
+                ? apiMessage.join('; ')
+                : (typeof apiMessage === 'string' ? apiMessage : null)
+            if (msg) toast.error(msg)
             console.error(e)
         }
     }, [
@@ -262,13 +363,28 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
         selectedClientId,
         onCreatedForTenant,
         sbisEnabled,
+        edoParticipantId,
+        sendEdoInvitation,
+        buildSharedOrgPayload,
     ])
 
-    const isLoading = isCreating || isUpdating
+    const isLoading = isCreating || isUpdating || isCheckingEdoStatus
+    const adminEditEdoOrg: Organization | null = organization
+        ? {
+            ...organization,
+            edoParticipantId: edoParticipantId.trim() || organization.edoParticipantId,
+            edoInvitationStateCode:
+                edoStatusAfterCheck?.edoInvitationStateCode ?? organization.edoInvitationStateCode,
+            edoInvitationId: edoStatusAfterCheck?.edoInvitationId ?? organization.edoInvitationId,
+            edo: edoStatusAfterCheck ?? organization.edo,
+        }
+        : null
     const selectedLegal = legalOptions.find((o) => o.value === (extra.legalForm || 'ul')) || legalOptions[0]
     const canSubmitCreateAsAdmin = !isAdmin || !!normalizeUserId(selectedClientId).trim()
     const hasValidKpp = !sbisEnabled || !isLegalEntityInn || isValidOrganizationKpp(kppDigits, innDigits)
-    const canSubmit = !!name.trim() && !!innDigits && !!address.trim() && canSubmitCreateAsAdmin && hasValidKpp
+    const edoIdRequired = sbisEnabled && !organization && sendEdoInvitation
+    const canSubmit = !!name.trim() && !!innDigits && !!address.trim() && canSubmitCreateAsAdmin && hasValidKpp &&
+        (!edoIdRequired || !!edoParticipantId.trim())
 
     return (
         <Modal
@@ -480,6 +596,73 @@ export const OrganizationCreateModal = memo((props: OrganizationCreateModalProps
 
                 {sbisEnabled && !hasValidKpp && isLegalEntityInn && (
                     <Text text={t('organization.form.kppRequired')} size="s" className={cls.lookupHintWarn} />
+                )}
+
+                {sbisEnabled && isAdmin && organization && (
+                    <VStack gap="8" max>
+                        <Text text={t('organization.form.edoSection')} size="s" bold />
+                        <HStack gap="8" max align="end" className={cls.edoIdRow}>
+                            <Textarea
+                                label={String(t('organization.form.edoParticipantId'))}
+                                value={edoParticipantId}
+                                onChange={(e) => { setEdoParticipantId(e.target.value) }}
+                                disabled={isLoading}
+                                minRows={1}
+                            />
+                            <Button
+                                className={cls.edoCheckBtn}
+                                variant="outline"
+                                onClick={() => { void handleCheckEdoStatus() }}
+                                disabled={isLoading || !edoParticipantId.trim()}
+                            >
+                                {t('organization.form.edoCheckStatus')}
+                            </Button>
+                        </HStack>
+                        <Text
+                            text={t('organization.form.edoCheckHint')}
+                            size="xs"
+                            className={cls.lookupHint}
+                        />
+                        {adminEditEdoOrg && (
+                            <Text
+                                text={`${t('organization.table.edoStatus')}: ${getOrganizationEdoStatusLabel(adminEditEdoOrg, t)}`}
+                                size="s"
+                            />
+                        )}
+                    </VStack>
+                )}
+
+                {sbisEnabled && !organization && (
+                    <VStack gap="8" max>
+                        <Text text={t('organization.form.edoSection')} size="s" bold />
+                        <Check
+                            checked={sendEdoInvitation}
+                            onChange={(e) => {
+                                const checked = e.target.checked
+                                setSendEdoInvitation(checked)
+                                if (!checked) setEdoParticipantId('')
+                            }}
+                            label={String(t('organization.form.connectEdo'))}
+                            disabled={isLoading}
+                        />
+                        {sendEdoInvitation && (
+                            <>
+                                <Textarea
+                                    label={`${t('organization.form.edoParticipantId')} *`}
+                                    value={edoParticipantId}
+                                    onChange={(e) => { setEdoParticipantId(e.target.value) }}
+                                    disabled={isLoading}
+                                    minRows={1}
+                                />
+                                <Text
+                                    text={t('organization.form.edoParticipantIdHint')}
+                                    size="xs"
+                                    className={cls.lookupHint}
+                                />
+                            </>
+                        )}
+                        <Text text={t('organization.form.connectEdoHint')} size="xs" className={cls.lookupHint} />
+                    </VStack>
                 )}
 
                 <HStack gap="8" max justify="end">

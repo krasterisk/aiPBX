@@ -29,6 +29,7 @@ export function applyCounterpartyToForm<T extends LookupPopulatedExtra>(
     setName: (v: string) => void,
     setAddress: (v: string) => void,
     setExtra: (updater: (s: T) => T) => void,
+    setEdoParticipantId?: (v: string) => void,
 ): void {
     setName(data.name || '')
     setAddress(data.address || '')
@@ -42,4 +43,7 @@ export function applyCounterpartyToForm<T extends LookupPopulatedExtra>(
         legalForm: data.legalForm || defaultLegalForm,
         director: data.director || '',
     }))
+    if (setEdoParticipantId && data.sbisCounterpartyId) {
+        setEdoParticipantId(data.sbisCounterpartyId)
+    }
 }

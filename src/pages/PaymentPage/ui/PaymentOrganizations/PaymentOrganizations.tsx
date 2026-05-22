@@ -1,6 +1,6 @@
 import cls from './PaymentOrganizations.module.scss'
 
-import { memo, useState, useCallback, useEffect } from 'react'
+import { memo, useState, useCallback, useEffect, useRef } from 'react'
 
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 
@@ -14,7 +14,17 @@ import { useSelector } from 'react-redux'
 
 import { Plus } from 'lucide-react'
 
-import { OrganizationList, Organization, useDeleteOrganizationMutation } from '@/entities/Organization'
+import {
+    OrganizationList,
+    Organization,
+    useDeleteOrganizationMutation,
+    useGetOrganizationsQuery,
+    useSyncPendingEdoInvitationsMutation,
+
+    getOrganizationEdoStateCode,
+    getOrganizationEdoInvitationId,
+} from '@/entities/Organization'
+import { isPaymentOrganizationsTabVisible } from '@/shared/lib/domain'
 
 import { OrganizationCreateModal } from '@/features/CreateOrganization'
 
@@ -56,6 +66,30 @@ export const PaymentOrganizations = memo((props: PaymentOrganizationsProps) => {
     const [invoiceOrgId, setInvoiceOrgId] = useState<string | undefined>(undefined)
 
     const [deleteOrganization] = useDeleteOrganizationMutation()
+    const sbisEnabled = isPaymentOrganizationsTabVisible()
+    const { data: organizationsData } = useGetOrganizationsQuery(
+        listUserId ? { userId: listUserId } : {},
+        { skip: !sbisEnabled },
+    )
+    const [syncPendingEdoInvitations] = useSyncPendingEdoInvitationsMutation()
+    const syncedPendingForUserRef = useRef<string | null>(null)
+
+    useEffect(() => {
+        if (!sbisEnabled || !listUserId || !organizationsData) return
+        if (syncedPendingForUserRef.current === listUserId) return
+
+        const hasPending = organizationsData.rows.some((org) => {
+            const code = getOrganizationEdoStateCode(org)
+            return code === 2 && !!getOrganizationEdoInvitationId(org)
+        })
+        if (!hasPending) return
+
+        syncedPendingForUserRef.current = listUserId
+        void syncPendingEdoInvitations({ userId: listUserId }).unwrap().catch((e) => {
+            syncedPendingForUserRef.current = null
+            console.error(e)
+        })
+    }, [sbisEnabled, listUserId, organizationsData, syncPendingEdoInvitations])
 
     const handleCreate = useCallback(() => {
         setOrganizationToEdit(undefined)

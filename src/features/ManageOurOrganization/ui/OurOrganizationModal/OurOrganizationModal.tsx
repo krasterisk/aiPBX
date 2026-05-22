@@ -65,6 +65,9 @@ export const OurOrganizationModal = memo((props: OurOrganizationModalProps) => {
     const [extra, setExtra] = useState(emptyFields)
     const [lookupState, setLookupState] = useState<LookupUiState>('idle')
     const [candidates, setCandidates] = useState<CounterpartyLookupItem[]>([])
+    const [edoParticipantId, setEdoParticipantId] = useState('')
+    const [sbisCertThumbprint, setSbisCertThumbprint] = useState('')
+    const [edoOperatorLabel, setEdoOperatorLabel] = useState('')
     const lookupRequestId = useRef(0)
 
     const innDigits = normalizeOrganizationInn(tin)
@@ -85,7 +88,8 @@ export const OurOrganizationModal = memo((props: OurOrganizationModalProps) => {
         if (requestId !== lookupRequestId.current) return
 
         if (response.status === 'single') {
-            applyCounterpartyToForm(response.data, setName, setAddress, setExtra)
+            applyCounterpartyToForm(response.data, setName, setAddress, setExtra, setEdoParticipantId)
+            setEdoOperatorLabel(response.data.edoOperatorLabel || '')
             setCandidates([])
             setLookupState('ok')
             toast.success(t('ourOrg.form.lookupSuccess'))
@@ -145,7 +149,8 @@ export const OurOrganizationModal = memo((props: OurOrganizationModalProps) => {
     }, 500)
 
     const handleSelectCandidate = useCallback(async (candidate: CounterpartyLookupItem) => {
-        applyCounterpartyToForm(candidate, setName, setAddress, setExtra)
+        applyCounterpartyToForm(candidate, setName, setAddress, setExtra, setEdoParticipantId)
+        setEdoOperatorLabel(candidate.edoOperatorLabel || '')
         setCandidates([])
         setLookupState('loading')
         if (candidate.kpp) {
@@ -172,6 +177,9 @@ export const OurOrganizationModal = memo((props: OurOrganizationModalProps) => {
                 bankAccount: organization.bankAccount || '',
                 bankCorrAccount: organization.bankCorrAccount || '',
             })
+            setEdoParticipantId(organization.edoParticipantId || '')
+            setSbisCertThumbprint(organization.sbisCertThumbprint || '')
+            setEdoOperatorLabel('')
             setLookupState('idle')
             setCandidates([])
         } else if (!organization && isOpen) {
@@ -179,6 +187,9 @@ export const OurOrganizationModal = memo((props: OurOrganizationModalProps) => {
             setTin('')
             setAddress('')
             setExtra({ ...emptyFields })
+            setEdoParticipantId('')
+            setSbisCertThumbprint('')
+            setEdoOperatorLabel('')
             setLookupState('idle')
             setCandidates([])
         }
@@ -207,6 +218,8 @@ export const OurOrganizationModal = memo((props: OurOrganizationModalProps) => {
             bankBic: extra.bankBic.replace(/\D/g, '') || null,
             bankAccount: extra.bankAccount.replace(/\D/g, '') || null,
             bankCorrAccount: extra.bankCorrAccount.replace(/\D/g, '') || null,
+            edoParticipantId: edoParticipantId.trim() || null,
+            sbisCertThumbprint: sbisCertThumbprint.trim() || null,
         }
         try {
             if (organization) {
@@ -218,7 +231,7 @@ export const OurOrganizationModal = memo((props: OurOrganizationModalProps) => {
         } catch (e) {
             console.error(e)
         }
-    }, [createOrg, updateOrg, organization, name, innDigits, address, extra, onClose])
+    }, [createOrg, updateOrg, organization, name, innDigits, address, extra, edoParticipantId, sbisCertThumbprint, onClose])
 
     const isLoading = isCreating || isUpdating
     const selectedLegal = legalOptions.find((o) => o.value === extra.legalForm) || legalOptions[0]
@@ -421,6 +434,30 @@ export const OurOrganizationModal = memo((props: OurOrganizationModalProps) => {
                     onChange={(e) => { setExtra((s) => ({ ...s, bankCorrAccount: e.target.value })) }}
                     disabled={isLoading}
                 />
+
+                {sbisEnabled && (
+                    <>
+                        <Text text={t('ourOrg.form.edoSection')} size="s" bold />
+                        <Textarea
+                            label={t('ourOrg.form.edoParticipantId')}
+                            value={edoParticipantId}
+                            onChange={(e) => { setEdoParticipantId(e.target.value) }}
+                            disabled={isLoading}
+                            minRows={1}
+                        />
+                        {edoOperatorLabel && (
+                            <Text text={edoOperatorLabel} size="s" className={cls.lookupHint} />
+                        )}
+                        <Textarea
+                            label={t('ourOrg.form.sbisCertThumbprint')}
+                            value={sbisCertThumbprint}
+                            onChange={(e) => { setSbisCertThumbprint(e.target.value) }}
+                            disabled={isLoading}
+                            minRows={1}
+                        />
+                        <Text text={t('ourOrg.form.sbisCertThumbprintHint')} size="xs" className={cls.lookupHint} />
+                    </>
+                )}
 
                 <Check
                     checked={extra.isPrimary}
