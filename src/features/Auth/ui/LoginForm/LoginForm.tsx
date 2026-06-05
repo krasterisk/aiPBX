@@ -1,8 +1,6 @@
 import cls from './LoginForm.module.scss'
 import { useTranslation } from 'react-i18next'
 import React, { memo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { getRouteLegalPublicOffer, getRouteLegalPersonalData } from '@/shared/const/router'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Loader } from '@/shared/ui/Loader'
@@ -12,6 +10,8 @@ import { Divider } from '@/shared/ui/Divider'
 import GoogleIcon from '@/shared/assets/icons/googleIcon.svg'
 import TelegramIcon from '@mui/icons-material/Telegram'
 import { useLoginData } from '../../lib/hooks/useLoginData'
+import { isLoginConsentRequired } from '../../lib/getAuthLegalConsentLinks'
+import { AuthLegalConsentRow } from '../AuthLegalConsentRow/AuthLegalConsentRow'
 
 interface LoginFormProps {
   className?: string
@@ -64,6 +64,8 @@ export const LoginForm = memo((props: LoginFormProps) => {
   }
 
   const isLoading = isLoginLoading || isGoogleLoading || isTelegramLoading || isLoginActivateLoading
+  const requiresConsent = isLoginConsentRequired()
+  const consentAccepted = requiresConsent ? agreeTerms : true
 
   return (
     <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className={className}>
@@ -152,40 +154,19 @@ export const LoginForm = memo((props: LoginFormProps) => {
           )
 : (
             <>
-              <HStack gap="8" align="start" className={cls.agreeRow}>
-                <input
-                  type="checkbox"
+              {requiresConsent && (
+                <AuthLegalConsentRow
                   id="agree-terms-login"
                   checked={agreeTerms}
-                  onChange={(e) => { setAgreeTerms(e.target.checked) }}
-                  className={cls.checkbox}
+                  onChange={setAgreeTerms}
+                  introTextKey="Входя в систему, я принимаю условия"
                 />
-                <label htmlFor="agree-terms-login" className={cls.agreeLabel}>
-                  {t('Входя в систему, я принимаю условия')}{' '}
-                  <Link
-                    to={getRouteLegalPublicOffer()}
-                    target="_blank"
-                    className={cls.legalLink}
-                    onClick={(e) => { e.stopPropagation() }}
-                  >
-                    {t('Публичной оферты')}
-                  </Link>{' '}
-                  {t('и')}{' '}
-                  <Link
-                    to={getRouteLegalPersonalData()}
-                    target="_blank"
-                    className={cls.legalLink}
-                    onClick={(e) => { e.stopPropagation() }}
-                  >
-                    {t('Политики обработки персональных данных')}
-                  </Link>
-                </label>
-              </HStack>
+              )}
               <Button
                 variant="glass-action"
                 fullWidth
                 onClick={onLoginClick}
-                disabled={isLoading || !email || !agreeTerms}
+                disabled={isLoading || !email || !consentAccepted}
                 className={cls.submitBtn}
               >
                 {t('Вход')}
@@ -201,7 +182,7 @@ export const LoginForm = memo((props: LoginFormProps) => {
             variant="filled"
             fullWidth
             onClick={onGoogleLoginClick}
-            disabled={isLoading || !agreeTerms}
+            disabled={isLoading || !consentAccepted}
             addonLeft={<GoogleIcon className={cls.socialIcon} />}
             className={cls.socialBtn}
           >
@@ -211,7 +192,7 @@ export const LoginForm = memo((props: LoginFormProps) => {
             variant="filled"
             fullWidth
             onClick={onTelegramLoginClick}
-            disabled={isLoading || !agreeTerms}
+            disabled={isLoading || !consentAccepted}
             addonLeft={<TelegramIcon className={cls.socialIcon} />}
             className={cls.socialBtn}
           >

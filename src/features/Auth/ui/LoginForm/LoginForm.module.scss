@@ -49,32 +49,6 @@
     }
 }
 
-.agreeRow {
-    align-items: flex-start;
-}
-
-.checkbox {
-    margin-top: 4px;
-    flex-shrink: 0;
-    accent-color: var(--accent-redesigned);
-}
-
-.agreeLabel {
-    font-size: 0.85rem;
-    line-height: 1.4;
-    color: var(--text-redesigned);
-    cursor: pointer;
-}
-
-.legalLink {
-    color: var(--accent-redesigned);
-    text-decoration: underline;
-
-    &:hover {
-        opacity: 0.85;
-    }
-}
-
 // Адаптивность
 @media (max-width: 768px) {
 

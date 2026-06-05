@@ -11,8 +11,7 @@ import { Divider } from '@/shared/ui/Divider'
 import GoogleIcon from '@/shared/assets/icons/googleIcon.svg'
 import TelegramIcon from '@mui/icons-material/Telegram'
 import { useSignupData } from '../../lib/hooks/useSignupData'
-import { getRouteLegalPublicOffer, getRouteLegalPersonalData } from '@/shared/const/router'
-import { Link } from 'react-router-dom'
+import { AuthLegalConsentRow } from '../AuthLegalConsentRow/AuthLegalConsentRow'
 
 interface SignupFormProps {
     className?: string
@@ -153,35 +152,12 @@ export const SignupForm = memo((props: SignupFormProps) => {
                     )
 : (
                         <>
-                            <HStack gap="8" align="start" className={cls.agreeRow}>
-                                <input
-                                    type="checkbox"
-                                    id="agree-terms"
-                                    checked={agreeTerms}
-                                    onChange={(e) => { setAgreeTerms(e.target.checked) }}
-                                    className={cls.checkbox}
-                                />
-                                <label htmlFor="agree-terms" className={cls.agreeLabel}>
-                                    {t('Регистрируясь, я принимаю условия')}{' '}
-                                    <Link
-                                        to={getRouteLegalPublicOffer()}
-                                        target="_blank"
-                                        className={cls.legalLink}
-                                        onClick={(e) => { e.stopPropagation() }}
-                                    >
-                                        {t('Публичной оферты')}
-                                    </Link>{' '}
-                                    {t('и')}{' '}
-                                    <Link
-                                        to={getRouteLegalPersonalData()}
-                                        target="_blank"
-                                        className={cls.legalLink}
-                                        onClick={(e) => { e.stopPropagation() }}
-                                    >
-                                        {t('Политики обработки персональных данных')}
-                                    </Link>
-                                </label>
-                            </HStack>
+                            <AuthLegalConsentRow
+                                id="agree-terms"
+                                checked={agreeTerms}
+                                onChange={setAgreeTerms}
+                                introTextKey="Регистрируясь, я принимаю условия"
+                            />
                             <Button
                                 variant="glass-action"
                                 fullWidth

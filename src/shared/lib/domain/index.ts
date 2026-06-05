@@ -5,6 +5,7 @@ export {
     getStaticUrl,
     getDomainOrigin,
     isPaymentOrganizationsTabVisible,
+    isRuDomain,
     getTenantCurrencyCode,
 } from './getDomainConfig'
 

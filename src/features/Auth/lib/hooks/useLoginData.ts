@@ -20,6 +20,7 @@ import {
 } from '../../model/selectors/login/getLoginActivationCode/getLoginActivationCode'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { buildLegalAcceptanceItems } from '@/shared/lib/legal/versions'
+import { isLoginConsentRequired } from '../getAuthLegalConsentLinks'
 
 export function useLoginData () {
   const { t } = useTranslation('login')
@@ -42,7 +43,7 @@ export function useLoginData () {
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const legalAcceptance = buildLegalAcceptanceItems()
+  const legalAcceptance = isLoginConsentRequired() ? buildLegalAcceptanceItems() : undefined
 
   useEffect(() => {
     if (resendTimer > 0) {

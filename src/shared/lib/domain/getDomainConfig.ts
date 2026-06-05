@@ -71,6 +71,19 @@ export function isPaymentOrganizationsTabVisible (): boolean {
 }
 
 /**
+ * Whether the current host is the Russian legal/billing domain (`aipbx.ru`).
+ * In dev, localhost is treated as RU for exercising RU-only UI (consent, legal links).
+ */
+export function isRuDomain (): boolean {
+    if (typeof window === 'undefined') return false
+    if (getDomainConfig().region === 'ru') return true
+    if (typeof __IS_DEV__ !== 'undefined' && __IS_DEV__ && LOCAL_DEV_HOSTNAMES.has(window.location.hostname)) {
+        return true
+    }
+    return false
+}
+
+/**
  * Returns domain-specific configuration based on the current hostname.
  * Works with both exact matches and subdomain fallback
  * (e.g. `app.aipbx.net` → `aipbx.net`).
