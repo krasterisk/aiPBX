@@ -126,9 +126,9 @@ export const SignupForm = memo((props: SignupFormProps) => {
                                 required
                             />
                             <Button
+                                type="submit"
                                 variant="glass-action"
                                 fullWidth
-                                onClick={onSignupActivateClick}
                                 disabled={isLoading}
                                 className={cls.submitBtn}
                             >
@@ -159,9 +159,9 @@ export const SignupForm = memo((props: SignupFormProps) => {
                                 introTextKey="Регистрируясь, я принимаю условия"
                             />
                             <Button
+                                type="submit"
                                 variant="glass-action"
                                 fullWidth
-                                onClick={onSignupClick}
                                 disabled={isLoading || !email || !agreeTerms}
                                 className={cls.submitBtn}
                             >

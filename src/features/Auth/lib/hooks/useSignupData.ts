@@ -8,7 +8,7 @@ import {
   useTelegramSignupUser, useActivateUser
 } from '@/entities/User'
 import { getRouteAssistants, getRouteLogin } from '@/shared/const/router'
-import { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useNavigate } from 'react-router-dom'
@@ -32,6 +32,7 @@ export function useSignupData () {
   const [userSignup, { isLoading: isSignupLoading }] = useSignupUser()
   const [googleSignup, { isLoading: isGoogleLoading }] = useGoogleSignupUser()
   const [resendTimer, setResendTimer] = useState<number>(0)
+  const signupInFlightRef = useRef(false)
   const [telegramSignup, { isLoading: isTelegramLoading }] = useTelegramSignupUser()
   const [signupActivateUser,
     {
@@ -86,11 +87,17 @@ export function useSignupData () {
   const onTelegramSignupClick = useTelegramLogin(handleTelegramSignupSuccess)
 
   const onSignupClick = useCallback(() => {
+    if (signupInFlightRef.current || isSignupLoading) {
+      return
+    }
+
     setSignupError(null)
     if (!email) {
       setSignupError(t('Введите email'))
       return
     }
+
+    signupInFlightRef.current = true
 
     userSignup({ email, legalAcceptance })
       .unwrap()
@@ -103,7 +110,10 @@ export function useSignupData () {
       .catch((e) => {
         setSignupError(t(getErrorMessage(e)))
       })
-  }, [dispatch, email, userSignup])
+      .finally(() => {
+        signupInFlightRef.current = false
+      })
+  }, [dispatch, email, isSignupLoading, legalAcceptance, t, userSignup])
 
   const onChangeActivationCode = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = event.target.value

@@ -1,4 +1,4 @@
-import { memo, ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { memo, ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { classNames } from '@/shared/lib/classNames/classNames'
@@ -19,6 +19,7 @@ import {
     UserAddAvatar,
     RoleSelect,
     currencySymbols,
+    usersApi,
 } from '@/entities/User'
 import { OurOrganizationSelect } from '@/entities/OurOrganization'
 import { getTenantCurrencyCode, isPaymentOrganizationsTabVisible } from '@/shared/lib/domain'
@@ -55,23 +56,44 @@ export const UserForm = memo((props: UserFormProps) => {
         skip: !isEdit || !userId
     })
 
+    const selectUsersList = useMemo(() => usersApi.endpoints.getUsers.select({}), [])
+    const selectSubUsersList = useMemo(() => usersApi.endpoints.getSubUsers.select(), [])
+    const usersListCache = useSelector(selectUsersList)
+    const subUsersCache = useSelector(selectSubUsersList)
+
+    const cachedUser = useMemo(() => {
+        if (!userId) return undefined
+
+        const fromAdminList = usersListCache?.data?.rows?.find(
+            (user) => String(user.id) === String(userId)
+        )
+        if (fromAdminList) return fromAdminList
+
+        return subUsersCache?.data?.find(
+            (user) => String(user.id) === String(userId)
+        )
+    }, [userId, usersListCache, subUsersCache])
+
+    const effectiveUserData = userData ?? cachedUser
+    const showLoadError = isError && !cachedUser
+
     const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false)
 
     useEffect(() => {
-        if (isEdit && userData) {
+        if (isEdit && effectiveUserData) {
             if (isAdmin) {
                 setFormFields({
-                    ...userData,
+                    ...effectiveUserData,
                     balance:
-                        userData.balance != null && !Number.isNaN(Number(userData.balance))
-                            ? Number(userData.balance)
+                        effectiveUserData.balance != null && !Number.isNaN(Number(effectiveUserData.balance))
+                            ? Number(effectiveUserData.balance)
                             : 0,
                 })
             } else {
-                setFormFields(userData)
+                setFormFields(effectiveUserData)
             }
         }
-    }, [isEdit, userData, setFormFields, isAdmin])
+    }, [isEdit, effectiveUserData, setFormFields, isAdmin])
 
     useEffect(() => {
         if (!isEdit && !isAdmin && clientData) {
@@ -117,7 +139,7 @@ export const UserForm = memo((props: UserFormProps) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isEdit, tenantCurrency])
 
-    if (isLoading) {
+    if (isLoading && !cachedUser) {
         return (
             <VStack max align="center" justify="center" className={cls.loader}>
                 <Loader />
@@ -125,7 +147,7 @@ export const UserForm = memo((props: UserFormProps) => {
         )
     }
 
-    if (isError) {
+    if (showLoadError) {
         return <ErrorGetData />
     }
 

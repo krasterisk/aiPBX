@@ -10,6 +10,8 @@ import {
     reportDisplayMoneyInput,
     useGetReportDialogs,
     useCreateCallAnalytics,
+    useRegenerateOperatorAnalytics,
+    isOperatorAnalyticsSource,
 } from '@/entities/Report'
 
 import { formatTime } from '@/shared/lib/functions/formatTime'
@@ -45,7 +47,11 @@ const CallsTableRow = memo(({ report }: CallsTableRowProps) => {
             refetchOnReconnect: false
         })
 
-    const [createCallAnalytics, { isLoading: isAnalyticsLoading }] = useCreateCallAnalytics()
+    const [createCallAnalytics, { isLoading: isCreateAnalyticsLoading }] = useCreateCallAnalytics()
+    const [regenerateOperatorAnalytics, { isLoading: isRegenerateLoading }] = useRegenerateOperatorAnalytics()
+
+    const isOperatorRecord = isOperatorAnalyticsSource(report.source)
+    const isAnalyticsLoading = isOperatorRecord ? isRegenerateLoading : isCreateAnalyticsLoading
 
     const onToggle = useCallback((e: React.MouseEvent) => {
         e.stopPropagation()
@@ -56,6 +62,11 @@ const CallsTableRow = memo(({ report }: CallsTableRowProps) => {
         e.stopPropagation()
         try { await createCallAnalytics(report.channelId).unwrap() } catch (err) { console.error(err) }
     }, [createCallAnalytics, report.channelId])
+
+    const onRegenerateAnalytics = useCallback(async (e: React.MouseEvent) => {
+        e.stopPropagation()
+        try { await regenerateOperatorAnalytics(report.channelId).unwrap() } catch (err) { console.error(err) }
+    }, [regenerateOperatorAnalytics, report.channelId])
 
     const formattedDate = report.createdAt
         ? new Intl.DateTimeFormat(undefined, {
@@ -178,7 +189,8 @@ hour12: false
                             isDialogLoading={isDialogLoading}
                             isDialogError={isDialogError}
                             mediaUrl={report.recordUrl}
-                            onGetAnalytics={onGetAnalytics}
+                            onGetAnalytics={isOperatorRecord ? undefined : onGetAnalytics}
+                            onRegenerateAnalytics={isOperatorRecord ? onRegenerateAnalytics : undefined}
                             isAnalyticsLoading={isAnalyticsLoading}
                         />
                     </td>

@@ -1,12 +1,14 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ReportExpandedPanel.module.scss'
 import React, { memo, useState, useCallback } from 'react'
-import { VStack } from '@/shared/ui/redesigned/Stack'
+import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
+import { Button } from '@/shared/ui/redesigned/Button'
 import { Report, ReportDialog } from '../../model/types/report'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { getUserAuthData, UserCurrencyValues } from '@/entities/User'
+import { getUserAuthData, isUserAdmin, UserCurrencyValues } from '@/entities/User'
+import { useDeleteReport } from '../../api/reportApi'
 import { ReportShowDialog } from '../ReportShowDialog/ReportShowDialog'
 import { ReportShowAnalytics } from '../ReportShowAnalytics/ReportShowAnalytics'
 import { BillingBreakdown } from '../BillingBreakdown/BillingBreakdown'
@@ -15,7 +17,9 @@ import {
     MessageSquareText,
     Receipt,
     BarChart3,
-    Sparkles
+    Sparkles,
+    RefreshCw,
+    Trash2
 } from 'lucide-react'
 
 type TabType = 'dialog' | 'billing' | 'analytics'
@@ -27,7 +31,8 @@ interface ReportExpandedPanelProps {
     isDialogLoading: boolean
     isDialogError: boolean
     mediaUrl?: string
-    onGetAnalytics: (e: React.MouseEvent) => void
+    onGetAnalytics?: (e: React.MouseEvent) => void
+    onRegenerateAnalytics?: (e: React.MouseEvent) => void
     isAnalyticsLoading: boolean
 }
 
@@ -40,18 +45,31 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
         isDialogError,
         mediaUrl,
         onGetAnalytics,
+        onRegenerateAnalytics,
         isAnalyticsLoading
     } = props
 
     const { t } = useTranslation('reports')
     const authData = useSelector(getUserAuthData)
+    const isAdmin = useSelector(isUserAdmin)
     const userCurrency = UserCurrencyValues.USD || authData?.currency
 
+    const [deleteReport, { isLoading: isDeleteLoading }] = useDeleteReport()
     const [activeTab, setActiveTab] = useState<TabType>('analytics')
 
     const onTabChange = useCallback((tab: TabType) => {
         setActiveTab(tab)
     }, [])
+
+    const onDeleteReport = useCallback(async (e: React.MouseEvent) => {
+        e.stopPropagation()
+        if (!window.confirm(String(t('Вы уверены, что хотите удалить запись?')))) return
+        try {
+            await deleteReport(report.id).unwrap()
+        } catch (err) {
+            console.error(err)
+        }
+    }, [deleteReport, report.id, t])
 
     const tabs: Array<{ key: TabType, label: string, icon: React.ElementType, badge?: string }> = [
         {
@@ -79,8 +97,39 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
 
     const renderAnalyticsContent = () => {
         if (report.analytics) {
-            return <ReportShowAnalytics analytics={report.analytics} />
+            return (
+                <VStack gap="16" max>
+                    {onRegenerateAnalytics && (
+                        <HStack justify="end" max>
+                            <Button
+                                variant="glass-action"
+                                size="m"
+                                onClick={onRegenerateAnalytics}
+                                disabled={isAnalyticsLoading}
+                                id="regenerate-analytics-button"
+                                addonLeft={isAnalyticsLoading
+                                    ? <Loader className={cls.btnLoader} />
+                                    : <RefreshCw size={16} />
+                                }
+                            >
+                                {String(t('Переформировать аналитику'))}
+                            </Button>
+                        </HStack>
+                    )}
+                    <ReportShowAnalytics analytics={report.analytics} />
+                </VStack>
+            )
         }
+
+        if (!onGetAnalytics && !onRegenerateAnalytics) {
+            return (
+                <VStack max align="center" justify="center" className={cls.emptyState}>
+                    <Text text={String(t('Нет данных аналитики'))} />
+                </VStack>
+            )
+        }
+
+        const onEmptyAction = onGetAnalytics || onRegenerateAnalytics
 
         return (
             <VStack
@@ -89,22 +138,19 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
                 justify="center"
                 className={cls.emptyState}
             >
-                <VStack
-                    align="center"
-                    gap="16"
-                    className={cls.emptyAction}
-                    onClick={isAnalyticsLoading ? undefined : onGetAnalytics}
+                <Button
+                    variant="glass-action"
+                    size="m"
+                    onClick={onEmptyAction}
+                    disabled={isAnalyticsLoading}
                     id="get-analytics-button"
-                >
-                    {isAnalyticsLoading
+                    addonLeft={isAnalyticsLoading
                         ? <Loader className={cls.btnLoader} />
-                        : <Sparkles size={48} className={cls.emptyIcon} />
+                        : <Sparkles size={16} />
                     }
-                    <Text
-                        text={t('Получить аналитику')}
-                        size="m"
-                    />
-                </VStack>
+                >
+                    {String(t('Получить аналитику'))}
+                </Button>
             </VStack>
         )
     }
@@ -115,6 +161,25 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
             max
             className={classNames(cls.ReportExpandedPanel, {}, [className])}
         >
+            {isAdmin && (
+                <HStack justify="end" max className={cls.actionsBar}>
+                    <Button
+                        variant="glass-action"
+                        color="error"
+                        size="m"
+                        onClick={onDeleteReport}
+                        disabled={isDeleteLoading}
+                        id="delete-report-button"
+                        addonLeft={isDeleteLoading
+                            ? <Loader className={cls.btnLoader} />
+                            : <Trash2 size={16} />
+                        }
+                    >
+                        {String(t('Удалить запись'))}
+                    </Button>
+                </HStack>
+            )}
+
             {/* Tab Bar */}
             <div className={cls.tabBar} role="tablist">
                 {tabs.map((tab) => {

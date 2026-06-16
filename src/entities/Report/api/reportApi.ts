@@ -129,15 +129,17 @@ export const reportApi = rtkApi.injectEndpoints({
       },
       invalidatesTags: (result, error, { id }) => [{ type: 'Reports', id }]
     }),
-    deleteReport: build.mutation<{ success: boolean, id: string }, string>({
+    deleteReport: build.mutation<{ success: boolean, id: string, refundedUsd?: number }, string>({
       query(id) {
         return {
           url: `/reports/${id}`,
           method: 'DELETE'
         }
       },
-      // Invalidates all queries that subscribe to this Post `id` only.
-      invalidatesTags: (result, error, id) => [{ type: 'Reports', id }]
+      invalidatesTags: (result, error, id) => [
+        { type: 'Reports', id },
+        { type: 'Reports', id: 'LIST' }
+      ]
     }),
     getAIAnalyticsDashboard: build.query<AIAnalyticsResponse, AIAnalyticsDashboardArgs>({
       query: (args) => {
@@ -162,6 +164,17 @@ export const reportApi = rtkApi.injectEndpoints({
       invalidatesTags: (result, error, arg) => [
         { type: 'Reports', id: 'LIST' },
         ...((result && 'channelId' in result) ? [{ type: 'Reports' as const, channelId: result.channelId }] : [])
+      ]
+    }),
+    regenerateOperatorAnalytics: build.mutation<Report, string>({
+      query: (channelId) => ({
+        url: `/operator-analytics/regenerate/${channelId}`,
+        method: 'POST'
+      }),
+      invalidatesTags: (result, error, channelId) => [
+        { type: 'Reports', id: 'LIST' },
+        { type: 'Reports', channelId },
+        { type: 'OperatorAnalytics', id: channelId }
       ]
     }),
 
@@ -324,6 +337,7 @@ export const useGetReport = reportApi.useGetReportQuery
 export const useUpdateReport = reportApi.useUpdateReportMutation
 export const useDeleteReport = reportApi.useDeleteReportMutation
 export const useCreateCallAnalytics = reportApi.useCreateCallAnalyticsMutation
+export const useRegenerateOperatorAnalytics = reportApi.useRegenerateOperatorAnalyticsMutation
 
 // Operator Analytics hooks
 export const useUploadOperatorFiles = reportApi.useUploadOperatorFilesMutation

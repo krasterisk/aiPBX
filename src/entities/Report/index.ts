@@ -76,6 +76,7 @@ export {
   useRevokeOperatorApiToken,
   useDeleteOperatorApiToken,
   useCreateCallAnalytics,
+  useRegenerateOperatorAnalytics,
   useLazyGetBatchStatus,
   useLazyGetActiveBatches,
   useLazyGetOperatorInsights,
@@ -85,6 +86,7 @@ export {
 export { ReportExpandedPanel } from './ui/ReportExpandedPanel/ReportExpandedPanel'
 export { useReportFilters } from './lib/useReportFilters'
 export { reportDisplayMoneyInput } from './lib/reportDisplayMoneyInput'
+export { isOperatorAnalyticsSource } from './lib/isOperatorAnalyticsSource'
 
 // ── Project Wizard Redux ──────────────────────────────────────────────────────
 export type { ProjectWizardSchema, MetricMethod } from './model/types/projectWizardSchema'
