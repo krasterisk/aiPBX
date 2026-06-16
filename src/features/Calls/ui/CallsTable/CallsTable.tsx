@@ -13,6 +13,8 @@ import {
     useRegenerateOperatorAnalytics,
     isOperatorAnalyticsSource,
 } from '@/entities/Report'
+import { isUserAdmin } from '@/entities/User'
+import { useSelector } from 'react-redux'
 
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { formatDisplayMoney } from '@/shared/lib/functions/formatDisplayMoney'
@@ -39,6 +41,7 @@ interface CallsTableRowProps {
 const CallsTableRow = memo(({ report }: CallsTableRowProps) => {
     const { t } = useTranslation('reports')
     const [isExpanded, setIsExpanded] = useState(false)
+    const isAdmin = useSelector(isUserAdmin)
 
     const { data: dialogs, isLoading: isDialogLoading, isError: isDialogError } =
         useGetReportDialogs(report.channelId, {
@@ -190,7 +193,7 @@ hour12: false
                             isDialogError={isDialogError}
                             mediaUrl={report.recordUrl}
                             onGetAnalytics={isOperatorRecord ? undefined : onGetAnalytics}
-                            onRegenerateAnalytics={isOperatorRecord ? onRegenerateAnalytics : undefined}
+                            onRegenerateAnalytics={isAdmin && isOperatorRecord ? onRegenerateAnalytics : undefined}
                             isAnalyticsLoading={isAnalyticsLoading}
                         />
                     </td>

@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import * as XLSX from 'xlsx'
 import FileSaver from 'file-saver'
-import { AllReports, CdrSource, reportDisplayMoneyInput } from '@/entities/Report'
+import { AllReports, CdrSource, reportDisplayMoneyInput, serializeCsatFilter } from '@/entities/Report'
 import { formatDate } from '@/shared/lib/functions/formatDate'
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { formatDisplayMoney } from '@/shared/lib/functions/formatDisplayMoney'
@@ -19,6 +19,7 @@ interface UseCallsExportParams {
     source?: CdrSource
     sortField?: string
     sortOrder?: 'ASC' | 'DESC'
+    csatFilter?: string[]
 }
 
 /**
@@ -33,6 +34,7 @@ async function fetchAllReportsDirect(params: {
     source?: CdrSource
     sortField?: string
     sortOrder?: 'ASC' | 'DESC'
+    csat?: string
 }): Promise<AllReports> {
     const query = new URLSearchParams()
     query.set('page', '1')
@@ -45,6 +47,7 @@ async function fetchAllReportsDirect(params: {
     if (params.sortField) query.set('sortField', params.sortField)
     if (params.sortOrder) query.set('sortOrder', params.sortOrder)
     if (params.source) query.set('source', params.source)
+    if (params.csat) query.set('csat', params.csat)
 
     const token = localStorage.getItem(TOKEN_LOCALSTORAGE_KEY)
     const res = await fetch(`${__API__}/reports/page?${query.toString()}`, {
@@ -56,7 +59,7 @@ async function fetchAllReportsDirect(params: {
 }
 
 export const useCallsExport = (params: UseCallsExportParams) => {
-    const { data, startDate, endDate, search, source, sortField, sortOrder } = params
+    const { data, startDate, endDate, search, source, sortField, sortOrder, csatFilter } = params
     const { t } = useTranslation('reports')
     const [exporting, setExporting] = useState(false)
 
@@ -73,6 +76,7 @@ export const useCallsExport = (params: UseCallsExportParams) => {
                 source,
                 sortField,
                 sortOrder,
+                csat: serializeCsatFilter(csatFilter),
             })
 
             if (!allData?.rows?.length) return
@@ -103,7 +107,7 @@ export const useCallsExport = (params: UseCallsExportParams) => {
         } finally {
             setExporting(false)
         }
-    }, [data?.count, startDate, endDate, search, source, sortField, sortOrder, t])
+    }, [data?.count, startDate, endDate, search, source, sortField, sortOrder, csatFilter, t])
 
     return { exportToExcel, exporting }
 }

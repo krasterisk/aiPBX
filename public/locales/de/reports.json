@@ -366,5 +366,9 @@
   "Пн": "Mo",
   "Ср": "Mi",
   "Пт": "Fr",
-  "Вс": "So"
+  "Вс": "So",
+  "Фильтр по оценке": "Bewertungsfilter",
+  "Без оценки": "Ohne Bewertung",
+  "Выбрано оценок": "Ausgewählt: {{count}}",
+  "Сбросить": "Zurücksetzen"
 }

@@ -16,3 +16,5 @@ export const getReportsPageSearch = (state: StateSchema) => state.reportsPage?.s
 export const getReportSortField = (state: StateSchema) => state.reportsPage?.sortField
 export const getReportSortOrder = (state: StateSchema) => state.reportsPage?.sortOrder
 export const getReportSource = (state: StateSchema) => state.reportsPage?.source
+export const getReportsListGeneration = (state: StateSchema) => state.reportsPage?.listGeneration ?? 0
+export const getReportCsatFilter = (state: StateSchema) => state.reportsPage?.csatFilter ?? []

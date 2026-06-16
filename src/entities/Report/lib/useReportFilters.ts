@@ -16,14 +16,18 @@ import {
   getReportUserId,
   getReportSortField,
   getReportSortOrder,
-  getReportSource
+  getReportSource,
+  getReportsListGeneration,
+  getReportCsatFilter,
 } from '../model/selectors/reportSelectors'
 import { reportsPageActions } from '../model/slices/reportsPageSlice'
 import { useGetReports } from '../api/reportApi'
+import { serializeCsatFilter } from '../lib/csatFilter'
 import { useDebounce } from '@/shared/lib/hooks/useDebounce/useDebounce'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 import { AssistantOptions } from '@/entities/Assistants'
 import { CdrSource } from '../model/types/report'
+import type { CsatFilterValue } from '../lib/csatFilter'
 
 export function useReportFilters() {
   const page = useSelector(getReportsPageNum)
@@ -41,6 +45,8 @@ export function useReportFilters() {
   const sortField = useSelector(getReportSortField)
   const sortOrder = useSelector(getReportSortOrder)
   const source = useSelector(getReportSource)
+  const listGeneration = useSelector(getReportsListGeneration)
+  const csatFilter = useSelector(getReportCsatFilter)
 
   const authData = useSelector(getUserAuthData)
   const isAdmin = useSelector(isUserAdmin)
@@ -68,7 +74,9 @@ export function useReportFilters() {
     endDate,
     sortField,
     sortOrder,
-    source
+    source,
+    listGeneration,
+    csat: serializeCsatFilter(csatFilter),
   }, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
@@ -120,7 +128,7 @@ export function useReportFilters() {
 
   const onChangeSearch = useCallback((search: string) => {
     dispatch(reportsPageActions.setSearch(search))
-    dispatch(reportsPageActions.setPage(1))
+    dispatch(reportsPageActions.resetListQuery())
     debouncedSearch(search)
   }, [debouncedSearch, dispatch])
 
@@ -130,13 +138,7 @@ export function useReportFilters() {
 
   const onChangeTab = useCallback((value: string) => {
     dispatch(reportsPageActions.setTab(value))
-    // const now = dayjs()
-    // const newStart = now.startOf(value as OpUnitType).format('YYYY-MM-DD')
-    // const newEnd = now.endOf(value as OpUnitType).format('YYYY-MM-DD')
-    //
-    // dispatch(reportsPageActions.setStartDate(newStart))
-    // dispatch(reportsPageActions.setEndDate(newEnd))
-    dispatch(reportsPageActions.setPage(1))
+    dispatch(reportsPageActions.resetListQuery())
   }, [dispatch])
 
   const onChangeHasMore = useCallback((hasMore: boolean) => {
@@ -145,39 +147,41 @@ export function useReportFilters() {
 
   const onChangeStartDate = useCallback((value: string) => {
     dispatch(reportsPageActions.setStartDate(value))
-    dispatch(reportsPageActions.setPage(1))
+    dispatch(reportsPageActions.resetListQuery())
   }, [dispatch])
 
   const onChangeUserId = useCallback((clientId: string) => {
     dispatch(reportsPageActions.setUserId(clientId))
-    dispatch(reportsPageActions.setPage(1))
+    dispatch(reportsPageActions.resetListQuery())
   }, [dispatch])
 
   const onChangeAssistant = useCallback((event: any, assistant: AssistantOptions[]) => {
     const newAssistantIds = assistant.map(item => item.id)
     dispatch(reportsPageActions.setAssistantId(newAssistantIds))
     dispatch(reportsPageActions.setAssistant(assistant))
-    dispatch(reportsPageActions.setPage(1))
+    dispatch(reportsPageActions.resetListQuery())
   }, [dispatch])
 
   const onChangeEndDate = useCallback((value: string) => {
     dispatch(reportsPageActions.setEndDate(value))
-    dispatch(reportsPageActions.setPage(1))
+    dispatch(reportsPageActions.resetListQuery())
   }, [dispatch])
 
   const onChangeSort = useCallback((field: string) => {
-    if (sortField === field) {
-      dispatch(reportsPageActions.setSortOrder(sortOrder === 'ASC' ? 'DESC' : 'ASC'))
-    } else {
-      dispatch(reportsPageActions.setSortField(field))
-      dispatch(reportsPageActions.setSortOrder('ASC'))
-    }
-    dispatch(reportsPageActions.setPage(1))
-  }, [dispatch, sortField, sortOrder])
+    dispatch(reportsPageActions.applySort(field))
+  }, [dispatch])
 
   const onChangeSource = useCallback((value: CdrSource | undefined) => {
     dispatch(reportsPageActions.setSource(value))
-    dispatch(reportsPageActions.setPage(1))
+    dispatch(reportsPageActions.resetListQuery())
+  }, [dispatch])
+
+  const onToggleCsatFilter = useCallback((value: CsatFilterValue) => {
+    dispatch(reportsPageActions.toggleCsatFilter(value))
+  }, [dispatch])
+
+  const onClearCsatFilter = useCallback(() => {
+    dispatch(reportsPageActions.clearCsatFilter())
   }, [dispatch])
 
   return {
@@ -200,6 +204,7 @@ export function useReportFilters() {
     sortField,
     sortOrder,
     source,
+    csatFilter,
     onChangeAssistant,
     onChangeUserId,
     onChangeStartDate,
@@ -210,6 +215,8 @@ export function useReportFilters() {
     onChangePage,
     onChangeSort,
     onChangeSource,
+    onToggleCsatFilter,
+    onClearCsatFilter,
     onRefetch,
     onLoadNext
   }

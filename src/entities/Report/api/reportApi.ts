@@ -1,4 +1,5 @@
 import { rtkApi } from '@/shared/api/rtkApi'
+import { mergeReportsCache, serializeReportsQueryArgs } from '../lib/mergeReportsCache'
 import { AIAnalyticsResponse, AllReports, Analytics, BatchStatusResponse, BatchUploadResponse, CdrSource, DashboardConfig, MetricDefinition, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorProject, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
@@ -13,6 +14,8 @@ interface QueryArgs {
   sortField?: string
   sortOrder?: 'ASC' | 'DESC'
   source?: CdrSource
+  listGeneration?: number
+  csat?: string
 }
 
 interface AIAnalyticsDashboardArgs {
@@ -30,17 +33,11 @@ export const reportApi = rtkApi.injectEndpoints({
         url: '/reports/page',
         params: args
       }),
-      serializeQueryArgs: ({ endpointName }) => {
-        return endpointName
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        return serializeReportsQueryArgs(endpointName, queryArgs)
       },
-      // Always merge incoming data to the cache entry
       merge: (currentCache, newItems, { arg }) => {
-        if (arg.page === 1) {
-          return newItems // Перезаписываем кэш новыми данными
-        } else {
-          currentCache.rows.push(...newItems.rows) // Добавляем новые элементы к кэшу
-          return currentCache
-        }
+        return mergeReportsCache(currentCache, newItems, arg)
       },
       // Refetch when the page arg changes
       forceRefetch({ currentArg, previousArg }) {

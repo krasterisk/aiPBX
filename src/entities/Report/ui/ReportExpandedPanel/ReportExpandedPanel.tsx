@@ -99,7 +99,7 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
         if (report.analytics) {
             return (
                 <VStack gap="16" max>
-                    {onRegenerateAnalytics && (
+                    {isAdmin && onRegenerateAnalytics && (
                         <HStack justify="end" max>
                             <Button
                                 variant="glass-action"

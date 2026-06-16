@@ -7,7 +7,8 @@ import { SearchInput } from '@/shared/ui/mui/SearchInput/SearchInput'
 import { PeriodPicker } from '@/entities/PeriodPicker'
 // eslint-disable-next-line krasterisk-plugin/layer-imports
 import { PeriodExtendedFilters } from '@/features/PeriodExtendedFilter'
-import { CdrSource } from '@/entities/Report'
+import { CsatFilter } from '../CsatFilter/CsatFilter'
+import { CdrSource, type CsatFilterValue } from '@/entities/Report'
 import { AssistantOptions } from '@/entities/Assistants'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
@@ -35,6 +36,9 @@ interface CallsHeaderProps {
     batchProgress?: UseBatchProgressReturn
     exporting?: boolean
     totalCount?: number
+    csatFilter?: string[]
+    onToggleCsatFilter?: (value: CsatFilterValue) => void
+    onClearCsatFilter?: () => void
 }
 
 export const CallsHeader = memo((props: CallsHeaderProps) => {
@@ -43,7 +47,8 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
         onChangeTab, onChangeStartDate, onChangeEndDate,
         onChangeSearch, onUpload, onExport, onChangeSource,
         onChangeAssistant, onChangeUserId, clientId, assistants,
-        batchProgress, exporting, totalCount
+        batchProgress, exporting, totalCount,
+        csatFilter, onToggleCsatFilter, onClearCsatFilter,
     } = props
 
     const { t } = useTranslation('reports')
@@ -72,6 +77,14 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
                     />
                 </HStack>
             </HStack>
+
+            {onToggleCsatFilter && onClearCsatFilter && (
+                <CsatFilter
+                    value={csatFilter ?? []}
+                    onToggle={onToggleCsatFilter}
+                    onClear={onClearCsatFilter}
+                />
+            )}
 
             {batchProgress?.isActive && (
                 <BatchProgressBar

@@ -87,6 +87,12 @@ export { ReportExpandedPanel } from './ui/ReportExpandedPanel/ReportExpandedPane
 export { useReportFilters } from './lib/useReportFilters'
 export { reportDisplayMoneyInput } from './lib/reportDisplayMoneyInput'
 export { isOperatorAnalyticsSource } from './lib/isOperatorAnalyticsSource'
+export {
+  serializeCsatFilter,
+  isCsatFilterActive,
+  CSAT_SCORE_VALUES,
+} from './lib/csatFilter'
+export type { CsatFilterValue } from './lib/csatFilter'
 
 // ── Project Wizard Redux ──────────────────────────────────────────────────────
 export type { ProjectWizardSchema, MetricMethod } from './model/types/projectWizardSchema'

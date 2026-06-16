@@ -14,7 +14,9 @@ const initialState: ReportsPageSchema = {
   userId: '',
   // sorting
   sortField: 'createdAt',
-  sortOrder: 'DESC'
+  sortOrder: 'DESC',
+  listGeneration: 0,
+  csatFilter: [],
 }
 
 export const reportsPageSlice = createSlice({
@@ -63,6 +65,35 @@ export const reportsPageSlice = createSlice({
     },
     setSource: (state, action: PayloadAction<CdrSource | undefined>) => {
       state.source = action.payload
+    },
+    applySort: (state, action: PayloadAction<string>) => {
+      const field = action.payload
+      if (state.sortField === field) {
+        state.sortOrder = state.sortOrder === 'ASC' ? 'DESC' : 'ASC'
+      } else {
+        state.sortField = field
+        state.sortOrder = 'ASC'
+      }
+      state.page = 1
+      state.listGeneration = (state.listGeneration ?? 0) + 1
+    },
+    resetListQuery: (state) => {
+      state.page = 1
+      state.listGeneration = (state.listGeneration ?? 0) + 1
+    },
+    toggleCsatFilter: (state, action: PayloadAction<string>) => {
+      const value = action.payload
+      const current = state.csatFilter ?? []
+      state.csatFilter = current.includes(value)
+        ? current.filter((item) => item !== value)
+        : [...current, value]
+      state.page = 1
+      state.listGeneration = (state.listGeneration ?? 0) + 1
+    },
+    clearCsatFilter: (state) => {
+      state.csatFilter = []
+      state.page = 1
+      state.listGeneration = (state.listGeneration ?? 0) + 1
     },
     initState: (state) => {
       state.limit = 25

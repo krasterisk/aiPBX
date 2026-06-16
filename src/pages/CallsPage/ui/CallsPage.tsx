@@ -29,9 +29,11 @@ const CallsPage = ({ className }: CallsPageProps) => {
         tab, startDate, endDate, search, source,
         clientId, assistants,
         sortField, sortOrder, isInited,
+        csatFilter,
         onChangeTab, onChangeStartDate, onChangeEndDate,
         onChangeSearch, onChangeSource, onChangeSort,
-        onChangeAssistant, onChangeUserId
+        onChangeAssistant, onChangeUserId,
+        onToggleCsatFilter, onClearCsatFilter,
     } = useReportFilters()
 
     const { exportToExcel, exporting } = useCallsExport({
@@ -42,6 +44,7 @@ const CallsPage = ({ className }: CallsPageProps) => {
         source,
         sortField,
         sortOrder,
+        csatFilter,
     })
 
     useInitialEffect(() => { dispatch(initReportsPage()) })
@@ -87,6 +90,9 @@ const CallsPage = ({ className }: CallsPageProps) => {
                         batchProgress={batch}
                         exporting={exporting}
                         totalCount={data?.count}
+                        csatFilter={csatFilter}
+                        onToggleCsatFilter={onToggleCsatFilter}
+                        onClearCsatFilter={onClearCsatFilter}
                     />
                     <CallsList
                         reports={data}

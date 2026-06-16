@@ -1,0 +1,75 @@
+@import '@/app/styles/variables/mixins';
+
+.CsatFilter {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    padding: 12px 16px;
+    @include glass-card-secondary;
+    border: 1px solid var(--glass-border-secondary);
+}
+
+.header {
+    margin-bottom: 10px;
+}
+
+.chipRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 34px;
+    padding: 6px 12px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--glass-border-secondary);
+    background: var(--glass-bg-tertiary);
+    color: var(--text-redesigned);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    user-select: none;
+
+    &:hover {
+        border-color: rgba(var(--accent-redesigned-rgb), 0.35);
+        background: rgba(var(--accent-redesigned-rgb), 0.06);
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgba(var(--accent-redesigned-rgb), 0.45);
+        outline-offset: 2px;
+    }
+}
+
+.chipActive {
+    composes: chip;
+    border-color: rgba(var(--accent-redesigned-rgb), 0.55);
+    background: rgba(var(--accent-redesigned-rgb), 0.12);
+    color: var(--accent-redesigned);
+    box-shadow: 0 0 0 1px rgba(var(--accent-redesigned-rgb), 0.08);
+}
+
+.chipStar {
+    flex-shrink: 0;
+    color: var(--warning-redesigned, #f59e0b);
+}
+
+.chipStarMuted {
+    composes: chipStar;
+    opacity: 0.45;
+}
+
+.clearBtn {
+    margin-left: auto;
+
+    @include mobile {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+}

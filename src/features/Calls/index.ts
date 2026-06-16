@@ -1,4 +1,5 @@
 export { CallsHeader } from './ui/CallsHeader/CallsHeader'
+export { CsatFilter } from './ui/CsatFilter/CsatFilter'
 export { CallsList } from './ui/CallsList/CallsList'
 export { CallsTable } from './ui/CallsTable/CallsTable'
 export { UploadModal } from './ui/UploadModal/UploadModal'

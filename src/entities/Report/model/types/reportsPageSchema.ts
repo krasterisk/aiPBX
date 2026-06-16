@@ -22,4 +22,7 @@ export interface ReportsPageSchema {
   // sorting
   sortField?: string
   sortOrder?: 'ASC' | 'DESC'
+  /** Bumped when filters/sort reset pagination — invalidates in-flight infinite-scroll merges */
+  listGeneration?: number
+  csatFilter?: string[]
 }
