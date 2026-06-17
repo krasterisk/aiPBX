@@ -11,8 +11,9 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { isUserAdmin } from '../../model/selectors/roleSelector'
-import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
+import { formatBalanceAmount } from '../../lib/formatBalanceAmount'
 import { UserCurrencyValues } from '../../model/consts/consts'
+import { getTenantCurrencyCode } from '@/shared/lib/domain'
 import { Divider } from '@/shared/ui/Divider'
 
 interface UserItemProps {
@@ -50,8 +51,9 @@ export const UserItem = memo((props: UserItemProps) => {
     onTopUp?.(user)
   }, [onTopUp, user])
 
+  const displayCurrency = (user.currency as UserCurrencyValues) || getTenantCurrencyCode()
   const formattedBalance = user.balance !== undefined
-    ? formatCurrency(user.balance, user.currency as UserCurrencyValues || UserCurrencyValues.USD, 2)
+    ? formatBalanceAmount(user.balance, displayCurrency)
     : null
 
   return (

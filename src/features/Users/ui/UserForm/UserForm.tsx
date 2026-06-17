@@ -210,7 +210,6 @@ export const UserForm = memo((props: UserFormProps) => {
                     {isEdit && showPersonalAccount && personalAccountNumber && (
                         <VStack gap="8" max>
                             <Text text={t('personalAccount.label')} size="s" bold className={cls.label} />
-                            <Text text={t('personalAccount.hint')} size="xs" variant="accent" />
                             <Text
                                 text={personalAccountNumber}
                                 size="m"
@@ -223,11 +222,6 @@ export const UserForm = memo((props: UserFormProps) => {
                     {!isOwnerCreating && !isSub && (
                         <VStack gap="8" max>
                             <Text text={t('Валюта') || ''} size="s" bold className={cls.label} />
-                            <Text
-                                text={t('Валюта тенанта подсказка')}
-                                size="xs"
-                                variant="accent"
-                            />
                             <Text
                                 text={`${tenantCurrency} (${currencySymbols[tenantCurrency] || tenantCurrency})`}
                                 size="m"

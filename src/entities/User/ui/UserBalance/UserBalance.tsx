@@ -6,20 +6,13 @@ import { useGetUserBalance } from '../../api/usersApi'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Loader } from '@/shared/ui/Loader'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { balanceWarnings, currencySymbols, UserCurrencyValues } from '../../model/consts/consts'
+import { balanceWarnings, UserCurrencyValues } from '../../model/consts/consts'
+import { formatBalanceAmount } from '../../lib/formatBalanceAmount'
 import { formatCurrency } from '@/shared/lib/functions/formatCurrency'
 import { getTenantCurrencyCode } from '@/shared/lib/domain'
 import { Tooltip } from '@/shared/ui/redesign-v3/Tooltip'
 import { AppLink } from '@/shared/ui/redesigned/AppLink'
 import { getRoutePayment } from '@/shared/const/router'
-
-function formatBalanceAmount (value: number, currency: UserCurrencyValues): string {
-  const amount = parseFloat(value.toFixed(2))
-  if (currency === UserCurrencyValues.RUB) {
-    return `${amount} ${currencySymbols.RUB}`
-  }
-  return formatCurrency(amount, currency, 2)
-}
 
 interface UserBalanceProps {
   className?: string

@@ -20,6 +20,7 @@ import { useGoogleLogin } from '@/shared/lib/hooks/useGoogleLogin/useGoogleLogin
 import { useTelegramLogin } from '@/shared/lib/hooks/useTelegramLogin/useTelegramLogin'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { buildLegalAcceptanceItems } from '@/shared/lib/legal/versions'
+import { normalizeEmail } from '@/shared/lib/functions/normalizeEmail'
 
 export function useSignupData () {
   const { t } = useTranslation('login')
@@ -99,7 +100,7 @@ export function useSignupData () {
 
     signupInFlightRef.current = true
 
-    userSignup({ email, legalAcceptance })
+    userSignup({ email: normalizeEmail(email), legalAcceptance })
       .unwrap()
       .then(() => {
         setSignupError(null)
@@ -127,7 +128,7 @@ export function useSignupData () {
       return
     }
     signupActivateUser({
-      email,
+      email: normalizeEmail(email),
       activationCode: activationSignupCode,
       type: 'signup',
       legalAcceptance,

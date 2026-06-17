@@ -20,6 +20,7 @@ import {
 } from '../../model/selectors/login/getLoginActivationCode/getLoginActivationCode'
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { buildLegalAcceptanceItems } from '@/shared/lib/legal/versions'
+import { normalizeEmail } from '@/shared/lib/functions/normalizeEmail'
 import { isLoginConsentRequired } from '../getAuthLegalConsentLinks'
 
 export function useLoginData () {
@@ -67,7 +68,7 @@ export function useLoginData () {
       return
     }
     loginActivateUser({
-      email,
+      email: normalizeEmail(email),
       activationCode: activationLoginCode,
       type: 'login',
       legalAcceptance,
@@ -124,7 +125,7 @@ export function useLoginData () {
       setLoginError(t('Введите email'))
       return
     }
-    userLogin({ email, legalAcceptance })
+    userLogin({ email: normalizeEmail(email), legalAcceptance })
       .unwrap()
       .then(() => {
         setIsLoginActivation(true)
