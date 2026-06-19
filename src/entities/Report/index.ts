@@ -6,6 +6,8 @@ export type {
   BillingRecord,
   AIAnalyticsResponse,
   AggregatedAIMetrics,
+  AnalyticsMetrics,
+  StoredMetricMeta,
   TimeSeriesPoint,
   AssistantMetric,
   TopIssue,
