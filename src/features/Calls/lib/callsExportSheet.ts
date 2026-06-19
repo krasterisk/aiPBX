@@ -4,7 +4,7 @@ import type {
     DefaultMetricKey,
     Report,
     StoredMetricMeta,
-} from '@/entities/Report/model/types/report'
+} from '@/entities/Report'
 import { formatDate } from '@/shared/lib/functions/formatDate'
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { formatDisplayMoney } from '@/shared/lib/functions/formatDisplayMoney'
@@ -50,20 +50,20 @@ const getSummary = (report: Report): string => {
     const metrics = report.analytics?.metrics
     if (!metrics) return report.analytics?.summary?.trim() ?? ''
     return (
-        metrics.summary?.trim()
-        || metrics.scenario_analysis?.summary?.trim()
-        || report.analytics?.summary?.trim()
-        || ''
+        metrics.summary?.trim() ||
+        metrics.scenario_analysis?.summary?.trim() ||
+        report.analytics?.summary?.trim() ||
+        ''
     )
 }
 
 const getSentiment = (report: Report): string => {
     const metrics = report.analytics?.metrics
     return (
-        metrics?.customer_sentiment
-        || metrics?.user_satisfaction?.sentiment
-        || report.analytics?.sentiment
-        || ''
+        metrics?.customer_sentiment ||
+        metrics?.user_satisfaction?.sentiment ||
+        report.analytics?.sentiment ||
+        ''
     )
 }
 
@@ -143,7 +143,7 @@ export type ExportCell = string | number
 export function buildCallsExportSheet(
     reports: Report[],
     t: TFunction,
-): { rows: Record<string, ExportCell>[], headers: string[] } {
+): { rows: Array<Record<string, ExportCell>>, headers: string[] } {
     const customColumns = collectCustomMetricColumns(reports, t)
 
     const operatorMetricHeaders = OPERATOR_METRIC_KEYS.map(m => String(t(m.labelKey)))
