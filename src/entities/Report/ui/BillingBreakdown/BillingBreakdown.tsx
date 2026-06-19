@@ -31,6 +31,9 @@ const fmtCost = (row: BillingRecord, usd: number | undefined) => {
 
 const helper = createColumnHelper<BillingRecord>()
 
+/** Analytic-family records have no audio leg (STT/LLM only). */
+const isAnalyticType = (type: string) => type === 'analytic' || type === 'analytic_regen'
+
 export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingBreakdownProps) => {
     const { t } = useTranslation('reports')
 
@@ -63,6 +66,9 @@ export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingB
     }, [billingRecords])
 
     const hasStt = billingRecords?.some(r => (r.sttCost ?? 0) > 0) ?? false
+    const hasTokenSplit = billingRecords?.some(
+        r => r.textTokensIn != null || r.textTokensOut != null,
+    ) ?? false
 
     const formatTime = (dateStr: string) =>
         new Date(dateStr).toLocaleTimeString(undefined, {
@@ -95,7 +101,7 @@ export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingB
             }),
             helper.accessor('audioTokens', {
                 header: String(t('Audio токены')),
-                cell: info => info.row.original.type === 'analytic'
+                cell: info => isAnalyticType(info.row.original.type)
                     ? '—'
                     : info.getValue().toLocaleString(),
                 footer: () => null
@@ -105,6 +111,22 @@ export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingB
                 cell: info => info.getValue().toLocaleString(),
                 footer: () => null
             }),
+            ...(hasTokenSplit ? [
+                helper.accessor('textTokensIn', {
+                    header: String(t('LLM вход')),
+                    cell: info => info.getValue() != null
+                        ? Number(info.getValue()).toLocaleString()
+                        : '—',
+                    footer: () => null
+                }),
+                helper.accessor('textTokensOut', {
+                    header: String(t('LLM выход')),
+                    cell: info => info.getValue() != null
+                        ? Number(info.getValue()).toLocaleString()
+                        : '—',
+                    footer: () => null
+                })
+            ] : []),
             helper.accessor('totalTokens', {
                 header: String(t('Всего токенов')),
                 cell: info => info.getValue().toLocaleString(),
@@ -112,7 +134,7 @@ export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingB
             }),
             helper.accessor('audioCost', {
                 header: String(t('Audio стоимость')),
-                cell: info => info.row.original.type === 'analytic'
+                cell: info => isAnalyticType(info.row.original.type)
                     ? '—'
                     : fmtCost(info.row.original, info.getValue()),
                 footer: () => null
@@ -158,7 +180,7 @@ export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingB
             })
         ]
         return cols
-    }, [t, userCurrency, hasStt, totals])
+    }, [t, userCurrency, hasStt, hasTokenSplit, totals])
 
     if (!billingRecords?.length) {
         return (

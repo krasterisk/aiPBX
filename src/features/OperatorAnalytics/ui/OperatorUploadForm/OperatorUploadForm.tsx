@@ -101,17 +101,14 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted }: Ope
         try {
             const result = await uploadFiles(formData).unwrap()
 
-            if (result && 'batchId' in result && result.batchId) {
-                toast.success(`${t('В работу ушло')}: ${(result).items.length} ${t('файлов')}`)
+            if ('batchId' in result && result.batchId) {
+                const count = result.total ?? result.items.length
+                toast.success(`${t('В работу ушло')}: ${count} ${t('файлов')}`)
                 setFiles([])
                 onBatchStarted?.(result.batchId)
                 onClose?.()
-            } else if (result && 'items' in result) {
-                toast.success(`${t('В работу ушло')}: ${(result).items.length} ${t('файлов')}`)
-                setFiles([])
-                setTimeout(() => { onClose?.() }, 800)
-            } else if (result && 'filename' in result) {
-                toast.success(`${(result).filename} — ${t('загружен и отправлен в работу')}`)
+            } else if ('filename' in result) {
+                toast.success(`${result.filename} — ${t('загружен и отправлен в работу')}`)
                 setFiles([])
                 setTimeout(() => { onClose?.() }, 800)
             } else {

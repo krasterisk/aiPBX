@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
@@ -43,8 +43,18 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
     const webhookHeaders = useSelector(getWizardWebhookHeaders)
     const webhookEvents = useSelector(getWizardWebhookEvents)
 
+    // Budget is edited locally (not part of the wizard slice) to keep the change additive.
+    const [budgetInput, setBudgetInput] = useState(
+        editProject.monthlyBudgetUsd != null ? String(editProject.monthlyBudgetUsd) : '',
+    )
+
     const handleSave = useCallback(async () => {
         try {
+            const parsedBudget = budgetInput.trim() === '' ? null : Number(budgetInput.replace(',', '.'))
+            const monthlyBudgetUsd = parsedBudget != null && Number.isFinite(parsedBudget) && parsedBudget > 0
+                ? parsedBudget
+                : null
+
             await updateProject({
                 id: editProject.id,
                 name: name.trim() || String(t('Новый проект')),
@@ -55,6 +65,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                 webhookUrl: webhookUrl.trim() || undefined,
                 webhookHeaders: Object.keys(webhookHeaders).length > 0 ? webhookHeaders : undefined,
                 webhookEvents: webhookEvents.length > 0 ? webhookEvents : undefined,
+                monthlyBudgetUsd,
             }).unwrap()
 
             dispatch(projectWizardActions.close())
@@ -63,7 +74,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
         } catch (err) {
             console.error('Settings save error:', err)
         }
-    }, [name, description, systemPrompt, customMetrics, visibleDefaults, webhookUrl, webhookHeaders, webhookEvents, editProject, updateProject, dispatch, onClose, onSuccess, t])
+    }, [name, description, systemPrompt, customMetrics, visibleDefaults, webhookUrl, webhookHeaders, webhookEvents, budgetInput, editProject, updateProject, dispatch, onClose, onSuccess, t])
 
     return (
         <VStack gap={'16'} max className={cls.ProjectWizard}>
@@ -99,6 +110,16 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                 fullWidth
                 multiline
                 rows={4}
+            />
+
+            <Textarea
+                label={String(t('Месячный бюджет, USD (0 — без лимита)'))}
+                value={budgetInput}
+                onChange={e => setBudgetInput(e.target.value)}
+                size={'small'}
+                fullWidth
+                multiline={false}
+                type={'number'}
             />
 
             <WizardReviewSection />

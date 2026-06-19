@@ -17,6 +17,7 @@ import { StatCard } from '@/features/Dashboard'
 import { formatTenantMoney } from '@/shared/lib/functions/formatDisplayMoney'
 import {
     DefaultMetricKey,
+    MetricPolarity,
     OperatorDashboardResponse,
     OperatorProject,
     useGetOperatorProjects,
@@ -32,6 +33,31 @@ import cls from './OperatorDashboard.module.scss'
 const normalizeRate = (rate?: number): number => {
     if (!rate) return 0
     return rate > 1 ? rate : rate * 100
+}
+
+// Resolve fill width + color for a custom metric value, respecting its
+// configured scale (min/max) and polarity (positive/negative/neutral).
+const metricVisual = (
+    value: number,
+    opts: { min?: number, max?: number, polarity?: MetricPolarity, isRate?: boolean },
+): { pct: number, color: string } => {
+    const min = opts.isRate ? 0 : (opts.min ?? 0)
+    const max = opts.isRate ? 100 : (opts.max ?? 100)
+    const span = max - min > 0 ? max - min : 100
+    const pct = Math.max(0, Math.min(100, ((value - min) / span) * 100))
+    const polarity = opts.polarity ?? 'positive'
+    const goodness = polarity === 'negative' ? 100 - pct : pct
+    const tone = polarity === 'neutral'
+        ? 'neutral'
+        : goodness >= 80 ? 'high' : goodness >= 50 ? 'mid' : 'low'
+    const color = tone === 'high'
+        ? 'var(--status-success)'
+        : tone === 'mid'
+            ? 'var(--status-warning)'
+            : tone === 'low'
+                ? 'var(--status-error)'
+                : 'var(--accent, #6366f1)'
+    return { pct, color }
 }
 
 // Full default metric key → translation map
@@ -103,11 +129,15 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
         }))
     }, [data?.aggregatedMetrics, activeProject?.visibleDefaultMetrics, t])
 
-    // Phase 1: Custom metrics from project schema
+    // Phase 1: Custom metrics from project schema with aggregated values
     const customMetricsList = useMemo(() => {
         if (!activeProject?.customMetricsSchema?.length) return []
-        return activeProject.customMetricsSchema
-    }, [activeProject?.customMetricsSchema])
+        const aggregated = data?.customMetricsAggregated ?? {}
+        return activeProject.customMetricsSchema.map(metric => ({
+            ...metric,
+            aggregated: aggregated[metric.id],
+        }))
+    }, [activeProject?.customMetricsSchema, data?.customMetricsAggregated])
 
     const timeSeriesLabels = data?.timeSeries?.monthly?.map(p => p.label) ?? []
     const timeSeriesCalls = data?.timeSeries?.monthly?.map(p => p.callsCount) ?? []
@@ -174,6 +204,42 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                         projectId,
                     }}
                 />
+            )}
+
+            {(data?.excludedLowQualityCount ?? 0) > 0 && (
+                <Text
+                    text={String(t('DASHBOARD_EXCLUDED_LOW_QUALITY', { count: data?.excludedLowQualityCount }))}
+                    size="s"
+                    variant="warning"
+                />
+            )}
+
+            {(data?.agentScorecards?.length ?? 0) > 0 && (
+                <Card variant="light" padding="16" max className={cls.scorecardsCard}>
+                    <VStack gap="12" max>
+                        <Text title={String(t('Карточки операторов'))} bold />
+                        <div className={cls.scorecardsTable}>
+                            <div className={cls.scorecardsHead}>
+                                <span>{String(t('Оператор'))}</span>
+                                <span>{String(t('Звонков'))}</span>
+                                <span>{String(t('Средний балл'))}</span>
+                                <span>{String(t('Успех'))}</span>
+                                <span>CSAT</span>
+                                <span>{String(t('Негатив'))}</span>
+                            </div>
+                            {data!.agentScorecards!.map(row => (
+                                <div key={row.operatorName} className={cls.scorecardsRow}>
+                                    <span className={cls.scorecardsName}>{row.operatorName}</span>
+                                    <span>{row.callsCount}</span>
+                                    <span>{row.averageScore}</span>
+                                    <span>{normalizeRate(row.successRate).toFixed(0)}%</span>
+                                    <span>{row.avgCsat ?? '—'}</span>
+                                    <span>{row.negativeRate.toFixed(0)}%</span>
+                                </div>
+                            ))}
+                        </div>
+                    </VStack>
+                </Card>
             )}
 
             {/* Project filter + Dashboard Builder button */}
@@ -317,21 +383,82 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                         <Text title={String(t('Кастомные метрики'))} bold />
                         <Text text={String(t('Пользовательские метрики проекта') + ` "${activeProject?.name}"`)} size={'s'} />
                         <VStack gap={'8'} max>
-                            {customMetricsList.map(metric => (
-                                <Card key={metric.id} padding={'16'} border={'partial'} variant={'light'}>
-                                    <HStack max justify={'between'} align={'center'}>
-                                        <VStack gap={'4'}>
-                                            <Text text={metric.name} bold size={'s'} />
-                                            <Text text={metric.description} size={'s'} />
+                            {customMetricsList.map(metric => {
+                                const agg = metric.aggregated
+                                return (
+                                    <Card key={metric.id} padding={'16'} border={'partial'} variant={'light'}>
+                                        <VStack gap={'8'} max>
+                                            <HStack max justify={'between'} align={'center'}>
+                                                <VStack gap={'4'}>
+                                                    <Text text={metric.name} bold size={'s'} />
+                                                    <Text text={metric.description} size={'s'} />
+                                                </VStack>
+                                                <Text text={metric.type} size={'xs'} variant={'accent'} />
+                                            </HStack>
+                                            {agg?.type === 'boolean' && agg.value != null && (() => {
+                                                // Aggregated as "% Да" → rate on 0..100; default neutral (informational)
+                                                const vis = metricVisual(agg.value, {
+                                                    isRate: true,
+                                                    polarity: metric.polarity ?? 'neutral',
+                                                })
+                                                return (
+                                                    <VStack gap={'4'} max>
+                                                        <HStack max justify={'between'}>
+                                                            <Text text={String(t('Да'))} size={'s'} />
+                                                            <Text text={`${agg.value}%`} size={'s'} bold />
+                                                        </HStack>
+                                                        <div className={cls.metricBarTrack}>
+                                                            <div
+                                                                className={cls.metricBarFill}
+                                                                style={{ width: `${vis.pct}%`, backgroundColor: vis.color }}
+                                                            />
+                                                        </div>
+                                                    </VStack>
+                                                )
+                                            })()}
+                                            {agg?.type === 'number' && agg.value != null && (() => {
+                                                const vis = metricVisual(agg.value, {
+                                                    min: metric.min,
+                                                    max: metric.max,
+                                                    polarity: metric.polarity ?? 'positive',
+                                                })
+                                                const valueText = metric.unit
+                                                    ? `${agg.value} ${metric.unit}`
+                                                    : (metric.max != null && metric.max !== 100)
+                                                        ? `${agg.value} / ${metric.max}`
+                                                        : String(agg.value)
+                                                return (
+                                                    <VStack gap={'4'} max>
+                                                        <HStack max justify={'between'}>
+                                                            <Text text={String(t('Среднее'))} size={'s'} />
+                                                            <Text text={valueText} size={'s'} bold />
+                                                        </HStack>
+                                                        <div className={cls.metricBarTrack}>
+                                                            <div
+                                                                className={cls.metricBarFill}
+                                                                style={{ width: `${vis.pct}%`, backgroundColor: vis.color }}
+                                                            />
+                                                        </div>
+                                                    </VStack>
+                                                )
+                                            })()}
+                                            {agg?.distribution && (
+                                                <VStack gap={'4'} max>
+                                                    {Object.entries(agg.distribution).map(([label, count]) => (
+                                                        <HStack key={label} max justify={'between'}>
+                                                            <Text text={label} size={'s'} />
+                                                            <Text text={String(count)} size={'s'} bold />
+                                                        </HStack>
+                                                    ))}
+                                                </VStack>
+                                            )}
+                                            {!agg && (
+                                                <Text text={String(t('Нет данных за выбранный период'))} size={'s'} />
+                                            )}
                                         </VStack>
-                                        <Text
-                                            text={metric.type}
-                                            size={'xs'}
-                                            variant={'accent'}
-                                        />
-                                    </HStack>
-                                </Card>
-                            ))}
+                                    </Card>
+                                )
+                            })}
                         </VStack>
                     </VStack>
                 </Card>

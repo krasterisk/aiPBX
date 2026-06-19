@@ -158,6 +158,24 @@ describe('ReportShowAnalytics', () => {
             render(<ReportShowAnalytics analytics={operatorAnalytics} />)
             expect(screen.queryByTestId('custom-metrics-card')).not.toBeInTheDocument()
         })
+
+        it('does not treat internal meta keys (_model/_quality/_assessments) as custom metrics', () => {
+            const withMeta: Analytics = {
+                ...operatorAnalytics,
+                metrics: {
+                    ...operatorAnalytics.metrics,
+                    _model: { name: 'gpt-x' },
+                    _quality: { quality: 'ok' },
+                    _assessments: { greeting_quality: { rationale: 'ok' } },
+                    _schema_version: 2,
+                },
+            }
+            render(<ReportShowAnalytics analytics={withMeta} />)
+            expect(screen.queryByTestId('custom-metrics-card')).not.toBeInTheDocument()
+            expect(screen.queryByText('_model')).not.toBeInTheDocument()
+            expect(screen.queryByText('_quality')).not.toBeInTheDocument()
+            expect(screen.queryByText('_assessments')).not.toBeInTheDocument()
+        })
     })
 
     describe('operator analytics with custom metrics', () => {
@@ -183,6 +201,22 @@ describe('ReportShowAnalytics', () => {
             render(<ReportShowAnalytics analytics={operatorWithCustomMetrics} />)
             expect(screen.getByText('delivery_time_mentioned')).toBeInTheDocument()
             expect(screen.getByText('Да, 30 минут')).toBeInTheDocument()
+        })
+
+        it('renders custom_metrics nested object', () => {
+            const nested: Analytics = {
+                ...operatorAnalytics,
+                metrics: {
+                    ...operatorAnalytics.metrics,
+                    custom_metrics: {
+                        upsell_attempt: true,
+                        delivery_time_mentioned: 'Да, 30 минут',
+                    },
+                },
+            }
+            render(<ReportShowAnalytics analytics={nested} />)
+            expect(screen.getByTestId('custom-metrics-card')).toBeInTheDocument()
+            expect(screen.getByText('upsell_attempt')).toBeInTheDocument()
         })
     })
 

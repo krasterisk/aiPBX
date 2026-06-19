@@ -1,6 +1,6 @@
 import { rtkApi } from '@/shared/api/rtkApi'
 import { mergeReportsCache, serializeReportsQueryArgs } from '../lib/mergeReportsCache'
-import { AIAnalyticsResponse, AllReports, Analytics, BatchStatusResponse, BatchUploadResponse, CdrSource, DashboardConfig, MetricDefinition, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorProject, Report, ReportDialog } from '../model/types/report'
+import { AIAnalyticsResponse, AllReports, Analytics, BatchStatusResponse, BatchUploadResponse, CdrSource, DashboardConfig, MetricDefinition, MetricOverride, MetricOverrideInput, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorProject, OperatorUploadResponse, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
   page?: number
@@ -176,7 +176,7 @@ export const reportApi = rtkApi.injectEndpoints({
     }),
 
     // Operator Analytics
-    uploadOperatorFiles: build.mutation<OperatorAnalysisResult | BatchUploadResponse, FormData>({
+    uploadOperatorFiles: build.mutation<OperatorUploadResponse, FormData>({
       query: (body) => ({
         url: '/operator-analytics/upload',
         method: 'POST',
@@ -287,6 +287,8 @@ export const reportApi = rtkApi.injectEndpoints({
       webhookUrl?: string
       webhookHeaders?: Record<string, string>
       webhookEvents?: string[]
+      monthlyBudgetUsd?: number | null
+      budgetAlertEmails?: string[] | null
     }>({
       query: ({ id, ...body }) => ({
         url: `/operator-analytics/projects/${id}`,
@@ -301,6 +303,25 @@ export const reportApi = rtkApi.injectEndpoints({
         method: 'POST',
         body
       })
+    }),
+    getMetricOverrides: build.query<MetricOverride[], string>({
+      query: (id) => `/operator-analytics/${id}/overrides`,
+      providesTags: (result, error, id) => [{ type: 'OperatorAnalytics', id }]
+    }),
+    saveMetricOverrides: build.mutation<MetricOverride[], { id: string, overrides: MetricOverrideInput[] }>({
+      query: ({ id, overrides }) => ({
+        url: `/operator-analytics/${id}/overrides`,
+        method: 'POST',
+        body: { overrides }
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: 'OperatorAnalytics', id }]
+    }),
+    deleteMetricOverride: build.mutation<{ deleted: number }, { id: string, metricId: string }>({
+      query: ({ id, metricId }) => ({
+        url: `/operator-analytics/${id}/overrides/${encodeURIComponent(metricId)}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: 'OperatorAnalytics', id }]
     }),
     getBatchStatus: build.query<BatchStatusResponse, string>({
       query: (batchId) => `/operator-analytics/batch/${batchId}`
@@ -350,6 +371,9 @@ export const useGenerateOperatorApiToken = reportApi.useGenerateOperatorApiToken
 export const useListOperatorApiTokens = reportApi.useListOperatorApiTokensQuery
 export const useRevokeOperatorApiToken = reportApi.useRevokeOperatorApiTokenMutation
 export const useDeleteOperatorApiToken = reportApi.useDeleteOperatorApiTokenMutation
+export const useGetMetricOverrides = reportApi.useGetMetricOverridesQuery
+export const useSaveMetricOverrides = reportApi.useSaveMetricOverridesMutation
+export const useDeleteMetricOverride = reportApi.useDeleteMetricOverrideMutation
 export const useLazyGetBatchStatus = reportApi.useLazyGetBatchStatusQuery
 export const useLazyGetActiveBatches = reportApi.useLazyGetActiveBatchesQuery
 export const useLazyGetOperatorInsights = reportApi.useLazyGetOperatorInsightsQuery

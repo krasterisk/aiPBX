@@ -53,9 +53,9 @@ export function useBatchProgress(): UseBatchProgressReturn {
     const activeBatches = batchArray.filter(b => !b.finished)
     const isActive = activeBatches.length > 0
 
-    const total = batchArray.reduce((s, b) => s + b.total, 0)
-    const completed = batchArray.reduce((s, b) => s + b.completed, 0)
-    const failed = batchArray.reduce((s, b) => s + b.failed, 0)
+    const total = activeBatches.reduce((s, b) => s + b.total, 0)
+    const completed = activeBatches.reduce((s, b) => s + b.completed, 0)
+    const failed = activeBatches.reduce((s, b) => s + b.failed, 0)
     const progress = total > 0 ? Math.round(((completed + failed) / total) * 100) : 0
 
     // ─── stop polling ─────────────────────────────────────────────────
@@ -83,15 +83,19 @@ export function useBatchProgress(): UseBatchProgressReturn {
 
             setBatches(prev => {
                 const next = new Map(prev)
-                next.set(batchId, {
-                    batchId,
-                    progress: status.progress,
-                    completed: status.completed,
-                    failed: status.failed,
-                    total: status.total,
-                    items: status.items,
-                    finished
-                })
+                if (finished) {
+                    next.delete(batchId)
+                } else {
+                    next.set(batchId, {
+                        batchId,
+                        progress: status.progress,
+                        completed: status.completed,
+                        failed: status.failed,
+                        total: status.total,
+                        items: status.items,
+                        finished: false
+                    })
+                }
                 return next
             })
 
@@ -110,6 +114,7 @@ export function useBatchProgress(): UseBatchProgressReturn {
                 }
 
                 dispatch(reportApi.util.invalidateTags(['OperatorAnalytics', 'Reports']))
+                return
             }
         } catch (err) {
             // Silently skip 429/network errors, will retry on next tick
@@ -219,7 +224,7 @@ export function useBatchProgress(): UseBatchProgressReturn {
     }, [])
 
     return {
-        batches: batchArray,
+        batches: activeBatches,
         isActive,
         progress,
         completed,

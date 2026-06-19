@@ -5,6 +5,7 @@ import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Analytics, DefaultMetricKey } from '../../model/types/report'
+import { MetricOverridePanel } from './MetricOverridePanel'
 import { useTranslation } from 'react-i18next'
 import {
     GitBranch,
@@ -43,7 +44,24 @@ const isOperatorMetrics = (metrics: Record<string, any>): boolean => {
 const KNOWN_METRIC_KEYS = new Set([
     ...OPERATOR_METRIC_LABELS.map(m => m.key),
     'customer_sentiment', 'summary', 'success', 'csat',
+    'custom_metrics', 'metrics',
 ])
+
+/** Internal/meta keys live alongside metrics but must never render as custom metrics. */
+const isInternalMetaKey = (key: string): boolean => key.startsWith('_')
+
+const extractCustomMetricEntries = (metrics: Record<string, any>): Array<[string, unknown]> => {
+    if (metrics.custom_metrics && typeof metrics.custom_metrics === 'object' && !Array.isArray(metrics.custom_metrics)) {
+        return Object.entries(metrics.custom_metrics).filter(([key]) => !isInternalMetaKey(key))
+    }
+    if (metrics.metrics && typeof metrics.metrics === 'object' && !Array.isArray(metrics.metrics)) {
+        const nested = metrics.metrics as Record<string, unknown>
+        if (typeof nested.greeting_quality !== 'number') {
+            return Object.entries(nested).filter(([key]) => !isInternalMetaKey(key))
+        }
+    }
+    return Object.entries(metrics).filter(([key]) => !KNOWN_METRIC_KEYS.has(key) && !isInternalMetaKey(key))
+}
 
 interface ReportShowAnalyticsProps {
     className?: string
@@ -92,13 +110,55 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
                 value: metrics[m.key] as number,
             }))
 
+        const quality = metrics._quality
+        const assessments = metrics._assessments as Record<string, { rationale?: string, quote?: string }> | undefined
+        const legacyEvidence = metrics._evidence as Record<string, string> | undefined
+        const normalizeQuote = (s: string) => s.replace(/[«»"'`]/g, '').trim().toLowerCase()
+        const getAssessment = (key: string): { rationale?: string, quote?: string } | undefined => {
+            const a = assessments?.[key]
+            if (a && (a.rationale || a.quote)) {
+                let quote = a.quote
+                // Drop the quote if the model already embedded it inside the rationale
+                if (quote && a.rationale && normalizeQuote(a.rationale).includes(normalizeQuote(quote))) {
+                    quote = undefined
+                }
+                return { rationale: a.rationale, quote }
+            }
+            const legacy = legacyEvidence?.[key]
+            return legacy ? { quote: legacy } : undefined
+        }
+        const dimMetrics = quality?.quality && quality.quality !== 'ok'
+
         return (
             <VStack
                 gap="16"
-                className={classNames(cls.ReportShowAnalytics, {}, [className])}
+                className={classNames(cls.ReportShowAnalytics, { [cls.dimmedMetrics]: dimMetrics }, [className])}
                 max
                 data-testid="analytics-operator"
             >
+                {quality?.quality && quality.quality !== 'ok' && (
+                    <Card variant="outlined" className={cls.qualityBanner} max data-testid="quality-warning-banner">
+                        <VStack gap="8">
+                            <Text
+                                text={String(t('LOW_STT_QUALITY_BANNER'))}
+                                bold
+                                variant="warning"
+                            />
+                            {quality.reasons?.length ? (
+                                <Text
+                                    text={quality.reasons.map(code => String(t(code))).join(', ')}
+                                    size="s"
+                                />
+                            ) : null}
+                            {quality.confidence != null && (
+                                <Text
+                                    text={`${String(t('Confidence'))}: ${Math.round(quality.confidence * 100)}%`}
+                                    size="s"
+                                />
+                            )}
+                        </VStack>
+                    </Card>
+                )}
                 {/* Summary */}
                 {summary && (
                     <Card variant="outlined" className={cls.summaryCard} max>
@@ -136,7 +196,70 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
                             ★ {csat}
                         </span>
                     )}
+                    {(metrics._topics?.keywords?.length ?? 0) > 0 && (
+                        <span className={cls.sentimentBadge} data-sentiment="neutral" data-testid="topic-keywords">
+                            {metrics._topics!.keywords!.join(', ')}
+                        </span>
+                    )}
                 </div>
+
+                {/* Rationale for summary-level outputs (sentiment / success / csat) */}
+                {(() => {
+                    const items: Array<{ key: string, label: string, hint?: string, a: { rationale?: string, quote?: string } }> = []
+                    const push = (key: string, label: string, hint: string, present: boolean) => {
+                        if (!present) return
+                        const a = getAssessment(key)
+                        if (a && (a.rationale || a.quote)) items.push({ key, label, hint, a })
+                    }
+                    push(
+                        'customer_sentiment',
+                        String(t('Эмоциональный настрой клиента')),
+                        String(t('Общая тональность речи клиента: позитивная, нейтральная или негативная')),
+                        Boolean(sentiment),
+                    )
+                    push(
+                        'success',
+                        String(t('Итог обращения')),
+                        String(t('Был ли решён вопрос или проблема клиента')),
+                        success != null,
+                    )
+                    push(
+                        'csat',
+                        String(t('Удовлетворённость клиента (CSAT)')),
+                        String(t('CSAT (Customer Satisfaction) — оценка удовлетворённости клиента по шкале 1–5')),
+                        csat != null,
+                    )
+                    if (!items.length) return null
+                    return (
+                        <Card variant="light" className={cls.gridItem} max data-testid="summary-assessments">
+                            <VStack gap="8" max>
+                                {items.map(({ key, label, hint, a }) => (
+                                    <VStack key={key} gap="4" max>
+                                        <Text text={label} size="s" bold />
+                                        {hint && (
+                                            <Text text={hint} size="xs" className={cls.metricHint} />
+                                        )}
+                                        {a.rationale && (
+                                            <Text
+                                                text={a.rationale}
+                                                size="xs"
+                                                className={cls.rationaleText}
+                                                data-testid={`summary-rationale-${key}`}
+                                            />
+                                        )}
+                                        {a.quote && (
+                                            <Text
+                                                text={`«${a.quote}»`}
+                                                size="xs"
+                                                className={cls.evidenceQuote}
+                                            />
+                                        )}
+                                    </VStack>
+                                ))}
+                            </VStack>
+                        </Card>
+                    )
+                })()}
 
                 {/* Progress bars for numeric metrics */}
                 {barMetrics.length > 0 && (
@@ -169,6 +292,30 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
                                                     data-testid={`metric-bar-${m.key}`}
                                                 />
                                             </div>
+                                            {(() => {
+                                                const a = getAssessment(m.key)
+                                                if (!a) return null
+                                                return (
+                                                    <VStack gap="4" max className={cls.metricAssessment}>
+                                                        {a.rationale && (
+                                                            <Text
+                                                                text={a.rationale}
+                                                                size="xs"
+                                                                className={cls.rationaleText}
+                                                                data-testid={`metric-rationale-${m.key}`}
+                                                            />
+                                                        )}
+                                                        {a.quote && (
+                                                            <Text
+                                                                text={`«${a.quote}»`}
+                                                                size="xs"
+                                                                className={cls.evidenceQuote}
+                                                                data-testid={`metric-evidence-${m.key}`}
+                                                            />
+                                                        )}
+                                                    </VStack>
+                                                )
+                                            })()}
                                         </VStack>
                                     )
                                 })}
@@ -177,25 +324,32 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
                     </Card>
                 )}
 
-                {/* Custom metrics — all keys not in KNOWN_METRIC_KEYS */}
+                {/* Custom metrics */}
                 {(() => {
-                    const customEntries = Object.entries(metrics)
-                        .filter(([key]) => !KNOWN_METRIC_KEYS.has(key))
+                    const customEntries = extractCustomMetricEntries(metrics)
                     if (!customEntries.length) return null
+                    const customMeta = metrics._custom_meta
                     return (
                         <Card variant="light" className={cls.gridItem} max data-testid="custom-metrics-card">
                             <VStack gap="12" max>
                                 {renderCardTitle(t('Кастомные метрики'), Puzzle)}
                                 <VStack gap="8" max>
                                     {customEntries.map(([key, value]) => {
+                                        const meta = customMeta?.[key]
+                                        const label = meta?.name || key
+
                                         if (typeof value === 'boolean') {
+                                            // Polarity decides good/bad; default neutral = informational
+                                            const polarity = meta?.polarity ?? 'neutral'
+                                            const tone = polarity === 'neutral'
+                                                ? 'neutral'
+                                                : (polarity === 'negative' ? !value : value)
+                                                    ? 'good'
+                                                    : 'bad'
                                             return (
                                                 <HStack key={key} justify="between" max>
-                                                    <Text text={key} size="s" className={cls.metricLabel} />
-                                                    <span
-                                                        className={cls.successBadge}
-                                                        data-success={String(value)}
-                                                    >
+                                                    <Text text={label} size="s" className={cls.metricLabel} />
+                                                    <span className={cls.successBadge} data-tone={tone}>
                                                         {value
                                                             ? <><CheckCircle size={14} /> {String(t('Да'))}</>
                                                             : <><AlertCircle size={14} /> {String(t('Нет'))}</>
@@ -205,27 +359,46 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
                                             )
                                         }
                                         if (typeof value === 'number') {
-                                            const level = value >= 80 ? 'high' : value >= 50 ? 'mid' : 'low'
-                                            const color = level === 'high'
+                                            const min = meta?.min ?? 0
+                                            const max = meta?.max ?? 100
+                                            const span = max - min > 0 ? max - min : 100
+                                            const pct = Math.max(0, Math.min(100, ((value - min) / span) * 100))
+                                            const polarity = meta?.polarity ?? 'positive'
+                                            // Normalized "goodness" 0..100 respecting polarity
+                                            const goodness = polarity === 'negative' ? 100 - pct : pct
+                                            const tone = polarity === 'neutral'
+                                                ? 'neutral'
+                                                : goodness >= 80 ? 'high' : goodness >= 50 ? 'mid' : 'low'
+                                            const color = tone === 'high'
                                                 ? 'var(--status-success, #22c55e)'
-                                                : level === 'mid'
+                                                : tone === 'mid'
                                                     ? 'var(--status-warning, #f59e0b)'
-                                                    : 'var(--status-error, #ef4444)'
+                                                    : tone === 'low'
+                                                        ? 'var(--status-error, #ef4444)'
+                                                        : 'var(--accent, #6366f1)'
+                                            const valueText = meta?.unit
+                                                ? `${value} ${meta.unit}`
+                                                : meta && max !== 100
+                                                    ? `${value} / ${max}`
+                                                    : String(value)
+                                            const textVariant = tone === 'high'
+                                                ? 'success'
+                                                : tone === 'mid' ? 'warning' : tone === 'low' ? 'error' : undefined
                                             return (
                                                 <VStack key={key} gap="4" max>
                                                     <HStack max justify="between">
-                                                        <Text text={key} size="s" />
+                                                        <Text text={label} size="s" />
                                                         <Text
-                                                            text={String(value)}
+                                                            text={valueText}
                                                             size="s"
                                                             bold
-                                                            variant={level === 'high' ? 'success' : level === 'mid' ? 'warning' : 'error'}
+                                                            variant={textVariant}
                                                         />
                                                     </HStack>
                                                     <div className={cls.metricBarTrack}>
                                                         <div
                                                             className={cls.metricBarFill}
-                                                            style={{ width: `${Math.min(value, 100)}%`, backgroundColor: color }}
+                                                            style={{ width: `${pct}%`, backgroundColor: color }}
                                                             data-testid={`metric-bar-custom-${key}`}
                                                         />
                                                     </div>
@@ -233,13 +406,22 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
                                             )
                                         }
                                         // string / enum
-                                        return renderMetricItem(key, String(value ?? '-'))
+                                        return renderMetricItem(label, String(value ?? '-'))
                                     })}
                                 </VStack>
                             </VStack>
                         </Card>
                     )
                 })()}
+
+                {/* Supervisor overrides (human-in-the-loop calibration) */}
+                {analytics.channelId && (
+                    <MetricOverridePanel
+                        channelId={String(analytics.channelId)}
+                        metrics={metrics}
+                        className={cls.gridItem}
+                    />
+                )}
             </VStack>
         )
     }

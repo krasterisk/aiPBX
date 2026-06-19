@@ -14,6 +14,8 @@ import cls from './ProjectWizard.module.scss'
 const AVAILABLE_EVENTS: Array<{ value: WebhookEvent, labelKey: string }> = [
     { value: 'analysis.completed', labelKey: 'Событие: анализ завершён' },
     { value: 'analysis.error', labelKey: 'Событие: ошибка анализа' },
+    { value: 'budget.exceeded', labelKey: 'Событие: превышен бюджет' },
+    { value: 'anomaly.detected', labelKey: 'Событие: аномалия метрик' },
 ]
 
 interface WizardStep4Props {

@@ -23,6 +23,7 @@ export type {
   OperatorApiToken,
   MetricDefinition,
   DefaultMetricKey,
+  MetricPolarity,
   WidgetType,
   DashboardWidget,
   DashboardConfig,
@@ -86,7 +87,7 @@ export {
 export { ReportExpandedPanel } from './ui/ReportExpandedPanel/ReportExpandedPanel'
 export { useReportFilters } from './lib/useReportFilters'
 export { reportDisplayMoneyInput } from './lib/reportDisplayMoneyInput'
-export { isOperatorAnalyticsSource } from './lib/isOperatorAnalyticsSource'
+export { isOperatorAnalyticsSource, OPERATOR_CDR_SOURCE } from './lib/isOperatorAnalyticsSource'
 export {
   serializeCsatFilter,
   isCsatFilterActive,

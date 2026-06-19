@@ -356,7 +356,7 @@ Content-Type: application/json`}</pre>
                     fullUrl={`${base}/operator-analytics/analyze-file`}
                 >
                     <VStack gap={'8'}>
-                        <Text text={String(t('Загружает аудиофайл(ы) через multipart/form-data. Проект определяется автоматически из токена. Поддерживает один или несколько файлов.'))} />
+                        <Text text={String(t('Загружает аудиофайл(ы) через multipart/form-data. Проект определяется автоматически из токена. По умолчанию обработка асинхронная (batch), чтобы избежать таймаутов на длинных записях.'))} />
                         <Text text={String(t('Заголовки запроса:'))} bold size={'s'} />
                         <pre className={cls.codeBlock}>{`Authorization: Bearer <${t('ваш_токен')}>
 Content-Type: multipart/form-data`}</pre>
@@ -364,15 +364,25 @@ Content-Type: multipart/form-data`}</pre>
                         <pre className={cls.codeBlock}>{`file          ${t('аудиофайл')} (MP3/WAV/OGG/M4A/FLAC/WebM, ${t('до')} 50 ${t('МБ')})  ${t('обязательно')}
 operatorName  ${t('имя оператора')}                                       ${t('необязательно')}
 clientPhone   ${t('номер телефона клиента')} (+7…)                        ${t('необязательно')}
-language      auto | ru | en | de | zh | kz | uk                  ${t('по умолчанию')}: auto`}</pre>
-                        <Text text={String(t('Пример (один файл):'))} bold size={'s'} />
+language      auto | ru | en | de | zh | kz | uk                  ${t('по умолчанию')}: auto
+sync          true — синхронный ответ (legacy, риск таймаута)     ${t('необязательно')}`}</pre>
+                        <Text text={String(t('Пример (один файл, async):'))} bold size={'s'} />
                         <pre className={cls.codeBlock}>{`curl -X POST ${base}/operator-analytics/analyze-file \\
   -H "Authorization: Bearer oa_xxx" \\
   -F "file=@/path/to/call.mp3" \\
   -F "operatorName=Иван Петров" \\
   -F "clientPhone=+79991234567" \\
   -F "language=ru"`}</pre>
-                        <Text text={String(t('Ответ (batch):'))} bold size={'s'} />
+                        <Text text={String(t('Ответ (async, 1 или N файлов):'))} bold size={'s'} />
+                        <pre className={cls.codeBlock}>{`{
+  "batchId": "batch_1710000000_abc123",
+  "total": 1,
+  "items": [
+    { "id": 42, "filename": "call.mp3", "status": "pending" }
+  ]
+}`}</pre>
+                        <Text text={String(t('Проверка статуса: GET /operator-analytics/batch/:batchId или GET /operator-analytics/results/:id'))} size={'s'} />
+                        <Text text={String(t('Ответ (batch, несколько файлов):'))} bold size={'s'} />
                         <pre className={cls.codeBlock}>{`{
   "items": [
     { "id": 42, "filename": "call1.mp3", "status": "processing" },

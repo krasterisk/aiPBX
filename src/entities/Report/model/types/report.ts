@@ -29,6 +29,10 @@ export interface Report {
   billingRecords?: BillingRecord[]
   source?: CdrSource
   transcription?: string
+  transcriptionQuality?: 'ok' | 'low' | 'unusable' | string | null
+  transcriptionConfidence?: number | null
+  detectedLanguage?: string | null
+  qualityReasons?: string[] | null
 }
 
 export interface ReportsListProps {
@@ -84,9 +88,13 @@ export interface ReportDialog {
 export interface BillingRecord {
   id: number
   channelId: string
-  type: 'realtime' | 'analytic'
+  type: 'realtime' | 'analytic' | 'analytic_regen' | string
   audioTokens: number
   textTokens: number
+  /** LLM input/prompt tokens (nullable; null for legacy records) */
+  textTokensIn?: number | null
+  /** LLM output/completion tokens (nullable; null for legacy records) */
+  textTokensOut?: number | null
   totalTokens: number
   audioCost: number
   textCost: number
@@ -153,6 +161,25 @@ export interface AnalyticsMetrics {
   summary?: string
   success?: boolean
   csat?: number
+  custom_metrics?: Record<string, unknown>
+  _quality?: {
+    quality?: 'ok' | 'low' | 'unusable' | string
+    confidence?: number
+    reasons?: string[]
+  }
+  /** Per-metric reasoning: why the model assigned each score (+ supporting quote) */
+  _assessments?: Record<string, { rationale?: string, quote?: string }>
+  /** Legacy: bare supporting quotes (pre-assessments records) */
+  _evidence?: Record<string, string>
+  /** Snapshot of custom metric definitions used at analysis time */
+  _custom_meta?: Record<string, StoredMetricMeta>
+  _model?: { name?: string, promptVersion?: string }
+  /** Project schema version captured at analysis time */
+  _schema_version?: number
+  /** Custom metric keys whose LLM values failed schema validation */
+  _custom_invalid?: string[]
+  /** Keyword spotting hits (compliance / competitor mentions) */
+  _topics?: { keywords?: string[] }
 }
 
 export interface Analytics {
@@ -327,6 +354,22 @@ export interface OperatorDashboardResponse {
     }>
   }
   insightsAvailable: boolean
+  customMetricsAggregated?: Record<string, {
+    type: MetricDefinition['type']
+    value?: number
+    distribution?: Record<string, number>
+  }>
+  excludedLowQualityCount?: number
+  agentScorecards?: AgentScorecard[]
+}
+
+export interface AgentScorecard {
+  operatorName: string
+  callsCount: number
+  averageScore: number
+  successRate: number
+  avgCsat: number | null
+  negativeRate: number
 }
 
 export interface BatchUploadResponse {
@@ -338,6 +381,8 @@ export interface BatchUploadResponse {
     status: OperatorAnalysisStatus
   }>
 }
+
+export type OperatorUploadResponse = BatchUploadResponse | Pick<OperatorAnalysisResult, 'id' | 'filename' | 'status'>
 
 export type BatchItemStatus = 'pending' | 'processing' | 'completed' | 'error'
 
@@ -358,11 +403,28 @@ export interface BatchStatusResponse {
 
 // ─── Metric / Dashboard types ─────────────────────────────────────────────────
 
+export type MetricPolarity = 'positive' | 'negative' | 'neutral'
+
 export interface MetricDefinition {
   id: string // snake_case
   name: string // "Попытка апселла"
   type: 'boolean' | 'number' | 'enum' | 'string'
   description: string // Instruction for LLM (max 500 chars)
+  enumValues?: string[]
+  min?: number // number scale minimum (default 0)
+  max?: number // number scale maximum (default 100)
+  unit?: string // display suffix, e.g. "/10", "%"
+  polarity?: MetricPolarity // coloring semantics
+}
+
+/** Snapshot of a custom metric definition stored with an analysis result */
+export interface StoredMetricMeta {
+  name?: string
+  type: 'boolean' | 'number' | 'enum' | 'string'
+  min?: number
+  max?: number
+  unit?: string
+  polarity?: MetricPolarity
   enumValues?: string[]
 }
 
@@ -389,7 +451,36 @@ export interface DashboardConfig {
   maxWidgets: number
 }
 
-export type WebhookEvent = 'analysis.completed' | 'analysis.error'
+export type WebhookEvent = 'analysis.completed' | 'analysis.error' | 'budget.exceeded' | 'anomaly.detected'
+
+// ─── Human-in-the-loop metric overrides ───────────────────────────────────────
+
+export type MetricOverrideOrigin = 'default' | 'custom' | 'summary'
+
+/** Supervisor correction of an LLM metric value (stored separately from LLM output). */
+export interface MetricOverride {
+  id: number
+  channelId: string
+  userId: string
+  actorUserId: string
+  metricId: string
+  origin: MetricOverrideOrigin
+  numValue?: number | null
+  boolValue?: boolean | null
+  strValue?: string | null
+  note?: string | null
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface MetricOverrideInput {
+  metricId: string
+  origin?: MetricOverrideOrigin
+  numValue?: number | null
+  boolValue?: boolean | null
+  strValue?: string | null
+  note?: string | null
+}
 
 // ─── Project ──────────────────────────────────────────────────────────────────
 
@@ -407,6 +498,8 @@ export interface OperatorProject {
   webhookUrl?: string
   webhookHeaders?: Record<string, string>
   webhookEvents?: WebhookEvent[]
+  monthlyBudgetUsd?: number | null
+  budgetAlertEmails?: string[] | null
 }
 
 // ─── Project Template ─────────────────────────────────────────────────────────

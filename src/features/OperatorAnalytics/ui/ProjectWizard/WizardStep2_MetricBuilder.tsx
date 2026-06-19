@@ -21,6 +21,18 @@ const METRIC_TYPES = [
     { label: 'String (Текст)', value: 'string' },
 ]
 
+const POLARITY_OPTIONS_NUMBER = [
+    { label: 'Больше — лучше', value: 'positive' },
+    { label: 'Меньше — лучше', value: 'negative' },
+    { label: 'Нейтрально (без оценки)', value: 'neutral' },
+]
+
+const POLARITY_OPTIONS_BOOLEAN = [
+    { label: '«Да» — это хорошо', value: 'positive' },
+    { label: '«Да» — это плохо', value: 'negative' },
+    { label: 'Нейтрально (без оценки)', value: 'neutral' },
+]
+
 interface WizardStep2Props {
     metrics: MetricDefinition[]
     systemPrompt: string
@@ -141,6 +153,55 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                                     size={'small'}
                                     fullWidth
                                     multiline={false}
+                                />
+                            )}
+
+                            {/* Number scale + polarity */}
+                            {metric.type === 'number' && (
+                                <HStack gap={'12'} max wrap={'wrap'}>
+                                    <Textarea
+                                        label={String(t('Мин.'))}
+                                        value={metric.min != null ? String(metric.min) : ''}
+                                        onChange={e => { handleChange(idx, 'min', e.target.value === '' ? undefined : Number(e.target.value)) }}
+                                        size={'small'}
+                                        multiline={false}
+                                    />
+                                    <Textarea
+                                        label={String(t('Макс.'))}
+                                        value={metric.max != null ? String(metric.max) : ''}
+                                        onChange={e => { handleChange(idx, 'max', e.target.value === '' ? undefined : Number(e.target.value)) }}
+                                        size={'small'}
+                                        multiline={false}
+                                    />
+                                    <Textarea
+                                        label={String(t('Единица'))}
+                                        value={metric.unit || ''}
+                                        onChange={e => { handleChange(idx, 'unit', e.target.value || undefined) }}
+                                        size={'small'}
+                                        multiline={false}
+                                    />
+                                    <Combobox
+                                        options={POLARITY_OPTIONS_NUMBER}
+                                        value={POLARITY_OPTIONS_NUMBER.find(o => o.value === (metric.polarity || 'positive')) || null}
+                                        onChange={(_, val: any) => { handleChange(idx, 'polarity', val?.value || 'positive') }}
+                                        getOptionLabel={(o: any) => o.label || ''}
+                                        isOptionEqualToValue={(o: any, v: any) => o.value === v.value}
+                                        label={String(t('Оценка'))}
+                                        disableClearable
+                                    />
+                                </HStack>
+                            )}
+
+                            {/* Boolean polarity */}
+                            {metric.type === 'boolean' && (
+                                <Combobox
+                                    options={POLARITY_OPTIONS_BOOLEAN}
+                                    value={POLARITY_OPTIONS_BOOLEAN.find(o => o.value === (metric.polarity || 'neutral')) || null}
+                                    onChange={(_, val: any) => { handleChange(idx, 'polarity', val?.value || 'neutral') }}
+                                    getOptionLabel={(o: any) => o.label || ''}
+                                    isOptionEqualToValue={(o: any, v: any) => o.value === v.value}
+                                    label={String(t('Оценка значения'))}
+                                    disableClearable
                                 />
                             )}
 

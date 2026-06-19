@@ -12,6 +12,7 @@ import {
     useCreateCallAnalytics,
     useRegenerateOperatorAnalytics,
     isOperatorAnalyticsSource,
+    OPERATOR_CDR_SOURCE,
 } from '@/entities/Report'
 import { isUserAdmin } from '@/entities/User'
 import { useSelector } from 'react-redux'
@@ -29,8 +30,8 @@ const SOURCE_CONFIG: Record<string, { icon: React.ReactNode, labelKey: string }>
     call: { icon: <Phone size={14} />, labelKey: 'Звонок' },
     widget: { icon: <Globe size={14} />, labelKey: 'Виджет' },
     playground: { icon: <Monitor size={14} />, labelKey: 'Playground' },
-    'external-api': { icon: <Save size={14} />, labelKey: 'Аналитика (API)' },
-    'external-front': { icon: <Save size={14} />, labelKey: 'Аналитика' },
+    [OPERATOR_CDR_SOURCE.EXTERNAL_API]: { icon: <Save size={14} />, labelKey: 'Аналитика (API)' },
+    [OPERATOR_CDR_SOURCE.EXTERNAL_FRONT]: { icon: <Save size={14} />, labelKey: 'Аналитика' },
 }
 
 // ── Row ───────────────────────────────────────────────────────────────────────
@@ -88,6 +89,11 @@ hour12: false
     const csat = report.analytics?.csat
     const scenarioSuccess = report.analytics?.metrics?.scenario_analysis?.success ??
         report.analytics?.metrics?.success
+    const transcriptionQuality = report.transcriptionQuality
+        || report.analytics?.metrics?._quality?.quality
+    const qualityReasons = report.qualityReasons
+        || report.analytics?.metrics?._quality?.reasons
+        || []
 
     return (
         <>
@@ -146,14 +152,25 @@ hour12: false
                 </td>
 
                 <td data-label={String(t('Настроение'))}>
-                    {report.analytics?.sentiment ? (
-                        <span
-                            className={cls.sentimentBadge}
-                            data-sentiment={report.analytics.sentiment.toLowerCase()}
-                        >
-                            {String(t(report.analytics.sentiment))}
-                        </span>
-                    ) : '—'}
+                    <HStack gap="4" align="center">
+                        {report.analytics?.sentiment ? (
+                            <span
+                                className={cls.sentimentBadge}
+                                data-sentiment={report.analytics.sentiment.toLowerCase()}
+                            >
+                                {String(t(report.analytics.sentiment))}
+                            </span>
+                        ) : '—'}
+                        {isOperatorRecord && transcriptionQuality === 'low' && (
+                            <span
+                                className={cls.qualityBadge}
+                                data-quality="low"
+                                data-tooltip={qualityReasons.map(code => String(t(code))).join(', ')}
+                            >
+                                {String(t('LOW_STT_QUALITY_BADGE'))}
+                            </span>
+                        )}
+                    </HStack>
                 </td>
 
                 <td data-label={String(t('Результат'))}>
@@ -193,7 +210,7 @@ hour12: false
                             isDialogError={isDialogError}
                             mediaUrl={report.recordUrl}
                             onGetAnalytics={isOperatorRecord ? undefined : onGetAnalytics}
-                            onRegenerateAnalytics={isAdmin && isOperatorRecord ? onRegenerateAnalytics : undefined}
+                            onRegenerateAnalytics={isAdmin && isOperatorRecord && report.recordUrl ? onRegenerateAnalytics : undefined}
                             isAnalyticsLoading={isAnalyticsLoading}
                         />
                     </td>
