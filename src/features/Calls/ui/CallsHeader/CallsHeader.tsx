@@ -14,6 +14,7 @@ import UploadFileIcon from '@mui/icons-material/UploadFile'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import { BatchProgressBar } from '../BatchProgressBar/BatchProgressBar'
 import type { UseBatchProgressReturn } from '../../lib/useBatchProgress'
+import cls from './CallsHeader.module.scss'
 
 interface CallsHeaderProps {
     tab?: string
@@ -38,7 +39,6 @@ interface CallsHeaderProps {
     totalCount?: number
     csatFilter?: string[]
     onToggleCsatFilter?: (value: CsatFilterValue) => void
-    onClearCsatFilter?: () => void
 }
 
 export const CallsHeader = memo((props: CallsHeaderProps) => {
@@ -48,7 +48,7 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
         onChangeSearch, onUpload, onExport, onChangeSource,
         onChangeAssistant, onChangeUserId, clientId, assistants,
         batchProgress, exporting, totalCount,
-        csatFilter, onToggleCsatFilter, onClearCsatFilter,
+        csatFilter, onToggleCsatFilter,
     } = props
 
     const { t } = useTranslation('reports')
@@ -78,14 +78,6 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
                 </HStack>
             </HStack>
 
-            {onToggleCsatFilter && onClearCsatFilter && (
-                <CsatFilter
-                    value={csatFilter ?? []}
-                    onToggle={onToggleCsatFilter}
-                    onClear={onClearCsatFilter}
-                />
-            )}
-
             {batchProgress?.isActive && (
                 <BatchProgressBar
                     batches={batchProgress.batches}
@@ -97,15 +89,27 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
                 />
             )}
 
-            <HStack max justify="between" align="center" gap="12" wrap="wrap">
-                {totalCount != null && (
-                    <Text
-                        text={`${String(t('Всего'))}: ${totalCount}`}
-                        size="s"
-                        bold
-                    />
+            <div className={cls.toolbarRow}>
+                <div className={cls.toolbarLeft}>
+                    {totalCount != null && (
+                        <Text
+                            text={`${String(t('Всего'))}: ${totalCount}`}
+                            size="s"
+                            bold
+                        />
+                    )}
+                </div>
+
+                {onToggleCsatFilter && (
+                    <div className={cls.toolbarCenter}>
+                        <CsatFilter
+                            value={csatFilter ?? []}
+                            onToggle={onToggleCsatFilter}
+                        />
+                    </div>
                 )}
-                <HStack gap="8" wrap="wrap">
+
+                <HStack gap="8" wrap="wrap" align="center" className={cls.toolbarRight}>
                     <Button
                         variant="clear"
                         color="success"
@@ -125,7 +129,7 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
                         {String(t('Загрузить аудио'))}
                     </Button>
                 </HStack>
-            </HStack>
+            </div>
             <PeriodExtendedFilters
                 source={source}
                 startDate={startDate ?? undefined}

@@ -33,7 +33,7 @@ const CallsPage = ({ className }: CallsPageProps) => {
         onChangeTab, onChangeStartDate, onChangeEndDate,
         onChangeSearch, onChangeSource, onChangeSort,
         onChangeAssistant, onChangeUserId,
-        onToggleCsatFilter, onClearCsatFilter,
+        onToggleCsatFilter,
     } = useReportFilters()
 
     const { exportToExcel, exporting } = useCallsExport({
@@ -92,7 +92,6 @@ const CallsPage = ({ className }: CallsPageProps) => {
                         totalCount={data?.count}
                         csatFilter={csatFilter}
                         onToggleCsatFilter={onToggleCsatFilter}
-                        onClearCsatFilter={onClearCsatFilter}
                     />
                     <CallsList
                         reports={data}

@@ -1,0 +1,40 @@
+.toolbarRow {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+}
+
+.toolbarLeft {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.toolbarCenter {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.toolbarRight {
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: flex-end;
+}
+
+@media (max-width: 900px) {
+    .toolbarRow {
+        flex-wrap: wrap;
+    }
+
+    .toolbarLeft,
+    .toolbarCenter,
+    .toolbarRight {
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+
+    .toolbarLeft {
+        text-align: center;
+    }
+}
