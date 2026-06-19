@@ -24,6 +24,7 @@ import {
 } from '@/entities/Report'
 import { AiInsightsBanner } from './AiInsightsBanner/AiInsightsBanner'
 import { HeatmapCalendar } from './HeatmapCalendar/HeatmapCalendar'
+import { OperatorScoreTable } from './OperatorScoreTable/OperatorScoreTable'
 import { DonutChart } from '@/shared/ui/redesigned/DonutChart'
 import cls from './OperatorDashboard.module.scss'
 
@@ -212,34 +213,6 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                     size="s"
                     variant="warning"
                 />
-            )}
-
-            {(data?.agentScorecards?.length ?? 0) > 0 && (
-                <Card variant="light" padding="16" max className={cls.scorecardsCard}>
-                    <VStack gap="12" max>
-                        <Text title={String(t('Карточки операторов'))} bold />
-                        <div className={cls.scorecardsTable}>
-                            <div className={cls.scorecardsHead}>
-                                <span>{String(t('Оператор'))}</span>
-                                <span>{String(t('Звонков'))}</span>
-                                <span>{String(t('Средний балл'))}</span>
-                                <span>{String(t('Успех'))}</span>
-                                <span>CSAT</span>
-                                <span>{String(t('Негатив'))}</span>
-                            </div>
-                            {data.agentScorecards!.map(row => (
-                                <div key={row.operatorName} className={cls.scorecardsRow}>
-                                    <span className={cls.scorecardsName}>{row.operatorName}</span>
-                                    <span>{row.callsCount}</span>
-                                    <span>{row.averageScore}</span>
-                                    <span>{normalizeRate(row.successRate).toFixed(0)}%</span>
-                                    <span>{row.avgCsat ?? '—'}</span>
-                                    <span>{row.negativeRate.toFixed(0)}%</span>
-                                </div>
-                            ))}
-                        </div>
-                    </VStack>
-                </Card>
             )}
 
             {/* Project filter + Dashboard Builder button */}
@@ -497,6 +470,22 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                         </div>
                     ) : <div />}
                 </div>
+            )}
+
+            {/* Operator quality ranking — bottom section */}
+            {(data?.agentScorecards?.length ?? 0) > 0 && (
+                <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
+                    <VStack gap={'16'} max>
+                        <VStack gap={'4'} max>
+                            <Text title={String(t('Рейтинг операторов'))} bold />
+                            <Text
+                                text={String(t('OPERATOR_SCORE_RANKING_SUBTITLE'))}
+                                size={'s'}
+                            />
+                        </VStack>
+                        <OperatorScoreTable rows={data.agentScorecards!} />
+                    </VStack>
+                </Card>
             )}
         </VStack>
     )

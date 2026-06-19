@@ -16,6 +16,7 @@ export type {
   OperatorCdrResponse,
   OperatorDashboardResponse,
   OperatorAggregatedMetrics,
+  AgentScorecard,
   BatchUploadResponse,
   BatchStatusResponse,
   BatchItemStatus,

@@ -399,6 +399,12 @@
   "Комментарий (необязательно)": "Kommentar (optional)",
   "Скорректированные оценки хранятся отдельно от оценок ИИ и используются для калибровки": "Korrigierte Bewertungen werden getrennt von KI-Bewertungen gespeichert und zur Kalibrierung verwendet",
   "Карточки операторов": "Operator-Scorecards",
+  "Рейтинг операторов": "Operator-Ranking",
+  "OPERATOR_SCORE_RANKING_SUBTITLE": "Vergleich und Ranking der Operatoren nach Anrufqualität im gewählten Zeitraum",
+  "OPERATOR_SCORE_FILTER_NAME": "Suchen…",
+  "OPERATOR_SCORE_NO_MATCH": "Keine Operatoren entsprechen den Filtern",
+  "OPERATOR_SCORE_FILTERED_COUNT": "{{shown}} von {{total}} Operatoren angezeigt",
+  "Сводка по каждому оператору за выбранный период": "Zusammenfassung pro Operator für den gewählten Zeitraum",
   "Оператор": "Operator",
   "Звонков": "Anrufe",
   "Негатив": "Negativ"

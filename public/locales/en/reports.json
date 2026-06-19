@@ -360,6 +360,12 @@
   "Комментарий (необязательно)": "Note (optional)",
   "Скорректированные оценки хранятся отдельно от оценок ИИ и используются для калибровки": "Corrected scores are stored separately from AI scores and used for calibration",
   "Карточки операторов": "Operator scorecards",
+  "Рейтинг операторов": "Operator ranking",
+  "OPERATOR_SCORE_RANKING_SUBTITLE": "Compare and rank operators by call quality for the selected period",
+  "OPERATOR_SCORE_FILTER_NAME": "Search…",
+  "OPERATOR_SCORE_NO_MATCH": "No operators match the filters",
+  "OPERATOR_SCORE_FILTERED_COUNT": "Showing {{shown}} of {{total}} operators",
+  "Сводка по каждому оператору за выбранный период": "Per-operator summary for the selected period",
   "Оператор": "Operator",
   "Звонков": "Calls",
   "Негатив": "Negative"

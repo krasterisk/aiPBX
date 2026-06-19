@@ -1,0 +1,125 @@
+@import '@/app/styles/variables/mixins';
+
+.tableWrapper {
+    width: 100%;
+    overflow-x: auto;
+    @include custom-scrollbar;
+}
+
+.table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+}
+
+.headerRow th {
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-redesigned);
+    opacity: 0.65;
+    border-bottom: 1px solid var(--glass-border-secondary);
+    white-space: nowrap;
+}
+
+.filterRow th {
+    padding: 6px 8px 10px;
+    border-bottom: 1px solid var(--glass-border-secondary);
+    vertical-align: middle;
+}
+
+.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition-fast);
+
+    &:hover {
+        opacity: 1;
+        color: var(--accent-redesigned);
+    }
+}
+
+.sortIcon {
+    color: var(--accent-redesigned);
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.filterInput {
+    width: 100%;
+    min-width: 64px;
+    padding: 6px 8px;
+    font-size: 12px;
+    color: var(--text-redesigned);
+    background: var(--glass-bg-secondary);
+    border: 1px solid var(--glass-border-secondary);
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: var(--transition-fast);
+
+    &::placeholder {
+        color: var(--hint-redesigned);
+        opacity: 0.7;
+    }
+
+    &:focus {
+        border-color: var(--accent-redesigned);
+        box-shadow: 0 0 0 2px rgba(94, 211, 243, 0.15);
+    }
+
+    // hide number spinners
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    &[type='number'] {
+        -moz-appearance: textfield;
+    }
+}
+
+.bodyRow {
+    transition: var(--transition-fast);
+
+    td {
+        padding: 12px;
+        vertical-align: middle;
+        border-bottom: 1px solid var(--glass-border-secondary);
+    }
+
+    &:hover td {
+        background: var(--glass-overlay-medium);
+    }
+
+    &:last-child td {
+        border-bottom: none;
+    }
+}
+
+.rankCol {
+    width: 40px;
+    text-align: center;
+    color: var(--hint-redesigned);
+}
+
+.operatorName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 220px;
+}
+
+.emptyCell {
+    padding: 24px 12px;
+    text-align: center;
+    color: var(--hint-redesigned);
+}
+
+.filteredHint {
+    margin-top: var(--space-2);
+    color: var(--hint-redesigned);
+}
