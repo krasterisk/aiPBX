@@ -96,12 +96,13 @@ interface OperatorDashboardProps {
     projectId?: string
     startDate?: string
     endDate?: string
+    userId?: string | number
     onChangeProjectId: (value: string) => void
     onOpenDashboardBuilder?: () => void
 }
 
 export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
-    const { data, isLoading, projectId, startDate, endDate, onChangeProjectId, onOpenDashboardBuilder } = props
+    const { data, isLoading, projectId, startDate, endDate, userId, onChangeProjectId, onOpenDashboardBuilder } = props
     const { t } = useTranslation('reports')
     const { data: projects } = useGetOperatorProjects()
 
@@ -203,6 +204,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                         startDate,
                         endDate,
                         projectId,
+                        userId: userId != null && userId !== '' ? String(userId) : undefined,
                     }}
                 />
             )}

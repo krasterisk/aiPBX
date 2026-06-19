@@ -56,6 +56,7 @@ const DashboardCallRecordsContent = memo(() => {
                 projectId={projectId}
                 startDate={startDate}
                 endDate={endDate}
+                userId={userId}
                 onChangeProjectId={onChangeProjectId}
                 onOpenDashboardBuilder={handleOpenBuilder}
             />

@@ -363,6 +363,34 @@ export interface OperatorDashboardResponse {
   agentScorecards?: AgentScorecard[]
 }
 
+export type InsightPriority = 'high' | 'medium' | 'low'
+export type InsightType = 'strength' | 'gap' | 'trend' | 'outlier' | 'quality'
+
+export interface OperatorInsightEvidence {
+  metric?: string
+  value?: number
+  operators?: string[]
+  periodLabel?: string
+}
+
+export interface OperatorInsight {
+  priority: InsightPriority
+  type: InsightType
+  title: string
+  observation: string
+  recommendation: string
+  evidence: OperatorInsightEvidence
+}
+
+export interface OperatorInsightsResponse {
+  insights: OperatorInsight[]
+  generatedAt: string
+  promptVersion: string
+  sampleSize: number
+  lowConfidence: boolean
+  factsDigest?: string
+}
+
 export interface AgentScorecard {
   operatorName: string
   callsCount: number

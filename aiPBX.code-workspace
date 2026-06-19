@@ -1,0 +1,13 @@
+{
+  "folders": [
+    {
+      "name": "aiPBX (frontend)",
+      "path": "."
+    },
+    {
+      "name": "aiPBX_backend",
+      "path": "../aiPBX_backend"
+    }
+  ],
+  "settings": {}
+}

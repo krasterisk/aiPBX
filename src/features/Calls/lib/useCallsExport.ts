@@ -2,11 +2,10 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import * as XLSX from 'xlsx'
 import FileSaver from 'file-saver'
-import { AllReports, CdrSource, reportDisplayMoneyInput, serializeCsatFilter } from '@/entities/Report'
-import { formatDate } from '@/shared/lib/functions/formatDate'
-import { formatTime } from '@/shared/lib/functions/formatTime'
-import { formatDisplayMoney } from '@/shared/lib/functions/formatDisplayMoney'
+import { AllReports, CdrSource, serializeCsatFilter } from '@/entities/Report'
 import { TOKEN_LOCALSTORAGE_KEY } from '@/shared/const/localstorage'
+
+import { buildCallsExportSheet } from './callsExportSheet'
 
 const FILE_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
 const FILE_EXT = '.xlsx'
@@ -81,25 +80,14 @@ export const useCallsExport = (params: UseCallsExportParams) => {
 
             if (!allData?.rows?.length) return
 
-            const rows = allData.rows.map((report, index) => ({
-                '№': index + 1,
-                [String(t('Дата'))]: report.createdAt ? formatDate(report.createdAt) : '',
-                [String(t('Ассистент'))]: report.assistantName ?? '',
-                [String(t('Звонивший'))]: report.callerId ?? '',
-                [String(t('Источник'))]: report.source ?? '',
-                [String(t('Длительность'))]: report.duration ? formatTime(report.duration, t) ?? '' : '',
-                [String(t('Токены'))]: report.tokens ?? '',
-                [String(t('Стоимость'))]: (report.cost || report.amountCurrency || report.billingRecords?.length)
-                    ? formatDisplayMoney(reportDisplayMoneyInput(report), 4)
-                    : '',
-                CSAT: report.analytics?.csat ?? '',
-                [String(t('Настроение'))]: report.analytics?.sentiment ?? '',
-                [String(t('Результат'))]: report.analytics?.metrics?.scenario_analysis?.success != null
-                    ? (report.analytics.metrics.scenario_analysis.success ? t('Успех') : t('Эскалация'))
-                    : ''
-            }))
+            const { rows, headers } = buildCallsExportSheet(allData.rows, t)
 
-            const ws = XLSX.utils.json_to_sheet(rows)
+            const ws = XLSX.utils.json_to_sheet(rows, { header: headers })
+            ws['!cols'] = headers.map(h => ({
+                wch: h === String(t('Саммари')) || h === String(t('Транскрипт')) || h === String(t('Обоснование метрик'))
+                    ? 48
+                    : Math.min(Math.max(h.length, 12), 28),
+            }))
             const wb = XLSX.utils.book_new()
             XLSX.utils.book_append_sheet(wb, ws, 'calls')
             const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })

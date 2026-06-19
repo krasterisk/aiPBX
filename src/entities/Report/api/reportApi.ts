@@ -1,6 +1,6 @@
 import { rtkApi } from '@/shared/api/rtkApi'
 import { mergeReportsCache, serializeReportsQueryArgs } from '../lib/mergeReportsCache'
-import { AIAnalyticsResponse, AllReports, Analytics, BatchStatusResponse, CdrSource, DashboardConfig, MetricDefinition, MetricOverride, MetricOverrideInput, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorProject, OperatorUploadResponse, Report, ReportDialog } from '../model/types/report'
+import { AIAnalyticsResponse, AllReports, Analytics, BatchStatusResponse, CdrSource, DashboardConfig, MetricDefinition, MetricOverride, MetricOverrideInput, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorInsightsResponse, OperatorProject, OperatorUploadResponse, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
   page?: number
@@ -330,15 +330,29 @@ export const reportApi = rtkApi.injectEndpoints({
       query: () => '/operator-analytics/batches'
     }),
     getOperatorInsights: build.query<
-      { insights: string[], generatedAt: string },
-      { startDate?: string, endDate?: string, operatorName?: string, projectId?: string }
+      OperatorInsightsResponse,
+      {
+        startDate?: string
+        endDate?: string
+        operatorName?: string
+        projectId?: string
+        userId?: string
+        refresh?: boolean | string
+      }
     >({
-      query: (args) => ({
-        url: '/operator-analytics/insights',
-        params: Object.fromEntries(
-          Object.entries(args).filter(([, v]) => v !== undefined && v !== '')
+      query: (args) => {
+        const params = Object.fromEntries(
+          Object.entries({
+            ...args,
+            refresh: args.refresh === true || args.refresh === '1' ? '1' : undefined,
+            projectId: args.projectId,
+          }).filter(([, v]) => v !== undefined && v !== '')
         )
-      }),
+        return {
+          url: '/operator-analytics/insights',
+          params,
+        }
+      },
     }),
   })
 })
