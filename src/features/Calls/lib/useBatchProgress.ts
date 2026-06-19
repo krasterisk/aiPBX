@@ -114,7 +114,6 @@ export function useBatchProgress(): UseBatchProgressReturn {
                 }
 
                 dispatch(reportApi.util.invalidateTags(['OperatorAnalytics', 'Reports']))
-                return
             }
         } catch (err) {
             // Silently skip 429/network errors, will retry on next tick

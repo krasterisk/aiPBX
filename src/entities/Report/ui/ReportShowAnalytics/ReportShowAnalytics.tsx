@@ -112,7 +112,7 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
 
         const quality = metrics._quality
         const assessments = metrics._assessments as Record<string, { rationale?: string, quote?: string }> | undefined
-        const legacyEvidence = metrics._evidence as Record<string, string> | undefined
+        const legacyEvidence = metrics._evidence 
         const normalizeQuote = (s: string) => s.replace(/[«»"'`]/g, '').trim().toLowerCase()
         const getAssessment = (key: string): { rationale?: string, quote?: string } | undefined => {
             const a = assessments?.[key]

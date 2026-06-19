@@ -227,7 +227,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                                 <span>CSAT</span>
                                 <span>{String(t('Негатив'))}</span>
                             </div>
-                            {data!.agentScorecards!.map(row => (
+                            {data.agentScorecards!.map(row => (
                                 <div key={row.operatorName} className={cls.scorecardsRow}>
                                     <span className={cls.scorecardsName}>{row.operatorName}</span>
                                     <span>{row.callsCount}</span>

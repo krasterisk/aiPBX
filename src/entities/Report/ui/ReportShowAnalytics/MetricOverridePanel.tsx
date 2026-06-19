@@ -75,7 +75,7 @@ export const MetricOverridePanel = memo((props: MetricOverridePanelProps) => {
         if (metrics.success != null) {
             list.push({ metricId: 'success', label: String(t('Итог обращения')), origin: 'summary', kind: 'boolean' })
         }
-        const custom = metrics.custom_metrics as Record<string, unknown> | undefined
+        const custom = metrics.custom_metrics 
         const meta = metrics._custom_meta
         if (custom && typeof custom === 'object') {
             for (const id of Object.keys(custom)) {
@@ -167,7 +167,7 @@ export const MetricOverridePanel = memo((props: MetricOverridePanelProps) => {
                         <div className={cls.iconWrapper}><UserPen size={20} /></div>
                         <Text title={String(t('Корректировки супервизора'))} size="m" bold />
                     </HStack>
-                    <Button variant="clear" onClick={() => setExpanded(e => !e)}>
+                    <Button variant="clear" onClick={() => { setExpanded(e => !e) }}>
                         {expanded ? String(t('Свернуть')) : String(t('Изменить'))}
                     </Button>
                 </HStack>
@@ -180,7 +180,7 @@ export const MetricOverridePanel = memo((props: MetricOverridePanelProps) => {
                                     <Text text={`${labelFor(o.metricId)}: ${formatOverrideValue(o)}`} size="s" bold />
                                     {o.note && <Text text={o.note} size="xs" className={cls.metricHint} />}
                                 </VStack>
-                                <Button variant="clear" onClick={() => handleDelete(o.metricId)} aria-label={String(t('Удалить'))}>
+                                <Button variant="clear" onClick={async () => { await handleDelete(o.metricId) }} aria-label={String(t('Удалить'))}>
                                     <Trash2 size={16} />
                                 </Button>
                             </HStack>
@@ -204,14 +204,14 @@ export const MetricOverridePanel = memo((props: MetricOverridePanelProps) => {
                         </select>
 
                         {selected && selected.kind === 'boolean' && (
-                            <select className={cls.overrideSelect} value={valueInput} onChange={e => setValueInput(e.target.value)}>
+                            <select className={cls.overrideSelect} value={valueInput} onChange={e => { setValueInput(e.target.value) }}>
                                 <option value="">{String(t('Выберите значение'))}</option>
                                 <option value="true">{String(t('Да'))}</option>
                                 <option value="false">{String(t('Нет'))}</option>
                             </select>
                         )}
                         {selected && selected.kind === 'enum' && (
-                            <select className={cls.overrideSelect} value={valueInput} onChange={e => setValueInput(e.target.value)}>
+                            <select className={cls.overrideSelect} value={valueInput} onChange={e => { setValueInput(e.target.value) }}>
                                 <option value="">{String(t('Выберите значение'))}</option>
                                 {(selected.enumValues || []).map(v => (
                                     <option key={v} value={v}>{String(t(v))}</option>

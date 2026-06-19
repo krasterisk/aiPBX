@@ -89,11 +89,11 @@ hour12: false
     const csat = report.analytics?.csat
     const scenarioSuccess = report.analytics?.metrics?.scenario_analysis?.success ??
         report.analytics?.metrics?.success
-    const transcriptionQuality = report.transcriptionQuality
-        || report.analytics?.metrics?._quality?.quality
-    const qualityReasons = report.qualityReasons
-        || report.analytics?.metrics?._quality?.reasons
-        || []
+    const transcriptionQuality = report.transcriptionQuality ||
+        report.analytics?.metrics?._quality?.quality
+    const qualityReasons = report.qualityReasons ||
+        report.analytics?.metrics?._quality?.reasons ||
+        []
 
     return (
         <>

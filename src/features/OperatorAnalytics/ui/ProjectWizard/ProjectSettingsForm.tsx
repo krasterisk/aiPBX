@@ -115,7 +115,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
             <Textarea
                 label={String(t('Месячный бюджет, USD (0 — без лимита)'))}
                 value={budgetInput}
-                onChange={e => setBudgetInput(e.target.value)}
+                onChange={e => { setBudgetInput(e.target.value) }}
                 size={'small'}
                 fullWidth
                 multiline={false}
