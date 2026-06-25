@@ -14,8 +14,7 @@ import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { onboardingActions } from '../../model/slices/onboardingSlice'
 import {
-    getOnboardingOaProjectId,
-    getOnboardingStep
+    getOnboardingOaProjectId
 } from '../../model/selectors/onboardingSelectors'
 import { trackOnboardingEvent } from '../../lib/onboardingAnalytics'
 import {
@@ -30,6 +29,7 @@ import {
     getWizardDescription
 } from '@/entities/Report'
 import { WizardStep0_Templates } from '@/features/OperatorAnalytics/ui/ProjectWizard/WizardStep0_Templates'
+import { OperatorUploadForm } from '@/features/OperatorAnalytics/ui/OperatorUploadForm/OperatorUploadForm'
 import clsWizard from '../OnboardingWizard/OnboardingWizard.module.scss'
 import cls from './OnboardingAnalyticsFlow.module.scss'
 
@@ -271,15 +271,46 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
 interface AnalyticsUploadStepProps {
     className?: string
     onBatchStarted?: (batchId: string) => void
+    batchProgress?: number
+    batchIsActive?: boolean
+    analysisComplete?: boolean
 }
 
-export const AnalyticsUploadStep = memo(({ className, onBatchStarted }: AnalyticsUploadStepProps) => {
+export const AnalyticsUploadStep = memo(({
+    className,
+    onBatchStarted,
+    batchProgress = 0,
+    batchIsActive = false,
+    analysisComplete = false
+}: AnalyticsUploadStepProps) => {
     const { t } = useTranslation('onboarding')
     const dispatch = useAppDispatch()
+    const projectId = useSelector(getOnboardingOaProjectId)
 
     const onBack = useCallback(() => {
-        dispatch(onboardingActions.prevStep())
+        if (!batchIsActive) {
+            dispatch(onboardingActions.prevStep())
+        }
+    }, [dispatch, batchIsActive])
+
+    const onUploadStart = useCallback(() => {
+        trackOnboardingEvent('oa_file_uploaded', { productPath: 'analytics', projectId: projectId ?? undefined })
+    }, [projectId])
+
+    const onSkip = useCallback(() => {
+        dispatch(onboardingActions.skipOnboarding())
     }, [dispatch])
+
+    if (!projectId) {
+        return (
+            <VStack gap="16" max className={className}>
+                <Text text={t('analytics_upload_no_project', 'Сначала создайте проект на предыдущем шаге')} variant="error" />
+                <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
+                    {t('step_back', 'Назад')}
+                </Button>
+            </VStack>
+        )
+    }
 
     return (
         <VStack gap="16" max className={className}>
@@ -288,12 +319,48 @@ export const AnalyticsUploadStep = memo(({ className, onBatchStarted }: Analytic
                 text={t('analytics_upload_subtitle', 'Загрузите аудиофайл — мы проанализируем разговор и покажем отчёт')}
                 size="l"
             />
-            <Text text={t('analytics_upload_pending', 'Форма загрузки подключается...')} size="s" />
-            <HStack gap="12" justify="between" max className={cls.stepFooter}>
-                <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
-                    {t('step_back', 'Назад')}
-                </Button>
-            </HStack>
+
+            {!batchIsActive && !analysisComplete && (
+                <OperatorUploadForm
+                    compact
+                    fixedProjectId={projectId}
+                    onUploadStart={onUploadStart}
+                    onBatchStarted={onBatchStarted}
+                />
+            )}
+
+            {batchIsActive && (
+                <VStack gap="12" max>
+                    <Text
+                        title={t('analytics_analysis_progress_title', 'Анализируем запись...')}
+                        text={t('analytics_analysis_progress_desc', 'Обычно это занимает несколько минут. Можно подождать здесь.')}
+                        size="s"
+                    />
+                    <div className={cls.progressBar}>
+                        <div className={cls.progressFill} style={{ width: `${batchProgress}%` }} />
+                    </div>
+                    <Text text={`${batchProgress}%`} align="center" size="xs" />
+                </VStack>
+            )}
+
+            {analysisComplete && (
+                <Text
+                    text={t('analytics_analysis_complete', 'Анализ завершён! Открываем дашборд...')}
+                    align="center"
+                    size="s"
+                />
+            )}
+
+            {!batchIsActive && (
+                <HStack gap="12" justify="between" max className={cls.stepFooter}>
+                    <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
+                        {t('step_back', 'Назад')}
+                    </Button>
+                    <Button variant="clear" size="s" onClick={onSkip} className={clsWizard.skipLink}>
+                        {t('welcome_skip', 'Пропустить и настроить позже')}
+                    </Button>
+                </HStack>
+            )}
         </VStack>
     )
 })

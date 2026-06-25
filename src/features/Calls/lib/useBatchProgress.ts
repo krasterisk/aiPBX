@@ -32,14 +32,20 @@ export interface MultiBatchState {
 
 const POLL_INTERVAL = 5000
 
+export interface UseBatchProgressOptions {
+    onBatchFinished?: (status: BatchStatusResponse, batchId: string) => void
+}
+
 export interface UseBatchProgressReturn extends MultiBatchState {
     startPolling: (batchId: string) => void
     dismiss: () => void
 }
 
-export function useBatchProgress(): UseBatchProgressReturn {
+export function useBatchProgress(options?: UseBatchProgressOptions): UseBatchProgressReturn {
     const { t } = useTranslation('reports')
     const dispatch = useAppDispatch()
+    const onBatchFinishedRef = useRef(options?.onBatchFinished)
+    onBatchFinishedRef.current = options?.onBatchFinished
     const [fetchBatchStatus] = useLazyGetBatchStatus()
     const [fetchActiveBatches] = useLazyGetActiveBatches()
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -114,6 +120,7 @@ export function useBatchProgress(): UseBatchProgressReturn {
                 }
 
                 dispatch(reportApi.util.invalidateTags(['OperatorAnalytics', 'Reports']))
+                onBatchFinishedRef.current?.(status, batchId)
             }
         } catch (err) {
             // Silently skip 429/network errors, will retry on next tick

@@ -37,9 +37,15 @@ interface OperatorUploadFormProps {
     isOpen?: boolean
     onClose?: () => void
     onBatchStarted?: (batchId: string) => void
+    /** When set, locks upload to this project and hides project selector */
+    fixedProjectId?: string
+    /** Called when user submits upload */
+    onUploadStart?: () => void
+    /** Hide title header for inline embed */
+    compact?: boolean
 }
 
-export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted }: OperatorUploadFormProps) => {
+export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted, fixedProjectId, onUploadStart, compact }: OperatorUploadFormProps) => {
     const { t } = useTranslation('reports')
     const [files, setFiles] = useState<Array<{ file: File }>>([])
     const [operatorName, setOperatorName] = useState('')
@@ -92,12 +98,14 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted }: Ope
 
     const handleSubmit = useCallback(async () => {
         if (!files.length) return
+        onUploadStart?.()
         const formData = new FormData()
         files.forEach(({ file }) => { formData.append(files.length === 1 ? 'file' : 'files', file) })
         if (operatorName) formData.append('operatorName', operatorName)
         if (clientPhone) formData.append('clientPhone', clientPhone)
         if (language && language.id !== 'auto') formData.append('language', language.id)
-        if (projectId) formData.append('projectId', projectId)
+        const effectiveProjectId = fixedProjectId || projectId
+        if (effectiveProjectId) formData.append('projectId', effectiveProjectId)
         try {
             const result = await uploadFiles(formData).unwrap()
 
@@ -121,7 +129,7 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted }: Ope
             const message = err?.data?.message || err?.message || t('Ошибка при загрузке')
             toast.error(String(message))
         }
-    }, [files, operatorName, clientPhone, language, projectId, uploadFiles, t, onClose, onBatchStarted])
+    }, [files, operatorName, clientPhone, language, projectId, fixedProjectId, uploadFiles, t, onClose, onBatchStarted, onUploadStart])
 
     const dropZoneClasses = [
         cls.dropZone,
@@ -132,7 +140,7 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted }: Ope
     return (
         <VStack gap="16" max>
             {/* Header */}
-            <Text title={String(t('Загрузить звонок'))} bold size="l" />
+            {!compact && <Text title={String(t('Загрузить звонок'))} bold size="l" />}
 
             {/* Drop zone */}
             <div
@@ -226,7 +234,9 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted }: Ope
                     isOptionEqualToValue={(o: { id: string }, v: { id: string }) => o.id === v.id}
                     disableClearable
                 />
-                <ProjectSelect value={projectId} onChange={setProjectId} />
+                {!fixedProjectId && (
+                    <ProjectSelect value={projectId} onChange={setProjectId} />
+                )}
             </div>
 
             {/* Submit */}
