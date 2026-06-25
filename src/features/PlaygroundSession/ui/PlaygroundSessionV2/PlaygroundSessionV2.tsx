@@ -5,7 +5,7 @@ import { AssistantOptions, useAssistant, assistantFormActions, assistantFormRedu
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 // eslint-disable-next-line krasterisk-plugin/layer-imports
 import { playgroundAssistantFormActions } from '@/pages/Playground'
-import { usePlaygroundSession } from '../../model/usePlaygroundSession'
+import { usePlaygroundSession, DisconnectInfo } from '../../model/usePlaygroundSession'
 import { PlaygroundLayout } from '../PlaygroundLayout/PlaygroundLayout'
 import { PlaygroundHeader } from '../PlaygroundHeader/PlaygroundHeader'
 import { StatusBar } from '../StatusBar/StatusBar'
@@ -21,10 +21,12 @@ const reducers: ReducersList = {
 
 interface PlaygroundSessionV2Props {
     className?: string
+    preselectedAssistantId?: string
+    onSessionDisconnect?: (info: DisconnectInfo) => void
 }
 
 export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
-    const { className } = props
+    const { className, preselectedAssistantId, onSessionDisconnect } = props
     const { t } = useTranslation('playground')
     const dispatch = useDispatch()
     const userData = useSelector(getUserAuthData)
@@ -37,6 +39,18 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
         skip: !selectedAssistant?.id
     })
 
+    const { data: preselectedAssistantData } = useAssistant(preselectedAssistantId || '', {
+        skip: !preselectedAssistantId
+    })
+
+    useEffect(() => {
+        if (!preselectedAssistantId || !preselectedAssistantData?.id || selectedAssistant) return
+        setSelectedAssistant({
+            id: preselectedAssistantData.id,
+            name: preselectedAssistantData.name || preselectedAssistantId
+        })
+    }, [preselectedAssistantId, preselectedAssistantData, selectedAssistant])
+
     useEffect(() => {
         if (assistantData && selectedAssistant) {
             dispatch(playgroundAssistantFormActions.initForm(assistantData))
@@ -48,7 +62,9 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
     }, [assistantData, selectedAssistant, dispatch])
 
     // --- Session hook ---
-    const { status, connect, disconnect, updateSession, events, analyserNode } = usePlaygroundSession()
+    const { status, connect, disconnect, updateSession, events, analyserNode } = usePlaygroundSession({
+        onDisconnect: onSessionDisconnect
+    })
 
     const isSessionActive = status === 'connected'
     const isConnecting = status === 'connecting'

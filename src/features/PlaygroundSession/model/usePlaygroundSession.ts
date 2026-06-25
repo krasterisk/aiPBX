@@ -8,9 +8,14 @@ const SAMPLE_RATE = 24000 // PCM16 from OpenAI Realtime API works at 24kHz
 const INITIAL_BUFFER_DELAY = 0.15 // 150ms buffering
 const RECONNECT_DELAY = 1000
 
+export interface DisconnectInfo {
+    connectedDurationMs: number
+    wasConnected: boolean
+}
+
 interface UsePlaygroundSessionProps {
     onConnect?: () => void
-    onDisconnect?: () => void
+    onDisconnect?: (info: DisconnectInfo) => void
     onError?: (error: string) => void
 }
 
@@ -39,6 +44,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
     const nextStartTimeRef = useRef<number>(0)
     const activeSourcesRef = useRef<AudioBufferSourceNode[]>([])
     const isPlayingRef = useRef<boolean>(false)
+    const connectedAtRef = useRef<number | null>(null)
 
     // Flush events periodically
     useEffect(() => {
@@ -249,6 +255,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         socket.on('playground.ready', async () => {
             console.log('Playground Session Ready')
             setStatus('connected')
+            connectedAtRef.current = Date.now()
             try {
                 await initAudioInput(socket, micDeviceId)
                 propsRef.current?.onConnect?.()
@@ -276,10 +283,14 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
 
         socket.on('disconnect', () => {
             console.log('Playground Socket Disconnected')
+            const connectedAt = connectedAtRef.current
+            const connectedDurationMs = connectedAt ? Date.now() - connectedAt : 0
+            const wasConnected = connectedAt !== null
+            connectedAtRef.current = null
             cleanupAudio()
             setStatus('idle')
             socketRef.current = null
-            propsRef.current?.onDisconnect?.()
+            propsRef.current?.onDisconnect?.({ connectedDurationMs, wasConnected })
         })
 
         socket.on('connect_error', (err) => {
@@ -300,9 +311,11 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         if (socketRef.current) {
             socketRef.current.emit('playground_stop')
             socketRef.current.disconnect()
+        } else {
+            connectedAtRef.current = null
+            cleanupAudio()
+            setStatus('idle')
         }
-        cleanupAudio()
-        setStatus('idle')
     }, [cleanupAudio])
 
     useEffect(() => {

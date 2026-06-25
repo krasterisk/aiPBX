@@ -98,5 +98,6 @@
     "Транскрипт": "Transcript",
     "Экспорт JSON": "Export JSON",
     "Экспорт": "Export",
-    "Очистить": "Clear"
+    "Очистить": "Clear",
+    "onboarding_call_success": "Great! Call completed — set up assistant publishing next."
 }

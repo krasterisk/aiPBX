@@ -1,9 +1,22 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { useTranslation } from 'react-i18next'
 import cls from './Playground.module.scss'
-import { memo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { Page } from '@/widgets/Page'
 import { PlaygroundSessionV2 } from '@/features/PlaygroundSession'
+import { useSearchParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
+import { onboardingActions } from '@/features/Onboarding/model/slices/onboardingSlice'
+import {
+    getOnboardingProductPath,
+    getOnboardingPlaygroundCallCompleted
+} from '@/features/Onboarding/model/selectors/onboardingSelectors'
+import { trackOnboardingEvent } from '@/features/Onboarding/lib/onboardingAnalytics'
+import { DisconnectInfo } from '@/features/PlaygroundSession/model/usePlaygroundSession'
+import { toast } from 'react-toastify'
+
+const MIN_CONNECTED_MS = 10_000
 
 interface PlaygroundPageProps {
     className?: string
@@ -12,10 +25,44 @@ interface PlaygroundPageProps {
 const PlaygroundPage = memo((props: PlaygroundPageProps) => {
     const { className } = props
     const { t } = useTranslation('playground')
+    const [searchParams, setSearchParams] = useSearchParams()
+    const dispatch = useAppDispatch()
+
+    const productPath = useSelector(getOnboardingProductPath)
+    const playgroundCallCompleted = useSelector(getOnboardingPlaygroundCallCompleted)
+
+    const onboardingFromUrl = searchParams.get('onboarding') === 'assistants'
+    const preselectedAssistantId = searchParams.get('assistantId') ?? undefined
+
+    const isOnboardingAssistants = useMemo(() => {
+        if (playgroundCallCompleted) return false
+        if (onboardingFromUrl) return true
+        return productPath === 'assistants'
+    }, [onboardingFromUrl, productPath, playgroundCallCompleted])
+
+    const handleSessionDisconnect = useCallback((info: DisconnectInfo) => {
+        if (!isOnboardingAssistants) return
+        if (!info.wasConnected || info.connectedDurationMs < MIN_CONNECTED_MS) return
+
+        dispatch(onboardingActions.setPlaygroundCallCompleted(true))
+        trackOnboardingEvent('playground_call_success', { productPath: 'assistants' })
+        dispatch(onboardingActions.resumeForPostSuccess())
+
+        if (onboardingFromUrl) {
+            setSearchParams({}, { replace: true })
+        }
+
+        toast.success(
+            t('onboarding_call_success', 'Отлично! Звонок прошёл успешно — настройте публикацию ассистента.')
+        )
+    }, [dispatch, isOnboardingAssistants, onboardingFromUrl, setSearchParams, t])
 
     return (
         <Page data-testid={'PlaygroundPage'} className={classNames(cls.Playground, {}, [className])}>
-            <PlaygroundSessionV2 />
+            <PlaygroundSessionV2
+                preselectedAssistantId={preselectedAssistantId}
+                onSessionDisconnect={handleSessionDisconnect}
+            />
         </Page>
     )
 })
