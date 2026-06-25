@@ -6,3 +6,4 @@ export {
     ONBOARDING_PRODUCT_KEY,
     ONBOARDING_SIGNUP_KEY
 } from './model/types/onboarding'
+export { trackOnboardingEvent } from './lib/onboardingAnalytics'

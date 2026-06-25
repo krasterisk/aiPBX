@@ -7,6 +7,7 @@ import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { onboardingActions } from '../../model/slices/onboardingSlice'
 import { OnboardingProductPath } from '../../model/types/onboarding'
+import { trackOnboardingEvent } from '../../lib/onboardingAnalytics'
 import AipbxLogo from '@/shared/assets/icons/aipbx_logo_v3.svg'
 import cls from './ProductForkStep.module.scss'
 import clsWizard from '../OnboardingWizard/OnboardingWizard.module.scss'
@@ -20,7 +21,12 @@ export const ProductForkStep = memo(({ className }: ProductForkStepProps) => {
     const dispatch = useAppDispatch()
 
     const onSelect = useCallback((path: OnboardingProductPath) => {
+        trackOnboardingEvent(
+            path === 'assistants' ? 'onboarding_product_assistants' : 'onboarding_product_analytics',
+            { productPath: path }
+        )
         dispatch(onboardingActions.setProductPath(path))
+        trackOnboardingEvent('onboarding_step_1', { productPath: path, step: 1 })
     }, [dispatch])
 
     const onSkip = useCallback(() => {

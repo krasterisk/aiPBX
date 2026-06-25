@@ -6,6 +6,10 @@ import {
     ONBOARDING_PRODUCT_KEY,
     getMaxStepForPath
 } from '../types/onboarding'
+import {
+    trackOnboardingEvent,
+    trackOnboardingStepEvent
+} from '../../lib/onboardingAnalytics'
 
 const initialState: OnboardingState = {
     isActive: false,
@@ -35,21 +39,25 @@ export const onboardingSlice = createSlice({
             state.isActive = true
             state.currentStep = 0
             state.productPath = null
+            trackOnboardingEvent('onboarding_started')
         },
         nextStep: (state) => {
             const max = getMaxStepForPath(state.productPath)
             if (state.currentStep < max) {
                 state.currentStep += 1
+                trackOnboardingStepEvent(state.currentStep, state.productPath)
             }
         },
         prevStep: (state) => {
             const minStep = state.productPath ? 1 : 0
             if (state.currentStep > minStep) {
                 state.currentStep -= 1
+                trackOnboardingStepEvent(state.currentStep, state.productPath)
             }
         },
         goToStep: (state, action: PayloadAction<number>) => {
             state.currentStep = action.payload
+            trackOnboardingStepEvent(state.currentStep, state.productPath)
         },
         setProductPath: (state, action: PayloadAction<OnboardingProductPath>) => {
             state.productPath = action.payload
@@ -120,6 +128,10 @@ export const onboardingSlice = createSlice({
             state.skipped = true
             state.isActive = false
             localStorage.setItem(ONBOARDING_STORAGE_KEY, 'true')
+            trackOnboardingEvent('onboarding_skipped', {
+                productPath: state.productPath,
+                step: state.currentStep
+            })
         },
         completeOnboarding: (state) => {
             state.isActive = false
