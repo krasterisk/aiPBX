@@ -136,6 +136,17 @@ export const onboardingSlice = createSlice({
         completeOnboarding: (state) => {
             state.isActive = false
             localStorage.setItem(ONBOARDING_STORAGE_KEY, 'true')
+            trackOnboardingEvent('onboarding_completed', {
+                productPath: state.productPath,
+                step: state.currentStep
+            })
+        },
+        pauseOnboardingOverlay: (state) => {
+            state.isActive = false
+        },
+        resumeForPostSuccess: (state) => {
+            state.isActive = true
+            state.currentStep = getMaxStepForPath('assistants')
         }
     }
 })

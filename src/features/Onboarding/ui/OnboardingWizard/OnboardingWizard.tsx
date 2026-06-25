@@ -20,7 +20,7 @@ import { ProductForkStep } from '../steps/ProductForkStep'
 import { WelcomeStep } from '../steps/WelcomeStep'
 import { BusinessTypeStep } from '../steps/BusinessTypeStep'
 import { SimpleExampleStep } from '../steps/SimpleExampleStep'
-import { PublishOverviewStep } from '../steps/PublishOverviewStep'
+import { PlaygroundGuideStep } from '../steps/PlaygroundGuideStep'
 import { CompletionStep } from '../steps/CompletionStep'
 import { AnalyticsWelcomeStep } from '../steps/AnalyticsWelcomeStep'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
@@ -37,7 +37,7 @@ const assistantsStepsMap: Record<number, React.FC<{ className?: string }>> = {
     1: WelcomeStep,
     2: BusinessTypeStep,
     3: SimpleExampleStep,
-    4: PublishOverviewStep,
+    4: PlaygroundGuideStep,
     5: CompletionStep
 }
 

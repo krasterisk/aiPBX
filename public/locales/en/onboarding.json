@@ -158,5 +158,9 @@
     "simple_example_result_title": "Call outcome",
     "simple_example_result_desc": "After the call you get a request: name, phone, and visit time.",
     "simple_example_telegram_toggle": "Connect Telegram (optional)",
-    "simple_example_telegram_desc": "You can connect Telegram later for order notifications. In some regions the service is unavailable — this does not block the assistant."
+    "simple_example_telegram_desc": "You can connect Telegram later for order notifications. In some regions the service is unavailable — this does not block the assistant.",
+    "playground_guide_title": "Test your assistant by voice",
+    "playground_guide_subtitle": "Next step — a call in Playground. It takes a couple of minutes and shows how the assistant responds to clients.",
+    "playground_guide_cta": "Call in Playground",
+    "playground_guide_hint": "Click \"Call in Playground\", allow the microphone, and talk to the assistant for at least 10 seconds."
 }

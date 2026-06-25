@@ -18,6 +18,7 @@ import {
     getOnboardingError
 } from '../../model/selectors/onboardingSelectors'
 import { BusinessCard } from '../components/BusinessCard/BusinessCard'
+import { trackOnboardingEvent } from '../../lib/onboardingAnalytics'
 import { assistantTemplates, useSetAssistants, useGeneratePrompt, useUpdateAssistant, initAssistant } from '@/entities/Assistants'
 
 import { useMcpServersAll } from '@/entities/Mcp'
@@ -160,6 +161,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             if (result?.[0]?.id) {
                 const assistantId = result[0].id
                 dispatch(onboardingActions.setCreatedAssistantId(assistantId))
+                trackOnboardingEvent('assistant_created', { productPath: 'assistants' })
 
                 // Auto-attach existing Telegram MCP server
                 try {
@@ -210,6 +212,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             if (result?.[0]?.id) {
                 const assistantId = result[0].id
                 dispatch(onboardingActions.setCreatedAssistantId(assistantId))
+                trackOnboardingEvent('assistant_created', { productPath: 'assistants' })
 
                 // Auto-attach existing Telegram MCP server
                 try {
