@@ -113,7 +113,7 @@ export const ProductForkStep = memo(({ className }: ProductForkStepProps) => {
 
             <Button
                 variant="clear"
-                size="s"
+                size="m"
                 onClick={onSkip}
                 className={clsWizard.skipLink}
             >
