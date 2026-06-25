@@ -147,5 +147,16 @@
     "completion_go_docs": "Documentation",
     "completion_go_assistants": "Go to Assistants",
     "back": "Back",
-    "next": "Next"
+    "next": "Next",
+    "simple_example_title": "Simple example",
+    "simple_example_scenario_default": "See how your assistant works with a sample appointment booking scenario.",
+    "simple_example_scenario_reception": "Your assistant acts as a virtual receptionist: takes calls and books clients.",
+    "simple_example_prompt_title": "Assistant instructions",
+    "simple_example_prompt_desc": "You defined the scenario: greeting, collecting client details, and booking an appointment.",
+    "simple_example_voice_title": "Voice and dialogue",
+    "simple_example_voice_desc": "The assistant responds by voice in real time — like a live receptionist.",
+    "simple_example_result_title": "Call outcome",
+    "simple_example_result_desc": "After the call you get a request: name, phone, and visit time.",
+    "simple_example_telegram_toggle": "Connect Telegram (optional)",
+    "simple_example_telegram_desc": "You can connect Telegram later for order notifications. In some regions the service is unavailable — this does not block the assistant."
 }

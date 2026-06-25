@@ -147,5 +147,16 @@
     "completion_go_docs": "Документация",
     "completion_go_assistants": "Перейти к ассистентам",
     "back": "Назад",
-    "next": "Далее"
+    "next": "Далее",
+    "simple_example_title": "Простой пример",
+    "simple_example_scenario_default": "Посмотрите, как работает ваш ассистент на примере записи клиента на приём.",
+    "simple_example_scenario_reception": "Ваш ассистент работает как виртуальный администратор: принимает звонки и записывает клиентов.",
+    "simple_example_prompt_title": "Инструкции ассистента",
+    "simple_example_prompt_desc": "Вы задали сценарий: приветствие, сбор данных клиента и запись на приём.",
+    "simple_example_voice_title": "Голос и диалог",
+    "simple_example_voice_desc": "Ассистент отвечает голосом в реальном времени — как живой оператор на ресепшене.",
+    "simple_example_result_title": "Результат звонка",
+    "simple_example_result_desc": "После разговора вы получаете заявку: имя, телефон, время визита.",
+    "simple_example_telegram_toggle": "Подключить Telegram (необязательно)",
+    "simple_example_telegram_desc": "Telegram можно подключить позже для уведомлений о заявках. В некоторых регионах сервис недоступен — это не блокирует работу ассистента."
 }

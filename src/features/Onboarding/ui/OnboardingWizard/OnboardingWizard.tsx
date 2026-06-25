@@ -19,7 +19,7 @@ import { StepIndicator } from '../components/StepIndicator/StepIndicator'
 import { ProductForkStep } from '../steps/ProductForkStep'
 import { WelcomeStep } from '../steps/WelcomeStep'
 import { BusinessTypeStep } from '../steps/BusinessTypeStep'
-import { TelegramStep } from '../steps/TelegramStep'
+import { SimpleExampleStep } from '../steps/SimpleExampleStep'
 import { PublishOverviewStep } from '../steps/PublishOverviewStep'
 import { CompletionStep } from '../steps/CompletionStep'
 import { AnalyticsWelcomeStep } from '../steps/AnalyticsWelcomeStep'
@@ -36,7 +36,7 @@ interface OnboardingWizardProps {
 const assistantsStepsMap: Record<number, React.FC<{ className?: string }>> = {
     1: WelcomeStep,
     2: BusinessTypeStep,
-    3: TelegramStep,
+    3: SimpleExampleStep,
     4: PublishOverviewStep,
     5: CompletionStep
 }
