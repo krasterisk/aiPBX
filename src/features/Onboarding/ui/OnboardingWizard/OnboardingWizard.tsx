@@ -22,7 +22,7 @@ import { BusinessTypeStep } from '../steps/BusinessTypeStep'
 import { SimpleExampleStep } from '../steps/SimpleExampleStep'
 import { PlaygroundGuideStep } from '../steps/PlaygroundGuideStep'
 import { TrunkWidgetStep } from '../steps/TrunkWidgetStep'
-import { AnalyticsWelcomeStep } from '../steps/AnalyticsWelcomeStep'
+import { OnboardingAnalyticsFlow } from '../analytics/OnboardingAnalyticsFlow'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 
 const reducers: ReducersList = {
@@ -42,7 +42,10 @@ const assistantsStepsMap: Record<number, React.FC<{ className?: string }>> = {
 }
 
 const analyticsStepsMap: Record<number, React.FC<{ className?: string }>> = {
-    1: AnalyticsWelcomeStep
+    1: OnboardingAnalyticsFlow,
+    2: OnboardingAnalyticsFlow,
+    3: OnboardingAnalyticsFlow,
+    4: OnboardingAnalyticsFlow
 }
 
 function resolveStepComponent (
@@ -53,7 +56,7 @@ function resolveStepComponent (
         return ProductForkStep
     }
     if (productPath === 'analytics') {
-        return analyticsStepsMap[currentStep] ?? AnalyticsWelcomeStep
+        return analyticsStepsMap[currentStep] ?? OnboardingAnalyticsFlow
     }
     return assistantsStepsMap[currentStep] ?? WelcomeStep
 }

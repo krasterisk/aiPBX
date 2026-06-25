@@ -7,6 +7,7 @@ export interface OnboardingState {
   productPath: OnboardingProductPath | null
   playgroundCallCompleted: boolean
   oaAnalysisCompleted: boolean
+  oaProjectId: string | null
   postSuccessStep: number | null
 
   // Step 1: Business type
@@ -36,7 +37,7 @@ export const TOTAL_STEPS = 5
 
 export const FORK_STEP = 0
 export const ASSISTANTS_MAX_STEP = 5
-export const ANALYTICS_MAX_STEP = 1
+export const ANALYTICS_MAX_STEP = 4
 
 export function getMaxStepForPath (productPath: OnboardingProductPath | null): number {
   if (productPath === 'analytics') return ANALYTICS_MAX_STEP

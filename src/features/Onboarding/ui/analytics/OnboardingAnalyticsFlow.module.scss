@@ -1,0 +1,63 @@
+.stepFooter {
+    width: 100%;
+    padding-top: 8px;
+}
+
+.templateGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    width: 100%;
+}
+
+.templateCard {
+    cursor: pointer;
+    transition: border-color var(--duration-fast) var(--ease-default);
+
+    &:hover {
+        border-color: var(--accent-redesigned);
+    }
+}
+
+.templateCardSelected {
+    border-color: var(--accent-redesigned) !important;
+    box-shadow: 0 0 0 1px var(--accent-redesigned);
+}
+
+.metricsList {
+    width: 100%;
+}
+
+.metricRow {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: var(--radius-m);
+    border: var(--glass-border-primary);
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease-default);
+
+    &:hover {
+        background: var(--hover-bg);
+    }
+}
+
+.progressBar {
+    width: 100%;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--bg-secondary);
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: var(--accent-redesigned);
+    transition: width var(--duration-normal) var(--ease-default);
+}
+
+.apiCard {
+    width: 100%;
+    padding: 16px;
+    border-radius: var(--radius-m);
+    border: var(--glass-border-primary);
+}

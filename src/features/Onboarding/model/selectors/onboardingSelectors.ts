@@ -25,6 +25,9 @@ export const getOnboardingPlaygroundCallCompleted = (state: StateSchema) =>
 export const getOnboardingOaAnalysisCompleted = (state: StateSchema) =>
     state.onboarding?.oaAnalysisCompleted ?? false
 
+export const getOnboardingOaProjectId = (state: StateSchema) =>
+    state.onboarding?.oaProjectId ?? null
+
 export const getOnboardingPostSuccessStep = (state: StateSchema) =>
     state.onboarding?.postSuccessStep ?? null
 

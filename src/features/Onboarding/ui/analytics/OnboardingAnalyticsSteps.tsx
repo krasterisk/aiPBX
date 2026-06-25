@@ -1,0 +1,307 @@
+import React, { memo, useCallback, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+import {
+    ArrowLeft,
+    ArrowRight,
+    BarChart3,
+    Check
+} from 'lucide-react'
+import { Button } from '@/shared/ui/redesign-v3/Button'
+import { Input } from '@/shared/ui/redesign-v3/Input'
+import { Text } from '@/shared/ui/redesigned/Text'
+import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
+import { onboardingActions } from '../../model/slices/onboardingSlice'
+import {
+    getOnboardingOaProjectId,
+    getOnboardingStep
+} from '../../model/selectors/onboardingSelectors'
+import { trackOnboardingEvent } from '../../lib/onboardingAnalytics'
+import {
+    DefaultMetricKey,
+    projectWizardActions,
+    useCreateOperatorProject,
+    getWizardName,
+    getWizardSelectedTemplateId,
+    getWizardVisibleDefaultMetrics,
+    getWizardCustomMetrics,
+    getWizardSystemPrompt,
+    getWizardDescription
+} from '@/entities/Report'
+import { WizardStep0_Templates } from '@/features/OperatorAnalytics/ui/ProjectWizard/WizardStep0_Templates'
+import clsWizard from '../OnboardingWizard/OnboardingWizard.module.scss'
+import cls from './OnboardingAnalyticsFlow.module.scss'
+
+const DEFAULT_METRIC_LABELS: Record<DefaultMetricKey, string> = {
+    greeting_quality: 'Качество приветствия',
+    script_compliance: 'Следование скрипту',
+    politeness_empathy: 'Вежливость и эмпатия',
+    active_listening: 'Активное слушание',
+    objection_handling: 'Работа с возражениями',
+    product_knowledge: 'Знание продукта',
+    problem_resolution: 'Решение проблемы',
+    speech_clarity_pace: 'Темп речи',
+    closing_quality: 'Качество завершения'
+}
+
+// ─── Step 1: Welcome ─────────────────────────────────────────────────────────
+
+export const AnalyticsWelcomeOverviewStep = memo(({ className }: { className?: string }) => {
+    const { t } = useTranslation('onboarding')
+    const dispatch = useAppDispatch()
+
+    const onNext = useCallback(() => {
+        dispatch(onboardingActions.nextStep())
+    }, [dispatch])
+
+    const onSkip = useCallback(() => {
+        dispatch(onboardingActions.skipOnboarding())
+    }, [dispatch])
+
+    return (
+        <VStack gap="16" align="center" max className={className}>
+            <BarChart3 size={48} />
+            <Text
+                title={t('analytics_welcome_title', 'Речевая аналитика')}
+                text={t(
+                    'analytics_welcome_desc',
+                    'Создайте проект, загрузите запись звонка и получите AI-инсайты по операторам.'
+                )}
+                align="center"
+                size="l"
+            />
+            <Button variant="primary" size="l" onClick={onNext} addonRight={<ArrowRight size={18} />}>
+                {t('analytics_welcome_continue', 'Начать настройку')}
+            </Button>
+            <Button variant="clear" size="s" onClick={onSkip} className={clsWizard.skipLink}>
+                {t('welcome_skip', 'Пропустить и настроить позже')}
+            </Button>
+        </VStack>
+    )
+})
+
+// ─── Step 2: Template + project name ─────────────────────────────────────────
+
+export const AnalyticsProjectSetupStep = memo(({ className }: { className?: string }) => {
+    const { t } = useTranslation(['onboarding', 'reports'])
+    const dispatch = useAppDispatch()
+    const name = useSelector(getWizardName)
+    const selectedTemplateId = useSelector(getWizardSelectedTemplateId)
+    const initializedRef = useRef(false)
+
+    useEffect(() => {
+        if (initializedRef.current) return
+        initializedRef.current = true
+        dispatch(projectWizardActions.openCreate())
+        dispatch(projectWizardActions.setMethod('template'))
+    }, [dispatch])
+
+    const onBack = useCallback(() => {
+        dispatch(onboardingActions.prevStep())
+    }, [dispatch])
+
+    const onNext = useCallback(() => {
+        if (!name.trim()) {
+            dispatch(onboardingActions.setError(t('analytics_project_name_required', 'Укажите название проекта')))
+            return
+        }
+        if (!selectedTemplateId) {
+            dispatch(onboardingActions.setError(t('analytics_template_required', 'Выберите шаблон отрасли')))
+            return
+        }
+        dispatch(onboardingActions.setError(null))
+        dispatch(onboardingActions.nextStep())
+    }, [dispatch, name, selectedTemplateId, t])
+
+    return (
+        <VStack gap="16" max className={className}>
+            <Text
+                title={t('analytics_project_title', 'Проект аналитики')}
+                text={t('analytics_project_subtitle', 'Выберите отрасль и назовите проект — мы подготовим метрики под ваши задачи')}
+                size="l"
+            />
+
+            <Input
+                label={t('analytics_project_name_label', 'Название проекта')}
+                value={name}
+                onChange={(v) => dispatch(projectWizardActions.setName(v))}
+                placeholder={t('analytics_project_name_placeholder', 'Например: Колл-центр продаж')}
+                fullWidth
+            />
+
+            <WizardStep0_Templates
+                selectedTemplateId={selectedTemplateId}
+                onSelect={(tpl) => dispatch(projectWizardActions.applyTemplate(tpl))}
+            />
+
+            <HStack gap="12" justify="between" max className={cls.stepFooter}>
+                <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
+                    {t('step_back', 'Назад')}
+                </Button>
+                <Button variant="primary" size="m" onClick={onNext} addonRight={<ArrowRight size={16} />}>
+                    {t('step_next', 'Далее')}
+                </Button>
+            </HStack>
+        </VStack>
+    )
+})
+
+// ─── Step 3: Metrics + project create ────────────────────────────────────────
+
+export const AnalyticsMetricsStep = memo(({ className }: { className?: string }) => {
+    const { t } = useTranslation(['onboarding', 'reports'])
+    const dispatch = useAppDispatch()
+    const name = useSelector(getWizardName)
+    const description = useSelector(getWizardDescription)
+    const systemPrompt = useSelector(getWizardSystemPrompt)
+    const customMetrics = useSelector(getWizardCustomMetrics)
+    const visibleDefaults = useSelector(getWizardVisibleDefaultMetrics)
+    const [createProject, { isLoading }] = useCreateOperatorProject()
+    const existingProjectId = useSelector(getOnboardingOaProjectId)
+
+    const onBack = useCallback(() => {
+        dispatch(onboardingActions.prevStep())
+    }, [dispatch])
+
+    const onToggleMetric = useCallback((key: DefaultMetricKey) => {
+        dispatch(projectWizardActions.toggleDefaultMetric(key))
+    }, [dispatch])
+
+    const onCreateAndContinue = useCallback(async () => {
+        if (existingProjectId) {
+            dispatch(onboardingActions.nextStep())
+            return
+        }
+        dispatch(onboardingActions.setError(null))
+        try {
+            const project = await createProject({
+                name: name.trim() || String(t('Новый проект', { ns: 'reports' })),
+                description: description.trim(),
+                systemPrompt: systemPrompt.trim(),
+                customMetricsSchema: customMetrics,
+                visibleDefaultMetrics: visibleDefaults
+            }).unwrap()
+
+            dispatch(onboardingActions.setOaProjectId(project.id))
+            trackOnboardingEvent('oa_project_created', {
+                productPath: 'analytics',
+                projectId: project.id
+            })
+            dispatch(onboardingActions.nextStep())
+        } catch (err: unknown) {
+            const message = (err as { data?: { message?: string } })?.data?.message
+                || t('analytics_project_create_error', 'Не удалось создать проект')
+            dispatch(onboardingActions.setError(String(message)))
+        }
+    }, [
+        createProject,
+        customMetrics,
+        description,
+        dispatch,
+        existingProjectId,
+        name,
+        systemPrompt,
+        t,
+        visibleDefaults
+    ])
+
+    return (
+        <VStack gap="16" max className={className}>
+            <Text
+                title={t('analytics_metrics_title', 'Метрики качества')}
+                text={t('analytics_metrics_subtitle', 'Выберите показатели для оценки звонков — шаблон уже предложил набор под вашу отрасль')}
+                size="l"
+            />
+
+            <VStack gap="8" max className={cls.metricsList}>
+                {(Object.keys(DEFAULT_METRIC_LABELS) as DefaultMetricKey[]).map((key) => {
+                    const selected = visibleDefaults.includes(key)
+                    return (
+                        <HStack
+                            key={key}
+                            gap="12"
+                            align="center"
+                            className={cls.metricRow}
+                            onClick={() => onToggleMetric(key)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => { if (e.key === 'Enter') onToggleMetric(key) }}
+                        >
+                            <HStack justify="center" align="center" style={{ width: 24 }}>
+                                {selected ? <Check size={16} /> : null}
+                            </HStack>
+                            <Text text={String(t(DEFAULT_METRIC_LABELS[key], { ns: 'reports', defaultValue: DEFAULT_METRIC_LABELS[key] }))} size="s" />
+                        </HStack>
+                    )
+                })}
+            </VStack>
+
+            {customMetrics.length > 0 && (
+                <VStack gap="8" max>
+                    <Text title={t('analytics_custom_metrics_title', 'Дополнительные метрики шаблона')} size="s" bold />
+                    {customMetrics.map((m) => (
+                        <Text key={m.id} text={`• ${m.name}`} size="xs" />
+                    ))}
+                </VStack>
+            )}
+
+            <HStack gap="12" justify="between" max className={cls.stepFooter}>
+                <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
+                    {t('step_back', 'Назад')}
+                </Button>
+                <Button
+                    variant="primary"
+                    size="m"
+                    onClick={onCreateAndContinue}
+                    disabled={isLoading || visibleDefaults.length === 0}
+                    addonRight={<ArrowRight size={16} />}
+                >
+                    {isLoading
+                        ? t('analytics_project_creating', 'Создаём проект...')
+                        : t('analytics_project_create', 'Создать проект и продолжить')}
+                </Button>
+            </HStack>
+        </VStack>
+    )
+})
+
+// ─── Step 4: Upload (placeholder for task 2) ─────────────────────────────────
+
+interface AnalyticsUploadStepProps {
+    className?: string
+    onBatchStarted?: (batchId: string) => void
+}
+
+export const AnalyticsUploadStep = memo(({ className, onBatchStarted }: AnalyticsUploadStepProps) => {
+    const { t } = useTranslation('onboarding')
+    const dispatch = useAppDispatch()
+
+    const onBack = useCallback(() => {
+        dispatch(onboardingActions.prevStep())
+    }, [dispatch])
+
+    return (
+        <VStack gap="16" max className={className}>
+            <Text
+                title={t('analytics_upload_title', 'Загрузите запись звонка')}
+                text={t('analytics_upload_subtitle', 'Загрузите аудиофайл — мы проанализируем разговор и покажем отчёт')}
+                size="l"
+            />
+            <Text text={t('analytics_upload_pending', 'Форма загрузки подключается...')} size="s" />
+            <HStack gap="12" justify="between" max className={cls.stepFooter}>
+                <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
+                    {t('step_back', 'Назад')}
+                </Button>
+            </HStack>
+        </VStack>
+    )
+})
+
+// ─── API intro panel (task 3) ────────────────────────────────────────────────
+
+export const AnalyticsApiIntroPanel = memo(() => null)
+
+// ─── Dashboard tour (task 4) ─────────────────────────────────────────────────
+
+export const OnboardingDashboardTour = memo(() => null)

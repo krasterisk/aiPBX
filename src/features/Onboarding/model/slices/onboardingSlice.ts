@@ -17,6 +17,7 @@ const initialState: OnboardingState = {
     productPath: null,
     playgroundCallCompleted: false,
     oaAnalysisCompleted: false,
+    oaProjectId: null,
     postSuccessStep: null,
     selectedTemplateId: null,
     customBusinessDescription: '',
@@ -70,6 +71,9 @@ export const onboardingSlice = createSlice({
         setOaAnalysisCompleted: (state, action: PayloadAction<boolean>) => {
             state.oaAnalysisCompleted = action.payload
         },
+        setOaProjectId: (state, action: PayloadAction<string | null>) => {
+            state.oaProjectId = action.payload
+        },
         setPostSuccessStep: (state, action: PayloadAction<number | null>) => {
             state.postSuccessStep = action.payload
         },
@@ -78,6 +82,7 @@ export const onboardingSlice = createSlice({
             state.currentStep = 0
             state.playgroundCallCompleted = false
             state.oaAnalysisCompleted = false
+            state.oaProjectId = null
             state.postSuccessStep = null
             state.skipped = false
             localStorage.removeItem(ONBOARDING_STORAGE_KEY)
