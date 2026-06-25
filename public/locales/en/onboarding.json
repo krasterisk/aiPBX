@@ -162,5 +162,13 @@
     "playground_guide_title": "Test your assistant by voice",
     "playground_guide_subtitle": "Next step — a call in Playground. It takes a couple of minutes and shows how the assistant responds to clients.",
     "playground_guide_cta": "Call in Playground",
-    "playground_guide_hint": "Click \"Call in Playground\", allow the microphone, and talk to the assistant for at least 10 seconds."
+    "playground_guide_hint": "Click \"Call in Playground\", allow the microphone, and talk to the assistant for at least 10 seconds.",
+    "trunk_widget_success": "Playground call completed successfully!",
+    "trunk_widget_title": "How to connect the assistant to clients?",
+    "trunk_widget_subtitle": "Choose a publishing method — set up now or come back later.",
+    "trunk_widget_widget_cta": "Create website widget",
+    "trunk_widget_sip_cta": "Configure SIP / PBX",
+    "trunk_widget_docs": "Documentation",
+    "trunk_widget_defer": "Set up later",
+    "trunk_widget_finish": "Finish onboarding"
 }

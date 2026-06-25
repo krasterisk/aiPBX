@@ -21,7 +21,7 @@ import { WelcomeStep } from '../steps/WelcomeStep'
 import { BusinessTypeStep } from '../steps/BusinessTypeStep'
 import { SimpleExampleStep } from '../steps/SimpleExampleStep'
 import { PlaygroundGuideStep } from '../steps/PlaygroundGuideStep'
-import { CompletionStep } from '../steps/CompletionStep'
+import { TrunkWidgetStep } from '../steps/TrunkWidgetStep'
 import { AnalyticsWelcomeStep } from '../steps/AnalyticsWelcomeStep'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 
@@ -38,7 +38,7 @@ const assistantsStepsMap: Record<number, React.FC<{ className?: string }>> = {
     2: BusinessTypeStep,
     3: SimpleExampleStep,
     4: PlaygroundGuideStep,
-    5: CompletionStep
+    5: TrunkWidgetStep
 }
 
 const analyticsStepsMap: Record<number, React.FC<{ className?: string }>> = {

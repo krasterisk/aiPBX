@@ -162,5 +162,13 @@
     "playground_guide_title": "Проверьте ассистента голосом",
     "playground_guide_subtitle": "Следующий шаг — звонок в Playground. Это займёт пару минут и покажет, как ассистент отвечает клиентам.",
     "playground_guide_cta": "Позвонить в Playground",
-    "playground_guide_hint": "Нажмите «Позвонить в Playground», разрешите микрофон и поговорите с ассистентом не менее 10 секунд."
+    "playground_guide_hint": "Нажмите «Позвонить в Playground», разрешите микрофон и поговорите с ассистентом не менее 10 секунд.",
+    "trunk_widget_success": "Звонок в Playground прошёл успешно!",
+    "trunk_widget_title": "Как подключить ассистента к клиентам?",
+    "trunk_widget_subtitle": "Выберите способ публикации — можно настроить сейчас или вернуться позже.",
+    "trunk_widget_widget_cta": "Создать виджет для сайта",
+    "trunk_widget_sip_cta": "Настроить SIP / АТС",
+    "trunk_widget_docs": "Документация",
+    "trunk_widget_defer": "Настрою позже",
+    "trunk_widget_finish": "Завершить обучение"
 }
