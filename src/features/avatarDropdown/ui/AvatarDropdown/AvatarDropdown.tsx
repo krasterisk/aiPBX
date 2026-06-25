@@ -2,7 +2,7 @@ import React, { memo, useCallback } from 'react'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserAuthData, isUserAdmin, userActions } from '@/entities/User'
+import { getUserAuthData, userActions } from '@/entities/User'
 import { rtkApi } from '@/shared/api/rtkApi'
 import { getRouteDocs, getRouteLegal, getRouteMain, getRoutePayment, getRouteUserEdit } from '@/shared/const/router'
 import { Avatar } from '@/shared/ui/redesigned/Avatar'
@@ -20,10 +20,13 @@ export const AvatarDropdown = memo((props: AvatarDropdownProps) => {
     className
   } = props
   const { t } = useTranslation()
+  const { t: tOnboarding } = useTranslation('onboarding')
   const dispatch = useDispatch()
   const authData = useSelector(getUserAuthData)
-  const isAdmin = useSelector(isUserAdmin)
   const navigate = useNavigate()
+
+  const onboardingCompleted = typeof localStorage !== 'undefined'
+    && localStorage.getItem(ONBOARDING_STORAGE_KEY) === 'true'
 
   const onLogout = useCallback(() => {
     dispatch(userActions.logout())
@@ -32,14 +35,14 @@ export const AvatarDropdown = memo((props: AvatarDropdownProps) => {
   }, [dispatch, navigate])
 
   const onStartOnboarding = useCallback(() => {
-    localStorage.removeItem(ONBOARDING_STORAGE_KEY)
+    dispatch(onboardingActions.resetForReentry())
     dispatch(onboardingActions.startOnboarding())
   }, [dispatch])
 
   const items = [
-    ...(isAdmin
+    ...(onboardingCompleted
       ? [{
-        content: t('Онбординг'),
+        content: tOnboarding('onboarding_reentry', 'Начать обучение'),
         onClick: onStartOnboarding
       }]
       : []),
