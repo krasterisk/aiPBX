@@ -1,8 +1,25 @@
-# Documentation Screenshots
+# Скриншоты документации
 
-- dashboard-placeholder.png - Скриншот дашборда
-- assistant-create-placeholder.png - диалог создания ассистента
-- assistant-publish-sip-placeholder.png - интерфейс публикации SIP
-- tool-create-placeholder.png - диалог создания функции
-- playground-placeholder.png - интерфейс Playground
-- reports-history-placeholder.png - Таблица истории звонков
+Скриншоты интерфейса aiPBX для документации (1280×800, redesign-v3).
+
+## Файлы
+
+| Файл | Описание |
+|------|----------|
+| `dashboard.png` | Дашборд — обзор метрик |
+| `assistant-create.png` | Диалог создания ассистента |
+| `assistant-publish-sip.png` | Публикация SIP / транк |
+| `tool-create.png` | Создание HTTP-функции |
+| `playground.png` | Playground — тестовый звонок |
+| `reports-history.png` | Таблица истории звонков |
+| `project-wizard.png` | Мастер проекта (речевая аналитика) |
+| `operator-dashboard.png` | Дашборд оператора |
+| `upload.png` | Загрузка записей для анализа |
+
+## Обновление
+
+```bash
+npx ts-node scripts/capture-docs-screenshots.ts
+```
+
+Скрипт: `scripts/capture-docs-screenshots.ts` (Playwright).
