@@ -198,7 +198,8 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
         <VStack gap={'16'} max className={cls.OperatorDashboard}>
             {/* AI Insights Banner */}
             {data?.insightsAvailable && (
-                <AiInsightsBanner
+                <div data-tour-id="oa-insights">
+                    <AiInsightsBanner
                     projectName={activeProject?.name}
                     queryParams={{
                         startDate,
@@ -207,6 +208,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                         userId: userId != null && userId !== '' ? String(userId) : undefined,
                     }}
                 />
+                </div>
             )}
 
             {(data?.excludedLowQualityCount ?? 0) > 0 && (
@@ -218,7 +220,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
             )}
 
             {/* Project filter + Dashboard Builder button */}
-            <HStack max justify={'between'} align={'center'} wrap={'wrap'} gap={'12'}>
+            <HStack max justify={'between'} align={'center'} wrap={'wrap'} gap={'12'} data-tour-id="oa-upload-entry">
                 {projects && projects.length > 0 && (
                     <HStack gap={'8'} align={'center'} wrap={'wrap'}>
                         <Text text={String(t('Проект')) + ':'} />
@@ -259,7 +261,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
             </HStack>
 
             {/* Stats Row */}
-            <HStack gap={'12'} max wrap={'wrap'} className={cls.statsGrid}>
+            <HStack gap={'12'} max wrap={'wrap'} className={cls.statsGrid} data-tour-id="oa-stats">
                 <StatCard
                     title={String(t('Всего звонков'))}
                     value={data?.totalAnalyzed ?? 0}
@@ -475,20 +477,32 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
             )}
 
             {/* Operator quality ranking — bottom section */}
-            {(data?.agentScorecards?.length ?? 0) > 0 && (
-                <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
-                    <VStack gap={'16'} max>
-                        <VStack gap={'4'} max>
-                            <Text title={String(t('Рейтинг операторов'))} bold />
-                            <Text
-                                text={String(t('OPERATOR_SCORE_RANKING_SUBTITLE'))}
-                                size={'s'}
-                            />
-                        </VStack>
-                        <OperatorScoreTable rows={data.agentScorecards!} />
+            <Card
+                max
+                variant={'glass'}
+                border={'partial'}
+                padding={'24'}
+                className={cls.chartCard}
+                data-tour-id="oa-scorecard"
+            >
+                <VStack gap={'16'} max>
+                    <VStack gap={'4'} max>
+                        <Text title={String(t('Рейтинг операторов'))} bold />
+                        <Text
+                            text={String(t('OPERATOR_SCORE_RANKING_SUBTITLE'))}
+                            size={'s'}
+                        />
                     </VStack>
-                </Card>
-            )}
+                    {(data?.agentScorecards?.length ?? 0) > 0
+                        ? <OperatorScoreTable rows={data.agentScorecards!} />
+                        : (
+                            <Text
+                                text={String(t('OPERATOR_SCORE_EMPTY', 'Данные появятся после анализа первых звонков'))}
+                                size="s"
+                            />
+                        )}
+                </VStack>
+            </Card>
         </VStack>
     )
 })

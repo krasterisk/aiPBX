@@ -449,7 +449,3 @@ export const AnalyticsApiIntroPanel = memo(({ onBackToUpload }: AnalyticsApiIntr
         </VStack>
     )
 })
-
-// ─── Dashboard tour (task 4) ─────────────────────────────────────────────────
-
-export const OnboardingDashboardTour = memo(() => null)
