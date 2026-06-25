@@ -1,11 +1,13 @@
-import React, { memo, useCallback, useEffect, useRef } from 'react'
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import {
     ArrowLeft,
     ArrowRight,
     BarChart3,
-    Check
+    Check,
+    Link2,
+    Webhook
 } from 'lucide-react'
 import { Button } from '@/shared/ui/redesign-v3/Button'
 import { Input } from '@/shared/ui/redesign-v3/Input'
@@ -30,6 +32,8 @@ import {
 } from '@/entities/Report'
 import { WizardStep0_Templates } from '@/features/OperatorAnalytics/ui/ProjectWizard/WizardStep0_Templates'
 import { OperatorUploadForm } from '@/features/OperatorAnalytics/ui/OperatorUploadForm/OperatorUploadForm'
+import { getRouteAnalyticsApi } from '@/shared/const/router'
+import { Link } from 'react-router-dom'
 import clsWizard from '../OnboardingWizard/OnboardingWizard.module.scss'
 import cls from './OnboardingAnalyticsFlow.module.scss'
 
@@ -286,6 +290,7 @@ export const AnalyticsUploadStep = memo(({
     const { t } = useTranslation('onboarding')
     const dispatch = useAppDispatch()
     const projectId = useSelector(getOnboardingOaProjectId)
+    const [showApiIntro, setShowApiIntro] = useState(false)
 
     const onBack = useCallback(() => {
         if (!batchIsActive) {
@@ -320,13 +325,22 @@ export const AnalyticsUploadStep = memo(({
                 size="l"
             />
 
-            {!batchIsActive && !analysisComplete && (
-                <OperatorUploadForm
-                    compact
-                    fixedProjectId={projectId}
-                    onUploadStart={onUploadStart}
-                    onBatchStarted={onBatchStarted}
-                />
+            {!batchIsActive && !analysisComplete && !showApiIntro && (
+                <>
+                    <OperatorUploadForm
+                        compact
+                        fixedProjectId={projectId}
+                        onUploadStart={onUploadStart}
+                        onBatchStarted={onBatchStarted}
+                    />
+                    <Button variant="outline" size="m" fullWidth onClick={() => setShowApiIntro(true)}>
+                        {t('analytics_api_option', 'Подключить API для автоматической выгрузки')}
+                    </Button>
+                </>
+            )}
+
+            {!batchIsActive && !analysisComplete && showApiIntro && (
+                <AnalyticsApiIntroPanel onBackToUpload={() => setShowApiIntro(false)} />
             )}
 
             {batchIsActive && (
@@ -365,9 +379,76 @@ export const AnalyticsUploadStep = memo(({
     )
 })
 
-// ─── API intro panel (task 3) ────────────────────────────────────────────────
+// ─── API intro panel (D-09) ────────────────────────────────────────────────
 
-export const AnalyticsApiIntroPanel = memo(() => null)
+interface AnalyticsApiIntroPanelProps {
+    onBackToUpload: () => void
+}
+
+export const AnalyticsApiIntroPanel = memo(({ onBackToUpload }: AnalyticsApiIntroPanelProps) => {
+    const { t } = useTranslation('onboarding')
+
+    const apiCards = [
+        {
+            Icon: Webhook,
+            titleKey: 'analytics_api_card_upload_title',
+            titleFallback: 'Загрузка по API',
+            descKey: 'analytics_api_card_upload_desc',
+            descFallback: 'Отправляйте записи через analyze-file или analyze-url — удобно для интеграции с АТС'
+        },
+        {
+            Icon: Link2,
+            titleKey: 'analytics_api_card_token_title',
+            titleFallback: 'API-токены',
+            descKey: 'analytics_api_card_token_desc',
+            descFallback: 'Создайте токен в разделе API и используйте его в заголовке Authorization'
+        }
+    ]
+
+    return (
+        <VStack gap="16" max>
+            <Text
+                title={t('analytics_api_intro_title', 'Подключить API для автоматической выгрузки')}
+                text={t(
+                    'analytics_api_intro_desc',
+                    'Для постоянного потока звонков из вашей АТС используйте REST API. Полная настройка коннектора — в документации.'
+                )}
+                size="l"
+            />
+
+            {apiCards.map(({ Icon, titleKey, titleFallback, descKey, descFallback }) => (
+                <HStack key={titleKey} gap="16" align="start" className={cls.apiCard}>
+                    <Icon size={20} />
+                    <VStack gap="4">
+                        <Text title={t(titleKey, titleFallback)} size="s" bold />
+                        <Text text={t(descKey, descFallback)} size="xs" />
+                    </VStack>
+                </HStack>
+            ))}
+
+            <Button
+                variant="outline"
+                size="m"
+                fullWidth
+                addonRight={<Link2 size={16} />}
+                onClick={() => window.open(getRouteAnalyticsApi(), '_blank')}
+            >
+                {t('analytics_api_docs_cta', 'Открыть документацию API')}
+            </Button>
+
+            <Link to={getRouteAnalyticsApi()} target="_blank" rel="noopener noreferrer">
+                <Text
+                    text={t('analytics_api_docs_link', 'Подробнее: эндпоинты analyze-file, batch status и webhooks')}
+                    size="xs"
+                />
+            </Link>
+
+            <Button variant="clear" size="s" onClick={onBackToUpload}>
+                {t('analytics_api_back_upload', 'Вернуться к загрузке файла')}
+            </Button>
+        </VStack>
+    )
+})
 
 // ─── Dashboard tour (task 4) ─────────────────────────────────────────────────
 
