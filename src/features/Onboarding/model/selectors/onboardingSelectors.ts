@@ -1,5 +1,5 @@
 import { StateSchema } from '@/app/providers/StoreProvider'
-import { OnboardingState } from '../types/onboarding'
+import { OnboardingState, getMaxStepForPath, getTotalStepsForPath } from '../types/onboarding'
 
 export const getOnboardingState = (state: StateSchema): OnboardingState | undefined =>
     state.onboarding
@@ -9,6 +9,24 @@ export const getOnboardingIsActive = (state: StateSchema) =>
 
 export const getOnboardingStep = (state: StateSchema) =>
     state.onboarding?.currentStep ?? 0
+
+export const getOnboardingProductPath = (state: StateSchema) =>
+    state.onboarding?.productPath ?? null
+
+export const getOnboardingMaxStep = (state: StateSchema) =>
+    getMaxStepForPath(state.onboarding?.productPath ?? null)
+
+export const getOnboardingTotalSteps = (state: StateSchema) =>
+    getTotalStepsForPath(state.onboarding?.productPath ?? null)
+
+export const getOnboardingPlaygroundCallCompleted = (state: StateSchema) =>
+    state.onboarding?.playgroundCallCompleted ?? false
+
+export const getOnboardingOaAnalysisCompleted = (state: StateSchema) =>
+    state.onboarding?.oaAnalysisCompleted ?? false
+
+export const getOnboardingPostSuccessStep = (state: StateSchema) =>
+    state.onboarding?.postSuccessStep ?? null
 
 export const getOnboardingTemplateId = (state: StateSchema) =>
     state.onboarding?.selectedTemplateId ?? null

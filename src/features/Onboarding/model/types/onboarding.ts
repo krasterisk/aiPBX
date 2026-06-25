@@ -1,11 +1,18 @@
+export type OnboardingProductPath = 'assistants' | 'analytics'
+
 export interface OnboardingState {
   isActive: boolean
-  currentStep: number // 0-4
+  currentStep: number
+
+  productPath: OnboardingProductPath | null
+  playgroundCallCompleted: boolean
+  oaAnalysisCompleted: boolean
+  postSuccessStep: number | null
 
   // Step 1: Business type
-  selectedTemplateId: string | null // e.g. 'appliance_repair' or 'custom'
+  selectedTemplateId: string | null
   customBusinessDescription: string
-  customFeatures: string[] // user-added features on top of template defaults
+  customFeatures: string[]
   isGeneratingPrompt: boolean
   generatedPrompt: string | null
 
@@ -21,4 +28,24 @@ export interface OnboardingState {
 }
 
 export const ONBOARDING_STORAGE_KEY = 'onboarding_completed'
+export const ONBOARDING_PRODUCT_KEY = 'onboarding_product_path'
+export const ONBOARDING_SIGNUP_KEY = 'onboarding_is_signup'
+
+/** @deprecated Use getTotalStepsForPath(productPath) */
 export const TOTAL_STEPS = 5
+
+export const FORK_STEP = 0
+export const ASSISTANTS_MAX_STEP = 5
+export const ANALYTICS_MAX_STEP = 1
+
+export function getMaxStepForPath (productPath: OnboardingProductPath | null): number {
+  if (productPath === 'analytics') return ANALYTICS_MAX_STEP
+  if (productPath === 'assistants') return ASSISTANTS_MAX_STEP
+  return FORK_STEP
+}
+
+export function getTotalStepsForPath (productPath: OnboardingProductPath | null): number {
+  if (productPath === 'analytics') return ANALYTICS_MAX_STEP
+  if (productPath === 'assistants') return ASSISTANTS_MAX_STEP
+  return 1
+}
