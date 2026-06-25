@@ -1,0 +1,44 @@
+@import "@/app/styles/variables/mixins";
+
+.productCards {
+  width: 100%;
+}
+
+.productCard {
+  flex: 1;
+  min-width: 200px;
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  background: var(--glass-overlay-light);
+  border: var(--glass-border-subtle);
+  cursor: pointer;
+  transition: var(--transition-normal);
+
+  &:hover {
+    transform: var(--hover-lift-sm);
+    border-color: var(--glass-border-accent);
+    box-shadow: var(--shadow-accent-sm);
+  }
+}
+
+.iconBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  background: var(--icon-bg-accent);
+  color: var(--accent-redesigned);
+}
+
+@include mobile {
+  .productCards {
+    flex-direction: column;
+  }
+
+  .productCard {
+    min-width: unset;
+    width: 100%;
+  }
+}
