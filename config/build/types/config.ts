@@ -25,6 +25,10 @@ export interface buildOptions {
   googleClientId: string
   tgBotId: string
   stripePublishableKey: string
+  sentryDsn: string
+  sentryEnvironment: string
+  yandexMetrikaId: string
+  ga4MeasurementId: string
 }
 
 export interface buildEnv {

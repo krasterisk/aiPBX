@@ -62,7 +62,9 @@ export enum AppRoutes {
   KNOWLEDGE_BASES = 'knowledge_bases',
   KNOWLEDGE_BASE_DETAIL = 'knowledge_base_detail',
   CHATS = 'chats',
-  CHAT_DETAIL = 'chat_detail'
+  CHAT_DETAIL = 'chat_detail',
+  HELPDESK = 'helpdesk',
+  HELPDESK_DETAIL = 'helpdesk_detail',
 }
 
 export const getRouteMain = () => '/'
@@ -131,6 +133,8 @@ export const getRouteKnowledgeBases = () => '/knowledge-bases'
 export const getRouteKnowledgeBaseDetail = (id: string) => `/knowledge-bases/${id}`
 export const getRouteChats = () => '/chats'
 export const getRouteChatDetail = (id: string) => `/chats/${id}`
+export const getRouteHelpdesk = () => '/admin/helpdesk'
+export const getRouteHelpdeskDetail = (id: string) => `/admin/helpdesk/${id}`
 
 export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteMain()]: AppRoutes.MAIN,
@@ -195,5 +199,7 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteKnowledgeBases()]: AppRoutes.KNOWLEDGE_BASES,
   [getRouteKnowledgeBaseDetail(':id')]: AppRoutes.KNOWLEDGE_BASE_DETAIL,
   [getRouteChats()]: AppRoutes.CHATS,
-  [getRouteChatDetail(':id')]: AppRoutes.CHAT_DETAIL
+  [getRouteChatDetail(':id')]: AppRoutes.CHAT_DETAIL,
+  [getRouteHelpdesk()]: AppRoutes.HELPDESK,
+  [getRouteHelpdeskDetail(':id')]: AppRoutes.HELPDESK_DETAIL,
 }

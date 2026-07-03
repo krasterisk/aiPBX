@@ -22,6 +22,7 @@ import { usePublicPrices } from '@/entities/Price'
 import { Button } from '@/shared/ui/redesigned/Button'
 import LogoIcon from '@/shared/assets/icons/aipbx_logo_v3.svg'
 import { getDomainConfig } from '@/shared/lib/domain'
+import { usePageMeta } from '@/shared/lib/seo/usePageMeta'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },
@@ -44,6 +45,14 @@ const PublicPricingPage: FC = memo(() => {
   const isMobile = useMediaQuery('(max-width:768px)')
   const navigate = useNavigate()
   const isRuDomain = getDomainConfig().region === 'ru'
+
+  usePageMeta({
+    title: isRuDomain ? 'Тарифы AI PBX — голосовые боты и аналитика' : 'AI PBX Pricing',
+    description: isRuDomain
+      ? 'Прозрачные тарифы на голосовых AI-ассистентов и речевую аналитику. Оплата в рублях, счета для юрлиц.'
+      : 'Transparent pricing for voice AI assistants and speech analytics.',
+    path: '/pricing'
+  })
 
   // Available currencies depend on domain
   const availableCurrencies = useMemo<Currency[]>(() => {

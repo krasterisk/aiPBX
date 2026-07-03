@@ -8,7 +8,7 @@ import { useGetOperatorDashboard, useGetOperatorProjects } from '@/entities/Repo
 import { dashboardPageReducer, getDashboardStartDate, getDashboardEndDate, getDashboardUserId } from '@/features/Dashboard'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
-import { OnboardingDashboardTour } from '@/features/Onboarding/ui/analytics/OnboardingDashboardTour'
+import { OnboardingDashboardTour } from '@/features/Onboarding'
 
 const reducers: ReducersList = { dashboardPage: dashboardPageReducer }
 
@@ -23,8 +23,8 @@ const DashboardCallRecordsContent = memo(() => {
     const userId = !isAdmin ? authData?.vpbx_user_id || authData?.id : clientId
 
     const queryProjectId = searchParams.get('projectId') ?? ''
-    const showOnboardingTour = searchParams.get('onboarding') === 'analytics'
-        && searchParams.get('tour') === '1'
+    const showOnboardingTour = searchParams.get('onboarding') === 'analytics' &&
+        searchParams.get('tour') === '1'
 
     const [projectId, setProjectId] = useState(queryProjectId)
     const [showBuilder, setShowBuilder] = useState(false)
@@ -75,7 +75,7 @@ const DashboardCallRecordsContent = memo(() => {
     }
 
     return (
-        <DashboardLayout title={String(t('Аналитика проектов'))}>
+        <DashboardLayout title={t('DASHBOARD_PROJECT_ANALYTICS_TITLE')}>
             <OperatorDashboard
                 data={dashboardData}
                 isLoading={isLoading || isFetching}

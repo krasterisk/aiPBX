@@ -13,7 +13,7 @@ const DashboardOverviewContent = memo(() => {
     const { data, isLoading, isFetching } = useDashboardFilters()
 
     return (
-        <DashboardLayout title={String(t('Сводный дашборд'))}>
+        <DashboardLayout title={t('DASHBOARD_OVERVIEW_TITLE')}>
             {isLoading && isFetching
                 ? <HStack max justify={'center'}><Loader /></HStack>
                 : <VStack gap={'16'} max>

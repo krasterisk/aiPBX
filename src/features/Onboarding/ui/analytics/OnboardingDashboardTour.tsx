@@ -80,7 +80,7 @@ export const OnboardingDashboardTour = memo(({ active, onFinished }: OnboardingD
     useLayoutEffect(() => {
         if (!active) return
         measureTarget()
-        const onResize = () => measureTarget()
+        const onResize = () => { measureTarget() }
         window.addEventListener('resize', onResize)
         window.addEventListener('scroll', onResize, true)
         const timer = window.setTimeout(measureTarget, 300)
@@ -148,7 +148,7 @@ export const OnboardingDashboardTour = memo(({ active, onFinished }: OnboardingD
                     size="xs"
                 />
                 <HStack gap="12" justify="between" className={cls.tourActions}>
-                    <Button variant="clear" size="s" onClick={onSkip}>
+                    <Button variant="clear" size="m" onClick={onSkip}>
                         {t('analytics_tour_skip', 'Пропустить')}
                     </Button>
                     <Button variant="primary" size="m" onClick={onNext}>

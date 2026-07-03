@@ -3,17 +3,16 @@ import { useTranslation } from 'react-i18next'
 import cls from './Playground.module.scss'
 import { memo, useCallback, useMemo } from 'react'
 import { Page } from '@/widgets/Page'
-import { PlaygroundSessionV2 } from '@/features/PlaygroundSession'
+import { PlaygroundSessionV2, DisconnectInfo } from '@/features/PlaygroundSession'
 import { useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
-import { onboardingActions } from '@/features/Onboarding/model/slices/onboardingSlice'
 import {
+ onboardingActions,
     getOnboardingProductPath,
     getOnboardingPlaygroundCallCompleted
-} from '@/features/Onboarding/model/selectors/onboardingSelectors'
-import { trackOnboardingEvent } from '@/features/Onboarding/lib/onboardingAnalytics'
-import { DisconnectInfo } from '@/features/PlaygroundSession/model/usePlaygroundSession'
+, trackOnboardingEvent 
+} from '@/features/Onboarding'
 import { toast } from 'react-toastify'
 
 const MIN_CONNECTED_MS = 10_000

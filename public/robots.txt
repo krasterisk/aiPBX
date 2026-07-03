@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Allow: /pricing
+Allow: /speech-analytics
+Allow: /voice-assistants
+Allow: /docs
+Disallow: /dashboard
+Disallow: /assistants
+Disallow: /playground
+Disallow: /payment
+Disallow: /admin
+
+Sitemap: https://aipbx.ru/sitemap.xml

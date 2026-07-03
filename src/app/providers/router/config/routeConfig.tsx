@@ -67,7 +67,9 @@ import {
   getRouteKnowledgeBases,
   getRouteKnowledgeBaseDetail,
   getRouteChats,
-  getRouteChatDetail
+  getRouteChatDetail,
+  getRouteHelpdesk,
+  getRouteHelpdeskDetail,
 } from '@/shared/const/router'
 import { AppRoutesProps } from '@/shared/types/router'
 
@@ -75,6 +77,8 @@ import { SettingPage } from '@/pages/SettingsPage'
 import { PricesPage } from '@/pages/PricesPage'
 import { ModelsPage } from '@/pages/ModelsPage'
 import { OurOrganizationsPage } from '@/pages/OurOrganizationsPage'
+import { HelpdeskListPage } from '@/pages/HelpdeskListPage'
+import { HelpdeskDetailPage } from '@/pages/HelpdeskDetailPage'
 import { AssistantsCreatePage, AssistantsPage, AssistantsEditPage } from '@/pages/AssistantsPage'
 import { UsersCreatePage, UsersEditPage, UsersPage } from '@/pages/UsersPage'
 import { ToolsCreatePage, ToolsEditPage, ToolsPage } from '@/pages/ToolsPage'
@@ -340,6 +344,18 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.OUR_ORGANIZATIONS]: {
     path: getRouteOurOrganizations(),
     element: <OurOrganizationsPage />,
+    authOnly: true,
+    roles: [UserRolesValues.ADMIN]
+  },
+  [AppRoutes.HELPDESK]: {
+    path: getRouteHelpdesk(),
+    element: <HelpdeskListPage />,
+    authOnly: true,
+    roles: [UserRolesValues.ADMIN]
+  },
+  [AppRoutes.HELPDESK_DETAIL]: {
+    path: getRouteHelpdeskDetail(':id'),
+    element: <HelpdeskDetailPage />,
     authOnly: true,
     roles: [UserRolesValues.ADMIN]
   },

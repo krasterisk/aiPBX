@@ -1,7 +1,7 @@
 # Phase 7: Helpdesk — AI-first admin ticket system (Krasterisk) - Context
 
-**Gathered:** 2026-07-03
-**Status:** Ready for planning
+**Gathered:** 2026-07-03 (updated 2026-07-03 — D-36 manual create)
+**Status:** Ready for planning (follow-up task: manual create UI)
 
 <domain>
 ## Phase Boundary
@@ -47,6 +47,15 @@ Administrative helpdesk module in aiPBX frontend + aiPBX_backend for Krasterisk 
 - **D-19:** Assignment — **unassigned pool**; operators self-claim tickets from pool.
 - **D-20:** Routes — `/admin/helpdesk` (list) and `/admin/helpdesk/:id` (detail); menubar item **Helpdesk** under admin section.
 - **D-21:** UI stack — redesign-v3 only; i18n ru + en.
+- **D-36:** **Manual ticket creation (operator UI)** — operators must be able to create tickets from the admin helpdesk UI, not only via voice/chat AI intake. Backend `POST /helpdesk/tickets` (`source: manual`) already exists; **frontend form was missing** in 07-03 delivery and is required follow-up.
+  - Entry: primary **«Создать заявку»** button on `/admin/helpdesk` list header.
+  - UX: **modal** with form (not a separate route).
+  - Required field: **subject**; optional: category, priority, description, caller/contact phone, INN, client name.
+  - Client link: optional **«Найти клиента»** via existing `POST /helpdesk/clients/identify` (phone → INN → name); prefill `alfawebhookClientId`, `inn`, `clientName` when match selected. Ticket may be created **without** client (D-03).
+  - On success: **redirect to** `/admin/helpdesk/:id`.
+  - Assignment: **auto-claim to creating operator** (`assigneeId` = current admin) so manual tickets do not re-enter unassigned pool and trigger D-32 notifications. **Confirmed: 1a.**
+  - Client search: optional **«Найти клиента»** via `POST /helpdesk/clients/identify` (phone → INN → name). **Confirmed: 2a.**
+  - If description provided: add first **operator message** with that text (audit trail).
 
 ### Voice scenario (Krasterisk)
 - **D-22:** Opening — *«Добрый день, компания Krasterisk, меня зовут [имя]. Чем могу помочь?»* then to issue.
@@ -116,7 +125,8 @@ Core tools: `helpdesk_identify_client`, `helpdesk_get_client_info`, `helpdesk_ge
 - `aiPBX_backend/src/payments/payments.service.ts` — legacy pbxBalanceUpdate patterns
 
 ### Frontend reuse points
-- `aiPBX/src/pages/AdminPage/ui/AdminPage.tsx` — stub to extend/replace with helpdesk hub link
+- `aiPBX/src/pages/HelpdeskListPage/` — add create-ticket modal + CTA (D-36 gap)
+- `aiPBX/src/entities/Helpdesk/api/helpdeskApi.ts` — `useCreateHelpdeskTicketMutation` already wired
 - `aiPBX/src/widgets/Menubar/model/selectors/getMenubarItems.ts` — admin subItems navigation
 - `aiPBX/src/app/providers/router/config/routeConfig.tsx` — route + role guards
 - `aiPBX/src/pages/ChatsPage/` — reference for admin list/detail pages
@@ -195,6 +205,9 @@ Bot must present aiPBX voice robots when clients ask — use Krasterisk Sales Kn
 ### Noted for future phases
 - End-user tenant visibility of their own tickets
 - Full MCP server as separate deployable (v1 uses ai-tools + documented schemas)
+
+### Phase 7 follow-up (post-07-03 execution)
+- **D-36 manual create UI** — **implemented** 2026-07-03: `CreateHelpdeskTicketModal`, backend auto-assign + operator message on create
 
 </deferred>
 

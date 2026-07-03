@@ -75,5 +75,49 @@
             "lookupRequiresKpp": "仅凭税号不足，请在下方填写 KPP。",
             "chooseBranch": "找到多个相同税号的组织 — 请选择："
         }
+    },
+    "helpdesk": {
+        "menu": "工单",
+        "pageTitle": "支持工单",
+        "pageSubtitle": "Krasterisk 运营台：工单、客户、LLM 上下文",
+        "claim": "认领",
+        "empty": "暂无工单",
+        "loadError": "加载工单失败",
+        "notFound": "未找到工单",
+        "backToList": "返回列表",
+        "view": { "table": "表格", "kanban": "看板" },
+        "table": {
+            "id": "ID", "subject": "主题", "client": "客户", "status": "状态",
+            "priority": "优先级", "assignee": "处理人", "actions": "操作",
+            "unassigned": "未分配", "unidentified": "未识别"
+        },
+        "status": {
+            "new": "新建", "in_progress": "处理中", "waiting_client": "等待客户",
+            "resolved": "已解决", "closed": "已关闭"
+        },
+        "priority": { "low": "低", "normal": "普通", "high": "高", "urgent": "紧急" },
+        "category": {
+            "technical": "技术", "billing": "计费", "sales": "销售", "other": "其他"
+        },
+        "create": {
+            "open": "创建工单", "title": "新建工单", "subject": "主题",
+            "category": "类别", "priority": "优先级", "description": "描述",
+            "contactPhone": "联系电话（如不同）", "clientSection": "客户",
+            "findClient": "查找客户", "pickCandidate": "从列表中选择组织",
+            "clientLinked": "已关联客户",
+            "clientNotFound": "未找到客户——仍可创建工单",
+            "cancel": "取消", "submit": "创建"
+        },
+        "detail": {
+            "status": "状态", "clientInfo": "客户", "inn": "税号", "phone": "电话",
+            "transcript": "通话记录", "messages": "消息",
+            "notePlaceholder": "运营备注…", "addNote": "添加备注"
+        },
+        "llm": {
+            "summaryTab": "摘要", "contextTab": "LLM 上下文",
+            "placeholder": "覆盖机器人上下文…", "empty": "上下文为空",
+            "noClient": "未关联客户"
+        },
+        "adminLink": "打开 Helpdesk"
     }
 }

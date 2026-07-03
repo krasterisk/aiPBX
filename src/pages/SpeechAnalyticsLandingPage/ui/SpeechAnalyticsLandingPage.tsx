@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Radio, PackageCheck, Bell } from 'lucide-react'
 import { getRouteSignup, getRouteMain, getRoutePublicVoiceAssistants, getRoutePublicPricing } from '@/shared/const/router'
+import { usePageMeta } from '@/shared/lib/seo/usePageMeta'
 import cls from '../../shared/LandingStyles.module.scss'
 
 const analyticsUploadImg = '/assets/landing/analytics-upload.png'
@@ -35,6 +36,12 @@ const METRICS = [
 
 const SpeechAnalyticsLandingPage = () => {
     const { t } = useTranslation('main')
+
+    usePageMeta({
+        title: 'Речевая аналитика звонков колл-центра с ИИ',
+        description: 'Автоматический анализ записей звонков: STT, оценка менеджеров, кастомные метрики, AI-инсайты для руководителя.',
+        path: '/speech-analytics'
+    })
 
     return (
         <div className={cls.LandingPage}>

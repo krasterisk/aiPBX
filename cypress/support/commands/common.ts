@@ -1,10 +1,12 @@
 import { USER_LOCALSTORAGE_KEY } from '../../../src/shared/const/localstorage';
 import {selectByTestId} from "../../helpers/selectByTestId";
 
+const apiUrl = () => Cypress.env('API_URL') as string;
+
 export const login = (username: string = 'admin2', password: string = 'helloween') => {
     return cy.request({
         method: 'POST',
-        url: 'http://192.168.2.37:7000/api/auth/login',
+        url: `${apiUrl()}/auth/login`,
         body: {
             username,
             password,

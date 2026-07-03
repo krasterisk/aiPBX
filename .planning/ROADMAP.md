@@ -255,7 +255,7 @@
 | 07-03 | 2 | Frontend: entity + admin pages (ticket list, detail, notes) |
 | 07-04 | 3 | Standalone: Krasterisk voice scenario doc + pbx-remote-handler CLI skeleton |
 
-**Status:** Planned (2026-07-03) — 4 plans ready for `/gsd-execute-phase 7`
+**Status:** Executed (2026-07-03) — 4/4 plans complete; see `07-01`…`07-04-SUMMARY.md`
 
 **Plans:** 4/4
 

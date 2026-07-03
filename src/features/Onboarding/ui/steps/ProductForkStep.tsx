@@ -60,7 +60,7 @@ export const ProductForkStep = memo(({ className }: ProductForkStepProps) => {
                     gap="12"
                     align="center"
                     className={cls.productCard}
-                    onClick={() => onSelect('assistants')}
+                    onClick={() => { onSelect('assistants') }}
                     role="button"
                     tabIndex={0}
                     onKeyDown={(e) => { if (e.key === 'Enter') onSelect('assistants') }}
@@ -87,7 +87,7 @@ export const ProductForkStep = memo(({ className }: ProductForkStepProps) => {
                     gap="12"
                     align="center"
                     className={cls.productCard}
-                    onClick={() => onSelect('analytics')}
+                    onClick={() => { onSelect('analytics') }}
                     role="button"
                     tabIndex={0}
                     onKeyDown={(e) => { if (e.key === 'Enter') onSelect('analytics') }}

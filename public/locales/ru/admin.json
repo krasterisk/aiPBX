@@ -79,5 +79,83 @@
             "sbisCertThumbprint": "Отпечаток КЭП",
             "sbisCertThumbprintHint": "Отпечаток сертификата, зарегистрированного в Saby для этого юрлица. Используется при автоматической отправке счетов в ЭДО."
         }
+    },
+    "helpdesk": {
+        "menu": "Заявки",
+        "pageTitle": "Заявки поддержки",
+        "pageSubtitle": "Операторская панель Krasterisk: заявки, клиенты, LLM-контекст",
+        "claim": "Взять в работу",
+        "empty": "Заявок пока нет",
+        "loadError": "Не удалось загрузить заявки",
+        "notFound": "Заявка не найдена",
+        "backToList": "К списку заявок",
+        "view": {
+            "table": "Таблица",
+            "kanban": "Канбан"
+        },
+        "table": {
+            "id": "ID",
+            "subject": "Тема",
+            "client": "Клиент",
+            "status": "Статус",
+            "priority": "Приоритет",
+            "assignee": "Исполнитель",
+            "actions": "Действия",
+            "unassigned": "Не назначена",
+            "unidentified": "Не идентифицирован"
+        },
+        "status": {
+            "new": "Новая",
+            "in_progress": "В работе",
+            "waiting_client": "Ожидает клиента",
+            "resolved": "Решена",
+            "closed": "Закрыта"
+        },
+        "priority": {
+            "low": "Низкий",
+            "normal": "Обычный",
+            "high": "Высокий",
+            "urgent": "Срочный"
+        },
+        "category": {
+            "technical": "Техническая",
+            "billing": "Биллинг",
+            "sales": "Продажи",
+            "other": "Прочее"
+        },
+        "create": {
+            "open": "Создать заявку",
+            "title": "Новая заявка",
+            "subject": "Тема",
+            "category": "Категория",
+            "priority": "Приоритет",
+            "description": "Описание",
+            "contactPhone": "Контактный телефон (если отличается)",
+            "clientSection": "Клиент",
+            "findClient": "Найти клиента",
+            "pickCandidate": "Выберите организацию из списка",
+            "clientLinked": "Клиент привязан",
+            "clientNotFound": "Клиент не найден — заявку можно создать без привязки",
+            "cancel": "Отмена",
+            "submit": "Создать"
+        },
+        "detail": {
+            "status": "Статус",
+            "clientInfo": "Клиент",
+            "inn": "ИНН",
+            "phone": "Телефон",
+            "transcript": "Транскрипт звонка",
+            "messages": "Сообщения",
+            "notePlaceholder": "Заметка оператора…",
+            "addNote": "Добавить заметку"
+        },
+        "llm": {
+            "summaryTab": "Сводка",
+            "contextTab": "LLM-контекст",
+            "placeholder": "Переопределение контекста для бота…",
+            "empty": "Контекст пока пуст",
+            "noClient": "Нет привязки к клиенту — контекст недоступен"
+        },
+        "adminLink": "Открыть Helpdesk"
     }
 }

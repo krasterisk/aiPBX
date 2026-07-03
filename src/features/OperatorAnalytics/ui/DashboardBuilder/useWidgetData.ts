@@ -121,8 +121,113 @@ export function useWidgetData(
         }
 
         // ── Custom metrics ──────────────────────────────────────────────────────
-        // TODO: When backend returns aggregatedCustomMetrics, use them here
-        // For now return a stub
+        if (source === 'custom') {
+            return extractCustomWidgetData(widget, dashboardData, project)
+        }
+
         return { value: 0, label: widget.title }
     }, [widget, dashboardData, project])
+}
+
+const PIE_COLORS = [
+    'var(--accent-redesigned)',
+    'var(--status-success)',
+    'var(--status-warning)',
+    'var(--status-error)',
+    'var(--icon-secondary)',
+]
+
+/**
+ * Pure helper — exported for unit tests.
+ */
+export function extractCustomWidgetData(
+    widget: DashboardWidget,
+    dashboardData: OperatorDashboardResponse,
+    project?: OperatorProject,
+): WidgetDataResult {
+    const metric = project?.customMetricsSchema?.find(m => m.id === widget.metricId)
+    const agg = dashboardData.customMetricsAggregated?.[widget.metricId]
+    const label = metric?.name ?? widget.title
+
+    if (!agg) {
+        return { label }
+    }
+
+    switch (widget.widgetType) {
+        case 'stat-card':
+        case 'sparkline': {
+            if (agg.type === 'boolean' || agg.type === 'number') {
+                return { value: agg.value ?? 0, label }
+            }
+            if (agg.distribution) {
+                const top = Object.entries(agg.distribution)
+                    .sort((a, b) => b[1] - a[1])[0]
+                return { value: top?.[1] ?? 0, label: top?.[0] ?? label }
+            }
+            return { value: 0, label }
+        }
+
+        case 'bar-chart':
+        case 'tag-cloud': {
+            if (agg.distribution) {
+                return {
+                    label,
+                    barData: Object.entries(agg.distribution).map(([entryLabel, value]) => ({
+                        label: entryLabel,
+                        value,
+                    })),
+                }
+            }
+            return {
+                label,
+                barData: [{ label, value: agg.value ?? 0 }],
+            }
+        }
+
+        case 'pie-chart': {
+            if (agg.distribution) {
+                return {
+                    label,
+                    pieData: Object.entries(agg.distribution).map(([entryLabel, value], index) => ({
+                        id: index,
+                        value,
+                        label: entryLabel,
+                        color: PIE_COLORS[index % PIE_COLORS.length],
+                    })),
+                }
+            }
+            if (agg.type === 'boolean' && agg.value != null) {
+                return {
+                    label,
+                    pieData: [
+                        { id: 0, value: agg.value, label: 'Да', color: 'var(--status-success)' },
+                        { id: 1, value: 100 - agg.value, label: 'Нет', color: 'var(--icon-secondary)' },
+                    ],
+                }
+            }
+            return { label, pieData: [] }
+        }
+
+        case 'line-chart':
+            return {
+                label,
+                timeSeriesData: dashboardData.timeSeries?.monthly?.map(point => ({
+                    label: point.label,
+                    value: point.callsCount,
+                })) ?? [],
+            }
+
+        case 'heatmap':
+            return {
+                label,
+                heatmapData: dashboardData.timeSeries?.daily?.map(point => ({
+                    date: point.label,
+                    callCount: point.callsCount ?? 0,
+                    avgScore: point.avgScore ?? (dashboardData.averageScore ?? 0),
+                })) ?? [],
+            }
+
+        default:
+            return { value: agg.value ?? 0, label }
+    }
 }

@@ -15,7 +15,7 @@ import { generateAllMockPngs } from './generate-mock-screenshots'
 const OUTPUT_DIR = path.resolve(__dirname, '../public/docs/screenshots')
 const VIEWPORT = { width: 1280, height: 800 }
 
-type MockSpec = {
+interface MockSpec {
   title: string
   subtitle: string
   variant: 'dashboard' | 'modal' | 'table' | 'wizard' | 'playground'
@@ -329,7 +329,7 @@ async function main (): Promise<void> {
   if (!ok) {
     console.log('Generating high-fidelity static mocks (1280×800, pure Node)...')
     const files = generateAllMockPngs(OUTPUT_DIR)
-    files.forEach((f) => console.log(`✓ ${f}`))
+    files.forEach((f) => { console.log(`✓ ${f}`) })
   }
 
   console.log(`\nDone — screenshots in ${OUTPUT_DIR}`)

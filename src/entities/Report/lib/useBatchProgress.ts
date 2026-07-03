@@ -1,13 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
-import {
-    useLazyGetBatchStatus,
-    useLazyGetActiveBatches,
-    reportApi,
-    BatchItemStatus,
-    BatchStatusResponse
-} from '@/entities/Report'
+import { reportApi, useLazyGetActiveBatches, useLazyGetBatchStatus } from '../api/reportApi'
+import type { BatchItemStatus, BatchStatusResponse } from '../model/types/report'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 
 export interface SingleBatchState {

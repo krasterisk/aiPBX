@@ -177,3 +177,20 @@
     min-height: 200px;
     width: 100%;
 }
+
+.tagCloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    align-items: center;
+    line-height: 1.3;
+}
+
+.tagCloudItem {
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--accent-redesigned) 14%, transparent);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 500;
+    white-space: nowrap;
+}

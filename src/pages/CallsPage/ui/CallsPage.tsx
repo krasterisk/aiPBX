@@ -1,10 +1,11 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { Page } from '@/widgets/Page'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitialEffect'
 import { reportsPageReducer, initReportsPage, useReportFilters } from '@/entities/Report'
+import { consumeInsightDrilldown } from '@/features/OperatorAnalytics'
 import { ErrorGetData } from '@/entities/ErrorGetData'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { CallsHeader, CallsList, UploadModal, useCallsExport, useBatchProgress } from '@/features/Calls'
@@ -36,6 +37,8 @@ const CallsPage = ({ className }: CallsPageProps) => {
         onToggleCsatFilter,
     } = useReportFilters()
 
+    const drilldownAppliedRef = useRef(false)
+
     const { exportToExcel, exporting } = useCallsExport({
         data,
         startDate,
@@ -48,6 +51,23 @@ const CallsPage = ({ className }: CallsPageProps) => {
     })
 
     useInitialEffect(() => { dispatch(initReportsPage()) })
+
+    useEffect(() => {
+        if (!isInited || drilldownAppliedRef.current) return
+        const drilldown = consumeInsightDrilldown()
+        if (!drilldown) return
+        drilldownAppliedRef.current = true
+        if (drilldown.startDate) onChangeStartDate(drilldown.startDate)
+        if (drilldown.endDate) onChangeEndDate(drilldown.endDate)
+        if (drilldown.userId) onChangeUserId(drilldown.userId)
+        if (drilldown.search) onChangeSearch(drilldown.search)
+    }, [
+        isInited,
+        onChangeStartDate,
+        onChangeEndDate,
+        onChangeUserId,
+        onChangeSearch,
+    ])
 
     const onScrollEnd = useCallback(() => {
         if (hasMore) onLoadNext()

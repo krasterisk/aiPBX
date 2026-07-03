@@ -75,5 +75,49 @@
             "lookupRequiresKpp": "INN allein reicht nicht. KPP unten angeben.",
             "chooseBranch": "Mehrere Organisationen mit dieser INN — bitte auswählen:"
         }
+    },
+    "helpdesk": {
+        "menu": "Tickets",
+        "pageTitle": "Support-Tickets",
+        "pageSubtitle": "Krasterisk-Operator: Tickets, Kunden, LLM-Kontext",
+        "claim": "Übernehmen",
+        "empty": "Noch keine Tickets",
+        "loadError": "Tickets konnten nicht geladen werden",
+        "notFound": "Ticket nicht gefunden",
+        "backToList": "Zurück zur Liste",
+        "view": { "table": "Tabelle", "kanban": "Kanban" },
+        "table": {
+            "id": "ID", "subject": "Betreff", "client": "Kunde", "status": "Status",
+            "priority": "Priorität", "assignee": "Bearbeiter", "actions": "Aktionen",
+            "unassigned": "Nicht zugewiesen", "unidentified": "Nicht identifiziert"
+        },
+        "status": {
+            "new": "Neu", "in_progress": "In Bearbeitung", "waiting_client": "Wartet auf Kunde",
+            "resolved": "Gelöst", "closed": "Geschlossen"
+        },
+        "priority": { "low": "Niedrig", "normal": "Normal", "high": "Hoch", "urgent": "Dringend" },
+        "category": {
+            "technical": "Technisch", "billing": "Abrechnung", "sales": "Vertrieb", "other": "Sonstiges"
+        },
+        "create": {
+            "open": "Ticket erstellen", "title": "Neues Ticket", "subject": "Betreff",
+            "category": "Kategorie", "priority": "Priorität", "description": "Beschreibung",
+            "contactPhone": "Kontakttelefon (falls abweichend)", "clientSection": "Kunde",
+            "findClient": "Kunde suchen", "pickCandidate": "Organisation aus Liste wählen",
+            "clientLinked": "Kunde verknüpft",
+            "clientNotFound": "Kunde nicht gefunden — Ticket kann ohne Verknüpfung erstellt werden",
+            "cancel": "Abbrechen", "submit": "Erstellen"
+        },
+        "detail": {
+            "status": "Status", "clientInfo": "Kunde", "inn": "INN", "phone": "Telefon",
+            "transcript": "Anruftranskript", "messages": "Nachrichten",
+            "notePlaceholder": "Operator-Notiz…", "addNote": "Notiz hinzufügen"
+        },
+        "llm": {
+            "summaryTab": "Zusammenfassung", "contextTab": "LLM-Kontext",
+            "placeholder": "Bot-Kontext überschreiben…", "empty": "Kontext leer",
+            "noClient": "Kein Kunde verknüpft"
+        },
+        "adminLink": "Helpdesk öffnen"
     }
 }

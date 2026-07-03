@@ -41,6 +41,7 @@ export const rtkApi = createApi({
     'OrganizationDocument',
     'OurOrganization',
     'BalanceAlerts',
+    'Helpdesk',
   ],
   endpoints: (builder) => ({})
 })

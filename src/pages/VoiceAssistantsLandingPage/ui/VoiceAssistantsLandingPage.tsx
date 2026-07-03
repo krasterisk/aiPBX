@@ -14,6 +14,7 @@ import {
     getRoutePublicSpeechAnalytics,
     getRoutePublicPricing
 } from '@/shared/const/router'
+import { usePageMeta } from '@/shared/lib/seo/usePageMeta'
 import cls from '../../shared/LandingStyles.module.scss'
 
 const assistantFormImg = '/assets/landing/assistant-form.png'
@@ -51,6 +52,12 @@ const VoiceAssistantsLandingPage = () => {
     const { t } = useTranslation('main')
     const audioRef = useRef<HTMLAudioElement>(null)
     const [isPlaying, setIsPlaying] = useState(false)
+
+    usePageMeta({
+        title: 'Голосовой AI-бот для Asterisk и телефонии',
+        description: 'Создайте голосового ассистента с LLM: SIP-транки, WebRTC-виджет, function calling, интеграции MCP и Bitrix24.',
+        path: '/voice-assistants'
+    })
 
     const handlePlayStop = useCallback(() => {
         const audio = audioRef.current

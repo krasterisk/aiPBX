@@ -149,10 +149,10 @@ export const TrunkWidgetStep = memo(({ className }: TrunkWidgetStepProps) => {
             </VStack>
 
             <HStack gap="12" justify="center" wrap="wrap">
-                <Button variant="clear" size="s" onClick={onOpenDocs} className={cls.skipLink}>
+                <Button variant="clear" size="m" onClick={onOpenDocs} className={cls.skipLink}>
                     {t('trunk_widget_docs', 'Документация')}
                 </Button>
-                <Button variant="clear" size="s" onClick={onDefer} className={cls.skipLink}>
+                <Button variant="clear" size="m" onClick={onDefer} className={cls.skipLink}>
                     {t('trunk_widget_defer', 'Настрою позже')}
                 </Button>
             </HStack>

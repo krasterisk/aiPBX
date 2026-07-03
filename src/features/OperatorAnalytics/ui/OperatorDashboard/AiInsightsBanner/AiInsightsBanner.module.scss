@@ -63,6 +63,16 @@
     color: var(--text-primary);
 }
 
+.evidenceChipClickable {
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-fast);
+
+    &:hover {
+        background: color-mix(in srgb, var(--accent-redesigned) 22%, transparent);
+    }
+}
+
 .lowConfidenceBanner {
     padding: 8px 12px;
     border-radius: var(--radius-md);

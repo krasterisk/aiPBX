@@ -1,7 +1,7 @@
 import { trackEvent } from '@/shared/config/analytics/initAnalytics'
 import type { OnboardingProductPath } from '../model/types/onboarding'
 
-export type OnboardingEventParams = {
+export interface OnboardingEventParams {
   productPath?: OnboardingProductPath | null
   step?: number
   [key: string]: string | number | undefined | null

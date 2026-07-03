@@ -1,0 +1,20 @@
+.HelpdeskDetailPage {
+  width: 100%;
+}
+
+.mainColumn {
+  flex: 2;
+  min-width: 320px;
+}
+
+.sideColumn {
+  flex: 1;
+  min-width: 280px;
+}
+
+.transcript {
+  white-space: pre-wrap;
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.9;
+}

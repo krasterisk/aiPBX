@@ -15,13 +15,19 @@
 - `HelpdeskAlfawebhookService.identifyClient()` — порядок phone → inn → name (D-01, D-02)
 - Unit-тесты `helpdesk-alfawebhook.service.spec.ts` (3 кейса)
 
-## Ручной шаг
+## Ручные шаги (миграции)
 
-Применить миграцию на dev/staging PostgreSQL:
+**Development (MySQL):**
+```bash
+mysql -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < migrations/mysql/2026-07-03-helpdesk-tables.sql
+```
 
+**Production (PostgreSQL):**
 ```bash
 psql "$DATABASE_URL" -f migrations/postgres/2026-07-03-helpdesk-tables.sql
 ```
+
+Sequelize-модели используют `DataType.JSON` (совместимость MySQL dev + Postgres prod).
 
 ## Проверки
 

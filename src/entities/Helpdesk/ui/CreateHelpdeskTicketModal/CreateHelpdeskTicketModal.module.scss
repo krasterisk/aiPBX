@@ -1,0 +1,11 @@
+.modal {
+    width: 100%;
+    max-width: 640px;
+}
+
+.clientBlock {
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    border: 1px solid color-mix(in srgb, var(--accent-redesigned) 18%, transparent);
+    background: color-mix(in srgb, var(--accent-redesigned) 4%, transparent);
+}

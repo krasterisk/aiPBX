@@ -75,5 +75,83 @@
             "lookupRequiresKpp": "TIN alone is not enough. Enter KPP below.",
             "chooseBranch": "Multiple organizations match this TIN — select one:"
         }
+    },
+    "helpdesk": {
+        "menu": "Tickets",
+        "pageTitle": "Support tickets",
+        "pageSubtitle": "Krasterisk operator desk: tickets, clients, LLM context",
+        "claim": "Claim",
+        "empty": "No tickets yet",
+        "loadError": "Failed to load tickets",
+        "notFound": "Ticket not found",
+        "backToList": "Back to tickets",
+        "view": {
+            "table": "Table",
+            "kanban": "Kanban"
+        },
+        "table": {
+            "id": "ID",
+            "subject": "Subject",
+            "client": "Client",
+            "status": "Status",
+            "priority": "Priority",
+            "assignee": "Assignee",
+            "actions": "Actions",
+            "unassigned": "Unassigned",
+            "unidentified": "Unidentified"
+        },
+        "status": {
+            "new": "New",
+            "in_progress": "In progress",
+            "waiting_client": "Waiting for client",
+            "resolved": "Resolved",
+            "closed": "Closed"
+        },
+        "priority": {
+            "low": "Low",
+            "normal": "Normal",
+            "high": "High",
+            "urgent": "Urgent"
+        },
+        "category": {
+            "technical": "Technical",
+            "billing": "Billing",
+            "sales": "Sales",
+            "other": "Other"
+        },
+        "create": {
+            "open": "Create ticket",
+            "title": "New ticket",
+            "subject": "Subject",
+            "category": "Category",
+            "priority": "Priority",
+            "description": "Description",
+            "contactPhone": "Contact phone (if different)",
+            "clientSection": "Client",
+            "findClient": "Find client",
+            "pickCandidate": "Select organization from the list",
+            "clientLinked": "Client linked",
+            "clientNotFound": "Client not found — you can still create the ticket",
+            "cancel": "Cancel",
+            "submit": "Create"
+        },
+        "detail": {
+            "status": "Status",
+            "clientInfo": "Client",
+            "inn": "TIN",
+            "phone": "Phone",
+            "transcript": "Call transcript",
+            "messages": "Messages",
+            "notePlaceholder": "Operator note…",
+            "addNote": "Add note"
+        },
+        "llm": {
+            "summaryTab": "Summary",
+            "contextTab": "LLM context",
+            "placeholder": "Bot context override…",
+            "empty": "Context is empty",
+            "noClient": "No client linked — context unavailable"
+        },
+        "adminLink": "Open Helpdesk"
     }
 }

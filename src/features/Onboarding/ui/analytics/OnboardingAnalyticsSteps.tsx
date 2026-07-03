@@ -21,6 +21,8 @@ import {
 import { trackOnboardingEvent } from '../../lib/onboardingAnalytics'
 import {
     DefaultMetricKey,
+    MetricDefinition,
+    ProjectTemplate,
     projectWizardActions,
     useCreateOperatorProject,
     getWizardName,
@@ -30,8 +32,8 @@ import {
     getWizardSystemPrompt,
     getWizardDescription
 } from '@/entities/Report'
-import { WizardStep0_Templates } from '@/features/OperatorAnalytics/ui/ProjectWizard/WizardStep0_Templates'
-import { OperatorUploadForm } from '@/features/OperatorAnalytics/ui/OperatorUploadForm/OperatorUploadForm'
+import { WizardStep0_Templates, WizardStep2_MetricBuilder, OperatorUploadForm } from '@/features/OperatorAnalytics'
+
 import { getRouteAnalyticsApi } from '@/shared/const/router'
 import { Link } from 'react-router-dom'
 import clsWizard from '../OnboardingWizard/OnboardingWizard.module.scss'
@@ -78,7 +80,7 @@ export const AnalyticsWelcomeOverviewStep = memo(({ className }: { className?: s
             <Button variant="primary" size="l" onClick={onNext} addonRight={<ArrowRight size={18} />}>
                 {t('analytics_welcome_continue', 'Начать настройку')}
             </Button>
-            <Button variant="clear" size="s" onClick={onSkip} className={clsWizard.skipLink}>
+            <Button variant="clear" size="m" onClick={onSkip} className={clsWizard.skipLink}>
                 {t('welcome_skip', 'Пропустить и настроить позже')}
             </Button>
         </VStack>
@@ -127,16 +129,16 @@ export const AnalyticsProjectSetupStep = memo(({ className }: { className?: stri
             />
 
             <Input
-                label={t('analytics_project_name_label', 'Название проекта')}
+                label={String(t('analytics_project_name_label', 'Название проекта'))}
                 value={name}
                 onChange={(v) => dispatch(projectWizardActions.setName(v))}
-                placeholder={t('analytics_project_name_placeholder', 'Например: Колл-центр продаж')}
+                placeholder={String(t('analytics_project_name_placeholder', 'Например: Колл-центр продаж'))}
                 fullWidth
             />
 
             <WizardStep0_Templates
                 selectedTemplateId={selectedTemplateId}
-                onSelect={(tpl) => dispatch(projectWizardActions.applyTemplate(tpl))}
+                onSelect={(tpl: ProjectTemplate) => dispatch(projectWizardActions.applyTemplate(tpl))}
             />
 
             <HStack gap="12" justify="between" max className={cls.stepFooter}>
@@ -172,6 +174,10 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
         dispatch(projectWizardActions.toggleDefaultMetric(key))
     }, [dispatch])
 
+    const onChangeCustomMetrics = useCallback((metrics: MetricDefinition[]) => {
+        dispatch(projectWizardActions.setCustomMetrics(metrics))
+    }, [dispatch])
+
     const onCreateAndContinue = useCallback(async () => {
         if (existingProjectId) {
             dispatch(onboardingActions.nextStep())
@@ -194,8 +200,8 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
             })
             dispatch(onboardingActions.nextStep())
         } catch (err: unknown) {
-            const message = (err as { data?: { message?: string } })?.data?.message
-                || t('analytics_project_create_error', 'Не удалось создать проект')
+            const message = (err as { data?: { message?: string } })?.data?.message ||
+                t('analytics_project_create_error', 'Не удалось создать проект')
             dispatch(onboardingActions.setError(String(message)))
         }
     }, [
@@ -227,7 +233,7 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
                             gap="12"
                             align="center"
                             className={cls.metricRow}
-                            onClick={() => onToggleMetric(key)}
+                            onClick={() => { onToggleMetric(key) }}
                             role="button"
                             tabIndex={0}
                             onKeyDown={(e) => { if (e.key === 'Enter') onToggleMetric(key) }}
@@ -241,14 +247,20 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
                 })}
             </VStack>
 
-            {customMetrics.length > 0 && (
-                <VStack gap="8" max>
-                    <Text title={t('analytics_custom_metrics_title', 'Дополнительные метрики шаблона')} size="s" bold />
-                    {customMetrics.map((m) => (
-                        <Text key={m.id} text={`• ${m.name}`} size="xs" />
-                    ))}
-                </VStack>
-            )}
+            <VStack gap="12" max>
+                <Text
+                    title={t('analytics_custom_metrics_title', 'Кастомные метрики')}
+                    text={t('analytics_custom_metrics_subtitle', 'Добавьте свои показатели — AI будет оценивать их по описанию')}
+                    size="s"
+                    bold
+                />
+                <WizardStep2_MetricBuilder
+                    metrics={customMetrics}
+                    systemPrompt={systemPrompt}
+                    visibleDefaultMetrics={visibleDefaults}
+                    onChangeMetrics={onChangeCustomMetrics}
+                />
+            </VStack>
 
             <HStack gap="12" justify="between" max className={cls.stepFooter}>
                 <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
@@ -270,14 +282,19 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
     )
 })
 
-// ─── Step 4: Upload (placeholder for task 2) ─────────────────────────────────
+// ─── Step 4: Upload ────────────────────────────────────────────────────────
+
+export type AnalyticsUploadPhase = 'idle' | 'processing' | 'success' | 'failed'
 
 interface AnalyticsUploadStepProps {
     className?: string
     onBatchStarted?: (batchId: string) => void
     batchProgress?: number
     batchIsActive?: boolean
-    analysisComplete?: boolean
+    uploadPhase?: AnalyticsUploadPhase
+    analysisError?: string | null
+    onRetryUpload?: () => void
+    onViewDashboard?: () => void
 }
 
 export const AnalyticsUploadStep = memo(({
@@ -285,7 +302,10 @@ export const AnalyticsUploadStep = memo(({
     onBatchStarted,
     batchProgress = 0,
     batchIsActive = false,
-    analysisComplete = false
+    uploadPhase = 'idle',
+    analysisError = null,
+    onRetryUpload,
+    onViewDashboard
 }: AnalyticsUploadStepProps) => {
     const { t } = useTranslation('onboarding')
     const dispatch = useAppDispatch()
@@ -321,11 +341,17 @@ export const AnalyticsUploadStep = memo(({
         <VStack gap="16" max className={className}>
             <Text
                 title={t('analytics_upload_title', 'Загрузите запись звонка')}
-                text={t('analytics_upload_subtitle', 'Загрузите аудиофайл — мы проанализируем разговор и покажем отчёт')}
+                text={uploadPhase === 'idle'
+                    ? t('analytics_upload_subtitle', 'Загрузите аудиофайл — мы проанализируем разговор и покажем отчёт')
+                    : uploadPhase === 'success'
+                        ? t('analytics_analysis_complete', 'Анализ завершён! Открываем дашборд с результатами...')
+                        : uploadPhase === 'failed'
+                            ? t('analytics_analysis_failed_desc', 'Не удалось обработать файл. Попробуйте другую запись или откройте дашборд.')
+                            : t('analytics_analysis_progress_desc', 'Обычно это занимает несколько минут. Можно подождать здесь.')}
                 size="l"
             />
 
-            {!batchIsActive && !analysisComplete && !showApiIntro && (
+            {uploadPhase === 'idle' && !showApiIntro && (
                 <>
                     <OperatorUploadForm
                         compact
@@ -333,21 +359,20 @@ export const AnalyticsUploadStep = memo(({
                         onUploadStart={onUploadStart}
                         onBatchStarted={onBatchStarted}
                     />
-                    <Button variant="outline" size="m" fullWidth onClick={() => setShowApiIntro(true)}>
+                    <Button variant="outline" size="m" fullWidth onClick={() => { setShowApiIntro(true) }}>
                         {t('analytics_api_option', 'Подключить API для автоматической выгрузки')}
                     </Button>
                 </>
             )}
 
-            {!batchIsActive && !analysisComplete && showApiIntro && (
-                <AnalyticsApiIntroPanel onBackToUpload={() => setShowApiIntro(false)} />
+            {uploadPhase === 'idle' && showApiIntro && (
+                <AnalyticsApiIntroPanel onBackToUpload={() => { setShowApiIntro(false) }} />
             )}
 
-            {batchIsActive && (
+            {(uploadPhase === 'processing' || batchIsActive) && (
                 <VStack gap="12" max>
                     <Text
                         title={t('analytics_analysis_progress_title', 'Анализируем запись...')}
-                        text={t('analytics_analysis_progress_desc', 'Обычно это занимает несколько минут. Можно подождать здесь.')}
                         size="s"
                     />
                     <div className={cls.progressBar}>
@@ -357,20 +382,39 @@ export const AnalyticsUploadStep = memo(({
                 </VStack>
             )}
 
-            {analysisComplete && (
+            {uploadPhase === 'success' && (
                 <Text
-                    text={t('analytics_analysis_complete', 'Анализ завершён! Открываем дашборд...')}
+                    text={t('analytics_analysis_complete', 'Анализ завершён! Открываем дашборд с результатами...')}
                     align="center"
                     size="s"
                 />
             )}
 
-            {!batchIsActive && (
+            {uploadPhase === 'failed' && (
+                <VStack gap="12" max align="center">
+                    <Text
+                        text={t(analysisError ?? 'analytics_analysis_failed', 'Обработка не удалась')}
+                        variant="error"
+                        align="center"
+                        size="s"
+                    />
+                    <HStack gap="12" wrap="wrap" justify="center">
+                        <Button variant="outline" size="m" onClick={onRetryUpload}>
+                            {t('analytics_upload_retry', 'Загрузить другой файл')}
+                        </Button>
+                        <Button variant="primary" size="m" onClick={onViewDashboard}>
+                            {t('analytics_view_dashboard', 'Открыть дашборд')}
+                        </Button>
+                    </HStack>
+                </VStack>
+            )}
+
+            {uploadPhase === 'idle' && (
                 <HStack gap="12" justify="between" max className={cls.stepFooter}>
                     <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
                         {t('step_back', 'Назад')}
                     </Button>
-                    <Button variant="clear" size="s" onClick={onSkip} className={clsWizard.skipLink}>
+                    <Button variant="clear" size="m" onClick={onSkip} className={clsWizard.skipLink}>
                         {t('welcome_skip', 'Пропустить и настроить позже')}
                     </Button>
                 </HStack>
@@ -443,7 +487,7 @@ export const AnalyticsApiIntroPanel = memo(({ onBackToUpload }: AnalyticsApiIntr
                 />
             </Link>
 
-            <Button variant="clear" size="s" onClick={onBackToUpload}>
+            <Button variant="clear" size="m" onClick={onBackToUpload}>
                 {t('analytics_api_back_upload', 'Вернуться к загрузке файла')}
             </Button>
         </VStack>

@@ -44,6 +44,8 @@ export interface BillingQueryParams {
     startDate?: string
     endDate?: string
     type?: string
+    /** Comma-separated types, e.g. `analytic,insight` */
+    types?: string
     userId?: string
     sortField?: string
     sortOrder?: string
@@ -59,6 +61,7 @@ const billingApi = rtkApi.injectEndpoints({
                 if (params.startDate) query.set('startDate', params.startDate)
                 if (params.endDate) query.set('endDate', params.endDate)
                 if (params.type) query.set('type', params.type)
+                if (params.types) query.set('types', params.types)
                 if (params.userId) query.set('userId', params.userId)
                 if (params.sortField) query.set('sortField', params.sortField)
                 if (params.sortOrder) query.set('sortOrder', params.sortOrder)

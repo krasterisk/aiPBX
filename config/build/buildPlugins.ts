@@ -9,7 +9,8 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import { buildOptions } from './types/config'
 
 export function buildPlugins ({
-  paths, isDev, apiUrl, wsUrl, project, staticUrl, googleClientId, tgBotId, stripePublishableKey
+  paths, isDev, apiUrl, wsUrl, project, staticUrl, googleClientId, tgBotId, stripePublishableKey,
+  sentryDsn, sentryEnvironment, yandexMetrikaId, ga4MeasurementId
 }: buildOptions): webpack.WebpackPluginInstance[] {
   const isProd = !isDev
 
@@ -26,7 +27,11 @@ export function buildPlugins ({
       __STATIC__: JSON.stringify(staticUrl),
       __GOOGLE_CLIENT_ID__: JSON.stringify(googleClientId),
       __TG_BOT_ID__: JSON.stringify(tgBotId),
-      __STRIPE_PUBLISHABLE_KEY__: JSON.stringify(stripePublishableKey)
+      __STRIPE_PUBLISHABLE_KEY__: JSON.stringify(stripePublishableKey),
+      __SENTRY_DSN__: JSON.stringify(sentryDsn),
+      __SENTRY_ENVIRONMENT__: JSON.stringify(sentryEnvironment),
+      __YANDEX_METRIKA_ID__: JSON.stringify(yandexMetrikaId),
+      __GA4_MEASUREMENT_ID__: JSON.stringify(ga4MeasurementId)
     }),
     new CircularDependencyPlugin({
       exclude: /node_modules/,
@@ -61,6 +66,8 @@ export function buildPlugins ({
       patterns: [
         { from: paths.locales, to: paths.buildLocales },
         { from: paths.favicon, to: paths.build },
+        { from: 'public/robots.txt', to: paths.build, noErrorOnMissing: true },
+        { from: 'public/sitemap.xml', to: paths.build, noErrorOnMissing: true },
         { from: paths.assets, to: paths.buildAssets },
         { from: 'public/docs', to: 'docs', noErrorOnMissing: true }
       ]

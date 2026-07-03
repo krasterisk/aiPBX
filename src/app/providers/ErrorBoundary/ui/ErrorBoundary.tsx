@@ -1,5 +1,6 @@
 import React, { Suspense, type ErrorInfo, type ReactNode } from 'react'
 import { PageError } from '@/widgets/PageError'
+import { Sentry } from '@/shared/config/sentry/initSentry'
 
 interface ErrorBoundaryProps {
   children: ReactNode
@@ -21,7 +22,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   }
 
   componentDidCatch (error: Error, errorInfo: ErrorInfo) {
-    console.log(error, errorInfo)
+    Sentry.captureException(error, { extra: { componentStack: errorInfo.componentStack } })
 
     // Auto-reload once on ChunkLoadError (stale deployment chunks)
     if (error.name === 'ChunkLoadError') {

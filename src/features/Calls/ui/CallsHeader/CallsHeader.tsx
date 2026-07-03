@@ -8,12 +8,11 @@ import { PeriodPicker } from '@/entities/PeriodPicker'
 // eslint-disable-next-line krasterisk-plugin/layer-imports
 import { PeriodExtendedFilters } from '@/features/PeriodExtendedFilter'
 import { CsatFilter } from '../CsatFilter/CsatFilter'
-import { CdrSource, type CsatFilterValue } from '@/entities/Report'
+import { CdrSource, type CsatFilterValue, type UseBatchProgressReturn } from '@/entities/Report'
 import { AssistantOptions } from '@/entities/Assistants'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import { BatchProgressBar } from '../BatchProgressBar/BatchProgressBar'
-import type { UseBatchProgressReturn } from '../../lib/useBatchProgress'
 import cls from './CallsHeader.module.scss'
 
 interface CallsHeaderProps {

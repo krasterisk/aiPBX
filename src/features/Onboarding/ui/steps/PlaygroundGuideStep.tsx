@@ -105,7 +105,7 @@ export const PlaygroundGuideStep = memo(({ className }: PlaygroundGuideStepProps
             <HStack gap="12" justify="center" wrap="wrap">
                 <Button
                     variant="clear"
-                    size="s"
+                    size="m"
                     onClick={onGoAssistants}
                     addonLeft={<Bot size={14} />}
                     className={cls.skipLink}
@@ -114,7 +114,7 @@ export const PlaygroundGuideStep = memo(({ className }: PlaygroundGuideStepProps
                 </Button>
                 <Button
                     variant="clear"
-                    size="s"
+                    size="m"
                     onClick={onGoDashboard}
                     addonLeft={<LayoutDashboard size={14} />}
                     className={cls.skipLink}
@@ -123,7 +123,7 @@ export const PlaygroundGuideStep = memo(({ className }: PlaygroundGuideStepProps
                 </Button>
                 <Button
                     variant="clear"
-                    size="s"
+                    size="m"
                     onClick={onGoDocs}
                     addonLeft={<BookOpen size={14} />}
                     className={cls.skipLink}
@@ -143,7 +143,7 @@ export const PlaygroundGuideStep = memo(({ className }: PlaygroundGuideStepProps
                 </Button>
                 <Button
                     variant="clear"
-                    size="s"
+                    size="m"
                     onClick={onSkip}
                     className={cls.skipLink}
                 >

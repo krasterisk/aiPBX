@@ -1,6 +1,10 @@
+import { config as loadEnv } from 'dotenv'
 import { buildWebpackConfig } from './config/build/buildWebpackConfig'
 import { type buildEnv, type buildPaths } from './config/build/types/config'
 import path from 'path'
+
+loadEnv({ path: path.resolve(__dirname, '.env.local') })
+loadEnv({ path: path.resolve(__dirname, '.env') })
 
 export default (env: buildEnv) => {
   const paths: buildPaths = {
@@ -17,13 +21,17 @@ export default (env: buildEnv) => {
 
   const mode = env?.mode || 'development'
   const isDev = mode === 'development'
-  const PORT = env?.port || 3000
-  const apiUrl = env?.apiUrl || 'http://192.168.2.37:5005/api'
-  const wsUrl = env?.wsUrl || ''
-  const staticUrl = env?.staticUrl || 'http://192.168.2.37:5005/static'
-  const googleClientId = env?.googleClientId || '833962533381-ehqsn7soc4s9e82cv9ats589787ihrog.apps.googleusercontent.com'
-  const tgBotId = env?.tgBotId || '8298793342'
-  const stripePublishableKey = env?.stripePublishableKey || 'pk_test_51SraxrIPIiX1aE70WbOwZQhPPjDvHQELzJQ8WbgZOMomPve8AxQlFgczq9qT2QQhCwgZDPbtiBZ4eFdtOSWuiZC200kLK9XSQ0'
+  const PORT = Number(env?.port || process.env.PORT || 3000)
+  const apiUrl = env?.apiUrl || process.env.API_URL || '/api'
+  const wsUrl = env?.wsUrl ?? process.env.WS_URL ?? ''
+  const staticUrl = env?.staticUrl || process.env.STATIC_URL || '/static'
+  const googleClientId = env?.googleClientId || process.env.GOOGLE_CLIENT_ID || ''
+  const tgBotId = env?.tgBotId || process.env.TELEGRAM_BOT_ID || ''
+  const stripePublishableKey = env?.stripePublishableKey || process.env.STRIPE_PUBLISHABLE_KEY || ''
+  const sentryDsn = process.env.SENTRY_DSN || ''
+  const sentryEnvironment = process.env.SENTRY_ENVIRONMENT || mode
+  const yandexMetrikaId = process.env.YANDEX_METRIKA_ID || ''
+  const ga4MeasurementId = process.env.GA4_MEASUREMENT_ID || ''
 
   return buildWebpackConfig({
     mode,
@@ -36,6 +44,10 @@ export default (env: buildEnv) => {
     staticUrl,
     googleClientId,
     tgBotId,
-    stripePublishableKey
+    stripePublishableKey,
+    sentryDsn,
+    sentryEnvironment,
+    yandexMetrikaId,
+    ga4MeasurementId
   })
 }

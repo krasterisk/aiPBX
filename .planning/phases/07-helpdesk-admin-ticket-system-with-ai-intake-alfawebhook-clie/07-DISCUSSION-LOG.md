@@ -48,6 +48,27 @@
 
 ---
 
+## Manual ticket creation (2026-07-03 follow-up)
+
+**User request:** Admin cannot create tickets by hand — must be possible from frontend.
+
+| Aspect | Decision |
+|--------|----------|
+| Backend | Already `POST /helpdesk/tickets` with `source: manual` |
+| Frontend gap | No create button/modal on `HelpdeskListPage` |
+| UX | Modal «Создать заявку» on list page |
+| Client search | Optional identify via `/helpdesk/clients/identify` |
+| After create | Redirect to ticket detail |
+| Assignment | Auto-claim to creator (proposed — avoids pool notification noise) |
+
+**User confirmed:** 1a (auto-assign), 2a (client search with identify API).
+
+**Implemented 2026-07-03:** `CreateHelpdeskTicketModal`, backend `assigneeId` on admin create.
+
+Captured as **D-36** in `07-CONTEXT.md`.
+
+---
+
 ## Cloud / on-prem PBX agent
 
 | Option | Description | Selected |

@@ -147,10 +147,26 @@ export const WidgetRenderer = memo((props: WidgetRendererProps) => {
             }
 
             case 'tag-cloud': {
+                if (!data.barData?.length) return <Text text={String(t('Нет данных'))} size={'s'} />
+                const maxValue = Math.max(...data.barData.map(entry => entry.value), 1)
                 return (
                     <VStack gap={'8'} max>
                         <Text text={widget.title} size={'s'} bold />
-                        <Text text={String(t('Tag Cloud — скоро'))} size={'s'} />
+                        <div className={cls.tagCloud}>
+                            {data.barData.map(entry => {
+                                const scale = 0.75 + (entry.value / maxValue) * 0.75
+                                return (
+                                    <span
+                                        key={entry.label}
+                                        className={cls.tagCloudItem}
+                                        style={{ fontSize: `${Math.round(12 * scale)}px` }}
+                                        title={`${entry.label}: ${entry.value}`}
+                                    >
+                                        {entry.label}
+                                    </span>
+                                )
+                            })}
+                        </div>
                     </VStack>
                 )
             }

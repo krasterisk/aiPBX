@@ -1,0 +1,9 @@
+.kanban {
+  overflow-x: auto;
+  align-items: flex-start;
+}
+
+.column {
+  min-width: 240px;
+  flex: 1;
+}

@@ -10,6 +10,10 @@ jest.mock('react-i18next', () => ({
     })
 }))
 
+jest.mock('./MetricOverridePanel', () => ({
+    MetricOverridePanel: () => null,
+}))
+
 // ── Fixtures ─────────────────────────────────────────────────────────────────
 
 /** Flat operator metrics — from file-upload analytics */

@@ -9,7 +9,16 @@ export default {
   globals: {
     __IS_DEV__: true,
     __API__: '',
-    __PROJECT__: 'jest'
+    __WS__: '',
+    __PROJECT__: 'jest',
+    __STATIC__: '',
+    __GOOGLE_CLIENT_ID__: '',
+    __TG_BOT_ID__: '',
+    __STRIPE_PUBLISHABLE_KEY__: '',
+    __SENTRY_DSN__: '',
+    __SENTRY_ENVIRONMENT__: 'test',
+    __YANDEX_METRIKA_ID__: '',
+    __GA4_MEASUREMENT_ID__: ''
   },
   clearMocks: true,
   coverageProvider: 'v8',

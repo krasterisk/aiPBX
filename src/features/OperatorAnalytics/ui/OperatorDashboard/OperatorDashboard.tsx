@@ -23,8 +23,10 @@ import {
     useGetOperatorProjects,
 } from '@/entities/Report'
 import { AiInsightsBanner } from './AiInsightsBanner/AiInsightsBanner'
+import { DashboardConfigGrid } from '../DashboardBuilder/DashboardConfigGrid'
 import { HeatmapCalendar } from './HeatmapCalendar/HeatmapCalendar'
 import { OperatorScoreTable } from './OperatorScoreTable/OperatorScoreTable'
+import { OperatorUsageSection } from './OperatorUsageSection/OperatorUsageSection'
 import { DonutChart } from '@/shared/ui/redesigned/DonutChart'
 import cls from './OperatorDashboard.module.scss'
 
@@ -140,6 +142,14 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
             aggregated: aggregated[metric.id],
         }))
     }, [activeProject?.customMetricsSchema, data?.customMetricsAggregated])
+
+    const customDashboardWidgets = useMemo(() => {
+        const widgets = activeProject?.dashboardConfig?.widgets
+        if (!widgets?.length) return []
+        return [...widgets].sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
+    }, [activeProject?.dashboardConfig?.widgets])
+
+    const hasCustomDashboard = customDashboardWidgets.length > 0
 
     const timeSeriesLabels = data?.timeSeries?.monthly?.map(p => p.label) ?? []
     const timeSeriesCalls = data?.timeSeries?.monthly?.map(p => p.callsCount) ?? []
@@ -300,6 +310,15 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                 />
             </HStack>
 
+            {hasCustomDashboard ? (
+                <DashboardConfigGrid
+                    widgets={customDashboardWidgets}
+                    dashboardData={data}
+                    project={activeProject}
+                    title={String(t('DASHBOARD_CUSTOM_LAYOUT'))}
+                />
+            ) : (
+                <>
             {/* Pie Charts Row */}
             <div className={cls.chartsRow}>
                 <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
@@ -475,6 +494,15 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                     ) : <div />}
                 </div>
             )}
+
+                </>
+            )}
+
+            <OperatorUsageSection
+                startDate={startDate}
+                endDate={endDate}
+                userId={userId}
+            />
 
             {/* Operator quality ranking — bottom section */}
             <Card

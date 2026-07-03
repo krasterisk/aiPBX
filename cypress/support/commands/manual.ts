@@ -41,18 +41,20 @@ const defaultManual = {
 }
 
 export const createManual = (manual?: Manual) => {
+    const apiUrl = Cypress.env('API_URL') as string;
     return cy.request({
         method: 'POST',
-        url: `http://192.168.2.37:7000/api/manuals`,
+        url: `${apiUrl}/manuals`,
         body: defaultManual ?? manual
     }).then((resp) => resp.body)
 }
 
 export const removeManual = (manualId: string) => {
+    const apiUrl = Cypress.env('API_URL') as string;
     cy.log(manualId)
     return cy.request({
         method: 'DELETE',
-        url: `http://192.168.2.37:7000/api/manuals`,
+        url: `${apiUrl}/manuals`,
         body: {
             ids: manualId
         }

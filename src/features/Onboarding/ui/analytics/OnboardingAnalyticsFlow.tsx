@@ -4,15 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
-import { projectWizardReducer } from '@/entities/Report'
-import { useBatchProgress } from '@/features/Calls/lib/useBatchProgress'
+import { projectWizardReducer, BatchStatusResponse, useBatchProgress } from '@/entities/Report'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { onboardingActions } from '../../model/slices/onboardingSlice'
 import {
     getOnboardingStep,
     getOnboardingError,
-    getOnboardingOaProjectId,
-    getOnboardingOaAnalysisCompleted
+    getOnboardingOaProjectId
 } from '../../model/selectors/onboardingSelectors'
 import { trackOnboardingEvent } from '../../lib/onboardingAnalytics'
 import { getRouteDashboardCallRecords } from '@/shared/const/router'
@@ -20,7 +18,8 @@ import {
     AnalyticsWelcomeOverviewStep,
     AnalyticsProjectSetupStep,
     AnalyticsMetricsStep,
-    AnalyticsUploadStep
+    AnalyticsUploadStep,
+    AnalyticsUploadPhase
 } from './OnboardingAnalyticsSteps'
 
 const reducers: ReducersList = {
@@ -37,31 +36,62 @@ const OnboardingAnalyticsFlowContent = memo(({ className }: OnboardingAnalyticsF
     const currentStep = useSelector(getOnboardingStep)
     const error = useSelector(getOnboardingError)
     const projectId = useSelector(getOnboardingOaProjectId)
-    const analysisCompleted = useSelector(getOnboardingOaAnalysisCompleted)
-    const [navigatingToDashboard, setNavigatingToDashboard] = useState(false)
+    const [uploadPhase, setUploadPhase] = useState<AnalyticsUploadPhase>('idle')
+    const [analysisError, setAnalysisError] = useState<string | null>(null)
 
-    const handleBatchFinished = useCallback((status: { completed: number; finishedAt?: string | null }) => {
+    const navigateToDashboardTour = useCallback(() => {
+        dispatch(onboardingActions.pauseOnboardingOverlay())
+        const params = new URLSearchParams({
+            onboarding: 'analytics',
+            tour: '1'
+        })
+        if (projectId) {
+            params.set('projectId', projectId)
+        }
+        navigate(`${getRouteDashboardCallRecords()}?${params.toString()}`)
+    }, [dispatch, navigate, projectId])
+
+    const handleBatchFinished = useCallback((status: BatchStatusResponse) => {
+        if (!status.finishedAt) {
+            return
+        }
+
         if (status.completed >= 1) {
+            setUploadPhase('success')
+            setAnalysisError(null)
             dispatch(onboardingActions.setOaAnalysisCompleted(true))
             trackOnboardingEvent('oa_first_analysis_complete', {
                 productPath: 'analytics',
                 projectId: projectId ?? undefined,
                 completed: status.completed
             })
-            setNavigatingToDashboard(true)
-            dispatch(onboardingActions.pauseOnboardingOverlay())
-            const params = new URLSearchParams({
-                onboarding: 'analytics',
-                tour: '1'
-            })
-            if (projectId) {
-                params.set('projectId', projectId)
-            }
-            navigate(`${getRouteDashboardCallRecords()}?${params.toString()}`)
+            navigateToDashboardTour()
+            return
         }
-    }, [dispatch, navigate, projectId])
+
+        setUploadPhase('failed')
+        setAnalysisError('analysis_failed')
+        dispatch(onboardingActions.setError('analytics_analysis_failed'))
+    }, [dispatch, navigateToDashboardTour, projectId])
 
     const batch = useBatchProgress({ onBatchFinished: handleBatchFinished })
+
+    const handleBatchStarted = useCallback((batchId: string) => {
+        setUploadPhase('processing')
+        setAnalysisError(null)
+        dispatch(onboardingActions.setError(null))
+        batch.startPolling(batchId)
+    }, [dispatch, batch])
+
+    const handleRetryUpload = useCallback(() => {
+        setUploadPhase('idle')
+        setAnalysisError(null)
+        dispatch(onboardingActions.setError(null))
+    }, [dispatch])
+
+    const handleViewDashboardAnyway = useCallback(() => {
+        navigateToDashboardTour()
+    }, [navigateToDashboardTour])
 
     const StepComponent = useMemo(() => {
         switch (currentStep) {
@@ -86,10 +116,13 @@ const OnboardingAnalyticsFlowContent = memo(({ className }: OnboardingAnalyticsF
             {currentStep === 4
                 ? (
                     <AnalyticsUploadStep
-                        onBatchStarted={batch.startPolling}
+                        onBatchStarted={handleBatchStarted}
                         batchProgress={batch.progress}
                         batchIsActive={batch.isActive}
-                        analysisComplete={analysisCompleted || navigatingToDashboard}
+                        uploadPhase={uploadPhase}
+                        analysisError={analysisError}
+                        onRetryUpload={handleRetryUpload}
+                        onViewDashboard={handleViewDashboardAnyway}
                     />
                 )
                 : <StepComponent />}

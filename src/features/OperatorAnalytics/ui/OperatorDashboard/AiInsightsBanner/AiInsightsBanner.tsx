@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { Skeleton } from '@mui/material'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
@@ -7,6 +8,8 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { Card } from '@/shared/ui/redesigned/Card'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import { OperatorInsight, useLazyGetOperatorInsights } from '@/entities/Report'
+import { getRouteCalls } from '@/shared/const/router'
+import { buildInsightDrilldownPayload, saveInsightDrilldown } from '../../../lib/insightDrilldown'
 import cls from './AiInsightsBanner.module.scss'
 
 interface AiInsightsBannerProps {
@@ -39,6 +42,11 @@ function priorityClass(priority: OperatorInsight['priority']): string {
     }
 }
 
+function canDrillDown(insight: OperatorInsight): boolean {
+    const { evidence } = insight
+    return Boolean(evidence.channelIds?.length || evidence.operators?.length)
+}
+
 function formatEvidence(insight: OperatorInsight): string | null {
     const { evidence } = insight
     if (evidence.metric != null && evidence.value != null) {
@@ -55,6 +63,7 @@ function formatEvidence(insight: OperatorInsight): string | null {
 
 export const AiInsightsBanner = memo(({ projectName, queryParams }: AiInsightsBannerProps) => {
     const { t } = useTranslation('reports')
+    const navigate = useNavigate()
     const [triggerInsights, { data, isLoading, isFetching, isError }] = useLazyGetOperatorInsights()
     const queryKey = useMemo(() => serializeQueryKey(queryParams), [queryParams])
     const lastFetchedKeyRef = useRef<string | null>(null)
@@ -74,6 +83,13 @@ export const AiInsightsBanner = memo(({ projectName, queryParams }: AiInsightsBa
         triggerInsights({ ...(queryParams ?? {}), refresh: true })
         lastFetchedKeyRef.current = queryKey
     }, [triggerInsights, queryParams, queryKey])
+
+    const handleEvidenceClick = useCallback((insight: OperatorInsight) => {
+        const payload = buildInsightDrilldownPayload(insight, queryParams)
+        if (!payload) return
+        saveInsightDrilldown(payload)
+        navigate(getRouteCalls())
+    }, [navigate, queryParams])
 
     const isStale = data != null && lastFetchedKeyRef.current !== queryKey
     const insights = isStale ? [] : (data?.insights ?? [])
@@ -150,7 +166,18 @@ export const AiInsightsBanner = memo(({ projectName, queryParams }: AiInsightsBa
                                             <Text text={insight.recommendation} size={'s'} className={cls.recommendation} />
                                         )}
                                         {evidenceText && (
-                                            <span className={cls.evidenceChip}>{evidenceText}</span>
+                                            canDrillDown(insight) ? (
+                                                <button
+                                                    type="button"
+                                                    className={`${cls.evidenceChip} ${cls.evidenceChipClickable}`}
+                                                    onClick={() => { handleEvidenceClick(insight) }}
+                                                    title={String(t('INSIGHT_DRILLDOWN_HINT'))}
+                                                >
+                                                    {evidenceText}
+                                                </button>
+                                            ) : (
+                                                <span className={cls.evidenceChip}>{evidenceText}</span>
+                                            )
                                         )}
                                     </VStack>
                                 </div>

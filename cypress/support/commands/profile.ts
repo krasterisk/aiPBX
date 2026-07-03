@@ -7,9 +7,10 @@ export const updateProfile = (firstname: string, lastname:string) => {
 }
 
 export const resetProfile = (profileId: string) => {
+    const apiUrl = Cypress.env('API_URL') as string;
     return cy.request({
         method: 'PUT',
-        url: `http://192.168.2.37:7000/api/users/profile`,
+        url: `${apiUrl}/users/profile`,
         body: {
             id: 1,
             username: "admin2",

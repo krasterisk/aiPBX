@@ -95,7 +95,7 @@ export const SimpleExampleStep = memo(({ className }: SimpleExampleStepProps) =>
             <VStack gap="8" max className={cls.featuresBlock}>
                 <Button
                     variant="clear"
-                    size="s"
+                    size="m"
                     onClick={toggleTelegram}
                     addonRight={telegramExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                 >

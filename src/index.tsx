@@ -7,6 +7,11 @@ import '@/app/styles/index.scss'
 import './shared/config/i18n/i18n'
 import { ErrorBoundary } from '@/app/providers/ErrorBoundary'
 import { StoreProvider } from '@/app/providers/StoreProvider'
+import { initSentry } from '@/shared/config/sentry/initSentry'
+import { initAnalytics } from '@/shared/config/analytics/initAnalytics'
+
+initSentry()
+initAnalytics()
 
 const container = document.getElementById('root')
 

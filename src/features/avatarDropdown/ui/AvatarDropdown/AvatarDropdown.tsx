@@ -9,7 +9,7 @@ import { Avatar } from '@/shared/ui/redesigned/Avatar'
 import { Dropdown } from '@/shared/ui/redesigned/Popups'
 import { useNavigate } from 'react-router-dom'
 // eslint-disable-next-line krasterisk-plugin/layer-imports
-import { onboardingActions, ONBOARDING_STORAGE_KEY } from '@/features/Onboarding'
+import { onboardingActions, getOnboardingIsActive } from '@/features/Onboarding'
 
 interface AvatarDropdownProps {
   className?: string
@@ -23,10 +23,10 @@ export const AvatarDropdown = memo((props: AvatarDropdownProps) => {
   const { t: tOnboarding } = useTranslation('onboarding')
   const dispatch = useDispatch()
   const authData = useSelector(getUserAuthData)
+  const isOnboardingActive = useSelector(getOnboardingIsActive)
   const navigate = useNavigate()
 
-  const onboardingCompleted = typeof localStorage !== 'undefined'
-    && localStorage.getItem(ONBOARDING_STORAGE_KEY) === 'true'
+  const showOnboardingReentry = Boolean(authData) && !isOnboardingActive
 
   const onLogout = useCallback(() => {
     dispatch(userActions.logout())
@@ -40,7 +40,7 @@ export const AvatarDropdown = memo((props: AvatarDropdownProps) => {
   }, [dispatch])
 
   const items = [
-    ...(onboardingCompleted
+    ...(showOnboardingReentry
       ? [{
         content: tOnboarding('onboarding_reentry', 'Начать обучение'),
         onClick: onStartOnboarding

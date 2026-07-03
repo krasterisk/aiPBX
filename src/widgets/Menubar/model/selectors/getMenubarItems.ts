@@ -23,7 +23,8 @@ import {
   getRouteAnalyticsProjects,
   getRouteAnalyticsApi,
   getRouteKnowledgeBases,
-  getRouteChats
+  getRouteChats,
+  getRouteHelpdesk,
 } from '@/shared/const/router'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
@@ -48,6 +49,7 @@ import ChatIcon from '@mui/icons-material/Chat'
 import InsightsIcon from '@mui/icons-material/Insights'
 import AssessmentIcon from '@mui/icons-material/Assessment'
 import CorporateFareIcon from '@mui/icons-material/CorporateFare'
+import SupportAgentIcon from '@mui/icons-material/SupportAgent'
 import TimelineIcon from '@mui/icons-material/Timeline'
 import { MenubarItemType } from '../types/menubar'
 import { useTranslation } from 'react-i18next'
@@ -225,6 +227,12 @@ export const useMenubarItems = () => {
                 path: getRouteOurOrganizations(),
                 Icon: CorporateFareIcon,
                 text: t('Наши организации'),
+                authOnly: true
+              },
+              {
+                path: getRouteHelpdesk(),
+                Icon: SupportAgentIcon,
+                text: t('HELPDESK_MENU'),
                 authOnly: true
               },
               {

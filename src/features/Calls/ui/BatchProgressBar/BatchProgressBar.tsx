@@ -8,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import AutorenewIcon from '@mui/icons-material/Autorenew'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import cls from './BatchProgressBar.module.scss'
-import type { SingleBatchState } from '../../lib/useBatchProgress'
+import type { SingleBatchState } from '@/entities/Report'
 
 interface BatchProgressBarProps {
     batches: SingleBatchState[]

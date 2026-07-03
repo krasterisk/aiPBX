@@ -36,6 +36,7 @@ import { useSelector } from 'react-redux'
 import { Button } from '@/shared/ui/redesigned/Button'
 import LogoIcon from '@/shared/assets/icons/aipbx_logo_v3.svg'
 import { getDomainConfig } from '@/shared/lib/domain'
+import { usePageMeta } from '@/shared/lib/seo/usePageMeta'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },
@@ -76,6 +77,16 @@ const MainPage: FC = memo(() => {
   const auth = useSelector(getUserAuthData)
   const domainConfig = getDomainConfig()
   const isRuDomain = domainConfig.region === 'ru'
+
+  usePageMeta({
+    title: isRuDomain
+      ? 'Голосовой AI-ассистент для бизнеса — облачная АТС с ИИ'
+      : 'AI Voice Assistant Platform — Cloud PBX',
+    description: isRuDomain
+      ? 'Создайте голосового AI-бота для телефонии: Asterisk, SIP, WebRTC. Речевая аналитика звонков, интеграции Bitrix24, биллинг для B2B.'
+      : 'Build voice AI assistants for phone and web. Real-time LLM calls, speech analytics, MCP integrations.',
+    path: '/'
+  })
 
   useEffect(() => {
     if (auth) {

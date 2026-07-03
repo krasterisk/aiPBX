@@ -11,7 +11,7 @@ const HEIGHT = 800
 
 type Rgb = [number, number, number]
 
-type MockLayout = {
+interface MockLayout {
   title: string
   sidebarActive: number
   variant: 'dashboard' | 'modal' | 'table' | 'wizard' | 'playground'
@@ -125,16 +125,16 @@ const GLYPHS: Record<string, number[]> = {
   w: [0, 0, 17, 17, 21, 21, 10],
   y: [0, 0, 17, 17, 15, 1, 14],
   '-': [0, 0, 0, 31, 0, 0, 0],
-  '0': [14, 17, 19, 21, 25, 17, 14],
-  '1': [4, 12, 4, 4, 4, 4, 14],
-  '2': [14, 17, 1, 2, 4, 8, 31],
-  '3': [14, 17, 1, 6, 1, 17, 14],
-  '4': [2, 6, 10, 18, 31, 2, 2],
-  '5': [31, 16, 30, 1, 1, 17, 14],
-  '6': [14, 17, 16, 30, 17, 17, 14],
-  '7': [31, 1, 2, 4, 4, 4, 4],
-  '8': [14, 17, 17, 14, 17, 17, 14],
-  '9': [14, 17, 17, 15, 1, 17, 14],
+  0: [14, 17, 19, 21, 25, 17, 14],
+  1: [4, 12, 4, 4, 4, 4, 14],
+  2: [14, 17, 1, 2, 4, 8, 31],
+  3: [14, 17, 1, 6, 1, 17, 14],
+  4: [2, 6, 10, 18, 31, 2, 2],
+  5: [31, 16, 30, 1, 1, 17, 14],
+  6: [14, 17, 16, 30, 17, 17, 14],
+  7: [31, 1, 2, 4, 4, 4, 4],
+  8: [14, 17, 17, 14, 17, 17, 14],
+  9: [14, 17, 17, 15, 1, 17, 14],
   '%': [17, 17, 2, 4, 8, 17, 17]
 }
 
@@ -213,7 +213,7 @@ function drawShell (buf: Buffer, layout: MockLayout): void {
     fillRoundRect(buf, mx, 100, 960, 400, CARD, 12)
     fillRect(buf, mx, 140, 960, 1, BORDER)
     const headers = ['Date', 'Number', 'Duration', 'Status']
-    headers.forEach((h, i) => drawText(buf, h, mx + 20 + i * 220, 115, MUTED, 2))
+    headers.forEach((h, i) => { drawText(buf, h, mx + 20 + i * 220, 115, MUTED, 2) })
     for (let row = 0; row < 4; row++) {
       const y = 160 + row * 50
       fillRect(buf, mx, y + 48, 960, 1, BORDER)
@@ -316,5 +316,5 @@ if (require.main === module) {
   const out = path.resolve(__dirname, '../public/docs/screenshots')
   const files = generateAllMockPngs(out)
   console.log(`Generated ${files.length} PNG mocks in ${out}`)
-  files.forEach((f) => console.log(`  ✓ ${f}`))
+  files.forEach((f) => { console.log(`  ✓ ${f}`) })
 }

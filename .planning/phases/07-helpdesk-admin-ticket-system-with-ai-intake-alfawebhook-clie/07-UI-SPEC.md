@@ -18,8 +18,8 @@ created: 2026-07-03
 | Property | Value |
 |----------|-------|
 | Tool | none (native SCSS) |
-| Preset | redesign-v3-native |
-| Component library | custom (`shared/ui/redesign-v3`) |
+| Preset | redesigned + mui wrappers (кабинет) |
+| Component library | `shared/ui/redesigned/*`, `shared/ui/mui/*` (см. `.docs/FRONTEND_ARCHITECTURE.md`) |
 | Icon library | lucide-react |
 | Font | project default (inherited from app shell) |
 
@@ -138,12 +138,13 @@ Accent reserved for: Claim button, Save note, active view toggle (table/kanban),
 
 | UI need | Use |
 |---------|-----|
-| Filters | `Combobox` multiple + searchable |
-| Search | `Input` with Search icon addon |
-| Buttons | `Button` redesign-v3 variants primary/ghost |
-| Tooltips | `Tooltip` redesign-v3 |
-| Cards | `@include glass-card-secondary` SCSS mixin |
-| Client select (manual link) | `ClientSelectV3` if linking ticket to client |
+| Filters | `Combobox` (`shared/ui/mui/Combobox`) multiple + searchable |
+| Search | `Textarea` или `Combobox` с иконкой Search |
+| Buttons | `Button` `shared/ui/redesigned/Button` variant glass-action / clear |
+| Tooltips | `Tooltip` redesign-v3 (точечно, по FRONTEND_ARCHITECTURE exceptions) |
+| Cards | `<Card variant="glass" />` или `@include glass-card-secondary` |
+| Tables | `Table` из `shared/ui/redesigned/Table` (TanStack) |
+| Layout | `VStack` / `HStack` из `shared/ui/redesigned/Stack` |
 
 ---
 
