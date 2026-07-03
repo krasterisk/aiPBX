@@ -9620,6 +9620,13 @@
           "periodLabel": {
             "type": "string",
             "example": "2026-02-01 — 2026-02-13"
+          },
+          "channelIds": {
+            "description": "Exemplar CDR channel IDs for drill-down (max 5)",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

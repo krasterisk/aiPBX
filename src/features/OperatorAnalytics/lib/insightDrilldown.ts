@@ -27,8 +27,10 @@ export function consumeInsightDrilldown(): InsightDrilldownPayload | null {
     }
 }
 
+import type { OperatorInsight } from '@/entities/Report'
+
 export function buildInsightDrilldownPayload(
-    insight: { evidence: { channelIds?: string[], operators?: string[] } },
+    insight: Pick<OperatorInsight, 'evidence'>,
     queryParams?: {
         startDate?: string
         endDate?: string

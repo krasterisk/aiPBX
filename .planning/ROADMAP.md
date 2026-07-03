@@ -276,7 +276,7 @@
 
 **Context:** `.planning/phases/08-user-docs-overhaul-menu-by-menu-public-docs-ru-en/08-CONTEXT.md`
 
-**Repos:** `aiPBX` only (`public/docs/`, `scripts/capture-docs-screenshots.ts`)
+**Repos:** `aiPBX` only (`public/docs/`, `scripts/capture-docs-screenshots.ts`, `DocumentationLayout`)
 
 ### Scope — покрытие по меню (без «Управление»)
 
@@ -313,7 +313,7 @@
 | 08-03 | 2 | Дашборды + Звонки + Operator Analytics (новые/расширенные разделы) |
 | 08-04 | 3 | Оплата, en-паритет, screenshot capture, DOCS-INDEX / GAP-14 close |
 
-**Status:** Not planned yet
+**Status:** Context gathered (2026-07-03) — ready for `/gsd-plan-phase 8`
 
 **Plans:** 0/4
 

@@ -4967,6 +4967,8 @@ export interface components {
             operators?: string[];
             /** @example 2026-02-01 — 2026-02-13 */
             periodLabel?: string;
+            /** @description Exemplar CDR channel IDs for drill-down (max 5) */
+            channelIds?: string[];
         };
         OperatorInsightDto: {
             /**
