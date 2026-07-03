@@ -11,8 +11,12 @@ const SITE_NAME = 'AI PBX'
 const DEFAULT_OG_IMAGE = '/assets/og-default.png'
 
 function upsertMeta (attr: 'name' | 'property', key: string, content: string): void {
-  let el = document.querySelector(`meta[${attr}="${key}"]`) as HTMLMetaElement | null
-  if (!el) {
+  const selector = `meta[${attr}="${key}"]`
+  const existing = document.head.querySelector(selector)
+  let el: HTMLMetaElement
+  if (existing instanceof HTMLMetaElement) {
+    el = existing
+  } else {
     el = document.createElement('meta')
     el.setAttribute(attr, key)
     document.head.appendChild(el)
@@ -21,8 +25,11 @@ function upsertMeta (attr: 'name' | 'property', key: string, content: string): v
 }
 
 function upsertCanonical (href: string): void {
-  let el = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null
-  if (!el) {
+  const existing = document.head.querySelector('link[rel="canonical"]')
+  let el: HTMLLinkElement
+  if (existing instanceof HTMLLinkElement) {
+    el = existing
+  } else {
     el = document.createElement('link')
     el.rel = 'canonical'
     document.head.appendChild(el)
