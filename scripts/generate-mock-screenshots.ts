@@ -26,7 +26,12 @@ const MOCKS: Record<string, MockLayout> = {
   'reports-history': { title: 'Call History', sidebarActive: 3, variant: 'table' },
   'project-wizard': { title: 'Project Wizard', sidebarActive: 4, variant: 'wizard' },
   'operator-dashboard': { title: 'Operator Dashboard', sidebarActive: 4, variant: 'dashboard' },
-  upload: { title: 'Upload Records', sidebarActive: 4, variant: 'wizard' }
+  upload: { title: 'Upload Records', sidebarActive: 4, variant: 'wizard' },
+  calls: { title: 'Calls', sidebarActive: 3, variant: 'table' },
+  'knowledge-base': { title: 'Knowledge Bases', sidebarActive: 1, variant: 'modal' },
+  'sip-trunks': { title: 'SIP Trunks', sidebarActive: 1, variant: 'modal' },
+  widgets: { title: 'Widgets', sidebarActive: 1, variant: 'modal' },
+  'analytics-api': { title: 'Analytics API', sidebarActive: 4, variant: 'table' }
 }
 
 const SIDEBAR: Rgb = [30, 30, 46]

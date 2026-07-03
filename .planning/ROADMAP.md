@@ -313,7 +313,7 @@
 | 08-03 | 2 | 08-01 | Dashboards + Calls + Operator Analytics + API embed |
 | 08-04 | 3 | 08-02, 08-03 | Payments, de/zh parity, DOCS-INDEX, GAP-14 |
 
-**Status:** Planned (2026-07-03)
+**Status:** Executed (2026-07-03) — 4/4 plans complete; see `08-01`…`08-04-SUMMARY.md`
 
 **Plans:** 4/4
 
@@ -326,10 +326,10 @@
 
 Plans:
 
-- [x] 08-01-PLAN.md — nav + i18n foundation
-- [x] 08-02-PLAN.md — AI Bots documentation
-- [x] 08-03-PLAN.md — Analytics + Calls documentation
-- [x] 08-04-PLAN.md — Payments + parity + closeout
+- [x] 08-01-PLAN.md — nav + i18n foundation ✓
+- [x] 08-02-PLAN.md — AI Bots documentation ✓
+- [x] 08-03-PLAN.md — Analytics + Calls documentation ✓
+- [x] 08-04-PLAN.md — Payments + parity + closeout ✓
 
 **Cross-cutting constraints:**
 

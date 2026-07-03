@@ -1,29 +1,29 @@
 # Documentation Screenshots
 
-Скриншоты интерфейса aiPBX для документации (1280×800, redesign-v3).
+UI mocks for aiPBX docs (1280×800). Generated via `scripts/capture-docs-screenshots.ts`.
 
-## Файлы
+## Files
 
-| Файл | Описание |
-|------|----------|
-| `dashboard.png` | Дашборд — обзор метрик |
-| `assistant-create.png` | Диалог создания ассистента |
-| `assistant-publish-sip.png` | Публикация SIP / транк |
-| `tool-create.png` | Создание HTTP-функции |
-| `playground.png` | Playground — тестовый звонок |
-| `reports-history.png` | Таблица истории звонков |
-| `project-wizard.png` | Мастер проекта (речевая аналитика) |
-| `operator-dashboard.png` | Дашборд оператора |
-| `upload.png` | Загрузка записей для анализа |
+| File | Description |
+|------|-------------|
+| `dashboard.png` | Overview dashboard |
+| `assistant-create.png` | Create assistant dialog |
+| `assistant-publish-sip.png` | SIP URI publish |
+| `tool-create.png` | HTTP tool create |
+| `playground.png` | Playground test call |
+| `reports-history.png` | Call history table |
+| `calls.png` | Calls / CDR journal |
+| `knowledge-base.png` | Knowledge bases list |
+| `sip-trunks.png` | SIP trunk form |
+| `widgets.png` | WebRTC widget |
+| `project-wizard.png` | Analytics project wizard |
+| `operator-dashboard.png` | Project analytics dashboard |
+| `upload.png` | Upload recordings |
+| `analytics-api.png` | Analytics API tokens |
 
-## Обновление
+## Regenerate
 
 ```bash
-# Моки из HTML-шаблонов (по умолчанию):
 npx ts-node scripts/capture-docs-screenshots.ts
-
-# Захват с локального dev-сервера:
 npx ts-node scripts/capture-docs-screenshots.ts --base-url=http://localhost:3000
 ```
-
-Скрипт: `scripts/capture-docs-screenshots.ts` (Playwright).

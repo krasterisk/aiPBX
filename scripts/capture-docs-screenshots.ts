@@ -360,6 +360,11 @@ async function main (): Promise<void> {
     console.log('Generating high-fidelity static mocks (1280×800, pure Node)...')
     const files = generateAllMockPngs(OUTPUT_DIR)
     files.forEach((f) => { console.log(`✓ ${f}`) })
+    for (const filename of Object.keys(MOCKS)) {
+      if (!files.includes(`${filename}.png`)) {
+        console.warn(`⚠ Missing mock PNG for ${filename} — add to generate-mock-screenshots.ts`)
+      }
+    }
   }
 
   console.log(`\nDone — screenshots in ${OUTPUT_DIR}`)

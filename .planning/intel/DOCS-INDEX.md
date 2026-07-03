@@ -57,17 +57,17 @@ Path: `aiPBX/docs/` — 14 files
 
 ## Frontend `public/docs/` (USER — in-app documentation)
 
-Path: `aiPBX/public/docs/` — 29 files
+Path: `aiPBX/public/docs/` — ru, en, de, zh locales
 
 | Path | Content |
 |------|---------|
-| `README.md` | TOC (legacy root) |
-| `01–08.md` | Root copies (legacy) |
-| `en/README.md`, `en/01–08.md` | English user docs |
-| `ru/README.md`, `ru/01–08.md` | Russian user docs |
-| `screenshots/README.md` | **Placeholders only** — GAP-14 |
+| `README.md` | Root pointer to locale folders |
+| `ru/README.md`, `en/README.md`, `de/README.md`, `zh/README.md` | TOC per language |
+| `ru/01–11.md` (and en/de/zh mirrors) | User guides aligned with menubar |
+| `screenshots/*.png` | UI mocks (14 files, Phase 8) |
+| `screenshots/README.md` | Screenshot inventory |
 
-Displayed at `/docs` via `DocsPage`. Mirrors `docs/` content without design-system files.
+Displayed at `/docs` via `DocsPage`. Sidebar structure in `getDocumentationContent.ts` mirrors menubar (non-admin).
 
 ---
 
