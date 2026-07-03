@@ -255,9 +255,16 @@
 | 07-03 | 2 | Frontend: entity + admin pages (ticket list, detail, notes) |
 | 07-04 | 3 | Standalone: Krasterisk voice scenario doc + pbx-remote-handler CLI skeleton |
 
-**Status:** Context gathered (2026-07-03) — ready for `/gsd-plan-phase 7`
+**Status:** Planned (2026-07-03) — 4 plans ready for `/gsd-execute-phase 7`
 
-**Plans:** 0/4
+**Plans:** 4/4
+
+| Plan | Wave | Depends on | Scope |
+|------|------|------------|-------|
+| 07-01 | 1 | — | Backend: models, migration, admin CRUD, alfawebhook search |
+| 07-02 | 2 | 07-01 | AI tools, LLM context, notifications, PBX agent proxy |
+| 07-03 | 2 | 07-01 | Frontend: entity, list (table+kanban), detail, routes |
+| 07-04 | 3 | 07-02, 07-03 | Voice scenario doc + pbx-remote-handler CLI |
 
 ---
 
