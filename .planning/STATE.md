@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 03
-status: complete
-last_updated: "2026-07-03T09:00:00.000Z"
+current_phase: 03 — Operator Analytics Phase 2 **complete** (all 4 waves)
+status: executing
+last_updated: "2026-07-03T10:40:40.779Z"
 last_activity: 2026-07-03
 progress:
   total_phases: 9
@@ -28,6 +28,7 @@ progress:
 
 ### Roadmap Evolution
 
+- **2026-07-03:** Phase 8 planned — 4 plans (08-01 nav/i18n, 08-02 AI Bots, 08-03 analytics/calls, 08-04 payments/parity/GAP-14)
 - **2026-07-03:** Phase 8 context gathered via `/gsd-discuss-phase 8` — mirror menubar in docs nav, ru/en/de/zh, hybrid illustrations, layered audience, embedded OA API reference, remove legacy root md duplicates
 - **2026-07-03:** Phase 8 added — User docs overhaul: menu-by-menu актуализация `public/docs` (ru+en), аналитика, макеты страниц; без раздела «Управление»
 - **2026-07-03:** Phase 7 added — Helpdesk: AI-first admin ticket system (Krasterisk), alfawebhook client lookup via REST, LLM context notes, voice assistant scenario doc, pbx-remote-handler CLI

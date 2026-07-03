@@ -8,69 +8,45 @@ export interface DocSection {
     }>
 }
 
+/** Sidebar structure mirrors app menubar (non-admin sections). */
 export const DOC_SECTIONS: DocSection[] = [
     {
         id: 'getting-started',
         titleKey: 'doc_getting_started'
     },
     {
-        id: 'assistants',
-        titleKey: 'doc_assistants',
-        subsections: [
-            { id: 'assistants', titleKey: 'doc_assistants_create', anchor: 'создание-ассистента' },
-            { id: 'assistants', titleKey: 'doc_assistants_prompt', anchor: 'инструкция-промпт-сердце-ассистента' },
-            { id: 'assistants', titleKey: 'doc_assistants_models', anchor: 'модель-ии-какую-выбрать' },
-            { id: 'assistants', titleKey: 'doc_assistants_voices', anchor: 'голос-как-звучит-ваш-ассистент' },
-            { id: 'assistants', titleKey: 'doc_assistants_params', anchor: 'параметры-модели-и-vad' },
-            { id: 'assistants', titleKey: 'doc_assistants_prompts_guide', anchor: 'гайд-по-написанию-промптов' }
-        ]
-    },
-    {
-        id: 'tools',
-        titleKey: 'doc_tools',
-        subsections: [
-            { id: 'tools', titleKey: 'doc_tools_types', anchor: 'типы-функций' },
-            { id: 'tools', titleKey: 'doc_tools_create', anchor: 'создание-функции' },
-            { id: 'tools', titleKey: 'doc_tools_schema', anchor: 'json-схема-параметров' },
-            { id: 'tools', titleKey: 'doc_tools_auth', anchor: 'аутентификация' },
-            { id: 'tools', titleKey: 'doc_tools_examples', anchor: 'примеры-function-calling' }
-        ]
-    },
-    {
-        id: 'mcp-servers',
-        titleKey: 'doc_mcp',
-        subsections: [
-            { id: 'mcp-servers', titleKey: 'doc_mcp_composio', anchor: 'галерея-интеграций-composio' },
-            { id: 'mcp-servers', titleKey: 'doc_mcp_manual', anchor: 'подключение-mcp-сервера' },
-            { id: 'mcp-servers', titleKey: 'doc_mcp_tools', anchor: 'управление-инструментами' }
-        ]
-    },
-    {
-        id: 'playground',
-        titleKey: 'doc_playground',
-        subsections: [
-            { id: 'playground', titleKey: 'doc_playground_testing', anchor: 'как-провести-тест' },
-            { id: 'playground', titleKey: 'doc_playground_logs', anchor: 'чтение-логов-и-отладка' },
-            { id: 'playground', titleKey: 'doc_playground_scenarios', anchor: 'сценарии-использования' }
-        ]
-    },
-    {
         id: 'dashboards',
         titleKey: 'doc_dashboards',
         subsections: [
-            { id: 'dashboards', titleKey: 'doc_dashboards_overview', anchor: 'overview-обзорная-панель' },
-            { id: 'dashboards', titleKey: 'doc_dashboards_analytics', anchor: 'ai-analytics-аналитика-по-звонкам' },
-            { id: 'dashboards', titleKey: 'doc_dashboards_records', anchor: 'call-records-история-звонков' }
+            { id: 'dashboards', titleKey: 'doc_dashboards_summary', anchor: 'сводный-дашборд' },
+            { id: 'dashboards', titleKey: 'doc_dashboards_bots', anchor: 'аналитика-ботов' },
+            { id: 'dashboards', titleKey: 'doc_dashboards_calls', anchor: 'аналитика-звонков' }
         ]
     },
     {
-        id: 'publish',
-        titleKey: 'doc_publish',
+        id: 'calls',
+        titleKey: 'doc_calls'
+    },
+    {
+        id: 'ai-bots',
+        titleKey: 'doc_ai_bots',
         subsections: [
-            { id: 'publish', titleKey: 'doc_publish_sip', anchor: 'sips-voip-интеграция' },
-            { id: 'publish', titleKey: 'doc_publish_widgets', anchor: 'виджеты-webrtc-для-сайта' },
-            { id: 'publish', titleKey: 'doc_publish_pbx', anchor: 'pbxs-подключение-asterisk' },
-            { id: 'publish', titleKey: 'doc_publish_asterisk', anchor: 'настройка-asterisk' }
+            { id: 'assistants', titleKey: 'doc_assistants', anchor: 'создание-ассистента' },
+            { id: 'playground', titleKey: 'doc_playground', anchor: 'как-провести-тест' },
+            { id: 'tools', titleKey: 'doc_tools', anchor: 'типы-функций' },
+            { id: 'mcp-servers', titleKey: 'doc_mcp', anchor: 'галерея-интеграций-composio' },
+            { id: 'knowledge-bases', titleKey: 'doc_knowledge_bases' },
+            { id: 'publish-sip', titleKey: 'doc_publish_sip', anchor: 'sips-voip-интеграция' },
+            { id: 'publish-trunks', titleKey: 'doc_publish_trunks', anchor: 'sip-trunks' },
+            { id: 'publish-widgets', titleKey: 'doc_publish_widgets', anchor: 'виджеты-webrtc-для-сайта' }
+        ]
+    },
+    {
+        id: 'analytics',
+        titleKey: 'doc_analytics',
+        subsections: [
+            { id: 'analytics-projects', titleKey: 'doc_analytics_projects', anchor: 'проекты-аналитики' },
+            { id: 'analytics-api', titleKey: 'doc_analytics_api', anchor: 'api-аналитики' }
         ]
     },
     {
@@ -86,7 +62,6 @@ export const DOC_SECTIONS: DocSection[] = [
     }
 ]
 
-// Map section id → markdown filename
 const SECTION_FILES: Record<string, string> = {
     'getting-started': '01-getting-started.md',
     assistants: '02-assistants.md',
@@ -94,8 +69,17 @@ const SECTION_FILES: Record<string, string> = {
     'mcp-servers': '04-mcp-servers.md',
     playground: '05-playground.md',
     dashboards: '06-dashboards.md',
+    'publish-sip': '07-publish.md',
+    'publish-trunks': '07-publish.md',
+    'publish-widgets': '07-publish.md',
     publish: '07-publish.md',
-    payments: '08-payments.md'
+    payments: '08-payments.md',
+    calls: '09-calls.md',
+    'knowledge-bases': '10-knowledge-bases.md',
+    analytics: '11-operator-analytics.md',
+    'analytics-projects': '11-operator-analytics.md',
+    'analytics-api': '11-operator-analytics.md',
+    'ai-bots': '02-assistants.md'
 }
 
 const cache: Record<string, string> = {}
@@ -114,7 +98,6 @@ export async function fetchDocumentationMarkdown (sectionId: string, lang: strin
     try {
         const response = await fetch(`/docs/${lang}/${fileName}`)
         if (!response.ok) {
-            // Fallback to Russian if translation not available
             if (lang !== 'ru') {
                 return await fetchDocumentationMarkdown(sectionId, 'ru')
             }
@@ -125,7 +108,6 @@ export async function fetchDocumentationMarkdown (sectionId: string, lang: strin
         return text
     } catch (error) {
         console.error(`Failed to load doc: ${lang}/${fileName}`, error)
-        // Try Russian fallback on error
         if (lang !== 'ru') {
             return await fetchDocumentationMarkdown(sectionId, 'ru')
         }

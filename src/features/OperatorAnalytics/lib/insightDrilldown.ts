@@ -1,4 +1,4 @@
-import type { CdrSource } from '@/entities/Report'
+import type { CdrSource, OperatorInsight } from '@/entities/Report'
 
 export const INSIGHT_DRILLDOWN_STORAGE_KEY = 'oa-insight-drilldown'
 
@@ -26,8 +26,6 @@ export function consumeInsightDrilldown(): InsightDrilldownPayload | null {
         return null
     }
 }
-
-import type { OperatorInsight } from '@/entities/Report'
 
 export function buildInsightDrilldownPayload(
     insight: Pick<OperatorInsight, 'evidence'>,

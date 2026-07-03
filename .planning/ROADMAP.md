@@ -306,20 +306,36 @@
 
 ### Suggested plan breakdown (for `/gsd-plan-phase 8`)
 
-| Plan | Wave | Scope |
-|------|------|-------|
-| 08-01 | 1 | Аудит меню vs docs; CONTEXT; обновить README + getting-started |
-| 08-02 | 2 | AI Боты блок (assistants, tools, MCP, KB, playground, publish) + макеты |
-| 08-03 | 2 | Дашборды + Звонки + Operator Analytics (новые/расширенные разделы) |
-| 08-04 | 3 | Оплата, en-паритет, screenshot capture, DOCS-INDEX / GAP-14 close |
+| Plan | Wave | Depends on | Scope |
+|------|------|------------|-------|
+| 08-01 | 1 | — | Doc nav mirror menubar, i18n, README, stubs, legacy cleanup |
+| 08-02 | 2 | 08-01 | AI Боты block + KB + publish + screenshots |
+| 08-03 | 2 | 08-01 | Dashboards + Calls + Operator Analytics + API embed |
+| 08-04 | 3 | 08-02, 08-03 | Payments, de/zh parity, DOCS-INDEX, GAP-14 |
 
-**Status:** Context gathered (2026-07-03) — ready for `/gsd-plan-phase 8`
+**Status:** Planned (2026-07-03)
 
-**Plans:** 0/4
+**Plans:** 4/4
+
+| Plan | Wave | Depends on | Scope |
+|------|------|------------|-------|
+| 08-01 | 1 | — | DOC_SECTIONS mirror menubar, docs.json 4 locales, README, remove root duplicates |
+| 08-02 | 2 | 08-01 | Assistants, tools, MCP, playground, KB, publish + PNG mocks |
+| 08-03 | 2 | 08-01 | 06-dashboards, 09-calls, 11-operator-analytics + API reference |
+| 08-04 | 3 | 08-02, 08-03 | 08-payments, locale audit, tone pass, DOCS-INDEX, GAP-14 |
 
 Plans:
 
-- [ ] TBD (run `/gsd-plan-phase 8` to break down)
+- [x] 08-01-PLAN.md — nav + i18n foundation
+- [x] 08-02-PLAN.md — AI Bots documentation
+- [x] 08-03-PLAN.md — Analytics + Calls documentation
+- [x] 08-04-PLAN.md — Payments + parity + closeout
+
+**Cross-cutting constraints:**
+
+- Content tone: operator-first, integrator blocks in publish/analytics only (D-10)
+- No admin docs; no em-dash / AI clichés in RU copy (D-12)
+- Illustrations: form-mockup + HTML PNG mocks (D-07, D-08)
 
 ---
 

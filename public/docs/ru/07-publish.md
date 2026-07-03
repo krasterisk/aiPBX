@@ -122,6 +122,28 @@ SIP (Session Initiation Protocol) — это стандарт интернет-�
 
 ---
 
+## SIP Trunks
+
+**SIP Trunk** — исходящая регистрация платформы на вашей АТС или у оператора связи. Нужен, если звонки должны идти через ваш номерной план, а не только на отдельный SIP URI.
+
+**Как открыть:** меню → **AI Боты** → **Публикация** → **SIP Trunks**.
+
+![SIP Trunks](/docs/screenshots/sip-trunks.png)
+
+<div class="form-mockup">
+  <div class="form-mockup-title">Новый SIP Trunk</div>
+  <div class="form-mockup-field"><label>Хост</label><div class="form-mockup-input">pbx.company.ru</div></div>
+  <div class="form-mockup-field"><label>Логин / пароль</label><div class="form-mockup-input">trunk_user</div></div>
+  <div class="form-mockup-field"><label>Ассистент</label><div class="form-mockup-select">Ресепшен ▾</div></div>
+  <div class="form-mockup-actions"><div class="form-mockup-btn form-mockup-btn-primary">Сохранить</div></div>
+</div>
+
+### Для интеграторов
+
+На стороне Asterisk создайте peer/trunk с разрешением INVITE с IP платформы. Проверьте кодеки (ulaw/alaw) и NAT. После сохранения в кабинете статус регистрации должен стать **Registered**.
+
+---
+
 ## Виджеты — WebRTC для сайта
 
 Виджет — это кнопка «Позвонить», встроенная в ваш сайт. Клиент нажимает — и начинает разговор с ассистентом прямо из браузера, без установки приложений и без регистрации.

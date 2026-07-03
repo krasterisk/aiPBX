@@ -66,6 +66,31 @@ const MOCKS: Record<string, MockSpec> = {
     title: 'Загрузка записей',
     subtitle: 'Импорт аудио для анализа',
     variant: 'wizard'
+  },
+  calls: {
+    title: 'Звонки',
+    subtitle: 'Журнал CDR',
+    variant: 'table'
+  },
+  'knowledge-base': {
+    title: 'Базы знаний',
+    subtitle: 'RAG для ассистентов',
+    variant: 'modal'
+  },
+  'sip-trunks': {
+    title: 'SIP Trunks',
+    subtitle: 'Регистрация на АТС',
+    variant: 'modal'
+  },
+  widgets: {
+    title: 'Виджеты',
+    subtitle: 'WebRTC на сайте',
+    variant: 'modal'
+  },
+  'analytics-api': {
+    title: 'API аналитики',
+    subtitle: 'Токены и эндпоинты',
+    variant: 'table'
   }
 }
 
@@ -78,7 +103,12 @@ const LIVE_ROUTES: Record<string, string> = {
   'reports-history': '/dashboard/calls',
   'project-wizard': '/dashboard/operator-analytics',
   'operator-dashboard': '/dashboard/operator-analytics',
-  upload: '/dashboard/operator-analytics'
+  upload: '/dashboard/operator-analytics',
+  calls: '/dashboard/calls',
+  'knowledge-base': '/dashboard/knowledge-bases',
+  'sip-trunks': '/dashboard/publish/sip-trunks',
+  widgets: '/dashboard/publish/widgets',
+  'analytics-api': '/dashboard/operator-analytics/api'
 }
 
 function shellCss (): string {
