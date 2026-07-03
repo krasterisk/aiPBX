@@ -215,6 +215,52 @@
 
 ---
 
+## Phase 7: Helpdesk — AI-first admin ticket system (Krasterisk)
+
+**Goal:** Административный модуль учёта и обработки заявок клиентов (helpdesk) во фронтенде и бэкенде, с приёмом обращений через голосовых ассистентов/чат-ботов, интеграцией с базой клиентов alfawebhook и LLM-контекстом для быстрого решения проблем.
+
+**GAPs:** GAP-25 (Admin page stub), new capability (no prior GAP)
+
+**Depends on:** Phase 0b (complete); existing `assistants/`, `ai-tools/`, `ai-tools-handlers/`, `mcp-client/`, `api-keys/` modules
+
+**Context:** `.planning/phases/07-helpdesk-admin-ticket-system-with-ai-intake-alfawebhook-clie/07-CONTEXT.md`
+
+**Repos:** `aiPBX` (admin UI, FSD) + `aiPBX_backend` (NestJS module, PostgreSQL)
+
+### Scope
+
+| Area | Deliverable |
+|------|-------------|
+| Backend DB | PostgreSQL: tickets, messages, status history, client links, LLM context notes |
+| Backend API | `HelpdeskModule` — CRUD (admin), AI tool endpoints (API key auth) |
+| Client lookup | REST API alfawebhook `GET /api/clients` по INN/названию; облачные клиенты — баланс через `pbxUrl` |
+| AI intake | Webhook tools + built-in handlers (identify client, get info, create ticket, search LLM context) |
+| LLM notes | Per-client rolling context (история обращений, примечания, snapshot) — injectable в промпт ассистента |
+| Frontend | Admin раздел: список заявок, карточка, фильтры, примечания, LLM-контекст (redesign-v3) |
+| Standalone doc | `.planning/scenarios/krasterisk-helpdesk-voice-assistant.md` — промпт, настройка ассистента, webhooks, чеклист |
+| Standalone script | `scripts/pbx-remote-handler/` — универсальный CLI: AMI, SIP registrations, DB (не часть модуля) |
+
+### Out of scope (this phase module)
+
+- Прямое подключение к MySQL alfawebhook (только REST API)
+- Изменения `billing/`, `ari/`, `accounting/` без явной задачи в плане
+- Production deploy голосового ассистента Крастериск (описывается в standalone-сценарии)
+
+### Suggested plan breakdown (for `/gsd-plan-phase 7`)
+
+| Plan | Wave | Scope |
+|------|------|-------|
+| 07-01 | 1 | Backend: Sequelize models, migrations, admin CRUD API, AlfawebhookClient read |
+| 07-02 | 2 | AI tools endpoints, LLM context service, ticket auto-create from voice/chat |
+| 07-03 | 2 | Frontend: entity + admin pages (ticket list, detail, notes) |
+| 07-04 | 3 | Standalone: Krasterisk voice scenario doc + pbx-remote-handler CLI skeleton |
+
+**Status:** Context gathered (2026-07-03) — ready for `/gsd-plan-phase 7`
+
+**Plans:** 0/4
+
+---
+
 ## Weekly agent cycle (from Phase 0b onward)
 
 ```
