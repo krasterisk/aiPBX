@@ -28,6 +28,7 @@ progress:
 
 ### Roadmap Evolution
 
+- **2026-07-03:** Phase 8 added — User docs overhaul: menu-by-menu актуализация `public/docs` (ru+en), аналитика, макеты страниц; без раздела «Управление»
 - **2026-07-03:** Phase 7 added — Helpdesk: AI-first admin ticket system (Krasterisk), alfawebhook client lookup via REST, LLM context notes, voice assistant scenario doc, pbx-remote-handler CLI
 - **2026-07-03:** Phase 7 context gathered via `/gsd-discuss-phase 7` — 34 implementation decisions locked in `07-CONTEXT.md`
 

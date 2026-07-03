@@ -4,2966 +4,3242 @@
  */
 
 export interface paths {
-    '/api/users/admin/top-up': {
+    "/api/users/admin/top-up": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Admin: top up user balance */
-        post: operations['UsersController_adminTopUp']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/users': {
+        post: operations["UsersController_adminTopUp"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get all users */
-        get: operations['UsersController_getAll']
+        get: operations["UsersController_getAll"];
         /** Edit user */
-        put: operations['UsersController_UpdateUser']
+        put: operations["UsersController_UpdateUser"];
         /** Create user */
-        post: operations['UsersController_create']
-        delete?: never
-        options?: never
-        head?: never
+        post: operations["UsersController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
         /** Update User */
-        patch: operations['UsersController_updateUser']
-        trace?: never
-    }
-    '/api/users/sub-user': {
+        patch: operations["UsersController_updateUser"];
+        trace?: never;
+    };
+    "/api/users/sub-user": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Create sub-user */
-        post: operations['UsersController_createSubUser']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/users/sub-users': {
+        post: operations["UsersController_createSubUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/sub-users": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get sub-users of current owner */
-        get: operations['UsersController_getSubUsers']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/users/tenant-members': {
+        get: operations["UsersController_getSubUsers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/tenant-members": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List tenant members (owner + sub-users) */
-        get: operations['UsersController_getTenantMembers']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/users/balance-alerts': {
+        get: operations["UsersController_getTenantMembers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/balance-alerts": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List balance threshold alerts for tenant */
-        get: operations['UsersController_listBalanceAlerts']
-        put?: never
+        get: operations["UsersController_listBalanceAlerts"];
+        put?: never;
         /** Create balance threshold alert */
-        post: operations['UsersController_createBalanceAlert']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/users/balance-alerts/{id}': {
+        post: operations["UsersController_createBalanceAlert"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/balance-alerts/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
         /** Delete balance threshold alert */
-        delete: operations['UsersController_deleteBalanceAlert']
-        options?: never
-        head?: never
+        delete: operations["UsersController_deleteBalanceAlert"];
+        options?: never;
+        head?: never;
         /** Update balance threshold alert */
-        patch: operations['UsersController_updateBalanceAlert']
-        trace?: never
-    }
-    '/api/users/page': {
+        patch: operations["UsersController_updateBalanceAlert"];
+        trace?: never;
+    };
+    "/api/users/page": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get users by page */
-        get: operations['UsersController_get']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/users/balance': {
+        get: operations["UsersController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/balance": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get user balance */
-        get: operations['UsersController_getBalance']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/users/me': {
+        get: operations["UsersController_getBalance"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/me": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get user data */
-        get: operations['UsersController_getMe']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/users/profile': {
+        get: operations["UsersController_getMe"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/profile": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get profile */
-        get: operations['UsersController_getUserProfile']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
+        get: operations["UsersController_getUserProfile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
         /** Update profile */
-        patch: operations['UsersController_updateUserProfile']
-        trace?: never
-    }
-    '/api/users/{id}': {
+        patch: operations["UsersController_updateUserProfile"];
+        trace?: never;
+    };
+    "/api/users/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get user by id */
-        get: operations['UsersController_getOne']
-        put?: never
-        post?: never
+        get: operations["UsersController_getOne"];
+        put?: never;
+        post?: never;
         /** Delete user by id's */
-        delete: operations['UsersController_DeleteUser']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/users/profile/{id}': {
+        delete: operations["UsersController_DeleteUser"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/profile/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get profile by id */
-        get: operations['UsersController_getProfileById']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/users/role/add': {
+        get: operations["UsersController_getProfileById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/role/add": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Add role for user */
-        post: operations['UsersController_addRole']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/users/role/remove': {
+        post: operations["UsersController_addRole"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/role/remove": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Remove user's role */
-        post: operations['UsersController_removeRole']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/users/avatar': {
+        post: operations["UsersController_removeRole"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/avatar": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
         /** Upload user avatar */
-        patch: operations['UsersController_UpdateUserAvatar']
-        trace?: never
-    }
-    '/api/users/limits': {
+        patch: operations["UsersController_UpdateUserAvatar"];
+        trace?: never;
+    };
+    "/api/users/limits": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Set user usage limit */
-        post: operations['UsersController_setUsageLimit']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/users/limits/{userId}': {
+        post: operations["UsersController_setUsageLimit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/limits/{userId}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get user usage limit */
-        get: operations['UsersController_getUsageLimit']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/roles': {
+        get: operations["UsersController_getUsageLimit"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/roles": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get roles */
-        get: operations['RolesController_getAll']
-        put?: never
+        get: operations["RolesController_getAll"];
+        put?: never;
         /** Create role */
-        post: operations['RolesController_create']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/roles/{value}': {
+        post: operations["RolesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/roles/{value}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get role by id */
-        get: operations['RolesController_getByValue']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/auth/login': {
+        get: operations["RolesController_getByValue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/login": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post: operations['AuthController_login']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/auth/signup': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/signup": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post: operations['AuthController_signup']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/auth/google/login': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_signup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/google/login": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post: operations['AuthController_googleLogin']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/auth/google/signup': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_googleLogin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/google/signup": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post: operations['AuthController_googleSignup']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/auth/telegram/login': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_googleSignup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/telegram/login": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post: operations['AuthController_telegramLogin']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/auth/telegram/signup': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_telegramLogin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/telegram/signup": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post: operations['AuthController_telegramSignup']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/auth/activation': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_telegramSignup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/activation": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** activation user */
-        post: operations['AuthController_activate']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/logs': {
+        post: operations["AuthController_activate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/logs": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get all logs */
-        get: operations['LoggerController_getAll']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/logs/page': {
+        get: operations["LoggerController_getAll"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/logs/page": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get logs with pagination and filters */
-        get: operations['LoggerController_get']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/sbis/counterparty': {
+        get: operations["LoggerController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sbis/counterparty": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /**
          * Lookup counterparty requisites by INN (SBIS EDO)
          * @description 10-digit INN: lookup by INN only may return multiple branches (status=choose) or require KPP (status=requires_kpp). Pass kpp for a single full record (status=single). 12-digit INN: IP, single record.
          */
-        get: operations['SbisController_lookup']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/currency': {
+        get: operations["SbisController_lookup"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/currency": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Create payment */
-        get: operations['CurrencyController_update']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/billing': {
+        get: operations["CurrencyController_update"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/billing": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get billing history with pagination */
-        get: operations['BillingController_getBillingHistory']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/billing/admin/backfill-fx': {
+        get: operations["BillingController_getBillingHistory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/billing/admin/backfill-fx": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Backfill FX snapshot fields on legacy billing records (admin) */
-        post: operations['BillingController_backfillFx']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/billing/admin/runway-check': {
+        post: operations["BillingController_backfillFx"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/billing/admin/runway-check": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Run balance runway check now (admin, RU billing deployments) */
-        post: operations['BillingController_runRunwayCheck']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/billing/admin/run-closing-documents': {
+        post: operations["BillingController_runRunwayCheck"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/billing/admin/run-closing-documents": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Run monthly closing UPD for one org (admin) */
-        post: operations['BillingController_runClosingDocuments']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/our-organizations': {
+        post: operations["BillingController_runClosingDocuments"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/our-organizations": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List our organizations (admin) */
-        get: operations['OurOrganizationsController_getAll']
-        put?: never
+        get: operations["OurOrganizationsController_getAll"];
+        put?: never;
         /** Create our organization (admin) */
-        post: operations['OurOrganizationsController_create']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/our-organizations/primary': {
+        post: operations["OurOrganizationsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/our-organizations/primary": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get primary our organization (admin) */
-        get: operations['OurOrganizationsController_getPrimary']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/our-organizations/{id}': {
+        get: operations["OurOrganizationsController_getPrimary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/our-organizations/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
         /** Delete our organization (admin) */
-        delete: operations['OurOrganizationsController_delete']
-        options?: never
-        head?: never
+        delete: operations["OurOrganizationsController_delete"];
+        options?: never;
+        head?: never;
         /** Update our organization (admin) */
-        patch: operations['OurOrganizationsController_update']
-        trace?: never
-    }
-    '/api/organizations': {
+        patch: operations["OurOrganizationsController_update"];
+        trace?: never;
+    };
+    "/api/organizations": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /**
          * Get organizations
          * @description Always scoped by the authenticated user. Optional query `userId` is applied only for ADMIN to list another tenant's organizations; for non-admins the query is ignored and the user id is taken from the JWT.
          */
-        get: operations['OrganizationsController_getAll']
-        put?: never
+        get: operations["OrganizationsController_getAll"];
+        put?: never;
         /** Create Organization */
-        post: operations['OrganizationsController_create']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/organizations/default-subject': {
+        post: operations["OrganizationsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organizations/default-subject": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Resolved default nomenclature for invoices */
-        get: operations['OrganizationsController_getDefaultSubject']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/organizations/edo-invitation/sync-pending': {
+        get: operations["OrganizationsController_getDefaultSubject"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organizations/edo-invitation/sync-pending": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Sync all pending EDO invitations for tenant */
-        post: operations['OrganizationsController_syncPendingEdoInvitations']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/organizations/{id}/invoices': {
+        post: operations["OrganizationsController_syncPendingEdoInvitations"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organizations/{id}/invoices": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Issue payment invoice (PDF) */
-        post: operations['OrganizationsController_createInvoice']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/organizations/{id}/edo-invitation': {
+        post: operations["OrganizationsController_createInvoice"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organizations/{id}/edo-invitation": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** EDO invitation status */
-        get: operations['OrganizationsController_getEdoInvitation']
-        put?: never
+        get: operations["OrganizationsController_getEdoInvitation"];
+        put?: never;
         /** Send EDO / roaming invitation */
-        post: operations['OrganizationsController_sendEdoInvitation']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/organizations/{id}/edo-invitation/sync': {
+        post: operations["OrganizationsController_sendEdoInvitation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organizations/{id}/edo-invitation/sync": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Sync EDO invitation status from SBIS */
-        post: operations['OrganizationsController_syncEdoInvitation']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/organizations/{id}/edo-invitation/check-route': {
+        post: operations["OrganizationsController_syncEdoInvitation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organizations/{id}/edo-invitation/check-route": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Check EDO route (ADMIN): list changes, then probe invitation if needed */
-        post: operations['OrganizationsController_checkEdoRoute']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/organizations/{id}/documents': {
+        post: operations["OrganizationsController_checkEdoRoute"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organizations/{id}/documents": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List organization documents */
-        get: operations['OrganizationsController_listDocuments']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/organizations/{id}/documents/{docId}/pdf': {
+        get: operations["OrganizationsController_listDocuments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organizations/{id}/documents/{docId}/pdf": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Download document PDF */
-        get: operations['OrganizationsController_getDocumentPdf']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/organizations/{id}/documents/{docId}/resend-sbis': {
+        get: operations["OrganizationsController_getDocumentPdf"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organizations/{id}/documents/{docId}/resend-sbis": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Retry SBIS for document */
-        post: operations['OrganizationsController_resendSbis']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/organizations/{id}/documents/{docId}': {
+        post: operations["OrganizationsController_resendSbis"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organizations/{id}/documents/{docId}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
         /** Delete organization document (admin only) */
-        delete: operations['OrganizationsController_deleteDocument']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/organizations/{id}': {
+        delete: operations["OrganizationsController_deleteDocument"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/organizations/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get One Organization */
-        get: operations['OrganizationsController_getOne']
+        get: operations["OrganizationsController_getOne"];
         /** Update Organization */
-        put: operations['OrganizationsController_update']
-        post?: never
+        put: operations["OrganizationsController_update"];
+        post?: never;
         /** Delete Organization */
-        delete: operations['OrganizationsController_remove']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/prices/public': {
+        delete: operations["OrganizationsController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/prices/public": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get public prices (admin rates) in specified currency */
-        get: operations['PricesController_getPublicPrices']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/prices': {
+        get: operations["PricesController_getPublicPrices"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/prices": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get all prices */
-        get: operations['PricesController_findAll']
-        put?: never
+        get: operations["PricesController_findAll"];
+        put?: never;
         /** Create price */
-        post: operations['PricesController_create']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/prices/{id}': {
+        post: operations["PricesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/prices/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get price by ID */
-        get: operations['PricesController_findOne']
+        get: operations["PricesController_findOne"];
         /** Update price */
-        put: operations['PricesController_update']
-        post?: never
+        put: operations["PricesController_update"];
+        post?: never;
         /** Delete price */
-        delete: operations['PricesController_remove']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/open-ai': {
+        delete: operations["PricesController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/open-ai": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Request to Ai */
-        post: operations['OpenAiController_request']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/reports/page': {
+        post: operations["OpenAiController_request"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/page": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** reports list page */
-        get: operations['AiCdrController_get']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/reports/events/{channelId}': {
+        get: operations["AiCdrController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/events/{channelId}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get events by channelId */
-        get: operations['AiCdrController_getEvents']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/reports/dialogs/{channelId}': {
+        get: operations["AiCdrController_getEvents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/dialogs/{channelId}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get dialog by channelId */
-        get: operations['AiCdrController_getDialogs']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/reports/dashboard': {
+        get: operations["AiCdrController_getDialogs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/dashboard": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get dashboard data */
-        get: operations['AiCdrController_getDashboard']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/reports/{id}': {
+        get: operations["AiCdrController_getDashboard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
         /** Delete call report (admin only) */
-        delete: operations['AiCdrController_deleteReport']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/ai-analytics/dashboard/data': {
+        delete: operations["AiCdrController_deleteReport"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai-analytics/dashboard/data": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get analytics dashboard data */
-        get: operations['AiAnalyticsController_getDashboard']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/ai-analytics/{channelId}': {
+        get: operations["AiAnalyticsController_getDashboard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai-analytics/{channelId}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get call analytics by channelId */
-        get: operations['AiAnalyticsController_getByChannelId']
-        put?: never
+        get: operations["AiAnalyticsController_getByChannelId"];
+        put?: never;
         /** Create call analytics by channelId */
-        post: operations['AiAnalyticsController_create']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/tools': {
+        post: operations["AiAnalyticsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tools": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** tools list */
-        get: operations['AiToolsController_getAll']
-        put?: never
+        get: operations["AiToolsController_getAll"];
+        put?: never;
         /** Create tool */
-        post: operations['AiToolsController_create']
-        delete?: never
-        options?: never
-        head?: never
+        post: operations["AiToolsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
         /** Update tool */
-        patch: operations['AiToolsController_update']
-        trace?: never
-    }
-    '/api/tools/page': {
+        patch: operations["AiToolsController_update"];
+        trace?: never;
+    };
+    "/api/tools/page": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Tools list page */
-        get: operations['AiToolsController_get']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/tools/{id}': {
+        get: operations["AiToolsController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tools/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get tool by id */
-        get: operations['AiToolsController_getOne']
-        put?: never
-        post?: never
+        get: operations["AiToolsController_getOne"];
+        put?: never;
+        post?: never;
         /** Delete tool */
-        delete: operations['AiToolsController_delete']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/knowledge-bases': {
+        delete: operations["AiToolsController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/knowledge-bases": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List all knowledge bases */
-        get: operations['KnowledgeController_getKnowledgeBases']
-        put?: never
+        get: operations["KnowledgeController_getKnowledgeBases"];
+        put?: never;
         /** Create a knowledge base */
-        post: operations['KnowledgeController_createKnowledgeBase']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/knowledge-bases/{id}': {
+        post: operations["KnowledgeController_createKnowledgeBase"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/knowledge-bases/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
         /** Update a knowledge base */
-        put: operations['KnowledgeController_updateKnowledgeBase']
-        post?: never
+        put: operations["KnowledgeController_updateKnowledgeBase"];
+        post?: never;
         /** Delete a knowledge base */
-        delete: operations['KnowledgeController_deleteKnowledgeBase']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/knowledge-bases/{id}/documents': {
+        delete: operations["KnowledgeController_deleteKnowledgeBase"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/knowledge-bases/{id}/documents": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List documents in a knowledge base */
-        get: operations['KnowledgeController_getDocuments']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/knowledge-bases/{id}/upload': {
+        get: operations["KnowledgeController_getDocuments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/knowledge-bases/{id}/upload": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Upload a file to knowledge base */
-        post: operations['KnowledgeController_uploadFile']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/knowledge-bases/{id}/url': {
+        post: operations["KnowledgeController_uploadFile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/knowledge-bases/{id}/url": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Add URL to knowledge base */
-        post: operations['KnowledgeController_addUrl']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/knowledge-bases/{id}/documents/{docId}': {
+        post: operations["KnowledgeController_addUrl"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/knowledge-bases/{id}/documents/{docId}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
         /** Delete a document */
-        delete: operations['KnowledgeController_deleteDocument']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/knowledge-bases/{id}/search': {
+        delete: operations["KnowledgeController_deleteDocument"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/knowledge-bases/{id}/search": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Search knowledge base (debug) */
-        get: operations['KnowledgeController_search']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/servers': {
+        get: operations["KnowledgeController_search"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/helpdesk/tickets": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** List all MCP servers for the current user */
-        get: operations['McpClientController_getAll']
-        put?: never
-        /** Create MCP server */
-        post: operations['McpClientController_createServer']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/servers/page': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Список заявок (admin) */
+        get: operations["HelpdeskController_listTickets"];
+        put?: never;
+        /** Создать заявку вручную (admin) */
+        post: operations["HelpdeskController_createTicket"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/helpdesk/tickets/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** List MCP servers with pagination and search */
-        get: operations['McpClientController_get']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/servers/{id}': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Детали заявки (admin) */
+        get: operations["HelpdeskController_getTicket"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Обновить заявку (admin) */
+        patch: operations["HelpdeskController_updateTicket"];
+        trace?: never;
+    };
+    "/api/helpdesk/tickets/{id}/claim": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
-        /** Delete MCP server */
-        delete: operations['McpClientController_deleteServer']
-        options?: never
-        head?: never
-        /** Update MCP server */
-        patch: operations['McpClientController_updateServer']
-        trace?: never
-    }
-    '/api/mcp/servers/{id}/connect': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Взять заявку из пула (admin, D-19) */
+        post: operations["HelpdeskController_claimTicket"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/helpdesk/tickets/{id}/messages": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        /** Connect to an MCP server */
-        post: operations['McpClientController_connectServer']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/servers/{id}/disconnect': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Добавить сообщение к заявке (admin) */
+        post: operations["HelpdeskController_addMessage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/helpdesk/clients/identify": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        /** Disconnect from an MCP server */
-        post: operations['McpClientController_disconnectServer']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/servers/{id}/sync-tools': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Идентификация клиента через alfawebhook (admin preview) */
+        post: operations["HelpdeskController_identifyClient"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/helpdesk/settings": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        /** Sync tools from an MCP server */
-        post: operations['McpClientController_syncTools']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/servers/{id}/tools': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Настройки helpdesk (admin) */
+        get: operations["HelpdeskController_getSettings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Обновить настройки helpdesk (admin) */
+        patch: operations["HelpdeskController_updateSettings"];
+        trace?: never;
+    };
+    "/api/helpdesk/clients/{clientKey}/llm-context": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get tools for a specific MCP server */
-        get: operations['McpClientController_getServerTools']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/tools/{id}/toggle': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** LLM-контекст клиента (admin) */
+        get: operations["HelpdeskController_getLlmContext"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Переопределение LLM-контекста оператором (admin) */
+        patch: operations["HelpdeskController_updateLlmContextOverride"];
+        trace?: never;
+    };
+    "/api/helpdesk/tools/identify-client": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        /** Toggle tool enabled/disabled */
-        patch: operations['McpClientController_toggleTool']
-        trace?: never
-    }
-    '/api/mcp/servers/{id}/tools/toggle-all': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Идентификация клиента (AI) */
+        post: operations["HelpdeskToolsController_identifyClient"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/helpdesk/tools/get-client-info": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        /** Bulk enable/disable all tools for a server */
-        patch: operations['McpClientController_bulkToggleTools']
-        trace?: never
-    }
-    '/api/mcp/tools/{id}/policies': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Информация о клиенте (AI) */
+        post: operations["HelpdeskToolsController_getClientInfo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/helpdesk/tools/get-llm-context": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get policies for a tool */
-        get: operations['McpClientController_getPolicies']
-        put?: never
-        /** Create policy for a tool */
-        post: operations['McpClientController_createPolicy']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/policies/{id}': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** LLM-контекст клиента (AI) */
+        post: operations["HelpdeskToolsController_getLlmContext"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/helpdesk/tools/create-ticket": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
-        /** Delete a policy */
-        delete: operations['McpClientController_deletePolicy']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/logs': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Создать заявку (AI) */
+        post: operations["HelpdeskToolsController_createTicket"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/helpdesk/tools/add-message": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get tool call audit logs */
-        get: operations['McpClientController_getLogs']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/composio/templates': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Добавить сообщение к заявке (AI) */
+        post: operations["HelpdeskToolsController_addMessage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/helpdesk/tools/pbx-get-vpbx-user": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get available Composio templates/toolkits */
-        get: operations['McpClientController_getComposioTemplates']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/composio/connect': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** PBX: данные vpbx_user (AI) */
+        post: operations["HelpdeskToolsController_pbxGetVpbxUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/helpdesk/tools/pbx-list-sip-registrations": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        /** Initiate Composio OAuth connection */
-        post: operations['McpClientController_composioConnect']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/composio/connect-apikey': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** PBX: SIP-регистрации (AI) */
+        post: operations["HelpdeskToolsController_pbxListSipRegistrations"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/helpdesk/tools/pbx-promised-payment": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        /** Connect API-key toolkit (Telegram, WhatsApp) */
-        post: operations['McpClientController_composioConnectApiKey']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/bitrix24/connect': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** PBX: обещанный платёж (AI) */
+        post: operations["HelpdeskToolsController_pbxPromisedPayment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/helpdesk/tools/pbx-hangup-channel": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        /** Connect Bitrix24 via webhook URL */
-        post: operations['McpClientController_bitrix24Connect']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/telegram/connect': {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** PBX: завершить канал (AI) */
+        post: operations["HelpdeskToolsController_pbxHangupChannel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/telegram/webhook": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        /** Connect Telegram via Chat ID (direct, no Composio) */
-        post: operations['McpClientController_telegramConnect']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/composio/callback': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Composio OAuth callback */
-        get: operations['McpClientController_composioCallback']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/composio/status': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get Composio connection status for all toolkits */
-        get: operations['McpClientController_composioStatus']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/composio/connections': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** List Composio connections for current user */
-        get: operations['McpClientController_getComposioConnections']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/composio/connections/{id}': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
-        /** Delete a Composio connection */
-        delete: operations['McpClientController_deleteComposioConnection']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/composio/actions/{toolkit}': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Discover actions for a Composio toolkit */
-        get: operations['McpClientController_discoverComposioActions']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/mcp/composio/execute': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        /** Execute a Composio action (manual test) */
-        post: operations['McpClientController_executeComposioAction']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/telegram/webhook': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Telegram webhook endpoint */
-        post: operations['TelegramController_handleWebhook']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/assistants': {
+        post: operations["TelegramController_handleWebhook"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/api-keys": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** assistants list */
-        get: operations['AssistantsController_getAll']
-        put?: never
-        /** Create assistant */
-        post: operations['AssistantsController_create']
-        delete?: never
-        options?: never
-        head?: never
-        /** Update assistant */
-        patch: operations['AssistantsController_update']
-        trace?: never
-    }
-    '/api/assistants/page': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Assistants list page */
-        get: operations['AssistantsController_get']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/assistants/{id}': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get assistant by id */
-        get: operations['AssistantsController_getOne']
-        put?: never
-        post?: never
-        /** Delete assistant */
-        delete: operations['AssistantsController_delete']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/assistants/generate-prompt': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        /** Generate prompt using AI */
-        post: operations['AssistantsController_generatePrompt']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/assistants/{id}/tts-voice': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        /** Upload TTS voice reference file */
-        post: operations['AssistantsController_uploadTtsVoice']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/pbx-servers': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** pbx list */
-        get: operations['PbxServersController_getAll']
-        put?: never
-        /** Create PBX */
-        post: operations['PbxServersController_create']
-        delete?: never
-        options?: never
-        head?: never
-        /** Update pbx */
-        patch: operations['PbxServersController_update']
-        trace?: never
-    }
-    '/api/pbx-servers/page': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** pbxServers list page */
-        get: operations['PbxServersController_get']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/pbx-servers/cloud': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get only cloud pbx servers */
-        get: operations['PbxServersController_getCloud']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/pbx-servers/cloud-and-user': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get cloud and user servers */
-        get: operations['PbxServersController_getCloudAndUser']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/pbx-servers/{id}': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get pbx by id */
-        get: operations['PbxServersController_getOne']
-        put?: never
-        post?: never
-        /** Delete pbx */
-        delete: operations['PbxServersController_delete']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/pbx-servers/create-sip-uri': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        /** Create SIP URI */
-        post: operations['PbxServersController_createSipUri']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/pbx-servers/update-sip-uri': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        /** Update SIP URI */
-        patch: operations['PbxServersController_updateSipUri']
-        trace?: never
-    }
-    '/api/pbx-servers/delete-sip-uri': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
-        /** Delete SIP URI */
-        delete: operations['PbxServersController_deleteSipUri']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/pbx-servers/{uniqueId}/status': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get pbx status */
-        get: operations['PbxServersController_getStatus']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/widget-keys/logo': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        /** Upload widget logo */
-        post: operations['WidgetKeysController_uploadLogo']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/widget-keys': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get all widget keys (admin: all, user: own) */
-        get: operations['WidgetKeysController_findAll']
-        put?: never
-        /** Create a new widget key */
-        post: operations['WidgetKeysController_create']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/widget-keys/{id}': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get a specific widget key by ID */
-        get: operations['WidgetKeysController_findOne']
-        /** Update a widget key */
-        put: operations['WidgetKeysController_update']
-        post?: never
-        /** Delete a widget key */
-        delete: operations['WidgetKeysController_remove']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/widget-keys/{id}/embed': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get embed code and JWT token for a widget key */
-        get: operations['WidgetKeysController_getEmbed']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/aiModels': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** aiModels list (JWT) */
-        get: operations['AiModelsController_getAll']
-        put?: never
-        /** Create aiModel */
-        post: operations['AiModelsController_create']
-        /** Delete aiModel */
-        delete: operations['AiModelsController_delete']
-        options?: never
-        head?: never
-        /** Update aiModel */
-        patch: operations['AiModelsController_update']
-        trace?: never
-    }
-    '/api/aiModels/external': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /**
-         * List published AI models (API key)
-         * @description Endpoint for external services. Requires API key with scope models:read.
-         */
-        get: operations['AiModelsController_getPublished']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/aiModels/ollama': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /**
-         * List live Ollama models (JWT)
-         * @description Returns models currently available in Ollama (/api/tags).
-         */
-        get: operations['AiModelsController_getOllamaModels']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/aiModels/ollama/external': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /**
-         * List live Ollama models (API key)
-         * @description For external services. Requires API key with scope models:read.
-         */
-        get: operations['AiModelsController_getOllamaModelsExternal']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/aiModels/{id}': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        /** Get aiModel by id */
-        get: operations['AiModelsController_getOne']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/api-keys': {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List API keys for the current user (no token hashes) */
-        get: operations['ApiKeyController_getAll']
-        put?: never
+        get: operations["ApiKeyController_getAll"];
+        put?: never;
         /**
          * Create an API key
          * @description Returns the raw token once. Store it securely — it cannot be retrieved later.
          */
-        post: operations['ApiKeyController_create']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/api-keys/{id}': {
+        post: operations["ApiKeyController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/api-keys/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
         /** Revoke an API key */
-        delete: operations['ApiKeyController_revoke']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/payments': {
+        delete: operations["ApiKeyController_revoke"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/servers": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List all MCP servers for the current user */
+        get: operations["McpClientController_getAll"];
+        put?: never;
+        /** Create MCP server */
+        post: operations["McpClientController_createServer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/servers/page": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List MCP servers with pagination and search */
+        get: operations["McpClientController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/servers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete MCP server */
+        delete: operations["McpClientController_deleteServer"];
+        options?: never;
+        head?: never;
+        /** Update MCP server */
+        patch: operations["McpClientController_updateServer"];
+        trace?: never;
+    };
+    "/api/mcp/servers/{id}/connect": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Connect to an MCP server */
+        post: operations["McpClientController_connectServer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/servers/{id}/disconnect": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Disconnect from an MCP server */
+        post: operations["McpClientController_disconnectServer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/servers/{id}/sync-tools": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sync tools from an MCP server */
+        post: operations["McpClientController_syncTools"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/servers/{id}/tools": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get tools for a specific MCP server */
+        get: operations["McpClientController_getServerTools"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/tools/{id}/toggle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Toggle tool enabled/disabled */
+        patch: operations["McpClientController_toggleTool"];
+        trace?: never;
+    };
+    "/api/mcp/servers/{id}/tools/toggle-all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Bulk enable/disable all tools for a server */
+        patch: operations["McpClientController_bulkToggleTools"];
+        trace?: never;
+    };
+    "/api/mcp/tools/{id}/policies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get policies for a tool */
+        get: operations["McpClientController_getPolicies"];
+        put?: never;
+        /** Create policy for a tool */
+        post: operations["McpClientController_createPolicy"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/policies/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete a policy */
+        delete: operations["McpClientController_deletePolicy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/logs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get tool call audit logs */
+        get: operations["McpClientController_getLogs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/composio/templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get available Composio templates/toolkits */
+        get: operations["McpClientController_getComposioTemplates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/composio/connect": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Initiate Composio OAuth connection */
+        post: operations["McpClientController_composioConnect"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/composio/connect-apikey": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Connect API-key toolkit (Telegram, WhatsApp) */
+        post: operations["McpClientController_composioConnectApiKey"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/bitrix24/connect": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Connect Bitrix24 via webhook URL */
+        post: operations["McpClientController_bitrix24Connect"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/telegram/connect": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Connect Telegram via Chat ID (direct, no Composio) */
+        post: operations["McpClientController_telegramConnect"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/composio/callback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Composio OAuth callback */
+        get: operations["McpClientController_composioCallback"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/composio/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Composio connection status for all toolkits */
+        get: operations["McpClientController_composioStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/composio/connections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Composio connections for current user */
+        get: operations["McpClientController_getComposioConnections"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/composio/connections/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete a Composio connection */
+        delete: operations["McpClientController_deleteComposioConnection"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/composio/actions/{toolkit}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Discover actions for a Composio toolkit */
+        get: operations["McpClientController_discoverComposioActions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mcp/composio/execute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Execute a Composio action (manual test) */
+        post: operations["McpClientController_executeComposioAction"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/assistants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** assistants list */
+        get: operations["AssistantsController_getAll"];
+        put?: never;
+        /** Create assistant */
+        post: operations["AssistantsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update assistant */
+        patch: operations["AssistantsController_update"];
+        trace?: never;
+    };
+    "/api/assistants/page": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Assistants list page */
+        get: operations["AssistantsController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/assistants/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get assistant by id */
+        get: operations["AssistantsController_getOne"];
+        put?: never;
+        post?: never;
+        /** Delete assistant */
+        delete: operations["AssistantsController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/assistants/generate-prompt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Generate prompt using AI */
+        post: operations["AssistantsController_generatePrompt"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/assistants/{id}/tts-voice": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload TTS voice reference file */
+        post: operations["AssistantsController_uploadTtsVoice"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/pbx-servers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** pbx list */
+        get: operations["PbxServersController_getAll"];
+        put?: never;
+        /** Create PBX */
+        post: operations["PbxServersController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update pbx */
+        patch: operations["PbxServersController_update"];
+        trace?: never;
+    };
+    "/api/pbx-servers/page": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** pbxServers list page */
+        get: operations["PbxServersController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/pbx-servers/cloud": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get only cloud pbx servers */
+        get: operations["PbxServersController_getCloud"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/pbx-servers/cloud-and-user": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get cloud and user servers */
+        get: operations["PbxServersController_getCloudAndUser"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/pbx-servers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get pbx by id */
+        get: operations["PbxServersController_getOne"];
+        put?: never;
+        post?: never;
+        /** Delete pbx */
+        delete: operations["PbxServersController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/pbx-servers/create-sip-uri": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create SIP URI */
+        post: operations["PbxServersController_createSipUri"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/pbx-servers/update-sip-uri": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update SIP URI */
+        patch: operations["PbxServersController_updateSipUri"];
+        trace?: never;
+    };
+    "/api/pbx-servers/delete-sip-uri": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete SIP URI */
+        delete: operations["PbxServersController_deleteSipUri"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/pbx-servers/{uniqueId}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get pbx status */
+        get: operations["PbxServersController_getStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/widget-keys/logo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload widget logo */
+        post: operations["WidgetKeysController_uploadLogo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/widget-keys": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all widget keys (admin: all, user: own) */
+        get: operations["WidgetKeysController_findAll"];
+        put?: never;
+        /** Create a new widget key */
+        post: operations["WidgetKeysController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/widget-keys/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a specific widget key by ID */
+        get: operations["WidgetKeysController_findOne"];
+        /** Update a widget key */
+        put: operations["WidgetKeysController_update"];
+        post?: never;
+        /** Delete a widget key */
+        delete: operations["WidgetKeysController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/widget-keys/{id}/embed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get embed code and JWT token for a widget key */
+        get: operations["WidgetKeysController_getEmbed"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/aiModels": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** aiModels list (JWT) */
+        get: operations["AiModelsController_getAll"];
+        put?: never;
+        /** Create aiModel */
+        post: operations["AiModelsController_create"];
+        /** Delete aiModel */
+        delete: operations["AiModelsController_delete"];
+        options?: never;
+        head?: never;
+        /** Update aiModel */
+        patch: operations["AiModelsController_update"];
+        trace?: never;
+    };
+    "/api/aiModels/external": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List published AI models (API key)
+         * @description Endpoint for external services. Requires API key with scope models:read.
+         */
+        get: operations["AiModelsController_getPublished"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/aiModels/ollama": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List live Ollama models (JWT)
+         * @description Returns models currently available in Ollama (/api/tags).
+         */
+        get: operations["AiModelsController_getOllamaModels"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/aiModels/ollama/external": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List live Ollama models (API key)
+         * @description For external services. Requires API key with scope models:read.
+         */
+        get: operations["AiModelsController_getOllamaModelsExternal"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/aiModels/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get aiModel by id */
+        get: operations["AiModelsController_getOne"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get user payment history (admin: all or ?userId=tenant; user: own tenant only) */
-        get: operations['PaymentsController_getUserPayments']
-        put?: never
+        get: operations["PaymentsController_getUserPayments"];
+        put?: never;
         /** Create payment (Manual) */
-        post: operations['PaymentsController_create']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/payments/create-intent': {
+        post: operations["PaymentsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/create-intent": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Create Stripe Payment Intent */
-        post: operations['PaymentsController_createIntent']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/payments/webhook': {
+        post: operations["PaymentsController_createIntent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/webhook": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Stripe Webhook */
-        post: operations['PaymentsController_webhook']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/payments/robokassa/create': {
+        post: operations["PaymentsController_webhook"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/robokassa/create": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Create Robokassa payment */
-        post: operations['PaymentsController_createRobokassaPayment']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/payments/robokassa/result': {
+        post: operations["PaymentsController_createRobokassaPayment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/robokassa/result": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Robokassa Result URL callback (server-to-server) */
-        post: operations['PaymentsController_robokassaResult']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/payments/robokassa/success': {
+        post: operations["PaymentsController_robokassaResult"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/robokassa/success": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Robokassa Success redirect */
-        get: operations['PaymentsController_robokassaSuccess']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/payments/robokassa/fail': {
+        get: operations["PaymentsController_robokassaSuccess"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/robokassa/fail": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Robokassa Fail redirect */
-        get: operations['PaymentsController_robokassaFail']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/payments/alfa-callback': {
+        get: operations["PaymentsController_robokassaFail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/alfa-callback": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Alfa bank / alfawebhook balance callback (form body, pbxBalanceUpdate compatible) */
-        post: operations['PaymentsController_alfaCallback']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/payments/robokassa/status/{invId}': {
+        post: operations["PaymentsController_alfaCallback"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/robokassa/status/{invId}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get Robokassa payment status */
-        get: operations['PaymentsController_getRobokassaStatus']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/widget/offer': {
+        get: operations["PaymentsController_getRobokassaStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/widget/offer": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Create WebRTC session with SDP offer (public endpoint) */
-        post: operations['WidgetController_handleOffer']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/widget/ice-candidate': {
+        post: operations["WidgetController_handleOffer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/widget/ice-candidate": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Add ICE candidate to existing session */
-        post: operations['WidgetController_handleIceCandidate']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/widget/hangup': {
+        post: operations["WidgetController_handleIceCandidate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/widget/hangup": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Terminate widget session */
-        post: operations['WidgetController_handleHangup']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/widget/config/{publicKey}': {
+        post: operations["WidgetController_handleHangup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/widget/config/{publicKey}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get widget configuration (public endpoint) */
-        get: operations['WidgetController_getConfig']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/widget/config': {
+        get: operations["WidgetController_getConfig"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/widget/config": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get widget configuration via JWT token (public endpoint) */
-        get: operations['WidgetController_getConfigByToken']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/batches': {
+        get: operations["WidgetController_getConfigByToken"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/batches": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List all active batch processes for current user */
-        get: operations['OperatorAnalyticsController_getActiveBatches']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/batch/{batchId}': {
+        get: operations["OperatorAnalyticsController_getActiveBatches"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/batch/{batchId}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get batch processing progress */
-        get: operations['OperatorAnalyticsController_getBatchStatus']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/upload': {
+        get: operations["OperatorAnalyticsController_getBatchStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/upload": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Upload audio file(s) for operator analysis (Frontend) */
-        post: operations['OperatorAnalyticsController_uploadFromFrontend']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/regenerate/{channelId}': {
+        post: operations["OperatorAnalyticsController_uploadFromFrontend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/regenerate/{channelId}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Regenerate operator analytics for an existing call record */
-        post: operations['OperatorAnalyticsController_regenerateAnalysis']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/analyze-file': {
+        post: operations["OperatorAnalyticsController_regenerateAnalysis"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/analyze-file": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Upload audio file(s) for analysis (External API) */
-        post: operations['OperatorAnalyticsController_uploadFromApi']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/analyze-url': {
+        post: operations["OperatorAnalyticsController_uploadFromApi"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/analyze-url": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Analyze audio by URL — single or batch (External API) */
-        post: operations['OperatorAnalyticsController_analyzeFromUrl']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/results': {
+        post: operations["OperatorAnalyticsController_analyzeFromUrl"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/results": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List analysis results for token project */
-        get: operations['OperatorAnalyticsController_getResults']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/results/{id}': {
+        get: operations["OperatorAnalyticsController_getResults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/results/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get analysis result by ID */
-        get: operations['OperatorAnalyticsController_getResultById']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/tokens/generate': {
+        get: operations["OperatorAnalyticsController_getResultById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/tokens/generate": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Generate a new API token */
-        post: operations['OperatorAnalyticsController_generateToken']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/tokens': {
+        post: operations["OperatorAnalyticsController_generateToken"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/tokens": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List API tokens (with projectName) */
-        get: operations['OperatorAnalyticsController_listTokens']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/tokens/{id}/revoke': {
+        get: operations["OperatorAnalyticsController_listTokens"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/tokens/{id}/revoke": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
         /** Revoke an API token */
-        patch: operations['OperatorAnalyticsController_revokeToken']
-        trace?: never
-    }
-    '/api/operator-analytics/tokens/{id}': {
+        patch: operations["OperatorAnalyticsController_revokeToken"];
+        trace?: never;
+    };
+    "/api/operator-analytics/tokens/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
         /** Delete an API token */
-        delete: operations['OperatorAnalyticsController_deleteToken']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/projects/generate-schema': {
+        delete: operations["OperatorAnalyticsController_deleteToken"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/projects/generate-schema": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Generate custom metrics schema from chat context */
-        post: operations['OperatorAnalyticsController_generateSchema']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/projects': {
+        post: operations["OperatorAnalyticsController_generateSchema"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/projects": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List projects (with recordCount) */
-        get: operations['OperatorAnalyticsController_listProjects']
-        put?: never
+        get: operations["OperatorAnalyticsController_listProjects"];
+        put?: never;
         /** Create a project (optionally from template) */
-        post: operations['OperatorAnalyticsController_createProject']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/projects/{id}': {
+        post: operations["OperatorAnalyticsController_createProject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/projects/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Update a project (POST fallback) */
-        post: operations['OperatorAnalyticsController_updateProjectPost']
+        post: operations["OperatorAnalyticsController_updateProjectPost"];
         /** Delete a project */
-        delete: operations['OperatorAnalyticsController_deleteProject']
-        options?: never
-        head?: never
+        delete: operations["OperatorAnalyticsController_deleteProject"];
+        options?: never;
+        head?: never;
         /** Update a project */
-        patch: operations['OperatorAnalyticsController_updateProject']
-        trace?: never
-    }
-    '/api/operator-analytics/projects/{id}/delete': {
+        patch: operations["OperatorAnalyticsController_updateProject"];
+        trace?: never;
+    };
+    "/api/operator-analytics/projects/{id}/delete": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Delete a project (POST fallback) */
-        post: operations['OperatorAnalyticsController_deleteProjectPost']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/projects/{id}/dashboard': {
+        post: operations["OperatorAnalyticsController_deleteProjectPost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/projects/{id}/dashboard": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get project-specific dashboard data */
-        get: operations['OperatorAnalyticsController_getProjectDashboard']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/projects/{id}/preview': {
+        get: operations["OperatorAnalyticsController_getProjectDashboard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/projects/{id}/preview": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Preview a metric on a mock call */
-        post: operations['OperatorAnalyticsController_previewMetric']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/projects/{id}/insights': {
+        post: operations["OperatorAnalyticsController_previewMetric"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/projects/{id}/insights": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /**
          * Get AI-generated insights for project (deprecated — use GET /insights?projectId=)
          * @deprecated
          */
-        get: operations['OperatorAnalyticsController_getProjectInsights']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/cdrs/bulk-move': {
+        get: operations["OperatorAnalyticsController_getProjectInsights"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/cdrs/bulk-move": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
         /** Bulk move CDRs to another project */
-        patch: operations['OperatorAnalyticsController_bulkMoveCdrs']
-        trace?: never
-    }
-    '/api/operator-analytics/cdrs': {
+        patch: operations["OperatorAnalyticsController_bulkMoveCdrs"];
+        trace?: never;
+    };
+    "/api/operator-analytics/cdrs": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get CDR list of analyzed calls */
-        get: operations['OperatorAnalyticsController_getCdrs']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/dashboard': {
+        get: operations["OperatorAnalyticsController_getCdrs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/dashboard": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get aggregated dashboard data */
-        get: operations['OperatorAnalyticsController_getDashboard']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/insights': {
+        get: operations["OperatorAnalyticsController_getDashboard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/insights": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get AI-generated structured insights (project optional) */
-        get: operations['OperatorAnalyticsController_getDashboardInsights']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/{id}/overrides': {
+        get: operations["OperatorAnalyticsController_getDashboardInsights"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/{id}/overrides": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List supervisor metric overrides for a record */
-        get: operations['OperatorAnalyticsController_getOverrides']
-        put?: never
+        get: operations["OperatorAnalyticsController_getOverrides"];
+        put?: never;
         /** Create/update supervisor metric overrides (stored separately from LLM values) */
-        post: operations['OperatorAnalyticsController_saveOverrides']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/{id}/overrides/{metricId}': {
+        post: operations["OperatorAnalyticsController_saveOverrides"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/{id}/overrides/{metricId}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
         /** Delete a supervisor metric override */
-        delete: operations['OperatorAnalyticsController_deleteOverride']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/operator-analytics/{id}': {
+        delete: operations["OperatorAnalyticsController_deleteOverride"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get analysis details by ID */
-        get: operations['OperatorAnalyticsController_getById']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/whisper/recognize': {
+        get: operations["OperatorAnalyticsController_getById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/whisper/recognize": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Recognize speech from audio file via Whisper */
-        post: operations['WhisperController_recognize']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/whisper/health': {
+        post: operations["WhisperController_recognize"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/whisper/health": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Check Whisper service availability */
-        get: operations['WhisperController_health']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/sip-trunks': {
+        get: operations["WhisperController_health"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sip-trunks": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List user's SIP trunks */
-        get: operations['SipTrunksController_findAll']
-        put?: never
+        get: operations["SipTrunksController_findAll"];
+        put?: never;
         /** Create SIP trunk */
-        post: operations['SipTrunksController_create']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/sip-trunks/{id}': {
+        post: operations["SipTrunksController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sip-trunks/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get single SIP trunk */
-        get: operations['SipTrunksController_findOne']
+        get: operations["SipTrunksController_findOne"];
         /** Update SIP trunk */
-        put: operations['SipTrunksController_update']
-        post?: never
+        put: operations["SipTrunksController_update"];
+        post?: never;
         /** Delete SIP trunk */
-        delete: operations['SipTrunksController_remove']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/sip-trunks/{id}/status': {
+        delete: operations["SipTrunksController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sip-trunks/{id}/status": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get SIP trunk status */
-        get: operations['SipTrunksController_getStatus']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/chats': {
+        get: operations["SipTrunksController_getStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/chats": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List all chats */
-        get: operations['ChatController_getAll']
-        put?: never
+        get: operations["ChatController_getAll"];
+        put?: never;
         /** Create a chat */
-        post: operations['ChatController_create']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/chats/{id}': {
+        post: operations["ChatController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/chats/{id}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get chat by ID */
-        get: operations['ChatController_getById']
+        get: operations["ChatController_getById"];
         /** Update chat */
-        put: operations['ChatController_update']
-        post?: never
+        put: operations["ChatController_update"];
+        post?: never;
         /** Delete chat */
-        delete: operations['ChatController_delete']
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/chats/{id}/message': {
+        delete: operations["ChatController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/chats/{id}/message": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /**
          * Send message (SSE streaming response)
          * @description Accepts JWT (regular users) OR API key Bearer token (external services).
          */
-        post: operations['ChatController_sendMessage']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/legal-acceptances': {
+        post: operations["ChatController_sendMessage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/legal-acceptances": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         /** Record current user consent with legal documents */
-        post: operations['LegalController_record']
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/api/legal-acceptances/mine': {
+        post: operations["LegalController_record"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/legal-acceptances/mine": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** List current user legal acceptances */
-        get: operations['LegalController_listMine']
-        put?: never
-        post?: never
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
+        get: operations["LegalController_listMine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
-export type webhooks = Record<string, never>
+export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         AdminTopUpDto: {
@@ -2971,1191 +3247,1371 @@ export interface components {
              * @description Target user ID
              * @example 1
              */
-            userId: string
+            userId: string;
             /**
              * @description Amount to add to balance
              * @example 100
              */
-            amount: number
+            amount: number;
             /**
              * @description Currency
              * @example USD
              */
-            currency?: string
+            currency?: string;
             /**
              * @description Payment method (e.g. bank_transfer, cash, crypto)
              * @example bank_transfer
              */
-            paymentMethod: string
+            paymentMethod: string;
             /**
              * @description Payment description / info
              * @example Manual top-up by admin
              */
-            paymentInfo?: string
-        }
+            paymentInfo?: string;
+        };
         LegalAcceptanceItemDto: {
             /** @enum {string} */
-            kind: 'public_offer' | 'personal_data_policy'
+            kind: "public_offer" | "personal_data_policy";
             /** @example 2026-05-18 */
-            version: string
+            version: string;
             /** @example 2026-05-18 */
-            contentHash: string
-        }
+            contentHash: string;
+        };
         CreateUserDto: {
             /**
              * @description Customer name
              * @example name
              */
-            name: string
+            name: string;
             /**
              * @description Username
              * @example Username
              */
-            username: string
+            username: string;
             /**
              * @description E-mail address
              * @example user@domain.com
              */
-            email: string
+            email: string;
             /**
              * @description User avatar
              * @example avatar.png
              */
-            avatar: string
+            avatar: string;
             /**
              * @description GoogleId for google auth
              * @example 123
              */
-            googleId: string
+            googleId: string;
             /**
              * @description Authorization type
              * @example google
              */
-            authType: string
+            authType: string;
             /**
              * @description TelegramId for telegram auth
              * @example 123
              */
-            telegramId: string
+            telegramId: string;
             /**
              * @description Is Activated user
              * @example true
              */
-            isActivated: boolean
+            isActivated: boolean;
             /**
              * @description activation link
              * @example 1234-1234-1234-1234
              */
-            activationCode: string
+            activationCode: string;
             /**
              * @description Currency
              * @example USD
              */
-            currency: string
+            currency: string;
             /**
              * @description activation expires timestamp
              * @example 178823233
              */
-            activationExpires: number
+            activationExpires: number;
             /**
              * @description Password
              * @example 12345
              */
-            password: string
+            password: string;
             /**
              * @description Role
              * @example USER
              */
-            roles: string[]
+            roles: string[];
             /**
              * @description Parent user ID (for sub-users)
              * @example 4
              */
-            vpbx_user_id?: number
+            vpbx_user_id?: number;
             /**
              * @description Our organization id for billing issuer (admin)
              * @example 1
              */
-            ourOrganizationId?: number
+            ourOrganizationId?: number;
             /** @description Legal documents acceptance batch (offer/privacy policy) */
-            legalAcceptance?: Array<components['schemas']['LegalAcceptanceItemDto']>
-        }
+            legalAcceptance?: components["schemas"]["LegalAcceptanceItemDto"][];
+        };
         User: {
             /**
              * @description Username. Required
              * @example Username
              */
-            username: string
+            username: string;
             /**
              * @description User firstname
              * @example Ivan
              */
-            name: string
+            name: string;
             /**
              * @description E-mail address
              * @example name@domain.com
              */
-            email: string
+            email: string;
             /**
              * @description feature flag
              * @example 0
              */
-            designed: boolean
+            designed: boolean;
             /**
              * @description User avatar
              * @example profile.png
              */
-            avatar: string
+            avatar: string;
             /**
              * @description GoogleId for google auth
              * @example 123
              */
-            googleId: string
+            googleId: string;
             /**
              * @description TelegramId for Telegram auth
              * @example 123
              */
-            telegramId: string
+            telegramId: string;
             /**
              * @description Password. Required
              * @example 12345
              */
-            password: string
+            password: string;
             /**
              * @description Ban flag
              * @example true
              */
-            banned: boolean
+            banned: boolean;
             /**
              * @description Ban reason
              * @example Bad behavior
              */
-            banReason: string
+            banReason: string;
             /**
              * @description User balance
              * @example 40
              */
-            balance: number
+            balance: number;
             /**
              * @description Currency
              * @example USD
              */
-            currency: string
+            currency: string;
             /**
              * @description Activation code
              * @example 123345
              */
-            activationCode: string
+            activationCode: string;
             /**
              * @description Activation expires timestamp
              * @example 123345
              */
-            activationExpires: number
+            activationExpires: number;
             /**
              * @description Reset password link
              * @example 12345-12312-12345-12345-123345
              */
-            resetPasswordLink: string
+            resetPasswordLink: string;
             /**
              * @description Type of user authorization
              * @example Google
              */
-            authType: string
+            authType: string;
             /**
              * @description is activated user
              * @example true
              */
-            isActivated: boolean
+            isActivated: boolean;
             /**
              * @description VPBX cabinet id
              * @example 4
              */
-            vpbx_user_id: number
+            vpbx_user_id: number;
             /**
              * @description Default issuer organization for invoices / closing docs (admin)
              * @example 1
              */
-            ourOrganizationId: number
+            ourOrganizationId: number;
             /**
              * @description Personal account number for bank payments (tenant owner)
              * @example AIPBX-00000042
              */
-            personalAccountNumber: string
-        }
+            personalAccountNumber: string;
+        };
         CreateSubUserDto: {
             /**
              * @description Sub-user e-mail address
              * @example user@domain.com
              */
-            email: string
+            email: string;
             /**
              * @description Sub-user name
              * @example Ivan
              */
-            name?: string
+            name?: string;
             /**
              * @description Sub-user password
              * @example 12345678
              */
-            password?: string
-        }
+            password?: string;
+        };
         BalanceThresholdAlert: {
             /**
              * @description Tenant owner user id
              * @example 1
              */
-            ownerUserId: number
+            ownerUserId: number;
             /**
              * @description Balance threshold (USD, same as user.balance)
              * @example 100
              */
-            limitAmount: number
+            limitAmount: number;
             /** @example ["a@b.com"] */
-            emails: string[]
+            emails: string[];
             /** @example [1,2] */
-            notifyUserIds: string[]
-        }
+            notifyUserIds: string[];
+        };
         CreateBalanceThresholdAlertDto: {
             /** @description Tenant owner (admin only) */
-            ownerUserId?: string
+            ownerUserId?: string;
             /** @example 100 */
-            limitAmount: number
+            limitAmount: number;
             /**
              * @example [
              *       "notify@example.com"
              *     ]
              */
-            emails: string[]
-            notifyUserIds?: number[]
-            sendInvoice?: boolean
-            organizationId?: number
+            emails: string[];
+            notifyUserIds?: number[];
+            sendInvoice?: boolean;
+            organizationId?: number;
             /** @enum {string} */
-            invoiceAmountMode?: 'fixed' | 'average_monthly'
+            invoiceAmountMode?: "fixed" | "average_monthly";
             /** @example 5000 */
-            invoiceAmountRub?: number
-            sendViaEdo?: boolean
-        }
+            invoiceAmountRub?: number;
+            sendViaEdo?: boolean;
+        };
         UpdateBalanceThresholdAlertDto: {
-            limitAmount?: number
-            emails?: string[]
-            notifyUserIds?: number[]
-            sendInvoice?: boolean
-            organizationId?: number
+            limitAmount?: number;
+            emails?: string[];
+            notifyUserIds?: number[];
+            sendInvoice?: boolean;
+            organizationId?: number;
             /** @enum {string} */
-            invoiceAmountMode?: 'fixed' | 'average_monthly'
-            invoiceAmountRub?: number
-            sendViaEdo?: boolean
-        }
-        AddRoleDto: Record<string, never>
+            invoiceAmountMode?: "fixed" | "average_monthly";
+            invoiceAmountRub?: number;
+            sendViaEdo?: boolean;
+        };
+        AddRoleDto: Record<string, never>;
         CreateUserLimitDto: {
             /**
              * @description User ID
              * @example 1
              */
-            userId: string
+            userId: string;
             /**
              * @description Limit amount
              * @example 100
              */
-            limitAmount: number
+            limitAmount: number;
             /**
              * @description List of emails
              * @example [
              *       "test@example.com"
              *     ]
              */
-            emails: string[]
-        }
+            emails: string[];
+        };
         UserLimits: {
             /**
              * @description User ID
              * @example 1
              */
-            userId: number
+            userId: number;
             /**
              * @description Limit amount in currency
              * @example 100
              */
-            limitAmount: number
+            limitAmount: number;
             /**
              * @description Notification emails
              * @example ["test@test.com"]
              */
-            emails: string[]
-        }
+            emails: string[];
+        };
         CreateRoleDto: {
             /**
              * @description Role's name
              * @example USER
              */
-            value: string
+            value: string;
             /**
              * @description Role's description
              * @example Simple user
              */
-            description: string
-        }
+            description: string;
+        };
         Role: {
             /**
              * @description Уникальное значение роли
              * @example ADMIN
              */
-            value: string
+            value: string;
             /**
              * @description Описание роли
              * @example Администратор
              */
-            description: string
-        }
-        TelegramAuthDto: Record<string, never>
-        ActivationDto: Record<string, never>
+            description: string;
+        };
+        TelegramAuthDto: Record<string, never>;
+        ActivationDto: Record<string, never>;
         Logs: {
             /**
              * @description Human-readable event description
              * @example Created assistant "Sales Bot"
              */
-            event: string
+            event: string;
             /**
              * @description Action type
              * @example create
              */
-            action: string
+            action: string;
             /**
              * @description Entity type affected
              * @example assistant
              */
-            entity: string
+            entity: string;
             /**
              * @description ID of the affected entity
              * @example 42
              */
-            entityId: number
+            entityId: number;
             /**
              * @description Previous data before change
              * @example {"name": "Old Bot"}
              */
-            oldData: Record<string, never>
+            oldData: Record<string, never>;
             /**
              * @description Updated data after change
              * @example {"name": "New Bot"}
              */
-            newData: Record<string, never>
+            newData: Record<string, never>;
             /**
              * @description Client IP address
              * @example 192.168.1.1
              */
-            ipAddress: string
+            ipAddress: string;
             /**
              * @description Client User-Agent
              * @example Mozilla/5.0...
              */
-            userAgent: string
+            userAgent: string;
             /**
              * @description Event severity level
              * @example info
              */
-            severity: string
+            severity: string;
             /**
              * @description Legacy event ID
              * @example 1
              */
-            eventId: number
-        }
-        Object: Record<string, never>
+            eventId: number;
+        };
+        Object: Record<string, never>;
         Payments: {
             /**
              * @description User id
              * @example 123
              */
-            userId: string
+            userId: string;
             /**
              * @description amount
              * @example 1000
              */
-            amount: number
+            amount: number;
             /**
              * @description Transaction status
              * @example OK
              */
-            status: string
+            status: string;
             /**
              * @description Payment Method
              * @example bank
              */
-            paymentMethod: string
+            paymentMethod: string;
             /**
              * @description Payment Info, Label, etc
              * @example BankCardAE
              */
-            paymentInfo: string
+            paymentInfo: string;
             /**
              * @description Payment system id
              * @example 10
              */
-            payId: number
+            payId: number;
             /**
              * @description vPbxUserId
              * @example 1006
              */
-            vPbxUserId: string
+            vPbxUserId: string;
             /**
              * @description Stripe Payment Intent ID
              * @example pi_3MtwPdLkdIwHu7ix28a3tqPa
              */
-            stripePaymentIntentId: string
+            stripePaymentIntentId: string;
             /**
              * @description Currency
              * @example usd
              */
-            currency: string
+            currency: string;
             /**
              * @description Stripe receipt URL
              * @example https://pay.stripe.com/receipts/...
              */
-            receiptUrl: string
+            receiptUrl: string;
             /**
              * @description Robokassa Invoice ID
              * @example 12345
              */
-            robokassaInvId: number
-            alfaInvId?: string
-            idempotencyKey?: string
-            fxRateRubUsd?: number
-            amountRub?: number
-            organizationDocumentId?: string
-        }
+            robokassaInvId: number;
+            alfaInvId?: string;
+            idempotencyKey?: string;
+            fxRateRubUsd?: number;
+            amountRub?: number;
+            organizationDocumentId?: string;
+        };
         OurOrganization: {
             /**
              * @description Short name
              * @example ООО «АйПиБиИкс»
              */
-            name: string
+            name: string;
             /**
              * @description INN
              * @example 7701234567
              */
-            tin: string
+            tin: string;
             /**
              * @description Legal address
              * @example 123 Main St
              */
-            address: string
-            kpp?: string
-            ogrn?: string
+            address: string;
+            kpp?: string;
+            ogrn?: string;
             /** @description ul | ip */
-            legalForm?: string
-            director?: string
+            legalForm?: string;
+            director?: string;
             /**
              * @description Default issuer for new tenants
              * @example true
              */
-            isPrimary: boolean
+            isPrimary: boolean;
             /** @description Bank name for invoices */
-            bankName?: string
+            bankName?: string;
             /** @description Bank branch label on invoice (defaults to bank name) */
-            bankBranchName?: string
-            bankBic?: string
-            bankAccount?: string
-            bankCorrAccount?: string
+            bankBranchName?: string;
+            bankBic?: string;
+            bankAccount?: string;
+            bankCorrAccount?: string;
             /** @description EDO participant id (maps to SBIS ИдентификаторАЯ) */
-            edoParticipantId?: string
+            edoParticipantId?: string;
             /** @description Qualified signature thumbprint for outgoing EDO */
-            sbisCertThumbprint?: string
-        }
+            sbisCertThumbprint?: string;
+        };
         CreateOurOrganizationDto: {
-            name: string
+            name: string;
             /** @description INN */
-            tin: string
-            address: string
-            kpp?: string
-            ogrn?: string
+            tin: string;
+            address: string;
+            kpp?: string;
+            ogrn?: string;
             /** @enum {string} */
-            legalForm?: 'ul' | 'ip'
-            director?: string
-            isPrimary?: boolean
-            bankName?: string
-            bankBranchName?: string
-            bankBic?: string
-            bankAccount?: string
-            bankCorrAccount?: string
+            legalForm?: "ul" | "ip";
+            director?: string;
+            isPrimary?: boolean;
+            bankName?: string;
+            bankBranchName?: string;
+            bankBic?: string;
+            bankAccount?: string;
+            bankCorrAccount?: string;
             /** @description EDO participant id (2BE-… / 2BM-…) */
-            edoParticipantId?: string
+            edoParticipantId?: string;
             /** @description Certificate thumbprint for EDO signing */
-            sbisCertThumbprint?: string
-        }
+            sbisCertThumbprint?: string;
+        };
         CreateOrganizationDto: {
             /**
              * @description Organization Name
              * @example My Corp
              */
-            name: string
+            name: string;
             /**
              * @description TIN (INN) 10 for UL, 12 for IP
              * @example 1234567890
              */
-            tin: string
+            tin: string;
             /**
              * @description Address
              * @example 123 Main St
              */
-            address: string
+            address: string;
             /** @enum {string} */
-            legalForm?: 'ul' | 'ip'
-            kpp?: string
-            ogrn?: string
-            director?: string
-            email?: string
-            phone?: string
-            bankAccount?: string
-            bankBic?: string
-            bankName?: string
+            legalForm?: "ul" | "ip";
+            kpp?: string;
+            ogrn?: string;
+            director?: string;
+            email?: string;
+            phone?: string;
+            bankAccount?: string;
+            bankBic?: string;
+            bankName?: string;
             /** @description Service name for invoices (max 500 chars) */
-            subject?: string
+            subject?: string;
             /** @description ADMIN only: create this organization for the given cabinet user id */
-            ownerUserId?: number
+            ownerUserId?: number;
             /** @description Counterparty EDO participant id (manual, required if sendEdoInvitation) */
-            edoParticipantId?: string
+            edoParticipantId?: string;
             /** @description Send EDO/roaming invitation after create */
-            sendEdoInvitation?: boolean
-        }
+            sendEdoInvitation?: boolean;
+        };
         Organization: {
             /**
              * @description User ID
              * @example 1
              */
-            userId: number
+            userId: number;
             /**
              * @description Organization Name
              * @example My Corp
              */
-            name: string
+            name: string;
             /**
              * @description Tax Identification Number (TIN/INN)
              * @example 1234567890
              */
-            tin: string
+            tin: string;
             /**
              * @description Address
              * @example 123 Main St
              */
-            address: string
-            kpp?: string
-            ogrn?: string
+            address: string;
+            kpp?: string;
+            ogrn?: string;
             /** @description ul | ip */
-            legalForm?: string
-            director?: string
-            email?: string
-            phone?: string
-            bankAccount?: string
-            bankBic?: string
-            bankName?: string
+            legalForm?: string;
+            director?: string;
+            email?: string;
+            phone?: string;
+            bankAccount?: string;
+            bankBic?: string;
+            bankName?: string;
             /** @description Default service name for invoices / closing docs */
-            subject?: string
+            subject?: string;
             /** Format: date-time */
-            alfawebhookSyncedAt?: string
+            alfawebhookSyncedAt?: string;
             /** @description Counterparty EDO participant id */
-            edoParticipantId?: string
-            edoInvitationId?: string
+            edoParticipantId?: string;
+            edoInvitationId?: string;
             /** @description 2=pending, 7=ready, 9=broken */
-            edoInvitationStateCode?: number
+            edoInvitationStateCode?: number;
             /** Format: date-time */
-            edoInvitationStateAt?: string
+            edoInvitationStateAt?: string;
             /** Format: date-time */
-            edoInvitationCheckedAt?: string
-        }
+            edoInvitationCheckedAt?: string;
+        };
         CreateInvoiceDto: {
             /** @example 10000 */
-            amountRub: number
-            subject?: string
+            amountRub: number;
+            subject?: string;
             /** @description Issuer our-organization id (admin override) */
-            ourOrganizationId?: number
+            ourOrganizationId?: number;
             /**
              * @description Create invoice in SBIS (EDO). If false, only local PDF is generated.
              * @default false
              */
-            sendViaEdo: boolean
-        }
+            sendViaEdo: boolean;
+        };
         Prices: {
             /**
              * @description Realtime Price
              * @example 123
              */
-            realtime: number
+            realtime: number;
             /**
              * @description Text Price
              * @example 123
              */
-            text: number
+            text: number;
             /**
              * @description Analytic Price
              * @example 123
              */
-            analytic: number
+            analytic: number;
             /**
              * @description STT price per minute of audio
              * @example 0.006
              */
-            stt: number
-        }
+            stt: number;
+        };
         CreatePriceDto: {
             /**
              * @description User ID
              * @example 1
              */
-            userId: number
+            userId: number;
             /**
              * @description Realtime Price
              * @example 10.5
              */
-            realtime: number
+            realtime: number;
             /**
              * @description Analytic Price
              * @example 5
              */
-            analytic: number
+            analytic: number;
             /**
              * @description Text Price
              * @example 1
              */
-            text: number
+            text: number;
             /**
              * @description STT price per minute of audio
              * @example 0.1
              */
-            stt: number
-        }
+            stt: number;
+        };
         UpdatePriceDto: {
             /**
              * @description Realtime Price
              * @example 10.5
              */
-            realtime?: number
+            realtime?: number;
             /**
              * @description Analytic Price
              * @example 5
              */
-            analytic?: number
-        }
-        openAiMessage: Record<string, never>
+            analytic?: number;
+        };
+        openAiMessage: Record<string, never>;
         AiCdr: {
             /**
              * @description Channel uniqueId
              * @example 123
              */
-            channelId: string
+            channelId: string;
             /**
              * @description CallerId
              * @example 1006
              */
-            callerId: string
+            callerId: string;
             /**
              * @description Assistant name
              * @example Bob
              */
-            assistantName: string
+            assistantName: string;
             /**
              * @description Assistant id
              * @example 2
              */
-            assistantId: string
+            assistantId: string;
             /**
              * @description Cached total tokens count
              * @example 1023
              */
-            tokens: number
+            tokens: number;
             /**
              * @description Call duration seconds
              * @example 10
              */
-            duration: number
+            duration: number;
             /**
              * @description Cached total cost in USD
              * @example 0.084
              */
-            cost: number
+            cost: number;
             /**
              * @description Currency code for amountCurrency
              * @example RUB
              */
-            costCurrency: string
+            costCurrency: string;
             /**
              * @description Cached total cost in tenant currency at hangup
              * @example 7.56
              */
-            amountCurrency: Record<string, never>
+            amountCurrency: Record<string, never>;
             /**
              * @description UserId
              * @example 1
              */
-            userId: string
+            userId: string;
             /**
              * @description vPbxUserId
              * @example 1006
              */
-            vPbxUserId: string
+            vPbxUserId: string;
             /**
              * @description Call source: call, widget, playground
              * @example call
              */
-            source: string
+            source: string;
             /**
              * @description Record URL
              * @example https://server.com/records/assistantId/channelId.mp3
              */
-            recordUrl: string
+            recordUrl: string;
             /**
              * @description Project id
              * @example 1
              */
-            projectId: number
-        }
+            projectId: number;
+        };
         AiEvents: {
             /**
              * @description Channel uniqueId
              * @example 123
              */
-            channelId: string
+            channelId: string;
             /**
              * @description CallerId
              * @example 1006
              */
-            callerId: string
+            callerId: string;
             /**
              * @description OpenAI Event
              * @example 1
              */
-            events: string[]
+            events: string[];
             /**
              * @description UserId
              * @example 1
              */
-            userId: string
+            userId: string;
             /**
              * @description vPbxUserId
              * @example 1006
              */
-            vPbxUserId: string
-        }
+            vPbxUserId: string;
+        };
         AiTool: {
             /**
              * @description This should always be function
              * @example function
              */
-            type: string
+            type: string;
             /**
              * @description The function's name
              * @example get_price
              */
-            name: string
+            name: string;
             /**
              * @description Details on when and how to use the function
              * @example to get price call this function
              */
-            description: string
+            description: string;
             /**
              * @description JSON schema defining the function's input arguments
              * @example {name: book, price: 100}
              */
-            parameters: string
+            parameters: string;
             /**
              * @description Whether to enforce strict mode for the function call
              * @example true
              */
-            strict: boolean
+            strict: boolean;
             /**
              * @description Api webhook
              * @example https://api.address.api
              */
-            webhook: string
+            webhook: string;
             /**
              * @description Comments
              * @example any comment
              */
-            comment: string
+            comment: string;
             /**
              * @description Custom headers for webhook
              * @example {"Authorization": "Bearer token"}
              */
-            headers: Record<string, never>
+            headers: Record<string, never>;
             /**
              * @description HTTP method (GET, POST, etc.)
              * @example POST
              */
-            method: string
-        }
-        ToolDto: Record<string, never>
+            method: string;
+        };
+        ToolDto: Record<string, never>;
         CreateKnowledgeBaseDto: {
             /**
              * @description Knowledge base name
              * @example Прайс-лист
              */
-            name: string
+            name: string;
             /**
              * @description Description
              * @example Цены на товары и услуги
              */
-            description?: string
-        }
+            description?: string;
+        };
         UpdateKnowledgeBaseDto: {
             /**
              * @description Knowledge base name
              * @example Обновлённый прайс
              */
-            name?: string
+            name?: string;
             /**
              * @description Description
              * @example Описание
              */
-            description?: string
-        }
+            description?: string;
+        };
         AddUrlDto: {
             /**
              * @description URL to parse and add to knowledge base
              * @example https://example.com/prices
              */
-            url: string
-        }
+            url: string;
+        };
+        HelpdeskTicket: {
+            id: number;
+            /** @example new */
+            status: string;
+            /** @example technical */
+            category: string;
+            /** @example normal */
+            priority: string;
+            /** @example voice */
+            source: string;
+            subject: string;
+            description?: string;
+            /** @description Caller ID */
+            callerPhone?: string;
+            contactPhone?: string;
+            alfawebhookClientId?: string;
+            inn?: string;
+            clientName?: string;
+            /** @description ID оператора-исполнителя */
+            assigneeId?: number;
+            createdByApiKeyId?: number;
+            transcript?: string;
+        };
+        CreateHelpdeskTicketDto: {
+            /** @example Проблема с регистрацией SIP */
+            subject?: string;
+            description?: string;
+            /** @enum {string} */
+            category?: "technical" | "billing" | "sales" | "spam" | "other";
+            /** @enum {string} */
+            priority?: "urgent" | "high" | "normal" | "low";
+            /**
+             * @default manual
+             * @enum {string}
+             */
+            source: "voice" | "chat" | "manual" | "email";
+            /** @description Caller ID (оригинальный номер звонка) */
+            callerPhone?: string;
+            /** @description Контактный номер, если отличается от Caller ID */
+            contactPhone?: string;
+            alfawebhookClientId?: string;
+            inn?: string;
+            clientName?: string;
+            transcript?: string;
+            /** @enum {string} */
+            status?: "new" | "in_progress" | "waiting_client" | "resolved" | "closed";
+        };
+        UpdateHelpdeskTicketDto: {
+            /** @enum {string} */
+            status?: "new" | "in_progress" | "waiting_client" | "resolved" | "closed";
+            /** @enum {string} */
+            category?: "technical" | "billing" | "sales" | "spam" | "other";
+            /** @enum {string} */
+            priority?: "urgent" | "high" | "normal" | "low";
+            subject?: string;
+            description?: string;
+            assigneeId?: number;
+            transcript?: string;
+        };
+        CreateHelpdeskMessageDto: {
+            /** @example Оператор уточнил детали */
+            content: string;
+            /**
+             * @default operator
+             * @enum {string}
+             */
+            role: "user" | "assistant" | "operator" | "system";
+        };
+        HelpdeskTicketMessage: {
+            id: number;
+            /** @example operator */
+            role: string;
+            content: string;
+            metadata?: Record<string, never>;
+        };
+        HelpdeskIdentifyBodyDto: {
+            phone?: string;
+            inn?: string;
+            name?: string;
+        };
+        AlfawebhookClientDto: {
+            id?: string;
+            /** @description ИНН */
+            inn?: string;
+            kpp?: string;
+            name?: string;
+            /** @description URL облачной АТС */
+            pbxUrl?: string;
+            balance?: number;
+            licNum?: string;
+            email?: string;
+            phone?: string;
+            organizationId?: string;
+        };
+        HelpdeskIdentifyResultDto: {
+            /** @description Найден ли клиент */
+            found: boolean;
+            client?: components["schemas"]["AlfawebhookClientDto"];
+            /** @description До 3 вариантов при неоднозначном поиске по названию */
+            candidates?: string[];
+            /** @description Облачный клиент (есть pbxUrl) */
+            isCloud?: boolean;
+            message?: string;
+        };
+        HelpdeskSettings: {
+            id: number;
+            /** @description Email для уведомлений о новых заявках */
+            notificationEmails: string[];
+            /** @description Telegram chat ID */
+            notificationTelegramChatIds: string[];
+        };
+        UpdateHelpdeskSettingsDto: {
+            notificationEmails?: string[];
+            notificationTelegramChatIds?: string[];
+        };
+        HelpdeskLlmContextOverrideDto: {
+            markdownOverride?: string | null;
+        };
+        HelpdeskToolsIdentifyDto: {
+            phone?: string;
+            inn?: string;
+            name?: string;
+        };
+        HelpdeskToolsClientRefDto: {
+            clientId?: string;
+            inn?: string;
+        };
+        HelpdeskToolsCreateTicketDto: {
+            subject: string;
+            category?: string;
+            priority?: string;
+            /** @description Original Caller ID (D-04) */
+            callerPhone?: string;
+            /** @description Alternate contact phone if different (D-04) */
+            contactPhone?: string;
+            clientName?: string;
+            alfawebhookClientId?: string;
+            inn?: string;
+            description?: string;
+            transcript?: string;
+            source?: string;
+        };
+        HelpdeskToolsAddMessageDto: {
+            ticketId: number;
+            role?: string;
+            content: string;
+        };
+        HelpdeskToolsPbxClientDto: {
+            clientId: string;
+        };
+        HelpdeskToolsPromisedPaymentDto: {
+            clientId: string;
+            /** @default 2 */
+            days: number;
+        };
+        HelpdeskToolsHangupDto: {
+            clientId: string;
+            channelId: string;
+            confirm: boolean;
+        };
+        CreateApiKeyDto: {
+            /**
+             * @description Human-readable label
+             * @example KrAsterisk production
+             */
+            name: string;
+            /**
+             * @description Scopes. Null/omit = all scopes.
+             * @example [
+             *       "chat:message",
+             *       "models:read"
+             *     ]
+             */
+            scopes?: string[];
+            /**
+             * @description ISO 8601 expiry. Omit for no expiry.
+             * @example 2027-01-01T00:00:00Z
+             */
+            expiresAt?: string;
+        };
         CreateMcpServerDto: {
             /** @example My CRM Server */
-            name: string
+            name: string;
             /** @example wss://mcp.example.com */
-            url: string
+            url: string;
             /**
              * @example websocket
              * @enum {string}
              */
-            transport: 'websocket' | 'http'
+            transport: "websocket" | "http";
             /**
              * @example bearer
              * @enum {string}
              */
-            authType: 'none' | 'bearer' | 'apikey' | 'custom_headers'
+            authType: "none" | "bearer" | "apikey" | "custom_headers";
             /**
              * @example {
              *       "token": "my-secret-token"
              *     }
              */
-            authCredentials?: Record<string, never>
+            authCredentials?: Record<string, never>;
             /**
              * @description Composio toolkit ID
              * @example gmail
              */
-            composioToolkit?: string
+            composioToolkit?: string;
             /**
              * @description Composio connected account ID
              * @example con_abc123
              */
-            composioAccountId?: string
-        }
+            composioAccountId?: string;
+        };
         UpdateMcpServerDto: {
-            name?: string
-            url?: string
+            name?: string;
+            url?: string;
             /** @enum {string} */
-            transport?: 'websocket' | 'http'
+            transport?: "websocket" | "http";
             /** @enum {string} */
-            authType?: 'none' | 'bearer' | 'apikey' | 'custom_headers'
-            authCredentials?: Record<string, never>
-        }
+            authType?: "none" | "bearer" | "apikey" | "custom_headers";
+            authCredentials?: Record<string, never>;
+        };
         CreateMcpPolicyDto: {
             /**
              * @example rate_limit
              * @enum {string}
              */
-            policyType: 'param_restrict' | 'rate_limit' | 'require_approval'
+            policyType: "param_restrict" | "rate_limit" | "require_approval";
             /**
              * @example {
              *       "maxCallsPerMinute": 10
              *     }
              */
-            policyConfig: Record<string, never>
+            policyConfig: Record<string, never>;
             /** @example 1 */
-            mcpToolRegistryId: number
-        }
+            mcpToolRegistryId: number;
+        };
         Assistant: {
             /**
              * @description Ai Bot name
              * @example VoiceBot
              */
-            name: string
+            name: string;
             /**
              * @description Ai Bot unique id
              * @example Bot unique id
              */
-            uniqueId: string
+            uniqueId: string;
             /**
              * @description Greeting phrase
              * @example Hello, what can i do for you?
              */
-            greeting: string
+            greeting: string;
             /**
              * @description Model name
              * @example GPT-4o
              */
-            model: string
+            model: string;
             /**
              * @description TTS Voice
              * @example Alloy
              */
-            voice: string
+            voice: string;
             /**
              * @description Input audio format
              * @example pcm16
              */
-            input_audio_format: string
+            input_audio_format: string;
             /**
              * @description Output audio format
              * @example pcm16
              */
-            output_audio_format: string
+            output_audio_format: string;
             /**
              * @description Bot instructions
              * @example You are a helpful consultant by name Alex
              */
-            instruction: string
+            instruction: string;
             /**
              * @description Input audio transcription model
              * @example whisper-1
              */
-            input_audio_transcription_model: string
+            input_audio_transcription_model: string;
             /**
              * @description Input audio transcription language
              * @example en
              */
-            input_audio_transcription_language: string
+            input_audio_transcription_language: string;
             /**
              * @description Turn detection type
              * @example server_vad
              */
-            turn_detection_type: string
+            turn_detection_type: string;
             /**
              * @description Turn detection threshold
              * @example 0.5
              */
-            turn_detection_threshold: string
+            turn_detection_threshold: string;
             /**
              * @description Prefix padding ms
              * @example 300
              */
-            turn_detection_prefix_padding_ms: string
+            turn_detection_prefix_padding_ms: string;
             /**
              * @description Silence duration ms
              * @example 500
              */
-            turn_detection_silence_duration_ms: string
+            turn_detection_silence_duration_ms: string;
             /**
              * @description Idle timeout ms
              * @example 10000
              */
-            idle_timeout_ms: string
+            idle_timeout_ms: string;
             /**
              * @description Whether user speech interrupts AI response
              * @example true
              */
-            interrupt_response: boolean
+            interrupt_response: boolean;
             /**
              * @description Tool choice method
              * @example auto
              */
-            tool_choice: string
+            tool_choice: string;
             /**
              * @description Semantic eagerness(Low,Medium,High)
              * @example auto
              */
-            semantic_eagerness: string
+            semantic_eagerness: string;
             /**
              * @description Type of noise reduction: none, near_field, far_field
              * @example none
              */
-            input_audio_noise_reduction: string
+            input_audio_noise_reduction: string;
             /**
              * @description Temperature
              * @example 0.8
              */
-            temperature: string
+            temperature: string;
             /**
              * @description Max tokens
              * @example inf
              */
-            max_response_output_tokens: string
+            max_response_output_tokens: string;
             /**
              * @description moh class
              * @example default
              */
-            moh: string
+            moh: string;
             /**
              * @description Enable post-call analytics
              * @example true
              */
-            analytic: boolean
+            analytic: boolean;
             /**
              * @description Allow AI to hang up the call
              * @example false
              */
-            allowHangup: boolean
+            allowHangup: boolean;
             /**
              * @description Allow AI to transfer the call
              * @example false
              */
-            allowTransfer: boolean
+            allowTransfer: boolean;
             /**
              * @description Any comments
              * @example comment
              */
-            comment: string
+            comment: string;
             /**
              * @description Pipeline mode: realtime or non-realtime
              * @example realtime
              */
-            pipelineMode: string
+            pipelineMode: string;
             /**
              * @description STT provider: whisper-local, vosk, whisper-api, yandex-stt
              * @example whisper-local
              */
-            sttProvider: string
+            sttProvider: string;
             /**
              * @description LLM provider: openai, yandex, ollama
              * @example openai
              */
-            llmProvider: string
+            llmProvider: string;
             /**
              * @description LLM model name
              * @example gpt-4o-mini
              */
-            llmModel: string
+            llmModel: string;
             /**
              * @description TTS provider: silero, openai-tts, yandex-tts
              * @example silero
              */
-            ttsProvider: string
+            ttsProvider: string;
             /**
              * @description TTS voice name (provider-specific)
              * @example baya
              */
-            ttsVoice: string
+            ttsVoice: string;
             /**
              * @description Project ID
              * @example 1
              */
-            projectId: number
-        }
-        AssistantDto: Record<string, never>
+            projectId: number;
+        };
+        AssistantDto: Record<string, never>;
         PbxServers: {
             /**
              * @description Server in Europe
              * @example aiPBX
              */
-            name: string
+            name: string;
             /**
              * @description server location
              * @example Europe
              */
-            location: string
+            location: string;
             /**
              * @description server_address:port, default port is 5060
              * @example sip.aipbx.net:5061
              */
-            sip_host: string
+            sip_host: string;
             /**
              * @description Unique server identifier
              * @example srv_1a2b3c4d5e
              */
-            uniqueId: string
+            uniqueId: string;
             /**
              * @description Public WSS URL for WebRTC widgets
              * @example wss://sip.aipbx.net:8089/ws
              */
-            wss_url: string
+            wss_url: string;
             /**
              * @description ari url
              * @example https://ari.aipbx.net:8084/aipbx
              */
-            ari_url: string
+            ari_url: string;
             /**
              * @description ari user
              * @example aiPbx
              */
-            ari_user: string
+            ari_user: string;
             /**
              * @description ari password
              * @example 123
              */
-            password: string
+            password: string;
             /**
              * @description Is cloud PBX available to all users
              * @example true
              */
-            cloudPbx: boolean
+            cloudPbx: boolean;
             /**
              * @description dialplan context for transfers
              * @example from-internal
              */
-            context: string
+            context: string;
             /**
              * @description music on hold class
              * @example default
              */
-            moh: string
+            moh: string;
             /**
              * @description recording format
              * @example wav
              */
-            recordFormat: string
+            recordFormat: string;
             /**
              * @description SIP technology: sip (chan_sip) or pjsip (chan_pjsip)
              * @example pjsip
              */
-            sipTechnology: string
+            sipTechnology: string;
             /**
              * @description comment
              * @example any comment
              */
-            comment: string
-        }
-        PbxDto: Record<string, never>
-        SipAccountDto: Record<string, never>
+            comment: string;
+        };
+        PbxDto: Record<string, never>;
+        SipAccountDto: Record<string, never>;
         SipAccounts: {
             /**
              * @description sip uri
              * @example test@sip.com
              */
-            sipUri: string
+            sipUri: string;
             /**
              * @description ip address
              * @example 1.1.1.1
              */
-            ipAddress: string
+            ipAddress: string;
             /**
              * @description is sip uri active
              * @example true
              */
-            active: boolean
+            active: boolean;
             /**
              * @description enable call recording
              * @example true
              */
-            records: boolean
+            records: boolean;
             /**
              * @description use tls
              * @example true
              */
-            tls: boolean
-        }
+            tls: boolean;
+        };
         CreateWidgetKeyDto: {
             /**
              * @description Widget name for identification
              * @example My Website Widget
              */
-            name: string
+            name: string;
             /**
              * @description Assistant ID to connect to this widget
              * @example 1
              */
-            assistantId: number
+            assistantId: number;
             /**
              * @description PBX Server ID for this widget
              * @example 1
              */
-            pbxServerId?: number
+            pbxServerId?: number;
             /**
              * @description Array of allowed domains (without protocol)
              * @example [
@@ -4163,114 +4619,114 @@ export interface components {
              *       "www.example.com"
              *     ]
              */
-            allowedDomains: string[]
+            allowedDomains: string[];
             /**
              * @description Maximum number of concurrent sessions (1-100)
              * @default 10
              * @example 10
              */
-            maxConcurrentSessions: number
+            maxConcurrentSessions: number;
             /**
              * @description Default language for the widget
              * @default en
              * @example en
              */
-            language: string
+            language: string;
             /**
              * @description Widget logo filename
              * @example logo.png
              */
-            logo?: string
+            logo?: string;
             /**
              * @description Widget appearance settings (JSON string)
              * @example {"buttonColor":"#667eea","theme":"light"}
              */
-            appearance?: string
+            appearance?: string;
             /**
              * @description API URL to encode in the widget JWT token
              * @example https://api.example.com/api
              */
-            apiUrl?: string
-        }
+            apiUrl?: string;
+        };
         WidgetKey: {
             /**
              * @description Public widget key
              * @example wk_1a2b3c4d5e6f7g8h9i0j
              */
-            publicKey: string
+            publicKey: string;
             /**
              * @description Widget name for identification
              * @example My Website Widget
              */
-            name: string
+            name: string;
             /**
              * @description User ID (owner)
              * @example 1
              */
-            userId: number
+            userId: number;
             /**
              * @description Assistant ID
              * @example 1
              */
-            assistantId: number
+            assistantId: number;
             /**
              * @description PBX Server ID (asterisk)
              * @example 1
              */
-            pbxServerId: number
+            pbxServerId: number;
             /**
              * @description JSON array of allowed domains
              * @example ["example.com", "www.example.com"]
              */
-            allowedDomains: string
+            allowedDomains: string;
             /**
              * @description Maximum concurrent sessions
              * @example 10
              */
-            maxConcurrentSessions: number
+            maxConcurrentSessions: number;
             /**
              * @description Maximum session duration in seconds
              * @example 600
              */
-            maxSessionDuration: number
+            maxSessionDuration: number;
             /**
              * @description Default language for the widget
              * @default en
              * @example en
              */
-            language: string
+            language: string;
             /**
              * @description Is key active
              * @example true
              */
-            isActive: boolean
+            isActive: boolean;
             /**
              * @description Widget logo filename
              * @example logo.png
              */
-            logo: string
+            logo: string;
             /**
              * @description Widget appearance settings (JSON string)
              * @example {"buttonColor":"#667eea","theme":"light"}
              */
-            appearance: string
+            appearance: string;
             /**
              * @description API URL for widget token
              * @example https://api.example.com/api
              */
-            apiUrl: string
+            apiUrl: string;
             /**
              * @description JWT token for widget embed
              * @example eyJhbGciOiJIUzI1NiJ9...
              */
-            token: string
-        }
+            token: string;
+        };
         UpdateWidgetKeyDto: {
             /**
              * @description Widget name for identification
              * @example Updated Widget Name
              */
-            name?: string
+            name?: string;
             /**
              * @description Array of allowed domains (without protocol)
              * @example [
@@ -4279,134 +4735,114 @@ export interface components {
              *       "subdomain.example.com"
              *     ]
              */
-            allowedDomains?: string[]
+            allowedDomains?: string[];
             /**
              * @description Maximum number of concurrent sessions (1-100)
              * @example 20
              */
-            maxConcurrentSessions?: number
+            maxConcurrentSessions?: number;
             /**
              * @description Maximum session duration in seconds (60-3600)
              * @example 600
              */
-            maxSessionDuration?: number
+            maxSessionDuration?: number;
             /**
              * @description Assistant ID to connect to this widget
              * @example 1
              */
-            assistantId?: number
+            assistantId?: number;
             /**
              * @description PBX Server ID for this widget
              * @example 1
              */
-            pbxServerId?: number
+            pbxServerId?: number;
             /**
              * @description Default language for the widget
              * @example en
              */
-            language?: string
+            language?: string;
             /**
              * @description Widget logo filename
              * @example logo.png
              */
-            logo?: string
+            logo?: string;
             /**
              * @description Widget appearance settings (JSON string)
              * @example {"buttonColor":"#667eea","theme":"light"}
              */
-            appearance?: string
+            appearance?: string;
             /**
              * @description API URL to encode in the widget JWT token
              * @example https://api.example.com/api
              */
-            apiUrl?: string
-        }
+            apiUrl?: string;
+        };
         aiModel: {
             /**
              * @description Unique ID
              * @example 1
              */
-            id: number
+            id: number;
             /**
              * @description Ai model
              * @example gpt4-mini-realtime
              */
-            name: string
+            name: string;
             /**
              * @description Whether this CDR is published
              * @example false
              */
-            publish: boolean
+            publish: boolean;
             /**
              * @description Published name
              * @example Demo call
              */
-            publishName: string
+            publishName: string;
             /**
              * @description beta llm model
              * @example beta
              */
-            comment: string
-        }
-        AiModelDto: Record<string, never>
-        UpdateAiModelDto: Record<string, never>
-        CreateApiKeyDto: {
-            /**
-             * @description Human-readable label
-             * @example KrAsterisk production
-             */
-            name: string
-            /**
-             * @description Scopes. Null/omit = all scopes.
-             * @example [
-             *       "chat:message",
-             *       "models:read"
-             *     ]
-             */
-            scopes?: string[]
-            /**
-             * @description ISO 8601 expiry. Omit for no expiry.
-             * @example 2027-01-01T00:00:00Z
-             */
-            expiresAt?: string
-        }
+            comment: string;
+        };
+        AiModelDto: Record<string, never>;
+        UpdateAiModelDto: Record<string, never>;
         CreateRobokassaPaymentDto: {
             /**
              * @description Amount in RUB
              * @example 500
              */
-            amount: number
+            amount: number;
             /**
              * @description Payment description
              * @example Account top-up
              */
-            description?: string
-        }
+            description?: string;
+        };
         WidgetOfferDto: {
             /**
              * @description Public widget key
              * @example wk_1a2b3c4d5e6f7g8h9i0j
              */
-            publicKey: string
+            publicKey: string;
             /**
              * @description Domain from which widget is connecting
              * @example example.com
              */
-            domain: string
+            domain: string;
             /**
              * @description WebRTC SDP Offer
              * @example v=0
              *     o=- 123456789 2 IN IP4 127.0.0.1
              *     ...
              */
-            sdpOffer: string
-        }
+            sdpOffer: string;
+        };
         WidgetIceCandidateDto: {
             /**
              * @description Session ID from offer response
              * @example sess_1a2b3c4d5e6f7g8h
              */
-            sessionId: string
+            sessionId: string;
             /**
              * @description ICE candidate object
              * @example {
@@ -4415,38 +4851,38 @@ export interface components {
              *       "sdpMid": "0"
              *     }
              */
-            candidate: Record<string, never>
-        }
+            candidate: Record<string, never>;
+        };
         WidgetHangupDto: {
             /**
              * @description Session ID to terminate
              * @example sess_1a2b3c4d5e6f7g8h
              */
-            sessionId?: string
+            sessionId?: string;
             /**
              * @description Public key to terminate sessions for
              * @example pk_12345
              */
-            publicKey?: string
-        }
+            publicKey?: string;
+        };
         GenerateSchemaDto: {
             /** @description Chat messages context for schema generation */
-            messages: string[]
+            messages: string[];
             /** @description Optional system prompt for context */
-            systemPrompt?: string
-        }
+            systemPrompt?: string;
+        };
         MetricDefinitionDto: {
             /**
              * @description snake_case identifier
              * @example upsell_attempt
              */
-            id: string
+            id: string;
             /** @example Попытка апселла */
-            name: string
+            name: string;
             /** @enum {string} */
-            type: 'boolean' | 'number' | 'enum' | 'string'
+            type: "boolean" | "number" | "enum" | "string";
             /** @example Did the operator attempt to upsell additional services? */
-            description: string
+            description: string;
             /**
              * @example [
              *       "low",
@@ -4454,123 +4890,116 @@ export interface components {
              *       "high"
              *     ]
              */
-            enumValues?: string[]
+            enumValues?: string[];
             /**
              * @description Number scale minimum (default 0)
              * @example 0
              */
-            min?: number
+            min?: number;
             /**
              * @description Number scale maximum (default 100)
              * @example 10
              */
-            max?: number
+            max?: number;
             /**
              * @description Optional display suffix
              * @example /10
              */
-            unit?: string
+            unit?: string;
             /**
              * @description Coloring semantics
              * @enum {string}
              */
-            polarity?: 'positive' | 'negative' | 'neutral'
-        }
+            polarity?: "positive" | "negative" | "neutral";
+        };
         CreateProjectDto: {
             /** @example Отдел продаж */
-            name: string
+            name: string;
             /** @example Входящие звонки менеджеров продаж */
-            description?: string
+            description?: string;
             /** @description Template ID to initialize from */
-            templateId?: string
+            templateId?: string;
             /** @description Business context prompt for LLM (max 1000 chars) */
-            systemPrompt?: string
+            systemPrompt?: string;
             /** @description Custom metrics definitions */
-            customMetricsSchema?: Array<components['schemas']['MetricDefinitionDto']>
+            customMetricsSchema?: components["schemas"]["MetricDefinitionDto"][];
             /** @description Which default metrics to show */
-            visibleDefaultMetrics?: string[]
+            visibleDefaultMetrics?: string[];
             /** @example https://example.com/webhook */
-            webhookUrl?: string
+            webhookUrl?: string;
             /**
              * @example [
              *       "analysis.completed",
              *       "analysis.error"
              *     ]
              */
-            webhookEvents?: string[]
+            webhookEvents?: string[];
             /**
              * @description Custom headers for webhook requests
              * @example {
              *       "Authorization": "Bearer xxx"
              *     }
              */
-            webhookHeaders?: Record<string, never>
+            webhookHeaders?: Record<string, never>;
             /**
              * @description Monthly spend budget in USD (null/0 = disabled)
              * @example 50
              */
-            monthlyBudgetUsd?: number
+            monthlyBudgetUsd?: number;
             /**
              * @description Emails notified on budget exceed
              * @example [
              *       "ops@example.com"
              *     ]
              */
-            budgetAlertEmails?: string[]
-        }
+            budgetAlertEmails?: string[];
+        };
         OperatorInsightEvidenceDto: {
             /** @example greeting_quality */
-            metric?: string
+            metric?: string;
             /** @example 72 */
-            value?: number
+            value?: number;
             /**
              * @example [
              *       "Иванов А."
              *     ]
              */
-            operators?: string[]
+            operators?: string[];
             /** @example 2026-02-01 — 2026-02-13 */
-            periodLabel?: string
-            /**
-             * @description Exemplar CDR channel IDs for drill-down (max 5)
-             * @example [
-             *       "1709123456.123"
-             *     ]
-             */
-            channelIds?: string[]
-        }
+            periodLabel?: string;
+        };
         OperatorInsightDto: {
             /**
              * @example high
              * @enum {string}
              */
-            priority: 'high' | 'medium' | 'low'
+            priority: "high" | "medium" | "low";
             /**
              * @example gap
              * @enum {string}
              */
-            type: 'strength' | 'gap' | 'trend' | 'outlier' | 'quality'
+            type: "strength" | "gap" | "trend" | "outlier" | "quality";
             /** @example Низкая вежливость у части операторов */
-            title: string
+            title: string;
             /** @example Средний показатель politeness_empathy ниже 70 у 3 операторов. */
-            observation: string
+            observation: string;
             /** @example Провести разбор звонков с низкими оценками вежливости. */
-            recommendation: string
-            evidence: components['schemas']['OperatorInsightEvidenceDto']
-        }
+            recommendation: string;
+            evidence: components["schemas"]["OperatorInsightEvidenceDto"];
+        };
         OperatorInsightsResponseDto: {
-            insights: Array<components['schemas']['OperatorInsightDto']>
+            insights: components["schemas"]["OperatorInsightDto"][];
             /** @example 2026-06-24T12:00:00.000Z */
-            generatedAt: string
+            generatedAt: string;
             /** @example 2026-06-18.2 */
-            promptVersion: string
+            promptVersion: string;
             /** @example 42 */
-            sampleSize: number
+            sampleSize: number;
             /** @example false */
-            lowConfidence: boolean
+            lowConfidence: boolean;
             /** @example a1b2c3d4 */
-            factsDigest?: string
-        }
+            factsDigest?: string;
+        };
         BulkMoveDto: {
             /**
              * @description Record IDs to move
@@ -4580,90 +5009,90 @@ export interface components {
              *       3
              *     ]
              */
-            ids: string[]
+            ids: string[];
             /**
              * @description Target project ID
              * @example 5
              */
-            targetProjectId: number
-        }
+            targetProjectId: number;
+        };
         SipTrunks: {
             /**
              * @description Trunk display name
              * @example My SIP Trunk
              */
-            name: string
+            name: string;
             /**
              * @description Trunk type: registration or ip
              * @example registration
              */
-            trunkType: string
+            trunkType: string;
             /**
              * @description External SIP server address (host:port)
              * @example sip.provider.com:5060
              */
-            sipServerAddress: string
+            sipServerAddress: string;
             /**
              * @description SIP transport protocol
              * @example udp
              */
-            transport: string
+            transport: string;
             /**
              * @description Auth username (registration only)
              * @example myuser
              */
-            authName: string
+            authName: string;
             /**
              * @description Auth password (registration only)
              * @example secret
              */
-            password: string
+            password: string;
             /**
              * @description SIP domain (registration only)
              * @example sip.provider.com
              */
-            domain: string
+            domain: string;
             /**
              * @description Caller ID (ip trunk only)
              * @example +74951234567
              */
-            callerId: string
+            callerId: string;
             /**
              * @description Provider IP address (ip trunk only)
              * @example 203.0.113.10
              */
-            providerIp: string
+            providerIp: string;
             /**
              * @description Is trunk active
              * @example true
              */
-            active: boolean
+            active: boolean;
             /**
              * @description Enable call recording
              * @example true
              */
-            records: boolean
-        }
-        CreateSipTrunkDto: Record<string, never>
-        UpdateSipTrunkDto: Record<string, never>
+            records: boolean;
+        };
+        CreateSipTrunkDto: Record<string, never>;
+        UpdateSipTrunkDto: Record<string, never>;
         CreateChatDto: {
             /**
              * @description Chat name
              * @example Helpdesk
              */
-            name: string
+            name: string;
             /** @description System instruction / prompt */
-            instruction?: string
+            instruction?: string;
             /**
              * @description Model name
              * @example gemma4:e4b
              */
-            model?: string
+            model?: string;
             /**
              * @description Temperature
              * @example 0.7
              */
-            temperature?: string
+            temperature?: string;
             /**
              * @description Tool IDs to attach
              * @example [
@@ -4671,26 +5100,26 @@ export interface components {
              *       3
              *     ]
              */
-            toolIds?: string[]
-        }
+            toolIds?: string[];
+        };
         UpdateChatDto: {
-            name?: string
-            instruction?: string
-            model?: string
-            temperature?: string
-            toolIds?: string[]
-        }
+            name?: string;
+            instruction?: string;
+            model?: string;
+            temperature?: string;
+            toolIds?: string[];
+        };
         EphemeralMcpServerDto: {
             /**
              * @description MCP server URL
              * @example https://krasterisk.ru/api/mcp
              */
-            url: string
+            url: string;
             /**
              * @description Transport type: http or websocket
              * @example http
              */
-            transport?: string
+            transport?: string;
             /**
              * @description Custom headers for this MCP server (auth, tenant id, etc.)
              * @example {
@@ -4698,4214 +5127,5138 @@ export interface components {
              *       "X-Vpbx-User-Uid": "42"
              *     }
              */
-            headers?: Record<string, never>
-        }
+            headers?: Record<string, never>;
+        };
         SendMessageDto: {
             /**
              * @description User message
              * @example Сколько стоит консультация?
              */
-            message: string
+            message: string;
             /** @description Conversation history */
-            history?: string[]
+            history?: string[];
             /** @description Ephemeral MCP servers for this request (multi-tenancy support) */
-            mcpServers?: Array<components['schemas']['EphemeralMcpServerDto']>
-        }
+            mcpServers?: components["schemas"]["EphemeralMcpServerDto"][];
+        };
         LegalAcceptanceBatchDto: {
-            items: Array<components['schemas']['LegalAcceptanceItemDto']>
+            items: components["schemas"]["LegalAcceptanceItemDto"][];
             /** @description login | signup | activation | manual */
-            source?: string
-        }
-    }
-    responses: never
-    parameters: never
-    requestBodies: never
-    headers: never
-    pathItems: never
+            source?: string;
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
-export type $defs = Record<string, never>
+export type $defs = Record<string, never>;
 export interface operations {
     UsersController_adminTopUp: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['AdminTopUpDto']
-            }
-        }
+                "application/json": components["schemas"]["AdminTopUpDto"];
+            };
+        };
         responses: {
             /** @description Balance topped up successfully */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     UsersController_getAll: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['User']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"][];
+                };
+            };
+        };
+    };
     UsersController_UpdateUser: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['User']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+        };
+    };
     UsersController_create: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateUserDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateUserDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['User']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+        };
+    };
     UsersController_updateUser: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['User']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"][];
+                };
+            };
+        };
+    };
     UsersController_createSubUser: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateSubUserDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateSubUserDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['User']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+        };
+    };
     UsersController_getSubUsers: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['User']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"][];
+                };
+            };
+        };
+    };
     UsersController_getTenantMembers: {
         parameters: {
             query: {
-                ownerUserId: string
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                ownerUserId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['User']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"][];
+                };
+            };
+        };
+    };
     UsersController_listBalanceAlerts: {
         parameters: {
             query: {
-                ownerUserId: string
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                ownerUserId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['BalanceThresholdAlert']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["BalanceThresholdAlert"][];
+                };
+            };
+        };
+    };
     UsersController_createBalanceAlert: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateBalanceThresholdAlertDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateBalanceThresholdAlertDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['BalanceThresholdAlert']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["BalanceThresholdAlert"];
+                };
+            };
+        };
+    };
     UsersController_deleteBalanceAlert: {
         parameters: {
             query: {
-                ownerUserId: string
-            }
-            header?: never
+                ownerUserId: string;
+            };
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     UsersController_updateBalanceAlert: {
         parameters: {
             query: {
-                ownerUserId: string
-            }
-            header?: never
+                ownerUserId: string;
+            };
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
+                id: string;
+            };
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['UpdateBalanceThresholdAlertDto']
-            }
-        }
+                "application/json": components["schemas"]["UpdateBalanceThresholdAlertDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['BalanceThresholdAlert']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["BalanceThresholdAlert"];
+                };
+            };
+        };
+    };
     UsersController_get: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['User']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"][];
+                };
+            };
+        };
+    };
     UsersController_getBalance: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': string
-                }
-            }
-        }
-    }
+                    "application/json": string;
+                };
+            };
+        };
+    };
     UsersController_getMe: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['User']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+        };
+    };
     UsersController_getUserProfile: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['User']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"][];
+                };
+            };
+        };
+    };
     UsersController_updateUserProfile: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['User']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"][];
+                };
+            };
+        };
+    };
     UsersController_getOne: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['User']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"][];
+                };
+            };
+        };
+    };
     UsersController_DeleteUser: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     UsersController_getProfileById: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['User']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"][];
+                };
+            };
+        };
+    };
     UsersController_addRole: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['AddRoleDto']
-            }
-        }
+                "application/json": components["schemas"]["AddRoleDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     UsersController_removeRole: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['AddRoleDto']
-            }
-        }
+                "application/json": components["schemas"]["AddRoleDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     UsersController_UpdateUserAvatar: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['User']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+        };
+    };
     UsersController_setUsageLimit: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateUserLimitDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateUserLimitDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['UserLimits']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["UserLimits"];
+                };
+            };
+        };
+    };
     UsersController_getUsageLimit: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                userId: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['UserLimits']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["UserLimits"];
+                };
+            };
+        };
+    };
     RolesController_getAll: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['Role']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Role"][];
+                };
+            };
+        };
+    };
     RolesController_create: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateRoleDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateRoleDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['Role']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Role"];
+                };
+            };
+        };
+    };
     RolesController_getByValue: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                value: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                value: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['Role']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Role"][];
+                };
+            };
+        };
+    };
     AuthController_login: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateUserDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateUserDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AuthController_signup: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateUserDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateUserDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AuthController_googleLogin: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AuthController_googleSignup: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AuthController_telegramLogin: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['TelegramAuthDto']
-            }
-        }
+                "application/json": components["schemas"]["TelegramAuthDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AuthController_telegramSignup: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['TelegramAuthDto']
-            }
-        }
+                "application/json": components["schemas"]["TelegramAuthDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AuthController_activate: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['ActivationDto']
-            }
-        }
+                "application/json": components["schemas"]["ActivationDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     LoggerController_getAll: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['Logs']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Logs"][];
+                };
+            };
+        };
+    };
     LoggerController_get: {
         parameters: {
             query?: {
-                page?: components['schemas']['Object']
-                limit?: components['schemas']['Object']
-                search?: string
-                action?: string
-                entity?: string
+                page?: components["schemas"]["Object"];
+                limit?: components["schemas"]["Object"];
+                search?: string;
+                action?: string;
+                entity?: string;
                 /** @description Filter by severity: info, warning, critical */
-                severity?: string
-                startDate?: string
-                endDate?: string
-                userId?: string
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                severity?: string;
+                startDate?: string;
+                endDate?: string;
+                userId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['Logs']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Logs"][];
+                };
+            };
+        };
+    };
     SbisController_lookup: {
         parameters: {
             query: {
-                inn: string
-                kpp: string
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                inn: string;
+                kpp: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     CurrencyController_update: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['Payments']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Payments"];
+                };
+            };
+        };
+    };
     BillingController_getBillingHistory: {
         parameters: {
             query?: {
-                page?: string
-                limit?: string
-                startDate?: string
-                endDate?: string
-                userId?: string
-                type?: string
-                sortField?: string
-                sortOrder?: string
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                page?: string;
+                limit?: string;
+                startDate?: string;
+                endDate?: string;
+                userId?: string;
+                type?: string;
+                sortField?: string;
+                sortOrder?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Paginated billing records */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     BillingController_backfillFx: {
         parameters: {
             query?: {
                 /** @description Only billing records for this userId (owner). Omit to process all users (up to limit). */
-                userId?: string
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                userId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Number of records updated */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     BillingController_runRunwayCheck: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Processed tenant owners */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     BillingController_runClosingDocuments: {
         parameters: {
             query?: {
                 /** @description Organization id (required unless dryRun + confirmAll) */
-                organizationId?: number
-                periodFrom?: string
-                periodTo?: string
-                documentDate?: string
-                sendViaEdo?: boolean
-                dryRun?: boolean
+                organizationId?: number;
+                periodFrom?: string;
+                periodTo?: string;
+                documentDate?: string;
+                sendViaEdo?: boolean;
+                dryRun?: boolean;
                 /** @description Run for all orgs (only with dryRun or explicit confirm) */
-                confirmAll?: boolean
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                confirmAll?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Closing result */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OurOrganizationsController_getAll: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['OurOrganization']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["OurOrganization"][];
+                };
+            };
+        };
+    };
     OurOrganizationsController_create: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateOurOrganizationDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateOurOrganizationDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OurOrganizationsController_getPrimary: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OurOrganizationsController_delete: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OurOrganizationsController_update: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
+                id: string;
+            };
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateOurOrganizationDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateOurOrganizationDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OrganizationsController_getAll: {
         parameters: {
             query: {
-                userId: string
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                userId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['Organization']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Organization"][];
+                };
+            };
+        };
+    };
     OrganizationsController_create: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateOrganizationDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateOrganizationDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['Organization']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Organization"];
+                };
+            };
+        };
+    };
     OrganizationsController_getDefaultSubject: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OrganizationsController_syncPendingEdoInvitations: {
         parameters: {
             query: {
-                userId: string
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                userId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OrganizationsController_createInvoice: {
         parameters: {
-            query?: never
+            query?: never;
             header: {
-                host: string
-                'x-forwarded-host': string
-            }
+                host: string;
+                "x-forwarded-host": string;
+            };
             path: {
-                id: string
-            }
-            cookie?: never
-        }
+                id: string;
+            };
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateInvoiceDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateInvoiceDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OrganizationsController_getEdoInvitation: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OrganizationsController_sendEdoInvitation: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OrganizationsController_syncEdoInvitation: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OrganizationsController_checkEdoRoute: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OrganizationsController_listDocuments: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OrganizationsController_getDocumentPdf: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-                docId: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+                docId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OrganizationsController_resendSbis: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-                docId: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+                docId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OrganizationsController_deleteDocument: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-                docId: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+                docId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OrganizationsController_getOne: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['Organization']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Organization"];
+                };
+            };
+        };
+    };
     OrganizationsController_update: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
+                id: string;
+            };
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateOrganizationDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateOrganizationDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['Organization']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Organization"];
+                };
+            };
+        };
+    };
     OrganizationsController_remove: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     PricesController_getPublicPrices: {
         parameters: {
             query?: {
                 /** @description Currency code (e.g. RUB, EUR). Defaults to USD */
-                currency?: string
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                currency?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['Prices']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Prices"];
+                };
+            };
+        };
+    };
     PricesController_findAll: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['Prices']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Prices"][];
+                };
+            };
+        };
+    };
     PricesController_create: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreatePriceDto']
-            }
-        }
+                "application/json": components["schemas"]["CreatePriceDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['Prices']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Prices"];
+                };
+            };
+        };
+    };
     PricesController_findOne: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['Prices']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Prices"];
+                };
+            };
+        };
+    };
     PricesController_update: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
+                id: number;
+            };
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['UpdatePriceDto']
-            }
-        }
+                "application/json": components["schemas"]["UpdatePriceDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['Prices']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Prices"];
+                };
+            };
+        };
+    };
     PricesController_remove: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OpenAiController_request: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['openAiMessage']
-            }
-        }
+                "application/json": components["schemas"]["openAiMessage"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['openAiMessage']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["openAiMessage"];
+                };
+            };
+        };
+    };
     AiCdrController_get: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['AiCdr']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["AiCdr"];
+                };
+            };
+        };
+    };
     AiCdrController_getEvents: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                channelId: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                channelId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['AiEvents']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["AiEvents"][];
+                };
+            };
+        };
+    };
     AiCdrController_getDialogs: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                channelId: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                channelId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['AiEvents']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["AiEvents"][];
+                };
+            };
+        };
+    };
     AiCdrController_getDashboard: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['AiCdr']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["AiCdr"];
+                };
+            };
+        };
+    };
     AiCdrController_deleteReport: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Report deleted */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AiAnalyticsController_getDashboard: {
         parameters: {
             query?: {
                 /** @description User ID filter */
-                userId?: string
+                userId?: string;
                 /** @description Assistant ID filter (comma-separated for multiple) */
-                assistantId?: string
+                assistantId?: string;
                 /** @description Start date (YYYY-MM-DD) */
-                startDate?: string
+                startDate?: string;
                 /** @description End date (YYYY-MM-DD) */
-                endDate?: string
+                endDate?: string;
                 /** @description Source filter: call, widget, playground */
-                source?: string
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                source?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Dashboard data with aggregated metrics */
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Record<string, never>
-                }
-            }
-        }
-    }
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
     AiAnalyticsController_getByChannelId: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                channelId: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                channelId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Analytics data */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AiAnalyticsController_create: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                channelId: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                channelId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Analytics created */
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AiToolsController_getAll: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['AiTool']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["AiTool"];
+                };
+            };
+        };
+    };
     AiToolsController_create: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': string[]
-            }
-        }
+                "application/json": string[];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['AiTool']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["AiTool"];
+                };
+            };
+        };
+    };
     AiToolsController_update: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['ToolDto']
-            }
-        }
+                "application/json": components["schemas"]["ToolDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['AiTool']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["AiTool"];
+                };
+            };
+        };
+    };
     AiToolsController_get: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['AiTool']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["AiTool"];
+                };
+            };
+        };
+    };
     AiToolsController_getOne: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['AiTool']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["AiTool"][];
+                };
+            };
+        };
+    };
     AiToolsController_delete: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     KnowledgeController_getKnowledgeBases: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     KnowledgeController_createKnowledgeBase: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateKnowledgeBaseDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateKnowledgeBaseDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     KnowledgeController_updateKnowledgeBase: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
+                id: number;
+            };
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['UpdateKnowledgeBaseDto']
-            }
-        }
+                "application/json": components["schemas"]["UpdateKnowledgeBaseDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     KnowledgeController_deleteKnowledgeBase: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     KnowledgeController_getDocuments: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     KnowledgeController_uploadFile: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     KnowledgeController_addUrl: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
+                id: number;
+            };
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['AddUrlDto']
-            }
-        }
+                "application/json": components["schemas"]["AddUrlDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     KnowledgeController_deleteDocument: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                docId: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                docId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     KnowledgeController_search: {
         parameters: {
             query: {
-                q: string
-                limit: string
-            }
-            header?: never
+                q: string;
+                limit: string;
+            };
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_getAll: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_createServer: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody: {
-            content: {
-                'application/json': components['schemas']['CreateMcpServerDto']
-            }
-        }
-        responses: {
-            201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_get: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskController_listTickets: {
         parameters: {
             query?: {
-                page?: components['schemas']['Object']
-                limit?: components['schemas']['Object']
-                search?: string
-                userId?: string
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                status?: string;
+                category?: string;
+                priority?: string;
+                /** @description null = только неназначенные */
+                assigneeId?: string;
+                /** @description Поиск по имени клиента, ИНН, телефону */
+                q?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_deleteServer: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HelpdeskTicket"][];
+                };
+            };
+        };
+    };
+    HelpdeskController_createTicket: {
         parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_updateServer: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: number
-            }
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['UpdateMcpServerDto']
-            }
-        }
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_connectServer: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                "application/json": components["schemas"]["CreateHelpdeskTicketDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_disconnectServer: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskController_getTicket: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_syncTools: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_getServerTools: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_toggleTool: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskController_updateTicket: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_bulkToggleTools: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_getPolicies: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_createPolicy: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: number
-            }
-            cookie?: never
-        }
+                id: number;
+            };
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateMcpPolicyDto']
-            }
-        }
+                "application/json": components["schemas"]["UpdateHelpdeskTicketDto"];
+            };
+        };
         responses: {
-            201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_deletePolicy: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskController_claimTicket: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_getLogs: {
-        parameters: {
-            query: {
-                limit: number
-                offset: number
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_getComposioTemplates: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_composioConnect: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_composioConnectApiKey: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskController_addMessage: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_bitrix24Connect: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_telegramConnect: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_composioCallback: {
-        parameters: {
-            query: {
-                userId: string
-                toolkit: string
-                status: string
-                connected_account_id: string
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_composioStatus: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_getComposioConnections: {
-        parameters: {
-            query: {
-                toolkit: string
-            }
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_deleteComposioConnection: {
-        parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_discoverComposioActions: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                toolkit: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    McpClientController_executeComposioAction: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateHelpdeskMessageDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HelpdeskTicketMessage"];
+                };
+            };
+        };
+    };
+    HelpdeskController_identifyClient: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HelpdeskIdentifyBodyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HelpdeskIdentifyResultDto"];
+                };
+            };
+        };
+    };
+    HelpdeskController_getSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HelpdeskSettings"];
+                };
+            };
+        };
+    };
+    HelpdeskController_updateSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateHelpdeskSettingsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskController_getLlmContext: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                clientKey: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskController_updateLlmContextOverride: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                clientKey: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HelpdeskLlmContextOverrideDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskToolsController_identifyClient: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HelpdeskToolsIdentifyDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskToolsController_getClientInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HelpdeskToolsClientRefDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskToolsController_getLlmContext: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HelpdeskToolsClientRefDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskToolsController_createTicket: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HelpdeskToolsCreateTicketDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskToolsController_addMessage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HelpdeskToolsAddMessageDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskToolsController_pbxGetVpbxUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HelpdeskToolsPbxClientDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskToolsController_pbxListSipRegistrations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HelpdeskToolsPbxClientDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskToolsController_pbxPromisedPayment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HelpdeskToolsPromisedPaymentDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HelpdeskToolsController_pbxHangupChannel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HelpdeskToolsHangupDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     TelegramController_handleWebhook: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    AssistantsController_getAll: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['Assistant']
-                }
-            }
-        }
-    }
-    AssistantsController_create: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody: {
-            content: {
-                'application/json': string[]
-            }
-        }
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['Assistant']
-                }
-            }
-        }
-    }
-    AssistantsController_update: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody: {
-            content: {
-                'application/json': components['schemas']['AssistantDto']
-            }
-        }
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['Assistant']
-                }
-            }
-        }
-    }
-    AssistantsController_get: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['Assistant']
-                }
-            }
-        }
-    }
-    AssistantsController_getOne: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': Array<components['schemas']['Assistant']>
-                }
-            }
-        }
-    }
-    AssistantsController_delete: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    AssistantsController_generatePrompt: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    AssistantsController_uploadTtsVoice: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    PbxServersController_getAll: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['PbxServers']
-                }
-            }
-        }
-    }
-    PbxServersController_create: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody: {
-            content: {
-                'application/json': components['schemas']['PbxDto']
-            }
-        }
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['PbxServers']
-                }
-            }
-        }
-    }
-    PbxServersController_update: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody: {
-            content: {
-                'application/json': components['schemas']['PbxDto']
-            }
-        }
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['PbxServers']
-                }
-            }
-        }
-    }
-    PbxServersController_get: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['PbxServers']
-                }
-            }
-        }
-    }
-    PbxServersController_getCloud: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': Array<components['schemas']['PbxServers']>
-                }
-            }
-        }
-    }
-    PbxServersController_getCloudAndUser: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': Array<components['schemas']['PbxServers']>
-                }
-            }
-        }
-    }
-    PbxServersController_getOne: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': Array<components['schemas']['PbxServers']>
-                }
-            }
-        }
-    }
-    PbxServersController_delete: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    PbxServersController_createSipUri: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody: {
-            content: {
-                'application/json': components['schemas']['SipAccountDto']
-            }
-        }
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['SipAccounts']
-                }
-            }
-        }
-    }
-    PbxServersController_updateSipUri: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody: {
-            content: {
-                'application/json': components['schemas']['SipAccountDto']
-            }
-        }
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['SipAccounts']
-                }
-            }
-        }
-    }
-    PbxServersController_deleteSipUri: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody: {
-            content: {
-                'application/json': components['schemas']['SipAccountDto']
-            }
-        }
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    PbxServersController_getStatus: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                uniqueId: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': {
-                        online?: boolean
-                    }
-                }
-            }
-        }
-    }
-    WidgetKeysController_uploadLogo: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody: {
-            content: {
-                'multipart/form-data': {
-                    /** Format: binary */
-                    image?: string
-                }
-            }
-        }
-        responses: {
-            /** @description Logo uploaded successfully */
-            201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    WidgetKeysController_findAll: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            /** @description List of widget keys */
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': Array<components['schemas']['WidgetKey']>
-                }
-            }
-            /** @description Unauthorized */
-            401: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    WidgetKeysController_create: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody: {
-            content: {
-                'application/json': components['schemas']['CreateWidgetKeyDto']
-            }
-        }
-        responses: {
-            /** @description Widget key created successfully */
-            201: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['WidgetKey']
-                }
-            }
-            /** @description Unauthorized */
-            401: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-            /** @description Forbidden - Assistant does not belong to user */
-            403: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-            /** @description Assistant not found */
-            404: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    WidgetKeysController_findOne: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            /** @description Widget key details */
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['WidgetKey']
-                }
-            }
-            /** @description Unauthorized */
-            401: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-            /** @description Widget key not found */
-            404: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    WidgetKeysController_update: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody: {
-            content: {
-                'application/json': components['schemas']['UpdateWidgetKeyDto']
-            }
-        }
-        responses: {
-            /** @description Widget key updated successfully */
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['WidgetKey']
-                }
-            }
-            /** @description Unauthorized */
-            401: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-            /** @description Widget key not found */
-            404: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    WidgetKeysController_remove: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            /** @description Widget key deleted successfully */
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-            /** @description Unauthorized */
-            401: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-            /** @description Widget key not found */
-            404: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    WidgetKeysController_getEmbed: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            /** @description Embed code and token */
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-            /** @description Widget key not found */
-            404: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    AiModelsController_getAll: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['aiModel']
-                }
-            }
-        }
-    }
-    AiModelsController_create: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody: {
-            content: {
-                'application/json': components['schemas']['AiModelDto']
-            }
-        }
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['aiModel']
-                }
-            }
-        }
-    }
-    AiModelsController_delete: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    AiModelsController_update: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody: {
-            content: {
-                'application/json': components['schemas']['UpdateAiModelDto']
-            }
-        }
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': components['schemas']['aiModel']
-                }
-            }
-        }
-    }
-    AiModelsController_getPublished: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    AiModelsController_getOllamaModels: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    AiModelsController_getOllamaModelsExternal: {
-        parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
-    AiModelsController_getOne: {
-        parameters: {
-            query?: never
-            header?: never
-            path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
-        responses: {
-            200: {
-                headers: Record<string, unknown>
-                content: {
-                    'application/json': Array<components['schemas']['aiModel']>
-                }
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     ApiKeyController_getAll: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     ApiKeyController_create: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateApiKeyDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateApiKeyDto"];
+            };
+        };
         responses: {
             /** @description { apiKey, rawToken } */
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     ApiKeyController_revoke: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_getAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_createServer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateMcpServerDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_get: {
+        parameters: {
+            query?: {
+                page?: components["schemas"]["Object"];
+                limit?: components["schemas"]["Object"];
+                search?: string;
+                userId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_deleteServer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_updateServer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMcpServerDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_connectServer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_disconnectServer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_syncTools: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_getServerTools: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_toggleTool: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_bulkToggleTools: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_getPolicies: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_createPolicy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateMcpPolicyDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_deletePolicy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_getLogs: {
+        parameters: {
+            query: {
+                limit: number;
+                offset: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_getComposioTemplates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_composioConnect: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_composioConnectApiKey: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_bitrix24Connect: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_telegramConnect: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_composioCallback: {
+        parameters: {
+            query: {
+                userId: string;
+                toolkit: string;
+                status: string;
+                connected_account_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_composioStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_getComposioConnections: {
+        parameters: {
+            query: {
+                toolkit: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_deleteComposioConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_discoverComposioActions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                toolkit: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpClientController_executeComposioAction: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AssistantsController_getAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Assistant"];
+                };
+            };
+        };
+    };
+    AssistantsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": string[];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Assistant"];
+                };
+            };
+        };
+    };
+    AssistantsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Assistant"];
+                };
+            };
+        };
+    };
+    AssistantsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Assistant"];
+                };
+            };
+        };
+    };
+    AssistantsController_getOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Assistant"][];
+                };
+            };
+        };
+    };
+    AssistantsController_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AssistantsController_generatePrompt: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AssistantsController_uploadTtsVoice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PbxServersController_getAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PbxServers"];
+                };
+            };
+        };
+    };
+    PbxServersController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PbxDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PbxServers"];
+                };
+            };
+        };
+    };
+    PbxServersController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PbxDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PbxServers"];
+                };
+            };
+        };
+    };
+    PbxServersController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PbxServers"];
+                };
+            };
+        };
+    };
+    PbxServersController_getCloud: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PbxServers"][];
+                };
+            };
+        };
+    };
+    PbxServersController_getCloudAndUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PbxServers"][];
+                };
+            };
+        };
+    };
+    PbxServersController_getOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PbxServers"][];
+                };
+            };
+        };
+    };
+    PbxServersController_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PbxServersController_createSipUri: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SipAccountDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SipAccounts"];
+                };
+            };
+        };
+    };
+    PbxServersController_updateSipUri: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SipAccountDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SipAccounts"];
+                };
+            };
+        };
+    };
+    PbxServersController_deleteSipUri: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SipAccountDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PbxServersController_getStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                uniqueId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        online?: boolean;
+                    };
+                };
+            };
+        };
+    };
+    WidgetKeysController_uploadLogo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    image?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Logo uploaded successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    WidgetKeysController_findAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of widget keys */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WidgetKey"][];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    WidgetKeysController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWidgetKeyDto"];
+            };
+        };
+        responses: {
+            /** @description Widget key created successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WidgetKey"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden - Assistant does not belong to user */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Assistant not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    WidgetKeysController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Widget key details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WidgetKey"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Widget key not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    WidgetKeysController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWidgetKeyDto"];
+            };
+        };
+        responses: {
+            /** @description Widget key updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WidgetKey"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Widget key not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    WidgetKeysController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Widget key deleted successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Widget key not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    WidgetKeysController_getEmbed: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Embed code and token */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Widget key not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AiModelsController_getAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["aiModel"];
+                };
+            };
+        };
+    };
+    AiModelsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiModelDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["aiModel"];
+                };
+            };
+        };
+    };
+    AiModelsController_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AiModelsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAiModelDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["aiModel"];
+                };
+            };
+        };
+    };
+    AiModelsController_getPublished: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AiModelsController_getOllamaModels: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AiModelsController_getOllamaModelsExternal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AiModelsController_getOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["aiModel"][];
+                };
+            };
+        };
+    };
     PaymentsController_getUserPayments: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['Payments']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Payments"][];
+                };
+            };
+        };
+    };
     PaymentsController_create: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': string[]
-            }
-        }
+                "application/json": string[];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['Payments']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["Payments"];
+                };
+            };
+        };
+    };
     PaymentsController_createIntent: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     PaymentsController_webhook: {
         parameters: {
-            query?: never
+            query?: never;
             header: {
-                'stripe-signature': string
-            }
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                "stripe-signature": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     PaymentsController_createRobokassaPayment: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateRobokassaPaymentDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateRobokassaPaymentDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     PaymentsController_robokassaResult: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     PaymentsController_robokassaSuccess: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     PaymentsController_robokassaFail: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     PaymentsController_alfaCallback: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     PaymentsController_getRobokassaStatus: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                invId: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                invId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     WidgetController_handleOffer: {
         parameters: {
-            query?: never
+            query?: never;
             header: {
-                'user-agent': string
-            }
-            path?: never
-            cookie?: never
-        }
+                "user-agent": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['WidgetOfferDto']
-            }
-        }
+                "application/json": components["schemas"]["WidgetOfferDto"];
+            };
+        };
         responses: {
             /** @description WebRTC session created, returns SDP answer */
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': {
+                    "application/json": {
                         /** @example sess_1a2b3c4d5e6f7g8h */
-                        sessionId?: string
+                        sessionId?: string;
                         /**
                          * @example v=0
                          *     o=- ...
                          */
-                        sdpAnswer?: string
-                    }
-                }
-            }
+                        sdpAnswer?: string;
+                    };
+                };
+            };
             /** @description Max concurrent sessions reached */
             400: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Forbidden - Invalid key or domain */
             403: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Widget key not found */
             404: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     WidgetController_handleIceCandidate: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['WidgetIceCandidateDto']
-            }
-        }
+                "application/json": components["schemas"]["WidgetIceCandidateDto"];
+            };
+        };
         responses: {
             /** @description ICE candidate added */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Session not found */
             404: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     WidgetController_handleHangup: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['WidgetHangupDto']
-            }
-        }
+                "application/json": components["schemas"]["WidgetHangupDto"];
+            };
+        };
         responses: {
             /** @description Session terminated */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Session not found */
             404: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     WidgetController_getConfig: {
         parameters: {
-            query?: never
+            query?: never;
             header: {
-                origin: string
-                referer: string
-            }
+                origin: string;
+                referer: string;
+            };
             path: {
-                publicKey: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                publicKey: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Widget configuration */
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': {
+                    "application/json": {
                         /** @example uuid-1234-5678 */
-                        assistantId?: string
+                        assistantId?: string;
                         /** @example Customer Support Bot */
-                        assistantName?: string
+                        assistantName?: string;
                         /** @example alloy */
-                        voice?: string
+                        voice?: string;
                         /** @example en */
-                        language?: string
+                        language?: string;
                         /** @example wss://pbx.example.com:8089/ws */
-                        wsUrl?: string
+                        wsUrl?: string;
                         /** @example pbx.example.com */
-                        sipDomain?: string
+                        sipDomain?: string;
                         /** @example /static/uuid.jpg */
-                        logo?: string
+                        logo?: string;
                         /**
                          * @example {
                          *       "buttonColor": "#667eea",
                          *       "theme": "light"
                          *     }
                          */
-                        appearance?: Record<string, never>
+                        appearance?: Record<string, never>;
                         /** @example 10 */
-                        maxConcurrentSessions?: number
+                        maxConcurrentSessions?: number;
                         /** @example 600 */
-                        maxSessionDuration?: number
-                    }
-                }
-            }
+                        maxSessionDuration?: number;
+                    };
+                };
+            };
             /** @description Max concurrent sessions reached */
             400: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Widget key is not active or domain not allowed */
             403: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Widget key not found */
             404: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     WidgetController_getConfigByToken: {
         parameters: {
-            query?: never
+            query?: never;
             header: {
-                authorization: string
-            }
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+                authorization: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Widget configuration */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Invalid or missing token */
             401: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_getActiveBatches: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Array of active batches with progress */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_getBatchStatus: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                batchId: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                batchId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Batch progress with per-file status */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Batch not found */
             404: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_uploadFromFrontend: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Analysis result (single file) or batch status (multiple files) */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Insufficient balance */
             402: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description File too large */
             413: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_regenerateAnalysis: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                channelId: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                channelId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Updated call record with new analytics and billing entry */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Insufficient balance */
             402: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_uploadFromApi: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Analysis result or batch status */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_analyzeFromUrl: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Analysis result (single) or batch status (multiple) */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_getResults: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Paginated list of results */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_getResultById: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Full analysis result with transcript and metrics */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Not found */
             404: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_generateToken: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Token generated */
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_listTokens: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_revokeToken: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_deleteToken: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_generateSchema: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['GenerateSchemaDto']
-            }
-        }
+                "application/json": components["schemas"]["GenerateSchemaDto"];
+            };
+        };
         responses: {
             /** @description MetricDefinition[] */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_listProjects: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_createProject: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateProjectDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateProjectDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_updateProjectPost: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_deleteProject: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_updateProject: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_deleteProjectPost: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_getProjectDashboard: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_previewMetric: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_getProjectInsights: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['OperatorInsightsResponseDto']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["OperatorInsightsResponseDto"];
+                };
+            };
+        };
+    };
     OperatorAnalyticsController_bulkMoveCdrs: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['BulkMoveDto']
-            }
-        }
+                "application/json": components["schemas"]["BulkMoveDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_getCdrs: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Paginated CDR list */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_getDashboard: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Dashboard metrics */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_getDashboardInsights: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Structured AI insights with priority, evidence, and metadata */
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['OperatorInsightsResponseDto']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["OperatorInsightsResponseDto"];
+                };
+            };
+        };
+    };
     OperatorAnalyticsController_getOverrides: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_saveOverrides: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_deleteOverride: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-                metricId: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+                metricId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     OperatorAnalyticsController_getById: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: string
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Full analysis result */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Not found */
             404: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     WhisperController_recognize: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Transcription result { text, duration } */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description No file provided */
             400: {
-                headers: Record<string, unknown>
-                content?: never
-            }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             /** @description Whisper service error */
             502: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     WhisperController_health: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Health status */
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     SipTrunksController_findAll: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': Array<components['schemas']['SipTrunks']>
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["SipTrunks"][];
+                };
+            };
+        };
+    };
     SipTrunksController_create: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateSipTrunkDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateSipTrunkDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['SipTrunks']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["SipTrunks"];
+                };
+            };
+        };
+    };
     SipTrunksController_findOne: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['SipTrunks']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["SipTrunks"];
+                };
+            };
+        };
+    };
     SipTrunksController_update: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
+                id: number;
+            };
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['UpdateSipTrunkDto']
-            }
-        }
+                "application/json": components["schemas"]["UpdateSipTrunkDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': components['schemas']['SipTrunks']
-                }
-            }
-        }
-    }
+                    "application/json": components["schemas"]["SipTrunks"];
+                };
+            };
+        };
+    };
     SipTrunksController_remove: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     SipTrunksController_getStatus: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
+                headers: {
+                    [name: string]: unknown;
+                };
                 content: {
-                    'application/json': {
-                        online?: boolean
-                    }
-                }
-            }
-        }
-    }
+                    "application/json": {
+                        online?: boolean;
+                    };
+                };
+            };
+        };
+    };
     ChatController_getAll: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     ChatController_create: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['CreateChatDto']
-            }
-        }
+                "application/json": components["schemas"]["CreateChatDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     ChatController_getById: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     ChatController_update: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
+                id: number;
+            };
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['UpdateChatDto']
-            }
-        }
+                "application/json": components["schemas"]["UpdateChatDto"];
+            };
+        };
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     ChatController_delete: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
-        requestBody?: never
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     ChatController_sendMessage: {
         parameters: {
-            query?: never
-            header?: never
+            query?: never;
+            header?: never;
             path: {
-                id: number
-            }
-            cookie?: never
-        }
+                id: number;
+            };
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['SendMessageDto']
-            }
-        }
+                "application/json": components["schemas"]["SendMessageDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     LegalController_record: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         requestBody: {
             content: {
-                'application/json': components['schemas']['LegalAcceptanceBatchDto']
-            }
-        }
+                "application/json": components["schemas"]["LegalAcceptanceBatchDto"];
+            };
+        };
         responses: {
             201: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     LegalController_listMine: {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        requestBody?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
-                headers: Record<string, unknown>
-                content?: never
-            }
-        }
-    }
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
 }

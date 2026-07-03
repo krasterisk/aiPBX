@@ -266,6 +266,61 @@
 | 07-03 | 2 | 07-01 | Frontend: entity, list (table+kanban), detail, routes |
 | 07-04 | 3 | 07-02, 07-03 | Voice scenario doc + pbx-remote-handler CLI |
 
+### Phase 8: User docs overhaul — menu-by-menu актуализация
+
+**Goal:** Полностью актуализировать пользовательскую документацию `public/docs/` (ru + en): пройти каждый пункт меню (кроме «Управление»), описать реальный функционал простым языком, дополнить разделы по аналитике, обновить макеты страниц.
+
+**GAPs:** GAP-14 (docs screenshots), product docs debt (нет разделов: Звонки, Базы знаний, OA Проекты/API, SIP Trunks)
+
+**Depends on:** Phase 2 (screenshot pipeline), Phase 3 (актуальная аналитика для описания)
+
+**Context:** `.planning/phases/08-user-docs-overhaul-menu-by-menu-public-docs-ru-en/08-CONTEXT.md`
+
+**Repos:** `aiPBX` only (`public/docs/`, `scripts/capture-docs-screenshots.ts`)
+
+### Scope — покрытие по меню (без «Управление»)
+
+| Меню | Подпункты | Документ / действие |
+|------|-----------|---------------------|
+| Дашборды | Сводный, Аналитика ботов, Аналитика звонков | Расширить `06-dashboards.md` — три экрана, метрики, AI insights, drill-down |
+| Звонки | — | **Новый** `09-calls.md` — журнал, фильтры, карточка звонка, связь с аналитикой |
+| AI Боты | Ассистенты | Актуализировать `02-assistants.md` |
+| | Песочница | Актуализировать `05-playground.md` |
+| | Функции | Актуализировать `03-tools.md` |
+| | MCP Серверы | Актуализировать `04-mcp-servers.md` |
+| | Базы знаний | **Новый** `10-knowledge-bases.md` — RAG, загрузка, привязка к ассистенту |
+| | Публикация → SIPs, SIP Trunks, Виджеты | Расширить `07-publish.md` (отдельно транки и виджеты) |
+| Аналитика | Проекты, API | **Новый** `11-operator-analytics.md` — проекты, метрики, загрузка, API-токены |
+| Оплата | — | Актуализировать `08-payments.md` (Robokassa, SBIS, баланс) |
+| Пользователи | (owner, не admin) | Добавить в `01-getting-started.md` или отдельный подраздел |
+
+**Исключено:** раздел «Управление» (пользователи admin, модели, цены, организации, helpdesk, PBX, AI чаты).
+
+### Качество контента
+
+- Язык для новичка: пошаговые сценарии «что нажать → что увидите → что дальше»
+- Без шаблонных AI-фраз и длинных тире (—); живой русский/английский
+- Скриншоты: HTML-макеты реальных страниц (`form-mockup` + `scripts/capture-docs-screenshots.ts`), не stock-фото
+- Синхронизация `ru/` и `en/`; обновить `README.md` оглавление в обоих языках
+- Перекрёстные ссылки между разделами (ассистент → песочница → публикация → звонки → дашборд)
+
+### Suggested plan breakdown (for `/gsd-plan-phase 8`)
+
+| Plan | Wave | Scope |
+|------|------|-------|
+| 08-01 | 1 | Аудит меню vs docs; CONTEXT; обновить README + getting-started |
+| 08-02 | 2 | AI Боты блок (assistants, tools, MCP, KB, playground, publish) + макеты |
+| 08-03 | 2 | Дашборды + Звонки + Operator Analytics (новые/расширенные разделы) |
+| 08-04 | 3 | Оплата, en-паритет, screenshot capture, DOCS-INDEX / GAP-14 close |
+
+**Status:** Not planned yet
+
+**Plans:** 0/4
+
+Plans:
+
+- [ ] TBD (run `/gsd-plan-phase 8` to break down)
+
 ---
 
 ## Weekly agent cycle (from Phase 0b onward)
