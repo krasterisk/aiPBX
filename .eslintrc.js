@@ -1,5 +1,5 @@
 module.exports = {
-  ignorePatterns: ['src/shared/api/generated/**'],
+  ignorePatterns: ['src/shared/api/generated/**', 'scripts/pbx-remote-handler/**'],
   env: {
     browser: true,
     es2021: true
