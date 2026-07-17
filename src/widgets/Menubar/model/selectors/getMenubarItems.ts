@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { getUserAuthData, isUserAdmin, isOwnerUser } from '@/entities/User'
+import { getUserAuthData, isUserAdmin, canManageTenantUsers } from '@/entities/User'
 import {
   getRouteAssistants,
   getRoutePbxServers,
@@ -58,7 +58,7 @@ export const useMenubarItems = () => {
   const userData = useSelector(getUserAuthData)
   const { t } = useTranslation()
   const isAdmin = useSelector(isUserAdmin)
-  const isOwner = useSelector(isOwnerUser)
+  const canManageUsers = useSelector(canManageTenantUsers)
 
   const menubarItemsList: MenubarItemType[] = []
 
@@ -186,7 +186,7 @@ export const useMenubarItems = () => {
         text: t('Оплата'),
         authOnly: true
       },
-      ...(isOwner && !isAdmin
+      ...(canManageUsers && !isAdmin
         ? [
           {
             path: getRouteUsers(),

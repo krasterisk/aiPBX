@@ -6,15 +6,16 @@ import { ErrorPage } from '../../../ErrorPage'
 import { UserCard } from '@/features/Users'
 
 import { useSelector } from 'react-redux'
-import { isSubUser, getUserAuthData } from '@/entities/User'
+import { isSubUser, getUserAuthData, canManageTenantUsers } from '@/entities/User'
 import { getRouteMain } from '@/shared/const/router'
 
 const UsersEditPage = memo(() => {
   const { id } = useParams<{ id: string }>()
   const isSub = useSelector(isSubUser)
+  const canManage = useSelector(canManageTenantUsers)
   const authData = useSelector(getUserAuthData)
 
-  if (isSub && id !== String(authData?.id)) {
+  if (isSub && !canManage && id !== String(authData?.id)) {
     return <Navigate to={getRouteMain()} replace />
   }
 

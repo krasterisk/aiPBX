@@ -10,6 +10,7 @@ import cls from './UserCard.module.scss'
 import {
   isUserAdmin,
   isOwnerUser,
+  canManageTenantUsers,
   useDeleteUser,
   User,
   usersApi,
@@ -48,6 +49,7 @@ export const UserCard = memo((props: UserCardProps) => {
   const [createSubUserMutation, { isLoading: isSubUserCreating }] = useCreateSubUser()
   const isAdmin = useSelector(isUserAdmin)
   const isOwner = useSelector(isOwnerUser)
+  const canManageUsers = useSelector(canManageTenantUsers)
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -66,6 +68,7 @@ export const UserCard = memo((props: UserCardProps) => {
     vpbx_user_id: '',
     roles: [],
     ourOrganizationId: null,
+    canManageUsers: false,
   }
 
   const [formFields, setFormFields] = useState<User>(initUser)
@@ -85,45 +88,62 @@ export const UserCard = memo((props: UserCardProps) => {
   const onSave = useCallback(async () => {
     if (!validateForm()) return
 
+    const tenantParentId =
+      formFields.vpbx_user_id &&
+      String(formFields.vpbx_user_id) !== '' &&
+      String(formFields.vpbx_user_id) !== String(formFields.id)
+        ? String(formFields.vpbx_user_id)
+        : null
+
     try {
       if (isEdit && userId) {
-        await userUpdateMutation(formFields).unwrap()
+        const updateBody = isAdmin
+          ? { ...formFields, vpbx_user_id: tenantParentId as User['vpbx_user_id'] }
+          : formFields
+        await userUpdateMutation(updateBody).unwrap()
         toast.success(t('Сохранено успешно'))
-        navigate(isAdmin ? getRouteUsers() : (isOwner ? getRouteUsers() : getRouteMain()))
-      } else if (isOwner && !isAdmin) {
-        // Owner creating a sub-user
+        navigate(isAdmin || canManageUsers ? getRouteUsers() : getRouteMain())
+      } else if (canManageUsers && !isAdmin) {
+        // Owner or tenant manager creating a sub-user
         const subUserDto: CreateSubUserDto = {
           email: formFields.email || '',
-          name: formFields.name || ''
+          name: formFields.name || '',
+          ...(isOwner ? { canManageUsers: !!formFields.canManageUsers } : {}),
         }
         await createSubUserMutation(subUserDto).unwrap()
         toast.success(t('Пользователь создан'))
         navigate(getRouteUsers())
       } else {
-        // Admin creating a user
-        const payload = await userMutation({ ...formFields }).unwrap()
-        dispatch(
-          usersApi.util.updateQueryData('getAllUsers', null, (draft) => {
-            draft.push(payload)
-          })
-        )
+        // Admin creating a user (optional tenant parent)
+        const payload = await userMutation({
+          ...formFields,
+          vpbx_user_id: tenantParentId as User['vpbx_user_id'],
+          canManageUsers: tenantParentId ? !!formFields.canManageUsers : false,
+        }).unwrap()
+        if (!tenantParentId) {
+          dispatch(
+            usersApi.util.updateQueryData('getAllUsers', null, (draft) => {
+              draft.push(payload)
+            })
+          )
+        }
         toast.success(t('Пользователь создан'))
         navigate(getRouteUsers())
       }
     } catch (e) {
       // Error toast handled by global toastMiddleware
     }
-  }, [formFields, isEdit, userId, userUpdateMutation, userMutation, createSubUserMutation, navigate, isAdmin, isOwner, dispatch, validateForm, t])
+  }, [formFields, isEdit, userId, userUpdateMutation, userMutation, createSubUserMutation, navigate, isAdmin, isOwner, canManageUsers, dispatch, validateForm, t])
 
   const onDelete = useCallback(async (id: string) => {
     try {
       await userDeleteMutation(id).unwrap()
       toast.success(t('Пользователь удалён'))
-      navigate(isAdmin ? getRouteUsers() : (isOwner ? getRouteUsers() : getRouteMain()))
+      navigate(isAdmin || canManageUsers ? getRouteUsers() : getRouteMain())
     } catch (e) {
       // Error toast handled by global toastMiddleware
     }
-  }, [userDeleteMutation, navigate, isAdmin, isOwner, t])
+  }, [userDeleteMutation, navigate, isAdmin, canManageUsers, t])
 
   const isBusy = isLoading || isUpdateLoading || isDeleteLoading || isSubUserCreating
 
@@ -154,8 +174,8 @@ export const UserCard = memo((props: UserCardProps) => {
     )
   }
 
-  // Owner can delete sub-users, admin can delete any user
-  const canDelete = isAdmin || (isOwner && isEdit)
+  // Owner/manager can delete sub-users, admin can delete any user
+  const canDelete = isAdmin || (canManageUsers && isEdit)
 
   return (
     <VStack gap="8" max className={classNames(cls.EndpointCard, {}, [className])}>

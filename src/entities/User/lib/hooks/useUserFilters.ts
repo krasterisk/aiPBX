@@ -6,6 +6,7 @@ import {
   getUsersPageLimit,
   getUsersPageNum,
   getUsersPageOrder,
+  getUsersPageOwnerUserId,
   getUsersPageSearch,
   getUsersPageSort,
   getUsersPageView,
@@ -25,6 +26,7 @@ export function useUserFilters () {
   const sort = useSelector(getUsersPageSort)
   const tab = useSelector(getUsersTab)
   const search = useSelector(getUsersPageSearch)
+  const ownerUserId = useSelector(getUsersPageOwnerUserId)
 
   const dispatch = useAppDispatch()
   const [newSearch, setNewSearch] = useState<string>('')
@@ -38,7 +40,12 @@ export function useUserFilters () {
     refetch
   } = useGetUsers(
     {
-      page, limit, sort, search: newSearch, order
+      page,
+      limit,
+      sort,
+      search: newSearch,
+      order,
+      ...(ownerUserId ? { ownerUserId } : {}),
     },
     {
       refetchOnFocus: true,
@@ -72,6 +79,12 @@ export function useUserFilters () {
     debouncedSearch(search)
   }, [debouncedSearch, dispatch])
 
+  const onChangeOwnerUserId = useCallback((id: string) => {
+    dispatch(usersPageActions.setOwnerUserId(id || ''))
+    dispatch(usersPageActions.setPage(1))
+    dispatch(usersPageActions.setHasMore(true))
+  }, [dispatch])
+
   const onChangePage = useCallback((page: number) => {
     dispatch(usersPageActions.setPage(page))
   }, [dispatch])
@@ -79,11 +92,6 @@ export function useUserFilters () {
   const onChangeHasMore = useCallback((hasMore: boolean) => {
     dispatch(usersPageActions.setHasMore(hasMore))
   }, [dispatch])
-
-  // const onChangeOrder = useCallback((order: SortOrder) => {
-  //   dispatch(usersPageActions.setOrder(order))
-  //   dispatch(usersPageActions.setPage(1))
-  // }, [dispatch])
 
   const onChangeTab = useCallback((value: string) => {
     dispatch(usersPageActions.setTab(value))
@@ -99,6 +107,7 @@ export function useUserFilters () {
     order,
     tab,
     search,
+    ownerUserId,
     isError,
     isLoading,
     error,
@@ -106,6 +115,7 @@ export function useUserFilters () {
     onChangeSort,
     onChangeTab,
     onChangeSearch,
+    onChangeOwnerUserId,
     onChangeHasMore,
     onChangePage,
     onRefetch,

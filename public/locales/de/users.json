@@ -63,5 +63,11 @@
     "ourOrg.fieldHint": "Welches Unternehmen Rechnungen und UPD für diesen Mandanten ausstellt. Nur für Admins.",
     "ourOrg.selectPlaceholder": "Organisation wählen",
     "ourOrg.notFound": "Keine Organisationen gefunden",
-    "ourOrg.primaryBadge": "primär"
+    "ourOrg.primaryBadge": "primär",
+    "tenant.fieldLabel": "Mandant",
+    "tenant.fieldHint": "Leer — neuer Mandanteneigentümer. Kunde wählen — Benutzer wird Unterbenutzer.",
+    "tenant.noTenantOwner": "Kein Mandant (Eigentümer)",
+    "tenant.selectPlaceholder": "Mandant wählen",
+    "canManageUsers.label": "Mandantenbenutzer verwalten",
+    "canManageUsers.hint": "Kann Mandantenbenutzer erstellen/bearbeiten und erhält Kontostand-Benachrichtigungen."
 }

@@ -4,14 +4,14 @@ import { VStack } from '@/shared/ui/redesigned/Stack'
 import { UserCard } from '@/features/Users'
 
 import { useSelector } from 'react-redux'
-import { isSubUser } from '@/entities/User'
+import { canManageTenantUsers } from '@/entities/User'
 import { Navigate } from 'react-router-dom'
 import { getRouteMain } from '@/shared/const/router'
 
 const UsersCreatePage = memo(() => {
-  const isSub = useSelector(isSubUser)
+  const canManage = useSelector(canManageTenantUsers)
 
-  if (isSub) {
+  if (!canManage) {
     return <Navigate to={getRouteMain()} replace />
   }
 

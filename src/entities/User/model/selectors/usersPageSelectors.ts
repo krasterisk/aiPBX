@@ -10,3 +10,4 @@ export const getUsersPageOrder = (state: StateSchema) => state.usersPage?.order 
 export const getUsersTab = (state: StateSchema) => state.usersPage?.tab ?? ''
 export const getUsersPageSort = (state: StateSchema) => state.usersPage?.sort ?? UserSortField.NAME
 export const getUsersPageSearch = (state: StateSchema) => state.usersPage?.search ?? ''
+export const getUsersPageOwnerUserId = (state: StateSchema) => state.usersPage?.ownerUserId ?? ''

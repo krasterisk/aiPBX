@@ -63,5 +63,11 @@
     "ourOrg.fieldHint": "为该租户开具发票和 UPD 的法律实体。仅管理员可见。",
     "ourOrg.selectPlaceholder": "选择组织",
     "ourOrg.notFound": "未找到组织",
-    "ourOrg.primaryBadge": "主要"
+    "ourOrg.primaryBadge": "主要",
+    "tenant.fieldLabel": "租户",
+    "tenant.fieldHint": "空 — 新租户所有者。选择客户 — 该用户成为其子用户。",
+    "tenant.noTenantOwner": "无租户（所有者）",
+    "tenant.selectPlaceholder": "选择租户",
+    "canManageUsers.label": "管理租户用户",
+    "canManageUsers.hint": "可创建和编辑租户用户，并接收余额通知。"
 }

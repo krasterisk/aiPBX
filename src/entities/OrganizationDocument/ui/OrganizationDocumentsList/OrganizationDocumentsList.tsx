@@ -1,8 +1,9 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import type { CellContext } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { ExternalLink } from 'lucide-react'
 import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Table } from '@/shared/ui/redesigned/Table'
@@ -15,6 +16,7 @@ import {
     openOrganizationDocumentPdf,
 } from '../../api/organizationDocumentApi'
 import type { OrganizationDocument } from '../../model/types/organizationDocument'
+import { OrganizationDocumentEditModal } from '../OrganizationDocumentEditModal/OrganizationDocumentEditModal'
 import cls from './OrganizationDocumentsList.module.scss'
 
 function formatDocCell(info: { getValue: () => string | null | undefined }) {
@@ -31,6 +33,7 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
     const { organizationId, canDeleteDocuments } = props
     const { t } = useTranslation('payment')
     const [deleteDocument, { isLoading: isDeleting }] = useDeleteOrganizationDocumentMutation()
+    const [documentToEdit, setDocumentToEdit] = useState<OrganizationDocument | null>(null)
 
     const { data, isLoading, isError } = useGetOrganizationDocumentsQuery(organizationId, {
         skip: !organizationId,
@@ -58,6 +61,10 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
             console.error(e)
         }
     }, [deleteDocument, organizationId, t])
+
+    const handleCloseEdit = useCallback(() => {
+        setDocumentToEdit(null)
+    }, [])
 
     const columns = useMemo(() => [
         {
@@ -165,16 +172,27 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
                             </Button>
                         )}
                         {canDeleteDocuments && (
-                            <Button
-                                className={cls.iconBtn}
-                                variant="clear"
-                                color="error"
-                                disabled={isDeleting}
-                                addonLeft={<DeleteIcon fontSize="small" />}
-                                onClick={() => {
-                                    void handleDeleteDocument(doc)
-                                }}
-                            />
+                            <>
+                                <Button
+                                    className={cls.iconBtn}
+                                    variant="clear"
+                                    disabled={isDeleting}
+                                    addonLeft={<EditIcon fontSize="small" />}
+                                    onClick={() => {
+                                        setDocumentToEdit(doc)
+                                    }}
+                                />
+                                <Button
+                                    className={cls.iconBtn}
+                                    variant="clear"
+                                    color="error"
+                                    disabled={isDeleting}
+                                    addonLeft={<DeleteIcon fontSize="small" />}
+                                    onClick={() => {
+                                        void handleDeleteDocument(doc)
+                                    }}
+                                />
+                            </>
                         )}
                     </HStack>
                 )
@@ -206,6 +224,14 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
         <VStack gap="16" max>
             <Text title={t('documents.title')} size="s" bold />
             <Table data={rows} columns={columns} rowVariant="glass" />
+            {canDeleteDocuments && (
+                <OrganizationDocumentEditModal
+                    isOpen={Boolean(documentToEdit)}
+                    onClose={handleCloseEdit}
+                    organizationId={organizationId}
+                    document={documentToEdit}
+                />
+            )}
         </VStack>
     )
 })

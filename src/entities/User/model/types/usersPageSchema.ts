@@ -14,4 +14,6 @@ export interface UsersPageSchema {
   order: SortOrder
   sort: UserSortField
   search: string
+  /** Admin: filter list by tenant owner id (empty = all) */
+  ownerUserId: string
 }

@@ -13,7 +13,8 @@ const initialState: UsersPageSchema = {
   _inited: false,
   sort: UserSortField.NAME,
   order: 'asc',
-  search: ''
+  search: '',
+  ownerUserId: '',
 }
 
 export const usersPageSlice = createSlice({
@@ -37,6 +38,9 @@ export const usersPageSlice = createSlice({
     },
     setSearch: (state, action: PayloadAction<string>) => {
       state.search = action.payload
+    },
+    setOwnerUserId: (state, action: PayloadAction<string>) => {
+      state.ownerUserId = action.payload
     },
     initState: (state) => {
       state.view = 'BIG'

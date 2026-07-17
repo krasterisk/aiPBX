@@ -7,6 +7,8 @@ interface QueryArgs {
   sort?: string
   order?: string
   search?: string
+  /** ADMIN: tenant owner id — owner + sub-users */
+  ownerUserId?: string
 }
 
 export interface AdminTopUpDto {
@@ -200,7 +202,10 @@ export const usersApi = rtkApi.injectEndpoints({
         )
         queryFulfilled.catch(patchResult.undo)
       },
-      invalidatesTags: (result, error, { id }) => [{ type: 'Users', id }]
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Users', id },
+        { type: 'Users', id: 'LIST' },
+      ]
     }),
     deleteUser: build.mutation<{ success: boolean, id: string }, string>({
       query (id) {

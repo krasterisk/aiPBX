@@ -20,8 +20,12 @@ interface ClientSelectProps {
   showIcon?: boolean
   required?: boolean
   disabled?: boolean
-  /** When true, user can pick "all clients" (empty id). */
+  /** When true, user can pick empty id (see emptyOptionLabel). */
   allowAll?: boolean
+  /** Label for empty option when allowAll (default: «Все клиенты»). */
+  emptyOptionLabel?: string
+  /** Exclude these client ids from the list (e.g. user being edited). */
+  excludeClientIds?: string[]
 }
 
 interface ClientOption {
@@ -45,16 +49,24 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
     required,
     disabled: disabledProp,
     allowAll = false,
+    emptyOptionLabel,
+    excludeClientIds,
   } = props
 
   const { data, isLoading } = useGetAllUsers(null)
 
-  const clientItems: ClientOption[] = data?.map(item => ({
-    id: String(item.id),
-    name: item.name || item.email || String(item.id)
-  })) || []
+  const excludeSet = new Set((excludeClientIds || []).map(String))
+  const clientItems: ClientOption[] = (data || [])
+    .filter((item) => !excludeSet.has(String(item.id)))
+    .map(item => ({
+      id: String(item.id),
+      name: item.name || item.email || String(item.id)
+    }))
 
-  const allClientsOption: ClientOption = { id: ALL_CLIENTS_ID, name: t('Все клиенты') }
+  const allClientsOption: ClientOption = {
+    id: ALL_CLIENTS_ID,
+    name: emptyOptionLabel || t('Все клиенты'),
+  }
   const options = allowAll ? [allClientsOption, ...clientItems] : clientItems
 
   const selectedClient = allowAll && (clientId === ALL_CLIENTS_ID || clientId == null || clientId === undefined)
@@ -73,7 +85,7 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
 
   // Определяем иконку слева
   const leftAddon = addonLeft || (showIcon ? <Users size={18} style={{ marginRight: 8 }} /> : undefined)
-  const placeholderText = placeholder || (t('Все клиенты'))
+  const placeholderText = placeholder || emptyOptionLabel || (t('Все клиенты'))
 
   return (
     <Combobox

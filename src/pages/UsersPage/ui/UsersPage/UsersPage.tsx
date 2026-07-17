@@ -7,7 +7,7 @@ import { ErrorGetData } from '@/entities/ErrorGetData'
 import { useInitialEffect } from '@/shared/lib/hooks/useInitialEffect/useInitialEffect'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 // eslint-disable-next-line krasterisk-plugin/layer-imports
-import { UsersList, usersPageReducer, useUserFilters, initUsersPage, isUserAdmin, isOwnerUser, isSubUser, SubUsersList } from '@/entities/User'
+import { UsersList, usersPageReducer, useUserFilters, initUsersPage, isUserAdmin, canManageTenantUsers, isSubUser, SubUsersList } from '@/entities/User'
 import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
 import { getRouteMain } from '@/shared/const/router'
@@ -22,7 +22,7 @@ const reducers: ReducersList = {
 
 const UsersPage = ({ className }: UsersPageProps) => {
   const isAdmin = useSelector(isUserAdmin)
-  const isOwner = useSelector(isOwnerUser)
+  const canManageUsers = useSelector(canManageTenantUsers)
   const isSub = useSelector(isSubUser)
 
   const {
@@ -49,13 +49,13 @@ const UsersPage = ({ className }: UsersPageProps) => {
     }
   })
 
-  // Sub-user view: deny access
-  if (isSub) {
+  // Sub-user without manage permission: deny access
+  if (isSub && !canManageUsers) {
     return <Navigate to={getRouteMain()} replace />
   }
 
-  // Owner view: show SubUsersList
-  if (isOwner && !isAdmin) {
+  // Owner / tenant manager view: show SubUsersList
+  if (canManageUsers && !isAdmin) {
     return (
       <Page
         data-testid={'UsersPage'}

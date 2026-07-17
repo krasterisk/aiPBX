@@ -25,6 +25,16 @@
     }
 }
 
+.tenantSelect {
+    min-width: 240px;
+    width: 280px;
+
+    @include mobile {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
 .createBtn {
     border-radius: var(--radius-md) !important;
     height: 42px !important;

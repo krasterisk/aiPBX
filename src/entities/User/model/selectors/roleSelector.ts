@@ -65,3 +65,14 @@ export const isSubUser = createSelector(
     return isUser && !!vpbxUserId && vpbxUserId !== userId
   }
 )
+
+const getCanManageUsersFlag = (state: StateSchema) => !!state.user.authData?.canManageUsers
+
+/** Admin, tenant owner, or sub-user with canManageUsers */
+export const canManageTenantUsers = createSelector(
+  [isUserAdmin, isOwnerUser, isSubUser, getCanManageUsersFlag],
+  (isAdmin, isOwner, isSub, canManageUsers) => {
+    if (isAdmin || isOwner) return true
+    return isSub && canManageUsers
+  }
+)

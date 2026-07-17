@@ -9,6 +9,7 @@ export {
   isUserUser,
   isOwnerUser,
   isSubUser,
+  canManageTenantUsers,
   getAllUserRoles,
   getVpbxUser,
   getBillingOwnerUserId,

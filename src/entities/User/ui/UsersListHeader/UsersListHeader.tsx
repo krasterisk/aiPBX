@@ -9,36 +9,32 @@ import { Plus } from 'lucide-react'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useUserFilters } from '../../lib/hooks/useUserFilters'
 import { isUserAdmin } from '../../model/selectors/roleSelector'
-import { ClientSelect } from '../ClientSelect/ClientSelect'
+import { ClientSelect, ALL_CLIENTS_ID } from '../ClientSelect/ClientSelect'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { SearchInput } from '@/shared/ui/mui/SearchInput'
 
 interface UsersListHeaderProps {
   className?: string
-  clientId?: string
-  onChangeClient?: (clientId: string) => void
 }
 
 export const UsersListHeader = memo((props: UsersListHeaderProps) => {
-  const {
-    className,
-    clientId,
-    onChangeClient,
-  } = props
+  const { className } = props
 
   const {
     search,
-    onChangeSearch
+    onChangeSearch,
+    ownerUserId,
+    onChangeOwnerUserId,
   } = useUserFilters()
 
   const { t } = useTranslation('users')
 
   const isAdmin = useSelector(isUserAdmin)
 
-  const handleClientChange = useCallback((newClientId: string) => {
-    onChangeClient?.(newClientId)
-  }, [onChangeClient])
+  const handleTenantChange = useCallback((newClientId: string) => {
+    onChangeOwnerUserId(newClientId || ALL_CLIENTS_ID)
+  }, [onChangeOwnerUserId])
 
   return (
     <VStack gap="16" max className={classNames(cls.UsersListHeader, {}, [className])}>
@@ -49,6 +45,18 @@ export const UsersListHeader = memo((props: UsersListHeaderProps) => {
         </VStack>
 
         <HStack gap="16" wrap="nowrap" className={cls.headerActions}>
+          {isAdmin && (
+            <ClientSelect
+              className={cls.tenantSelect}
+              clientId={ownerUserId || ALL_CLIENTS_ID}
+              onChangeClient={handleTenantChange}
+              allowAll
+              emptyOptionLabel={t('Все клиенты') ?? undefined}
+              placeholder={t('tenant.selectPlaceholder') ?? undefined}
+              fullWidth={false}
+            />
+          )}
+
           <SearchInput
             data-testid="UserSearch"
             className={cls.searchInput}
@@ -69,13 +77,6 @@ export const UsersListHeader = memo((props: UsersListHeaderProps) => {
           </AppLink>
         </HStack>
       </HStack>
-
-      {isAdmin && onChangeClient && (
-        <ClientSelect
-          clientId={clientId}
-          onChangeClient={handleClientChange}
-        />
-      )}
     </VStack>
   )
 })

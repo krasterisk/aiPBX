@@ -40,12 +40,15 @@ export interface User {
   token?: string
   roles?: UserRoles[]
   vpbxUser?: ClientOptions
-  vpbx_user_id?: string
+  /** Tenant owner id; null/empty = this user is the tenant owner */
+  vpbx_user_id?: string | null
   our_organization_id?: string
   ourOrganizationId?: string | number | null
   authType?: string
   /** Tenant owner l/s (read-only); same for all sub-users of the tenant */
   personalAccountNumber?: string | null
+  /** Sub-user may manage tenant users and receive balance notifications */
+  canManageUsers?: boolean
 }
 
 export interface UserSchema {
@@ -78,4 +81,5 @@ export interface UsageLimitProps {
 export interface CreateSubUserDto {
   email: string
   name: string
+  canManageUsers?: boolean
 }

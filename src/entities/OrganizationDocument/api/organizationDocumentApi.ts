@@ -19,6 +19,12 @@ export interface CreateInvoiceResponse {
     subject: string
 }
 
+export interface UpdateOrganizationDocumentBody {
+    number?: string
+    documentDate?: string
+    amountRub?: number
+}
+
 export interface DefaultSubjectResponse {
     defaultSubject: string
 }
@@ -48,6 +54,19 @@ const organizationDocumentApi = rtkApi.injectEndpoints({
                 { type: 'OrganizationDocument', id: organizationId },
             ],
         }),
+        updateOrganizationDocument: build.mutation<
+            OrganizationDocument,
+            { organizationId: string, documentId: string, body: UpdateOrganizationDocumentBody }
+        >({
+            query: ({ organizationId, documentId, body }) => ({
+                url: `/organizations/${organizationId}/documents/${encodeURIComponent(documentId)}`,
+                method: 'PATCH',
+                body,
+            }),
+            invalidatesTags: (_res, _err, arg) => [
+                { type: 'OrganizationDocument', id: arg.organizationId },
+            ],
+        }),
         deleteOrganizationDocument: build.mutation<
             void,
             { organizationId: string, documentId: string }
@@ -67,6 +86,7 @@ export const {
     useGetOrganizationDefaultSubjectQuery,
     useCreateOrganizationInvoiceMutation,
     useGetOrganizationDocumentsQuery,
+    useUpdateOrganizationDocumentMutation,
     useDeleteOrganizationDocumentMutation,
 } = organizationDocumentApi
 

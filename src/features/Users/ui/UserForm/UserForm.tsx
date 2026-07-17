@@ -18,6 +18,8 @@ import {
     UserRolesValues,
     UserAddAvatar,
     RoleSelect,
+    ClientSelect,
+    ALL_CLIENTS_ID,
     currencySymbols,
     usersApi,
 } from '@/entities/User'
@@ -26,6 +28,7 @@ import { getTenantCurrencyCode, isPaymentOrganizationsTabVisible } from '@/share
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import { Loader } from '@/shared/ui/Loader'
 import { ErrorGetData } from '@/entities/ErrorGetData'
+import { Check } from '@/shared/ui/mui/Check'
 import cls from './UserForm.module.scss'
 
 interface UserFormProps {
@@ -155,8 +158,18 @@ export const UserForm = memo((props: UserFormProps) => {
         ? (formFields.avatar.startsWith('http') ? formFields.avatar : `${__STATIC__}/${formFields.avatar}`)
         : ''
 
-    // Owner creating a sub-user: simplified form
-    const isOwnerCreating = isOwner && !isAdmin && !isEdit
+    // Owner/manager creating a sub-user: simplified form
+    const isTenantCreating = (isOwner || isSub) && !isAdmin && !isEdit
+
+    const hasTenantParent = !!(
+        formFields.vpbx_user_id &&
+        String(formFields.vpbx_user_id) !== '' &&
+        String(formFields.vpbx_user_id) !== String(formFields.id)
+    )
+    // Admin/owner only; for sub-users (owner creating always; otherwise when parent selected)
+    const showCanManageUsers =
+        (isAdmin || isOwner) &&
+        ((isOwner && !isAdmin && !isEdit) || hasTenantParent)
 
     return (
         <div className={classNames(cls.UserForm, {}, [className])}>
@@ -207,6 +220,23 @@ export const UserForm = memo((props: UserFormProps) => {
                         />
                     </VStack>
 
+                    {showCanManageUsers && (
+                        <VStack gap="4" max>
+                            <Check
+                                checked={!!formFields.canManageUsers}
+                                onChange={(e) => {
+                                    setFormFields({
+                                        ...formFields,
+                                        canManageUsers: e.target.checked,
+                                    })
+                                }}
+                                label={t('canManageUsers.label')}
+                                data-testid="UserCard.canManageUsers"
+                            />
+                            <Text text={t('canManageUsers.hint')} size="xs" variant="accent" />
+                        </VStack>
+                    )}
+
                     {isEdit && showPersonalAccount && personalAccountNumber && (
                         <VStack gap="8" max>
                             <Text text={t('personalAccount.label')} size="s" bold className={cls.label} />
@@ -219,7 +249,7 @@ export const UserForm = memo((props: UserFormProps) => {
                         </VStack>
                     )}
 
-                    {!isOwnerCreating && !isSub && (
+                    {!isTenantCreating && !isSub && (
                         <VStack gap="8" max>
                             <Text text={t('Валюта') || ''} size="s" bold className={cls.label} />
                             <Text
@@ -255,6 +285,35 @@ export const UserForm = memo((props: UserFormProps) => {
                                 className={cls.fullWidth}
                                 minRows={1}
                                 type="number"
+                            />
+                        </VStack>
+                    )}
+
+                    {isAdmin && (
+                        <VStack gap="8" max>
+                            <Text text={t('tenant.fieldLabel')} size="s" bold className={cls.label} />
+                            <Text text={t('tenant.fieldHint')} size="xs" variant="accent" />
+                            <ClientSelect
+                                label=""
+                                clientId={
+                                    formFields.vpbx_user_id &&
+                                    String(formFields.vpbx_user_id) !== String(formFields.id)
+                                        ? String(formFields.vpbx_user_id)
+                                        : ALL_CLIENTS_ID
+                                }
+                                allowAll
+                                emptyOptionLabel={t('tenant.noTenantOwner') ?? undefined}
+                                placeholder={t('tenant.selectPlaceholder') ?? undefined}
+                                excludeClientIds={formFields.id ? [String(formFields.id)] : undefined}
+                                onChangeClient={(id) => {
+                                    setFormFields({
+                                        ...formFields,
+                                        vpbx_user_id: id || '',
+                                        vpbxUser: id
+                                            ? { id, name: formFields.vpbxUser?.name || '' }
+                                            : { id: '', name: '' },
+                                    })
+                                }}
                             />
                         </VStack>
                     )}
