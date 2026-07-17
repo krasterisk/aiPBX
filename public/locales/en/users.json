@@ -68,6 +68,6 @@
     "tenant.fieldHint": "Empty — new tenant owner. Select a client — user becomes their sub-user.",
     "tenant.noTenantOwner": "No tenant (owner)",
     "tenant.selectPlaceholder": "Select tenant",
-    "canManageUsers.label": "Manage tenant users",
-    "canManageUsers.hint": "Can create and edit tenant users and receives balance notifications."
+    "canManageUsers.label": "Administrative user",
+    "canManageUsers.hint": "Can create and edit users and receive balance notifications."
 }

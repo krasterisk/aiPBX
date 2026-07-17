@@ -68,6 +68,6 @@
     "tenant.fieldHint": "空 — 新租户所有者。选择客户 — 该用户成为其子用户。",
     "tenant.noTenantOwner": "无租户（所有者）",
     "tenant.selectPlaceholder": "选择租户",
-    "canManageUsers.label": "管理租户用户",
-    "canManageUsers.hint": "可创建和编辑租户用户，并接收余额通知。"
+    "canManageUsers.label": "管理用户",
+    "canManageUsers.hint": "可创建和编辑用户，并接收余额通知。"
 }

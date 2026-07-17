@@ -68,6 +68,6 @@
     "tenant.fieldHint": "Leer — neuer Mandanteneigentümer. Kunde wählen — Benutzer wird Unterbenutzer.",
     "tenant.noTenantOwner": "Kein Mandant (Eigentümer)",
     "tenant.selectPlaceholder": "Mandant wählen",
-    "canManageUsers.label": "Mandantenbenutzer verwalten",
-    "canManageUsers.hint": "Kann Mandantenbenutzer erstellen/bearbeiten und erhält Kontostand-Benachrichtigungen."
+    "canManageUsers.label": "Administrativer Benutzer",
+    "canManageUsers.hint": "Kann Benutzer erstellen und bearbeiten sowie Kontostand-Benachrichtigungen erhalten."
 }
