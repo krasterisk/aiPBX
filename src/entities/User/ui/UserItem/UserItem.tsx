@@ -6,7 +6,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Avatar } from '@/shared/ui/redesigned/Avatar'
-import { ShieldCheck, Mail, Wallet, KeyRound } from 'lucide-react'
+import { ShieldCheck, Mail, Wallet, KeyRound, UserCog } from 'lucide-react'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
@@ -37,6 +37,7 @@ export const UserItem = memo((props: UserItemProps) => {
 
   const isOwnerCard = !isAdmin && (!user.vpbx_user_id || user.vpbx_user_id === user.id)
   const isSubUserCard = !!user.vpbx_user_id && user.vpbx_user_id !== user.id
+  const isTenantAdminCard = isSubUserCard && !!user.canManageUsers
 
   const checkedSrc = user.avatar
     ? (user.avatar.startsWith('http') ? user.avatar : `${__STATIC__}/${user.avatar}`)
@@ -86,6 +87,12 @@ export const UserItem = memo((props: UserItemProps) => {
                 <HStack className={cls.ownerBadge} gap="4" align="center">
                   <KeyRound size={8} />
                   <Text text={t('Владелец')} size="xs" />
+                </HStack>
+              )}
+              {isTenantAdminCard && (
+                <HStack className={cls.tenantAdminBadge} gap="4" align="center">
+                  <UserCog size={8} />
+                  <Text text={t('canManageUsers.label')} size="xs" />
                 </HStack>
               )}
             </VStack>

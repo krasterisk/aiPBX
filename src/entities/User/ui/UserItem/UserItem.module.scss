@@ -98,6 +98,19 @@
     white-space: nowrap;
 }
 
+.tenantAdminBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: 2px 8px;
+    background: rgba(46, 204, 113, 0.15);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(46, 204, 113, 0.3);
+    color: #2ecc71;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
 
 .detailsGrid {
     display: grid;
