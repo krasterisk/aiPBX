@@ -23,6 +23,7 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import LogoIcon from '@/shared/assets/icons/aipbx_logo_v3.svg'
 import { getDomainConfig } from '@/shared/lib/domain'
 import { usePageMeta } from '@/shared/lib/seo/usePageMeta'
+import { useSeoRenderReady } from '@/shared/lib/seo/useSeoRenderReady'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },
@@ -41,7 +42,7 @@ const CURRENCY_SYMBOLS: Record<Currency, string> = {
 }
 
 const PublicPricingPage: FC = memo(() => {
-  const { t, i18n } = useTranslation('pricing')
+  const { t, i18n, ready } = useTranslation('pricing')
   const isMobile = useMediaQuery('(max-width:768px)')
   const navigate = useNavigate()
   const isRuDomain = getDomainConfig().region === 'ru'
@@ -53,6 +54,7 @@ const PublicPricingPage: FC = memo(() => {
       : 'Transparent pricing for voice AI assistants and speech analytics.',
     path: '/pricing'
   })
+  useSeoRenderReady(ready)
 
   // Available currencies depend on domain
   const availableCurrencies = useMemo<Currency[]>(() => {
