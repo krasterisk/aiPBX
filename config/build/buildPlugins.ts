@@ -17,7 +17,8 @@ export function buildPlugins ({
 
   const plugins = [
     new HtmlWebpackPlugin({
-      template: paths.html
+      template: paths.html,
+      siteUrl: siteUrl || 'https://aipbx.net'
     }),
     new webpack.ProgressPlugin(),
     new webpack.DefinePlugin({
