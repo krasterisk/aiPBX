@@ -78,6 +78,9 @@ export function buildPlugins ({
         { from: 'public/docs', to: 'docs', noErrorOnMissing: true }
       ]
     }))
+    const prerenderSiteUrl = process.env.SITE_URL || 'https://aipbx.net'
+    const prerenderLng = prerenderSiteUrl.includes('aipbx.ru') ? 'ru' : 'en'
+
     plugins.push(new PrerendererWebpackPlugin({
       routes: ['/', '/voice-assistants', '/speech-analytics', '/pricing'],
       renderer: '@prerenderer/renderer-puppeteer',
@@ -90,12 +93,25 @@ export function buildPlugins ({
           ...(process.env.PUPPETEER_EXECUTABLE_PATH
             ? { executablePath: process.env.PUPPETEER_EXECUTABLE_PATH }
             : {})
+        },
+        // Force segment locale before app scripts so LanguageDetector
+        // does not freeze host OS language into bot-visible HTML.
+        async pageSetup (page: { evaluateOnNewDocument: (fn: (lng: string) => void, ...args: string[]) => Promise<void>, setExtraHTTPHeaders: (h: Record<string, string>) => Promise<void> }) {
+          await page.setExtraHTTPHeaders({
+            'Accept-Language': prerenderLng === 'ru' ? 'ru-RU,ru;q=0.9' : 'en-US,en;q=0.9'
+          })
+          await page.evaluateOnNewDocument((lng: string) => {
+            try {
+              window.localStorage.setItem('i18nextLng', lng)
+            } catch {
+              // ignore quota / private mode
+            }
+          }, prerenderLng)
         }
       },
       postProcess (renderedRoute: { html: string }) {
-        const siteUrl = process.env.SITE_URL || 'https://aipbx.net'
         renderedRoute.html = renderedRoute.html
-          .replace(/http:\/\/localhost:\d+/g, siteUrl)
+          .replace(/http:\/\/localhost:\d+/g, prerenderSiteUrl)
       }
     }))
   }
