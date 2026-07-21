@@ -23,7 +23,7 @@ describe('initAnalytics', () => {
     ;(global as any).__YANDEX_METRIKA_ID__ = originalMetrika
     delete window.gtag
     delete window.dataLayer
-    document.head.querySelectorAll('script').forEach((el) => el.remove())
+    document.head.querySelectorAll('script').forEach((el) => { el.remove() })
   })
 
   it('configures GA4 with send_page_view:false and Ads when both IDs are set', () => {
@@ -74,6 +74,6 @@ describe('initAnalytics', () => {
     ;(global as any).__GOOGLE_ADS_ID__ = 'AW-16711221644'
     delete window.gtag
 
-    expect(() => fireAdsConversion('-B6_CK72wtMcEIyDxKA-')).not.toThrow()
+    expect(() => { fireAdsConversion('-B6_CK72wtMcEIyDxKA-') }).not.toThrow()
   })
 })

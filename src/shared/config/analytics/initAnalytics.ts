@@ -19,6 +19,7 @@ function loadScript (src: string): void {
 export function initAnalytics (): void {
   const metrikaId = typeof __YANDEX_METRIKA_ID__ !== 'undefined' ? __YANDEX_METRIKA_ID__ : ''
   const ga4Id = typeof __GA4_MEASUREMENT_ID__ !== 'undefined' ? __GA4_MEASUREMENT_ID__ : ''
+  const adsId = typeof __GOOGLE_ADS_ID__ !== 'undefined' ? __GOOGLE_ADS_ID__ : ''
 
   if (metrikaId) {
     const id = Number(metrikaId)
@@ -40,7 +41,11 @@ export function initAnalytics (): void {
       window.dataLayer?.push(args)
     }
     window.gtag('js', new Date())
-    window.gtag('config', ga4Id)
+    window.gtag('config', ga4Id, { send_page_view: false })
+  }
+
+  if (adsId && window.gtag) {
+    window.gtag('config', adsId)
   }
 }
 
@@ -54,5 +59,13 @@ export function trackEvent (name: string, params?: Record<string, string | numbe
 
   if (ga4Id && window.gtag) {
     window.gtag('event', name, params)
+  }
+}
+
+/** Google Ads conversion only — do not dual-dispatch to Metrika; never pass PII (email/tokens). */
+export function fireAdsConversion (label: string, params: Record<string, unknown> = {}): void {
+  const adsId = typeof __GOOGLE_ADS_ID__ !== 'undefined' ? __GOOGLE_ADS_ID__ : ''
+  if (adsId && window.gtag) {
+    window.gtag('event', 'conversion', { send_to: `${adsId}/${label}`, ...params })
   }
 }
