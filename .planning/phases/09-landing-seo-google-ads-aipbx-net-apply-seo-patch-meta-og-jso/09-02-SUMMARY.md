@@ -70,7 +70,7 @@ Each task was committed atomically:
 2. **Task 1 (GREEN): extend usePageMeta with SITE_URL canonical and JSON-LD** - `9c9a19e8` (feat)
 3. **Task 2: add useSeoRenderReady for prerender gate** - `4c2cb652` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `b00f73a6` (docs: complete plan)
 
 ## Files Created/Modified
 
