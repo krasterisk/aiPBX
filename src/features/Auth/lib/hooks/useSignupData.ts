@@ -21,6 +21,7 @@ import { useTelegramLogin } from '@/shared/lib/hooks/useTelegramLogin/useTelegra
 import { getErrorMessage } from '@/shared/lib/functions/getErrorMessage'
 import { buildLegalAcceptanceItems } from '@/shared/lib/legal/versions'
 import { normalizeEmail } from '@/shared/lib/functions/normalizeEmail'
+import { trackEvent, fireAdsConversion } from '@/shared/config/analytics/initAnalytics'
 
 export function useSignupData () {
   const { t } = useTranslation('login')
@@ -60,6 +61,8 @@ export function useSignupData () {
     googleSignup({ id_token: idToken, legalAcceptance })
       .unwrap()
       .then((data) => {
+        trackEvent('signup_complete', { method: 'google' })
+        fireAdsConversion(typeof __ADS_SIGNUP_LABEL__ !== 'undefined' ? __ADS_SIGNUP_LABEL__ : '')
         localStorage.setItem('onboarding_is_signup', 'true')
         dispatch(userActions.setToken(data))
         navigate(getRouteAssistants())
@@ -76,6 +79,8 @@ export function useSignupData () {
     telegramSignup(data)
       .unwrap()
       .then((response) => {
+        trackEvent('signup_complete', { method: 'telegram' })
+        fireAdsConversion(typeof __ADS_SIGNUP_LABEL__ !== 'undefined' ? __ADS_SIGNUP_LABEL__ : '')
         localStorage.setItem('onboarding_is_signup', 'true')
         dispatch(userActions.setToken(response))
         navigate(getRouteAssistants())
@@ -135,6 +140,8 @@ export function useSignupData () {
     })
       .unwrap()
       .then((data) => {
+        trackEvent('signup_complete', { method: 'email' })
+        fireAdsConversion(typeof __ADS_SIGNUP_LABEL__ !== 'undefined' ? __ADS_SIGNUP_LABEL__ : '')
         localStorage.setItem('onboarding_is_signup', 'true')
         dispatch(userActions.setToken(data))
         navigate(getRouteAssistants())
@@ -142,7 +149,7 @@ export function useSignupData () {
       .catch((e) => {
         setSignupError(getErrorMessage(e))
       })
-  }, [activationSignupCode, email, signupActivateUser, dispatch, navigate])
+  }, [activationSignupCode, email, signupActivateUser, dispatch, navigate, legalAcceptance, t])
 
   const onChangeEmail = useCallback((event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const email = event.target.value
