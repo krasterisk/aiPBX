@@ -31,6 +31,9 @@ declare const __SENTRY_DSN__: string
 declare const __SENTRY_ENVIRONMENT__: string
 declare const __YANDEX_METRIKA_ID__: string
 declare const __GA4_MEASUREMENT_ID__: string
+declare const __SITE_URL__: string
+declare const __GOOGLE_ADS_ID__: string
+declare const __ADS_SIGNUP_LABEL__: string
 
 type DeepPartial<T> = T extends object ? {
   [P in keyof T]?: DeepPartial<T[P]>

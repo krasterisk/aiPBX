@@ -10,7 +10,8 @@ import { buildOptions } from './types/config'
 
 export function buildPlugins ({
   paths, isDev, apiUrl, wsUrl, project, staticUrl, googleClientId, tgBotId, stripePublishableKey,
-  sentryDsn, sentryEnvironment, yandexMetrikaId, ga4MeasurementId
+  sentryDsn, sentryEnvironment, yandexMetrikaId, ga4MeasurementId,
+  siteUrl, googleAdsId, adsSignupLabel
 }: buildOptions): webpack.WebpackPluginInstance[] {
   const isProd = !isDev
 
@@ -31,7 +32,10 @@ export function buildPlugins ({
       __SENTRY_DSN__: JSON.stringify(sentryDsn),
       __SENTRY_ENVIRONMENT__: JSON.stringify(sentryEnvironment),
       __YANDEX_METRIKA_ID__: JSON.stringify(yandexMetrikaId),
-      __GA4_MEASUREMENT_ID__: JSON.stringify(ga4MeasurementId)
+      __GA4_MEASUREMENT_ID__: JSON.stringify(ga4MeasurementId),
+      __SITE_URL__: JSON.stringify(siteUrl),
+      __GOOGLE_ADS_ID__: JSON.stringify(googleAdsId),
+      __ADS_SIGNUP_LABEL__: JSON.stringify(adsSignupLabel)
     }),
     new CircularDependencyPlugin({
       exclude: /node_modules/,
