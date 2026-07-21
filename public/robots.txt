@@ -10,4 +10,4 @@ Disallow: /playground
 Disallow: /payment
 Disallow: /admin
 
-Sitemap: https://aipbx.ru/sitemap.xml
+Sitemap: https://aipbx.net/sitemap.xml

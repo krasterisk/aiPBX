@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://aipbx.ru/</loc>
+    <loc>https://aipbx.net/</loc>
+    <lastmod>2026-07-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://aipbx.ru/pricing</loc>
+    <loc>https://aipbx.net/pricing</loc>
+    <lastmod>2026-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://aipbx.ru/speech-analytics</loc>
+    <loc>https://aipbx.net/speech-analytics</loc>
+    <lastmod>2026-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://aipbx.ru/voice-assistants</loc>
+    <loc>https://aipbx.net/voice-assistants</loc>
+    <lastmod>2026-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://aipbx.ru/docs</loc>
+    <loc>https://aipbx.net/docs</loc>
+    <lastmod>2026-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://aipbx.ru/signup</loc>
+    <loc>https://aipbx.net/signup</loc>
+    <lastmod>2026-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
