@@ -18,7 +18,10 @@ export default {
     __SENTRY_DSN__: '',
     __SENTRY_ENVIRONMENT__: 'test',
     __YANDEX_METRIKA_ID__: '',
-    __GA4_MEASUREMENT_ID__: ''
+    __GA4_MEASUREMENT_ID__: '',
+    __SITE_URL__: 'https://aipbx.net',
+    __GOOGLE_ADS_ID__: '',
+    __ADS_SIGNUP_LABEL__: ''
   },
   clearMocks: true,
   coverageProvider: 'v8',
