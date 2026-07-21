@@ -72,7 +72,7 @@ completed: 2026-07-21
 4. **Additional: Docker EU prerender** — `49f30b16` (chore)
 5. **Rule 2 fix: PublicPricing seo-render-ready** — `345c9e59` (fix)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** d007818 (docs: complete plan)
 
 ## Files Created/Modified
 
