@@ -539,9 +539,15 @@ npm run build:prod
 # assert each route produced static HTML with SEO content:
 for r in "" voice-assistants speech-analytics pricing; do
   f="build/${r:+$r/}index.html"
-  grep -q "<title>" "$f" && grep -q 'name="description"' "$f" \
-    && grep -q 'application/ld+json' "$f" && grep -q 'rel="canonical"' "$f" \
-    && ! grep -q 'PageLoader' "$f" || echo "FAIL: $f"
+  if [[ ! -f "$f" ]] \
+    || ! grep -q "<title>" "$f" \
+    || ! grep -q 'name="description"' "$f" \
+    || ! grep -q 'application/ld+json' "$f" \
+    || ! grep -q 'rel="canonical"' "$f" \
+    || grep -q 'PageLoader' "$f"; then
+    echo "FAIL: $f" >&2
+    exit 1
+  fi
 done
 # conversion events fire WITHOUT a live Ads account:
 #   jest: mock window.gtag; assert gtag('event','conversion',{send_to:'AW-…/label'}) called

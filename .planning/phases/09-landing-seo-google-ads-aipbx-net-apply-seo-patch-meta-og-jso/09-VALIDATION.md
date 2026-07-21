@@ -38,29 +38,34 @@ created: 2026-07-21
 
 | Item | Requirement | Test Type | Automated Command | File Exists | Status |
 |------|-------------|-----------|-------------------|-------------|--------|
-| usePageMeta writes i18n title/desc/OG/canonical/JSON-LD/hreflang into head | D-01 | unit (jsdom) | `npm run test:unit -- usePageMeta` | ❌ W0 | ⬜ pending |
-| hreflang en→.net, ru→.ru, x-default→.net using `__SITE_URL__` (not window.origin) | D-02 | unit (jsdom) | `npm run test:unit -- usePageMeta` | ❌ W0 | ⬜ pending |
-| sitemap/robots contain `aipbx.net`, no `aipbx.ru` | D-03 | static assert | `node scripts/verify-prerender.js` | ❌ W0 | ⬜ pending |
-| Prerendered HTML has `<title>`, description, JSON-LD, canonical; no PageLoader; no dotted i18n keys | D-04 | integration (post-build grep) | `node scripts/verify-prerender.js` | ❌ W0 | ⬜ pending |
-| `og-default.png` (1200×630) exists; og:image absolute | D-05 | static assert | `node scripts/verify-prerender.js` | ❌ W0 | ⬜ pending |
-| `signup_complete` + Ads `send_to` fire on signup success (3 handlers) | D-06/D-07 | unit (mock gtag/trackEvent) | `npm run test:unit -- useSignupData` | ❌ W0 | ⬜ pending |
-| `initAnalytics` configs GA4 + Ads when env set; no-op when unset | D-07 | unit | `npm run test:unit -- initAnalytics` | ❌ W0 | ⬜ pending |
-| METRICS render from i18n (en + ru) | D-08 | unit (render) | `npm run test:unit -- SpeechAnalytics` | ❌ W0 | ⬜ pending |
-| Ads campaign asset draft artifact present | D-10 | doc exists | `test -f 09-ADS-ASSETS.md` | ❌ W0 | ⬜ pending |
-| SEO/Lighthouse audit artifact present | D-11 | doc exists | `test -f 09-SEO-AUDIT.md` | ❌ W0 | ⬜ pending |
+| usePageMeta writes i18n title/desc/OG/canonical/JSON-LD/hreflang into head | D-01 | unit (jsdom) | `npm run test:unit -- usePageMeta` | ❌ 09-02 W2 | ⬜ pending |
+| hreflang en→.net, ru→.ru, x-default→.net using `__SITE_URL__` (not window.origin) | D-02 | unit (jsdom) | `npm run test:unit -- usePageMeta` | ❌ 09-02 W2 | ⬜ pending |
+| sitemap/robots contain `aipbx.net`, no `aipbx.ru` | D-03 | static assert | `node scripts/verify-prerender.js` | ❌ 09-07 W4 | ⬜ pending |
+| Prerendered HTML has `<title>`, description, JSON-LD, canonical; no PageLoader; no dotted i18n keys | D-04 | integration (post-build grep) | `node scripts/verify-prerender.js` | ❌ 09-07 W4 | ⬜ pending |
+| `og-default.png` (1200×630) exists; og:image absolute | D-05 | static assert | `node scripts/verify-prerender.js` | ❌ 09-07 W4 | ⬜ pending |
+| `signup_complete` + Ads `send_to` fire on signup success (3 handlers) | D-06/D-07 | unit (mock gtag/trackEvent) | `npm run test:unit -- useSignupData` | ❌ 09-05 W3 | ⬜ pending |
+| `initAnalytics` configs GA4 + Ads when env set; no-op when unset | D-07 | unit | `npm run test:unit -- initAnalytics` | ❌ 09-03 W2 | ⬜ pending |
+| METRICS render from i18n (en + ru) | D-08 | unit (render) | `npm run test:unit -- SpeechAnalytics` | ❌ 09-04 W3 | ⬜ pending |
+| Ads campaign asset draft artifact present | D-10 | doc exists | `test -f 09-ADS-ASSETS.md` | ❌ 09-08 W1 | ⬜ pending |
+| SEO/Lighthouse audit artifact present | D-11 | doc exists | `test -f 09-SEO-AUDIT.md` | ❌ 09-08 W1 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
 ---
 
-## Wave 0 Requirements
+## Wave 0 Gaps — Scheduled Implementation Waves
 
-- [ ] `src/shared/lib/seo/usePageMeta.test.ts` — head assertions in jsdom (D-01/D-02)
-- [ ] `src/shared/config/analytics/initAnalytics.test.ts` — mock gtag (D-06/D-07)
-- [ ] `useSignupData` funnel test — assert `signup_complete` + Ads conversion on success
-- [ ] `scripts/verify-prerender.js` — post-build grep gate (D-03/D-04/D-05)
-- [ ] Prerender integration spike — confirm A1 (no hydration break with MUI/framer-motion/lazy chunks)
-- [ ] Install `@prerenderer/webpack-plugin @prerenderer/renderer-puppeteer puppeteer` (or provide system Chrome)
+These items originated as Wave 0 validation gaps, but their test creation is intentionally
+scheduled with the implementation plan that owns each artifact:
+
+- [ ] **09-02 / Wave 2:** `src/shared/lib/seo/usePageMeta.test.ts` — head assertions in jsdom (D-01/D-02)
+- [ ] **09-03 / Wave 2:** `src/shared/config/analytics/initAnalytics.test.ts` — mock gtag (D-06/D-07)
+- [ ] **09-05 / Wave 3:** `useSignupData` funnel test — assert `signup_complete` + Ads conversion on success
+- [ ] **09-04 / Wave 3:** `SpeechAnalytics` render test — assert METRICS render from i18n (EN + RU)
+- [ ] **09-07 / Wave 4:** `scripts/verify-prerender.js` — fail-closed post-build gate (D-03/D-04/D-05)
+- [ ] **09-07 / Wave 4:** Prerender integration spike — confirm A1 (no hydration break with MUI/framer-motion/lazy chunks)
+- [ ] **09-07 / Wave 4:** Install `@prerenderer/webpack-plugin @prerenderer/renderer-puppeteer puppeteer` (or provide system Chrome)
+- [ ] **09-08 / Wave 1:** `09-ADS-ASSETS.md` and `09-SEO-AUDIT.md` artifact checks (D-10/D-11)
 
 ---
 
