@@ -67,7 +67,7 @@ Each task was committed atomically:
 1. **Task 1: Write 09-SEO-AUDIT.md** - `f60e5fd4` (docs)
 2. **Task 2: Write 09-ADS-ASSETS.md** - `5391e7d9` (docs)
 
-**Plan metadata:** (pending final docs commit)
+**Plan metadata:** `c8f0186b` (docs: complete plan)
 
 ## Files Created/Modified
 
