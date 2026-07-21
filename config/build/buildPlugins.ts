@@ -6,6 +6,7 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
 import CircularDependencyPlugin from 'circular-dependency-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
+import PrerendererWebpackPlugin from '@prerenderer/webpack-plugin'
 import { buildOptions } from './types/config'
 
 export function buildPlugins ({
@@ -76,6 +77,26 @@ export function buildPlugins ({
         { from: paths.assets, to: paths.buildAssets },
         { from: 'public/docs', to: 'docs', noErrorOnMissing: true }
       ]
+    }))
+    plugins.push(new PrerendererWebpackPlugin({
+      routes: ['/', '/voice-assistants', '/speech-analytics', '/pricing'],
+      renderer: '@prerenderer/renderer-puppeteer',
+      rendererOptions: {
+        renderAfterDocumentEvent: 'seo-render-ready',
+        timeout: 30000,
+        headless: true,
+        launchOptions: {
+          args: ['--no-sandbox', '--disable-setuid-sandbox'],
+          ...(process.env.PUPPETEER_EXECUTABLE_PATH
+            ? { executablePath: process.env.PUPPETEER_EXECUTABLE_PATH }
+            : {})
+        }
+      },
+      postProcess (renderedRoute: { html: string }) {
+        const siteUrl = process.env.SITE_URL || 'https://aipbx.net'
+        renderedRoute.html = renderedRoute.html
+          .replace(/http:\/\/localhost:\d+/g, siteUrl)
+      }
     }))
   }
 
