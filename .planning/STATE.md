@@ -3,17 +3,17 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 09
-current_plan: 03 done; next 04 (of 08 in phase)
+current_plan: 04 done; next 05 (of 08 in phase)
 status: executing
-stopped_at: Completed 09-03-PLAN.md
-last_updated: "2026-07-21T09:00:51.621Z"
+stopped_at: Completed 09-04-PLAN.md
+last_updated: "2026-07-21T09:15:00.000Z"
 last_activity: 2026-07-21
 progress:
   total_phases: 11
   completed_phases: 4
   total_plans: 27
-  completed_plans: 21
-  percent: 78
+  completed_plans: 22
+  percent: 81
 ---
 
 # Project State
@@ -24,11 +24,11 @@ progress:
 
 **Current Phase:** 09
 
-**Current Plan:** 03 done; next 04 (of 08 in phase)
+**Current Plan:** 04 done; next 05 (of 08 in phase)
 
 **Last Activity:** 2026-07-21
 
-**Stopped At:** Completed 09-03-PLAN.md
+**Stopped At:** Completed 09-04-PLAN.md
 
 ## Accumulated Context
 
@@ -46,9 +46,14 @@ progress:
 - [Phase 09]: useSeoRenderReady dispatches seo-render-ready for prerender gate
 - [Phase 09]: Ads config runs in a separate guarded block after GA4 init (requires window.gtag)
 - [Phase 09]: fireAdsConversion never dual-dispatches to Metrika; no PII in conversion params
+- [Phase 09]: SEO patch applied as baseline not verbatim — RU meta preserved in ru/main.json
+- [Phase 09]: index.html Organization JSON-LD site-wide; per-page SoftwareApplication via usePageMeta
+- [Phase 09]: HtmlWebpackPlugin siteUrl from 09-01 chain for index.html canonical/OG
+- [Phase 09]: No gtag in index.html — analytics remains initAnalytics (09-03)
 
 ### Roadmap Evolution
 
+- **2026-07-21:** Phase 9 plan 09-04 executed — i18n landing meta/JSON-LD/METRICS + demo CTA + index.html base meta (D-01/D-08/D-09)
 - **2026-07-21:** Phase 9 plan 09-03 executed — initAnalytics Ads config + fireAdsConversion + mock-gtag tests (D-06/D-07)
 - **2026-07-21:** Phase 9 plan 09-02 executed — usePageMeta SITE_URL canonical/hreflang/JSON-LD + useSeoRenderReady + jsdom tests (D-01/D-02)
 - **2026-07-21:** Phase 9 plan 09-08 executed — `09-SEO-AUDIT.md` (D-11) + `09-ADS-ASSETS.md` (D-10) EN Search draft
@@ -141,10 +146,10 @@ progress:
 
 | Field | Value |
 |-------|-------|
-| Status | **Executing** — 2026-07-21 (5/8 plans) |
+| Status | **Executing** — 2026-07-21 (6/8 plans) |
 | Directory | `.planning/phases/09-landing-seo-google-ads-aipbx-net-apply-seo-patch-meta-og-jso/` |
-| Plans | 09-01 ✅ build-constant chain; 09-02 ✅ usePageMeta SEO head; 09-03 ✅ Ads initAnalytics + fireAdsConversion; 09-06 ✅ sitemap/OG; 09-08 ✅ SEO audit + Ads assets; 09-04/05/07 pending |
-| Next | Wave 3 (09-04 landing meta, 09-05 funnel) then Wave 4 prerender |
+| Plans | 09-01 ✅ build-constant chain; 09-02 ✅ usePageMeta SEO head; 09-03 ✅ Ads initAnalytics + fireAdsConversion; 09-04 ✅ landing i18n meta/CRO; 09-06 ✅ sitemap/OG; 09-08 ✅ SEO audit + Ads assets; 09-05/07 pending |
+| Next | Wave 3 (09-05 funnel) then Wave 4 prerender |
 
 ## Phase 7 — Helpdesk (AI-first admin ticket system)
 
@@ -178,3 +183,4 @@ progress:
 | Phase 09 P08 | 12min | 2 tasks | 2 files |
 | Phase 09 P02 | 12min | 2 tasks | 3 files |
 | Phase 09 P03 | 8min | 2 tasks | 2 files |
+| Phase 09 P04 | 11min | 3 tasks | 7 files |

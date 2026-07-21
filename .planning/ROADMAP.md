@@ -348,7 +348,7 @@ Plans:
 **Context:** `.planning/phases/09-landing-seo-google-ads-aipbx-net-apply-seo-patch-meta-og-jso/09-CONTEXT.md`
 **Research:** `09-RESEARCH.md` · **Patterns:** `09-PATTERNS.md` · **Validation:** `09-VALIDATION.md`
 
-**Plans:** 5/8 plans executed
+**Plans:** 6/8 plans executed
 
 | Plan | Wave | Depends on | Scope | Decisions |
 |------|------|------------|-------|-----------|
@@ -366,7 +366,7 @@ Plans:
 - [x] 09-01-PLAN.md — build-constant chain + env + jest globals
 - [x] 09-02-PLAN.md — usePageMeta i18n + JSON-LD + hreflang + render-ready
 - [x] 09-03-PLAN.md — initAnalytics Ads + fireAdsConversion
-- [ ] 09-04-PLAN.md — landing pages meta/JSON-LD/CRO + i18n + index.html
+- [x] 09-04-PLAN.md — landing pages meta/JSON-LD/CRO + i18n + index.html
 - [ ] 09-05-PLAN.md — analytics funnel wiring (signup/page_view/payment)
 - [x] 09-06-PLAN.md — sitemap/robots .net + og-default.png
 - [ ] 09-07-PLAN.md — prerender (@prerenderer) + verify gate
