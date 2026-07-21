@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 09
 status: executing
-last_updated: "2026-07-21T08:15:00.452Z"
+last_updated: "2026-07-21T08:16:03.855Z"
 last_activity: 2026-07-21
 progress:
   total_phases: 11
   completed_phases: 4
   total_plans: 27
   completed_plans: 17
-  percent: 36
+  percent: 63
 ---
 
 # Project State
@@ -22,12 +22,23 @@ progress:
 
 **Current Phase:** 09
 
+**Current Plan:** 02 (of 08 in phase)
+
 **Last Activity:** 2026-07-21
+
+**Stopped At:** Completed 09-01-PLAN.md
 
 ## Accumulated Context
 
+### Decisions
+
+- SITE_URL defaults to https://aipbx.net at build time; never window.location.origin (D-02/D-03)
+- Ads IDs empty-string default locally; real values documented in .env.example as public client IDs
+- .env.example force-added despite .env.* gitignore so plan artifact is tracked
+
 ### Roadmap Evolution
 
+- **2026-07-21:** Phase 9 plan 09-01 executed — `__SITE_URL__` / `__GOOGLE_ADS_ID__` / `__ADS_SIGNUP_LABEL__` DefinePlugin chain + Jest globals + `.env.example`
 - **2026-07-21:** Phase 9 added — Landing SEO + Google Ads (aipbx.net): apply `scripts/aipbx_seo.patch`, meta/OG/JSON-LD, react-snap prerender, GA4+Ads conversion, Search Console; closes GAP-15/40/16 for .net EN market (parallel to Phase 4 RU GTM)
 - **2026-07-03:** Phase 8 executed — user docs overhaul: menubar-aligned `/docs` nav, ru/en/de/zh, 09-11 new sections, 14 screenshot mocks, GAP-14
 - **2026-07-03:** Phase 8 context gathered via `/gsd-discuss-phase 8` — mirror menubar in docs nav, ru/en/de/zh, hybrid illustrations, layered audience, embedded OA API reference, remove legacy root md duplicates
@@ -111,6 +122,15 @@ progress:
 | Validation | `.planning/phases/02-onboarding-conversion/02-VALIDATION.md` |
 | Verification | FE `test:unit` green (Onboarding tests); docs screenshots in `public/docs/screenshots/`; funnel doc `docs/ONBOARDING_ANALYTICS.md` |
 | Next | Phase 3 per ROADMAP.md (Operator Analytics Phase 2) |
+
+## Phase 9 — Landing SEO + Google Ads (aipbx.net)
+
+| Field | Value |
+|-------|-------|
+| Status | **Executing** — 2026-07-21 (1/8 plans) |
+| Directory | `.planning/phases/09-landing-seo-google-ads-aipbx-net-apply-seo-patch-meta-og-jso/` |
+| Plans | 09-01 ✅ build-constant chain; 09-02..09-08 pending |
+| Next | Wave 1 siblings (09-06, 09-08) or Wave 2 (09-02, 09-03) |
 
 ## Phase 7 — Helpdesk (AI-first admin ticket system)
 
