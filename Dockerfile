@@ -1,25 +1,19 @@
-# syntax=docker/dockerfile:1
 # ============================================
 # Stage 1: Build (Webpack + SEO prerender)
 # ============================================
-FROM node:22-slim AS builder
-WORKDIR /app
+# Use official Puppeteer image: Node + Google Chrome + libs already baked in.
+# Avoids apt→deb.debian.org during build (DNS often broken in Docker bridge on VPS)
+# and avoids BuildKit network.host (not allowed on this host).
+FROM ghcr.io/puppeteer/puppeteer:21.11.0 AS builder
 
-# System Chromium for @prerenderer/renderer-puppeteer (skip puppeteer download on slim).
-# --network=host: apt often fails with "Temporary failure resolving deb.debian.org"
-# when the Docker bridge DNS is broken on the VPS (host DNS still works).
-RUN --network=host \
-    apt-get update && apt-get install -y --no-install-recommends \
-    chromium \
-    fonts-liberation \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+USER root
+WORKDIR /app
 
 ENV PUPPETEER_SKIP_DOWNLOAD=true \
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 
-# Кэширование зависимостей (--ignore-scripts OK: Chromium comes from apt above)
+# Кэширование зависимостей (Chrome already in base image)
 COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
     npm ci --legacy-peer-deps --ignore-scripts --prefer-offline
@@ -43,7 +37,7 @@ ENV SITE_URL=${SITE_URL} \
     GA4_MEASUREMENT_ID=${GA4_MEASUREMENT_ID} \
     GOOGLE_ADS_ID=${GOOGLE_ADS_ID} \
     ADS_SIGNUP_LABEL=${ADS_SIGNUP_LABEL} \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 
 # Production build (+ postbuild:prod runs verify-prerender)
 RUN npm run build:prod -- \
