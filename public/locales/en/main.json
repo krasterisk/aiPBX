@@ -181,7 +181,23 @@
     "ApiFeature3Desc": "Receive notifications about completed analyses or errors via webhook directly in your system.",
     "CTATitle": "Ready to improve conversation quality?",
     "CTADesc": "Start analyzing calls today. First 10 analyses are free.",
-    "CTAButton": "Start for Free"
+    "CTAButton": "Start for Free",
+    "meta": {
+      "title": "Speech Analytics Software for Call Centers | AI PBX",
+      "description": "Analyze call recordings with AI: transcription, quality scoring, sentiment analysis, and custom metrics. API and webhook delivery for call centers.",
+      "schemaName": "AI PBX Speech Analytics"
+    },
+    "metrics": {
+      "greetingQuality": "Greeting Quality",
+      "scriptAdherence": "Script Adherence",
+      "politenessEmpathy": "Politeness & Empathy",
+      "activeListening": "Active Listening",
+      "objectionHandling": "Objection Handling",
+      "productKnowledge": "Product Knowledge",
+      "problemResolution": "Problem Resolution",
+      "speechPace": "Speech Pace",
+      "closingQuality": "Closing Quality"
+    }
   },
   "VoiceAssistantsPage": {
     "NavAnalytics": "Speech Analytics",
@@ -240,6 +256,24 @@
     "CaseHotelDesc": "Room reservations, service information, wake-up calls.",
     "CTATitle": "Ready to automate calls?",
     "CTADesc": "Create your first AI assistant for free.",
-    "CTAButton": "Create Assistant"
+    "CTAButton": "Create Assistant",
+    "meta": {
+      "title": "AI Voice Assistant for Business | Automate Calls 24/7 | AI PBX",
+      "description": "Automate inbound and outbound calls with an AI voice assistant. Book appointments, qualify leads, and capture caller data 24/7. SIP, Asterisk, WebRTC ready.",
+      "schemaName": "AI PBX Voice Assistant"
+    }
+  },
+  "MainPage": {
+    "meta": {
+      "title": "AI Voice Assistant Platform — Cloud PBX",
+      "description": "Build voice AI assistants for phone and web. Real-time LLM calls, speech analytics, MCP integrations.",
+      "schemaName": "AI PBX"
+    }
+  },
+  "landing": {
+    "demoCta": {
+      "label": "Request a Demo",
+      "subtitle": "See AI PBX in action — no commitment required"
+    }
   }
 }

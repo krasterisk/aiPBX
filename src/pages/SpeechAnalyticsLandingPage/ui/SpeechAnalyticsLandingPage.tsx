@@ -26,15 +26,15 @@ const fadeIn = {
 }
 
 const METRICS = [
-    { name: 'Качество приветствия', color: '#22c55e' },
-    { name: 'Следование скрипту', color: '#f59e0b' },
-    { name: 'Вежливость и эмпатия', color: '#22c55e' },
-    { name: 'Активное слушание', color: '#f59e0b' },
-    { name: 'Работа с возражениями', color: '#f59e0b' },
-    { name: 'Знание продукта', color: '#22c55e' },
-    { name: 'Решение проблемы', color: '#f59e0b' },
-    { name: 'Темп речи', color: '#22c55e' },
-    { name: 'Качество завершения', color: '#f59e0b' },
+    { key: 'greetingQuality', color: '#22c55e' },
+    { key: 'scriptAdherence', color: '#f59e0b' },
+    { key: 'politenessEmpathy', color: '#22c55e' },
+    { key: 'activeListening', color: '#f59e0b' },
+    { key: 'objectionHandling', color: '#f59e0b' },
+    { key: 'productKnowledge', color: '#22c55e' },
+    { key: 'problemResolution', color: '#f59e0b' },
+    { key: 'speechPace', color: '#22c55e' },
+    { key: 'closingQuality', color: '#f59e0b' },
 ]
 
 const SpeechAnalyticsLandingPage = () => {
@@ -92,6 +92,9 @@ const SpeechAnalyticsLandingPage = () => {
                         <div className={cls.ctaGroup}>
                             <Link to={getRouteSignup()} className={cls.ctaBtn}>
                                 {t('SpeechAnalyticsPage.HeroCTA')}
+                            </Link>
+                            <Link to={getRouteSignup()} className={cls.ctaBtnOutline}>
+                                {t('landing.demoCta.label')}
                             </Link>
                         </div>
                     </motion.div>
@@ -207,9 +210,9 @@ const SpeechAnalyticsLandingPage = () => {
                             </p>
                             <div className={cls.metricList} style={{ gridTemplateColumns: '1fr' }}>
                                 {METRICS.map((m) => (
-                                    <div className={cls.metricItem} key={m.name}>
+                                    <div className={cls.metricItem} key={m.key}>
                                         <div className={cls.metricDot} style={{ background: m.color }} />
-                                        <div className={cls.metricName}>{t(`SpeechAnalyticsPage.Metric_${m.name}`, m.name)}</div>
+                                        <div className={cls.metricName}>{t(`SpeechAnalyticsPage.metrics.${m.key}`)}</div>
                                     </div>
                                 ))}
                             </div>

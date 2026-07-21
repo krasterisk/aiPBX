@@ -177,6 +177,13 @@ const MainPage: FC = memo(() => {
                 {t('Hero.CTA_Start')}
                 <ArrowRight size={20} style={{ marginLeft: 8 }} />
               </Button>
+              <Button
+                size="xl"
+                variant="clear"
+                onClick={onRegister}
+              >
+                {t('landing.demoCta.label')}
+              </Button>
             </div>
           </motion.div>
         </Container>

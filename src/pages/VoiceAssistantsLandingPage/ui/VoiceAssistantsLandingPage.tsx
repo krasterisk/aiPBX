@@ -125,6 +125,9 @@ const VoiceAssistantsLandingPage = () => {
                             <Link to={getRouteSignup()} className={cls.ctaBtn}>
                                 {t('VoiceAssistantsPage.HeroCTA')}
                             </Link>
+                            <Link to={getRouteSignup()} className={cls.ctaBtnOutline}>
+                                {t('landing.demoCta.label')}
+                            </Link>
                         </div>
                     </motion.div>
                 </div>
