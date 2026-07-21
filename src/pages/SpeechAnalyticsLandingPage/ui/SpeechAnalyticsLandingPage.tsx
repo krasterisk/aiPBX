@@ -5,7 +5,10 @@ import { motion } from 'framer-motion'
 import { Radio, PackageCheck, Bell } from 'lucide-react'
 import { getRouteSignup, getRouteMain, getRoutePublicVoiceAssistants, getRoutePublicPricing } from '@/shared/const/router'
 import { usePageMeta } from '@/shared/lib/seo/usePageMeta'
+import { useSeoRenderReady } from '@/shared/lib/seo/useSeoRenderReady'
 import cls from '../../shared/LandingStyles.module.scss'
+
+const SITE_URL = typeof __SITE_URL__ !== 'undefined' ? __SITE_URL__ : 'https://aipbx.net'
 
 const analyticsUploadImg = '/assets/landing/analytics-upload.png'
 const analyticsDashboardImg = '/assets/landing/analytics-dashboard.png'
@@ -35,13 +38,22 @@ const METRICS = [
 ]
 
 const SpeechAnalyticsLandingPage = () => {
-    const { t } = useTranslation('main')
+    const { t, ready } = useTranslation('main')
 
     usePageMeta({
-        title: 'Речевая аналитика звонков колл-центра с ИИ',
-        description: 'Автоматический анализ записей звонков: STT, оценка менеджеров, кастомные метрики, AI-инсайты для руководителя.',
-        path: '/speech-analytics'
+        title: t('SpeechAnalyticsPage.meta.title'),
+        description: t('SpeechAnalyticsPage.meta.description'),
+        path: '/speech-analytics',
+        jsonLd: {
+            '@context': 'https://schema.org',
+            '@type': 'SoftwareApplication',
+            name: t('SpeechAnalyticsPage.meta.schemaName'),
+            applicationCategory: 'BusinessApplication',
+            operatingSystem: 'Web, SIP, WebRTC',
+            url: `${SITE_URL}/speech-analytics`
+        }
     })
+    useSeoRenderReady(ready)
 
     return (
         <div className={cls.LandingPage}>

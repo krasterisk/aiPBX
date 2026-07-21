@@ -15,7 +15,10 @@ import {
     getRoutePublicPricing
 } from '@/shared/const/router'
 import { usePageMeta } from '@/shared/lib/seo/usePageMeta'
+import { useSeoRenderReady } from '@/shared/lib/seo/useSeoRenderReady'
 import cls from '../../shared/LandingStyles.module.scss'
+
+const SITE_URL = typeof __SITE_URL__ !== 'undefined' ? __SITE_URL__ : 'https://aipbx.net'
 
 const assistantFormImg = '/assets/landing/assistant-form.png'
 const assistantPlaygroundImg = '/assets/landing/assistant-playground.png'
@@ -49,15 +52,24 @@ const USE_CASES = [
 ]
 
 const VoiceAssistantsLandingPage = () => {
-    const { t } = useTranslation('main')
+    const { t, ready } = useTranslation('main')
     const audioRef = useRef<HTMLAudioElement>(null)
     const [isPlaying, setIsPlaying] = useState(false)
 
     usePageMeta({
-        title: 'Голосовой AI-бот для Asterisk и телефонии',
-        description: 'Создайте голосового ассистента с LLM: SIP-транки, WebRTC-виджет, function calling, интеграции MCP и Bitrix24.',
-        path: '/voice-assistants'
+        title: t('VoiceAssistantsPage.meta.title'),
+        description: t('VoiceAssistantsPage.meta.description'),
+        path: '/voice-assistants',
+        jsonLd: {
+            '@context': 'https://schema.org',
+            '@type': 'SoftwareApplication',
+            name: t('VoiceAssistantsPage.meta.schemaName'),
+            applicationCategory: 'BusinessApplication',
+            operatingSystem: 'Web, SIP, WebRTC',
+            url: `${SITE_URL}/voice-assistants`
+        }
     })
+    useSeoRenderReady(ready)
 
     const handlePlayStop = useCallback(() => {
         const audio = audioRef.current

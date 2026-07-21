@@ -37,6 +37,7 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import LogoIcon from '@/shared/assets/icons/aipbx_logo_v3.svg'
 import { getDomainConfig } from '@/shared/lib/domain'
 import { usePageMeta } from '@/shared/lib/seo/usePageMeta'
+import { useSeoRenderReady } from '@/shared/lib/seo/useSeoRenderReady'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },
@@ -70,8 +71,10 @@ const FeatureCard: FC<FeatureCardProps> = ({ icon: Icon, title, desc, delay = 0 
   </motion.div>
 )
 
+const SITE_URL = typeof __SITE_URL__ !== 'undefined' ? __SITE_URL__ : 'https://aipbx.net'
+
 const MainPage: FC = memo(() => {
-  const { t } = useTranslation('main')
+  const { t, ready } = useTranslation('main')
   const isMobile = useMediaQuery('(max-width:768px)')
   const navigate = useNavigate()
   const auth = useSelector(getUserAuthData)
@@ -79,14 +82,19 @@ const MainPage: FC = memo(() => {
   const isRuDomain = domainConfig.region === 'ru'
 
   usePageMeta({
-    title: isRuDomain
-      ? 'Голосовой AI-ассистент для бизнеса — облачная АТС с ИИ'
-      : 'AI Voice Assistant Platform — Cloud PBX',
-    description: isRuDomain
-      ? 'Создайте голосового AI-бота для телефонии: Asterisk, SIP, WebRTC. Речевая аналитика звонков, интеграции Bitrix24, биллинг для B2B.'
-      : 'Build voice AI assistants for phone and web. Real-time LLM calls, speech analytics, MCP integrations.',
-    path: '/'
+    title: t('MainPage.meta.title'),
+    description: t('MainPage.meta.description'),
+    path: '/',
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: t('MainPage.meta.schemaName'),
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web, SIP, WebRTC',
+      url: `${SITE_URL}/`
+    }
   })
+  useSeoRenderReady(ready)
 
   useEffect(() => {
     if (auth) {
