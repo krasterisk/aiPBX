@@ -1,11 +1,15 @@
+# syntax=docker/dockerfile:1
 # ============================================
 # Stage 1: Build (Webpack + SEO prerender)
 # ============================================
 FROM node:22-slim AS builder
 WORKDIR /app
 
-# System Chromium for @prerenderer/renderer-puppeteer (skip puppeteer download on slim)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# System Chromium for @prerenderer/renderer-puppeteer (skip puppeteer download on slim).
+# --network=host: apt often fails with "Temporary failure resolving deb.debian.org"
+# when the Docker bridge DNS is broken on the VPS (host DNS still works).
+RUN --network=host \
+    apt-get update && apt-get install -y --no-install-recommends \
     chromium \
     fonts-liberation \
     ca-certificates \
