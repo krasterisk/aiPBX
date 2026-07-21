@@ -337,6 +337,48 @@ Plans:
 - No admin docs; no em-dash / AI clichés in RU copy (D-12)
 - Illustrations: form-mockup + HTML PNG mocks (D-07, D-08)
 
+### Phase 9: Landing SEO + Google Ads (aipbx.net): apply SEO patch, meta/OG/JSON-LD, react-snap prerender, GA4+Ads conversion, Search Console
+
+**Goal:** Ship production SEO for the 4 public landing routes on aipbx.net (EN) and enable Google Ads publication — i18n-driven per-page meta/OG/JSON-LD/hreflang, build-time prerender so bots see rendered HTML, GA4 + Ads full-funnel conversion tracking, `.net` sitemap/robots, an expert SEO audit, and a drafted Ads campaign — all without breaking the RU segment.
+
+**Requirements:** D-01..D-11 (CONTEXT decisions; closes GAP-15/16/40/42). Note: prerender uses `@prerenderer/webpack-plugin` (NOT react-snap, per D-04).
+
+**Depends on:** Phase 8
+
+**Context:** `.planning/phases/09-landing-seo-google-ads-aipbx-net-apply-seo-patch-meta-og-jso/09-CONTEXT.md`
+**Research:** `09-RESEARCH.md` · **Patterns:** `09-PATTERNS.md` · **Validation:** `09-VALIDATION.md`
+
+**Plans:** 8 plans in 4 waves
+
+| Plan | Wave | Depends on | Scope | Decisions |
+|------|------|------------|-------|-----------|
+| 09-01 | 1 | — | Build-constant chain (__SITE_URL__/__GOOGLE_ADS_ID__/__ADS_SIGNUP_LABEL__) + env + jest globals | D-07 |
+| 09-06 | 1 | — | sitemap/robots → .net + og-default.png (1200×630) | D-03, D-05 |
+| 09-08 | 1 | — | 09-SEO-AUDIT.md + 09-ADS-ASSETS.md | D-10, D-11 |
+| 09-02 | 2 | 09-01 | usePageMeta i18n + JSON-LD + hreflang + render-ready hook + test | D-01, D-02 |
+| 09-03 | 2 | 09-01 | initAnalytics Ads config + fireAdsConversion + test | D-06, D-07 |
+| 09-04 | 3 | 09-02 | Landing meta/JSON-LD/render-ready + METRICS i18n + demo CTA + index.html | D-01, D-08, D-09 |
+| 09-05 | 3 | 09-03 | Signup funnel + Ads conversion + page_view + first_call + payment_success | D-06, D-07 |
+| 09-07 | 4 | 09-01, 09-04, 09-06 | @prerenderer/webpack-plugin prerender + verify-prerender.js (autonomous:false) | D-04 |
+
+Plans:
+
+- [ ] 09-01-PLAN.md — build-constant chain + env + jest globals
+- [ ] 09-02-PLAN.md — usePageMeta i18n + JSON-LD + hreflang + render-ready
+- [ ] 09-03-PLAN.md — initAnalytics Ads + fireAdsConversion
+- [ ] 09-04-PLAN.md — landing pages meta/JSON-LD/CRO + i18n + index.html
+- [ ] 09-05-PLAN.md — analytics funnel wiring (signup/page_view/payment)
+- [ ] 09-06-PLAN.md — sitemap/robots .net + og-default.png
+- [ ] 09-07-PLAN.md — prerender (@prerenderer) + verify gate
+- [ ] 09-08-PLAN.md — SEO audit + Ads campaign assets
+
+**Cross-cutting constraints:**
+
+- Apply `scripts/aipbx_seo.patch` as baseline NOT verbatim (D-01) — route meta + METRICS through i18n, never overwrite RU.
+- Do NOT hardcode gtag in index.html — extend `initAnalytics` (RESEARCH anti-pattern).
+- Canonical/hreflang from `__SITE_URL__`, never `window.location.origin`.
+- `payment_success` must NOT edit `billing/`/`ari/`/`accounting/` core (non-invasive fire only).
+
 ---
 
 ## Weekly agent cycle (from Phase 0b onward)
