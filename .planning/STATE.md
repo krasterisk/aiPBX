@@ -3,17 +3,17 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 09
-current_plan: 04 done; next 05 (of 08 in phase)
+current_plan: 05 done; next 07 (of 08 in phase)
 status: executing
-stopped_at: Completed 09-04-PLAN.md
-last_updated: "2026-07-21T09:15:00.000Z"
+stopped_at: Completed 09-05-PLAN.md
+last_updated: "2026-07-21T09:49:46.701Z"
 last_activity: 2026-07-21
 progress:
   total_phases: 11
   completed_phases: 4
   total_plans: 27
-  completed_plans: 22
-  percent: 81
+  completed_plans: 23
+  percent: 36
 ---
 
 # Project State
@@ -24,11 +24,11 @@ progress:
 
 **Current Phase:** 09
 
-**Current Plan:** 04 done; next 05 (of 08 in phase)
+**Current Plan:** 05 done; next 07 (of 08 in phase)
 
 **Last Activity:** 2026-07-21
 
-**Stopped At:** Completed 09-04-PLAN.md
+**Stopped At:** Completed 09-05-PLAN.md
 
 ## Accumulated Context
 
@@ -50,9 +50,13 @@ progress:
 - [Phase 09]: index.html Organization JSON-LD site-wide; per-page SoftwareApplication via usePageMeta
 - [Phase 09]: HtmlWebpackPlugin siteUrl from 09-01 chain for index.html canonical/OG
 - [Phase 09]: No gtag in index.html — analytics remains initAnalytics (09-03)
+- [Phase 09]: payment_success on BillingPage verified success (alternate-return-route), not PaymentPage
+- [Phase 09]: first_call emitted alongside playground_call_success
+- [Phase 09]: signup Ads conversion only on google/telegram/email-activation success
 
 ### Roadmap Evolution
 
+- **2026-07-21:** Phase 9 plan 09-05 executed — GA4 funnel (signup_complete/page_view/first_call/payment_success) + Ads signup conversion (D-06/D-07)
 - **2026-07-21:** Phase 9 plan 09-04 executed — i18n landing meta/JSON-LD/METRICS + demo CTA + index.html base meta (D-01/D-08/D-09)
 - **2026-07-21:** Phase 9 plan 09-03 executed — initAnalytics Ads config + fireAdsConversion + mock-gtag tests (D-06/D-07)
 - **2026-07-21:** Phase 9 plan 09-02 executed — usePageMeta SITE_URL canonical/hreflang/JSON-LD + useSeoRenderReady + jsdom tests (D-01/D-02)
@@ -184,3 +188,4 @@ progress:
 | Phase 09 P02 | 12min | 2 tasks | 3 files |
 | Phase 09 P03 | 8min | 2 tasks | 2 files |
 | Phase 09 P04 | 11min | 3 tasks | 7 files |
+| Phase 09 P05 | 35min | 5 tasks | 7 files |
