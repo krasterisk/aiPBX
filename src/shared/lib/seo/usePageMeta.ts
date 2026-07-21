@@ -5,10 +5,13 @@ export interface PageMetaOptions {
   description: string
   path?: string
   ogImage?: string
+  jsonLd?: Record<string, unknown>
 }
 
 const SITE_NAME = 'AI PBX'
 const DEFAULT_OG_IMAGE = '/assets/og-default.png'
+const SITE_URL = typeof __SITE_URL__ !== 'undefined' ? __SITE_URL__ : 'https://aipbx.net'
+const RU_SITE_URL = 'https://aipbx.ru'
 
 function upsertMeta (attr: 'name' | 'property', key: string, content: string): void {
   const selector = `meta[${attr}="${key}"]`
@@ -37,7 +40,36 @@ function upsertCanonical (href: string): void {
   el.href = href
 }
 
-export function setPageMeta ({ title, description, path, ogImage }: PageMetaOptions): void {
+function upsertHreflang (lng: string, href: string): void {
+  const selector = `link[rel="alternate"][hreflang="${lng}"]`
+  const existing = document.head.querySelector(selector)
+  let el: HTMLLinkElement
+  if (existing instanceof HTMLLinkElement) {
+    el = existing
+  } else {
+    el = document.createElement('link')
+    el.rel = 'alternate'
+    el.setAttribute('hreflang', lng)
+    document.head.appendChild(el)
+  }
+  el.href = href
+}
+
+function upsertJsonLd (data: Record<string, unknown>): void {
+  const existing = document.head.querySelector('#page-jsonld')
+  let el: HTMLScriptElement
+  if (existing instanceof HTMLScriptElement) {
+    el = existing
+  } else {
+    el = document.createElement('script')
+    el.type = 'application/ld+json'
+    el.id = 'page-jsonld'
+    document.head.appendChild(el)
+  }
+  el.textContent = JSON.stringify(data)
+}
+
+export function setPageMeta ({ title, description, path, ogImage, jsonLd }: PageMetaOptions): void {
   const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`
 
   document.title = fullTitle
@@ -45,17 +77,23 @@ export function setPageMeta ({ title, description, path, ogImage }: PageMetaOpti
   upsertMeta('property', 'og:title', fullTitle)
   upsertMeta('property', 'og:description', description)
   upsertMeta('property', 'og:type', 'website')
-  upsertMeta('property', 'og:image', ogImage || DEFAULT_OG_IMAGE)
+  upsertMeta('property', 'og:image', `${SITE_URL}${ogImage || DEFAULT_OG_IMAGE}`)
 
   if (path) {
-    const origin = window.location.origin
-    upsertCanonical(`${origin}${path}`)
-    upsertMeta('property', 'og:url', `${origin}${path}`)
+    upsertCanonical(`${SITE_URL}${path}`)
+    upsertMeta('property', 'og:url', `${SITE_URL}${path}`)
+    upsertHreflang('en', `${SITE_URL}${path}`)
+    upsertHreflang('ru', `${RU_SITE_URL}${path}`)
+    upsertHreflang('x-default', `${SITE_URL}${path}`)
+  }
+
+  if (jsonLd) {
+    upsertJsonLd(jsonLd)
   }
 }
 
 export function usePageMeta (options: PageMetaOptions): void {
   useEffect(() => {
     setPageMeta(options)
-  }, [options.title, options.description, options.path, options.ogImage])
+  }, [options.title, options.description, options.path, options.ogImage, options.jsonLd])
 }
