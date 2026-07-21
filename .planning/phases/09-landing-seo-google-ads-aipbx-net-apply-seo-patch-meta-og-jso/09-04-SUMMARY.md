@@ -78,7 +78,7 @@ Each task was committed atomically:
 2. **Task 2: METRICS to i18n, demo CTA, and en/ru locale keys** - `0aae6ac7` (feat)
 3. **Task 3: index.html base meta, viewport a11y, Organization JSON-LD** - `f712358b` (feat)
 
-**Plan metadata:** (docs commit after SUMMARY)
+**Plan metadata:** `af7becd7` (docs: complete plan)
 
 ## Files Created/Modified
 
