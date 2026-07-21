@@ -3,37 +3,39 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 09
-current_plan: 05 done; next 07 (of 08 in phase)
-status: executing
-stopped_at: Completed 09-05-PLAN.md
-last_updated: "2026-07-21T09:49:46.701Z"
+current_plan: 07 done; phase 09 plans 8/8 complete
+status: phase_complete
+stopped_at: Completed 09-07-PLAN.md
+last_updated: "2026-07-21T11:05:00.000Z"
 last_activity: 2026-07-21
 progress:
   total_phases: 11
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 27
-  completed_plans: 23
-  percent: 85
+  completed_plans: 24
+  percent: 89
 ---
 
 # Project State
 
 **Project:** aiPBX (full-stack)  
 
-**Status:** Executing Phase 09
+**Status:** Phase 09 plans complete (8/8)
 
 **Current Phase:** 09
 
-**Current Plan:** 05 done; next 07 (of 08 in phase)
+**Current Plan:** 07 done; phase 09 plans 8/8 complete
 
 **Last Activity:** 2026-07-21
 
-**Stopped At:** Completed 09-05-PLAN.md
+**Stopped At:** Completed 09-07-PLAN.md
 
 ## Accumulated Context
 
 ### Decisions
 
+- [Phase 09]: Prerender via @prerenderer/webpack-plugin + seo-render-ready (not react-snap)
+- [Phase 09]: Docker EU builder uses apt chromium + PUPPETEER_EXECUTABLE_PATH; SITE_URL/GA4/Ads as build ARGs
 - SITE_URL defaults to https://aipbx.net at build time; never window.location.origin (D-02/D-03)
 - Ads IDs empty-string default locally; real values documented in .env.example as public client IDs
 - .env.example force-added despite .env.* gitignore so plan artifact is tracked
@@ -56,6 +58,7 @@ progress:
 
 ### Roadmap Evolution
 
+- **2026-07-21:** Phase 9 plan 09-07 executed — `@prerenderer/webpack-plugin` prerender + verify-prerender + Docker Chromium for EU (D-04)
 - **2026-07-21:** Phase 9 plan 09-05 executed — GA4 funnel (signup_complete/page_view/first_call/payment_success) + Ads signup conversion (D-06/D-07)
 - **2026-07-21:** Phase 9 plan 09-04 executed — i18n landing meta/JSON-LD/METRICS + demo CTA + index.html base meta (D-01/D-08/D-09)
 - **2026-07-21:** Phase 9 plan 09-03 executed — initAnalytics Ads config + fireAdsConversion + mock-gtag tests (D-06/D-07)
@@ -150,10 +153,10 @@ progress:
 
 | Field | Value |
 |-------|-------|
-| Status | **Executing** — 2026-07-21 (6/8 plans) |
+| Status | **Executed** — 2026-07-21 (8/8 plans) |
 | Directory | `.planning/phases/09-landing-seo-google-ads-aipbx-net-apply-seo-patch-meta-og-jso/` |
-| Plans | 09-01 ✅ build-constant chain; 09-02 ✅ usePageMeta SEO head; 09-03 ✅ Ads initAnalytics + fireAdsConversion; 09-04 ✅ landing i18n meta/CRO; 09-05 ✅ GA4 funnel + Ads conversion; 09-06 ✅ sitemap/OG; 09-08 ✅ SEO audit + Ads assets; 09-07 pending |
-| Next | Wave 4 prerender (09-07) |
+| Plans | 09-01 ✅ build-constant chain; 09-02 ✅ usePageMeta SEO head; 09-03 ✅ Ads initAnalytics + fireAdsConversion; 09-04 ✅ landing i18n meta/CRO; 09-05 ✅ GA4 funnel + Ads conversion; 09-06 ✅ sitemap/OG; 09-08 ✅ SEO audit + Ads assets; 09-07 ✅ prerender + verify gate |
+| Next | Founder: Rich Results + OG debugger after [deploy:1]; phase verify/UAT |
 
 ## Phase 7 — Helpdesk (AI-first admin ticket system)
 
@@ -189,3 +192,4 @@ progress:
 | Phase 09 P03 | 8min | 2 tasks | 2 files |
 | Phase 09 P04 | 11min | 3 tasks | 7 files |
 | Phase 09 P05 | 35min | 5 tasks | 7 files |
+| Phase 09 P07 | 45min | 3 tasks | 9 files |
