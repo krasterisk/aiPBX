@@ -13,6 +13,7 @@ import {
     getOnboardingPlaygroundCallCompleted
 , trackOnboardingEvent 
 } from '@/features/Onboarding'
+import { trackEvent } from '@/shared/config/analytics/initAnalytics'
 import { toast } from 'react-toastify'
 
 const MIN_CONNECTED_MS = 10_000
@@ -45,6 +46,7 @@ const PlaygroundPage = memo((props: PlaygroundPageProps) => {
 
         dispatch(onboardingActions.setPlaygroundCallCompleted(true))
         trackOnboardingEvent('playground_call_success', { productPath: 'assistants' })
+        trackEvent('first_call')
         dispatch(onboardingActions.resumeForPostSuccess())
 
         if (onboardingFromUrl) {

@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { Navbar } from '@/widgets/Navbar'
 import { useSelector } from 'react-redux'
@@ -24,6 +24,19 @@ const App = (): any => {
   const { theme } = useTheme()
   const { pathname } = useLocation()
   const isDocsPage = pathname.startsWith(getRouteDocs())
+
+  useEffect(() => {
+    const ga4Id = typeof __GA4_MEASUREMENT_ID__ !== 'undefined' ? __GA4_MEASUREMENT_ID__ : ''
+    if (!ga4Id || !window.gtag) {
+      return
+    }
+    const siteUrl = typeof __SITE_URL__ !== 'undefined' ? __SITE_URL__ : ''
+    window.gtag('event', 'page_view', {
+      page_path: pathname,
+      page_location: `${siteUrl}${pathname}`,
+      page_title: document.title
+    })
+  }, [pathname])
 
   const mapThemeToToast = () => {
     switch (theme) {
