@@ -3,17 +3,17 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 09
-current_plan: 06 done; next 02 (of 08 in phase)
+current_plan: 08 done; next 02 (of 08 in phase)
 status: executing
-stopped_at: Completed 09-06-PLAN.md
-last_updated: "2026-07-21T08:24:59.787Z"
+stopped_at: Completed 09-08-PLAN.md
+last_updated: "2026-07-21T08:34:00.000Z"
 last_activity: 2026-07-21
 progress:
   total_phases: 11
   completed_phases: 4
   total_plans: 27
-  completed_plans: 18
-  percent: 36
+  completed_plans: 19
+  percent: 70
 ---
 
 # Project State
@@ -24,11 +24,11 @@ progress:
 
 **Current Phase:** 09
 
-**Current Plan:** 06 done; next 02 (of 08 in phase)
+**Current Plan:** 08 done; next 02 (of 08 in phase)
 
 **Last Activity:** 2026-07-21
 
-**Stopped At:** Completed 09-06-PLAN.md
+**Stopped At:** Completed 09-08-PLAN.md
 
 ## Accumulated Context
 
@@ -39,9 +39,13 @@ progress:
 - .env.example force-added despite .env.* gitignore so plan artifact is tracked
 - [Phase 09]: lastmod set to 2026-07-21 (execution day) rather than patch 2026-07-20
 - [Phase 09]: OG card via System.Drawing branded template matching logo cyan/violet (exact 1200x630)
+- [Phase 09]: Consent Mode v2 documented as P1 founder decision; no CMP in 09-08
+- [Phase 09]: Ads draft optimizes to signup_complete label -B6_CK72wtMcEIyDxKA-; other events observation-only
+- [Phase 09]: Campaign launch gated on 09-07 prerender verify for Quality Score
 
 ### Roadmap Evolution
 
+- **2026-07-21:** Phase 9 plan 09-08 executed — `09-SEO-AUDIT.md` (D-11) + `09-ADS-ASSETS.md` (D-10) EN Search draft
 - **2026-07-21:** Phase 9 plan 09-01 executed — `__SITE_URL__` / `__GOOGLE_ADS_ID__` / `__ADS_SIGNUP_LABEL__` DefinePlugin chain + Jest globals + `.env.example`
 - **2026-07-21:** Phase 9 added — Landing SEO + Google Ads (aipbx.net): apply `scripts/aipbx_seo.patch`, meta/OG/JSON-LD, react-snap prerender, GA4+Ads conversion, Search Console; closes GAP-15/40/16 for .net EN market (parallel to Phase 4 RU GTM)
 - **2026-07-03:** Phase 8 executed — user docs overhaul: menubar-aligned `/docs` nav, ru/en/de/zh, 09-11 new sections, 14 screenshot mocks, GAP-14
@@ -131,10 +135,10 @@ progress:
 
 | Field | Value |
 |-------|-------|
-| Status | **Executing** — 2026-07-21 (1/8 plans) |
+| Status | **Executing** — 2026-07-21 (3/8 plans) |
 | Directory | `.planning/phases/09-landing-seo-google-ads-aipbx-net-apply-seo-patch-meta-og-jso/` |
-| Plans | 09-01 ✅ build-constant chain; 09-02..09-08 pending |
-| Next | Wave 1 siblings (09-06, 09-08) or Wave 2 (09-02, 09-03) |
+| Plans | 09-01 ✅ build-constant chain; 09-06 ✅ sitemap/OG; 09-08 ✅ SEO audit + Ads assets; 09-02..05, 09-07 pending |
+| Next | Wave 2 (09-02, 09-03) |
 
 ## Phase 7 — Helpdesk (AI-first admin ticket system)
 
@@ -165,3 +169,4 @@ progress:
 | Phase | Plan | Duration | Notes |
 |-------|------|----------|-------|
 | Phase 09 P06 | 8min | 2 tasks | 3 files |
+| Phase 09 P08 | 12min | 2 tasks | 2 files |
