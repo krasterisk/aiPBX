@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 03 — Operator Analytics Phase 2 **complete** (all 4 waves)
 status: executing
-last_updated: "2026-07-03T10:40:40.779Z"
+last_updated: "2026-07-21T04:27:30.358Z"
 last_activity: 2026-07-03
 progress:
-  total_phases: 9
-  completed_phases: 2
-  total_plans: 10
-  completed_plans: 8
-  percent: 40
+  total_phases: 11
+  completed_phases: 4
+  total_plans: 19
+  completed_plans: 16
+  percent: 36
 ---
 
 # Project State
@@ -28,6 +28,7 @@ progress:
 
 ### Roadmap Evolution
 
+- **2026-07-21:** Phase 9 added — Landing SEO + Google Ads (aipbx.net): apply `scripts/aipbx_seo.patch`, meta/OG/JSON-LD, react-snap prerender, GA4+Ads conversion, Search Console; closes GAP-15/40/16 for .net EN market (parallel to Phase 4 RU GTM)
 - **2026-07-03:** Phase 8 executed — user docs overhaul: menubar-aligned `/docs` nav, ru/en/de/zh, 09-11 new sections, 14 screenshot mocks, GAP-14
 - **2026-07-03:** Phase 8 context gathered via `/gsd-discuss-phase 8` — mirror menubar in docs nav, ru/en/de/zh, hybrid illustrations, layered audience, embedded OA API reference, remove legacy root md duplicates
 - **2026-07-03:** Phase 8 added — User docs overhaul: menu-by-menu актуализация `public/docs` (ru+en), аналитика, макеты страниц; без раздела «Управление»
