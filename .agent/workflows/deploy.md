@@ -154,7 +154,12 @@ AIPBX_BOTNAME=aiPBXBot
 
 ### 2.1 Frontend — `Dockerfile.frontend`
 
-Заменить текущий `Dockerfile` на multi-stage build:
+Заменить текущий `Dockerfile` на multi-stage build.
+
+> **Phase 09 SEO:** live `aiPBX/Dockerfile` installs apt `chromium`, sets
+> `PUPPETEER_EXECUTABLE_PATH`, and accepts build ARGs `SITE_URL` (default
+> `https://aipbx.net`), `GA4_MEASUREMENT_ID`, `GOOGLE_ADS_ID`, `ADS_SIGNUP_LABEL`.
+> After `npm run build:prod` it runs `node scripts/verify-prerender.js` (fail-closed).
 
 ```dockerfile
 # ============================================
@@ -178,6 +183,10 @@ ARG WS_URL=wss://aipbx.krasterisk.ru
 ARG PORT=7003
 ARG TG_BOT_ID=8298793342
 ARG STRIPE_PUBLISHABLE_KEY
+ARG SITE_URL=https://aipbx.net
+ARG GA4_MEASUREMENT_ID
+ARG GOOGLE_ADS_ID
+ARG ADS_SIGNUP_LABEL
 
 # Production build
 RUN npm run build:prod -- \
@@ -493,6 +502,11 @@ services:
         PORT: ${FRONTEND_PORT}
         TG_BOT_ID: ${FRONTEND_TG_BOT_ID}
         STRIPE_PUBLISHABLE_KEY: ${FRONTEND_STRIPE_KEY}
+        # SEO prerender + gtag (webpack DefinePlugin via process.env)
+        SITE_URL: ${SITE_URL:-https://aipbx.net}
+        GA4_MEASUREMENT_ID: ${GA4_MEASUREMENT_ID}
+        GOOGLE_ADS_ID: ${GOOGLE_ADS_ID}
+        ADS_SIGNUP_LABEL: ${ADS_SIGNUP_LABEL}
     restart: unless-stopped
     networks:
       - app-internal
