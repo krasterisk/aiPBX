@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState, useCallback } from 'react'
+import React, { memo, useEffect, useState, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Page } from '@/widgets/Page'
 import { VStack } from '@/shared/ui/redesigned/Stack'
@@ -11,6 +11,7 @@ import CheckIcon from '@/shared/assets/icons/check.svg'
 import { getRoutePayment } from '@/shared/const/router'
 import { loadStripe } from '@stripe/stripe-js'
 import { useLazyGetRobokassaStatusQuery } from '@/entities/Payment'
+import { trackEvent } from '@/shared/config/analytics/initAnalytics'
 
 const STRIPE_KEY = __STRIPE_PUBLISHABLE_KEY__ || ''
 
@@ -20,6 +21,15 @@ const BillingPage = memo(() => {
     const navigate = useNavigate()
     const [verificationStatus, setVerificationStatus] = useState<'loading' | 'success' | 'pending' | 'error'>('loading')
     const [fetchRobokassaStatus] = useLazyGetRobokassaStatusQuery()
+    const paymentSuccessFiredRef = useRef(false)
+
+    const firePaymentSuccess = useCallback(() => {
+        if (paymentSuccessFiredRef.current) {
+            return
+        }
+        paymentSuccessFiredRef.current = true
+        trackEvent('payment_success')
+    }, [])
 
     const provider = searchParams.get('provider')
     const status = searchParams.get('status')
@@ -43,6 +53,7 @@ const BillingPage = memo(() => {
                 try {
                     const result = await fetchRobokassaStatus(invId).unwrap()
                     if (result.status === 'succeeded') {
+                        firePaymentSuccess()
                         setVerificationStatus('success')
                     } else if (result.status === 'pending') {
                         setVerificationStatus('pending')
@@ -77,6 +88,7 @@ const BillingPage = memo(() => {
                     const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret)
 
                     if (paymentIntent?.status === 'succeeded') {
+                        firePaymentSuccess()
                         setVerificationStatus('success')
                     } else {
                         setVerificationStatus('error')
@@ -91,7 +103,7 @@ const BillingPage = memo(() => {
 
             verifyPayment()
         }
-    }, [searchParams, navigate, provider, status, fetchRobokassaStatus])
+    }, [searchParams, navigate, provider, status, fetchRobokassaStatus, firePaymentSuccess])
 
     const onBackToPayment = useCallback(() => {
         navigate(getRoutePayment())
