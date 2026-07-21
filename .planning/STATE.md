@@ -3,15 +3,17 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 09
+current_plan: 06 done; next 02 (of 08 in phase)
 status: executing
-last_updated: "2026-07-21T08:16:03.855Z"
+stopped_at: Completed 09-06-PLAN.md
+last_updated: "2026-07-21T08:23:44.408Z"
 last_activity: 2026-07-21
 progress:
   total_phases: 11
   completed_phases: 4
   total_plans: 27
-  completed_plans: 17
-  percent: 63
+  completed_plans: 18
+  percent: 36
 ---
 
 # Project State
@@ -22,11 +24,11 @@ progress:
 
 **Current Phase:** 09
 
-**Current Plan:** 02 (of 08 in phase)
+**Current Plan:** 06 done; next 02 (of 08 in phase)
 
 **Last Activity:** 2026-07-21
 
-**Stopped At:** Completed 09-01-PLAN.md
+**Stopped At:** Completed 09-06-PLAN.md
 
 ## Accumulated Context
 
@@ -35,6 +37,8 @@ progress:
 - SITE_URL defaults to https://aipbx.net at build time; never window.location.origin (D-02/D-03)
 - Ads IDs empty-string default locally; real values documented in .env.example as public client IDs
 - .env.example force-added despite .env.* gitignore so plan artifact is tracked
+- [Phase 09]: lastmod set to 2026-07-21 (execution day) rather than patch 2026-07-20
+- [Phase 09]: OG card via System.Drawing branded template matching logo cyan/violet (exact 1200x630)
 
 ### Roadmap Evolution
 
@@ -155,3 +159,9 @@ progress:
 | Date | 2026-06-19 |
 
 | Plans | 3/3 |
+
+## Performance Metrics
+
+| Phase | Plan | Duration | Notes |
+|-------|------|----------|-------|
+| Phase 09 P06 | 8min | 2 tasks | 3 files |
