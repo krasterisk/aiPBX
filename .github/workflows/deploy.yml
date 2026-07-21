@@ -33,7 +33,11 @@ jobs:
         with:
           node-version: 22
           cache: "npm"
+      # Skip puppeteer Chromium download — quality gate does not prerender
       - run: npm ci
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
       - run: npm run lint:ts
       - run: npm run test:unit
       - run: npm run generate:api-types:check
