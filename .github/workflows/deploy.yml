@@ -101,7 +101,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           command_timeout: 30m
-          script_stop: true
+          # script_stop removed in appleboy/ssh-action@v1 — use `set -e` below
           script: |
             set -e
             echo "Starting deployment to ${{ matrix.server }}..."
