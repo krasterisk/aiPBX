@@ -65,7 +65,7 @@ Each task was committed atomically:
 1. **Task 1: Switch sitemap.xml and robots.txt to aipbx.net** - `57f4188f` (feat)
 2. **Task 2: Generate og-default.png (1200x630)** - `ec5ae827` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `738698f3` (docs: complete plan)
 
 ## Files Created/Modified
 
