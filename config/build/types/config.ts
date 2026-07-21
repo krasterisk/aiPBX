@@ -29,6 +29,9 @@ export interface buildOptions {
   sentryEnvironment: string
   yandexMetrikaId: string
   ga4MeasurementId: string
+  siteUrl: string
+  googleAdsId: string
+  adsSignupLabel: string
 }
 
 export interface buildEnv {

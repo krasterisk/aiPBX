@@ -32,6 +32,9 @@ export default (env: buildEnv) => {
   const sentryEnvironment = process.env.SENTRY_ENVIRONMENT || mode
   const yandexMetrikaId = process.env.YANDEX_METRIKA_ID || ''
   const ga4MeasurementId = process.env.GA4_MEASUREMENT_ID || ''
+  const siteUrl = process.env.SITE_URL || 'https://aipbx.net'
+  const googleAdsId = process.env.GOOGLE_ADS_ID || ''
+  const adsSignupLabel = process.env.ADS_SIGNUP_LABEL || ''
 
   return buildWebpackConfig({
     mode,
@@ -48,6 +51,9 @@ export default (env: buildEnv) => {
     sentryDsn,
     sentryEnvironment,
     yandexMetrikaId,
-    ga4MeasurementId
+    ga4MeasurementId,
+    siteUrl,
+    googleAdsId,
+    adsSignupLabel
   })
 }
