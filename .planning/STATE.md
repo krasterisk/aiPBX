@@ -13,7 +13,7 @@ progress:
   completed_phases: 4
   total_plans: 27
   completed_plans: 23
-  percent: 36
+  percent: 85
 ---
 
 # Project State
@@ -152,8 +152,8 @@ progress:
 |-------|-------|
 | Status | **Executing** — 2026-07-21 (6/8 plans) |
 | Directory | `.planning/phases/09-landing-seo-google-ads-aipbx-net-apply-seo-patch-meta-og-jso/` |
-| Plans | 09-01 ✅ build-constant chain; 09-02 ✅ usePageMeta SEO head; 09-03 ✅ Ads initAnalytics + fireAdsConversion; 09-04 ✅ landing i18n meta/CRO; 09-06 ✅ sitemap/OG; 09-08 ✅ SEO audit + Ads assets; 09-05/07 pending |
-| Next | Wave 3 (09-05 funnel) then Wave 4 prerender |
+| Plans | 09-01 ✅ build-constant chain; 09-02 ✅ usePageMeta SEO head; 09-03 ✅ Ads initAnalytics + fireAdsConversion; 09-04 ✅ landing i18n meta/CRO; 09-05 ✅ GA4 funnel + Ads conversion; 09-06 ✅ sitemap/OG; 09-08 ✅ SEO audit + Ads assets; 09-07 pending |
+| Next | Wave 4 prerender (09-07) |
 
 ## Phase 7 — Helpdesk (AI-first admin ticket system)
 

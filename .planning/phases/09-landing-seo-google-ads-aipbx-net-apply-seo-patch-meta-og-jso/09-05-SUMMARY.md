@@ -78,7 +78,7 @@ Each task was committed atomically:
 5. **Task 4: Founder decision** - checkpoint (`alternate-return-route` → BillingPage)
 6. **Task 5: payment_success on BillingPage** - `2f6eb834` (feat)
 
-**Plan metadata:** (docs commit after this SUMMARY)
+**Plan metadata:** `7c9e4a5e` (docs: complete plan)
 
 ## Files Created/Modified
 
