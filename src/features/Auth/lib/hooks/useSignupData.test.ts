@@ -10,10 +10,10 @@ const tokenResponse = { token: 'tok', user: { id: '1', email: 'a@b.c' } }
 let googleHandler: ((idToken: string) => void) | undefined
 let telegramHandler: ((data: unknown) => void) | undefined
 
-const googleUnwrap = jest.fn(() => Promise.resolve(tokenResponse))
-const telegramUnwrap = jest.fn(() => Promise.resolve(tokenResponse))
-const signupUnwrap = jest.fn(() => Promise.resolve(undefined))
-const activateUnwrap = jest.fn(() => Promise.resolve(tokenResponse))
+const googleUnwrap = jest.fn(async () => tokenResponse)
+const telegramUnwrap = jest.fn(async () => tokenResponse)
+const signupUnwrap = jest.fn(async () => undefined)
+const activateUnwrap = jest.fn(async () => tokenResponse)
 
 const googleSignup = jest.fn(() => ({ unwrap: googleUnwrap }))
 const telegramSignup = jest.fn(() => ({ unwrap: telegramUnwrap }))
@@ -87,10 +87,10 @@ describe('useSignupData funnel analytics (D-06/D-07)', () => {
     jest.clearAllMocks()
     googleHandler = undefined
     telegramHandler = undefined
-    googleUnwrap.mockImplementation(() => Promise.resolve(tokenResponse))
-    telegramUnwrap.mockImplementation(() => Promise.resolve(tokenResponse))
-    signupUnwrap.mockImplementation(() => Promise.resolve(undefined))
-    activateUnwrap.mockImplementation(() => Promise.resolve(tokenResponse))
+    googleUnwrap.mockImplementation(async () => tokenResponse)
+    telegramUnwrap.mockImplementation(async () => tokenResponse)
+    signupUnwrap.mockImplementation(async () => undefined)
+    activateUnwrap.mockImplementation(async () => tokenResponse)
     ;(global as any).__ADS_SIGNUP_LABEL__ = '-B6_CK72wtMcEIyDxKA-'
   })
 
@@ -149,7 +149,9 @@ describe('useSignupData funnel analytics (D-06/D-07)', () => {
   })
 
   it('does NOT fire conversion on Google signup failure', async () => {
-    googleUnwrap.mockImplementation(() => Promise.reject(new Error('fail')))
+    googleUnwrap.mockImplementation(async () => {
+      throw new Error('fail')
+    })
     renderHook(() => useSignupData())
 
     await act(async () => {
