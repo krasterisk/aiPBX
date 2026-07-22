@@ -82,6 +82,7 @@ const MainPage: FC = memo(() => {
   const isRuDomain = domainConfig.region === 'ru'
 
   usePageMeta({
+    ready,
     title: t('MainPage.meta.title'),
     description: t('MainPage.meta.description'),
     path: '/',

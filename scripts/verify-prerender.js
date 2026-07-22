@@ -89,8 +89,14 @@ for (const { route, file, enTitle } of ROUTES) {
   if (/SpeechAnalyticsPage\.[A-Za-z]/.test(html) ||
       /VoiceAssistantsPage\.[A-Za-z]/.test(html) ||
       /MainPage\.[A-Za-z]/.test(html) ||
-      /PricingPage\.[A-Za-z]/.test(html)) {
+      /PricingPage\.[A-Za-z]/.test(html) ||
+      /landing\.demoCta\./.test(html)) {
     fail(`${label}: contains dotted untranslated i18n keys`)
+  }
+
+  const title = extractTitle(html)
+  if (/\.meta\.(title|description)/i.test(title) || /Page\.[A-Za-z]/.test(title)) {
+    fail(`${label}: <title> looks like unresolved i18n key: "${title}"`)
   }
 
   if (EXPECT_EN) {

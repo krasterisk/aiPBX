@@ -6,6 +6,13 @@ export interface PageMetaOptions {
   path?: string
   ogImage?: string
   jsonLd?: Record<string, unknown>
+  /** When false, skip writing head (wait for i18n). Default true. */
+  ready?: boolean
+}
+
+/** i18next returns the key itself when the namespace is not loaded yet. */
+export function isUnresolvedI18nValue (value: string): boolean {
+  return /^[A-Za-z][A-Za-z0-9]*(\.[A-Za-z][A-Za-z0-9]*)+$/.test(value.trim())
 }
 
 const SITE_NAME = 'AI PBX'
@@ -70,6 +77,10 @@ function upsertJsonLd (data: Record<string, unknown>): void {
 }
 
 export function setPageMeta ({ title, description, path, ogImage, jsonLd }: PageMetaOptions): void {
+  if (!title || isUnresolvedI18nValue(title) || isUnresolvedI18nValue(description)) {
+    return
+  }
+
   const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`
 
   document.title = fullTitle
@@ -93,7 +104,9 @@ export function setPageMeta ({ title, description, path, ogImage, jsonLd }: Page
 }
 
 export function usePageMeta (options: PageMetaOptions): void {
+  const ready = options.ready !== false
   useEffect(() => {
+    if (!ready) return
     setPageMeta(options)
-  }, [options.title, options.description, options.path, options.ogImage, options.jsonLd])
+  }, [ready, options.title, options.description, options.path, options.ogImage, options.jsonLd])
 }

@@ -41,6 +41,7 @@ const SpeechAnalyticsLandingPage = () => {
     const { t, ready } = useTranslation('main')
 
     usePageMeta({
+        ready,
         title: t('SpeechAnalyticsPage.meta.title'),
         description: t('SpeechAnalyticsPage.meta.description'),
         path: '/speech-analytics',

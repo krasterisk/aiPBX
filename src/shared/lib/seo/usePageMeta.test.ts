@@ -1,4 +1,4 @@
-import { setPageMeta } from './usePageMeta'
+import { isUnresolvedI18nValue, setPageMeta } from './usePageMeta'
 
 describe('setPageMeta', () => {
   beforeEach(() => {
@@ -77,5 +77,23 @@ describe('setPageMeta', () => {
 
     const script = document.head.querySelector('#page-jsonld') as HTMLScriptElement
     expect(JSON.parse(script.textContent || '').name).toBe('Updated')
+  })
+
+  it('does not write head when title is an unresolved i18n key', () => {
+    setPageMeta({
+      title: 'VoiceAssistantsPage.meta.title',
+      description: 'VoiceAssistantsPage.meta.description',
+      path: '/voice-assistants'
+    })
+    expect(document.title).toBe('')
+    expect(document.head.querySelector('meta[name="description"]')).toBeNull()
+  })
+})
+
+describe('isUnresolvedI18nValue', () => {
+  it('detects dotted i18n keys', () => {
+    expect(isUnresolvedI18nValue('VoiceAssistantsPage.meta.title')).toBe(true)
+    expect(isUnresolvedI18nValue('landing.demoCta.label')).toBe(true)
+    expect(isUnresolvedI18nValue('AI Voice Assistant for Business')).toBe(false)
   })
 })

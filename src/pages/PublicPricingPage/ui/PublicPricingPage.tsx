@@ -48,6 +48,7 @@ const PublicPricingPage: FC = memo(() => {
   const isRuDomain = getDomainConfig().region === 'ru'
 
   usePageMeta({
+    ready,
     title: isRuDomain ? 'Тарифы AI PBX — голосовые боты и аналитика' : 'AI PBX Pricing',
     description: isRuDomain
       ? 'Прозрачные тарифы на голосовых AI-ассистентов и речевую аналитику. Оплата в рублях, счета для юрлиц.'

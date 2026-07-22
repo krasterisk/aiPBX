@@ -57,6 +57,7 @@ const VoiceAssistantsLandingPage = () => {
     const [isPlaying, setIsPlaying] = useState(false)
 
     usePageMeta({
+        ready,
         title: t('VoiceAssistantsPage.meta.title'),
         description: t('VoiceAssistantsPage.meta.description'),
         path: '/voice-assistants',
