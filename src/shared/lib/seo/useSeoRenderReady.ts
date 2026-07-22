@@ -11,6 +11,6 @@ export function useSeoRenderReady (ready: boolean): void {
     const id = window.requestAnimationFrame(() => {
       document.dispatchEvent(new Event('seo-render-ready'))
     })
-    return () => window.cancelAnimationFrame(id)
+    return () => { window.cancelAnimationFrame(id) }
   }, [ready])
 }
