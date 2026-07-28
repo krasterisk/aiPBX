@@ -12,6 +12,7 @@ import GoogleIcon from '@/shared/assets/icons/googleIcon.svg'
 import TelegramIcon from '@mui/icons-material/Telegram'
 import { useSignupData } from '../../lib/hooks/useSignupData'
 import { AuthLegalConsentRow } from '../AuthLegalConsentRow/AuthLegalConsentRow'
+import { isRuDomain } from '@/shared/lib/domain'
 
 interface SignupFormProps {
     className?: string
@@ -64,6 +65,7 @@ export const SignupForm = memo((props: SignupFormProps) => {
     }
 
     const isLoading = isSignupLoading || isGoogleLoading || isTelegramLoading || isSignupActivateLoading
+    const showSocialAuth = !isRuDomain()
 
     return (
         <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
@@ -171,30 +173,34 @@ export const SignupForm = memo((props: SignupFormProps) => {
                     )}
                 </VStack>
 
-                <Divider className={cls.divider}>{t('или')}</Divider>
+                {showSocialAuth && (
+                    <>
+                        <Divider className={cls.divider}>{t('или')}</Divider>
 
-                <VStack gap="12" max>
-                    <Button
-                        variant="filled"
-                        fullWidth
-                        onClick={onGoogleSignupClick}
-                        disabled={isLoading || !agreeTerms}
-                        addonLeft={<GoogleIcon className={cls.socialIcon} />}
-                        className={cls.socialBtn}
-                    >
-                        {t('Продолжить с Google')}
-                    </Button>
-                    <Button
-                        variant="filled"
-                        fullWidth
-                        onClick={onTelegramSignupClick}
-                        disabled={isLoading || !agreeTerms}
-                        addonLeft={<TelegramIcon className={cls.socialIcon} />}
-                        className={cls.socialBtn}
-                    >
-                        {t('Продолжить с Telegram')}
-                    </Button>
-                </VStack>
+                        <VStack gap="12" max>
+                            <Button
+                                variant="filled"
+                                fullWidth
+                                onClick={onGoogleSignupClick}
+                                disabled={isLoading || !agreeTerms}
+                                addonLeft={<GoogleIcon className={cls.socialIcon} />}
+                                className={cls.socialBtn}
+                            >
+                                {t('Продолжить с Google')}
+                            </Button>
+                            <Button
+                                variant="filled"
+                                fullWidth
+                                onClick={onTelegramSignupClick}
+                                disabled={isLoading || !agreeTerms}
+                                addonLeft={<TelegramIcon className={cls.socialIcon} />}
+                                className={cls.socialBtn}
+                            >
+                                {t('Продолжить с Telegram')}
+                            </Button>
+                        </VStack>
+                    </>
+                )}
 
                 <HStack max justify="center" align="center" gap="8">
                     <Text text={t('Уже есть аккаунт?')} />
