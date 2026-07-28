@@ -86,10 +86,22 @@ export function buildPlugins ({
       renderer: '@prerenderer/renderer-puppeteer',
       rendererOptions: {
         renderAfterDocumentEvent: 'seo-render-ready',
-        timeout: 30000,
+        timeout: 60000,
         headless: true,
+        // Block absolute API / analytics hosts so Docker builds do not hang
+        // waiting on https://aipbx.*/api from inside the builder container.
+        skipThirdPartyRequests: true,
+        navigationOptions: {
+          timeout: 60000,
+          waitUntil: 'domcontentloaded'
+        },
         launchOptions: {
-          args: ['--no-sandbox', '--disable-setuid-sandbox'],
+          args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu'
+          ],
           ...(process.env.PUPPETEER_EXECUTABLE_PATH
             ? { executablePath: process.env.PUPPETEER_EXECUTABLE_PATH }
             : {})

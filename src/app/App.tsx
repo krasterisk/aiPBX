@@ -12,13 +12,16 @@ import { useTheme } from '@/shared/lib/hooks/useTheme/useTheme'
 import { Theme } from '@/shared/const/theme'
 import { useLocation } from 'react-router-dom'
 import { getRouteDocs } from '@/shared/const/router'
+import { TOKEN_LOCALSTORAGE_KEY } from '@/shared/const/localstorage'
 
 import { OnboardingWizard } from '@/features/Onboarding'
 
 const App = (): any => {
   const userData = useSelector(getUserAuthData)
-  // const toolbar = useAppToolbar()
-  const { isLoading } = useGetMe(null)
+  // Skip /users/me when anonymous — otherwise prerender (and cold public loads)
+  // hang on an absolute API URL that may be unreachable from the build container.
+  const hasToken = !!localStorage.getItem(TOKEN_LOCALSTORAGE_KEY)
+  const { isLoading } = useGetMe(null, { skip: !hasToken })
   // setFeatureFlags({ isAppRedesigned: redesigned })
 
   const { theme } = useTheme()
