@@ -91,10 +91,6 @@ export function buildPlugins ({
         // Block absolute API / analytics hosts so Docker builds do not hang
         // waiting on https://aipbx.*/api from inside the builder container.
         skipThirdPartyRequests: true,
-        navigationOptions: {
-          timeout: 60000,
-          waitUntil: 'domcontentloaded'
-        },
         launchOptions: {
           args: [
             '--no-sandbox',
