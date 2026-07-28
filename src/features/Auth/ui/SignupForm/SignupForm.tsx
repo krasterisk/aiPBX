@@ -42,30 +42,30 @@ export const SignupForm = memo((props: SignupFormProps) => {
         onGoogleSignupClick,
     } = useSignupData()
 
+    const isLoading = isSignupLoading || isGoogleLoading || isTelegramLoading || isSignupActivateLoading
+    const showSocialAuth = !isRuDomain()
+    const canSubmitCredentials = !isLoading && !!email && agreeTerms
+
+    const submitForm = () => {
+        if (isSignupActivation) {
+            if (!isLoading) onSignupActivateClick()
+            return
+        }
+        if (!canSubmitCredentials) return
+        onSignupClick()
+    }
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-
-        if (isSignupActivation) {
-            onSignupActivateClick()
-        } else {
-            onSignupClick()
-        }
+        submitForm()
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault()
-
-            if (isSignupActivation) {
-                onSignupActivateClick()
-            } else {
-                onSignupClick()
-            }
+            submitForm()
         }
     }
-
-    const isLoading = isSignupLoading || isGoogleLoading || isTelegramLoading || isSignupActivateLoading
-    const showSocialAuth = !isRuDomain()
 
     return (
         <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
@@ -164,7 +164,7 @@ export const SignupForm = memo((props: SignupFormProps) => {
                                 type="submit"
                                 variant="glass-action"
                                 fullWidth
-                                disabled={isLoading || !email || !agreeTerms}
+                                disabled={!canSubmitCredentials}
                                 className={cls.submitBtn}
                             >
                                 {t('Регистрация')}

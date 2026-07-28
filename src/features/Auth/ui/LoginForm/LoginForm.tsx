@@ -42,32 +42,32 @@ export const LoginForm = memo((props: LoginFormProps) => {
     onChangeEmail,
   } = useLoginData()
 
+  const isLoading = isLoginLoading || isGoogleLoading || isTelegramLoading || isLoginActivateLoading
+  const requiresConsent = isLoginConsentRequired()
+  const consentAccepted = requiresConsent ? agreeTerms : true
+  const showSocialAuth = !isRuDomain()
+  const canSubmitCredentials = !isLoading && !!email && consentAccepted
+
+  const submitForm = () => {
+    if (isLoginActivation) {
+      if (!isLoading) onLoginActivateClick()
+      return
+    }
+    if (!canSubmitCredentials) return
+    onLoginClick()
+  }
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-
-    if (isLoginActivation) {
-      onLoginActivateClick()
-    } else {
-      onLoginClick()
-    }
+    submitForm()
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
-
-      if (isLoginActivation) {
-        onLoginActivateClick()
-      } else {
-        onLoginClick()
-      }
+      submitForm()
     }
   }
-
-  const isLoading = isLoginLoading || isGoogleLoading || isTelegramLoading || isLoginActivateLoading
-  const requiresConsent = isLoginConsentRequired()
-  const consentAccepted = requiresConsent ? agreeTerms : true
-  const showSocialAuth = !isRuDomain()
 
   return (
     <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className={className}>
@@ -165,10 +165,10 @@ export const LoginForm = memo((props: LoginFormProps) => {
                 />
               )}
               <Button
+                type="submit"
                 variant="glass-action"
                 fullWidth
-                onClick={onLoginClick}
-                disabled={isLoading || !email || !consentAccepted}
+                disabled={!canSubmitCredentials}
                 className={cls.submitBtn}
               >
                 {t('Вход')}
