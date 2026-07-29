@@ -379,6 +379,45 @@ Plans:
 - Canonical/hreflang from `__SITE_URL__`, never `window.location.origin`.
 - `payment_success` must NOT edit `billing/`/`ari/`/`accounting/` core (non-invasive fire only).
 
+### Phase 10: Speech analytics UX overhaul — operator drill-down, call tags, topic reports
+
+**Goal:** Сделать модуль речевой аналитики глубоким, функциональным, но простым и информативным инструментом для маркетолога / руководителя колл-центра: отрефакторить UX дашборда и модуля в целом, убрать раздел расходов, дать drill-down по операторам и темам/тегам звонков до конкретных разговоров и объяснения оценок.
+
+**Focus UI:** `src/features/OperatorAnalytics/ui/OperatorDashboard/OperatorDashboard.tsx` (+ связанный модуль Operator Analytics / аналитика звонков)
+
+**GAPs:** GAP-11 (OA Phase 2 — drill-down deferred); UX debt модуля аналитики звонков
+
+**Depends on:** Phase 9 (roadmap sequencing); product-wise builds on existing Operator Analytics / call analytics
+
+**Repos:** `aiPBX` (+ `aiPBX_backend` if tag/report APIs needed)
+
+### Scope — продуктовые направления
+
+| Направление | Что сделать |
+|-------------|-------------|
+| Dashboard UX | Доработать / отрефакторить дашборд аналитики звонков: информативность без перегруза |
+| Убрать расходы | Удалить раздел расходов на аналитику из UI (и связанный dead UX) |
+| Рейтинг операторов | Улучшить UX; drill-down в карточку оператора: метрики, данные, разговоры; проследить цепочку «почему такие баллы/оценки» |
+| Теги звонков | Тегирование на этапе анализа; отчёты по темам/тегам; drill-down до записей/разговоров; сводная и детальная статистика |
+| Модуль целиком | Оценка речевой аналитики end-to-end; предложения и реализация UX/дашбордов под аудиторию маркетолог / руководитель КЦ |
+
+### Suggested plan breakdown (for `/gsd-discuss-phase 10` → `/gsd-plan-phase 10`)
+
+| Plan | Wave | Depends on | Scope |
+|------|------|------------|-------|
+| 10-01 | 1 | — | Audit модуля + UX IA; remove costs section; dashboard cleanup |
+| 10-02 | 2 | 10-01 | Operator rating → operator detail drill-down (metrics → scores → calls) |
+| 10-03 | 2 | 10-01 | Call tagging at analysis + topic/tag reports + call-level drill-down |
+| 10-04 | 3 | 10-02, 10-03 | Cross-cutting polish, i18n, docs touch if needed |
+
+**Status:** Not planned yet
+
+**Plans:** 0 plans
+
+Plans:
+
+- [ ] TBD (run `/gsd-discuss-phase 10` then `/gsd-plan-phase 10`)
+
 ---
 
 ## Weekly agent cycle (from Phase 0b onward)
