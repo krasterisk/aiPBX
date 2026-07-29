@@ -57,6 +57,7 @@ progress:
 
 ### Roadmap Evolution
 
+- **2026-07-29:** Phase 10 context gathered via `/gsd-discuss-phase 10` — side-panel operator/topic drill-down, remove Usage+volume charts from fixed OA, project taxonomy tags + Themes section (D-01…D-30 in `10-CONTEXT.md`)
 - **2026-07-29:** Phase 10 added — Speech analytics UX overhaul: OperatorDashboard refactor, remove analytics costs section, operator rating drill-down (metrics → scores → calls), call tagging + topic/tag reports with record-level drill-down; closes/extends GAP-11 drill-down debt
 - **2026-07-21:** Phase 9 plan 09-07 executed — `@prerenderer/webpack-plugin` prerender + verify-prerender + Docker Chromium for EU (D-04)
 - **2026-07-21:** Phase 9 plan 09-05 executed — GA4 funnel (signup_complete/page_view/first_call/payment_success) + Ads signup conversion (D-06/D-07)
