@@ -119,17 +119,9 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
                     )
                 }
 
-                if (edoStatus === 'failed' || edoStatus === 'failed_permanent') {
-                    return (
-                        <Text
-                            text={doc.sbisLastError || t('documents.edo.failed')}
-                            size="s"
-                            variant="error"
-                        />
-                    )
-                }
-
-                if (edoUrl) {
+                // Draft exists in SBIS (send may have failed) — prefer link / registered over raw error dump
+                const isFailed = edoStatus === 'failed' || edoStatus === 'failed_permanent'
+                if (edoUrl && (!isFailed || doc.sbisId)) {
                     return (
                         <Button
                             variant="clear"
@@ -145,6 +137,20 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
 
                 if (doc.sbisId || edoStatus === 'draft' || edoStatus === 'accepted') {
                     return <Text text={t('documents.edo.registered')} size="s" />
+                }
+
+                if (isFailed) {
+                    const raw = (doc.sbisLastError || '').trim()
+                    const hint = raw.length > 120 ? `${raw.slice(0, 117)}…` : raw
+                    return (
+                        <span title={hint || undefined}>
+                            <Text
+                                text={t('documents.edo.failed')}
+                                size="s"
+                                variant="error"
+                            />
+                        </span>
+                    )
                 }
 
                 return null

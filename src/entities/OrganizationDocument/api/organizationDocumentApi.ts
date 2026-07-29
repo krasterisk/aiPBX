@@ -7,7 +7,7 @@ export interface CreateInvoiceBody {
     subject?: string | null
     /** Admin only: issuer our-organization for this invoice */
     ourOrganizationId?: number | null
-    /** Create draft in EDO; default false — local PDF only */
+    /** Create draft in SBIS; default false — local PDF only. Does not send via EDO. */
     sendViaEdo?: boolean
 }
 

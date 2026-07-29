@@ -123,7 +123,7 @@
   "invoice.cancel": "取消",
   "invoice.create": "创建",
   "invoice.loading": "正在创建发票…",
-  "invoice.sendViaEdo": "通过 EDI 发送发票",
+  "invoice.sendViaEdo": "在 SBIS 中创建发票",
   "invoice.issue": "开具发票",
   "documents.title": "文档",
   "documents.empty": "暂无文档",

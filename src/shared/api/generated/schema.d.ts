@@ -3846,7 +3846,7 @@ export interface components {
             /** @description Issuer our-organization id (admin override) */
             ourOrganizationId?: number;
             /**
-             * @description Create invoice in SBIS (EDO). If false, only local PDF is generated.
+             * @description Create invoice draft in SBIS. If false, only local PDF is generated. Does not send via EDO.
              * @default false
              */
             sendViaEdo: boolean;

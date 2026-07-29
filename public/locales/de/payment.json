@@ -122,7 +122,7 @@
   "invoice.cancel": "Abbrechen",
   "invoice.create": "Erstellen",
   "invoice.loading": "Rechnung wird erstellt…",
-  "invoice.sendViaEdo": "Rechnung per EDI senden",
+  "invoice.sendViaEdo": "Rechnung in SBIS erstellen",
   "invoice.issue": "Rechnung erstellen",
   "documents.title": "Dokumente",
   "documents.empty": "Noch keine Dokumente",

@@ -124,7 +124,7 @@
   "invoice.cancel": "Отмена",
   "invoice.create": "Создать",
   "invoice.loading": "Создание счёта…",
-  "invoice.sendViaEdo": "Отправить счёт через ЭДО",
+  "invoice.sendViaEdo": "Создать счёт в СБИС",
   "invoice.sendViaEdoPending": "Сначала контрагент должен принять приглашение в ЭДО (статус «ожидает принятия»).",
   "invoice.sendViaEdoNotReady": "Обмен по ЭДО недоступен. Отправьте приглашение контрагенту и дождитесь принятия.",
   "invoice.issue": "Выставить счёт",
