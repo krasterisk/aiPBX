@@ -3,16 +3,16 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 10
-current_plan: 6
+current_plan: 7
 status: ready
-stopped_at: Completed 10-06-PLAN.md
-last_updated: "2026-07-30T07:17:35.952Z"
+stopped_at: Completed 10-05-PLAN.md
+last_updated: "2026-07-30T08:10:00.000Z"
 last_activity: 2026-07-30
 progress:
   total_phases: 8
   completed_phases: 5
   total_plans: 37
-  completed_plans: 26
+  completed_plans: 27
 ---
 
 # Project State
@@ -23,16 +23,18 @@ progress:
 
 **Current Phase:** 10
 
-**Current Plan:** 5
+**Current Plan:** 7
 
 **Last Activity:** 2026-07-30
 
-**Stopped At:** Completed 10-06-PLAN.md
+**Stopped At:** Completed 10-05-PLAN.md
 
 ## Accumulated Context
 
 ### Decisions
 
+- [Phase 10]: spotTaxonomyTags uses ES6 Cyrillic/Latin boundary class; auto tag write is warn-and-continue
+- [Phase 10]: Re-analysis deletes operator_call_tags where source=auto only; manual PATCH replaces full tag set
 - [Phase 10]: Taxonomy writes skip currentSchemaVersion bump; validated via TagDefinitionDto + service validateCallTaxonomy
 - [Phase 10]: operator_call_tags table dual-dialect with channelId+tagId uniqueness; tags never in operator_metric_values
 - [Phase 10]: operatorNameExact short-circuits substring operatorName in buildDashboardCdrWhere
