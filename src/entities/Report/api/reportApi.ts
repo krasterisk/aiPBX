@@ -378,6 +378,18 @@ export const reportApi = rtkApi.injectEndpoints({
       }),
       providesTags: ['OperatorAnalytics'],
     }),
+    updateCallTags: build.mutation<{ tagIds: string[] }, { channelId: string, tagIds: string[] }>({
+      query: ({ channelId, tagIds }) => ({
+        url: `/operator-analytics/${channelId}/tags`,
+        method: 'PATCH',
+        body: { tagIds },
+      }),
+      invalidatesTags: (result, error, { channelId }) => [
+        { type: 'OperatorAnalytics', id: channelId },
+        { type: 'Reports', id: 'LIST' },
+        'OperatorAnalytics',
+      ],
+    }),
   })
 })
 
@@ -416,3 +428,4 @@ export const useLazyGetBatchStatus = reportApi.useLazyGetBatchStatusQuery
 export const useLazyGetActiveBatches = reportApi.useLazyGetActiveBatchesQuery
 export const useLazyGetOperatorInsights = reportApi.useLazyGetOperatorInsightsQuery
 export const useGetOperatorEvidence = reportApi.useGetOperatorEvidenceQuery
+export const useUpdateCallTags = reportApi.useUpdateCallTagsMutation

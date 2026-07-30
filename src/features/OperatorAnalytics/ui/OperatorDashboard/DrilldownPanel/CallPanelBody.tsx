@@ -68,7 +68,7 @@ export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
 
     return (
         <div data-testid="call-panel-body">
-            <ReportShowAnalytics analytics={analytics} />
+            <ReportShowAnalytics analytics={analytics} channelId={channelId} />
         </div>
     )
 })

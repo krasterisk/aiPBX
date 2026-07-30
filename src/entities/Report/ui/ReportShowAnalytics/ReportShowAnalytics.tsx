@@ -1,12 +1,20 @@
 import { classNames } from '@/shared/lib/classNames/classNames'
 import cls from './ReportShowAnalytics.module.scss'
-import React, { memo } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
+import { Button } from '@/shared/ui/redesigned/Button'
 import { Card } from '@/shared/ui/redesigned/Card'
-import { Analytics, DefaultMetricKey } from '../../model/types/report'
+import { Analytics, DefaultMetricKey, TagDefinition } from '../../model/types/report'
 import { MetricOverridePanel } from './MetricOverridePanel'
+import { CallTagChips } from '../CallTagChips'
+import {
+    useGetOperatorAnalysis,
+    useGetOperatorProjects,
+    useUpdateCallTags,
+} from '../../api/reportApi'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import {
     GitBranch,
     Smile,
@@ -66,17 +74,65 @@ const extractCustomMetricEntries = (metrics: Record<string, any>): Array<[string
 interface ReportShowAnalyticsProps {
     className?: string
     analytics: Analytics
+    channelId?: string
 }
 
 export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
     const {
         className,
-        analytics
+        analytics,
+        channelId,
     } = props
 
     const { t } = useTranslation('reports')
+    const [isTagEditing, setIsTagEditing] = useState(false)
+    const [updateCallTags] = useUpdateCallTags()
+    const { data: operatorAnalysis } = useGetOperatorAnalysis(channelId ?? '', { skip: !channelId })
+    const { data: operatorProjects } = useGetOperatorProjects(undefined, { skip: !channelId })
 
     const metrics = analytics.metrics
+    const serverTagIds = metrics?._topics?.tags ?? []
+    const tagNames = metrics?._topics?.tag_names
+    const [localTagIds, setLocalTagIds] = useState<string[]>(serverTagIds)
+
+    useEffect(() => {
+        setLocalTagIds(serverTagIds)
+    }, [serverTagIds.join('|')])
+
+    const projectTaxonomy = useMemo<TagDefinition[]>(() => {
+        const projectId = operatorAnalysis?.projectId
+        if (!projectId || !operatorProjects?.length) return []
+        const project = operatorProjects.find(item => String(item.id) === String(projectId))
+        return project?.callTaxonomy ?? []
+    }, [operatorAnalysis?.projectId, operatorProjects])
+
+    const availableTags = useMemo(
+        () => projectTaxonomy.filter(tag => !localTagIds.includes(tag.id)),
+        [projectTaxonomy, localTagIds],
+    )
+
+    const persistTags = useCallback(async (nextTagIds: string[]) => {
+        if (!channelId) return
+
+        const previousTagIds = localTagIds
+        setLocalTagIds(nextTagIds)
+
+        try {
+            await updateCallTags({ channelId, tagIds: nextTagIds }).unwrap()
+        } catch {
+            setLocalTagIds(previousTagIds)
+            toast.error(String(t('Не удалось сохранить теги. Изменения не применены.')))
+        }
+    }, [channelId, localTagIds, t, updateCallTags])
+
+    const handleRemoveTag = useCallback((tagId: string) => {
+        void persistTags(localTagIds.filter(id => id !== tagId))
+    }, [localTagIds, persistTags])
+
+    const handleAddTag = useCallback((tagId: string) => {
+        if (localTagIds.includes(tagId)) return
+        void persistTags([...localTagIds, tagId])
+    }, [localTagIds, persistTags])
 
     // ── Common helpers ────────────────────────────────────────────────────────
     const renderMetricItem = (label: string, value: React.ReactNode) => (
@@ -202,6 +258,36 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
                         </span>
                     )}
                 </div>
+
+                <VStack gap="8" max data-testid="call-tag-section">
+                    <HStack gap="8" align="center" justify="between" max>
+                        <Text text={String(t('Темы'))} size="xs" bold />
+                        {channelId ? (
+                            <Button
+                                variant="clear"
+                                size="s"
+                                onClick={() => { setIsTagEditing(prev => !prev) }}
+                                data-testid="call-tag-edit-toggle"
+                            >
+                                {isTagEditing
+                                    ? String(t('Готово'))
+                                    : String(t('Изменить темы'))}
+                            </Button>
+                        ) : null}
+                    </HStack>
+                    <CallTagChips
+                        mode="unbounded"
+                        tagIds={localTagIds}
+                        tagNames={tagNames}
+                        taxonomy={projectTaxonomy}
+                        editable={isTagEditing && channelId ? {
+                            onRemove: handleRemoveTag,
+                            onAdd: handleAddTag,
+                            availableTags,
+                        } : undefined}
+                        data-testid="call-card-tag-chips"
+                    />
+                </VStack>
 
                 {/* Rationale for summary-level outputs (sentiment / success / csat) */}
                 {(() => {

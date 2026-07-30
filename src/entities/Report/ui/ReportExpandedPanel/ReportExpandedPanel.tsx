@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { getUserAuthData, isUserAdmin, UserCurrencyValues } from '@/entities/User'
 import { useDeleteReport } from '../../api/reportApi'
+import { isOperatorAnalyticsSource } from '../../lib/isOperatorAnalyticsSource'
 import { ReportShowDialog } from '../ReportShowDialog/ReportShowDialog'
 import { ReportShowAnalytics } from '../ReportShowAnalytics/ReportShowAnalytics'
 import { BillingBreakdown } from '../BillingBreakdown/BillingBreakdown'
@@ -116,7 +117,10 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
                             </Button>
                         </HStack>
                     )}
-                    <ReportShowAnalytics analytics={report.analytics} />
+                    <ReportShowAnalytics
+                        analytics={report.analytics}
+                        channelId={isOperatorAnalyticsSource(report.source) ? report.channelId : undefined}
+                    />
                 </VStack>
             )
         }

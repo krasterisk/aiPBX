@@ -95,7 +95,8 @@ export {
   useLazyGetActiveBatches,
   useLazyGetOperatorInsights,
   useGetOperatorEvidence,
-  useLazyGetReports
+  useLazyGetReports,
+  useUpdateCallTags,
 } from './api/reportApi'
 
 export { ReportExpandedPanel } from './ui/ReportExpandedPanel/ReportExpandedPanel'

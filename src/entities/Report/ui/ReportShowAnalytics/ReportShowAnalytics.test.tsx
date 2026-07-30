@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { ReportShowAnalytics } from './ReportShowAnalytics'
 import type { Analytics } from '../../model/types/report'
+import { toast } from 'react-toastify'
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 jest.mock('react-i18next', () => ({
@@ -12,6 +13,20 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('./MetricOverridePanel', () => ({
     MetricOverridePanel: () => null,
+}))
+
+const mockUpdateCallTags = jest.fn()
+const mockUseGetOperatorAnalysis = jest.fn()
+const mockUseGetOperatorProjects = jest.fn()
+
+jest.mock('../../api/reportApi', () => ({
+    useUpdateCallTags: () => [mockUpdateCallTags, { isLoading: false }],
+    useGetOperatorAnalysis: (...args: unknown[]) => mockUseGetOperatorAnalysis(...args),
+    useGetOperatorProjects: (...args: unknown[]) => mockUseGetOperatorProjects(...args),
+}))
+
+jest.mock('react-toastify', () => ({
+    toast: { error: jest.fn() },
 }))
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────
@@ -113,6 +128,24 @@ const operatorWithCustomMetrics: Analytics = {
 // ── Tests ────────────────────────────────────────────────────────────────────
 
 describe('ReportShowAnalytics', () => {
+    beforeEach(() => {
+        mockUpdateCallTags.mockReset()
+        mockUpdateCallTags.mockReturnValue({ unwrap: () => Promise.resolve({ tagIds: [] }) })
+        mockUseGetOperatorAnalysis.mockReturnValue({
+            data: { projectId: 'project-1' },
+        })
+        mockUseGetOperatorProjects.mockReturnValue({
+            data: [{
+                id: 'project-1',
+                name: 'Project',
+                createdAt: '2026-01-01',
+                callTaxonomy: [
+                    { id: 'billing', name: 'Счета', aliases: ['счёт'] },
+                    { id: 'returns', name: 'Возвраты', aliases: ['возврат'] },
+                ],
+            }],
+        })
+    })
     describe('operator analytics (flat metrics)', () => {
         it('renders operator view with data-testid="analytics-operator"', () => {
             render(<ReportShowAnalytics analytics={operatorAnalytics} />)
@@ -270,6 +303,86 @@ describe('ReportShowAnalytics', () => {
             expect(screen.queryByText('Влияние на бизнес')).not.toBeInTheDocument()
             expect(screen.queryByText('Анализ сценария')).not.toBeInTheDocument()
             expect(screen.queryByText('Оценка оператора')).not.toBeInTheDocument()
+        })
+    })
+
+    describe('call tag chips', () => {
+        const taggedAnalytics: Analytics = {
+            ...operatorAnalytics,
+            metrics: {
+                ...operatorAnalytics.metrics!,
+                _topics: {
+                    keywords: ['возврат'],
+                    tags: ['billing', 'returns'],
+                    tag_names: { billing: 'Счета', returns: 'Возвраты' },
+                },
+            },
+        }
+
+        it('renders bounded tag chips on the call card alongside keywords', () => {
+            render(<ReportShowAnalytics analytics={taggedAnalytics} channelId="24" />)
+
+            expect(screen.getByTestId('topic-keywords')).toHaveTextContent('возврат')
+            expect(screen.getByTestId('call-card-tag-chips-chip-billing')).toBeInTheDocument()
+            expect(screen.getByTestId('call-card-tag-chips-chip-returns')).toBeInTheDocument()
+        })
+
+        it('shows inline no-themes note when a call has no tags', () => {
+            render(<ReportShowAnalytics analytics={operatorAnalytics} channelId="24" />)
+            expect(screen.getByTestId('call-card-tag-chips-empty')).toHaveTextContent('Темы не найдены')
+        })
+
+        it('reveals remove and add controls only after entering edit mode', () => {
+            render(<ReportShowAnalytics analytics={taggedAnalytics} channelId="24" />)
+
+            expect(screen.queryByTestId('call-card-tag-chips-remove-billing')).not.toBeInTheDocument()
+            fireEvent.click(screen.getByTestId('call-tag-edit-toggle'))
+            expect(screen.getByTestId('call-card-tag-chips-remove-billing')).toBeInTheDocument()
+            expect(screen.getByTestId('call-card-tag-chips-add')).toBeInTheDocument()
+        })
+
+        it('offers only project taxonomy themes not already on the call', () => {
+            render(<ReportShowAnalytics analytics={taggedAnalytics} channelId="24" />)
+
+            fireEvent.click(screen.getByTestId('call-tag-edit-toggle'))
+            fireEvent.click(screen.getByTestId('call-card-tag-chips-add'))
+
+            expect(screen.queryByTestId('call-card-tag-chips-picker-option-billing')).not.toBeInTheDocument()
+            expect(screen.queryByTestId('call-card-tag-chips-picker-option-returns')).not.toBeInTheDocument()
+        })
+
+        it('optimistically removes a tag and sends the full resulting set', async () => {
+            mockUpdateCallTags.mockReturnValue({
+                unwrap: () => Promise.resolve({ tagIds: ['returns'] }),
+            })
+
+            render(<ReportShowAnalytics analytics={taggedAnalytics} channelId="24" />)
+            fireEvent.click(screen.getByTestId('call-tag-edit-toggle'))
+            fireEvent.click(screen.getByTestId('call-card-tag-chips-remove-billing'))
+
+            expect(screen.queryByTestId('call-card-tag-chips-chip-billing')).not.toBeInTheDocument()
+            expect(mockUpdateCallTags).toHaveBeenCalledWith({
+                channelId: '24',
+                tagIds: ['returns'],
+            })
+        })
+
+        it('restores removed tags and reports failure when save is rejected', async () => {
+            mockUpdateCallTags.mockReturnValue({
+                unwrap: () => Promise.reject(new Error('network')),
+            })
+
+            render(<ReportShowAnalytics analytics={taggedAnalytics} channelId="24" />)
+            fireEvent.click(screen.getByTestId('call-tag-edit-toggle'))
+            fireEvent.click(screen.getByTestId('call-card-tag-chips-remove-billing'))
+
+            expect(await screen.findByTestId('call-card-tag-chips-chip-billing')).toBeInTheDocument()
+            expect(toast.error).toHaveBeenCalledWith('Не удалось сохранить теги. Изменения не применены.')
+        })
+
+        it('does not expose tag editing without channelId', () => {
+            render(<ReportShowAnalytics analytics={taggedAnalytics} />)
+            expect(screen.queryByTestId('call-tag-edit-toggle')).not.toBeInTheDocument()
         })
     })
 })

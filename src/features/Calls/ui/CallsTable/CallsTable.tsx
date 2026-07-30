@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { classNames } from '@/shared/lib/classNames/classNames'
-import { HStack } from '@/shared/ui/redesigned/Stack'
+import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import {
@@ -13,6 +13,7 @@ import {
     useRegenerateOperatorAnalytics,
     isOperatorAnalyticsSource,
     OPERATOR_CDR_SOURCE,
+    CallTagChips,
 } from '@/entities/Report'
 import { isUserAdmin } from '@/entities/User'
 import { useSelector } from 'react-redux'
@@ -152,25 +153,35 @@ hour12: false
                 </td>
 
                 <td data-label={String(t('Настроение'))}>
-                    <HStack gap="4" align="center">
-                        {report.analytics?.sentiment ? (
-                            <span
-                                className={cls.sentimentBadge}
-                                data-sentiment={report.analytics.sentiment.toLowerCase()}
-                            >
-                                {String(t(report.analytics.sentiment))}
-                            </span>
-                        ) : '—'}
-                        {isOperatorRecord && transcriptionQuality === 'low' && (
-                            <span
-                                className={cls.qualityBadge}
-                                data-quality="low"
-                                data-tooltip={qualityReasons.map(code => String(t(code))).join(', ')}
-                            >
-                                {String(t('LOW_STT_QUALITY_BADGE'))}
-                            </span>
-                        )}
-                    </HStack>
+                    <VStack gap="8" max>
+                        <HStack gap="4" align="center">
+                            {report.analytics?.sentiment ? (
+                                <span
+                                    className={cls.sentimentBadge}
+                                    data-sentiment={report.analytics.sentiment.toLowerCase()}
+                                >
+                                    {String(t(report.analytics.sentiment))}
+                                </span>
+                            ) : '—'}
+                            {isOperatorRecord && transcriptionQuality === 'low' && (
+                                <span
+                                    className={cls.qualityBadge}
+                                    data-quality="low"
+                                    data-tooltip={qualityReasons.map(code => String(t(code))).join(', ')}
+                                >
+                                    {String(t('LOW_STT_QUALITY_BADGE'))}
+                                </span>
+                            )}
+                        </HStack>
+                        {isOperatorRecord && report.analytics?.metrics ? (
+                            <CallTagChips
+                                mode="bounded"
+                                tagIds={report.analytics.metrics._topics?.tags ?? []}
+                                tagNames={report.analytics.metrics._topics?.tag_names}
+                                data-testid={`journal-tag-chips-${report.id}`}
+                            />
+                        ) : null}
+                    </VStack>
                 </td>
 
                 <td data-label={String(t('Результат'))}>
