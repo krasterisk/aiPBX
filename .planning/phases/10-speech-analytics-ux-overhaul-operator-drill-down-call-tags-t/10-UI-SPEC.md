@@ -1,10 +1,11 @@
 ---
 phase: 10
 slug: speech-analytics-ux-overhaul-operator-drill-down-call-tags-t
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-07-30
+reviewed_at: 2026-07-30
 ---
 
 # Phase 10 — UI Design Contract
@@ -142,6 +143,7 @@ Namespace: `reports`. Locales: `ru` + `en` are the DoD minimum; `de` and `zh` fi
 | Secondary CTA (topic card → panel) | RU **«Разбор темы»** · EN "Break down topic" |
 | Panel back control | RU **«Назад к {context}»** · EN "Back to {context}" — `{context}` is the operator name or theme name from the entry below on the stack |
 | Panel close control | `aria-label` RU **«Закрыть панель»** · EN "Close panel" (icon-only, no visible text) |
+| Chip remove control (call card edit) | `aria-label` RU **«Убрать тему {name}»** · EN "Remove topic {name}" (icon-only ×) |
 | Empty state heading — «Темы», no taxonomy (D-21) | RU **«Темы звонков не настроены»** · EN "Call topics aren't set up" |
 | Empty state body — «Темы», no taxonomy | RU **«Добавьте темы и ключевые слова в настройках проекта — звонки начнут размечаться при следующем анализе.»** · EN "Add topics and their keywords in project settings — calls will be tagged from the next analysis onward." |
 | Empty state action — «Темы», no taxonomy | RU **«Настроить темы проекта»** · EN "Set up project topics" → links to project settings (D-17). This is the only accent-filled button in the section. |
@@ -176,6 +178,8 @@ Namespace: `reports`. Locales: `ru` + `en` are the DoD minimum; `de` and `zh` fi
 ---
 
 ## Layout Contract (D-24 … D-29)
+
+**Dashboard focal point (at rest):** the **KPI StatCard row** (`oa-stats`) is the primary visual anchor — first data section under D-25. Section titles stay Body/bold; do not escalate mid-page charts to Display. Panel interiors use Display once per stack view for the headline number (Panel Contract).
 
 Single scroll, no tabs (D-24). Fixed order — **D-25 is authoritative where it conflicts with D-28's "current placement" wording; AI Insights renders _after_ Stats, which means the `AiInsightsBanner` moves down from its current first position:**
 
@@ -367,11 +371,11 @@ Documented per the phase brief's instruction to use best judgment on unanswered 
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: FLAG (non-blocking) — CTAs specific; retry/dismiss single-word acceptable as dialog/error affordances
+- [x] Dimension 2 Visuals: FLAG (non-blocking) — panel hierarchy locked; dashboard primary visual anchor = KPI StatCard row (first under D-25); chip × aria-label in Copywriting
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: FLAG (non-blocking) — `--space-3` (12px) retained for existing statsGrid / chip-row usage
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved 2026-07-30 (gsd-ui-checker VERIFIED; FLAGs accepted as recommendations)
