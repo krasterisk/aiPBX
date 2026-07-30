@@ -100,6 +100,12 @@ export {
 
 export { ReportExpandedPanel } from './ui/ReportExpandedPanel/ReportExpandedPanel'
 export { ReportShowAnalytics } from './ui/ReportShowAnalytics/ReportShowAnalytics'
+export {
+  CallTagChips,
+  resolveTagDisplayName,
+  resolveTagColor,
+} from './ui/CallTagChips'
+export type { CallTagChipsProps, CallTagChipsEditConfig } from './ui/CallTagChips'
 export { useReportFilters } from './lib/useReportFilters'
 export { useBatchProgress } from './lib/useBatchProgress'
 export type {

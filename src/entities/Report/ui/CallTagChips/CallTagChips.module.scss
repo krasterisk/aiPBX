@@ -1,0 +1,89 @@
+@import '@/app/styles/variables/mixins';
+
+.root {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    min-width: 0;
+}
+
+.empty {
+    font-size: var(--font-size-xs);
+    color: var(--text-redesigned);
+    opacity: 0.75;
+}
+
+.chip {
+    @include chip-base;
+    max-width: 160px;
+    min-width: 0;
+}
+
+.chipLabel {
+    @include text-truncate;
+    min-width: 0;
+}
+
+.colorDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.overflowChip {
+    @include chip-base;
+    flex-shrink: 0;
+}
+
+.removeButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin: -10px -8px -10px 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-redesigned);
+    cursor: pointer;
+    flex-shrink: 0;
+    @include focus-visible;
+}
+
+.addButton {
+    @include chip-base;
+    cursor: pointer;
+    @include focus-visible;
+}
+
+.picker {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+    background: var(--glass-bg-tertiary);
+    border: var(--glass-border-subtle);
+}
+
+.pickerOption {
+    @include focus-visible;
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: var(--space-2) var(--space-3);
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-redesigned);
+    font-size: var(--font-size-xs);
+    cursor: pointer;
+
+    &:hover {
+        background: var(--glass-bg-secondary);
+    }
+}
