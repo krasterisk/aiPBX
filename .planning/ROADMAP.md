@@ -438,7 +438,7 @@ Plans:
 - [x] 10-03 — Taxonomy vertical tracer: migrations → DTO → settings editor
 - [x] 10-04 — FE dashboard cleanup + IA reshuffle
 - [ ] 10-05 — BE tagging pipeline + manual edits + list filters
-- [ ] 10-06 — FE operator drill-down panel
+- [x] 10-06 — FE operator drill-down panel
 - [ ] 10-07 — BE per-theme stats in `getDashboard`
 - [ ] 10-08 — FE «Темы» section + theme panel
 - [ ] 10-09 — FE tag chips + CSV export column
