@@ -50,7 +50,7 @@ describe('buildCallsExportSheet', () => {
         expect(rows[0]['Качество приветствия']).toBe(80)
         expect(rows[0]['Результат']).toBe('Успех')
         expect(rows[0]['Транскрипт']).toContain('возврат')
-        expect(rows[0]['EXPORT_KEYWORDS']).toBe('возврат')
+        expect(rows[0].EXPORT_KEYWORDS).toBe('возврат')
         expect(String(rows[0]['Обоснование метрик'])).toContain('Вежливое приветствие')
     })
 
@@ -148,7 +148,7 @@ describe('buildCallsExportSheet', () => {
         expect(headers.some(h => h.includes('Запрос возврата'))).toBe(true)
         expect(rows[0]['Саммари']).toBe('Развёрнутое саммари')
         expect(rows[0]['Качество приветствия']).toBe(80)
-        expect(rows[0]['EXPORT_KEYWORDS']).toBe('возврат')
+        expect(rows[0].EXPORT_KEYWORDS).toBe('возврат')
         expect(rows[0]['Теги']).toBe('Счета')
         expect(rows[0]['Обоснование метрик']).toContain('Вежливое приветствие')
     })

@@ -130,7 +130,7 @@ const operatorWithCustomMetrics: Analytics = {
 describe('ReportShowAnalytics', () => {
     beforeEach(() => {
         mockUpdateCallTags.mockReset()
-        mockUpdateCallTags.mockReturnValue({ unwrap: () => Promise.resolve({ tagIds: [] }) })
+        mockUpdateCallTags.mockReturnValue({ unwrap: async () => ({ tagIds: [] }) })
         mockUseGetOperatorAnalysis.mockReturnValue({
             data: { projectId: 'project-1' },
         })
@@ -353,7 +353,7 @@ describe('ReportShowAnalytics', () => {
 
         it('optimistically removes a tag and sends the full resulting set', async () => {
             mockUpdateCallTags.mockReturnValue({
-                unwrap: () => Promise.resolve({ tagIds: ['returns'] }),
+                unwrap: async () => ({ tagIds: ['returns'] }),
             })
 
             render(<ReportShowAnalytics analytics={taggedAnalytics} channelId="24" />)
@@ -369,7 +369,7 @@ describe('ReportShowAnalytics', () => {
 
         it('restores removed tags and reports failure when save is rejected', async () => {
             mockUpdateCallTags.mockReturnValue({
-                unwrap: () => Promise.reject(new Error('network')),
+                unwrap: async () => { throw new Error('network') },
             })
 
             render(<ReportShowAnalytics analytics={taggedAnalytics} channelId="24" />)

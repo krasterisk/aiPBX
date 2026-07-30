@@ -139,7 +139,7 @@ export const CallTagChips = memo((props: CallTagChipsProps) => {
 
             {overflowCount > 0 ? (
                 <span className={cls.overflowChip} data-testid={`${testId}-overflow`}>
-                    +{overflowCount}
+                    {String(t('+{{count}}', { count: overflowCount }))}
                 </span>
             ) : null}
 
@@ -151,7 +151,7 @@ export const CallTagChips = memo((props: CallTagChipsProps) => {
                         onClick={() => { setPickerOpen(prev => !prev) }}
                         data-testid={`${testId}-add`}
                     >
-                        + {String(t('Добавить тему'))}
+                        {String(t('+ Добавить тему'))}
                     </button>
                     {pickerOpen && editable.availableTags.length > 0 ? (
                         <div className={cls.picker} data-testid={`${testId}-picker`}>

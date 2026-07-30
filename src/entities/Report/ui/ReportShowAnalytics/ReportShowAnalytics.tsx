@@ -93,11 +93,12 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
     const metrics = analytics.metrics
     const serverTagIds = metrics?._topics?.tags ?? []
     const tagNames = metrics?._topics?.tag_names
+    const serverTagIdsKey = serverTagIds.join('\u0000')
     const [localTagIds, setLocalTagIds] = useState<string[]>(serverTagIds)
 
     useEffect(() => {
-        setLocalTagIds(serverTagIds)
-    }, [serverTagIds.join('|')])
+        setLocalTagIds(metrics?._topics?.tags ?? [])
+    }, [serverTagIdsKey, metrics?._topics?.tags])
 
     const projectTaxonomy = useMemo<TagDefinition[]>(() => {
         const projectId = operatorAnalysis?.projectId

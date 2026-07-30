@@ -6,11 +6,10 @@ import type {
     StoredMetricMeta,
     TagDefinition,
 } from '@/entities/Report'
-import { resolveTagDisplayName } from '@/entities/Report'
+import { reportDisplayMoneyInput, resolveTagDisplayName } from '@/entities/Report'
 import { formatDate } from '@/shared/lib/functions/formatDate'
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { formatDisplayMoney } from '@/shared/lib/functions/formatDisplayMoney'
-import { reportDisplayMoneyInput } from '@/entities/Report'
 
 const EXCEL_CELL_MAX = 32767
 

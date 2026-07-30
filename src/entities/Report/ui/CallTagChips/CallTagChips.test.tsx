@@ -4,9 +4,12 @@ import type { TagDefinition } from '../../model/types/report'
 
 jest.mock('react-i18next', () => ({
     useTranslation: () => ({
-        t: (key: string, opts?: { name?: string }) => {
+        t: (key: string, opts?: { name?: string, count?: number }) => {
             if (key.includes('{{name}}') && opts?.name) {
                 return key.replace('{{name}}', opts.name)
+            }
+            if (key.includes('{{count}}') && opts?.count != null) {
+                return key.replace('{{count}}', String(opts.count))
             }
             return key
         },
@@ -172,7 +175,7 @@ describe('CallTagChips', () => {
         fireEvent.click(screen.getByTestId('call-tag-chips-remove-billing'))
         expect(onRemove).toHaveBeenCalledWith('billing')
 
-        fireEvent.click(screen.getByTestId('call-tag-chips-add'))
+        fireEvent.click(screen.getByText('+ Добавить тему'))
         fireEvent.click(screen.getByTestId('call-tag-chips-picker-option-returns'))
         expect(onAdd).toHaveBeenCalledWith('returns')
     })
