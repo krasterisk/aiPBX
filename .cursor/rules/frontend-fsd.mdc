@@ -10,7 +10,7 @@ Architecture: Feature-Sliced Design (`app → pages → widgets → features →
 
 ## UI layer
 
-- **New UI only in** `src/shared/ui/redesign/`
+- **New UI only in** `src/shared/ui/redesign-v3/`
 - Do not add code to `shared/ui/deprecated/`
 - Prefer `redesign-v3` components over MUI where equivalents exist
 
