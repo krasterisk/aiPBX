@@ -1,7 +1,6 @@
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Skeleton } from '@mui/material'
-import { LinesChart } from '@/shared/ui/mui/LinesChart'
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk'
 import SpeedIcon from '@mui/icons-material/Speed'
 import TimerIcon from '@mui/icons-material/Timer'
@@ -24,9 +23,7 @@ import {
 } from '@/entities/Report'
 import { AiInsightsBanner } from './AiInsightsBanner/AiInsightsBanner'
 import { DashboardConfigGrid } from '../DashboardBuilder/DashboardConfigGrid'
-import { HeatmapCalendar } from './HeatmapCalendar/HeatmapCalendar'
 import { OperatorScoreTable } from './OperatorScoreTable/OperatorScoreTable'
-import { OperatorUsageSection } from './OperatorUsageSection/OperatorUsageSection'
 import { DonutChart } from '@/shared/ui/redesigned/DonutChart'
 import cls from './OperatorDashboard.module.scss'
 
@@ -76,21 +73,6 @@ const ALL_DEFAULT_METRICS: Array<{ key: DefaultMetricKey, labelKey: string }> = 
     { key: 'closing_quality', labelKey: 'Качество завершения' },
 ]
 
-// Emotion sx — inherits CSS vars from the active theme class on the parent element.
-const CHART_SX = {
-    '& .MuiChartsAxis-line': { stroke: 'var(--text-redesigned) !important', strokeOpacity: '0.4 !important', strokeWidth: '1.5 !important' },
-    '& .MuiChartsAxis-tick': { stroke: 'var(--text-redesigned) !important', strokeOpacity: '0.4 !important', strokeWidth: '1.5 !important' },
-    '& .MuiChartsGrid-line': { stroke: 'var(--text-redesigned) !important', strokeOpacity: '0.1 !important', strokeDasharray: '4 4' },
-    '& .MuiChartsAxis-tickLabel': { fill: 'var(--text-redesigned) !important' },
-    '& .MuiChartsAxis-tickLabel tspan': { fill: 'var(--text-redesigned) !important' },
-    '& .MuiChartsLegend-label': { color: 'var(--text-redesigned) !important', fill: 'var(--text-redesigned) !important' },
-    '& .MuiChartsLabel-root': { color: 'var(--text-redesigned) !important' },
-    '& .MuiChartsLegend-root text': { fill: 'var(--text-redesigned) !important' },
-    '& text': { fill: 'var(--text-redesigned) !important' },
-    '& .MuiLineElement-root': { strokeWidth: 2.5 },
-    '& .MuiMarkElement-root': { strokeWidth: 2 },
-}
-
 interface OperatorDashboardProps {
     className?: string
     data?: OperatorDashboardResponse
@@ -115,7 +97,9 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
         return m > 0 ? `${m} ${t('мин')} ${s} ${t('сек')}` : `${s} ${t('сек')}`
     }
 
-    const activeProject = projects?.find((p: OperatorProject) => p.id === projectId)
+    const activeProject = projects?.find(
+        (p: OperatorProject) => String(p.id) === String(projectId ?? ''),
+    )
 
     // Phase 1: Filter radarMetrics by visibleDefaultMetrics when project is selected
     const radarMetrics = useMemo(() => {
@@ -151,9 +135,6 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
 
     const hasCustomDashboard = customDashboardWidgets.length > 0
 
-    const timeSeriesLabels = data?.timeSeries?.monthly?.map(p => p.label) ?? []
-    const timeSeriesCalls = data?.timeSeries?.monthly?.map(p => p.callsCount) ?? []
-
     const sentimentData = [
         { id: 0, value: data?.sentimentDistribution?.positive ?? 0, label: String(t('Positive')), color: '#22c55e' },
         { id: 1, value: data?.sentimentDistribution?.neutral ?? 0, label: String(t('Neutral')), color: '#f59e0b' },
@@ -175,20 +156,9 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
     const scoreVariant = avgScore >= 80 ? 'success' : avgScore >= 50 ? 'warning' : 'error'
     const successVariant = successRatePct >= 80 ? 'success' : successRatePct >= 50 ? 'warning' : 'error'
 
-    // Build heatmap data from timeSeries
-    const heatmapData = useMemo(() => {
-        if (!data?.timeSeries?.daily) return []
-        
-        return data.timeSeries.daily.map(p => ({
-            date: p.label,
-            callCount: p.callsCount ?? 0,
-            avgScore: p.avgScore ?? (data.averageScore ?? 0)
-        }))
-    }, [data])
-
     if (isLoading || !data) {
         return (
-            <VStack gap={'16'} max>
+            <VStack gap={'24'} max>
                 <HStack gap={'8'} max>
                     {[1, 2, 3, 4, 5, 6].map(i => (
                         <Skeleton key={i} variant="rounded" height={100} sx={{ flex: 1 }} />
@@ -205,22 +175,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
     }
 
     return (
-        <VStack gap={'16'} max className={cls.OperatorDashboard}>
-            {/* AI Insights Banner */}
-            {data?.insightsAvailable && (
-                <div data-tour-id="oa-insights">
-                    <AiInsightsBanner
-                    projectName={activeProject?.name}
-                    queryParams={{
-                        startDate,
-                        endDate,
-                        projectId,
-                        userId: userId != null && userId !== '' ? String(userId) : undefined,
-                    }}
-                />
-                </div>
-            )}
-
+        <VStack gap={'24'} max className={cls.OperatorDashboard}>
             {(data?.excludedLowQualityCount ?? 0) > 0 && (
                 <Text
                     text={String(t('DASHBOARD_EXCLUDED_LOW_QUALITY', { count: data?.excludedLowQualityCount }))}
@@ -248,9 +203,9 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                                 key={p.id}
                                 padding={'8'}
                                 border={'partial'}
-                                variant={projectId === p.id ? 'light' : 'clear'}
+                                variant={String(projectId) === String(p.id) ? 'light' : 'clear'}
                                 className={cls.projectChip}
-                                onClick={() => { onChangeProjectId(p.id) }}
+                                onClick={() => { onChangeProjectId(String(p.id)) }}
                             >
                                 <Text text={p.name} />
                             </Card>
@@ -271,7 +226,14 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
             </HStack>
 
             {/* Stats Row */}
-            <HStack gap={'12'} max wrap={'wrap'} className={cls.statsGrid} data-tour-id="oa-stats">
+            <HStack
+                gap={'12'}
+                max
+                wrap={'wrap'}
+                className={cls.statsGrid}
+                data-tour-id="oa-stats"
+                data-testid="oa-section-stats"
+            >
                 <StatCard
                     title={String(t('Всего звонков'))}
                     value={data?.totalAnalyzed ?? 0}
@@ -310,6 +272,20 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                 />
             </HStack>
 
+            {data?.insightsAvailable && (
+                <div data-tour-id="oa-insights" data-testid="oa-section-insights">
+                    <AiInsightsBanner
+                        projectName={activeProject?.name}
+                        queryParams={{
+                            startDate,
+                            endDate,
+                            projectId,
+                            userId: userId != null && userId !== '' ? String(userId) : undefined,
+                        }}
+                    />
+                </div>
+            )}
+
             {hasCustomDashboard ? (
                 <DashboardConfigGrid
                     widgets={customDashboardWidgets}
@@ -318,7 +294,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                     title={String(t('DASHBOARD_CUSTOM_LAYOUT'))}
                 />
             ) : (
-                <>
+                <div data-testid="oa-section-mid-charts">
             {/* Pie Charts Row */}
             <div className={cls.chartsRow}>
                 <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
@@ -392,7 +368,6 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                                                 <Text text={metric.type} size={'xs'} variant={'accent'} />
                                             </HStack>
                                             {agg?.type === 'boolean' && agg.value != null && (() => {
-                                                // Aggregated as "% Да" → rate on 0..100; default neutral (informational)
                                                 const vis = metricVisual(agg.value, {
                                                     isRate: true,
                                                     polarity: metric.polarity ?? 'neutral',
@@ -459,50 +434,8 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                     </VStack>
                 </Card>
             )}
-
-            {/* Bottom Row */}
-            {(timeSeriesLabels.length > 0 || heatmapData.length > 0) && (
-                <div className={cls.chartsRow}>
-                    {timeSeriesLabels.length > 0 ? (
-                        <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
-                            <VStack gap={'16'} max>
-                                <Text title={String(t('Динамика звонков'))} bold />
-                                <div className={cls.chartContainer}>
-                                    <LinesChart
-                                        xAxis={[{ scaleType: 'point', data: timeSeriesLabels }]}
-                                        yAxis={[{ width: 30 }]}
-                                        series={[{
-                                            data: timeSeriesCalls,
-                                            label: String(t('Звонки')),
-                                            color: '#5ed3f3',
-                                            curve: 'monotoneX',
-                                            showMark: true,
-                                        }]}
-                                        height={180}
-                                        margin={{ left: 5, right: 16, top: 16, bottom: 25 }}
-                                    />
-                                </div>
-                            </VStack>
-                        </Card>
-                    ) : <div />}
-
-                    {/* Heatmap Calendar */}
-                    {heatmapData.length > 0 ? (
-                        <div className={cls.chartCard}>
-                            <HeatmapCalendar data={heatmapData} startDate={startDate} endDate={endDate} />
-                        </div>
-                    ) : <div />}
                 </div>
             )}
-
-                </>
-            )}
-
-            <OperatorUsageSection
-                startDate={startDate}
-                endDate={endDate}
-                userId={userId}
-            />
 
             {/* Operator quality ranking — bottom section */}
             <Card
@@ -512,6 +445,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                 padding={'24'}
                 className={cls.chartCard}
                 data-tour-id="oa-scorecard"
+                data-testid="oa-section-ranking"
             >
                 <VStack gap={'16'} max>
                     <VStack gap={'4'} max>
