@@ -392,5 +392,17 @@
   "Сводка по каждому оператору за выбранный период": "Per-operator summary for the selected period",
   "Оператор": "Operator",
   "Звонков": "Calls",
-  "Негатив": "Negative"
+  "Негатив": "Negative",
+  "Темы": "Topics",
+  "Нажмите на тему, чтобы увидеть её звонки и статистику": "Select a topic to see its calls and statistics",
+  "Темы звонков не настроены": "Call topics aren't set up",
+  "Добавьте темы и ключевые слова в настройках проекта — звонки начнут размечаться при следующем анализе.": "Add topics and their keywords in project settings — calls will be tagged from the next analysis onward.",
+  "Настроить темы проекта": "Set up project topics",
+  "Совпадений по темам нет": "No topic matches",
+  "За выбранный период ни один звонок не совпал со словарём тем. Измените период или дополните синонимы темы.": "No call in the selected period matched the topic dictionary. Change the period or add more synonyms.",
+  "Показать все ({{count}})": "Show all ({{count}})",
+  "TOPICS_CALL_LIST_HEADER": "Calls: {{count}}",
+  "TOPICS_PAGE_INDICATOR": "Page {{page}} of {{totalPages}}",
+  "TOPICS_SHARE_OF_PERIOD": "Share of period: {{value}}%",
+  "TOPICS_DELTA_VS_PERIOD": "Δ vs period average: {{value}}"
 }
