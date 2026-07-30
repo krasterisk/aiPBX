@@ -6,13 +6,13 @@ current_phase: 10
 current_plan: 3
 status: ready
 stopped_at: Completed 10-01-PLAN.md
-last_updated: "2026-07-30T05:56:58.831Z"
+last_updated: "2026-07-30T06:08:16.951Z"
 last_activity: 2026-07-30
 progress:
   total_phases: 8
   completed_phases: 5
   total_plans: 37
-  completed_plans: 23
+  completed_plans: 24
 ---
 
 # Project State
@@ -27,7 +27,7 @@ progress:
 
 **Last Activity:** 2026-07-30
 
-**Stopped At:** Completed 10-02-PLAN.md
+**Stopped At:** Completed 10-04-PLAN.md
 
 ## Accumulated Context
 
@@ -60,6 +60,8 @@ progress:
 - [Phase ?]: operatorNameExact short-circuits substring operatorName in buildDashboardCdrWhere
 - [Phase ?]: SidePanel backLabel prop keeps shell OA-agnostic while showing visible back context
 - [Phase ?]: PanelEntry tag variant includes tagName for title and back label resolution
+- [Phase ?]: D-25 wins: AiInsightsBanner renders after Stats row
+- [Phase ?]: String() project id comparison fixes deep-link without type ripple
 
 ### Roadmap Evolution
 
@@ -206,9 +208,10 @@ progress:
 |------|----------|-------|-------|
 | Phase 10-speech-analytics-ux-overhaul-operator-drill-down-call-tags-t P01 | 28 | 3 tasks | 10 files |
 | Phase 10-speech-analytics-ux-overhaul-operator-drill-down-call-tags-t P02 | 45min | 2 tasks | 8 files |
+| Phase 10 P04 | 45 | 3 tasks | 5 files |
 
 ## Session
 
-**Last session:** 2026-07-30T05:56:58.794Z
+**Last session:** 2026-07-30T06:08:16.912Z
 **Stopped at:** Completed 10-01-PLAN.md
 **Resume file:** None
