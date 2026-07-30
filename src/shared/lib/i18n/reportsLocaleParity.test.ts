@@ -80,14 +80,14 @@ const ENGLISH_CONTRACT: Partial<Record<(typeof PHASE_10_REPORT_KEYS)[number], st
     'Не удалось загрузить разбор': "Couldn't load the breakdown",
     'Проверьте соединение и повторите. Если ошибка повторяется, обновите страницу.':
         'Check your connection and retry. If it keeps failing, reload the page.',
-    'Повторить': 'Retry',
+    Повторить: 'Retry',
     'Не удалось сохранить теги. Изменения не применены.': "Couldn't save tags. Your changes weren't applied.",
     'По последним {{count}} звонкам': 'Based on the last {{count}} calls',
     'Удалить тему «{{name}}»?': 'Delete topic "{{name}}"?',
     'Звонки, размеченные ранее, сохранят тег. Новые анализы перестанут его получать.':
         'Previously tagged calls keep the tag. New analyses will stop receiving it.',
     'Удалить тему': 'Delete topic',
-    'Отмена': 'Cancel',
+    Отмена: 'Cancel',
     'Нажмите на оператора, чтобы увидеть, из чего сложилась оценка':
         'Select an operator to see what the score is made of',
     'Нажмите на тему, чтобы увидеть её звонки и статистику':
@@ -130,7 +130,7 @@ describe('reports locale parity — phase 10', () => {
         expect(value.trim().length).toBeGreaterThan(0)
     })
 
-    it.each(PHASE_10_REPORT_KEYS.filter(key => /\{\{/.test(key)))(
+    it.each(PHASE_10_REPORT_KEYS.filter(key => key.includes('{{')))(
         'keeps identical interpolation placeholders for "%s" across all locales',
         (key) => {
             const ruPlaceholders = extractPlaceholders(namespaces.ru[key])
