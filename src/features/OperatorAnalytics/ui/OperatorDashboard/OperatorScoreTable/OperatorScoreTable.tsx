@@ -4,12 +4,8 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import type { AgentScorecard } from '@/entities/Report'
+import { normalizeRate, scoreVariant } from '../../../lib/metricVisual'
 import cls from './OperatorScoreTable.module.scss'
-
-const normalizeRate = (rate?: number): number => {
-    if (!rate) return 0
-    return rate > 1 ? rate : rate * 100
-}
 
 type SortField = 'operatorName' | 'callsCount' | 'averageScore' | 'successRatePct' | 'avgCsat' | 'negativeRate'
 
@@ -44,9 +40,10 @@ const parseMin = (raw: string): number | null => {
 
 interface OperatorScoreTableProps {
     rows: AgentScorecard[]
+    onSelectOperator?: (operatorName: string, rowElement: HTMLElement | null) => void
 }
 
-export const OperatorScoreTable = memo(({ rows }: OperatorScoreTableProps) => {
+export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScoreTableProps) => {
     const { t } = useTranslation('reports')
     const [sortField, setSortField] = useState<SortField>('averageScore')
     const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC')
@@ -113,11 +110,24 @@ export const OperatorScoreTable = memo(({ rows }: OperatorScoreTableProps) => {
             : <ChevronDown size={14} className={cls.sortIcon} />
     }
 
-    const scoreVariant = (value: number) =>
-        value >= 80 ? 'success' : value >= 50 ? 'warning' : 'error'
+    const scoreVariantFn = (value: number) => scoreVariant(value)
 
     const negativeVariant = (value: number) =>
         value >= 30 ? 'error' : value >= 15 ? 'warning' : undefined
+
+    const handleRowActivate = useCallback((row: ScoreRow, target: HTMLElement) => {
+        onSelectOperator?.(row.operatorName, target)
+    }, [onSelectOperator])
+
+    const handleRowKeyDown = useCallback((
+        event: React.KeyboardEvent<HTMLTableRowElement>,
+        row: ScoreRow,
+    ) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            handleRowActivate(row, event.currentTarget)
+        }
+    }, [handleRowActivate])
 
     return (
         <div className={cls.tableWrapper}>
@@ -220,7 +230,16 @@ export const OperatorScoreTable = memo(({ rows }: OperatorScoreTableProps) => {
                             </td>
                         </tr>
                     ) : sortedRows.map((row, index) => (
-                        <tr key={row.operatorName} className={cls.bodyRow}>
+                        <tr
+                            key={row.operatorName}
+                            className={cls.bodyRow}
+                            role={onSelectOperator ? 'button' : undefined}
+                            tabIndex={onSelectOperator ? 0 : undefined}
+                            aria-label={onSelectOperator ? row.operatorName : undefined}
+                            onClick={onSelectOperator ? (e) => { handleRowActivate(row, e.currentTarget) } : undefined}
+                            onKeyDown={onSelectOperator ? (e) => { handleRowKeyDown(e, row) } : undefined}
+                            data-testid={`operator-score-row-${row.operatorName}`}
+                        >
                             <td className={cls.rankCol}>
                                 <Text text={String(index + 1)} size="s" bold />
                             </td>
@@ -229,13 +248,13 @@ export const OperatorScoreTable = memo(({ rows }: OperatorScoreTableProps) => {
                             </td>
                             <td><Text text={String(row.callsCount)} /></td>
                             <td>
-                                <Text text={String(row.averageScore)} bold variant={scoreVariant(row.averageScore)} />
+                                <Text text={String(row.averageScore)} bold variant={scoreVariantFn(row.averageScore)} />
                             </td>
                             <td>
                                 <Text
                                     text={`${row.successRatePct.toFixed(0)}%`}
                                     bold
-                                    variant={scoreVariant(row.successRatePct)}
+                                    variant={scoreVariantFn(row.successRatePct)}
                                 />
                             </td>
                             <td>

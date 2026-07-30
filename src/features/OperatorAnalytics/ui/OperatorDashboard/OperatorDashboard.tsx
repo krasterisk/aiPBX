@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Skeleton } from '@mui/material'
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk'
@@ -15,8 +15,6 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { StatCard } from '@/features/Dashboard'
 import { formatTenantMoney } from '@/shared/lib/functions/formatDisplayMoney'
 import {
-    DefaultMetricKey,
-    MetricPolarity,
     OperatorDashboardResponse,
     OperatorProject,
     useGetOperatorProjects,
@@ -25,53 +23,19 @@ import { AiInsightsBanner } from './AiInsightsBanner/AiInsightsBanner'
 import { DashboardConfigGrid } from '../DashboardBuilder/DashboardConfigGrid'
 import { OperatorScoreTable } from './OperatorScoreTable/OperatorScoreTable'
 import { DonutChart } from '@/shared/ui/redesigned/DonutChart'
+import { SidePanel } from '@/shared/ui/redesign-v3'
+import {
+    clearPanelStack,
+    getCurrentPanelEntry,
+    popPanelEntry,
+    pushPanelEntry,
+    resolveBackLabel,
+    resolvePanelTitle,
+    type PanelEntry,
+} from '../../model/panelStack'
+import { DrilldownPanel } from './DrilldownPanel'
+import { ALL_DEFAULT_METRICS, metricVisual, normalizeRate } from '../../lib/metricVisual'
 import cls from './OperatorDashboard.module.scss'
-
-// Success rate heuristic:
-// backend may send 0–1 (fraction) or 0–100 (percent).
-// If value > 1 → already percent. If ≤ 1 → fraction, multiply by 100.
-const normalizeRate = (rate?: number): number => {
-    if (!rate) return 0
-    return rate > 1 ? rate : rate * 100
-}
-
-// Resolve fill width + color for a custom metric value, respecting its
-// configured scale (min/max) and polarity (positive/negative/neutral).
-const metricVisual = (
-    value: number,
-    opts: { min?: number, max?: number, polarity?: MetricPolarity, isRate?: boolean },
-): { pct: number, color: string } => {
-    const min = opts.isRate ? 0 : (opts.min ?? 0)
-    const max = opts.isRate ? 100 : (opts.max ?? 100)
-    const span = max - min > 0 ? max - min : 100
-    const pct = Math.max(0, Math.min(100, ((value - min) / span) * 100))
-    const polarity = opts.polarity ?? 'positive'
-    const goodness = polarity === 'negative' ? 100 - pct : pct
-    const tone = polarity === 'neutral'
-        ? 'neutral'
-        : goodness >= 80 ? 'high' : goodness >= 50 ? 'mid' : 'low'
-    const color = tone === 'high'
-        ? 'var(--status-success)'
-        : tone === 'mid'
-            ? 'var(--status-warning)'
-            : tone === 'low'
-                ? 'var(--status-error)'
-                : 'var(--accent, #6366f1)'
-    return { pct, color }
-}
-
-// Full default metric key → translation map
-const ALL_DEFAULT_METRICS: Array<{ key: DefaultMetricKey, labelKey: string }> = [
-    { key: 'greeting_quality', labelKey: 'Качество приветствия' },
-    { key: 'script_compliance', labelKey: 'Следование скрипту' },
-    { key: 'politeness_empathy', labelKey: 'Вежливость и эмпатия' },
-    { key: 'active_listening', labelKey: 'Активное слушание' },
-    { key: 'objection_handling', labelKey: 'Работа с возражениями' },
-    { key: 'product_knowledge', labelKey: 'Знание продукта' },
-    { key: 'problem_resolution', labelKey: 'Решение проблемы' },
-    { key: 'speech_clarity_pace', labelKey: 'Темп речи' },
-    { key: 'closing_quality', labelKey: 'Качество завершения' },
-]
 
 interface OperatorDashboardProps {
     className?: string
@@ -89,6 +53,53 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
     const { data, isLoading, projectId, startDate, endDate, userId, onChangeProjectId, onOpenDashboardBuilder } = props
     const { t } = useTranslation('reports')
     const { data: projects } = useGetOperatorProjects()
+    const [panelStack, setPanelStack] = useState<PanelEntry[]>([])
+    const lastFocusedRowRef = useRef<HTMLElement | null>(null)
+
+    const dashboardFilters = useMemo(() => ({
+        startDate,
+        endDate,
+        projectId: projectId || undefined,
+        userId: userId != null && userId !== '' ? String(userId) : undefined,
+    }), [startDate, endDate, projectId, userId])
+
+    const currentEntry = getCurrentPanelEntry(panelStack)
+    const previousEntry = panelStack.length > 1 ? panelStack[panelStack.length - 2] : undefined
+    const panelTitle = resolvePanelTitle(currentEntry, t)
+    const backLabel = resolveBackLabel(previousEntry, t)
+    const isPanelOpen = panelStack.length > 0
+
+    const handleSelectOperator = useCallback((operatorName: string, rowElement: HTMLElement | null) => {
+        lastFocusedRowRef.current = rowElement
+        setPanelStack([{ kind: 'operator', operatorName }])
+    }, [])
+
+    const handleClosePanel = useCallback(() => {
+        setPanelStack(clearPanelStack())
+        lastFocusedRowRef.current?.focus()
+    }, [])
+
+    const handlePanelBack = useCallback(() => {
+        setPanelStack(prev => popPanelEntry(prev))
+    }, [])
+
+    const handleSelectMetric = useCallback((metricId: string, metricLabel: string) => {
+        if (!currentEntry || currentEntry.kind !== 'operator') return
+        setPanelStack(prev => pushPanelEntry(prev, {
+            kind: 'operatorMetric',
+            operatorName: currentEntry.operatorName,
+            metricId,
+            metricLabel,
+        }))
+    }, [currentEntry])
+
+    const handleOpenCall = useCallback((channelId: string, fromLabel: string) => {
+        setPanelStack(prev => pushPanelEntry(prev, {
+            kind: 'call',
+            channelId,
+            fromLabel,
+        }))
+    }, [])
 
     const formatDuration = (seconds?: number) => {
         if (!seconds) return '0 ' + t('сек')
@@ -456,7 +467,12 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                         />
                     </VStack>
                     {(data?.agentScorecards?.length ?? 0) > 0
-                        ? <OperatorScoreTable rows={data.agentScorecards!} />
+                        ? (
+                            <OperatorScoreTable
+                                rows={data.agentScorecards!}
+                                onSelectOperator={handleSelectOperator}
+                            />
+                        )
                         : (
                             <Text
                                 text={String(t('OPERATOR_SCORE_EMPTY', 'Данные появятся после анализа первых звонков'))}
@@ -465,6 +481,23 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                         )}
                 </VStack>
             </Card>
+
+            <SidePanel
+                isOpen={isPanelOpen}
+                onClose={handleClosePanel}
+                onBack={panelStack.length > 1 ? handlePanelBack : undefined}
+                backLabel={backLabel}
+                title={panelTitle}
+            >
+                {currentEntry && (
+                    <DrilldownPanel
+                        entry={currentEntry}
+                        filters={dashboardFilters}
+                        onSelectMetric={handleSelectMetric}
+                        onOpenCall={handleOpenCall}
+                    />
+                )}
+            </SidePanel>
         </VStack>
     )
 })

@@ -1,4 +1,6 @@
+import React from 'react'
 import { render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { OperatorDashboard } from './OperatorDashboard'
 import type { OperatorDashboardResponse, OperatorProject } from '@/entities/Report'
 
@@ -10,11 +12,15 @@ jest.mock('react-i18next', () => ({
 }))
 
 const mockUseGetOperatorProjects = jest.fn()
+const mockUseGetOperatorEvidence = jest.fn()
 jest.mock('@/entities/Report', () => {
     const actual = jest.requireActual('@/entities/Report')
     return {
         ...actual,
         useGetOperatorProjects: () => mockUseGetOperatorProjects(),
+        useGetOperatorEvidence: (...args: unknown[]) => mockUseGetOperatorEvidence(...args),
+        useGetOperatorCdrs: () => ({ data: { data: [], total: 0, page: 1, limit: 20 }, isLoading: false }),
+        useGetOperatorAnalysis: () => ({ data: undefined, isLoading: false, isError: false, refetch: jest.fn() }),
     }
 })
 
@@ -26,9 +32,40 @@ jest.mock('../DashboardBuilder/DashboardConfigGrid', () => ({
     DashboardConfigGrid: () => <div data-testid="oa-section-builder" />,
 }))
 
-jest.mock('./OperatorScoreTable/OperatorScoreTable', () => ({
-    OperatorScoreTable: () => <div data-testid="operator-score-table-mock" />,
-}))
+jest.mock('@/shared/ui/redesign-v3', () => {
+    const actual = jest.requireActual('@/shared/ui/redesign-v3')
+    return {
+        ...actual,
+        SidePanel: ({
+            isOpen,
+            title,
+            onClose,
+            onBack,
+            backLabel,
+            children,
+        }: {
+            isOpen: boolean
+            title: string
+            onClose: () => void
+            onBack?: () => void
+            backLabel?: string
+            children: React.ReactNode
+        }) => (isOpen ? (
+            <div data-testid="operator-drilldown-panel">
+                <h2>{title}</h2>
+                {onBack && (
+                    <button type="button" aria-label={backLabel ?? 'Назад'} onClick={onBack}>
+                        back
+                    </button>
+                )}
+                <button type="button" aria-label="Закрыть панель" onClick={onClose}>
+                    close
+                </button>
+                {children}
+            </div>
+        ) : null),
+    }
+})
 
 jest.mock('@/shared/ui/redesigned/DonutChart', () => ({
     DonutChart: () => <div data-testid="donut-chart-mock" />,
@@ -245,5 +282,104 @@ describe('OperatorDashboard project id resolution', () => {
         expect(screen.getByTestId('oa-section-stats')).toBeInTheDocument()
         const allProjectsChip = screen.getByText('Все проекты').closest('[class*="projectChip"]')
         expect(allProjectsChip?.className).not.toMatch(/light/)
+    })
+})
+
+describe('OperatorDashboard drill-down panel', () => {
+    beforeEach(() => {
+        mockUseGetOperatorProjects.mockReturnValue({ data: baseProjects })
+        mockUseGetOperatorEvidence.mockReturnValue({
+            data: {
+                operatorName: 'Alice',
+                callsCount: 1,
+                scoredCalls: 1,
+                averageScore: 82,
+                sampleCapped: false,
+                metrics: [],
+            },
+            isLoading: false,
+            isFetching: false,
+            isError: false,
+            refetch: jest.fn(),
+        })
+    })
+
+    it('opens the panel with the operator name when a row is clicked', async () => {
+        const user = userEvent.setup()
+        render(<OperatorDashboard {...defaultProps} />)
+
+        expect(screen.queryByTestId('operator-drilldown-panel')).not.toBeInTheDocument()
+        await user.click(screen.getByTestId('operator-score-row-Alice'))
+        expect(screen.getByTestId('operator-drilldown-panel')).toBeInTheDocument()
+        expect(screen.getByRole('heading', { name: 'Alice' })).toBeInTheDocument()
+    })
+
+    it('opens the panel when Enter is pressed on a focused operator row', async () => {
+        const user = userEvent.setup()
+        render(<OperatorDashboard {...defaultProps} />)
+
+        const row = screen.getByTestId('operator-score-row-Alice')
+        row.focus()
+        await user.keyboard('{Enter}')
+        expect(screen.getByRole('heading', { name: 'Alice' })).toBeInTheDocument()
+    })
+
+    it('opens the panel when Space is pressed on a focused operator row', async () => {
+        const user = userEvent.setup()
+        render(<OperatorDashboard {...defaultProps} />)
+
+        const row = screen.getByTestId('operator-score-row-Alice')
+        row.focus()
+        await user.keyboard(' ')
+        expect(screen.getByRole('heading', { name: 'Alice' })).toBeInTheDocument()
+    })
+
+    it('exposes operator rows as keyboard-reachable buttons with accessible names', () => {
+        render(<OperatorDashboard {...defaultProps} />)
+        expect(screen.getByRole('button', { name: 'Alice' })).toHaveAttribute('tabindex', '0')
+    })
+
+    it('returns focus to the triggering row when the panel closes', async () => {
+        const user = userEvent.setup()
+        render(<OperatorDashboard {...defaultProps} />)
+
+        const row = screen.getByTestId('operator-score-row-Alice')
+        await user.click(row)
+        await user.click(screen.getByRole('button', { name: 'Закрыть панель' }))
+        expect(row).toHaveFocus()
+    })
+
+    it('clears the stack on close so reopening has no back control', async () => {
+        const user = userEvent.setup()
+        render(<OperatorDashboard {...defaultProps} />)
+
+        await user.click(screen.getByTestId('operator-score-row-Alice'))
+        await user.click(screen.getByRole('button', { name: 'Закрыть панель' }))
+        await user.click(screen.getByTestId('operator-score-row-Alice'))
+
+        expect(screen.queryByRole('button', { name: /back/i })).not.toBeInTheDocument()
+    })
+
+    it('mounts exactly one panel element', async () => {
+        const user = userEvent.setup()
+        render(<OperatorDashboard {...defaultProps} />)
+
+        await user.click(screen.getByTestId('operator-score-row-Alice'))
+        expect(screen.getAllByTestId('operator-drilldown-panel')).toHaveLength(1)
+    })
+
+    it('renders the panel in builder layout mode as well', async () => {
+        mockUseGetOperatorProjects.mockReturnValue({ data: [projectWithBuilderLayout] })
+        const user = userEvent.setup()
+
+        render(
+            <OperatorDashboard
+                {...defaultProps}
+                projectId="proj-builder"
+            />,
+        )
+
+        await user.click(screen.getByTestId('operator-score-row-Alice'))
+        expect(screen.getByTestId('operator-drilldown-panel')).toBeInTheDocument()
     })
 })

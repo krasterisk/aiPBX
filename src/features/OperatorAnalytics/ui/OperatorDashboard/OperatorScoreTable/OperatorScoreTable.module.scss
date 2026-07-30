@@ -98,6 +98,15 @@
     &:last-child td {
         border-bottom: none;
     }
+
+    &[role='button'] {
+        cursor: pointer;
+
+        &:focus-visible {
+            outline: 2px solid var(--accent-redesigned);
+            outline-offset: 2px;
+        }
+    }
 }
 
 .rankCol {
