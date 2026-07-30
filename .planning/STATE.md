@@ -2,37 +2,39 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 09
-current_plan: 07 done; phase 09 plans 8/8 complete
-status: phase_complete
-stopped_at: Phase 10 context gathered
-last_updated: "2026-07-30T05:24:01.131Z"
-last_activity: 2026-07-21
+current_phase: 10
+current_plan: 2
+status: ready
+stopped_at: Completed 10-01-PLAN.md
+last_updated: "2026-07-30T05:56:00.000Z"
+last_activity: 2026-07-30
 progress:
   total_phases: 8
   completed_phases: 5
   total_plans: 37
-  completed_plans: 21
+  completed_plans: 22
 ---
 
 # Project State
 
 **Project:** aiPBX (full-stack)  
 
-**Status:** Phase 09 plans complete (8/8)
+**Status:** Executing Phase 10
 
-**Current Phase:** 09
+**Current Phase:** 10
 
-**Current Plan:** 07 done; phase 09 plans 8/8 complete
+**Current Plan:** 2
 
-**Last Activity:** 2026-07-21
+**Last Activity:** 2026-07-30
 
-**Stopped At:** Phase 10 plans verified (10/10)
+**Stopped At:** Completed 10-01-PLAN.md
 
 ## Accumulated Context
 
 ### Decisions
 
+- [Phase 10]: Evidence endpoint has no response cache in wave 1
+- [Phase 10]: operatorNameExact short-circuits substring operatorName in buildDashboardCdrWhere
 - [Phase 09]: Prerender via @prerenderer/webpack-plugin + seo-render-ready (not react-snap)
 - [Phase 09]: Docker EU builder uses apt chromium + PUPPETEER_EXECUTABLE_PATH; SITE_URL/GA4/Ads as build ARGs
 - SITE_URL defaults to https://aipbx.net at build time; never window.location.origin (D-02/D-03)
@@ -54,6 +56,8 @@ progress:
 - [Phase 09]: payment_success on BillingPage verified success (alternate-return-route), not PaymentPage
 - [Phase 09]: first_call emitted alongside playground_call_success
 - [Phase 09]: signup Ads conversion only on google/telegram/email-activation success
+- [Phase ?]: Evidence endpoint has no response cache in wave 1
+- [Phase ?]: operatorNameExact short-circuits substring operatorName in buildDashboardCdrWhere
 
 ### Roadmap Evolution
 
@@ -194,9 +198,14 @@ progress:
 | Phase 09 P04 | 11min | 3 tasks | 7 files |
 | Phase 09 P05 | 35min | 5 tasks | 7 files |
 | Phase 09 P07 | 45min | 3 tasks | 9 files |
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 10-speech-analytics-ux-overhaul-operator-drill-down-call-tags-t P01 | 28 | 3 tasks | 10 files |
 
 ## Session
 
-**Last session:** 2026-07-30T05:24:01.094Z
-**Stopped at:** Phase 10 context gathered
-**Resume file:** .planning\phases\10-speech-analytics-ux-overhaul-operator-drill-down-call-tags-t\10-01-PLAN.md
+**Last session:** 2026-07-30T05:56:00.000Z
+**Stopped at:** Completed 10-01-PLAN.md
+**Resume file:** None
