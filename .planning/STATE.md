@@ -3,10 +3,10 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 10
-current_plan: 7
+current_plan: 8
 status: ready
-stopped_at: Completed 10-05-PLAN.md
-last_updated: "2026-07-30T08:10:00.000Z"
+stopped_at: Completed 10-07-PLAN.md
+last_updated: "2026-07-30T08:29:00.000Z"
 last_activity: 2026-07-30
 progress:
   total_phases: 8
@@ -67,6 +67,7 @@ progress:
 - [Phase ?]: String() project id comparison fixes deep-link without type ripple
 - [Phase ?]: OperatorPanelBody expand mode kept for isolated tests; dashboard pushes operatorMetric via onSelectMetric
 - [Phase ?]: TagStat type ships D-16 fields for 10-08 theme panel
+- [Phase 10]: tagStats aggregated in getDashboard from _topics.tags with single findByPk reuse; omitted without taxonomy, [] when no matches
 
 ### Roadmap Evolution
 
