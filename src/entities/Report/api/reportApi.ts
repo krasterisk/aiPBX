@@ -1,6 +1,6 @@
 import { rtkApi } from '@/shared/api/rtkApi'
 import { mergeReportsCache, serializeReportsQueryArgs } from '../lib/mergeReportsCache'
-import { AIAnalyticsResponse, AllReports, Analytics, BatchStatusResponse, CdrSource, DashboardConfig, MetricDefinition, MetricOverride, MetricOverrideInput, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorInsightsResponse, OperatorProject, OperatorUploadResponse, Report, ReportDialog } from '../model/types/report'
+import { AIAnalyticsResponse, AllReports, Analytics, BatchStatusResponse, CdrSource, DashboardConfig, MetricDefinition, TagDefinition, MetricOverride, MetricOverrideInput, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorInsightsResponse, OperatorProject, OperatorUploadResponse, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
   page?: number
@@ -231,6 +231,7 @@ export const reportApi = rtkApi.injectEndpoints({
       description?: string
       systemPrompt?: string
       customMetricsSchema?: MetricDefinition[]
+      callTaxonomy?: TagDefinition[]
       visibleDefaultMetrics?: string[]
       webhookUrl?: string
       webhookHeaders?: Record<string, string>
@@ -282,6 +283,7 @@ export const reportApi = rtkApi.injectEndpoints({
       description?: string
       systemPrompt?: string
       customMetricsSchema?: MetricDefinition[]
+      callTaxonomy?: TagDefinition[]
       visibleDefaultMetrics?: string[]
       dashboardConfig?: DashboardConfig
       webhookUrl?: string

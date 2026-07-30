@@ -8,6 +8,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch
 import SaveIcon from '@mui/icons-material/Save'
 import {
     OperatorProject,
+    TagDefinition,
     useUpdateOperatorProject,
     projectWizardActions,
     getWizardName,
@@ -21,6 +22,9 @@ import {
 } from '@/entities/Report'
 import { WizardReviewSection } from './WizardReviewSection'
 import { WizardHeader } from './WizardHeader'
+import { TaxonomyEditor } from './TaxonomyEditor'
+import { Card } from '@/shared/ui/redesigned/Card'
+import { Text } from '@/shared/ui/redesigned/Text'
 import cls from './ProjectWizard.module.scss'
 
 interface ProjectSettingsFormProps {
@@ -47,6 +51,9 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
     const [budgetInput, setBudgetInput] = useState(
         editProject.monthlyBudgetUsd != null ? String(editProject.monthlyBudgetUsd) : '',
     )
+    const [callTaxonomy, setCallTaxonomy] = useState<TagDefinition[]>(
+        editProject.callTaxonomy ?? [],
+    )
 
     const handleSave = useCallback(async () => {
         try {
@@ -61,6 +68,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                 description: description.trim(),
                 systemPrompt: systemPrompt.trim(),
                 customMetricsSchema: customMetrics,
+                callTaxonomy,
                 visibleDefaultMetrics: visibleDefaults,
                 webhookUrl: webhookUrl.trim() || undefined,
                 webhookHeaders: Object.keys(webhookHeaders).length > 0 ? webhookHeaders : undefined,
@@ -74,7 +82,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
         } catch (err) {
             console.error('Settings save error:', err)
         }
-    }, [name, description, systemPrompt, customMetrics, visibleDefaults, webhookUrl, webhookHeaders, webhookEvents, budgetInput, editProject, updateProject, dispatch, onClose, onSuccess, t])
+    }, [name, description, systemPrompt, customMetrics, callTaxonomy, visibleDefaults, webhookUrl, webhookHeaders, webhookEvents, budgetInput, editProject, updateProject, dispatch, onClose, onSuccess, t])
 
     return (
         <VStack gap={'16'} max className={cls.ProjectWizard}>
@@ -121,6 +129,13 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                 multiline={false}
                 type={'number'}
             />
+
+            <Card variant={'glass'} border={'partial'} padding={'16'} max>
+                <VStack gap={'12'} max>
+                    <Text text={String(t('Темы звонков'))} bold />
+                    <TaxonomyEditor taxonomy={callTaxonomy} onChange={setCallTaxonomy} />
+                </VStack>
+            </Card>
 
             <WizardReviewSection />
 

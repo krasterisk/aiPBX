@@ -29,6 +29,7 @@ export type {
   OperatorProject,
   OperatorApiToken,
   MetricDefinition,
+  TagDefinition,
   DefaultMetricKey,
   MetricPolarity,
   WidgetType,

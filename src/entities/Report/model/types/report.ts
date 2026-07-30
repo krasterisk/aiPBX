@@ -186,7 +186,11 @@ export interface AnalyticsMetrics {
   /** Custom metric keys whose LLM values failed schema validation */
   _custom_invalid?: string[]
   /** Keyword spotting hits (compliance / competitor mentions) */
-  _topics?: { keywords?: string[] }
+  _topics?: {
+    keywords?: string[]
+    tags?: string[]
+    tag_names?: Record<string, string>
+  }
 }
 
 export interface Analytics {
@@ -412,6 +416,14 @@ export interface BatchStatusResponse {
 
 export type MetricPolarity = 'positive' | 'negative' | 'neutral'
 
+export interface TagDefinition {
+  id: string
+  name: string
+  aliases: string[]
+  color?: string
+  description?: string
+}
+
 export interface MetricDefinition {
   id: string // snake_case
   name: string // "Попытка апселла"
@@ -499,6 +511,7 @@ export interface OperatorProject {
   isDefault?: boolean
   systemPrompt?: string
   customMetricsSchema?: MetricDefinition[]
+  callTaxonomy?: TagDefinition[]
   currentSchemaVersion?: number
   visibleDefaultMetrics?: DefaultMetricKey[]
   dashboardConfig?: DashboardConfig
