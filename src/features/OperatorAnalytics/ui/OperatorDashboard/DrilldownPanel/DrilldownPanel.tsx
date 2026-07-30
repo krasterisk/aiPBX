@@ -2,6 +2,7 @@ import { memo } from 'react'
 import type { PanelEntry } from '../../../model/panelStack'
 import { CallPanelBody } from './CallPanelBody'
 import { OperatorMetricPanelBody, OperatorPanelBody, type DashboardFilters } from './OperatorPanelBody'
+import { TagPanelBody } from './TagPanelBody'
 
 export interface DrilldownPanelProps {
     entry: PanelEntry
@@ -33,7 +34,13 @@ export const DrilldownPanel = memo((props: DrilldownPanelProps) => {
         case 'call':
             return <CallPanelBody channelId={entry.channelId} />
         case 'tag':
-            return null
+            return (
+                <TagPanelBody
+                    entry={entry}
+                    filters={filters}
+                    onOpenCall={onOpenCall}
+                />
+            )
         default: {
             const _exhaustive: never = entry
             return _exhaustive

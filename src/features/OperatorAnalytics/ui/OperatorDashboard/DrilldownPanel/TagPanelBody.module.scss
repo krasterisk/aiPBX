@@ -1,0 +1,106 @@
+@import '@/app/styles/variables/mixins';
+
+.root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.headline {
+    font-size: var(--font-xl-redesigned);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text-redesigned);
+}
+
+.statStrip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.statItem {
+    @include glass-card-tertiary;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    border: 1px solid var(--glass-border-secondary);
+    border-radius: var(--radius-md);
+}
+
+.statLabel {
+    color: var(--hint-redesigned);
+}
+
+.statValue {
+    font-weight: 700;
+}
+
+.sentimentPositive {
+    color: var(--status-success);
+}
+
+.sentimentNeutral {
+    color: var(--status-neutral);
+}
+
+.sentimentNegative {
+    color: var(--status-error);
+}
+
+.callListHeader {
+    color: var(--hint-redesigned);
+}
+
+.callList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.callRow {
+    @include hover-card-row;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    width: 100%;
+    padding: var(--space-3);
+    border: 1px solid var(--glass-border-secondary);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--text-redesigned);
+    cursor: pointer;
+    text-align: left;
+
+    &:focus-visible {
+        @include focus-visible;
+    }
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+}
+
+.errorBlock {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+}
+
+.emptyBlock {
+    padding: var(--space-4) 0;
+}
+
+.secondaryMeta {
+    color: var(--hint-redesigned);
+}
