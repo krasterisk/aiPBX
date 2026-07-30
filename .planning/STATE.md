@@ -6,13 +6,13 @@ current_phase: 10
 current_plan: 8
 status: ready
 stopped_at: Completed 10-07-PLAN.md
-last_updated: "2026-07-30T08:29:00.000Z"
+last_updated: "2026-07-30T08:12:13.443Z"
 last_activity: 2026-07-30
 progress:
   total_phases: 8
   completed_phases: 5
   total_plans: 37
-  completed_plans: 28
+  completed_plans: 29
 ---
 
 # Project State
@@ -27,7 +27,7 @@ progress:
 
 **Last Activity:** 2026-07-30
 
-**Stopped At:** Completed 10-07-PLAN.md
+**Stopped At:** Completed 10-09-PLAN.md
 
 ## Accumulated Context
 
@@ -68,6 +68,7 @@ progress:
 - [Phase ?]: OperatorPanelBody expand mode kept for isolated tests; dashboard pushes operatorMetric via onSelectMetric
 - [Phase ?]: TagStat type ships D-16 fields for 10-08 theme panel
 - [Phase 10]: tagStats aggregated in getDashboard from _topics.tags with single findByPk reuse; omitted without taxonomy, [] when no matches
+- [Phase ?]: CallTagChips in entities/Report; tag edit on call card only; export formula guard scoped to Теги column
 
 ### Roadmap Evolution
 
@@ -216,9 +217,10 @@ progress:
 | Phase 10-speech-analytics-ux-overhaul-operator-drill-down-call-tags-t P02 | 45min | 2 tasks | 8 files |
 | Phase 10 P04 | 45 | 3 tasks | 5 files |
 | Phase 10-speech-analytics-ux-overhaul-operator-drill-down-call-tags-t P06 | 90min | 3 tasks | 14 files |
+| Phase 10-09 P09 | 55min | 3 tasks | 13 files |
 
 ## Session
 
-**Last session:** 2026-07-30T07:17:35.656Z
+**Last session:** 2026-07-30T08:12:13.338Z
 **Stopped at:** Completed 10-01-PLAN.md
 **Resume file:** None

@@ -441,7 +441,7 @@ Plans:
 - [x] 10-06 — FE operator drill-down panel
 - [x] 10-07 — BE per-theme stats in `getDashboard`
 - [ ] 10-08 — FE «Темы» section + theme panel
-- [ ] 10-09 — FE tag chips + CSV export column
+- [x] 10-09 — FE tag chips + CSV export column
 - [ ] 10-10 — Closeout: i18n, contract regen, human UAT
 
 **Manual step:** 10-03 ships two dialect migrations that must be applied by hand per server (no migration runner — RISKS R12). See `user_setup` in `10-03-PLAN.md`.
