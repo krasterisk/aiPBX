@@ -435,7 +435,7 @@ Plans:
 
 - [x] 10-01 — BE tracer: operator-evidence endpoint
 - [x] 10-02 — FE tracer: SidePanel + panelStack
-- [ ] 10-03 — Taxonomy vertical tracer: migrations → DTO → settings editor
+- [x] 10-03 — Taxonomy vertical tracer: migrations → DTO → settings editor
 - [x] 10-04 — FE dashboard cleanup + IA reshuffle
 - [ ] 10-05 — BE tagging pipeline + manual edits + list filters
 - [ ] 10-06 — FE operator drill-down panel

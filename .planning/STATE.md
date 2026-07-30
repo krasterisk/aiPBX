@@ -3,16 +3,16 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 10
-current_plan: 4
+current_plan: 3
 status: ready
-stopped_at: Completed 10-01-PLAN.md
-last_updated: "2026-07-30T06:08:16.951Z"
+stopped_at: Completed 10-03-PLAN.md
+last_updated: "2026-07-30T06:44:00.000Z"
 last_activity: 2026-07-30
 progress:
   total_phases: 8
   completed_phases: 5
   total_plans: 37
-  completed_plans: 24
+  completed_plans: 25
 ---
 
 # Project State
@@ -23,17 +23,18 @@ progress:
 
 **Current Phase:** 10
 
-**Current Plan:** 4
+**Current Plan:** 3
 
 **Last Activity:** 2026-07-30
 
-**Stopped At:** Completed 10-04-PLAN.md
+**Stopped At:** Completed 10-03-PLAN.md
 
 ## Accumulated Context
 
 ### Decisions
 
-- [Phase 10]: Evidence endpoint has no response cache in wave 1
+- [Phase 10]: Taxonomy writes skip currentSchemaVersion bump; validated via TagDefinitionDto + service validateCallTaxonomy
+- [Phase 10]: operator_call_tags table dual-dialect with channelId+tagId uniqueness; tags never in operator_metric_values
 - [Phase 10]: operatorNameExact short-circuits substring operatorName in buildDashboardCdrWhere
 - [Phase 09]: Prerender via @prerenderer/webpack-plugin + seo-render-ready (not react-snap)
 - [Phase 09]: Docker EU builder uses apt chromium + PUPPETEER_EXECUTABLE_PATH; SITE_URL/GA4/Ads as build ARGs
