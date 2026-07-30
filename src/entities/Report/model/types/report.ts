@@ -383,6 +383,47 @@ export interface AgentScorecard {
   negativeRate: number
 }
 
+export interface OperatorEvidenceItem {
+  channelId: string
+  createdAt: string
+  value: number | boolean | string | null
+  rationale?: string
+  quote?: string
+}
+
+export interface OperatorEvidenceMetric {
+  metricId: string
+  origin: 'default' | 'custom' | 'summary'
+  label?: string
+  average: number | null
+  sampleSize: number
+  evidence: OperatorEvidenceItem[]
+}
+
+export interface OperatorEvidenceResponse {
+  operatorName: string
+  callsCount: number
+  scoredCalls: number
+  averageScore: number
+  sampleCapped: boolean
+  metrics: OperatorEvidenceMetric[]
+}
+
+export interface TagStat {
+  tagId: string
+  name: string
+  callsCount: number
+  averageScore: number
+  successRate: number
+  sentiment: {
+    positive: number
+    neutral: number
+    negative: number
+  }
+  shareOfPeriodCalls?: number
+  deltaVsPeriodAverage?: number
+}
+
 export interface BatchUploadResponse {
   batchId: string
   total: number

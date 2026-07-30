@@ -1,6 +1,6 @@
 import { rtkApi } from '@/shared/api/rtkApi'
 import { mergeReportsCache, serializeReportsQueryArgs } from '../lib/mergeReportsCache'
-import { AIAnalyticsResponse, AllReports, Analytics, BatchStatusResponse, CdrSource, DashboardConfig, MetricDefinition, TagDefinition, MetricOverride, MetricOverrideInput, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorInsightsResponse, OperatorProject, OperatorUploadResponse, Report, ReportDialog } from '../model/types/report'
+import { AIAnalyticsResponse, AllReports, Analytics, BatchStatusResponse, CdrSource, DashboardConfig, MetricDefinition, TagDefinition, MetricOverride, MetricOverrideInput, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorEvidenceResponse, OperatorInsightsResponse, OperatorProject, OperatorUploadResponse, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
   page?: number
@@ -192,6 +192,8 @@ export const reportApi = rtkApi.injectEndpoints({
       startDate?: string
       endDate?: string
       operatorName?: string
+      operatorNameExact?: string
+      theme?: string
       projectId?: string
       page?: number
       limit?: number
@@ -356,6 +358,26 @@ export const reportApi = rtkApi.injectEndpoints({
         }
       },
     }),
+    getOperatorEvidence: build.query<
+      OperatorEvidenceResponse,
+      {
+        operatorName?: string
+        startDate?: string
+        endDate?: string
+        projectId?: string
+        userId?: string
+        limit?: number
+        order?: string
+      }
+    >({
+      query: (args) => ({
+        url: '/operator-analytics/operator-evidence',
+        params: Object.fromEntries(
+          Object.entries(args).filter(([, v]) => v !== undefined && v !== '')
+        ),
+      }),
+      providesTags: ['OperatorAnalytics'],
+    }),
   })
 })
 
@@ -393,3 +415,4 @@ export const useDeleteMetricOverride = reportApi.useDeleteMetricOverrideMutation
 export const useLazyGetBatchStatus = reportApi.useLazyGetBatchStatusQuery
 export const useLazyGetActiveBatches = reportApi.useLazyGetActiveBatchesQuery
 export const useLazyGetOperatorInsights = reportApi.useLazyGetOperatorInsightsQuery
+export const useGetOperatorEvidence = reportApi.useGetOperatorEvidenceQuery
