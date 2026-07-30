@@ -7,6 +7,7 @@ export type {
   AIAnalyticsResponse,
   AggregatedAIMetrics,
   AnalyticsMetrics,
+  Analytics,
   StoredMetricMeta,
   TimeSeriesPoint,
   AssistantMetric,
@@ -23,6 +24,10 @@ export type {
   InsightPriority,
   InsightType,
   AgentScorecard,
+  OperatorEvidenceItem,
+  OperatorEvidenceMetric,
+  OperatorEvidenceResponse,
+  TagStat,
   BatchUploadResponse,
   BatchStatusResponse,
   BatchItemStatus,
@@ -89,10 +94,12 @@ export {
   useLazyGetBatchStatus,
   useLazyGetActiveBatches,
   useLazyGetOperatorInsights,
+  useGetOperatorEvidence,
   useLazyGetReports
 } from './api/reportApi'
 
 export { ReportExpandedPanel } from './ui/ReportExpandedPanel/ReportExpandedPanel'
+export { ReportShowAnalytics } from './ui/ReportShowAnalytics/ReportShowAnalytics'
 export { useReportFilters } from './lib/useReportFilters'
 export { useBatchProgress } from './lib/useBatchProgress'
 export type {
