@@ -846,7 +846,8 @@ export interface paths {
         delete: operations["OrganizationsController_deleteDocument"];
         options?: never;
         head?: never;
-        patch?: never;
+        /** Update organization document fields (admin only; DB only, PDF untouched) */
+        patch: operations["OrganizationsController_updateDocument"];
         trace?: never;
     };
     "/api/organizations/{id}": {
@@ -3007,6 +3008,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/operator-analytics/operator-evidence": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get aggregated per-metric evidence for one operator over the dashboard period */
+        get: operations["OperatorAnalyticsController_getOperatorEvidence"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/operator-analytics/{id}/overrides": {
         parameters: {
             query?: never;
@@ -3040,6 +3058,23 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/{id}/tags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update manual call tags for an analysed call */
+        patch: operations["OperatorAnalyticsController_updateCallTags"];
         trace?: never;
     };
     "/api/operator-analytics/{id}": {
@@ -3344,10 +3379,15 @@ export interface components {
              */
             roles: string[];
             /**
-             * @description Parent user ID (for sub-users)
+             * @description Allow sub-user to manage tenant users (admin/owner only)
+             * @example false
+             */
+            canManageUsers?: boolean;
+            /**
+             * @description Tenant owner user ID for sub-users; omit/null for new tenant owner (admin)
              * @example 4
              */
-            vpbx_user_id?: number;
+            vpbx_user_id?: number | null;
             /**
              * @description Our organization id for billing issuer (admin)
              * @example 1
@@ -3457,6 +3497,11 @@ export interface components {
              * @example AIPBX-00000042
              */
             personalAccountNumber: string;
+            /**
+             * @description Sub-user may create/edit tenant users and receive tenant balance notifications
+             * @example false
+             */
+            canManageUsers: boolean;
         };
         CreateSubUserDto: {
             /**
@@ -3474,6 +3519,11 @@ export interface components {
              * @example 12345678
              */
             password?: string;
+            /**
+             * @description Allow this sub-user to manage tenant users (owner/admin only)
+             * @example false
+             */
+            canManageUsers?: boolean;
         };
         BalanceThresholdAlert: {
             /**
@@ -3846,10 +3896,21 @@ export interface components {
             /** @description Issuer our-organization id (admin override) */
             ourOrganizationId?: number;
             /**
-             * @description Create invoice in SBIS (EDO). If false, only local PDF is generated.
+             * @description Create invoice draft in SBIS. If false, only local PDF is generated. Does not send via EDO.
              * @default false
              */
             sendViaEdo: boolean;
+        };
+        UpdateOrganizationDocumentDto: {
+            /** @example AI-001 */
+            number?: string;
+            /**
+             * @description YYYY-MM-DD
+             * @example 2026-07-16
+             */
+            documentDate?: string;
+            /** @example 10000 */
+            amountRub?: number;
         };
         Prices: {
             /**
@@ -4912,6 +4973,27 @@ export interface components {
              */
             polarity?: "positive" | "negative" | "neutral";
         };
+        TagDefinitionDto: {
+            /**
+             * @description snake_case identifier
+             * @example returns
+             */
+            id: string;
+            /** @example Возвраты */
+            name: string;
+            /**
+             * @description Synonym phrases for keyword matching
+             * @example [
+             *       "возврат",
+             *       "вернуть товар"
+             *     ]
+             */
+            aliases: string[];
+            /** @example #5ed3f3 */
+            color?: string;
+            /** @example Клиент просит вернуть товар или деньги */
+            description?: string;
+        };
         CreateProjectDto: {
             /** @example Отдел продаж */
             name: string;
@@ -4923,6 +5005,50 @@ export interface components {
             systemPrompt?: string;
             /** @description Custom metrics definitions */
             customMetricsSchema?: components["schemas"]["MetricDefinitionDto"][];
+            /** @description Call topic taxonomy */
+            callTaxonomy?: components["schemas"]["TagDefinitionDto"][];
+            /** @description Which default metrics to show */
+            visibleDefaultMetrics?: string[];
+            /** @example https://example.com/webhook */
+            webhookUrl?: string;
+            /**
+             * @example [
+             *       "analysis.completed",
+             *       "analysis.error"
+             *     ]
+             */
+            webhookEvents?: string[];
+            /**
+             * @description Custom headers for webhook requests
+             * @example {
+             *       "Authorization": "Bearer xxx"
+             *     }
+             */
+            webhookHeaders?: Record<string, never>;
+            /**
+             * @description Monthly spend budget in USD (null/0 = disabled)
+             * @example 50
+             */
+            monthlyBudgetUsd?: number;
+            /**
+             * @description Emails notified on budget exceed
+             * @example [
+             *       "ops@example.com"
+             *     ]
+             */
+            budgetAlertEmails?: string[];
+        };
+        UpdateProjectDto: {
+            /** @example Отдел продаж */
+            name?: string;
+            /** @example Входящие звонки менеджеров продаж */
+            description?: string;
+            /** @description Business context prompt for LLM (max 1000 chars) */
+            systemPrompt?: string;
+            /** @description Custom metrics definitions */
+            customMetricsSchema?: components["schemas"]["MetricDefinitionDto"][];
+            /** @description Call topic taxonomy */
+            callTaxonomy?: components["schemas"]["TagDefinitionDto"][];
             /** @description Which default metrics to show */
             visibleDefaultMetrics?: string[];
             /** @example https://example.com/webhook */
@@ -5017,6 +5143,57 @@ export interface components {
              * @example 5
              */
             targetProjectId: number;
+        };
+        OperatorEvidenceItemDto: {
+            /** @example 12345 */
+            channelId: string;
+            /** @example 2026-07-30T10:00:00.000Z */
+            createdAt: string;
+            /** @example 72 */
+            value: Record<string, never> | null;
+            /** @example Оператор не представился по стандарту. */
+            rationale?: string;
+            /** @example Здравствуйте, чем могу помочь? */
+            quote?: string;
+        };
+        OperatorEvidenceMetricDto: {
+            /** @example greeting_quality */
+            metricId: string;
+            /**
+             * @example default
+             * @enum {string}
+             */
+            origin: "default" | "custom" | "summary";
+            /** @example Попытка апселла */
+            label?: string;
+            /** @example 68.5 */
+            average: number | null;
+            /** @example 12 */
+            sampleSize: number;
+            evidence: components["schemas"]["OperatorEvidenceItemDto"][];
+        };
+        OperatorEvidenceResponseDto: {
+            /** @example Иван */
+            operatorName: string;
+            /** @example 42 */
+            callsCount: number;
+            /** @example 38 */
+            scoredCalls: number;
+            /** @example 71.25 */
+            averageScore: number;
+            /** @example false */
+            sampleCapped: boolean;
+            metrics: components["schemas"]["OperatorEvidenceMetricDto"][];
+        };
+        UpdateCallTagsDto: {
+            /**
+             * @description Theme ids from the project callTaxonomy
+             * @example [
+             *       "returns",
+             *       "billing"
+             *     ]
+             */
+            tagIds: string[];
         };
         SipTrunks: {
             /**
@@ -5972,6 +6149,8 @@ export interface operations {
                 startDate?: string;
                 endDate?: string;
                 userId?: string;
+                /** @description Comma-separated billing types (e.g. analytic,insight) */
+                types?: string;
                 type?: string;
                 sortField?: string;
                 sortOrder?: string;
@@ -6409,6 +6588,30 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OrganizationsController_updateDocument: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                docId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateOrganizationDocumentDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {
@@ -9635,7 +9838,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProjectDto"];
+            };
+        };
         responses: {
             201: {
                 headers: {
@@ -9673,7 +9880,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProjectDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {
@@ -9838,6 +10049,26 @@ export interface operations {
             };
         };
     };
+    OperatorAnalyticsController_getOperatorEvidence: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Per-metric quotes and rationales */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperatorEvidenceResponseDto"];
+                };
+            };
+        };
+    };
     OperatorAnalyticsController_getOverrides: {
         parameters: {
             query?: never;
@@ -9887,6 +10118,29 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OperatorAnalyticsController_updateCallTags: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCallTagsDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {

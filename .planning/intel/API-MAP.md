@@ -142,6 +142,15 @@ Base URL: `__API__` (e.g. `https://aipbx.ru/api`). WebSocket: `__WS__` (port 303
 | `GET /operator-analytics/insights` | AI insights (structured) | JWT |
 | `GET/POST/DELETE /operator-analytics/tokens` | API tokens | JWT |
 | `GET /operator-analytics/cdrs` | CDR list | JWT |
+| `GET /operator-analytics/operator-evidence` | per-operator metric evidence (quotes/rationales) | JWT (ADMIN, USER) |
+| `PATCH /operator-analytics/{id}/tags` | manual call tag update | JWT (ADMIN, USER) |
+
+**Query params (phase 10):**
+
+| Route | Param | Purpose |
+|-------|-------|---------|
+| `GET /operator-analytics/cdrs` | `operatorNameExact` | Exact assistantName match for drill-down call lists |
+| `GET /operator-analytics/cdrs` | `tagId` | Filter calls tagged with a project theme |
 
 **BE:** `OperatorAnalyticsModule` — largest API surface
 

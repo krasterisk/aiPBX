@@ -43,6 +43,8 @@ Prioritized for solo founder, RU B2B market.
 | GAP-28 | 3 UI generations coexist | FE | M | L | deprecated/redesigned/redesign-v3 |
 | GAP-29 | E2E tests minimal (~5 Cypress specs) | FE | M | M | No CI e2e |
 | GAP-30 | No backend e2e tests | BE | M | M | `jest-e2e.json` exists, no specs |
+| GAP-31 | Call export: formula-safe values for pre-existing columns | FE | M | S | Phase 10-09 scoped formula guard to «Теги» column only; keywords/summary/transcript still unescaped |
+| GAP-32 | Operator evidence sample-size tuning | BE | L | S | `OPERATOR_EVIDENCE_MAX_CALLS` env knob + per-metric evidence count; defaults from 10-01 may need UAT tuning |
 
 ## P3 — GTM / growth (RU B2B)
 
