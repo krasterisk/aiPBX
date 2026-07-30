@@ -6,13 +6,13 @@ current_phase: 10
 current_plan: 2
 status: ready
 stopped_at: Completed 10-01-PLAN.md
-last_updated: "2026-07-30T05:56:00.000Z"
+last_updated: "2026-07-30T05:56:58.831Z"
 last_activity: 2026-07-30
 progress:
   total_phases: 8
   completed_phases: 5
   total_plans: 37
-  completed_plans: 22
+  completed_plans: 23
 ---
 
 # Project State
@@ -27,7 +27,7 @@ progress:
 
 **Last Activity:** 2026-07-30
 
-**Stopped At:** Completed 10-01-PLAN.md
+**Stopped At:** Completed 10-02-PLAN.md
 
 ## Accumulated Context
 
@@ -58,6 +58,8 @@ progress:
 - [Phase 09]: signup Ads conversion only on google/telegram/email-activation success
 - [Phase ?]: Evidence endpoint has no response cache in wave 1
 - [Phase ?]: operatorNameExact short-circuits substring operatorName in buildDashboardCdrWhere
+- [Phase ?]: SidePanel backLabel prop keeps shell OA-agnostic while showing visible back context
+- [Phase ?]: PanelEntry tag variant includes tagName for title and back label resolution
 
 ### Roadmap Evolution
 
@@ -203,9 +205,10 @@ progress:
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | Phase 10-speech-analytics-ux-overhaul-operator-drill-down-call-tags-t P01 | 28 | 3 tasks | 10 files |
+| Phase 10-speech-analytics-ux-overhaul-operator-drill-down-call-tags-t P02 | 45min | 2 tasks | 8 files |
 
 ## Session
 
-**Last session:** 2026-07-30T05:56:00.000Z
+**Last session:** 2026-07-30T05:56:58.794Z
 **Stopped at:** Completed 10-01-PLAN.md
 **Resume file:** None

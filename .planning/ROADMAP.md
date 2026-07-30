@@ -434,7 +434,7 @@ The original four-plan sketch below was written before `10-CONTEXT.md` locked 30
 Plans:
 
 - [x] 10-01 — BE tracer: operator-evidence endpoint
-- [ ] 10-02 — FE tracer: SidePanel + panelStack
+- [x] 10-02 — FE tracer: SidePanel + panelStack
 - [ ] 10-03 — Taxonomy vertical tracer: migrations → DTO → settings editor
 - [ ] 10-04 — FE dashboard cleanup + IA reshuffle
 - [ ] 10-05 — BE tagging pipeline + manual edits + list filters
