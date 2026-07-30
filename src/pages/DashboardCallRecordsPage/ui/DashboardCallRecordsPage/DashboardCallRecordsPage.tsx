@@ -46,7 +46,7 @@ const DashboardCallRecordsContent = memo(() => {
     )
 
     const { data: projects } = useGetOperatorProjects()
-    const activeProject = projects?.find(p => p.id === projectId)
+    const activeProject = projects?.find(p => String(p.id) === String(projectId ?? ''))
 
     const onChangeProjectId = useCallback((value: string) => {
         setProjectId(value)
