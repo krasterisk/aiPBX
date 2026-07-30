@@ -1,0 +1,93 @@
+@import '@/app/styles/variables/mixins';
+
+.paper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    background: var(--bg-redesigned);
+    color: var(--text-redesigned);
+    border-left: 1px solid var(--glass-border-primary);
+
+    @include mobile {
+        width: 100vw;
+    }
+
+    @media (min-width: 601px) and (max-width: 1023px) {
+        width: min(480px, 92vw);
+    }
+
+    @include desktop {
+        width: clamp(480px, 38vw, 560px);
+    }
+}
+
+.header {
+    @include flex-between;
+    flex-shrink: 0;
+    height: var(--space-16);
+    padding: 0 var(--space-6);
+    background: var(--glass-bg-primary);
+    border-bottom: 1px solid var(--divider-solid);
+    gap: var(--space-2);
+
+    @include mobile {
+        padding: 0 var(--space-4);
+    }
+}
+
+.headerStart {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+    flex: 1;
+}
+
+.title {
+    @include text-truncate;
+    margin: 0;
+    font-family: var(--font-family-header-redesigned);
+    font-size: var(--font-l-redesigned);
+    font-weight: 700;
+    line-height: 1.33;
+}
+
+.iconButton {
+    @include flex-center;
+    @include focus-visible;
+    flex-shrink: 0;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-redesigned);
+    cursor: pointer;
+}
+
+.backButton {
+    @extend .iconButton;
+    gap: var(--space-1);
+    max-width: 100%;
+    color: var(--accent-redesigned);
+}
+
+.backLabel {
+    @include text-truncate;
+    font-size: var(--font-m-redesigned);
+    font-weight: 400;
+}
+
+.body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-6);
+
+    @include custom-scrollbar;
+
+    @include mobile {
+        padding: var(--space-4);
+    }
+}
