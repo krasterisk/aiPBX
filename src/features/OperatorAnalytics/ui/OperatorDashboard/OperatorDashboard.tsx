@@ -312,8 +312,8 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                     title={String(t('DASHBOARD_CUSTOM_LAYOUT'))}
                 />
             ) : (
-                <div data-testid="oa-section-mid-charts">
-            {/* Pie Charts Row */}
+                <div data-testid="oa-section-mid-charts" className={cls.midChartsSection}>
+            {/* Sentiment / success / avg score — one adaptive row */}
             <div className={cls.chartsRow}>
                 <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
                     <VStack gap={'12'} max>
@@ -327,44 +327,48 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                         <DonutChart data={successData} />
                     </VStack>
                 </Card>
-            </div>
-
-            {/* Avg Score — horizontal bar chart (filtered by visibleDefaultMetrics) */}
-            {radarMetrics.length > 0 && (
-                <Card max variant={'glass'} border={'partial'} padding={'24'}>
-                    <VStack gap={'16'} max>
-                        <HStack max justify={'between'} align={'center'}>
-                            <Text title={String(t('Средняя оценка'))} bold />
-                            {activeProject?.visibleDefaultMetrics && (
-                                <Text
-                                    text={`${radarMetrics.length} / ${ALL_DEFAULT_METRICS.length} ${t('метрик')}`}
-                                    size={'s'}
-                                />
-                            )}
-                        </HStack>
-                        <VStack gap={'8'} max className={cls.metricBars}>
-                            {radarMetrics.map(m => {
-                                const level = m.value >= 80 ? 'high' : m.value >= 50 ? 'mid' : 'low'
-                                const color = level === 'high' ? 'var(--status-success)' : level === 'mid' ? 'var(--status-warning)' : 'var(--status-error)'
-                                return (
-                                    <VStack key={m.key} gap={'4'} max>
-                                        <HStack max justify={'between'}>
-                                            <Text text={m.label} size={'s'} />
-                                            <Text text={String(m.value)} size={'s'} bold variant={level === 'high' ? 'success' : level === 'mid' ? 'warning' : 'error'} />
-                                        </HStack>
-                                        <div className={cls.metricBarTrack}>
-                                            <div
-                                                className={cls.metricBarFill}
-                                                style={{ width: `${m.value}%`, backgroundColor: color }}
-                                            />
-                                        </div>
-                                    </VStack>
-                                )
-                            })}
+                {radarMetrics.length > 0 && (
+                    <Card
+                        max
+                        variant={'glass'}
+                        border={'partial'}
+                        padding={'24'}
+                        className={`${cls.chartCard} ${cls.chartCardGrow}`}
+                    >
+                        <VStack gap={'16'} max>
+                            <HStack max justify={'between'} align={'center'}>
+                                <Text title={String(t('Средняя оценка'))} bold />
+                                {activeProject?.visibleDefaultMetrics && (
+                                    <Text
+                                        text={`${radarMetrics.length} / ${ALL_DEFAULT_METRICS.length} ${t('метрик')}`}
+                                        size={'s'}
+                                    />
+                                )}
+                            </HStack>
+                            <VStack gap={'8'} max className={cls.metricBars}>
+                                {radarMetrics.map(m => {
+                                    const level = m.value >= 80 ? 'high' : m.value >= 50 ? 'mid' : 'low'
+                                    const color = level === 'high' ? 'var(--status-success)' : level === 'mid' ? 'var(--status-warning)' : 'var(--status-error)'
+                                    return (
+                                        <VStack key={m.key} gap={'4'} max>
+                                            <HStack max justify={'between'}>
+                                                <Text text={m.label} size={'s'} />
+                                                <Text text={String(m.value)} size={'s'} bold variant={level === 'high' ? 'success' : level === 'mid' ? 'warning' : 'error'} />
+                                            </HStack>
+                                            <div className={cls.metricBarTrack}>
+                                                <div
+                                                    className={cls.metricBarFill}
+                                                    style={{ width: `${m.value}%`, backgroundColor: color }}
+                                                />
+                                            </div>
+                                        </VStack>
+                                    )
+                                })}
+                            </VStack>
                         </VStack>
-                    </VStack>
-                </Card>
-            )}
+                    </Card>
+                )}
+            </div>
 
             {/* Phase 1: Custom Metrics Section */}
             {customMetricsList.length > 0 && (

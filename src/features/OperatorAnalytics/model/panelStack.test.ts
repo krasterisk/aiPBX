@@ -111,7 +111,19 @@ describe('panelStack', () => {
 
     it('resolves operator and tag titles', () => {
         expect(resolvePanelTitle(operatorEntry, t)).toBe('Anna')
-        expect(resolvePanelTitle({ kind: 'tag', tagId: 'refunds', tagName: 'Refunds' }, t)).toBe('Refunds')
+        expect(resolvePanelTitle({
+            kind: 'tag',
+            stat: {
+                tagId: 'refunds',
+                name: 'Refunds',
+                callsCount: 1,
+                averageScore: 80,
+                successRate: 1,
+                sentiment: { positive: 1, neutral: 0, negative: 0 },
+                shareOfPeriodCalls: 10,
+                deltaVsPeriodAverage: 0,
+            },
+        }, t)).toBe('Refunds')
     })
 
     it('resolves the back label from the entry directly below the current one', () => {

@@ -23,23 +23,38 @@
 
 // ─── Charts Layout ─────────────────────────────────────────────────────────────
 
+.midChartsSection {
+    width: 100%;
+}
+
 .chartsRow {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    // Two donuts at a stable width; «Средняя оценка» takes the rest to the right edge
+    grid-template-columns: minmax(200px, 280px) minmax(200px, 280px) minmax(0, 1fr);
     gap: var(--space-4);
     width: 100%;
-    align-items: start;
+    align-items: stretch;
 
     @include tablet {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        .chartCardGrow {
+            grid-column: 1 / -1;
+        }
+    }
+
+    @include mobile {
         grid-template-columns: 1fr;
+
+        .chartCardGrow {
+            grid-column: auto;
+        }
     }
 }
 
-
-
-
-
 .chartCard {
+    width: 100%;
+    min-width: 0;
     transition: var(--transition-slow);
 
     &:hover {
@@ -52,6 +67,11 @@
             transform: none;
         }
     }
+}
+
+.chartCardGrow {
+    width: 100%;
+    min-width: 0;
 }
 
 // ─── Project Chips ─────────────────────────────────────────────────────────────

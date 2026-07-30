@@ -6,13 +6,13 @@ current_phase: 10
 current_plan: 9
 status: ready
 stopped_at: Completed 10-09-PLAN.md
-last_updated: "2026-07-30T08:12:13.443Z"
+last_updated: "2026-07-30T08:32:24.003Z"
 last_activity: 2026-07-30
 progress:
   total_phases: 8
   completed_phases: 5
   total_plans: 37
-  completed_plans: 29
+  completed_plans: 30
 ---
 
 # Project State
@@ -27,13 +27,14 @@ progress:
 
 **Last Activity:** 2026-07-30
 
-**Stopped At:** Completed 10-09-PLAN.md
+**Stopped At:** Completed 10-09-PLAN.md (10-08 completed in same phase wave)
 
 ## Accumulated Context
 
 ### Decisions
 
-- [Phase 10]: spotTaxonomyTags uses ES6 Cyrillic/Latin boundary class; auto tag write is warn-and-continue
+- [Phase 10]: Tag panel stack entry carries full TagStat so card and panel D-16 figures stay aligned
+- [Phase 10]: Topics not-configured empty state links to getRouteAnalyticsProjects() route constant
 - [Phase 10]: Re-analysis deletes operator_call_tags where source=auto only; manual PATCH replaces full tag set
 - [Phase 10]: Taxonomy writes skip currentSchemaVersion bump; validated via TagDefinitionDto + service validateCallTaxonomy
 - [Phase 10]: operator_call_tags table dual-dialect with channelId+tagId uniqueness; tags never in operator_metric_values
@@ -221,6 +222,6 @@ progress:
 
 ## Session
 
-**Last session:** 2026-07-30T08:12:13.338Z
+**Last session:** 2026-07-30T08:32:23.970Z
 **Stopped at:** Completed 10-01-PLAN.md
 **Resume file:** None
