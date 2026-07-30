@@ -11,6 +11,11 @@ jest.mock('react-i18next', () => ({
     }),
 }))
 
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: () => jest.fn(),
+}))
+
 const mockUseGetOperatorProjects = jest.fn()
 const mockUseGetOperatorEvidence = jest.fn()
 jest.mock('@/entities/Report', () => {
@@ -112,8 +117,25 @@ const baseProjects: OperatorProject[] = [
         id: 'proj-1' as unknown as string,
         name: 'Sales',
         createdAt: '2026-01-01T00:00:00.000Z',
+        callTaxonomy: [{ id: 'tag-1', name: 'Продажи', aliases: ['продаж'] }],
     },
 ]
+
+const sampleTagStats = [
+    {
+        tagId: 'tag-1',
+        name: 'Продажи',
+        callsCount: 15,
+        averageScore: 80,
+        successRate: 0.6,
+        sentiment: { positive: 8, neutral: 5, negative: 2 },
+    },
+]
+
+const dashboardWithTags: OperatorDashboardResponse = {
+    ...baseDashboardData,
+    tagStats: sampleTagStats,
+}
 
 const projectWithBuilderLayout: OperatorProject = {
     id: 'proj-builder' as unknown as string,
@@ -177,6 +199,78 @@ describe('OperatorDashboard layout', () => {
         expect(insightsIdx).toBeGreaterThan(statsIdx)
         expect(midIdx).toBeGreaterThan(insightsIdx)
         expect(rankingIdx).toBeGreaterThan(midIdx)
+    })
+
+    it('does not render the topics section without a selected project', () => {
+        render(<OperatorDashboard {...defaultProps} />)
+        expect(screen.queryByTestId('oa-section-topics')).not.toBeInTheDocument()
+    })
+
+    it('renders topics between mid-charts and ranking when a project is selected', () => {
+        const { container } = render(
+            <OperatorDashboard
+                {...defaultProps}
+                projectId="proj-1"
+                data={dashboardWithTags}
+            />,
+        )
+
+        expect(screen.getByTestId('oa-section-topics')).toBeInTheDocument()
+
+        const [midIdx, topicsIdx, rankingIdx] = sectionOrder(container, [
+            'oa-section-mid-charts',
+            'oa-section-topics',
+            'oa-section-ranking',
+        ])
+
+        expect(midIdx).toBeGreaterThanOrEqual(0)
+        expect(topicsIdx).toBeGreaterThan(midIdx)
+        expect(rankingIdx).toBeGreaterThan(topicsIdx)
+    })
+
+    it('renders topics below builder grid and above ranking in custom layout mode', () => {
+        mockUseGetOperatorProjects.mockReturnValue({
+            data: [{
+                ...projectWithBuilderLayout,
+                callTaxonomy: [{ id: 'tag-1', name: 'Продажи', aliases: ['продаж'] }],
+            }],
+        })
+
+        const { container } = render(
+            <OperatorDashboard
+                {...defaultProps}
+                projectId="proj-builder"
+                data={dashboardWithTags}
+            />,
+        )
+
+        expect(screen.getByTestId('oa-section-builder')).toBeInTheDocument()
+        expect(screen.getByTestId('oa-section-topics')).toBeInTheDocument()
+
+        const [builderIdx, topicsIdx, rankingIdx] = sectionOrder(container, [
+            'oa-section-builder',
+            'oa-section-topics',
+            'oa-section-ranking',
+        ])
+
+        expect(builderIdx).toBeGreaterThanOrEqual(0)
+        expect(topicsIdx).toBeGreaterThan(builderIdx)
+        expect(rankingIdx).toBeGreaterThan(topicsIdx)
+    })
+
+    it('opens the panel with the theme name when a topic card is clicked', async () => {
+        const user = userEvent.setup()
+        render(
+            <OperatorDashboard
+                {...defaultProps}
+                projectId="proj-1"
+                data={dashboardWithTags}
+            />,
+        )
+
+        await user.click(screen.getByTestId('topic-card-tag-1'))
+        expect(screen.getByTestId('operator-drilldown-panel')).toBeInTheDocument()
+        expect(screen.getByRole('heading', { name: 'Продажи' })).toBeInTheDocument()
     })
 
     it('keeps both cost stat cards', () => {

@@ -1,7 +1,9 @@
+import type { TagStat } from '@/entities/Report'
+
 export type PanelEntry =
     | { kind: 'operator', operatorName: string }
     | { kind: 'operatorMetric', operatorName: string, metricId: string, metricLabel?: string }
-    | { kind: 'tag', tagId: string, tagName: string }
+    | { kind: 'tag', stat: TagStat }
     | { kind: 'call', channelId: string, fromLabel: string }
 
 export type TranslateFn = (key: string, options?: Record<string, string>) => string
@@ -36,7 +38,7 @@ export function resolvePanelTitle(entry: PanelEntry | undefined, _t: TranslateFn
         case 'operatorMetric':
             return entry.metricLabel ?? entry.metricId
         case 'tag':
-            return entry.tagName
+            return entry.stat.name
         case 'call':
             return entry.fromLabel
         default: {
@@ -65,7 +67,7 @@ function entryContextLabel(entry: PanelEntry): string {
         case 'operatorMetric':
             return entry.metricLabel ?? entry.metricId
         case 'tag':
-            return entry.tagName
+            return entry.stat.name
         case 'call':
             return entry.fromLabel
         default: {

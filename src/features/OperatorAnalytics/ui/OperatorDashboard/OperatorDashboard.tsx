@@ -17,6 +17,7 @@ import { formatTenantMoney } from '@/shared/lib/functions/formatDisplayMoney'
 import {
     OperatorDashboardResponse,
     OperatorProject,
+    TagStat,
     useGetOperatorProjects,
 } from '@/entities/Report'
 import { AiInsightsBanner } from './AiInsightsBanner/AiInsightsBanner'
@@ -34,6 +35,7 @@ import {
     type PanelEntry,
 } from '../../model/panelStack'
 import { DrilldownPanel } from './DrilldownPanel'
+import { TopicsSection } from './TopicsSection'
 import { ALL_DEFAULT_METRICS, metricVisual, normalizeRate } from '../../lib/metricVisual'
 import cls from './OperatorDashboard.module.scss'
 
@@ -99,6 +101,11 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
             channelId,
             fromLabel,
         }))
+    }, [])
+
+    const handleSelectTag = useCallback((stat: TagStat, rowElement: HTMLElement | null) => {
+        lastFocusedRowRef.current = rowElement
+        setPanelStack([{ kind: 'tag', stat }])
     }, [])
 
     const formatDuration = (seconds?: number) => {
@@ -446,6 +453,15 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                 </Card>
             )}
                 </div>
+            )}
+
+            {projectId && (
+                <TopicsSection
+                    tagStats={data?.tagStats}
+                    hasTaxonomy={(activeProject?.callTaxonomy?.length ?? 0) > 0}
+                    isLoading={isLoading}
+                    onSelectTag={handleSelectTag}
+                />
             )}
 
             {/* Operator quality ranking — bottom section */}

@@ -372,6 +372,8 @@ export interface OperatorDashboardResponse {
   }>
   excludedLowQualityCount?: number
   agentScorecards?: AgentScorecard[]
+  /** Present when a project with callTaxonomy is selected; [] when taxonomy exists but no matches */
+  tagStats?: TagStat[]
 }
 
 export interface AgentScorecard {
