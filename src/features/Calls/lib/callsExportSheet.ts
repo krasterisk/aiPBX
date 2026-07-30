@@ -4,7 +4,9 @@ import type {
     DefaultMetricKey,
     Report,
     StoredMetricMeta,
+    TagDefinition,
 } from '@/entities/Report'
+import { resolveTagDisplayName } from '@/entities/Report'
 import { formatDate } from '@/shared/lib/functions/formatDate'
 import { formatTime } from '@/shared/lib/functions/formatTime'
 import { formatDisplayMoney } from '@/shared/lib/functions/formatDisplayMoney'
@@ -81,6 +83,26 @@ const formatResult = (metrics: AnalyticsMetrics | undefined, t: TFunction): stri
 const truncateCell = (text: string): string =>
     text.length > EXCEL_CELL_MAX ? text.slice(0, EXCEL_CELL_MAX - 1) + '…' : text
 
+export const escapeSpreadsheetFormula = (value: string): string => {
+    if (!value) return value
+    if (/^[=+\-@\t\r]/.test(value)) {
+        return `'${value}`
+    }
+    return value
+}
+
+const formatTagNamesForExport = (
+    tagIds: string[] | undefined,
+    tagNames: Record<string, string> | undefined,
+    taxonomy?: TagDefinition[],
+): string => {
+    if (!tagIds?.length) return ''
+    const joined = tagIds
+        .map(tagId => resolveTagDisplayName(tagId, tagNames, taxonomy))
+        .join(', ')
+    return escapeSpreadsheetFormula(truncateCell(joined))
+}
+
 const extractCustomEntries = (
     metrics: AnalyticsMetrics,
 ): Array<[string, unknown, StoredMetricMeta | undefined]> => {
@@ -152,6 +174,7 @@ export function buildCallsExportSheet(
         String(t('Саммари')),
         String(t('Качество транскрипции')),
         String(t('EXPORT_KEYWORDS')),
+        String(t('Теги')),
         String(t('Обоснование метрик')),
         String(t('Транскрипт')),
     ]
@@ -222,6 +245,10 @@ export function buildCallsExportSheet(
                 report.transcriptionQuality || metrics?._quality?.quality || ''
             row[String(t('EXPORT_KEYWORDS'))] =
                 metrics?._topics?.keywords?.join(', ') ?? ''
+            row[String(t('Теги'))] = formatTagNamesForExport(
+                metrics?._topics?.tags,
+                metrics?._topics?.tag_names,
+            )
             row[String(t('Транскрипт'))] = truncateCell(report.transcription?.trim() ?? '')
         }
 
