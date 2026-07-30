@@ -401,7 +401,9 @@ Plans:
 | Теги звонков | Тегирование на этапе анализа; отчёты по темам/тегам; drill-down до записей/разговоров; сводная и детальная статистика |
 | Модуль целиком | Оценка речевой аналитики end-to-end; предложения и реализация UX/дашбордов под аудиторию маркетолог / руководитель КЦ |
 
-### Suggested plan breakdown (for `/gsd-discuss-phase 10` → `/gsd-plan-phase 10`)
+### Suggested plan breakdown (superseded — kept for provenance)
+
+The original four-plan sketch below was written before `10-CONTEXT.md` locked 30 decisions. Planning expanded it to 10 tracer-led plans across 5 waves; the mapping is: sketch 10-01 → plans 10-04; sketch 10-02 → plans 10-01, 10-02, 10-06; sketch 10-03 → plans 10-03, 10-05, 10-07, 10-08, 10-09; sketch 10-04 → plan 10-10.
 
 | Plan | Wave | Depends on | Scope |
 |------|------|------------|-------|
@@ -410,13 +412,39 @@ Plans:
 | 10-03 | 2 | 10-01 | Call tagging at analysis + topic/tag reports + call-level drill-down |
 | 10-04 | 3 | 10-02, 10-03 | Cross-cutting polish, i18n, docs touch if needed |
 
-**Status:** Not planned yet
+**Status:** Planned
 
-**Plans:** 0 plans
+**Plans:** 10 plans across 6 waves (TRACER_MODE — every plan leads with an end-to-end tracer task)
+
+| Plan | Wave | Depends on | Repo | Scope | Decisions |
+|------|------|------------|------|-------|-----------|
+| 10-01 | 1 | — | BE | `GET /operator-analytics/operator-evidence` — bounded, tenant-scoped per-metric evidence; one definition of exact-operator identity, shared by the evidence and analysed-calls routes | D-04, D-05, D-06, D-08 |
+| 10-02 | 1 | — | FE | `redesign-v3/SidePanel` + pure `panelStack` model | D-01, D-03, D-07, D-30 |
+| 10-04 | 1 | — | FE | Dashboard cleanup + IA reshuffle; delete `OperatorUsageSection`; project-id resolution fix; first render test | D-09…D-12, D-24…D-29 |
+| 10-03 | 2 | 10-01 | BE + FE | Taxonomy vertical: dual-dialect migrations, `operator_call_tags` model, `callTaxonomy` column + validated DTO, taxonomy editor in project settings | D-13, D-17, D-19, D-21, D-22 |
+| 10-05 | 3 | 10-03 | BE | `spotTaxonomyTags` matcher, automatic tagging at analysis, manual `PATCH /:id/tags`, `tagId` list filter | D-14, D-18, D-19, D-20, D-22 |
+| 10-06 | 3 | 10-01, 10-02, 10-04 | FE | Operator drill-down: API + types, hoisted metric visuals, panel body router, operator and call bodies, activatable ranking rows, dashboard panel host | D-01, D-02, D-03, D-06, D-08 |
+| 10-07 | 4 | 10-03, 10-05 | BE | `lib/tag-stats.ts` + project-gated `tagStats` in `getDashboard`, with a no-extra-query guarantee | D-15, D-16, D-19, D-29 |
+| 10-08 | 5 | 10-06, 10-07 | FE | «Темы» section with two distinct empty states and expand control; theme panel body with server-paginated call list | D-15, D-16, D-21, D-25, D-26, D-29 |
+| 10-09 | 5 | 10-05, 10-06 | FE | Tag chip row (journal + call card with optimistic manual editing) + «Теги» export column | D-14, D-19, D-22, D-23 |
+| 10-10 | 6 | all | BE + FE | Closeout: four-locale i18n behind a parity gate, contract + generated-type regeneration, API map and backlog updates, human UAT checkpoint | D-02, D-27, D-30 |
+
+10-03 is serialised behind 10-01 for file ownership, not behaviour: both edit the 130-kilobyte `operator-analytics.service.ts`, and the module is edited by exactly one plan per wave throughout.
 
 Plans:
 
-- [ ] TBD (run `/gsd-discuss-phase 10` then `/gsd-plan-phase 10`)
+- [ ] 10-01 — BE tracer: operator-evidence endpoint
+- [ ] 10-02 — FE tracer: SidePanel + panelStack
+- [ ] 10-03 — Taxonomy vertical tracer: migrations → DTO → settings editor
+- [ ] 10-04 — FE dashboard cleanup + IA reshuffle
+- [ ] 10-05 — BE tagging pipeline + manual edits + list filters
+- [ ] 10-06 — FE operator drill-down panel
+- [ ] 10-07 — BE per-theme stats in `getDashboard`
+- [ ] 10-08 — FE «Темы» section + theme panel
+- [ ] 10-09 — FE tag chips + CSV export column
+- [ ] 10-10 — Closeout: i18n, contract regen, human UAT
+
+**Manual step:** 10-03 ships two dialect migrations that must be applied by hand per server (no migration runner — RISKS R12). See `user_setup` in `10-03-PLAN.md`.
 
 ---
 

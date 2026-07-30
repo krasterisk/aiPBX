@@ -733,30 +733,17 @@ The MySQL twin uses `JSON`, `AUTO_INCREMENT`, `DATETIME DEFAULT CURRENT_TIMESTAM
 | A5 | Word-boundary alias matching is a net improvement over the current substring match for Russian call transcripts | Pattern 5 | Could reduce recall on inflected forms (`возврат` / `возвратом`). Mitigation: boundary regex allows a trailing suffix only if the planner opts for a prefix match instead — decide with real transcripts |
 | A6 | «Темы» ordering by `callsCount` descending (mirroring `buildAgentScorecards`) is what managers want | Pattern 6 | Low impact; trivially changeable |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **D-28 vs. current code placement of AI Insights.**
-   - What we know: D-25 orders the page `Stats → AI Insights → …`, and D-28 says AI Insights "stays after Stats (current placement)". In `OperatorDashboard.tsx` the `AiInsightsBanner` is rendered **first**, above the excluded-quality notice, the project chip row, and the Stats row.
-   - What's unclear: whether D-28 means "keep the code as-is" (banner first) or "move it to after Stats, as D-25 says".
-   - Recommendation: follow **D-25** (Stats → AI Insights) since it is the explicit IA spec, and confirm with the founder in the plan checkpoint. Also decide where the project chip row and `DASHBOARD_EXCLUDED_LOW_QUALITY` notice land — neither is named in D-25 and both currently sit above Stats. Keep `data-tour-id="oa-upload-entry"` wherever the chip row ends up.
+1. **D-28 vs. current code placement of AI Insights.** — **RESOLVED (10-04):** Follow **D-25** — `Stats → AI Insights`. Move `AiInsightsBanner` below Stats. Project chip row and excluded-quality notice stay above Stats (UI-SPEC A-02).
 
-2. **`.cursor/rules/frontend-fsd.mdc` names a directory that does not exist.**
-   - What we know: the rule says "New UI only in `src/shared/ui/redesign/`"; the actual directories are `deprecated/`, `redesigned/`, `mui/`, `redesign-v3/`. `PROJECT.md` and `RISKS.md` R15 both say `redesign-v3`.
-   - What's unclear: whether the rule is a typo for `redesign-v3` or an unrealised future rename.
-   - Recommendation: build `SidePanel` in `redesign-v3/` (two of three sources agree, and it exists) and fix the rule text in the same phase as a one-line change.
+2. **`.cursor/rules/frontend-fsd.mdc` names a directory that does not exist.** — **RESOLVED (10-02):** Build `SidePanel` in `src/shared/ui/redesign-v3/`. Fix the rule typo to `redesign-v3` in the same plan as a one-line change.
 
-3. **Tag identity in `_topics.tags`: ids or display names?**
-   - What we know: `_topics.keywords` stores raw matched strings; the export column and the call-card badge render them directly. Storing tag **ids** keeps renames cheap but requires the taxonomy to resolve names at render time (available on the frontend via `useGetOperatorProjects`, unavailable for a call whose project was deleted).
-   - Recommendation: store **ids** in `_topics.tags` and additionally snapshot `_topics.tag_names` (id → name at analysis time), mirroring how `_custom_meta` snapshots metric definitions. That makes the export and call card readable without the project, and keeps «Темы» rename-safe.
+3. **Tag identity in `_topics.tags`: ids or display names?** — **RESOLVED (10-05):** Store tag **ids** in `_topics.tags` plus snapshot `_topics.tag_names` (id → name at analysis time), mirroring `_custom_meta`.
 
-4. **Should evidence responses be cached?**
-   - What we know: unlike insights there is no LLM cost, so the only driver is latency; caching quotes adds a PII surface in Redis.
-   - Recommendation: **no cache in wave 1.** Measure panel latency during UAT; add `InsightsCacheService`-based caching later only with a tenant-prefixed key (Pitfall 10).
+4. **Should evidence responses be cached?** — **RESOLVED (10-01):** **No cache in wave 1.** Revisit after UAT only with tenant-prefixed keys (Pitfall 10 / R4).
 
-5. **Taxonomy CRUD placement within the wizard (D-17).**
-   - What we know: `ProjectWizard` has steps 0–4 (`Templates`, `Chat`, `MetricBuilder`, `DefaultMetrics`, `Webhook`) plus `ProjectSettingsForm` and `WizardReviewSection`.
-   - What's unclear: new wizard step vs. a section inside `ProjectSettingsForm`.
-   - Recommendation: put it in **`ProjectSettingsForm`** (edit path — the realistic place for iterating a keyword dictionary) and surface it in `WizardReviewSection` read-only, avoiding a longer creation funnel that would work against the onboarding conversion goal.
+5. **Taxonomy CRUD placement within the wizard (D-17).** — **RESOLVED (10-03):** Put taxonomy editor in **`ProjectSettingsForm`**; surface read-only in `WizardReviewSection`.
 
 ## Environment Availability
 
