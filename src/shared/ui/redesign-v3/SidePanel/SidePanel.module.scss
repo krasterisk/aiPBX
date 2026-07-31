@@ -24,17 +24,31 @@
 }
 
 .header {
-    @include flex-between;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     flex-shrink: 0;
-    height: var(--space-16);
+    min-height: var(--space-16);
     padding: 0 var(--space-6);
     background: var(--glass-bg-primary);
     border-bottom: 1px solid var(--divider-solid);
-    gap: var(--space-2);
+    gap: var(--space-1);
 
     @include mobile {
         padding: 0 var(--space-4);
     }
+}
+
+.headerStacked {
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-3);
+}
+
+.headerTop {
+    @include flex-between;
+    gap: var(--space-2);
+    width: 100%;
+    min-width: 0;
 }
 
 .headerStart {
@@ -52,6 +66,17 @@
     font-size: var(--font-l-redesigned);
     font-weight: 700;
     line-height: 1.33;
+}
+
+.titleCentered {
+    @extend .title;
+    width: 100%;
+    text-align: center;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .iconButton {

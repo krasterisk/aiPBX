@@ -25,7 +25,11 @@ export default (env: buildEnv) => {
   const apiUrl = env?.apiUrl || process.env.API_URL || '/api'
   const wsUrl = env?.wsUrl ?? process.env.WS_URL ?? ''
   const staticUrl = env?.staticUrl || process.env.STATIC_URL || '/static'
-  const googleClientId = env?.googleClientId || process.env.GOOGLE_CLIENT_ID || ''
+  const googleClientId =
+    env?.googleClientId ||
+    process.env.GOOGLE_CLIENT_ID ||
+    process.env.REACT_APP_GOOGLE_CLIENT_ID ||
+    ''
   const tgBotId = env?.tgBotId || process.env.TELEGRAM_BOT_ID || ''
   const stripePublishableKey = env?.stripePublishableKey || process.env.STRIPE_PUBLISHABLE_KEY || ''
   const sentryDsn = process.env.SENTRY_DSN || ''

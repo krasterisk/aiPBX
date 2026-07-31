@@ -21,7 +21,7 @@ describe('TaxonomyEditor', () => {
         aliases: ['возврат'],
     }
 
-    it('renders one row per theme with name and synonym fields', () => {
+    it('renders one row per theme with name and keyword fields', () => {
         render(
             <TaxonomyEditor
                 taxonomy={[baseTheme, { id: 'delivery', name: 'Доставка', aliases: ['курьер'] }]}
@@ -33,6 +33,8 @@ describe('TaxonomyEditor', () => {
         expect(screen.getByDisplayValue('возврат')).toBeInTheDocument()
         expect(screen.getByDisplayValue('Доставка')).toBeInTheDocument()
         expect(screen.getByDisplayValue('курьер')).toBeInTheDocument()
+        expect(screen.getAllByText('TAXONOMY_NAME_HINT')).toHaveLength(2)
+        expect(screen.getAllByText('TAXONOMY_KEYWORDS_HINT')).toHaveLength(2)
     })
 
     it('appends an empty row when adding a theme', () => {
@@ -47,18 +49,31 @@ describe('TaxonomyEditor', () => {
         ])
     })
 
-    it('derives theme id from the display name', () => {
+    it('keeps a stable theme id when the display name changes', () => {
         const onChange = jest.fn()
         render(<TaxonomyEditor taxonomy={[baseTheme]} onChange={onChange} />)
 
         fireEvent.change(screen.getByDisplayValue('Возвраты'), { target: { value: 'Complaints' } })
 
         expect(onChange).toHaveBeenCalledWith([
-            expect.objectContaining({ id: 'complaints', name: 'Complaints' }),
+            expect.objectContaining({ id: 'returns', name: 'Complaints' }),
         ])
     })
 
-    it('reports trimmed synonym list with empty entries dropped', () => {
+    it('preserves in-progress keyword typing including trailing separators', () => {
+        const onChange = jest.fn()
+        render(<TaxonomyEditor taxonomy={[baseTheme]} onChange={onChange} />)
+
+        const input = screen.getByDisplayValue('возврат')
+        fireEvent.change(input, { target: { value: 'возврат, отказ, ' } })
+
+        expect(input).toHaveValue('возврат, отказ, ')
+        expect(onChange).toHaveBeenCalledWith([
+            expect.objectContaining({ aliases: ['возврат', 'отказ'] }),
+        ])
+    })
+
+    it('reports trimmed keyword list with empty entries dropped', () => {
         const onChange = jest.fn()
         render(<TaxonomyEditor taxonomy={[baseTheme]} onChange={onChange} />)
 
@@ -103,5 +118,8 @@ describe('TaxonomyEditor', () => {
         render(<TaxonomyEditor taxonomy={[]} onChange={jest.fn()} />)
 
         expect(screen.getByText('Добавьте темы и ключевые слова — звонки начнут размечаться при следующем анализе.')).toBeInTheDocument()
+        expect(screen.getByText(
+            'Темы — метки для звонков. При анализе система ищет в расшифровке ключевые слова темы и ставит метку автоматически.',
+        )).toBeInTheDocument()
     })
 })

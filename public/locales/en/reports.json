@@ -416,6 +416,11 @@
   "Проверьте соединение и повторите. Если ошибка повторяется, обновите страницу.": "Check your connection and retry. If it keeps failing, reload the page.",
   "Повторить": "Retry",
   "По последним {{count}} звонкам": "Based on the last {{count}} calls",
+  "Средний балл": "Average score",
+  "Средний балл метрики": "Metric average",
+  "Оценок по метрике: {{count}}": "Scored calls: {{count}}",
+  "Разбор звонка не найден. Возможно, запись удалена или недоступна для вашего аккаунта.": "Call analysis not found. The record may have been deleted or is unavailable for your account.",
+  "У этой записи нет сохранённых метрик анализа.": "This record has no saved analysis metrics.",
   "Звонков за период нет": "No calls in this period",
   "Нажмите на оператора, чтобы увидеть, из чего сложилась оценка": "Select an operator to see what the score is made of",
   "Темы не найдены": "No topics found",
@@ -429,10 +434,14 @@
   "Новая тема": "New topic",
   "Название темы": "Topic name",
   "Синонимы (через запятую)": "Synonyms (comma-separated)",
+  "Ключевые слова (через запятую)": "Keywords (comma-separated)",
   "Добавьте темы и ключевые слова — звонки начнут размечаться при следующем анализе.": "Add topics and keywords — calls will be tagged from the next analysis onward.",
+  "Темы — метки для звонков. При анализе система ищет в расшифровке ключевые слова темы и ставит метку автоматически.": "Topics are labels for calls. During analysis the system looks for the topic’s keywords in the transcript and applies the label automatically.",
+  "TAXONOMY_NAME_HINT": "How the topic appears in reports, on the dashboard, and in the call’s tag list.",
+  "TAXONOMY_KEYWORDS_HINT": "Words and phrases from the customer or agent speech. A match in the transcript tags the call with this topic. More specific phrases mean fewer false matches.",
+  "TAXONOMY_KEYWORDS_PLACEHOLDER": "e.g. refund, return item, exchange",
   "Удалить тему «{{name}}»?": "Delete topic \"{{name}}\"?",
   "Звонки, размеченные ранее, сохранят тег. Новые анализы перестанут его получать.": "Previously tagged calls keep the tag. New analyses will stop receiving it.",
   "Удалить тему": "Delete topic",
-  "Темы звонков": "Call topics",
-  "Средний балл": "Average score"
+  "Темы звонков": "Call topics"
 }

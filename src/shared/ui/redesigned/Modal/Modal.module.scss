@@ -72,6 +72,14 @@
     }
 }
 
+.opened.elevated {
+    z-index: calc(var(--modal-z-index) + 50);
+
+    .content {
+        z-index: calc(var(--modal-z-index) + 50);
+    }
+}
+
 // ─── Closing animation ───────────────────────────────────────────────────────
 .isClosing {
     .content {

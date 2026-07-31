@@ -455,6 +455,11 @@
   "Проверьте соединение и повторите. Если ошибка повторяется, обновите страницу.": "Prüfen Sie die Verbindung und versuchen Sie es erneut. Wenn der Fehler weiterhin auftritt, laden Sie die Seite neu.",
   "Повторить": "Erneut versuchen",
   "По последним {{count}} звонкам": "Basierend auf den letzten {{count}} Anrufen",
+  "Средний балл": "Durchschnittliche Bewertung",
+  "Средний балл метрики": "Metrik-Durchschnitt",
+  "Оценок по метрике: {{count}}": "Bewertete Anrufe: {{count}}",
+  "Разбор звонка не найден. Возможно, запись удалена или недоступна для вашего аккаунта.": "Anrufanalyse nicht gefunden. Der Datensatz wurde möglicherweise gelöscht oder ist für Ihr Konto nicht verfügbar.",
+  "У этой записи нет сохранённых метрик анализа.": "Für diesen Datensatz sind keine Analysemetriken gespeichert.",
   "Звонков за период нет": "Keine Anrufe in diesem Zeitraum",
   "Нажмите на оператора, чтобы увидеть, из чего сложилась оценка": "Wählen Sie einen Operator, um zu sehen, woraus die Bewertung besteht",
   "Темы не найдены": "Keine Themen gefunden",
@@ -468,10 +473,14 @@
   "Новая тема": "Neues Thema",
   "Название темы": "Themenname",
   "Синонимы (через запятую)": "Synonyme (durch Komma getrennt)",
+  "Ключевые слова (через запятую)": "Schlüsselwörter (durch Komma getrennt)",
   "Добавьте темы и ключевые слова — звонки начнут размечаться при следующем анализе.": "Fügen Sie Themen und Schlüsselwörter hinzu — Anrufe werden ab der nächsten Analyse markiert.",
+  "Темы — метки для звонков. При анализе система ищет в расшифровке ключевые слова темы и ставит метку автоматически.": "Themen sind Labels für Anrufe. Bei der Analyse sucht das System die Schlüsselwörter des Themas in der Transkription und setzt das Label automatisch.",
+  "TAXONOMY_NAME_HINT": "So erscheint das Thema in Berichten, im Dashboard und in der Tag-Liste des Anrufs.",
+  "TAXONOMY_KEYWORDS_HINT": "Wörter und Phrasen aus der Kunden- oder Agentensprache. Ein Treffer in der Transkription markiert den Anruf mit diesem Thema. Präzisere Phrasen bedeuten weniger Fehltreffer.",
+  "TAXONOMY_KEYWORDS_PLACEHOLDER": "z. B. Rückgabe, Ware zurückgeben, Umtausch",
   "Удалить тему «{{name}}»?": "Thema „{{name}}“ löschen?",
   "Звонки, размеченные ранее, сохранят тег. Новые анализы перестанут его получать.": "Bereits markierte Anrufe behalten das Tag. Neue Analysen erhalten es nicht mehr.",
   "Удалить тему": "Thema löschen",
-  "Темы звонков": "Anruf-Themen",
-  "Средний балл": "Durchschnittliche Bewertung"
+  "Темы звонков": "Anruf-Themen"
 }

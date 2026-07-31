@@ -145,22 +145,25 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
                     <div className={cls.emptyBlock} data-testid="tag-panel-calls-empty">
                         <Text text={String(t('Звонков за период нет'))} size="m" />
                     </div>
-                ) : data?.data.map(call => (
-                    <button
-                        key={call.id}
-                        type="button"
-                        className={cls.callRow}
-                        onClick={() => { onOpenCall(call.id, stat.name) }}
-                        data-testid={`tag-call-row-${call.id}`}
-                    >
-                        <Text text={call.filename || call.id} size="m" />
-                        <Text
-                            text={new Date(call.createdAt).toLocaleDateString()}
-                            size="xs"
-                            className={cls.secondaryMeta}
-                        />
-                    </button>
-                ))}
+                ) : data?.data.map(call => {
+                    const openId = call.channelId || call.id
+                    return (
+                        <button
+                            key={call.id}
+                            type="button"
+                            className={cls.callRow}
+                            onClick={() => { onOpenCall(openId, stat.name) }}
+                            data-testid={`tag-call-row-${call.id}`}
+                        >
+                            <Text text={call.filename || openId} size="m" />
+                            <Text
+                                text={new Date(call.createdAt).toLocaleDateString()}
+                                size="xs"
+                                className={cls.secondaryMeta}
+                            />
+                        </button>
+                    )
+                })}
             </div>
 
             {totalPages > 1 && (

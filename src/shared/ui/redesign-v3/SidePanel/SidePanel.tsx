@@ -39,31 +39,38 @@ export const SidePanel = memo((props: SidePanelProps) => {
                 className: cls.paper,
             }}
         >
-            <header className={cls.header}>
-                <div className={cls.headerStart}>
-                    {onBack && (
-                        <button
-                            type="button"
-                            className={cls.backButton}
-                            onClick={onBack}
-                            aria-label={backLabel ?? String(t('Назад'))}
-                        >
-                            <ChevronLeft size={20} aria-hidden />
-                            {backLabel && (
-                                <span className={cls.backLabel}>{backLabel}</span>
-                            )}
-                        </button>
-                    )}
-                    <h2 className={cls.title}>{title}</h2>
+            <header className={classNames(cls.header, { [cls.headerStacked]: Boolean(onBack) }, [])}>
+                <div className={cls.headerTop}>
+                    <div className={cls.headerStart}>
+                        {onBack && (
+                            <button
+                                type="button"
+                                className={cls.backButton}
+                                onClick={onBack}
+                                aria-label={backLabel ?? String(t('Назад'))}
+                            >
+                                <ChevronLeft size={20} aria-hidden />
+                                <span className={cls.backLabel}>
+                                    {backLabel ?? String(t('Назад'))}
+                                </span>
+                            </button>
+                        )}
+                        {!onBack && (
+                            <h2 className={cls.title}>{title}</h2>
+                        )}
+                    </div>
+                    <button
+                        type="button"
+                        className={cls.iconButton}
+                        onClick={onClose}
+                        aria-label={String(t('Закрыть панель'))}
+                    >
+                        <X size={20} aria-hidden />
+                    </button>
                 </div>
-                <button
-                    type="button"
-                    className={cls.iconButton}
-                    onClick={onClose}
-                    aria-label={String(t('Закрыть панель'))}
-                >
-                    <X size={20} aria-hidden />
-                </button>
+                {onBack && (
+                    <h2 className={cls.titleCentered}>{title}</h2>
+                )}
             </header>
             <div className={cls.body}>
                 {children}

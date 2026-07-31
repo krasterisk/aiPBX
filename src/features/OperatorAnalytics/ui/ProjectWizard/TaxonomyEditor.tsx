@@ -15,12 +15,15 @@ interface TaxonomyEditorProps {
     onChange: (taxonomy: TagDefinition[]) => void
 }
 
-const generateId = (name: string): string =>
-    name.toLowerCase().replace(/[^a-zа-яё0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '') || `tag_${Date.now()}`
+function parseAliases(raw: string): string[] {
+    return raw.split(',').map(s => s.trim()).filter(Boolean)
+}
 
 export const TaxonomyEditor = memo(({ taxonomy, onChange }: TaxonomyEditorProps) => {
     const { t } = useTranslation('reports')
     const [pendingDeleteIndex, setPendingDeleteIndex] = useState<number | null>(null)
+    /** Raw comma-separated draft so typing spaces/commas does not fight controlled join() */
+    const [aliasDraftById, setAliasDraftById] = useState<Record<string, string>>({})
 
     const handleAdd = useCallback(() => {
         onChange([
@@ -29,21 +32,28 @@ export const TaxonomyEditor = memo(({ taxonomy, onChange }: TaxonomyEditorProps)
         ])
     }, [taxonomy, onChange])
 
-    const handleChange = useCallback((idx: number, field: keyof TagDefinition, value: TagDefinition[keyof TagDefinition]) => {
-        const updated = taxonomy.map((tag, i) => {
-            if (i !== idx) return tag
-            const next = { ...tag, [field]: value }
-            if (field === 'name' && typeof value === 'string') {
-                next.id = generateId(value)
-            }
-            return next
-        })
-        onChange(updated)
+    const handleNameChange = useCallback((idx: number, name: string) => {
+        onChange(taxonomy.map((tag, i) => (i === idx ? { ...tag, name } : tag)))
+    }, [taxonomy, onChange])
+
+    const handleAliasesDraftChange = useCallback((idx: number, tagId: string, raw: string) => {
+        setAliasDraftById(prev => ({ ...prev, [tagId]: raw }))
+        onChange(taxonomy.map((tag, i) => (
+            i === idx ? { ...tag, aliases: parseAliases(raw) } : tag
+        )))
     }, [taxonomy, onChange])
 
     const handleConfirmDelete = useCallback(() => {
         if (pendingDeleteIndex == null) return
+        const removed = taxonomy[pendingDeleteIndex]
         onChange(taxonomy.filter((_, i) => i !== pendingDeleteIndex))
+        if (removed) {
+            setAliasDraftById(prev => {
+                const next = { ...prev }
+                delete next[removed.id]
+                return next
+            })
+        }
         setPendingDeleteIndex(null)
     }, [pendingDeleteIndex, taxonomy, onChange])
 
@@ -51,6 +61,13 @@ export const TaxonomyEditor = memo(({ taxonomy, onChange }: TaxonomyEditorProps)
 
     return (
         <VStack gap={'12'} max>
+            <Text
+                text={String(t(
+                    'Темы — метки для звонков. При анализе система ищет в расшифровке ключевые слова темы и ставит метку автоматически.',
+                ))}
+                size={'s'}
+            />
+
             {taxonomy.length === 0 && (
                 <Text
                     text={String(t('Добавьте темы и ключевые слова — звонки начнут размечаться при следующем анализе.'))}
@@ -60,7 +77,7 @@ export const TaxonomyEditor = memo(({ taxonomy, onChange }: TaxonomyEditorProps)
 
             {taxonomy.map((tag, idx) => (
                 <Card
-                    key={`${tag.id}-${idx}`}
+                    key={tag.id}
                     variant={'glass'}
                     border={'partial'}
                     padding={'16'}
@@ -84,25 +101,22 @@ export const TaxonomyEditor = memo(({ taxonomy, onChange }: TaxonomyEditorProps)
                         <Textarea
                             label={String(t('Название темы'))}
                             value={tag.name}
-                            onChange={e => { handleChange(idx, 'name', e.target.value) }}
+                            onChange={e => { handleNameChange(idx, e.target.value) }}
                             size={'small'}
                             fullWidth
                             multiline={false}
+                            helperText={String(t('TAXONOMY_NAME_HINT'))}
                         />
 
                         <Textarea
-                            label={String(t('Синонимы (через запятую)'))}
-                            value={tag.aliases.join(', ')}
-                            onChange={e => {
-                                handleChange(
-                                    idx,
-                                    'aliases',
-                                    e.target.value.split(',').map(s => s.trim()).filter(Boolean),
-                                )
-                            }}
+                            label={String(t('Ключевые слова (через запятую)'))}
+                            value={aliasDraftById[tag.id] ?? tag.aliases.join(', ')}
+                            onChange={e => { handleAliasesDraftChange(idx, tag.id, e.target.value) }}
                             size={'small'}
                             fullWidth
                             multiline={false}
+                            helperText={String(t('TAXONOMY_KEYWORDS_HINT'))}
+                            placeholder={String(t('TAXONOMY_KEYWORDS_PLACEHOLDER'))}
                         />
                     </VStack>
                 </Card>
@@ -119,6 +133,7 @@ export const TaxonomyEditor = memo(({ taxonomy, onChange }: TaxonomyEditorProps)
             <Modal
                 isOpen={pendingDeleteIndex != null}
                 onClose={() => { setPendingDeleteIndex(null) }}
+                elevated
             >
                 <VStack gap={'16'} max>
                     <Text

@@ -21,6 +21,8 @@ interface ModalProps {
   size?: ModalSize
   /** Show a fixed close button in the top-right corner */
   showClose?: boolean
+  /** Stack above another open modal (nested confirm dialogs) */
+  elevated?: boolean
 }
 
 export const Modal = (props: ModalProps) => {
@@ -32,7 +34,8 @@ export const Modal = (props: ModalProps) => {
     lazy,
     contentClassName,
     size = 'narrow',
-    showClose = false
+    showClose = false,
+    elevated = false,
   } = props
 
   const { close, isClosing, isMounted } = useModal({ animationDelay: 300, onClose, isOpen })
@@ -42,7 +45,8 @@ export const Modal = (props: ModalProps) => {
   const mods: Mods = {
     [cls.opened]: isOpen,
     [cls.isClosing]: isClosing,
-    [cls.wide]: size === 'wide'
+    [cls.wide]: size === 'wide',
+    [cls.elevated]: elevated,
   }
 
   if (lazy && !isMounted) {

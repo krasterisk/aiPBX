@@ -315,7 +315,7 @@ describe('DrilldownPanel stack navigation', () => {
         expect(onSelectMetric).toHaveBeenCalledWith('greeting_quality', 'Greeting')
     })
 
-    it('uses operatorNameExact for metric call list query', () => {
+    it('does not load CDR call list in metric panel (evidence-only)', () => {
         render(
             <DrilldownPanel
                 entry={{
@@ -330,24 +330,11 @@ describe('DrilldownPanel stack navigation', () => {
             />,
         )
 
-        expect(mockUseGetOperatorCdrs).toHaveBeenCalledWith(
-            expect.objectContaining({
-                operatorNameExact: 'Alice',
-                startDate: '2026-07-01',
-                endDate: '2026-07-31',
-                projectId: 'proj-1',
-            }),
-            expect.any(Object),
-        )
-        expect(mockUseGetOperatorCdrs.mock.calls[0][0]).not.toHaveProperty('search')
+        expect(mockUseGetOperatorCdrs).not.toHaveBeenCalled()
+        expect(screen.queryByTestId('operator-metric-call-list')).not.toBeInTheDocument()
     })
 
-    it('shows explicit empty state when call list is empty', () => {
-        mockUseGetOperatorCdrs.mockReturnValue({
-            data: { data: [], total: 0, page: 1, limit: 20 },
-            isLoading: false,
-        })
-
+    it('labels metric average and sample size in metric panel', () => {
         render(
             <DrilldownPanel
                 entry={{
@@ -362,7 +349,8 @@ describe('DrilldownPanel stack navigation', () => {
             />,
         )
 
-        expect(screen.getByTestId('operator-metric-calls-empty')).toBeInTheDocument()
+        expect(screen.getByText('Средний балл метрики')).toBeInTheDocument()
+        expect(screen.getByText('Оценок по метрике: {{count}}:2')).toBeInTheDocument()
     })
 
     it('opens call from evidence quote via onOpenCall', async () => {
@@ -384,28 +372,6 @@ describe('DrilldownPanel stack navigation', () => {
         )
 
         await user.click(screen.getByTestId('evidence-call-call-1'))
-        expect(onOpenCall).toHaveBeenCalledWith('call-1', 'Greeting')
-    })
-
-    it('opens call from call list row via onOpenCall', async () => {
-        const onOpenCall = jest.fn()
-        const user = userEvent.setup()
-
-        render(
-            <DrilldownPanel
-                entry={{
-                    kind: 'operatorMetric',
-                    operatorName: 'Alice',
-                    metricId: 'greeting_quality',
-                    metricLabel: 'Greeting',
-                }}
-                filters={defaultFilters}
-                onSelectMetric={jest.fn()}
-                onOpenCall={onOpenCall}
-            />,
-        )
-
-        await user.click(screen.getByTestId('call-list-row-call-1'))
         expect(onOpenCall).toHaveBeenCalledWith('call-1', 'Greeting')
     })
 

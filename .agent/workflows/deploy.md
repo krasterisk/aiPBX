@@ -182,6 +182,7 @@ ARG STATIC_URL=https://aipbx.net/static
 ARG WS_URL=wss://aipbx.krasterisk.ru
 ARG PORT=7003
 ARG TG_BOT_ID=8298793342
+ARG GOOGLE_CLIENT_ID=833962533381-ehqsn7soc4s9e82cv9ats589787ihrog.apps.googleusercontent.com
 ARG STRIPE_PUBLISHABLE_KEY
 ARG SITE_URL=https://aipbx.net
 ARG GA4_MEASUREMENT_ID
@@ -195,6 +196,7 @@ RUN npm run build:prod -- \
   --env wsUrl=${WS_URL} \
   --env port=${PORT} \
   --env tgBotId=${TG_BOT_ID} \
+  --env googleClientId=${GOOGLE_CLIENT_ID} \
   --env stripePublishableKey=${STRIPE_PUBLISHABLE_KEY}
 
 # ============================================
@@ -501,6 +503,7 @@ services:
         STATIC_URL: ${FRONTEND_STATIC_URL}
         PORT: ${FRONTEND_PORT}
         TG_BOT_ID: ${FRONTEND_TG_BOT_ID}
+        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
         STRIPE_PUBLISHABLE_KEY: ${FRONTEND_STRIPE_KEY}
         # SEO prerender + gtag (webpack DefinePlugin via process.env)
         SITE_URL: ${SITE_URL:-https://aipbx.net}
@@ -754,6 +757,7 @@ jobs:
             STATIC_URL=${{ secrets.FRONTEND_STATIC_URL }}
             PORT=7003
             TG_BOT_ID=${{ secrets.TG_BOT_ID }}
+            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
             STRIPE_PUBLISHABLE_KEY=${{ secrets.FRONTEND_STRIPE_KEY }}
           cache-from: type=gha,scope=${{ matrix.server }}
           cache-to: type=gha,scope=${{ matrix.server }},mode=max

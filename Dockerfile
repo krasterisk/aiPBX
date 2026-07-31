@@ -26,6 +26,8 @@ ARG API_URL=https://aipbx.net/api
 ARG STATIC_URL=https://aipbx.net/static
 ARG PORT=7003
 ARG TG_BOT_ID=8298793342
+# Public OAuth client ID (embedded in the JS bundle; override via compose if needed)
+ARG GOOGLE_CLIENT_ID=833962533381-ehqsn7soc4s9e82cv9ats589787ihrog.apps.googleusercontent.com
 ARG STRIPE_PUBLISHABLE_KEY=
 ARG SITE_URL=https://aipbx.net
 ARG GA4_MEASUREMENT_ID=
@@ -37,6 +39,7 @@ ENV SITE_URL=${SITE_URL} \
     GA4_MEASUREMENT_ID=${GA4_MEASUREMENT_ID} \
     GOOGLE_ADS_ID=${GOOGLE_ADS_ID} \
     ADS_SIGNUP_LABEL=${ADS_SIGNUP_LABEL} \
+    GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 
 # Production build (+ postbuild:prod runs verify-prerender)
@@ -45,6 +48,7 @@ RUN npm run build:prod -- \
   --env staticUrl=${STATIC_URL} \
   --env port=${PORT} \
   --env tgBotId=${TG_BOT_ID} \
+  --env googleClientId=${GOOGLE_CLIENT_ID} \
   --env stripePublishableKey=${STRIPE_PUBLISHABLE_KEY}
 
 # Fail-closed SEO gate (explicit; also covered by npm postbuild:prod)

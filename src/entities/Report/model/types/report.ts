@@ -293,6 +293,8 @@ export type OperatorAnalysisStatus = 'processing' | 'completed' | 'error'
 
 export interface OperatorAnalysisResult {
   id: string
+  /** operator_analytics id used by GET /operator-analytics/:id (may differ from aiCdr PK) */
+  channelId?: string
   filename: string
   status: OperatorAnalysisStatus
   source?: 'frontend' | 'api'

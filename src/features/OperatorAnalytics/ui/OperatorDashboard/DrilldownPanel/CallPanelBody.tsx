@@ -56,7 +56,11 @@ export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
             <div className={cls.errorBlock} data-testid="call-panel-error">
                 <Text title={String(t('Не удалось загрузить разбор'))} bold />
                 <Text
-                    text={String(t('Проверьте соединение и повторите. Если ошибка повторяется, обновите страницу.'))}
+                    text={String(t(
+                        isError
+                            ? 'Разбор звонка не найден. Возможно, запись удалена или недоступна для вашего аккаунта.'
+                            : 'У этой записи нет сохранённых метрик анализа.',
+                    ))}
                     size="m"
                 />
                 <Button variant="glass-action" size="s" onClick={() => { void refetch() }}>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 declare global {
   interface Window {
@@ -6,25 +6,81 @@ declare global {
   }
 }
 
-export const useGoogleLogin = (onSuccess: (idToken: string) => void) => {
-  useEffect(() => {
-    if (!window.google) return
+const getGoogleClientId = () =>
+  typeof __GOOGLE_CLIENT_ID__ === 'string' ? __GOOGLE_CLIENT_ID__.trim() : ''
 
-    if (window.google?.accounts?.id) {
+export const useGoogleLogin = (onSuccess: (idToken: string) => void) => {
+  const onSuccessRef = useRef(onSuccess)
+  onSuccessRef.current = onSuccess
+
+  useEffect(() => {
+    const clientId = getGoogleClientId()
+    if (!clientId) {
+      if (__IS_DEV__) {
+        // eslint-disable-next-line no-console
+        console.error(
+          '[Google Auth] GOOGLE_CLIENT_ID is empty. Set it in .env and restart the dev server.'
+        )
+      }
+      return
+    }
+
+    let cancelled = false
+    let pollId: number | undefined
+
+    const initialize = () => {
+      if (cancelled || !window.google?.accounts?.id) return false
+
       window.google.accounts.id.initialize({
-        client_id: __GOOGLE_CLIENT_ID__,
-        callback: (response: any) => {
+        client_id: clientId,
+        callback: (response: { credential?: string }) => {
           if (response.credential) {
-            onSuccess(response.credential) // это id_token
+            onSuccessRef.current(response.credential)
           }
         }
       })
+      return true
     }
-  }, [onSuccess])
+
+    if (!initialize()) {
+      pollId = window.setInterval(() => {
+        if (initialize() && pollId !== undefined) {
+          window.clearInterval(pollId)
+          pollId = undefined
+        }
+      }, 100)
+    }
+
+    return () => {
+      cancelled = true
+      if (pollId !== undefined) {
+        window.clearInterval(pollId)
+      }
+    }
+  }, [])
 
   return () => {
-    if (window.google) {
-      window.google.accounts.id.prompt() // покажет всплывающее окно выбора аккаунта
+    const clientId = getGoogleClientId()
+    if (!clientId) {
+      if (__IS_DEV__) {
+        // eslint-disable-next-line no-console
+        console.error(
+          '[Google Auth] Cannot prompt: GOOGLE_CLIENT_ID is empty.'
+        )
+      }
+      return
     }
+
+    if (!window.google?.accounts?.id) {
+      if (__IS_DEV__) {
+        // eslint-disable-next-line no-console
+        console.error('[Google Auth] Google Identity Services script is not loaded.')
+      }
+      return
+    }
+
+    // One Tap / account chooser. If suppressed by the browser, GIS logs
+    // skipped/not displayed — user may need to allow third-party sign-in.
+    window.google.accounts.id.prompt()
   }
 }

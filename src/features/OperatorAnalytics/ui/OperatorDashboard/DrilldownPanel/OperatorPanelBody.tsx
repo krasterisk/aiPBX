@@ -7,7 +7,6 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import {
     type OperatorEvidenceMetric,
-    useGetOperatorCdrs,
     useGetOperatorEvidence,
 } from '@/entities/Report'
 import type { PanelEntry } from '../../../model/panelStack'
@@ -89,7 +88,7 @@ export const OperatorPanelBody = memo((props: OperatorPanelBodyProps) => {
 
     if (loading && !data) {
         return (
-            <VStack gap="8" max className={cls.root} data-testid="operator-panel-loading">
+            <VStack gap="8" max align="stretch" className={cls.root} data-testid="operator-panel-loading">
                 {[1, 2, 3, 4].map(i => (
                     <Skeleton key={i} variant="rounded" height={56} width="100%" />
                 ))}
@@ -129,9 +128,16 @@ export const OperatorPanelBody = memo((props: OperatorPanelBodyProps) => {
     }
 
     return (
-        <VStack gap="16" max className={cls.root} data-testid="operator-panel-body">
-            <div className={cls.headline} data-testid="operator-panel-headline">
-                {data.averageScore.toFixed(1)}
+        <VStack gap="16" max align="stretch" className={cls.root} data-testid="operator-panel-body">
+            <div className={cls.headlineBlock} data-testid="operator-panel-headline">
+                <Text
+                    text={String(t('Средний балл'))}
+                    size="xs"
+                    className={cls.headlineLabel}
+                />
+                <div className={cls.headline}>
+                    {data.averageScore.toFixed(1)}
+                </div>
             </div>
 
             {data.sampleCapped && (
@@ -159,7 +165,7 @@ export const OperatorPanelBody = memo((props: OperatorPanelBodyProps) => {
                                 data-testid={`operator-metric-row-${metric.metricId}`}
                             >
                                 <div className={cls.metricRowHeader}>
-                                    <Text text={label} size="m" />
+                                    <Text text={label} size="m" className={cls.metricLabel} />
                                     <HStack gap="8" align="center">
                                         <Text
                                             text={avg != null ? String(avg) : '—'}
@@ -224,24 +230,11 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
 
     const metric = evidenceData?.metrics.find(m => m.metricId === entry.metricId)
 
-    const cdrArgs = useMemo(() => ({
-        startDate: filters.startDate,
-        endDate: filters.endDate,
-        projectId: filters.projectId,
-        operatorNameExact: entry.operatorName,
-        page: 1,
-        limit: 20,
-    }), [entry.operatorName, filters])
-
-    const { data: cdrData, isLoading: cdrLoading } = useGetOperatorCdrs(cdrArgs, {
-        skip: !entry.operatorName,
-    })
-
-    const loading = (evidenceLoading && !evidenceData) || (cdrLoading && !cdrData)
+    const loading = evidenceLoading && !evidenceData
 
     if (loading) {
         return (
-            <VStack gap="8" max className={cls.root} data-testid="operator-metric-loading">
+            <VStack gap="8" max align="stretch" className={cls.root} data-testid="operator-metric-loading">
                 {[1, 2, 3].map(i => (
                     <Skeleton key={i} variant="rounded" height={72} width="100%" />
                 ))}
@@ -253,16 +246,22 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
     const avg = metric?.average ?? 0
 
     return (
-        <VStack gap="16" max className={cls.root} data-testid="operator-metric-panel">
-            <div className={cls.headline}>{avg != null ? String(avg) : '—'}</div>
-
-            {metric && (
+        <VStack gap="16" max align="stretch" className={cls.root} data-testid="operator-metric-panel">
+            <div className={cls.headlineBlock}>
                 <Text
-                    text={String(metric.sampleSize)}
+                    text={String(t('Средний балл метрики'))}
                     size="xs"
-                    className={cls.cappedNotice}
+                    className={cls.headlineLabel}
                 />
-            )}
+                <div className={cls.headline}>{avg != null ? String(avg) : '—'}</div>
+                {metric && (
+                    <Text
+                        text={String(t('Оценок по метрике: {{count}}', { count: metric.sampleSize }))}
+                        size="xs"
+                        className={cls.cappedNotice}
+                    />
+                )}
+            </div>
 
             {evidenceData?.sampleCapped && (
                 <Text
@@ -272,44 +271,27 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
                 />
             )}
 
-            {metric?.evidence.map(item => (
-                <button
-                    key={`${item.channelId}-${item.createdAt}`}
-                    type="button"
-                    className={cls.evidenceItem}
-                    onClick={() => { onOpenCall(item.channelId, label) }}
-                    data-testid={`evidence-call-${item.channelId}`}
-                >
-                    {item.quote && (
-                        <Text text={`«${item.quote}»`} size="m" className={cls.quote} />
-                    )}
-                    {item.rationale && (
-                        <Text text={item.rationale} size="m" className={cls.rationale} />
-                    )}
-                    <Text
-                        text={new Date(item.createdAt).toLocaleDateString()}
-                        size="xs"
-                        className={cls.cappedNotice}
-                    />
-                </button>
-            ))}
-
-            <div className={cls.callList} data-testid="operator-metric-call-list">
-                {(cdrData?.data.length ?? 0) === 0 ? (
-                    <div className={cls.emptyBlock} data-testid="operator-metric-calls-empty">
-                        <Text text={String(t('Звонков за период нет'))} size="m" />
+            <div className={cls.evidenceSection}>
+                {(metric?.evidence.length ?? 0) === 0 ? (
+                    <div className={cls.emptyBlock} data-testid="operator-metric-evidence-empty">
+                        <Text text={String(t('Нет обоснований по метрикам'))} size="m" />
                     </div>
-                ) : cdrData?.data.map(call => (
+                ) : metric?.evidence.map(item => (
                     <button
-                        key={call.id}
+                        key={`${item.channelId}-${item.createdAt}`}
                         type="button"
-                        className={cls.callRow}
-                        onClick={() => { onOpenCall(call.id, label) }}
-                        data-testid={`call-list-row-${call.id}`}
+                        className={cls.evidenceItem}
+                        onClick={() => { onOpenCall(item.channelId, label) }}
+                        data-testid={`evidence-call-${item.channelId}`}
                     >
-                        <Text text={call.filename || call.id} size="m" />
+                        {item.quote && (
+                            <Text text={`«${item.quote}»`} size="m" className={cls.quote} />
+                        )}
+                        {item.rationale && (
+                            <Text text={item.rationale} size="m" className={cls.rationale} />
+                        )}
                         <Text
-                            text={new Date(call.createdAt).toLocaleDateString()}
+                            text={new Date(item.createdAt).toLocaleDateString()}
                             size="xs"
                             className={cls.cappedNotice}
                         />
