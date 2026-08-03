@@ -4,7 +4,8 @@ import { Skeleton } from '@mui/material'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { ReportShowAnalytics, useGetOperatorAnalysis, ReportShowDialog } from '@/entities/Report'
+import { MediaPlayer } from '@/shared/ui/MediaPlayer'
+import { ReportShowAnalytics, useGetOperatorAnalysis } from '@/entities/Report'
 
 import type { Analytics } from '@/entities/Report'
 import cls from './OperatorPanelBody.module.scss'
@@ -43,12 +44,7 @@ export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
     )
 
     const recordUrl = useMemo(() => {
-        const raw = (data)?.recordUrl
-        return typeof raw === 'string' && raw.trim() ? raw : undefined
-    }, [data])
-
-    const transcription = useMemo(() => {
-        const raw = (data)?.transcription
+        const raw = data?.recordUrl
         return typeof raw === 'string' && raw.trim() ? raw : undefined
     }, [data])
 
@@ -83,14 +79,9 @@ export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
 
     return (
         <VStack gap="16" max className={cls.root} data-testid="call-panel-body">
-            {(recordUrl || transcription) && (
+            {recordUrl && (
                 <div data-testid="call-panel-recording">
-                    <ReportShowDialog
-                        isDialogLoading={false}
-                        isDialogError={false}
-                        mediaUrl={recordUrl}
-                        transcription={transcription}
-                    />
+                    <MediaPlayer src={recordUrl} />
                 </div>
             )}
             <ReportShowAnalytics analytics={analytics} channelId={channelId} />

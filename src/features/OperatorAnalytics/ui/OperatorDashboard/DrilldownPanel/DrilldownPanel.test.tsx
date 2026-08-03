@@ -523,7 +523,7 @@ describe('DrilldownPanel stack navigation', () => {
         expect(mockUseGetOperatorAnalysis).toHaveBeenCalledWith('call-1', expect.objectContaining({ skip: false }))
     })
 
-    it('shows recording player and transcript in call body', () => {
+    it('shows recording player without transcript in call body', () => {
         render(
             <DrilldownPanel
                 entry={{ kind: 'call', channelId: 'call-1', fromLabel: 'Greeting' }}
@@ -535,7 +535,7 @@ describe('DrilldownPanel stack navigation', () => {
 
         expect(screen.getByTestId('call-panel-recording')).toBeInTheDocument()
         expect(screen.getByText('Прослушать запись')).toBeInTheDocument()
-        expect(screen.getByText('Operator: Hello')).toBeInTheDocument()
+        expect(screen.queryByText('Operator: Hello')).not.toBeInTheDocument()
     })
 
     it('uses shared metric labels from API response in operator metric view', () => {
