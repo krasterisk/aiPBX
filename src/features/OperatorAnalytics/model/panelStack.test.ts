@@ -126,6 +126,18 @@ describe('panelStack', () => {
         }, t)).toBe('Refunds')
     })
 
+    it('resolves distribution panel titles and back labels', () => {
+        const distributionEntry: PanelEntry = {
+            kind: 'distribution',
+            chart: 'sentiment',
+            segment: 'negative',
+            label: 'Негативное настроение',
+        }
+
+        expect(resolvePanelTitle(distributionEntry, t)).toBe('Негативное настроение')
+        expect(resolveBackLabel(distributionEntry, t)).toBe('Назад к {{context}}:Негативное настроение')
+    })
+
     it('resolves the back label from the entry directly below the current one', () => {
         const stack = [operatorEntry, metricEntry, callEntry]
         const previous = stack[stack.length - 2]

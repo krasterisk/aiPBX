@@ -305,6 +305,7 @@ export interface OperatorAnalysisResult {
   tokens?: number
   createdAt: string
   operatorName?: string
+  assistantName?: string
   clientPhone?: string
   language?: string
   transcription?: string

@@ -268,6 +268,138 @@ describe('DrilldownPanel tag body', () => {
     })
 })
 
+describe('DrilldownPanel distribution body', () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockUseGetOperatorCdrs.mockReturnValue({
+            data: {
+                data: [{
+                    id: 'cdr-1',
+                    channelId: 'ch-1',
+                    filename: '65',
+                    duration: 125,
+                    createdAt: '2026-07-02T10:00:00.000Z',
+                    assistantName: 'Bob',
+                    callerId: '+79001234567',
+                    analytics: {
+                        metrics: {
+                            greeting_quality: 70,
+                            script_compliance: 80,
+                            politeness_empathy: 80,
+                            active_listening: 70,
+                            objection_handling: 70,
+                            product_knowledge: 80,
+                            problem_resolution: 70,
+                            speech_clarity_pace: 80,
+                            closing_quality: 70,
+                        },
+                    },
+                }],
+                total: 3,
+                page: 1,
+                limit: 20,
+            },
+            isLoading: false,
+            isFetching: false,
+            isError: false,
+            refetch: jest.fn(),
+        })
+    })
+
+    it('renders DistributionPanelBody for a distribution entry', () => {
+        render(
+            <DrilldownPanel
+                entry={{
+                    kind: 'distribution',
+                    chart: 'sentiment',
+                    segment: 'negative',
+                    label: 'Негативное настроение',
+                }}
+                filters={defaultFilters}
+                onSelectMetric={jest.fn()}
+                onOpenCall={jest.fn()}
+            />,
+        )
+
+        expect(screen.getByTestId('distribution-panel-body')).toBeInTheDocument()
+    })
+
+    it('requests calls filtered by sentiment with dashboard filters', () => {
+        render(
+            <DrilldownPanel
+                entry={{
+                    kind: 'distribution',
+                    chart: 'sentiment',
+                    segment: 'negative',
+                    label: 'Негативное настроение',
+                }}
+                filters={defaultFilters}
+                onSelectMetric={jest.fn()}
+                onOpenCall={jest.fn()}
+            />,
+        )
+
+        expect(mockUseGetOperatorCdrs).toHaveBeenCalledWith(
+            expect.objectContaining({
+                sentiment: 'negative',
+                startDate: '2026-07-01',
+                endDate: '2026-07-31',
+                projectId: 'proj-1',
+                page: 1,
+                limit: 20,
+            }),
+        )
+    })
+
+    it('requests unsuccessful calls when success segment is fail', () => {
+        render(
+            <DrilldownPanel
+                entry={{
+                    kind: 'distribution',
+                    chart: 'success',
+                    segment: 'fail',
+                    label: 'Неуспешные звонки',
+                }}
+                filters={defaultFilters}
+                onSelectMetric={jest.fn()}
+                onOpenCall={jest.fn()}
+            />,
+        )
+
+        expect(mockUseGetOperatorCdrs).toHaveBeenCalledWith(
+            expect.objectContaining({ success: false }),
+        )
+    })
+
+    it('shows labeled call meta and opens call via onOpenCall', async () => {
+        const onOpenCall = jest.fn()
+        const user = userEvent.setup()
+
+        render(
+            <DrilldownPanel
+                entry={{
+                    kind: 'distribution',
+                    chart: 'sentiment',
+                    segment: 'negative',
+                    label: 'Негативное настроение',
+                }}
+                filters={defaultFilters}
+                onSelectMetric={jest.fn()}
+                onOpenCall={onOpenCall}
+            />,
+        )
+
+        expect(screen.getByText('Bob')).toBeInTheDocument()
+        expect(screen.getByText('Длительность:')).toBeInTheDocument()
+        expect(screen.getByText('Клиент:')).toBeInTheDocument()
+        expect(screen.getByText('+79001234567')).toBeInTheDocument()
+        expect(screen.getByText('Средний балл:')).toBeInTheDocument()
+        expect(screen.queryByText('65')).not.toBeInTheDocument()
+        await user.click(screen.getByTestId('distribution-call-row-cdr-1'))
+        expect(onOpenCall).toHaveBeenCalledWith('ch-1', 'Негативное настроение')
+    })
+})
+
 describe('DrilldownPanel stack navigation', () => {
     beforeEach(() => {
         jest.clearAllMocks()
@@ -291,6 +423,8 @@ describe('DrilldownPanel stack navigation', () => {
             data: {
                 id: 'call-1',
                 metrics: { greeting_quality: 70 },
+                recordUrl: 'https://example.com/rec/call-1.mp3',
+                transcription: 'Operator: Hello',
             },
             isLoading: false,
             isError: false,
@@ -387,6 +521,21 @@ describe('DrilldownPanel stack navigation', () => {
 
         expect(screen.getByTestId('report-show-analytics-mock')).toBeInTheDocument()
         expect(mockUseGetOperatorAnalysis).toHaveBeenCalledWith('call-1', expect.objectContaining({ skip: false }))
+    })
+
+    it('shows recording player and transcript in call body', () => {
+        render(
+            <DrilldownPanel
+                entry={{ kind: 'call', channelId: 'call-1', fromLabel: 'Greeting' }}
+                filters={defaultFilters}
+                onSelectMetric={jest.fn()}
+                onOpenCall={jest.fn()}
+            />,
+        )
+
+        expect(screen.getByTestId('call-panel-recording')).toBeInTheDocument()
+        expect(screen.getByText('Прослушать запись')).toBeInTheDocument()
+        expect(screen.getByText('Operator: Hello')).toBeInTheDocument()
     })
 
     it('uses shared metric labels from API response in operator metric view', () => {

@@ -10,7 +10,7 @@ import {
     useGetOperatorEvidence,
 } from '@/entities/Report'
 import type { PanelEntry } from '../../../model/panelStack'
-import { getDefaultMetricLabelKey, scoreVariant } from '../../../lib/metricVisual'
+import { formatEvidenceMetricAverage, getMetricLabelKey } from '../../../lib/metricVisual'
 import cls from './OperatorPanelBody.module.scss'
 
 export interface DashboardFilters {
@@ -57,7 +57,7 @@ function metricLabel(
     t: (key: string) => string,
 ): string {
     if (metric.label) return metric.label
-    const labelKey = getDefaultMetricLabelKey(metric.metricId)
+    const labelKey = getMetricLabelKey(metric.metricId)
     return labelKey ? String(t(labelKey)) : metric.metricId
 }
 
@@ -153,7 +153,7 @@ export const OperatorPanelBody = memo((props: OperatorPanelBodyProps) => {
             <div className={cls.metricList}>
                 {data.metrics.map(metric => {
                     const label = metricLabel(metric, t)
-                    const avg = metric.average ?? 0
+                    const display = formatEvidenceMetricAverage(metric.metricId, metric.average, t)
                     const expanded = expandedMetricId === metric.metricId
                     return (
                         <div key={metric.metricId}>
@@ -168,10 +168,10 @@ export const OperatorPanelBody = memo((props: OperatorPanelBodyProps) => {
                                     <Text text={label} size="m" className={cls.metricLabel} />
                                     <HStack gap="8" align="center">
                                         <Text
-                                            text={avg != null ? String(avg) : '—'}
+                                            text={display.text}
                                             size="m"
                                             bold
-                                            variant={scoreVariant(avg)}
+                                            variant={display.variant}
                                         />
                                         <ChevronRight size={16} className={cls.metricChevron} aria-hidden />
                                     </HStack>
@@ -243,17 +243,24 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
     }
 
     const label = entry.metricLabel ?? (metric ? metricLabel(metric, t) : entry.metricId)
-    const avg = metric?.average ?? 0
+    const display = formatEvidenceMetricAverage(entry.metricId, metric?.average ?? null, t)
+    const headlineLabel = entry.metricId === 'csat'
+        ? String(t('Средний CSAT'))
+        : entry.metricId === 'success'
+            ? String(t('Доля успешных обращений'))
+            : entry.metricId === 'customer_sentiment'
+                ? String(t('Преобладающий настрой'))
+                : String(t('Средний балл метрики'))
 
     return (
         <VStack gap="16" max align="stretch" className={cls.root} data-testid="operator-metric-panel">
             <div className={cls.headlineBlock}>
                 <Text
-                    text={String(t('Средний балл метрики'))}
+                    text={headlineLabel}
                     size="xs"
                     className={cls.headlineLabel}
                 />
-                <div className={cls.headline}>{avg != null ? String(avg) : '—'}</div>
+                <div className={cls.headline}>{display.text}</div>
                 {metric && (
                     <Text
                         text={String(t('Оценок по метрике: {{count}}', { count: metric.sampleSize }))}

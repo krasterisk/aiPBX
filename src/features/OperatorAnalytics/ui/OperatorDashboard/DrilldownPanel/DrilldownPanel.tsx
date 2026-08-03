@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import type { PanelEntry } from '../../../model/panelStack'
 import { CallPanelBody } from './CallPanelBody'
+import { DistributionPanelBody } from './DistributionPanelBody'
 import { OperatorMetricPanelBody, OperatorPanelBody, type DashboardFilters } from './OperatorPanelBody'
 import { TagPanelBody } from './TagPanelBody'
 
@@ -36,6 +37,14 @@ export const DrilldownPanel = memo((props: DrilldownPanelProps) => {
         case 'tag':
             return (
                 <TagPanelBody
+                    entry={entry}
+                    filters={filters}
+                    onOpenCall={onOpenCall}
+                />
+            )
+        case 'distribution':
+            return (
+                <DistributionPanelBody
                     entry={entry}
                     filters={filters}
                     onOpenCall={onOpenCall}

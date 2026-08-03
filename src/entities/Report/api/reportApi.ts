@@ -200,6 +200,8 @@ export const reportApi = rtkApi.injectEndpoints({
       search?: string
       sortField?: string
       sortOrder?: 'ASC' | 'DESC'
+      sentiment?: 'positive' | 'neutral' | 'negative'
+      success?: boolean
     }>({
       query: (args) => ({
         url: '/operator-analytics/cdrs',

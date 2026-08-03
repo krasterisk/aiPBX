@@ -17,8 +17,21 @@ export const ALL_DEFAULT_METRICS: Array<{ key: DefaultMetricKey, labelKey: strin
     { key: 'closing_quality', labelKey: 'Качество завершения' },
 ]
 
+/** Summary metrics shown in operator evidence (not in the 0–100 quality rubric). */
+export const SUMMARY_METRIC_LABELS: Record<string, string> = {
+    csat: 'Удовлетворённость клиента (CSAT)',
+    customer_sentiment: 'Эмоциональный настрой клиента',
+    success: 'Итог обращения',
+}
+
+export type ScoreTextVariant = 'success' | 'warning' | 'error' | 'primary'
+
 export function getDefaultMetricLabelKey(metricId: string): string | undefined {
     return ALL_DEFAULT_METRICS.find(m => m.key === metricId)?.labelKey
+}
+
+export function getMetricLabelKey(metricId: string): string | undefined {
+    return getDefaultMetricLabelKey(metricId) ?? SUMMARY_METRIC_LABELS[metricId]
 }
 
 export function metricVisual(
@@ -44,10 +57,62 @@ export function metricVisual(
     return { pct, color }
 }
 
-export function scoreVariant(value: number): 'success' | 'warning' | 'error' {
+export function scoreVariant(value: number): ScoreTextVariant {
     return value >= 80 ? 'success' : value >= 50 ? 'warning' : 'error'
 }
 
 export function scoreColor(value: number): string {
     return metricVisual(value, { isRate: true }).color
+}
+
+/** CSAT is 1–5; do not treat it as a 0–100 quality score. */
+export function csatVariant(value: number): ScoreTextVariant {
+    if (value >= 4) return 'success'
+    if (value >= 3) return 'warning'
+    return 'error'
+}
+
+/**
+ * Format an evidence-metric average for the operator panel.
+ * Summary metrics use dedicated scales; quality metrics stay 0–100.
+ */
+export function formatEvidenceMetricAverage(
+    metricId: string,
+    average: number | null | undefined,
+    t: (key: string) => string,
+): { text: string, variant: ScoreTextVariant } {
+    if (average == null || Number.isNaN(average)) {
+        return { text: '—', variant: 'primary' }
+    }
+
+    if (metricId === 'csat') {
+        return {
+            text: `${average.toFixed(1)} / 5`,
+            variant: csatVariant(average),
+        }
+    }
+
+    if (metricId === 'success') {
+        return {
+            text: `${Math.round(average)}%`,
+            variant: scoreVariant(average),
+        }
+    }
+
+    if (metricId === 'customer_sentiment') {
+        const labelKey = average >= 67
+            ? 'Positive'
+            : average >= 34
+                ? 'Neutral'
+                : 'Negative'
+        return {
+            text: String(t(labelKey)),
+            variant: scoreVariant(average),
+        }
+    }
+
+    return {
+        text: String(average),
+        variant: scoreVariant(average),
+    }
 }

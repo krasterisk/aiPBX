@@ -1,9 +1,18 @@
 import type { TagStat } from '@/entities/Report'
 
+export type DistributionChart = 'sentiment' | 'success'
+export type DistributionSegment = 'positive' | 'neutral' | 'negative' | 'success' | 'fail'
+
 export type PanelEntry =
     | { kind: 'operator', operatorName: string }
     | { kind: 'operatorMetric', operatorName: string, metricId: string, metricLabel?: string }
     | { kind: 'tag', stat: TagStat }
+    | {
+        kind: 'distribution'
+        chart: DistributionChart
+        segment: DistributionSegment
+        label: string
+    }
     | { kind: 'call', channelId: string, fromLabel: string }
 
 export type TranslateFn = (key: string, options?: Record<string, string>) => string
@@ -39,6 +48,8 @@ export function resolvePanelTitle(entry: PanelEntry | undefined, _t: TranslateFn
             return entry.metricLabel ?? entry.metricId
         case 'tag':
             return entry.stat.name
+        case 'distribution':
+            return entry.label
         case 'call':
             return entry.fromLabel
         default: {
@@ -68,6 +79,8 @@ function entryContextLabel(entry: PanelEntry): string {
             return entry.metricLabel ?? entry.metricId
         case 'tag':
             return entry.stat.name
+        case 'distribution':
+            return entry.label
         case 'call':
             return entry.fromLabel
         default: {

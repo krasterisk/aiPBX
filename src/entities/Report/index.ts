@@ -101,6 +101,7 @@ export {
 
 export { ReportExpandedPanel } from './ui/ReportExpandedPanel/ReportExpandedPanel'
 export { ReportShowAnalytics } from './ui/ReportShowAnalytics/ReportShowAnalytics'
+export { ReportShowDialog } from './ui/ReportShowDialog/ReportShowDialog'
 export {
   CallTagChips,
   resolveTagDisplayName,

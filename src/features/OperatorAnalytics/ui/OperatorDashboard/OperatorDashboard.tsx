@@ -23,7 +23,7 @@ import {
 import { AiInsightsBanner } from './AiInsightsBanner/AiInsightsBanner'
 import { DashboardConfigGrid } from '../DashboardBuilder/DashboardConfigGrid'
 import { OperatorScoreTable } from './OperatorScoreTable/OperatorScoreTable'
-import { DonutChart } from '@/shared/ui/redesigned/DonutChart'
+import { DonutChart, type DonutSegment } from '@/shared/ui/redesigned/DonutChart'
 import { SidePanel } from '@/shared/ui/redesign-v3'
 import {
     clearPanelStack,
@@ -32,6 +32,7 @@ import {
     pushPanelEntry,
     resolveBackLabel,
     resolvePanelTitle,
+    type DistributionSegment,
     type PanelEntry,
 } from '../../model/panelStack'
 import { DrilldownPanel } from './DrilldownPanel'
@@ -108,6 +109,37 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
         setPanelStack([{ kind: 'tag', stat }])
     }, [])
 
+    const handleSentimentSegmentClick = useCallback((segment: DonutSegment) => {
+        const id = String(segment.id) as Extract<DistributionSegment, 'positive' | 'neutral' | 'negative'>
+        const labelKey = {
+            positive: 'Позитивное настроение',
+            neutral: 'Нейтральное настроение',
+            negative: 'Негативное настроение',
+        }[id]
+        if (!labelKey) return
+        setPanelStack([{
+            kind: 'distribution',
+            chart: 'sentiment',
+            segment: id,
+            label: String(t(labelKey)),
+        }])
+    }, [t])
+
+    const handleSuccessSegmentClick = useCallback((segment: DonutSegment) => {
+        const id = String(segment.id) as Extract<DistributionSegment, 'success' | 'fail'>
+        const labelKey = {
+            success: 'Успешные звонки',
+            fail: 'Неуспешные звонки',
+        }[id]
+        if (!labelKey) return
+        setPanelStack([{
+            kind: 'distribution',
+            chart: 'success',
+            segment: id,
+            label: String(t(labelKey)),
+        }])
+    }, [t])
+
     const formatDuration = (seconds?: number) => {
         if (!seconds) return '0 ' + t('сек')
         const m = Math.floor(seconds / 60)
@@ -153,11 +185,11 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
 
     const hasCustomDashboard = customDashboardWidgets.length > 0
 
-    const sentimentData = [
-        { id: 0, value: data?.sentimentDistribution?.positive ?? 0, label: String(t('Positive')), color: '#22c55e' },
-        { id: 1, value: data?.sentimentDistribution?.neutral ?? 0, label: String(t('Neutral')), color: '#f59e0b' },
-        { id: 2, value: data?.sentimentDistribution?.negative ?? 0, label: String(t('Negative')), color: '#ef4444' },
-    ]
+    const sentimentData = useMemo(() => [
+        { id: 'positive', value: data?.sentimentDistribution?.positive ?? 0, label: String(t('Positive')), color: '#22c55e' },
+        { id: 'neutral', value: data?.sentimentDistribution?.neutral ?? 0, label: String(t('Neutral')), color: '#f59e0b' },
+        { id: 'negative', value: data?.sentimentDistribution?.negative ?? 0, label: String(t('Negative')), color: '#ef4444' },
+    ], [data?.sentimentDistribution, t])
 
     const successRatePct = normalizeRate(data?.successRate)
     const totalDisplayCost = data?.totalAmountCurrency ?? data?.totalCost ?? 0
@@ -165,10 +197,14 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
         ? totalDisplayCost / data.totalAnalyzed
         : 0
 
-    const successData = [
-        { id: 0, value: Math.round(successRatePct), label: String(t('Успех')), color: '#22c55e' },
-        { id: 1, value: 100 - Math.round(successRatePct), label: String(t('Нет')), color: '#64748b' },
-    ]
+    const totalAnalyzed = data?.totalAnalyzed ?? 0
+    const successCount = Math.round(totalAnalyzed * successRatePct / 100)
+    const failCount = Math.max(0, totalAnalyzed - successCount)
+
+    const successData = useMemo(() => [
+        { id: 'success', value: successCount, label: String(t('Успех')), color: '#22c55e' },
+        { id: 'fail', value: failCount, label: String(t('Нет')), color: '#64748b' },
+    ], [successCount, failCount, t])
 
     const avgScore = data?.averageScore ?? 0
     const scoreVariant = avgScore >= 80 ? 'success' : avgScore >= 50 ? 'warning' : 'error'
@@ -318,13 +354,15 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                 <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
                     <VStack gap={'12'} max>
                         <Text title={String(t('Настроение клиента'))} bold />
-                        <DonutChart data={sentimentData} />
+                        <Text text={String(t('Нажмите на сегмент, чтобы увидеть звонки'))} size="xs" />
+                        <DonutChart data={sentimentData} onSegmentClick={handleSentimentSegmentClick} />
                     </VStack>
                 </Card>
                 <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
                     <VStack gap={'12'} max>
                         <Text title={String(t('Успешных звонков'))} bold />
-                        <DonutChart data={successData} />
+                        <Text text={String(t('Нажмите на сегмент, чтобы увидеть звонки'))} size="xs" />
+                        <DonutChart data={successData} onSegmentClick={handleSuccessSegmentClick} />
                     </VStack>
                 </Card>
                 {radarMetrics.length > 0 && (

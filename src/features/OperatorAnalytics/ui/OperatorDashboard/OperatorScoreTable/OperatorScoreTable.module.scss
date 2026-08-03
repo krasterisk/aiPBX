@@ -91,8 +91,10 @@
         border-bottom: 1px solid var(--glass-border-secondary);
     }
 
+    // glass-overlay-medium matches the light glass card tint → invisible hover;
+    // mix from text color so both themes get a readable highlight.
     &:hover td {
-        background: var(--glass-overlay-medium);
+        background: color-mix(in srgb, var(--text-redesigned) 7%, transparent);
     }
 
     &:last-child td {

@@ -4,7 +4,8 @@ import { Skeleton } from '@mui/material'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { ReportShowAnalytics, useGetOperatorAnalysis } from '@/entities/Report'
+import { ReportShowAnalytics, useGetOperatorAnalysis, ReportShowDialog } from '@/entities/Report'
+
 import type { Analytics } from '@/entities/Report'
 import cls from './OperatorPanelBody.module.scss'
 
@@ -41,6 +42,16 @@ export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
         [data],
     )
 
+    const recordUrl = useMemo(() => {
+        const raw = (data)?.recordUrl
+        return typeof raw === 'string' && raw.trim() ? raw : undefined
+    }, [data])
+
+    const transcription = useMemo(() => {
+        const raw = (data)?.transcription
+        return typeof raw === 'string' && raw.trim() ? raw : undefined
+    }, [data])
+
     if (isLoading && !data) {
         return (
             <VStack gap="8" max className={cls.root} data-testid="call-panel-loading">
@@ -71,8 +82,18 @@ export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
     }
 
     return (
-        <div data-testid="call-panel-body">
+        <VStack gap="16" max className={cls.root} data-testid="call-panel-body">
+            {(recordUrl || transcription) && (
+                <div data-testid="call-panel-recording">
+                    <ReportShowDialog
+                        isDialogLoading={false}
+                        isDialogError={false}
+                        mediaUrl={recordUrl}
+                        transcription={transcription}
+                    />
+                </div>
+            )}
             <ReportShowAnalytics analytics={analytics} channelId={channelId} />
-        </div>
+        </VStack>
     )
 })

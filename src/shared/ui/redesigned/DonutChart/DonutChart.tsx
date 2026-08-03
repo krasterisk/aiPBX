@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react'
+import { memo, useState, useCallback, KeyboardEvent } from 'react'
 import { VStack, HStack } from '../Stack'
 import { Text } from '../Text'
 
@@ -16,13 +16,18 @@ export interface DonutChartProps {
     /** Inner radius of the donut hole @default 50 */
     innerRadius?: number
     className?: string
+    onSegmentClick?: (segment: DonutSegment) => void
 }
 
 /**
- * Static donut chart — pure SVG, no JS animation, no CSS transition on paths.
- * Includes hover tooltip with label, value and percentage.
+ * Donut chart — pure SVG. Hover tooltip; optional segment/legend click for drilldown.
  */
-export const DonutChart = memo(({ data, size = 200, innerRadius = 50 }: DonutChartProps) => {
+export const DonutChart = memo(({
+    data,
+    size = 200,
+    innerRadius = 50,
+    onSegmentClick,
+}: DonutChartProps) => {
     const outerRadius = size / 2 - 4
     const cx = size / 2
     const cy = size / 2
@@ -35,6 +40,18 @@ export const DonutChart = memo(({ data, size = 200, innerRadius = 50 }: DonutCha
         const rect = e.currentTarget.getBoundingClientRect()
         setMouse({ x: e.clientX - rect.left, y: e.clientY - rect.top })
     }, [])
+
+    const activate = useCallback((segment: DonutSegment) => {
+        if (!onSegmentClick || segment.value <= 0) return
+        onSegmentClick(segment)
+    }, [onSegmentClick])
+
+    const onLegendKeyDown = useCallback((e: KeyboardEvent, segment: DonutSegment) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            activate(segment)
+        }
+    }, [activate])
 
     if (total === 0) return null
 
@@ -70,6 +87,7 @@ export const DonutChart = memo(({ data, size = 200, innerRadius = 50 }: DonutCha
     })
 
     const hoveredArc = hovered !== null ? arcs[hovered] : null
+    const clickable = Boolean(onSegmentClick)
 
     return (
         <VStack gap={'12'} max align={'center'}>
@@ -91,9 +109,11 @@ export const DonutChart = memo(({ data, size = 200, innerRadius = 50 }: DonutCha
                         style={{
                             filter: hovered === arc.idx ? 'brightness(1.15)' : 'none',
                             transition: 'opacity 0.15s ease, filter 0.15s ease',
-                            cursor: 'pointer',
+                            cursor: clickable && arc.value > 0 ? 'pointer' : 'default',
                         }}
                         onMouseEnter={() => { setHovered(arc.idx) }}
+                        onClick={() => { activate(arc) }}
+                        data-testid={`donut-segment-${arc.id}`}
                     />
                 ))}
             </svg>
@@ -135,7 +155,17 @@ export const DonutChart = memo(({ data, size = 200, innerRadius = 50 }: DonutCha
             {/* Legend */}
             <HStack gap={'16'} wrap={'wrap'} justify={'center'}>
                 {data.map(item => (
-                    <HStack key={item.id} gap={'8'} align={'center'}>
+                    <HStack
+                        key={item.id}
+                        gap={'8'}
+                        align={'center'}
+                        role={clickable ? 'button' : undefined}
+                        tabIndex={clickable && item.value > 0 ? 0 : undefined}
+                        onClick={clickable ? () => { activate(item) } : undefined}
+                        onKeyDown={clickable ? (e) => { onLegendKeyDown(e, item) } : undefined}
+                        data-testid={`donut-legend-${item.id}`}
+                        style={clickable && item.value > 0 ? { cursor: 'pointer' } : undefined}
+                    >
                         <svg width={12} height={12}>
                             <circle cx={6} cy={6} r={6} fill={item.color} />
                         </svg>
