@@ -327,7 +327,11 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
             </HStack>
 
             {data?.insightsAvailable && (
-                <div data-tour-id="oa-insights" data-testid="oa-section-insights">
+                <div
+                    data-tour-id="oa-insights"
+                    data-testid="oa-section-insights"
+                    className={cls.insightsSection}
+                >
                     <AiInsightsBanner
                         projectName={activeProject?.name}
                         queryParams={{

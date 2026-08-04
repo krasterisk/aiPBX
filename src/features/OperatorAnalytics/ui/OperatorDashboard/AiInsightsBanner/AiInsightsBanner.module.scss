@@ -1,6 +1,9 @@
 @import '@/app/styles/variables/mixins';
 
 .banner {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     border-left: 3px solid var(--accent-redesigned);
 }
 
