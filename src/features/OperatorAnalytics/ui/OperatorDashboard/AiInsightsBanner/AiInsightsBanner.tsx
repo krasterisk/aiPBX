@@ -8,6 +8,7 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { Card } from '@/shared/ui/redesigned/Card'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import { OperatorInsight, useLazyGetOperatorInsights } from '@/entities/Report'
+import { classNames } from '@/shared/lib/classNames/classNames'
 import { getRouteCalls } from '@/shared/const/router'
 import { buildInsightDrilldownPayload, saveInsightDrilldown } from '../../../lib/insightDrilldown'
 import cls from './AiInsightsBanner.module.scss'
@@ -39,6 +40,18 @@ function priorityClass(priority: OperatorInsight['priority']): string {
         case 'high': return cls.priorityHigh
         case 'medium': return cls.priorityMedium
         default: return cls.priorityLow
+    }
+}
+
+/** Valence color from type — priority is importance, not good/bad. */
+function typeClass(type: OperatorInsight['type']): string {
+    switch (type) {
+        case 'strength': return cls.typeStrength
+        case 'gap': return cls.typeGap
+        case 'outlier': return cls.typeOutlier
+        case 'trend': return cls.typeTrend
+        case 'quality': return cls.typeQuality
+        default: return ''
     }
 }
 
@@ -149,7 +162,12 @@ export const AiInsightsBanner = memo(({ projectName, queryParams }: AiInsightsBa
                             return (
                                 <div
                                     key={`${insight.title}-${i}`}
-                                    className={`${cls.insightCard} ${priorityClass(insight.priority)}`}
+                                    className={classNames(cls.insightCard, {}, [
+                                        typeClass(insight.type),
+                                        priorityClass(insight.priority),
+                                    ])}
+                                    data-insight-type={insight.type}
+                                    data-insight-priority={insight.priority}
                                 >
                                     <VStack gap={'8'} max>
                                         <HStack gap={'8'} align={'center'} wrap={'wrap'}>

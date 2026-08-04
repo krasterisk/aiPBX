@@ -19,18 +19,60 @@
     border-left: 3px solid var(--text-secondary);
 }
 
+/* Valence from insight type (good / bad / neutral) */
+.typeStrength {
+    border-left-color: var(--status-success);
+    background: color-mix(in srgb, var(--status-success) 10%, transparent);
+
+    .typeBadge {
+        background: color-mix(in srgb, var(--status-success) 15%, transparent);
+        color: var(--status-success);
+    }
+}
+
+.typeGap,
+.typeOutlier {
+    border-left-color: var(--status-error);
+    background: color-mix(in srgb, var(--status-error) 10%, transparent);
+
+    .typeBadge {
+        background: color-mix(in srgb, var(--status-error) 15%, transparent);
+        color: var(--status-error);
+    }
+}
+
+.typeTrend {
+    border-left-color: var(--status-info);
+    background: color-mix(in srgb, var(--status-info) 10%, transparent);
+
+    .typeBadge {
+        background: color-mix(in srgb, var(--status-info) 15%, transparent);
+        color: var(--status-info);
+    }
+}
+
+.typeQuality {
+    border-left-color: var(--status-warning);
+    background: color-mix(in srgb, var(--status-warning) 10%, transparent);
+
+    .typeBadge {
+        background: color-mix(in srgb, var(--status-warning) 15%, transparent);
+        color: var(--status-warning);
+    }
+}
+
+/* Priority = importance emphasis, not good/bad */
 .priorityHigh {
-    border-left-color: #e53935;
-    background: color-mix(in srgb, #e53935 10%, transparent);
+    border-left-width: 4px;
 }
 
 .priorityMedium {
-    border-left-color: #fb8c00;
-    background: color-mix(in srgb, #fb8c00 10%, transparent);
+    border-left-width: 3px;
 }
 
 .priorityLow {
-    border-left-color: var(--text-secondary);
+    border-left-width: 2px;
+    opacity: 0.88;
 }
 
 .priorityBadge,
@@ -79,8 +121,8 @@
 .lowConfidenceBanner {
     padding: 8px 12px;
     border-radius: var(--radius-md);
-    background: color-mix(in srgb, #fb8c00 12%, transparent);
-    border: 1px solid color-mix(in srgb, #fb8c00 35%, transparent);
+    background: color-mix(in srgb, var(--status-warning) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--status-warning) 35%, transparent);
 }
 
 .recommendation {
