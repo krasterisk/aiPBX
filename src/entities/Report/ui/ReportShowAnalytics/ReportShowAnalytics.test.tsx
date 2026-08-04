@@ -327,13 +327,24 @@ describe('ReportShowAnalytics', () => {
             expect(screen.getByTestId('call-card-tag-chips-chip-returns')).toBeInTheDocument()
         })
 
-        it('shows inline no-themes note when a call has no tags', () => {
+        it('hides empty-state copy when a call has no tags', () => {
             render(<ReportShowAnalytics analytics={operatorAnalytics} channelId="24" />)
-            expect(screen.getByTestId('call-card-tag-chips-empty')).toHaveTextContent('Темы не найдены')
+            expect(screen.queryByText('Темы не найдены')).not.toBeInTheDocument()
+            expect(screen.queryByTestId('call-card-tag-chips-empty')).not.toBeInTheDocument()
         })
 
         it('reveals remove and add controls only after entering edit mode', () => {
-            render(<ReportShowAnalytics analytics={taggedAnalytics} channelId="24" />)
+            const oneTagAnalytics: Analytics = {
+                ...taggedAnalytics,
+                metrics: {
+                    ...taggedAnalytics.metrics!,
+                    _topics: {
+                        tags: ['billing'],
+                        tag_names: { billing: 'Счета' },
+                    },
+                },
+            }
+            render(<ReportShowAnalytics analytics={oneTagAnalytics} channelId="24" />)
 
             expect(screen.queryByTestId('call-card-tag-chips-remove-billing')).not.toBeInTheDocument()
             fireEvent.click(screen.getByTestId('call-tag-edit-toggle'))
@@ -341,14 +352,63 @@ describe('ReportShowAnalytics', () => {
             expect(screen.getByTestId('call-card-tag-chips-add')).toBeInTheDocument()
         })
 
+        it('lets user add the first theme when the call has none', () => {
+            render(<ReportShowAnalytics analytics={operatorAnalytics} channelId="24" />)
+
+            fireEvent.click(screen.getByTestId('call-tag-edit-toggle'))
+            fireEvent.click(screen.getByTestId('call-card-tag-chips-add'))
+            fireEvent.click(screen.getByTestId('call-card-tag-chips-picker-option-billing'))
+
+            expect(mockUpdateCallTags).toHaveBeenCalledWith({
+                channelId: '24',
+                tagIds: ['billing'],
+                tagNames: { billing: 'Счета' },
+            })
+        })
+
         it('offers only project taxonomy themes not already on the call', () => {
-            render(<ReportShowAnalytics analytics={taggedAnalytics} channelId="24" />)
+            const oneTagAnalytics: Analytics = {
+                ...taggedAnalytics,
+                metrics: {
+                    ...taggedAnalytics.metrics!,
+                    _topics: {
+                        tags: ['billing'],
+                        tag_names: { billing: 'Счета' },
+                    },
+                },
+            }
+            render(<ReportShowAnalytics analytics={oneTagAnalytics} channelId="24" />)
 
             fireEvent.click(screen.getByTestId('call-tag-edit-toggle'))
             fireEvent.click(screen.getByTestId('call-card-tag-chips-add'))
 
             expect(screen.queryByTestId('call-card-tag-chips-picker-option-billing')).not.toBeInTheDocument()
-            expect(screen.queryByTestId('call-card-tag-chips-picker-option-returns')).not.toBeInTheDocument()
+            expect(screen.getByTestId('call-card-tag-chips-picker-option-returns')).toBeInTheDocument()
+        })
+
+        it('allows free-form themes when project has no taxonomy', () => {
+            mockUseGetOperatorProjects.mockReturnValue({
+                data: [{
+                    id: 'project-1',
+                    name: 'Project',
+                    createdAt: '2026-01-01',
+                    callTaxonomy: [],
+                }],
+            })
+
+            render(<ReportShowAnalytics analytics={operatorAnalytics} channelId="24" />)
+            fireEvent.click(screen.getByTestId('call-tag-edit-toggle'))
+            fireEvent.click(screen.getByTestId('call-card-tag-chips-add'))
+            fireEvent.change(screen.getByTestId('call-card-tag-chips-custom-input'), {
+                target: { value: 'Своя тема' },
+            })
+            fireEvent.submit(screen.getByTestId('call-card-tag-chips-custom-form'))
+
+            expect(mockUpdateCallTags).toHaveBeenCalledWith({
+                channelId: '24',
+                tagIds: ['своя-тема'],
+                tagNames: { 'своя-тема': 'Своя тема' },
+            })
         })
 
         it('optimistically removes a tag and sends the full resulting set', async () => {
@@ -364,6 +424,7 @@ describe('ReportShowAnalytics', () => {
             expect(mockUpdateCallTags).toHaveBeenCalledWith({
                 channelId: '24',
                 tagIds: ['returns'],
+                tagNames: { returns: 'Возвраты' },
             })
         })
 

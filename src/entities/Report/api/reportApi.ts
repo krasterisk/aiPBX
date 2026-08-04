@@ -380,11 +380,15 @@ export const reportApi = rtkApi.injectEndpoints({
       }),
       providesTags: ['OperatorAnalytics'],
     }),
-    updateCallTags: build.mutation<{ tagIds: string[] }, { channelId: string, tagIds: string[] }>({
-      query: ({ channelId, tagIds }) => ({
+    updateCallTags: build.mutation<{ tagIds: string[] }, {
+      channelId: string
+      tagIds: string[]
+      tagNames?: Record<string, string>
+    }>({
+      query: ({ channelId, tagIds, tagNames }) => ({
         url: `/operator-analytics/${channelId}/tags`,
         method: 'PATCH',
-        body: { tagIds },
+        body: { tagIds, tagNames },
       }),
       invalidatesTags: (result, error, { channelId }) => [
         { type: 'OperatorAnalytics', id: channelId },

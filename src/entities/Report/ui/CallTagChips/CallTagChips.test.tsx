@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import { CallTagChips } from './CallTagChips'
+import { CallTagChips, slugifyTagId } from './CallTagChips'
 import type { TagDefinition } from '../../model/types/report'
 
 jest.mock('react-i18next', () => ({
@@ -26,10 +26,57 @@ const taxonomy: TagDefinition[] = [
 ]
 
 describe('CallTagChips', () => {
-    it('renders inline no-themes note when there are no tags', () => {
-        render(<CallTagChips tagIds={[]} taxonomy={taxonomy} />)
-        expect(screen.getByTestId('call-tag-chips-empty')).toHaveTextContent('Темы не найдены')
-        expect(screen.queryByTestId('call-tag-chips-chip-billing')).not.toBeInTheDocument()
+    it('renders nothing in read-only mode when there are no tags', () => {
+        const { container } = render(<CallTagChips tagIds={[]} taxonomy={taxonomy} />)
+        expect(container).toBeEmptyDOMElement()
+        expect(screen.queryByText('Темы не найдены')).not.toBeInTheDocument()
+    })
+
+    it('shows add controls for empty editable chips', () => {
+        const onAdd = jest.fn()
+        render(
+            <CallTagChips
+                tagIds={[]}
+                taxonomy={taxonomy}
+                editable={{
+                    onRemove: jest.fn(),
+                    onAdd,
+                    availableTags: [taxonomy[0]],
+                }}
+            />,
+        )
+
+        fireEvent.click(screen.getByTestId('call-tag-chips-add'))
+        fireEvent.click(screen.getByTestId('call-tag-chips-picker-option-billing'))
+        expect(onAdd).toHaveBeenCalledWith('billing')
+    })
+
+    it('allows free-form custom tags when allowCustom is set', () => {
+        const onAddCustom = jest.fn()
+        render(
+            <CallTagChips
+                tagIds={[]}
+                editable={{
+                    onRemove: jest.fn(),
+                    onAdd: jest.fn(),
+                    availableTags: [],
+                    allowCustom: true,
+                    onAddCustom,
+                }}
+            />,
+        )
+
+        fireEvent.click(screen.getByTestId('call-tag-chips-add'))
+        fireEvent.change(screen.getByTestId('call-tag-chips-custom-input'), {
+            target: { value: 'Своя тема' },
+        })
+        fireEvent.submit(screen.getByTestId('call-tag-chips-custom-form'))
+        expect(onAddCustom).toHaveBeenCalledWith('Своя тема')
+    })
+
+    it('slugifies free-form labels', () => {
+        expect(slugifyTagId('  Hello World  ')).toBe('hello-world')
+        expect(slugifyTagId('Счета / возврат')).toBe('счета-возврат')
     })
 
     it('renders one chip for a single tag', () => {

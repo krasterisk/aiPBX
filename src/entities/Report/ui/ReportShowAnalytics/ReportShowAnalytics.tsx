@@ -7,7 +7,7 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Analytics, DefaultMetricKey, TagDefinition } from '../../model/types/report'
 import { MetricOverridePanel } from './MetricOverridePanel'
-import { CallTagChips } from '../CallTagChips'
+import { CallTagChips, slugifyTagId } from '../CallTagChips'
 import {
     useGetOperatorAnalysis,
     useGetOperatorProjects,
@@ -92,13 +92,15 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
 
     const metrics = analytics.metrics
     const serverTagIds = metrics?._topics?.tags ?? []
-    const tagNames = metrics?._topics?.tag_names
+    const serverTagNames = metrics?._topics?.tag_names
     const serverTagIdsKey = serverTagIds.join('\u0000')
     const [localTagIds, setLocalTagIds] = useState<string[]>(serverTagIds)
+    const [localTagNames, setLocalTagNames] = useState<Record<string, string>>(serverTagNames ?? {})
 
     useEffect(() => {
         setLocalTagIds(metrics?._topics?.tags ?? [])
-    }, [serverTagIdsKey, metrics?._topics?.tags])
+        setLocalTagNames(metrics?._topics?.tag_names ?? {})
+    }, [serverTagIdsKey, metrics?._topics?.tags, metrics?._topics?.tag_names])
 
     const projectTaxonomy = useMemo<TagDefinition[]>(() => {
         const projectId = operatorAnalysis?.projectId
@@ -107,33 +109,62 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
         return project?.callTaxonomy ?? []
     }, [operatorAnalysis?.projectId, operatorProjects])
 
+    const allowCustomTags = projectTaxonomy.length === 0
+
     const availableTags = useMemo(
         () => projectTaxonomy.filter(tag => !localTagIds.includes(tag.id)),
         [projectTaxonomy, localTagIds],
     )
 
-    const persistTags = useCallback(async (nextTagIds: string[]) => {
+    const persistTags = useCallback(async (
+        nextTagIds: string[],
+        nextTagNames: Record<string, string> = localTagNames,
+    ) => {
         if (!channelId) return
 
         const previousTagIds = localTagIds
+        const previousTagNames = localTagNames
         setLocalTagIds(nextTagIds)
+        setLocalTagNames(nextTagNames)
 
         try {
-            await updateCallTags({ channelId, tagIds: nextTagIds }).unwrap()
+            await updateCallTags({
+                channelId,
+                tagIds: nextTagIds,
+                tagNames: nextTagNames,
+            }).unwrap()
         } catch {
             setLocalTagIds(previousTagIds)
+            setLocalTagNames(previousTagNames)
             toast.error(String(t('Не удалось сохранить теги. Изменения не применены.')))
         }
-    }, [channelId, localTagIds, t, updateCallTags])
+    }, [channelId, localTagIds, localTagNames, t, updateCallTags])
 
     const handleRemoveTag = useCallback((tagId: string) => {
-        void persistTags(localTagIds.filter(id => id !== tagId))
-    }, [localTagIds, persistTags])
+        const nextIds = localTagIds.filter(id => id !== tagId)
+        const nextNames = { ...localTagNames }
+        delete nextNames[tagId]
+        void persistTags(nextIds, nextNames)
+    }, [localTagIds, localTagNames, persistTags])
 
     const handleAddTag = useCallback((tagId: string) => {
         if (localTagIds.includes(tagId)) return
-        void persistTags([...localTagIds, tagId])
-    }, [localTagIds, persistTags])
+        const taxonomyTag = projectTaxonomy.find(tag => tag.id === tagId)
+        const nextNames = taxonomyTag
+            ? { ...localTagNames, [tagId]: taxonomyTag.name }
+            : localTagNames
+        void persistTags([...localTagIds, tagId], nextNames)
+    }, [localTagIds, localTagNames, persistTags, projectTaxonomy])
+
+    const handleAddCustomTag = useCallback((label: string) => {
+        const name = label.trim()
+        if (!name) return
+        let id = slugifyTagId(name)
+        if (localTagIds.includes(id)) {
+            id = `${id}-${Date.now().toString(36)}`.slice(0, 50)
+        }
+        void persistTags([...localTagIds, id], { ...localTagNames, [id]: name })
+    }, [localTagIds, localTagNames, persistTags])
 
     // ── Common helpers ────────────────────────────────────────────────────────
     const renderMetricItem = (label: string, value: React.ReactNode) => (
@@ -279,12 +310,14 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
                     <CallTagChips
                         mode="unbounded"
                         tagIds={localTagIds}
-                        tagNames={tagNames}
+                        tagNames={localTagNames}
                         taxonomy={projectTaxonomy}
                         editable={isTagEditing && channelId ? {
                             onRemove: handleRemoveTag,
                             onAdd: handleAddTag,
                             availableTags,
+                            allowCustom: allowCustomTags,
+                            onAddCustom: allowCustomTags ? handleAddCustomTag : undefined,
                         } : undefined}
                         data-testid="call-card-tag-chips"
                     />
