@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo, useState, type ElementType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Skeleton } from '@mui/material'
-import { BarChart3, Headphones, MessageSquareText } from 'lucide-react'
+import { BarChart3, MessageSquareText } from 'lucide-react'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
@@ -15,7 +15,7 @@ import {
 import type { Analytics } from '@/entities/Report'
 import cls from './CallPanelBody.module.scss'
 
-type CallPanelTab = 'analytics' | 'recording' | 'dialog'
+type CallPanelTab = 'analytics' | 'dialog'
 
 interface CallPanelBodyProps {
     channelId: string
@@ -67,7 +67,6 @@ export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
 
     const tabs: Array<{ key: CallPanelTab, label: string, icon: ElementType }> = [
         { key: 'analytics', label: String(t('Аналитика')), icon: BarChart3 },
-        { key: 'recording', label: String(t('Запись')), icon: Headphones },
         { key: 'dialog', label: String(t('Диалог')), icon: MessageSquareText },
     ]
 
@@ -102,6 +101,12 @@ export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
 
     return (
         <VStack gap="0" max align="stretch" className={cls.root} data-testid="call-panel-body">
+            {recordUrl && (
+                <div className={cls.recording} data-testid="call-panel-recording">
+                    <MediaPlayer src={recordUrl} />
+                </div>
+            )}
+
             <div className={cls.tabBar} role="tablist" data-testid="call-panel-tabs">
                 {tabs.map(tab => {
                     const Icon = tab.icon
@@ -128,14 +133,6 @@ export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
             <div className={cls.tabContent}>
                 {activeTab === 'analytics' && (
                     <ReportShowAnalytics analytics={analytics} channelId={channelId} />
-                )}
-
-                {activeTab === 'recording' && (
-                    <div data-testid="call-panel-recording">
-                        {recordUrl
-                            ? <MediaPlayer src={recordUrl} />
-                            : <Text text={String(t('Запись недоступна'))} size="m" />}
-                    </div>
                 )}
 
                 {activeTab === 'dialog' && (

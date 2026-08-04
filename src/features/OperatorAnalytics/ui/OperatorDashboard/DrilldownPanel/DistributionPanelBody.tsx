@@ -127,15 +127,13 @@ export const DistributionPanelBody = memo((props: DistributionPanelBodyProps) =>
     return (
         <VStack gap="16" max align="stretch" className={cls.root} data-testid="distribution-panel-body">
             <div className={cls.summary}>
-                <div className={cls.headline} data-testid="distribution-panel-headline">
-                    {total}
+                <div data-testid="distribution-panel-call-count">
+                    <Text
+                        text={String(t('TOPICS_CALL_LIST_HEADER', { count: total }))}
+                        size="m"
+                        bold
+                    />
                 </div>
-                <Text
-                    text={String(t('TOPICS_CALL_LIST_HEADER', { count: total }))}
-                    size="s"
-                    className={cls.summaryHint}
-                    data-testid="distribution-panel-call-count"
-                />
                 <Text
                     text={String(t('DISTRIBUTION_LIST_HINT'))}
                     size="xs"
