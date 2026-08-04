@@ -1,14 +1,21 @@
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo, useState, type ElementType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Skeleton } from '@mui/material'
+import { BarChart3, Headphones, MessageSquareText } from 'lucide-react'
+import { classNames } from '@/shared/lib/classNames/classNames'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { MediaPlayer } from '@/shared/ui/MediaPlayer'
-import { ReportShowAnalytics, useGetOperatorAnalysis } from '@/entities/Report'
-
+import {
+    ReportShowAnalytics,
+    ReportShowDialog,
+    useGetOperatorAnalysis,
+} from '@/entities/Report'
 import type { Analytics } from '@/entities/Report'
-import cls from './OperatorPanelBody.module.scss'
+import cls from './CallPanelBody.module.scss'
+
+type CallPanelTab = 'analytics' | 'recording' | 'dialog'
 
 interface CallPanelBodyProps {
     channelId: string
@@ -34,6 +41,7 @@ function toAnalytics(data: Record<string, unknown>): Analytics | null {
 
 export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
     const { t } = useTranslation('reports')
+    const [activeTab, setActiveTab] = useState<CallPanelTab>('analytics')
     const { data, isLoading, isError, refetch } = useGetOperatorAnalysis(channelId, {
         skip: !channelId,
     })
@@ -47,6 +55,21 @@ export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
         const raw = data?.recordUrl
         return typeof raw === 'string' && raw.trim() ? raw : undefined
     }, [data])
+
+    const transcription = useMemo(() => {
+        const raw = data?.transcription
+        return typeof raw === 'string' && raw.trim() ? raw : undefined
+    }, [data])
+
+    const onTabChange = useCallback((tab: CallPanelTab) => {
+        setActiveTab(tab)
+    }, [])
+
+    const tabs: Array<{ key: CallPanelTab, label: string, icon: ElementType }> = [
+        { key: 'analytics', label: String(t('Аналитика')), icon: BarChart3 },
+        { key: 'recording', label: String(t('Запись')), icon: Headphones },
+        { key: 'dialog', label: String(t('Диалог')), icon: MessageSquareText },
+    ]
 
     if (isLoading && !data) {
         return (
@@ -78,13 +101,57 @@ export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
     }
 
     return (
-        <VStack gap="16" max className={cls.root} data-testid="call-panel-body">
-            {recordUrl && (
-                <div data-testid="call-panel-recording">
-                    <MediaPlayer src={recordUrl} />
-                </div>
-            )}
-            <ReportShowAnalytics analytics={analytics} channelId={channelId} />
+        <VStack gap="0" max align="stretch" className={cls.root} data-testid="call-panel-body">
+            <div className={cls.tabBar} role="tablist" data-testid="call-panel-tabs">
+                {tabs.map(tab => {
+                    const Icon = tab.icon
+                    const isActive = activeTab === tab.key
+                    return (
+                        <button
+                            key={tab.key}
+                            type="button"
+                            role="tab"
+                            id={`call-panel-tab-${tab.key}`}
+                            aria-selected={isActive}
+                            className={classNames(cls.tab, { [cls.tabActive]: isActive })}
+                            onClick={() => { onTabChange(tab.key) }}
+                            data-testid={`call-panel-tab-${tab.key}`}
+                        >
+                            <Icon size={16} className={cls.tabIcon} aria-hidden />
+                            <span className={cls.tabLabel}>{tab.label}</span>
+                            {isActive && <div className={cls.tabIndicator} />}
+                        </button>
+                    )
+                })}
+            </div>
+
+            <div className={cls.tabContent}>
+                {activeTab === 'analytics' && (
+                    <ReportShowAnalytics analytics={analytics} channelId={channelId} />
+                )}
+
+                {activeTab === 'recording' && (
+                    <div data-testid="call-panel-recording">
+                        {recordUrl
+                            ? <MediaPlayer src={recordUrl} />
+                            : <Text text={String(t('Запись недоступна'))} size="m" />}
+                    </div>
+                )}
+
+                {activeTab === 'dialog' && (
+                    <div data-testid="call-panel-dialog">
+                        {transcription
+                            ? (
+                                <ReportShowDialog
+                                    isDialogLoading={false}
+                                    isDialogError={false}
+                                    transcription={transcription}
+                                />
+                            )
+                            : <Text text={String(t('Диалог отсутствует'))} size="m" />}
+                    </div>
+                )}
+            </div>
         </VStack>
     )
 })

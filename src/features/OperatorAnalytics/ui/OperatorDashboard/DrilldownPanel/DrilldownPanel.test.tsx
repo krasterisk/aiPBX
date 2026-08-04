@@ -509,7 +509,7 @@ describe('DrilldownPanel stack navigation', () => {
         expect(onOpenCall).toHaveBeenCalledWith('call-1', 'Greeting')
     })
 
-    it('renders ReportShowAnalytics in call body', () => {
+    it('renders ReportShowAnalytics in call body by default', () => {
         render(
             <DrilldownPanel
                 entry={{ kind: 'call', channelId: 'call-1', fromLabel: 'Greeting' }}
@@ -519,11 +519,15 @@ describe('DrilldownPanel stack navigation', () => {
             />,
         )
 
+        expect(screen.getByTestId('call-panel-tabs')).toBeInTheDocument()
         expect(screen.getByTestId('report-show-analytics-mock')).toBeInTheDocument()
+        expect(screen.queryByTestId('call-panel-recording')).not.toBeInTheDocument()
+        expect(screen.queryByTestId('call-panel-dialog')).not.toBeInTheDocument()
         expect(mockUseGetOperatorAnalysis).toHaveBeenCalledWith('call-1', expect.objectContaining({ skip: false }))
     })
 
-    it('shows recording player without transcript in call body', () => {
+    it('shows recording player on recording tab without transcript', async () => {
+        const user = userEvent.setup()
         render(
             <DrilldownPanel
                 entry={{ kind: 'call', channelId: 'call-1', fromLabel: 'Greeting' }}
@@ -532,10 +536,31 @@ describe('DrilldownPanel stack navigation', () => {
                 onOpenCall={jest.fn()}
             />,
         )
+
+        await user.click(screen.getByTestId('call-panel-tab-recording'))
 
         expect(screen.getByTestId('call-panel-recording')).toBeInTheDocument()
         expect(screen.getByText('Прослушать запись')).toBeInTheDocument()
         expect(screen.queryByText('Operator: Hello')).not.toBeInTheDocument()
+        expect(screen.queryByTestId('report-show-analytics-mock')).not.toBeInTheDocument()
+    })
+
+    it('shows transcript on dialog tab', async () => {
+        const user = userEvent.setup()
+        render(
+            <DrilldownPanel
+                entry={{ kind: 'call', channelId: 'call-1', fromLabel: 'Greeting' }}
+                filters={defaultFilters}
+                onSelectMetric={jest.fn()}
+                onOpenCall={jest.fn()}
+            />,
+        )
+
+        await user.click(screen.getByTestId('call-panel-tab-dialog'))
+
+        expect(screen.getByTestId('call-panel-dialog')).toBeInTheDocument()
+        expect(screen.getByText('Operator: Hello')).toBeInTheDocument()
+        expect(screen.queryByText('Прослушать запись')).not.toBeInTheDocument()
     })
 
     it('uses shared metric labels from API response in operator metric view', () => {
