@@ -38,7 +38,8 @@ import {
     WizardStep0_Templates,
     WizardStep2_MetricBuilder,
     OperatorUploadForm,
- ALL_DEFAULT_METRICS, TaxonomyEditor 
+    ALL_DEFAULT_METRICS,
+    TaxonomyEditor,
 } from '@/features/OperatorAnalytics'
 
 import { getRouteAnalyticsApi } from '@/shared/const/router'
