@@ -68,6 +68,7 @@ export const TopicsSection = memo((props: TopicsSectionProps) => {
                 padding="24"
                 className={cls.section}
                 data-testid="oa-section-topics"
+                data-tour-id="oa-topics"
             >
                 <VStack gap="16" max>
                     <VStack gap="4" max>
@@ -101,6 +102,7 @@ export const TopicsSection = memo((props: TopicsSectionProps) => {
                 padding="24"
                 className={cls.section}
                 data-testid="oa-section-topics"
+                data-tour-id="oa-topics"
             >
                 <VStack gap="16" max>
                     <VStack gap="4" max>
@@ -113,7 +115,7 @@ export const TopicsSection = memo((props: TopicsSectionProps) => {
                     <div className={cls.emptyState} data-testid="topics-empty-not-configured">
                         <Text title={String(t('Темы звонков не настроены'))} bold />
                         <Text
-                            text={String(t('Добавьте темы и ключевые слова в настройках проекта — звонки начнут размечаться при следующем анализе.'))}
+                            text={String(t('Добавьте темы в настройках проекта - звонки начнут размечаться при следующем анализе.'))}
                             size="m"
                         />
                         <Button variant="accent" size="s" onClick={handleOpenProjectSettings}>
@@ -134,6 +136,7 @@ export const TopicsSection = memo((props: TopicsSectionProps) => {
                 padding="24"
                 className={cls.section}
                 data-testid="oa-section-topics"
+                data-tour-id="oa-topics"
             >
                 <VStack gap="16" max>
                     <VStack gap="4" max>
@@ -146,7 +149,7 @@ export const TopicsSection = memo((props: TopicsSectionProps) => {
                     <div className={cls.emptyState} data-testid="topics-empty-zero-matches">
                         <Text title={String(t('Совпадений по темам нет'))} bold />
                         <Text
-                            text={String(t('За выбранный период ни один звонок не совпал со словарём тем. Измените период или дополните синонимы темы.'))}
+                            text={String(t('За выбранный период ни один звонок не получил тему. Измените период или уточните описания тем в настройках проекта.'))}
                             size="m"
                         />
                     </div>
@@ -163,6 +166,7 @@ export const TopicsSection = memo((props: TopicsSectionProps) => {
             padding="24"
             className={cls.section}
             data-testid="oa-section-topics"
+            data-tour-id="oa-topics"
         >
             <VStack gap="16" max>
                 <VStack gap="4" max>

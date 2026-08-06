@@ -21,7 +21,7 @@ interface AdminTopUpModalProps {
     userName?: string
 }
 
-/** Баланс в БД — USD; публичные цены: цена_в_валюте = цена_usd * rate ⇒ usd = сумма_в_валюте / rate */
+/** Баланс в БД - USD; публичные цены: цена_в_валюте = цена_usd * rate ⇒ usd = сумма_в_валюте / rate */
 function amountInInputCurrencyToUsd(amount: number, currency: UserCurrencyValues, rateFromApi: number): number {
     if (currency === UserCurrencyValues.USD) {
         return Math.round(amount * 100) / 100
@@ -84,7 +84,7 @@ export const AdminTopUpModal = memo((props: AdminTopUpModalProps) => {
                 amount: amountUsd,
                 currency: 'USD',
                 paymentMethod,
-                paymentInfo: [paymentInfo?.trim(), extra.trim()].filter(Boolean).join(' — ') || undefined,
+                paymentInfo: [paymentInfo?.trim(), extra.trim()].filter(Boolean).join(' - ') || undefined,
             }).unwrap()
 
             toast.success(t('Баланс успешно пополнен'))

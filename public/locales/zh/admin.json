@@ -65,7 +65,7 @@
                 "ul": "法人",
                 "ip": "个体工商户"
             },
-            "innHint": "法人输入 10 位税号，个体户输入 12 位 — 将自动加载信息。",
+            "innHint": "法人输入 10 位税号，个体户输入 12 位 - 将自动加载信息。",
             "innHintIncomplete": "还需 {{count}} 位数字…",
             "kppHint": "若匹配多个分支机构或查询失败，法人需填写 KPP。",
             "kppRequired": "法人请填写 KPP（9 位）。",
@@ -73,7 +73,7 @@
             "lookupSuccess": "已按税号加载",
             "lookupFailed": "未找到该税号对应的组织",
             "lookupRequiresKpp": "仅凭税号不足，请在下方填写 KPP。",
-            "chooseBranch": "找到多个相同税号的组织 — 请选择："
+            "chooseBranch": "找到多个相同税号的组织 - 请选择："
         }
     },
     "helpdesk": {
@@ -105,7 +105,7 @@
             "contactPhone": "联系电话（如不同）", "clientSection": "客户",
             "findClient": "查找客户", "pickCandidate": "从列表中选择组织",
             "clientLinked": "已关联客户",
-            "clientNotFound": "未找到客户——仍可创建工单",
+            "clientNotFound": "未找到客户--仍可创建工单",
             "cancel": "取消", "submit": "创建"
         },
         "detail": {

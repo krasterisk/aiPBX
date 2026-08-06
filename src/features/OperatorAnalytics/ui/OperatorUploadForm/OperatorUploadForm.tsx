@@ -116,7 +116,7 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted, fixed
                 onBatchStarted?.(result.batchId)
                 onClose?.()
             } else if ('filename' in result) {
-                toast.success(`${result.filename} — ${t('загружен и отправлен в работу')}`)
+                toast.success(`${result.filename} - ${t('загружен и отправлен в работу')}`)
                 setFiles([])
                 setTimeout(() => { onClose?.() }, 800)
             } else {

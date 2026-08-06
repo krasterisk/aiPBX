@@ -56,6 +56,8 @@ export interface CallTagChipsProps {
     taxonomy?: TagDefinition[]
     mode?: 'bounded' | 'unbounded'
     editable?: CallTagChipsEditConfig
+    /** When set, chips become filter affordances (journal grouping by theme). */
+    onTagClick?: (tagId: string, tagName: string) => void
     'data-testid'?: string
 }
 
@@ -73,6 +75,7 @@ export const CallTagChips = memo((props: CallTagChipsProps) => {
         taxonomy,
         mode = 'unbounded',
         editable,
+        onTagClick,
         'data-testid': testId = 'call-tag-chips',
     } = props
 
@@ -124,6 +127,11 @@ export const CallTagChips = memo((props: CallTagChipsProps) => {
         setPickerOpen(false)
     }, [customLabel, editable])
 
+    const handleTagClick = useCallback((tag: ResolvedTag) => {
+        if (!onTagClick) return
+        onTagClick(tag.id, tag.name)
+    }, [onTagClick])
+
     // Read-only empty: render nothing (no "not found" noise).
     if (!resolvedTags.length && !editable) {
         return null
@@ -136,32 +144,55 @@ export const CallTagChips = memo((props: CallTagChipsProps) => {
             data-testid={testId}
         >
             {visibleTags.map(tag => (
-                <span
-                    key={tag.id}
-                    className={cls.chip}
-                    title={tag.name}
-                    data-testid={`${testId}-chip-${tag.id}`}
-                >
-                    {tag.color ? (
-                        <span
-                            className={cls.colorDot}
-                            style={{ backgroundColor: tag.color }}
-                            aria-hidden
-                        />
-                    ) : null}
-                    <span className={cls.chipLabel}>{tag.name}</span>
-                    {editable ? (
-                        <button
-                            type="button"
-                            className={cls.removeButton}
-                            aria-label={String(t('Убрать тему {{name}}', { name: tag.name }))}
-                            onClick={() => { handleRemove(tag.id) }}
-                            data-testid={`${testId}-remove-${tag.id}`}
-                        >
-                            <X size={14} aria-hidden />
-                        </button>
-                    ) : null}
-                </span>
+                onTagClick ? (
+                    <button
+                        key={tag.id}
+                        type="button"
+                        className={classNames(cls.chip, {}, [cls.chipButton])}
+                        title={String(t('Фильтровать по теме {{name}}', { name: tag.name }))}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            handleTagClick(tag)
+                        }}
+                        data-testid={`${testId}-chip-${tag.id}`}
+                    >
+                        {tag.color ? (
+                            <span
+                                className={cls.colorDot}
+                                style={{ backgroundColor: tag.color }}
+                                aria-hidden
+                            />
+                        ) : null}
+                        <span className={cls.chipLabel}>{tag.name}</span>
+                    </button>
+                ) : (
+                    <span
+                        key={tag.id}
+                        className={cls.chip}
+                        title={tag.name}
+                        data-testid={`${testId}-chip-${tag.id}`}
+                    >
+                        {tag.color ? (
+                            <span
+                                className={cls.colorDot}
+                                style={{ backgroundColor: tag.color }}
+                                aria-hidden
+                            />
+                        ) : null}
+                        <span className={cls.chipLabel}>{tag.name}</span>
+                        {editable ? (
+                            <button
+                                type="button"
+                                className={cls.removeButton}
+                                aria-label={String(t('Убрать тему {{name}}', { name: tag.name }))}
+                                onClick={() => { handleRemove(tag.id) }}
+                                data-testid={`${testId}-remove-${tag.id}`}
+                            >
+                                <X size={14} aria-hidden />
+                            </button>
+                        ) : null}
+                    </span>
+                )
             ))}
 
             {overflowCount > 0 ? (

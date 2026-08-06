@@ -19,6 +19,8 @@ import {
   getReportSource,
   getReportsListGeneration,
   getReportCsatFilter,
+  getReportTagId,
+  getReportTagLabel,
 } from '../model/selectors/reportSelectors'
 import { reportsPageActions } from '../model/slices/reportsPageSlice'
 import { useGetReports } from '../api/reportApi'
@@ -47,6 +49,8 @@ export function useReportFilters() {
   const source = useSelector(getReportSource)
   const listGeneration = useSelector(getReportsListGeneration)
   const csatFilter = useSelector(getReportCsatFilter)
+  const tagId = useSelector(getReportTagId)
+  const tagLabel = useSelector(getReportTagLabel)
 
   const authData = useSelector(getUserAuthData)
   const isAdmin = useSelector(isUserAdmin)
@@ -77,6 +81,7 @@ export function useReportFilters() {
     source,
     listGeneration,
     csat: serializeCsatFilter(csatFilter),
+    tagId: tagId || undefined,
   }, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
@@ -184,6 +189,14 @@ export function useReportFilters() {
     dispatch(reportsPageActions.clearCsatFilter())
   }, [dispatch])
 
+  const onFilterByTag = useCallback((nextTagId: string, nextTagLabel: string) => {
+    dispatch(reportsPageActions.setTagFilter({ tagId: nextTagId, tagLabel: nextTagLabel }))
+  }, [dispatch])
+
+  const onClearTagFilter = useCallback(() => {
+    dispatch(reportsPageActions.setTagFilter(null))
+  }, [dispatch])
+
   return {
     hasMore,
     page,
@@ -205,6 +218,8 @@ export function useReportFilters() {
     sortOrder,
     source,
     csatFilter,
+    tagId,
+    tagLabel,
     onChangeAssistant,
     onChangeUserId,
     onChangeStartDate,
@@ -217,6 +232,8 @@ export function useReportFilters() {
     onChangeSource,
     onToggleCsatFilter,
     onClearCsatFilter,
+    onFilterByTag,
+    onClearTagFilter,
     onRefetch,
     onLoadNext
   }

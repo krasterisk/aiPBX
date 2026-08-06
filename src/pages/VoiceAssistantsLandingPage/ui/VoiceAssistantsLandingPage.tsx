@@ -257,7 +257,7 @@ const VoiceAssistantsLandingPage = () => {
                 </div>
             </section>
 
-            {/* ── SIP Trunks — Any PBX ── */}
+            {/* ── SIP Trunks - Any PBX ── */}
             <section className={cls.section}>
                 <div className={cls.container}>
                     <div className={cls.twoCol}>

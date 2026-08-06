@@ -43,7 +43,7 @@ function priorityClass(priority: OperatorInsight['priority']): string {
     }
 }
 
-/** Valence color from type — priority is importance, not good/bad. */
+/** Valence color from type - priority is importance, not good/bad. */
 function typeClass(type: OperatorInsight['type']): string {
     switch (type) {
         case 'strength': return cls.typeStrength
@@ -116,7 +116,7 @@ export const AiInsightsBanner = memo(({ projectName, queryParams }: AiInsightsBa
                     <HStack gap={'8'} align={'center'}>
                         <AutoAwesomeIcon sx={{ color: 'var(--accent-redesigned)', fontSize: 20 }} />
                         <Text text={String(t('AI Инсайты'))} bold />
-                        {projectName && <Text text={`— ${projectName}`} size={'s'} />}
+                        {projectName && <Text text={`- ${projectName}`} size={'s'} />}
                     </HStack>
 
                     <HStack gap={'8'}>

@@ -1,6 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ProjectWizardSchema, MetricMethod } from '../types/projectWizardSchema'
-import { MetricDefinition, DefaultMetricKey, WebhookEvent, ProjectTemplate, OperatorProject } from '../types/report'
+import {
+    ProjectWizardSchema,
+    MetricMethod,
+    DEFAULT_DIGEST_CONFIG,
+    DEFAULT_ALERT_CONFIG,
+    mergeAlertConfig,
+} from '../types/projectWizardSchema'
+import {
+    MetricDefinition,
+    DefaultMetricKey,
+    WebhookEvent,
+    ProjectTemplate,
+    OperatorProject,
+    DigestConfig,
+    AlertConfig,
+    TagDefinition,
+} from '../types/report'
 
 const ALL_DEFAULT_METRICS: DefaultMetricKey[] = [
     'greeting_quality', 'script_compliance', 'politeness_empathy',
@@ -18,11 +33,15 @@ const initialState: ProjectWizardSchema = {
     systemPrompt: '',
     customMetrics: [],
     visibleDefaultMetrics: [...ALL_DEFAULT_METRICS],
+    callTaxonomy: [],
     webhookUrl: '',
     webhookHeaders: {},
     webhookEvents: [],
     selectedTemplateId: undefined,
     showWebhooks: false,
+    digestConfig: { ...DEFAULT_DIGEST_CONFIG },
+    showDigest: false,
+    alertConfig: mergeAlertConfig(DEFAULT_ALERT_CONFIG),
 }
 
 export const projectWizardSlice = createSlice({
@@ -30,6 +49,18 @@ export const projectWizardSlice = createSlice({
     initialState,
     reducers: {
         // ── Open / Close / Reset ──────────────────────────────────
+        /**
+         * Reset draft fields for a new project without opening the modal.
+         * Used by analytics onboarding, which renders its own create UI
+         * while OperatorProjectManager may also be mounted underneath.
+         */
+        initCreateDraft: (state) => {
+            Object.assign(state, {
+                ...initialState,
+                isOpen: false,
+                editProjectId: undefined,
+            })
+        },
         openCreate: (state) => {
             Object.assign(state, {
                 ...initialState,
@@ -48,11 +79,24 @@ export const projectWizardSlice = createSlice({
             state.systemPrompt = p.systemPrompt ?? ''
             state.customMetrics = p.customMetricsSchema ?? []
             state.visibleDefaultMetrics = p.visibleDefaultMetrics ?? [...ALL_DEFAULT_METRICS]
+            state.callTaxonomy = p.callTaxonomy ?? []
             state.webhookUrl = p.webhookUrl ?? ''
             state.webhookHeaders = p.webhookHeaders ?? {}
             state.webhookEvents = p.webhookEvents ?? []
             state.selectedTemplateId = undefined
             state.showWebhooks = false
+            state.digestConfig = p.digestConfig
+                ? { ...DEFAULT_DIGEST_CONFIG, ...p.digestConfig }
+                : { ...DEFAULT_DIGEST_CONFIG }
+            state.alertConfig = mergeAlertConfig(p.alertConfig)
+            state.showDigest = Boolean(
+                p.digestConfig?.enabled ||
+                p.digestConfig?.emails?.length ||
+                p.digestConfig?.telegramChatIds?.length ||
+                p.alertConfig?.enabled ||
+                p.alertConfig?.emails?.length ||
+                p.alertConfig?.telegramChatIds?.length,
+            )
         },
         close: (state) => {
             state.isOpen = false
@@ -96,6 +140,9 @@ export const projectWizardSlice = createSlice({
                 state.visibleDefaultMetrics.push(key)
             }
         },
+        setCallTaxonomy: (state, action: PayloadAction<TagDefinition[]>) => {
+            state.callTaxonomy = action.payload
+        },
         setWebhookUrl: (state, action: PayloadAction<string>) => {
             state.webhookUrl = action.payload
         },
@@ -107,6 +154,15 @@ export const projectWizardSlice = createSlice({
         },
         setShowWebhooks: (state, action: PayloadAction<boolean>) => {
             state.showWebhooks = action.payload
+        },
+        setDigestConfig: (state, action: PayloadAction<DigestConfig>) => {
+            state.digestConfig = action.payload
+        },
+        setShowDigest: (state, action: PayloadAction<boolean>) => {
+            state.showDigest = action.payload
+        },
+        setAlertConfig: (state, action: PayloadAction<AlertConfig>) => {
+            state.alertConfig = action.payload
         },
         setSelectedTemplateId: (state, action: PayloadAction<string | undefined>) => {
             state.selectedTemplateId = action.payload

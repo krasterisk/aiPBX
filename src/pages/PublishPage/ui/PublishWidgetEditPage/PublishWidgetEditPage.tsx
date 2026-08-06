@@ -25,7 +25,7 @@ const PublishWidgetEditContent = memo(({ className }: { className?: string }) =>
     const { id } = useParams<{ id: string }>()
     const dispatch = useAppDispatch()
 
-    // refetchOnMountOrArgChange: true  — forces a fresh API call each time
+    // refetchOnMountOrArgChange: true  - forces a fresh API call each time
     // this component mounts. This is critical because:
     //   1. DynamicModuleLoader (parent) registers the reducer in its useEffect
     //   2. React fires child useEffects BEFORE parent useEffects

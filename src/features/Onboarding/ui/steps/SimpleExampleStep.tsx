@@ -36,7 +36,7 @@ const exampleCards = [
         titleKey: 'simple_example_voice_title',
         descKey: 'simple_example_voice_desc',
         titleFallback: 'Голос и диалог',
-        descFallback: 'Ассистент отвечает голосом в реальном времени — как живой оператор на ресепшене.'
+        descFallback: 'Ассистент отвечает голосом в реальном времени - как живой оператор на ресепшене.'
     },
     {
         Icon: MessageSquare,
@@ -106,7 +106,7 @@ export const SimpleExampleStep = memo(({ className }: SimpleExampleStepProps) =>
                         <Text
                             text={t(
                                 'simple_example_telegram_desc',
-                                'Telegram можно подключить позже для уведомлений о заявках. В некоторых регионах сервис недоступен — это не блокирует работу ассистента.'
+                                'Telegram можно подключить позже для уведомлений о заявках. В некоторых регионах сервис недоступен - это не блокирует работу ассистента.'
                             )}
                             size="xs"
                         />

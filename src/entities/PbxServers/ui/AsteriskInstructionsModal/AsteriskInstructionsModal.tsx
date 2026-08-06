@@ -158,9 +158,9 @@ same => n,Hangup()`
                                     />
                                     <CodeBlock code="https://{{PBX_ADDRESS}}/records/{{ASSISTANTID}}/{{UNIQUEID}}.{{FORMAT}}" />
                                     <VStack gap="4" max>
-                                        <Text text={t('ASSISTANTID — ID ассистента в AI PBX')} size="s" />
-                                        <Text text={t('UNIQUEID — уникальный идентификатор звонка Asterisk')} size="s" />
-                                        <Text text={t('FORMAT — формат записи (указан в настройках сервера)')} size="s" />
+                                        <Text text={t('ASSISTANTID - ID ассистента в AI PBX')} size="s" />
+                                        <Text text={t('UNIQUEID - уникальный идентификатор звонка Asterisk')} size="s" />
+                                        <Text text={t('FORMAT - формат записи (указан в настройках сервера)')} size="s" />
                                     </VStack>
                                 </VStack>
                             </VStack>

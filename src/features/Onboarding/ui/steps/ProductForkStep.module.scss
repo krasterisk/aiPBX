@@ -1,44 +1,160 @@
 @import "@/app/styles/variables/mixins";
 
 .productCards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
   width: 100%;
 }
 
 .productCard {
-  flex: 1;
-  min-width: 200px;
-  padding: var(--space-6);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 100%;
+  padding: var(--space-6) var(--space-5);
   border-radius: var(--radius-xl);
   background: var(--glass-overlay-light);
   border: var(--glass-border-subtle);
   cursor: pointer;
-  transition: var(--transition-normal);
+  text-align: center;
+  overflow: hidden;
+  // Prefer scale over translateY — avoids hit-area flicker (see hover-lift-card mixin).
+  transition:
+    transform var(--duration-slow) var(--ease-spring),
+    border-color var(--duration-medium) var(--ease-out),
+    box-shadow var(--duration-slow) var(--ease-spring),
+    background-color var(--duration-medium) var(--ease-out);
+  outline: none;
 
-  &:hover {
-    transform: var(--hover-lift-sm);
-    border-color: var(--glass-border-accent);
-    box-shadow: var(--shadow-accent-sm);
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--glass-bg-tertiary);
+    opacity: 0;
+    transition: opacity var(--duration-medium) var(--ease-out);
+    pointer-events: none;
+  }
+
+  &:hover,
+  &:focus-visible {
+    transform: scale(1.015);
+    border-color: rgba(94, 211, 243, 0.35);
+    box-shadow: var(--shadow-lg), var(--shadow-accent-md);
+    z-index: 1;
+
+    &::before {
+      opacity: 1;
+    }
+
+    .iconBox {
+      background: var(--icon-bg-accent);
+      color: var(--accent-redesigned);
+      box-shadow: var(--shadow-accent-sm);
+      transform: scale(1.06);
+    }
+
+    .cta {
+      color: var(--accent-redesigned);
+      background: rgba(94, 211, 243, 0.12);
+      border-color: rgba(94, 211, 243, 0.35);
+      gap: var(--space-2);
+    }
+
+    .ctaChevron {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  &:focus-visible {
+    box-shadow: var(--shadow-lg), var(--shadow-accent-md), 0 0 0 3px rgba(94, 211, 243, 0.25);
+  }
+
+  &:active {
+    transform: scale(1.005);
+    transition-duration: var(--duration-fast);
   }
 }
 
 .iconBox {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   border-radius: var(--radius-lg);
-  background: var(--icon-bg-accent);
-  color: var(--accent-redesigned);
+  background: var(--icon-bg-secondary);
+  color: var(--icon-redesigned);
+  transition:
+    background-color var(--duration-medium) var(--ease-out),
+    color var(--duration-medium) var(--ease-out),
+    box-shadow var(--duration-medium) var(--ease-out),
+    transform var(--duration-slow) var(--ease-spring);
+}
+
+.title,
+.description,
+.cta {
+  position: relative;
+  z-index: 1;
+}
+
+.description {
+  flex: 1;
+  max-width: 220px;
+  color: var(--hint-redesigned);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  min-height: 40px;
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: var(--glass-border-subtle);
+  background: transparent;
+  color: var(--text-redesigned);
+  font-size: var(--font-size-s);
+  font-weight: 600;
+  line-height: 1.2;
+  transition:
+    color var(--duration-medium) var(--ease-out),
+    background-color var(--duration-medium) var(--ease-out),
+    border-color var(--duration-medium) var(--ease-out),
+    gap var(--duration-medium) var(--ease-out);
+  pointer-events: none; // whole card is the hit target
+}
+
+.ctaChevron {
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity var(--duration-medium) var(--ease-out),
+    transform var(--duration-medium) var(--ease-spring);
+  flex-shrink: 0;
 }
 
 @include mobile {
   .productCards {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   .productCard {
-    min-width: unset;
     width: 100%;
+  }
+
+  .description {
+    max-width: none;
   }
 }

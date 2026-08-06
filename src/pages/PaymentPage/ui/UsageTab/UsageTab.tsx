@@ -56,7 +56,7 @@ const formatPeriod = (start?: string, end?: string, allTimeLabel?: string | null
     const parts: string[] = []
     if (start) parts.push(dayjs(start).format('DD.MM.YYYY'))
     if (end) parts.push(dayjs(end).format('DD.MM.YYYY'))
-    return parts.join(' — ')
+    return parts.join(' - ')
 }
 
 // ── component ────────────────────────────────────────────
@@ -230,7 +230,7 @@ parts.push(
         }
 
         const rateStr = formatFxRateUsdToCurrency(row.fxRateUsdToCurrency)
-        if (rateStr !== '—') {
+        if (rateStr !== '-') {
             parts.push(
                 <span key="fx" className={cls.detailsRow}>
                     <span>{t('usage.table.fxRate', { defaultValue: 'Rate' })}:</span>
@@ -310,7 +310,7 @@ parts.push(
                         {t('usage.totalRecords', { defaultValue: 'Total Records' })}
                     </span>
                     <span className={cls.summaryValue}>
-                        {data ? data.count.toLocaleString() : '—'}
+                        {data ? data.count.toLocaleString() : '-'}
                     </span>
                 </div>
                 <div className={cls.summaryCard}>
@@ -323,7 +323,7 @@ parts.push(
                                 costUsd: data.totalCost,
                                 amountCurrency: data.totalAmountCurrency ?? undefined,
                             }, 2)
-                            : '—'}
+                            : '-'}
                     </span>
                 </div>
                 <div className={cls.summaryCard}>

@@ -32,7 +32,7 @@ export const OurOrganizationList = memo((props: OurOrganizationListProps) => {
             header: t('ourOrg.table.primary'),
             accessorKey: 'isPrimary',
             cell: (info: { getValue: () => boolean }) =>
-                info.getValue() ? t('ourOrg.table.primaryYes') : '—',
+                info.getValue() ? t('ourOrg.table.primaryYes') : '-',
         },
         {
             header: t('Name'),
@@ -47,7 +47,7 @@ export const OurOrganizationList = memo((props: OurOrganizationListProps) => {
         {
             header: t('ourOrg.table.kpp'),
             accessorKey: 'kpp',
-            cell: (info: { getValue: () => string }) => info.getValue() || '—',
+            cell: (info: { getValue: () => string }) => info.getValue() || '-',
         },
         {
             header: t('ourOrg.table.address'),

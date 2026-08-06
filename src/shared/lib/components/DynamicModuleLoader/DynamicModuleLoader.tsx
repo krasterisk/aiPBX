@@ -30,7 +30,7 @@ export const DynamicModuleLoader = (props: DynamicModuleLoaderProps) => {
   // Register reducers SYNCHRONOUSLY so they exist before children render/fire effects.
   // This prevents a race condition where child useEffects (e.g. initForm) dispatch
   // actions before the reducer is added to the store.
-  // reducerManager.add() is idempotent — it no-ops if the reducer already exists.
+  // reducerManager.add() is idempotent - it no-ops if the reducer already exists.
   const mountedReducers = store.reducerManager.getReducerMap()
   Object.entries(reducers).forEach(([name, reducer]) => {
     const mounted = mountedReducers[name as StateSchemaKey]

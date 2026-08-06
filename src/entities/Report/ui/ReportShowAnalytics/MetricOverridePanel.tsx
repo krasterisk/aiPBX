@@ -109,7 +109,7 @@ export const MetricOverridePanel = memo((props: MetricOverridePanelProps) => {
         if (o.boolValue != null) return o.boolValue ? String(t('Да')) : String(t('Нет'))
         if (o.numValue != null) return String(o.numValue)
         if (o.strValue != null) return String(t(o.strValue))
-        return '—'
+        return '-'
     }
 
     const labelFor = (metricId: string): string =>

@@ -1,7 +1,7 @@
 {
   "Hero": {
     "Title": "AI PBX: The Future of Your Telephony Starts Here",
-    "SubTitle": "Automate calls with AI assistants and analyze the quality of any conversation. Two products — one platform.",
+    "SubTitle": "Automate calls with AI assistants and analyze the quality of any conversation. Two products - one platform.",
     "CTA_Start": "Start Now",
     "CTA_Demo": "Request Demo"
   },
@@ -79,18 +79,18 @@
   },
   "SpeechAnalytics": {
     "Title": "Speech Analytics",
-    "SubTitle": "Not just bots — analyze any call recording",
+    "SubTitle": "Not just bots - analyze any call recording",
     "AnyRecording": {
       "Title": "Analyze Any Recording",
-      "Desc": "Upload audio files in any format — from call center recordings to Zoom meetings. AI transcribes and evaluates every conversation."
+      "Desc": "Upload audio files in any format - from call center recordings to Zoom meetings. AI transcribes and evaluates every conversation."
     },
     "Metrics": {
       "Title": "Flexible Metrics",
-      "Desc": "Create projects with any evaluation criteria — greeting, empathy, objection handling, or your own custom metrics. Unlimited scoring customization."
+      "Desc": "Create projects with any evaluation criteria - greeting, empathy, objection handling, or your own custom metrics. Unlimited scoring customization."
     },
     "Insights": {
       "Title": "AI Insights",
-      "Desc": "AI finds patterns in your calls — conversion drops, negative trends, metric anomalies."
+      "Desc": "AI finds patterns in your calls - conversion drops, negative trends, metric anomalies."
     },
     "API": {
       "Title": "API for Integrations",
@@ -146,14 +146,14 @@
     "NavStart": "Get Started",
     "HeroBadge": "Speech Analytics",
     "HeroTitle": "Understand What Happens in Every Conversation",
-    "HeroSubtitle": "Upload recordings manually or send them automatically via API in real time — get detailed reports with quality scores, sentiment analysis, and AI recommendations.",
+    "HeroSubtitle": "Upload recordings manually or send them automatically via API in real time - get detailed reports with quality scores, sentiment analysis, and AI recommendations.",
     "HeroCTA": "Try for Free",
     "HowTitle": "Two Ways to Analyze",
-    "HowSubtitle": "Manual upload or automatic integration — choose your path",
+    "HowSubtitle": "Manual upload or automatic integration - choose your path",
     "Step1Title": "Upload Recordings Manually",
     "Step1Desc": "Drag and drop audio files. Supports mp3, wav, ogg, m4a up to 50 MB. Specify operator, language, and project for contextual analysis.",
     "Step1bTitle": "Or Send via API",
-    "Step1bDesc": "Connect REST API with a project token — recordings from your CRM or PBX are sent and analyzed automatically, in real time. Results arrive via webhook.",
+    "Step1bDesc": "Connect REST API with a project token - recordings from your CRM or PBX are sent and analyzed automatically, in real time. Results arrive via webhook.",
     "Step2Title": "AI Analyzes",
     "Step2Desc": "The system automatically transcribes the recording (STT), then the LLM scores the conversation across 9 metrics, determines sentiment, highlights key moments, and generates a summary.",
     "Step3Title": "Get Your Report",
@@ -204,7 +204,7 @@
     "NavStart": "Get Started",
     "HeroBadge": "Voice Assistants",
     "HeroTitle": "Create an AI Operator in 5 Minutes",
-    "HeroSubtitle": "Describe the task in text, choose a voice, connect telephony — and your AI assistant is ready to take calls.",
+    "HeroSubtitle": "Describe the task in text, choose a voice, connect telephony - and your AI assistant is ready to take calls.",
     "HeroCTA": "Create Assistant",
     "CreateTitle": "Creating an Assistant",
     "CreateSubtitle": "Three steps from idea to working bot",
@@ -217,12 +217,12 @@
     "DialogTitle": "Hear How It Sounds",
     "DialogSubtitle": "A real example of an AI assistant talking to a customer",
     "AudioLabel": "Sample AI Assistant Call",
-    "AudioDesc": "A customer calls an appliance repair service — the assistant takes a service request for a technician to fix a dryer.",
+    "AudioDesc": "A customer calls an appliance repair service - the assistant takes a service request for a technician to fix a dryer.",
     "FeaturesTitle": "Capabilities",
     "Feature_NLU": "Language Understanding",
-    "Feature_NLUDesc": "Dialogues powered by GPT-4o and Qwen — virtually indistinguishable from talking to a human.",
+    "Feature_NLUDesc": "Dialogues powered by GPT-4o and Qwen - virtually indistinguishable from talking to a human.",
     "Feature_FunctionCalling": "Function Calling",
-    "Feature_FunctionCallingDesc": "The assistant can book a client, check order status, send a notification — right during the call.",
+    "Feature_FunctionCallingDesc": "The assistant can book a client, check order status, send a notification - right during the call.",
     "Feature_MultiLang": "Multilingual",
     "Feature_MultiLangDesc": "Works in Russian, English, German, Chinese, and Kazakh.",
     "Feature_PremiumVoices": "Premium Voices",
@@ -230,8 +230,8 @@
     "Feature_MCP": "MCP Servers",
     "Feature_MCPDesc": "Connect external tools via Model Context Protocol for deep integration.",
     "Feature_AutoAnalytics": "Auto Analytics",
-    "Feature_AutoAnalyticsDesc": "Every call is automatically transcribed and analyzed. Sentiment, summary, metrics — no extra steps needed.",
-    "SipTitle": "SIP Trunk — Any PBX",
+    "Feature_AutoAnalyticsDesc": "Every call is automatically transcribed and analyzed. Sentiment, summary, metrics - no extra steps needed.",
+    "SipTitle": "SIP Trunk - Any PBX",
     "SipDesc": "Connect your AI assistant to your IP-PBX via SIP trunk. Works with Asterisk, FreePBX, 3CX, Yeastar, and any other system.",
     "SipFeature1": "SIP server registration or IP-based auth",
     "SipFeature2": "UDP, TCP, TLS protocols",
@@ -265,7 +265,7 @@
   },
   "MainPage": {
     "meta": {
-      "title": "AI Voice Assistant Platform — Cloud PBX",
+      "title": "AI Voice Assistant Platform - Cloud PBX",
       "description": "Build voice AI assistants for phone and web. Real-time LLM calls, speech analytics, MCP integrations.",
       "schemaName": "AI PBX"
     }
@@ -273,7 +273,7 @@
   "landing": {
     "demoCta": {
       "label": "Request a Demo",
-      "subtitle": "See AI PBX in action — no commitment required"
+      "subtitle": "See AI PBX in action - no commitment required"
     }
   }
 }

@@ -179,7 +179,7 @@ export const AssistantTemplates = memo(() => {
                         align="center"
                     />
                     <Text
-                        text={t('Опишите свой бизнес — мы создадим промпт')}
+                        text={t('Опишите свой бизнес - мы создадим промпт')}
                         className={cls.templateDesc}
                         align="center"
                         size="s"

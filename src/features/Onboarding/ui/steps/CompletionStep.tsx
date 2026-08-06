@@ -84,7 +84,7 @@ export const CompletionStep = memo(({ className }: CompletionStepProps) => {
                     <Text
                         text={telegramConnected
                             ? t('completion_check_telegram_yes', 'Telegram подключен') 
-                            : t('completion_check_telegram_no', 'Telegram — подключите позже в настройках') 
+                            : t('completion_check_telegram_no', 'Telegram - подключите позже в настройках') 
                         }
                         size="s"
                     />
@@ -111,7 +111,7 @@ export const CompletionStep = memo(({ className }: CompletionStepProps) => {
                         <Globe size={14} />
                     </HStack>
                     <Text
-                        text={t('completion_next_publish', 'Опубликуйте — добавьте виджет или подключите к телефонии') }
+                        text={t('completion_next_publish', 'Опубликуйте - добавьте виджет или подключите к телефонии') }
                         size="xs"
                     />
                 </HStack>
@@ -120,7 +120,7 @@ export const CompletionStep = memo(({ className }: CompletionStepProps) => {
                         <Settings size={14} />
                     </HStack>
                     <Text
-                        text={t('completion_next_customize', 'Настройте детали — голос, инструкции, интеграции') }
+                        text={t('completion_next_customize', 'Настройте детали - голос, инструкции, интеграции') }
                         size="xs"
                     />
                 </HStack>
@@ -129,7 +129,7 @@ export const CompletionStep = memo(({ className }: CompletionStepProps) => {
                         <BookOpen size={14} />
                     </HStack>
                     <Text
-                        text={t('completion_next_docs', 'Изучите документацию — подробные гайды и примеры') }
+                        text={t('completion_next_docs', 'Изучите документацию - подробные гайды и примеры') }
                         size="xs"
                     />
                 </HStack>

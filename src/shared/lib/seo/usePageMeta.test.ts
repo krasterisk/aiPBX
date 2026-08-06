@@ -55,7 +55,7 @@ describe('setPageMeta', () => {
     expect(JSON.parse(script.textContent || '')).toEqual(jsonLd)
   })
 
-  it('is idempotent — second call does not duplicate canonical or JSON-LD', () => {
+  it('is idempotent - second call does not duplicate canonical or JSON-LD', () => {
     const jsonLd = { '@type': 'WebPage', name: 'Speech Analytics' }
 
     setPageMeta({

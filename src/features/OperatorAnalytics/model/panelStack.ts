@@ -5,7 +5,7 @@ export type DistributionSegment = 'positive' | 'neutral' | 'negative' | 'success
 
 export type PanelEntry =
     | { kind: 'operator', operatorName: string }
-    | { kind: 'operatorMetric', operatorName: string, metricId: string, metricLabel?: string }
+    | { kind: 'operatorMetric', operatorName?: string, metricId: string, metricLabel?: string }
     | { kind: 'tag', stat: TagStat }
     | {
         kind: 'distribution'

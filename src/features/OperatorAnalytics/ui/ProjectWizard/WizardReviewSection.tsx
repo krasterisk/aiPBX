@@ -8,6 +8,8 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch
 import {
     MetricDefinition,
     DefaultMetricKey,
+    DigestConfig,
+    AlertConfig,
     WebhookEvent,
     projectWizardActions,
     getWizardCustomMetrics,
@@ -17,10 +19,19 @@ import {
     getWizardWebhookHeaders,
     getWizardWebhookEvents,
     getWizardShowWebhooks,
+    getWizardDigestConfig,
+    getWizardShowDigest,
+    getWizardAlertConfig,
+    getWizardEditProjectId,
+    DEFAULT_DIGEST_CONFIG,
+    DEFAULT_ALERT_CONFIG,
+    mergeAlertConfig,
 } from '@/entities/Report'
 import { WizardStep2_MetricBuilder } from './WizardStep2_MetricBuilder'
 import { WizardStep3_DefaultMetrics } from './WizardStep3_DefaultMetrics'
 import { WizardStep4_Webhook } from './WizardStep4_Webhook'
+import { WizardStep_DigestSettings } from './WizardStep_DigestSettings'
+import { WizardStep_AlertSettings } from './WizardStep_AlertSettings'
 import cls from './ProjectWizard.module.scss'
 
 export const WizardReviewSection = memo(() => {
@@ -34,13 +45,17 @@ export const WizardReviewSection = memo(() => {
     const webhookHeaders = useSelector(getWizardWebhookHeaders)
     const webhookEvents = useSelector(getWizardWebhookEvents)
     const showWebhooks = useSelector(getWizardShowWebhooks)
+    const digestConfig = useSelector(getWizardDigestConfig) ?? DEFAULT_DIGEST_CONFIG
+    const showDigest = useSelector(getWizardShowDigest)
+    const alertConfig = mergeAlertConfig(useSelector(getWizardAlertConfig) ?? DEFAULT_ALERT_CONFIG)
+    const editProjectId = useSelector(getWizardEditProjectId)
 
     const [showCustom, setShowCustom] = useState(false)
     const [showDefault, setShowDefault] = useState(false)
 
     return (
         <VStack gap={'16'} max>
-            {/* Custom Metrics — collapsible */}
+            {/* Custom Metrics - collapsible */}
             <Card variant={'glass'} border={'partial'} padding={'16'} max>
                 <VStack gap={'8'} max>
                     <HStack max justify={'between'} align={'center'}
@@ -60,7 +75,7 @@ export const WizardReviewSection = memo(() => {
                 </VStack>
             </Card>
 
-            {/* Default Metrics — collapsible */}
+            {/* Default Metrics - collapsible */}
             <Card variant={'glass'} border={'partial'} padding={'16'} max>
                 <VStack gap={'8'} max>
                     <HStack max justify={'between'} align={'center'}
@@ -78,7 +93,7 @@ export const WizardReviewSection = memo(() => {
                 </VStack>
             </Card>
 
-            {/* Webhooks — collapsible */}
+            {/* Webhooks - collapsible */}
             <Card variant={'glass'} border={'partial'} padding={'16'} max>
                 <VStack gap={'8'} max>
                     <HStack max justify={'between'} align={'center'}
@@ -96,6 +111,38 @@ export const WizardReviewSection = memo(() => {
                             onChangeHeaders={(v: Record<string, string>) => dispatch(projectWizardActions.setWebhookHeaders(v))}
                             onChangeEvents={(v: WebhookEvent[]) => dispatch(projectWizardActions.setWebhookEvents(v))}
                         />
+                    )}
+                </VStack>
+            </Card>
+
+            <Card variant={'glass'} border={'partial'} padding={'16'} max>
+                <VStack gap={'8'} max>
+                    <HStack max justify={'between'} align={'center'}
+                        onClick={() => dispatch(projectWizardActions.setShowDigest(!showDigest))}
+                        className={cls.clickable}>
+                        <Text text={String(t('NOTIFICATIONS_SECTION_TITLE'))} bold />
+                        <Text text={showDigest ? '▲' : '▼'} />
+                    </HStack>
+                    {showDigest && (
+                        <VStack gap={'16'} max>
+                            <VStack gap={'8'} max>
+                                <Text text={String(t('DIGEST_SECTION_TITLE'))} bold size="s" />
+                                <WizardStep_DigestSettings
+                                    projectId={editProjectId}
+                                    digestConfig={digestConfig}
+                                    onChange={(cfg: DigestConfig) => dispatch(projectWizardActions.setDigestConfig(cfg))}
+                                />
+                            </VStack>
+                            <VStack gap={'8'} max>
+                                <Text text={String(t('ALERT_SECTION_TITLE'))} bold size="s" />
+                                <WizardStep_AlertSettings
+                                    projectId={editProjectId}
+                                    alertConfig={alertConfig}
+                                    digestConfig={digestConfig}
+                                    onChange={(cfg: AlertConfig) => dispatch(projectWizardActions.setAlertConfig(cfg))}
+                                />
+                            </VStack>
+                        </VStack>
                     )}
                 </VStack>
             </Card>

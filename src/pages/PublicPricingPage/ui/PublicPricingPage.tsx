@@ -49,7 +49,7 @@ const PublicPricingPage: FC = memo(() => {
 
   usePageMeta({
     ready,
-    title: isRuDomain ? 'Тарифы AI PBX — голосовые боты и аналитика' : 'AI PBX Pricing',
+    title: isRuDomain ? 'Тарифы AI PBX - голосовые боты и аналитика' : 'AI PBX Pricing',
     description: isRuDomain
       ? 'Прозрачные тарифы на голосовых AI-ассистентов и речевую аналитику. Оплата в рублях, счета для юрлиц.'
       : 'Transparent pricing for voice AI assistants and speech analytics.',
@@ -78,7 +78,7 @@ const PublicPricingPage: FC = memo(() => {
   const symbol = CURRENCY_SYMBOLS[currency]
 
   const formatPrice = useCallback((value: number | undefined) => {
-    if (value === undefined) return '—'
+    if (value === undefined) return '-'
     // Show 2 decimal places for small values, none for large
     if (value < 1) return value.toFixed(3)
     if (value < 100) return value.toFixed(2)
@@ -162,7 +162,7 @@ const PublicPricingPage: FC = memo(() => {
               {t('Hero.SubTitle')}
             </Typography>
 
-            {/* Currency Selector — hidden for RU domain (only RUB) */}
+            {/* Currency Selector - hidden for RU domain (only RUB) */}
             {availableCurrencies.length > 1 && (
               <div className={cls.currencySelector}>
                 {availableCurrencies.map((cur) => (

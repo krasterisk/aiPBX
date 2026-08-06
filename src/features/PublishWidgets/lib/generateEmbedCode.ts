@@ -5,7 +5,7 @@ export function generateEmbedCode (
     widget: WidgetKey,
     settings: WidgetAppearanceSettings
 ): string {
-    // Embed code runs on external sites — needs absolute URL
+    // Embed code runs on external sites - needs absolute URL
     const apiUrl = `${getDomainOrigin()}${getApiBaseUrl()}`
 
     const attributes = [

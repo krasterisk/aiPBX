@@ -217,7 +217,7 @@ export const FunctionToolCard = memo((props: FunctionToolCardProps) => {
                     <ToolAddParam isEdit={isEdit} toolName={formFields?.name} className={cls.fullWidth} />
                 )}
 
-                {/* 5. Handler mode radio (if function) — replaces old webhook checkbox */}
+                {/* 5. Handler mode radio (if function) - replaces old webhook checkbox */}
                 {isFunction && (
                     <VStack gap="16" max>
                         <RadioGroup

@@ -12,7 +12,7 @@ interface AnalyticsWelcomeStepProps {
     className?: string
 }
 
-/** Wave 1 analytics entry — full flow in plan 02-03 */
+/** Wave 1 analytics entry - full flow in plan 02-03 */
 export const AnalyticsWelcomeStep = memo(({ className }: AnalyticsWelcomeStepProps) => {
     const { t } = useTranslation('onboarding')
     const dispatch = useAppDispatch()
@@ -34,7 +34,7 @@ export const AnalyticsWelcomeStep = memo(({ className }: AnalyticsWelcomeStepPro
             />
 
             <Text
-                text={t('analytics_welcome_desc', 'Создайте проект, загрузите запись звонка и получите AI-инсайты по операторам. Полный мастер настройки — в следующем шаге онбординга.')}
+                text={t('analytics_welcome_desc', 'Создайте проект, загрузите запись звонка и получите AI-инсайты по операторам. Полный мастер настройки - в следующем шаге онбординга.')}
                 align="center"
                 size="s"
             />

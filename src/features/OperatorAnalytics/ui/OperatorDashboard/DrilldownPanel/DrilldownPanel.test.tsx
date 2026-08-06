@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { DrilldownPanel } from './DrilldownPanel'
 import type { OperatorEvidenceResponse, TagStat } from '@/entities/Report'
@@ -104,7 +104,7 @@ describe('DrilldownPanel tag body', () => {
         expect(screen.getByTestId('tag-panel-body')).toBeInTheDocument()
     })
 
-    it('shows call count as the display headline', () => {
+    it('shows labeled call count as the display headline', () => {
         render(
             <DrilldownPanel
                 entry={{ kind: 'tag', stat: tagStat }}
@@ -114,7 +114,7 @@ describe('DrilldownPanel tag body', () => {
             />,
         )
 
-        expect(screen.getByTestId('tag-panel-headline')).toHaveTextContent('25')
+        expect(screen.getByTestId('tag-panel-headline')).toHaveTextContent('TOPICS_DRILLDOWN_CALLS_COUNT:25')
     })
 
     it('shows D-16 stat strip from the TagStat entry without recomputing', () => {
@@ -135,7 +135,7 @@ describe('DrilldownPanel tag body', () => {
         expect(strip).toHaveTextContent('62%')
     })
 
-    it('requests calls filtered by theme with dashboard filters', () => {
+    it('requests calls filtered by tagId with dashboard filters', () => {
         render(
             <DrilldownPanel
                 entry={{ kind: 'tag', stat: tagStat }}
@@ -147,7 +147,7 @@ describe('DrilldownPanel tag body', () => {
 
         expect(mockUseGetOperatorCdrs).toHaveBeenCalledWith(
             expect.objectContaining({
-                theme: 'tag-sales',
+                tagId: 'tag-sales',
                 startDate: '2026-07-01',
                 endDate: '2026-07-31',
                 projectId: 'proj-1',
@@ -169,6 +169,43 @@ describe('DrilldownPanel tag body', () => {
         )
 
         expect(screen.getByTestId('tag-panel-call-count')).toHaveTextContent('25')
+    })
+
+    it('renders informative call rows with operator instead of bare ids', () => {
+        mockUseGetOperatorCdrs.mockReturnValue({
+            data: {
+                data: [{
+                    id: '3',
+                    filename: '3',
+                    createdAt: '2026-08-05T10:00:00.000Z',
+                    operatorName: 'Иван',
+                    clientPhone: '79001234567',
+                    duration: 95,
+                    metrics: { greeting_quality: 80, script_compliance: 60 },
+                }],
+                total: 1,
+                page: 1,
+                limit: 20,
+            },
+            isLoading: false,
+            isFetching: false,
+            isError: false,
+            refetch: jest.fn(),
+        })
+
+        render(
+            <DrilldownPanel
+                entry={{ kind: 'tag', stat: { ...tagStat, callsCount: 1 } }}
+                filters={defaultFilters}
+                onSelectMetric={jest.fn()}
+                onOpenCall={jest.fn()}
+            />,
+        )
+
+        const row = screen.getByTestId('tag-call-row-3')
+        expect(row).toHaveTextContent('Иван')
+        expect(row).toHaveTextContent('79001234567')
+        expect(row).toHaveTextContent('Открыть')
     })
 
     it('requests the next page when pagination advances', async () => {
@@ -583,7 +620,8 @@ describe('DrilldownPanel stack navigation', () => {
             />,
         )
 
-        expect(screen.getByTestId('operator-metric-panel')).toBeInTheDocument()
-        expect(screen.getByText('70')).toBeInTheDocument()
+        const panel = screen.getByTestId('operator-metric-panel')
+        expect(panel).toBeInTheDocument()
+        expect(within(panel).getAllByText('70').length).toBeGreaterThanOrEqual(1)
     })
 })

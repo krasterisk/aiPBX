@@ -11,7 +11,7 @@ export interface CounterpartyLookupItem {
     legalForm: 'ul' | 'ip'
     /** Единственный ID участника ЭДО, который отдаёт СБИС (если знает контрагента в ЭДО). */
     sbisCounterpartyId: string | null
-    /** Подсказка по префиксу: 2BE — Saby, 2BM — Diadoc и т.д. */
+    /** Подсказка по префиксу: 2BE - Saby, 2BM - Diadoc и т.д. */
     edoOperatorLabel: string | null
     fromCache?: boolean
 }

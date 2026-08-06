@@ -119,7 +119,7 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
                     )
                 }
 
-                // Draft exists in SBIS (send may have failed) — prefer link / registered over raw error dump
+                // Draft exists in SBIS (send may have failed) - prefer link / registered over raw error dump
                 const isFailed = edoStatus === 'failed' || edoStatus === 'failed_permanent'
                 if (edoUrl && (!isFailed || doc.sbisId)) {
                     return (

@@ -173,12 +173,18 @@
     grid-template-columns: 1fr 1fr;
     gap: var(--space-3);
     width: 100%;
-    overflow: hidden;
+    // Outlined MUI labels sit on the top border and stick ~10px above the field.
+    // overflow:hidden was clipping them under the file list above.
+    overflow: visible;
+    padding-top: var(--space-2);
 
     >* {
         min-width: 0;
         width: 100%;
         box-sizing: border-box;
+        // Keep floating labels above the file list when they overlap the gap.
+        position: relative;
+        z-index: 1;
     }
 
     @include tablet {

@@ -1,5 +1,5 @@
 /**
- * Pure event processor — converts PlaygroundEvents into TranscriptItems and SessionMetrics.
+ * Pure event processor - converts PlaygroundEvents into TranscriptItems and SessionMetrics.
  *
  * This is the core data transformation logic, extracted from PlaygroundCall's
  * inline useMemo for testability and reuse (live mode + replay mode).
@@ -30,7 +30,7 @@ export function createInitialProcessorState(): ProcessorState {
 
 /**
  * Process a single event and return updated state.
- * Pure function — no side effects.
+ * Pure function - no side effects.
  */
 export function processEvent(state: ProcessorState, event: PlaygroundEvent): ProcessorState {
     // Clone top-level to avoid mutation (transcript items are mutated in-place for perf)

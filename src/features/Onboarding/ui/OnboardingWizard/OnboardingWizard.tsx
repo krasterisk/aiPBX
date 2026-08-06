@@ -45,7 +45,8 @@ const analyticsStepsMap: Record<number, React.FC<{ className?: string }>> = {
     1: OnboardingAnalyticsFlow,
     2: OnboardingAnalyticsFlow,
     3: OnboardingAnalyticsFlow,
-    4: OnboardingAnalyticsFlow
+    4: OnboardingAnalyticsFlow,
+    5: OnboardingAnalyticsFlow,
 }
 
 function resolveStepComponent (

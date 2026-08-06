@@ -16,7 +16,7 @@ interface TimeSeriesChartsProps {
 }
 
 /**
- * Chart color palette — resolved hex values matching CSS vars from design-system.scss
+ * Chart color palette - resolved hex values matching CSS vars from design-system.scss
  * MUI X Charts require resolved hex in series[].color (CSS vars not supported)
  *
  * --chart-primary   = --accent-redesigned  = #5ed3f3

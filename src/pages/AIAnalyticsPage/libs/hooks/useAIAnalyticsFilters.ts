@@ -24,7 +24,7 @@ export function useAIAnalyticsFilters() {
     const startDate = useSelector(getDashboardStartDate)
     const endDate = useSelector(getDashboardEndDate)
 
-    // Специфичные фильтры — из своего slice
+    // Специфичные фильтры - из своего slice
     const clientId = useSelector(getAIAnalyticsUserId)
     const isInited = useSelector(getAIAnalyticsInited)
     const assistantId = useSelector(getAIAnalyticsAssistantId)

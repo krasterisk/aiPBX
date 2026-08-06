@@ -18,7 +18,7 @@ import { OnboardingWizard } from '@/features/Onboarding'
 
 const App = (): any => {
   const userData = useSelector(getUserAuthData)
-  // Skip /users/me when anonymous — otherwise prerender (and cold public loads)
+  // Skip /users/me when anonymous - otherwise prerender (and cold public loads)
   // hang on an absolute API URL that may be unreachable from the build container.
   const hasToken = !!localStorage.getItem(TOKEN_LOCALSTORAGE_KEY)
   const { isLoading } = useGetMe(null, { skip: !hasToken })

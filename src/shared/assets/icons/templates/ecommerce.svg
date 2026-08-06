@@ -1,0 +1,7 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="10" width="24" height="20" rx="3" stroke="url(#ecom)" stroke-width="2.5" fill="none"/>
+  <path d="M14 10V9a6 6 0 0 1 12 0v1" stroke="url(#ecom)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <circle cx="16" cy="22" r="1.5" fill="#5ED3F3"/>
+  <circle cx="24" cy="22" r="1.5" fill="#5ED3F3"/>
+  <defs><linearGradient id="ecom" x1="8" y1="8" x2="32" y2="30"><stop stop-color="#5ED3F3"/><stop offset="1" stop-color="#3BA3C7"/></linearGradient></defs>
+</svg>

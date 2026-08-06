@@ -54,7 +54,7 @@ export const McpToolsCard = memo((props: McpToolsCardProps) => {
                     </Tooltip>
                 </HStack>
 
-                {/* Tools list — names only */}
+                {/* Tools list - names only */}
                 <McpToolsList
                     serverId={serverId}
                     selectedToolId={selectedTool?.id}

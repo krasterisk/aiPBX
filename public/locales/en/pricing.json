@@ -14,7 +14,7 @@
       "Desc": "Real-time voice AI assistant. Handles inbound and outbound calls with natural human-like dialogue.",
       "Unit": "1M tokens",
       "UnitFull": "per 1,000,000 tokens",
-      "TableDesc": "Voice dialogue processing cost: speech recognition, LLM response generation, and voice synthesis — all included in one token-based price.",
+      "TableDesc": "Voice dialogue processing cost: speech recognition, LLM response generation, and voice synthesis - all included in one token-based price.",
       "Features": [
         "Inbound and outbound call handling",
         "Natural voice dialogue powered by LLM",
@@ -83,11 +83,11 @@
     },
     "Q2": {
       "Question": "What's the difference between Realtime AI and Text AI?",
-      "Answer": "Realtime AI handles voice calls — including speech recognition (STT), LLM response generation, and text-to-speech synthesis (TTS). Text AI works with text in chats and widgets only, which is why it's more affordable."
+      "Answer": "Realtime AI handles voice calls - including speech recognition (STT), LLM response generation, and text-to-speech synthesis (TTS). Text AI works with text in chats and widgets only, which is why it's more affordable."
     },
     "Q3": {
       "Question": "How is Speech Analytics billed?",
-      "Answer": "First, the recording is transcribed (billed under STT — per minute). Then the resulting transcription is analyzed via LLM (billed under Analytics — per token). These are two independent steps with different pricing."
+      "Answer": "First, the recording is transcribed (billed under STT - per minute). Then the resulting transcription is analyzed via LLM (billed under Analytics - per token). These are two independent steps with different pricing."
     },
     "Q4": {
       "Question": "Is there a minimum payment or subscription?",

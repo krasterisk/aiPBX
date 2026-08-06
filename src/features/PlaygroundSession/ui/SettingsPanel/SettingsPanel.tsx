@@ -159,7 +159,7 @@ export const SettingsPanel = memo((props: SettingsPanelProps) => {
     return (
         <div className={classNames(cls.SettingsPanel, {}, [className])}>
             <div className={cls.scrollArea}>
-                {/* ▸ Prompt — collapsed when session active */}
+                {/* ▸ Prompt - collapsed when session active */}
                 <Section
                     title={t('Промпт')}
                     icon={MessageSquareText}

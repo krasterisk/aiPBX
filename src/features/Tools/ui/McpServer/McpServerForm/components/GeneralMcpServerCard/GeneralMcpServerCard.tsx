@@ -215,7 +215,7 @@ export const GeneralMcpServerCard = memo((props: GeneralMcpServerCardProps) => {
                     />
                 </VStack>
 
-                {/* 6. Credentials — Bearer */}
+                {/* 6. Credentials - Bearer */}
                 {authType === 'bearer' && (
                     <VStack gap="8" max className={cls.credentialsContainer}>
                         <HStack gap="4" align="center">
@@ -241,7 +241,7 @@ export const GeneralMcpServerCard = memo((props: GeneralMcpServerCardProps) => {
                     </VStack>
                 )}
 
-                {/* 7. Credentials — API Key */}
+                {/* 7. Credentials - API Key */}
                 {authType === 'apikey' && (
                     <VStack gap="8" max className={cls.credentialsContainer}>
                         <HStack gap="4" align="center">
@@ -267,7 +267,7 @@ export const GeneralMcpServerCard = memo((props: GeneralMcpServerCardProps) => {
                     </VStack>
                 )}
 
-                {/* 8. Credentials — Custom Headers */}
+                {/* 8. Credentials - Custom Headers */}
                 {authType === 'custom_headers' && (
                     <VStack gap="8" max className={cls.credentialsContainer}>
                         <HStack gap="4" align="center">

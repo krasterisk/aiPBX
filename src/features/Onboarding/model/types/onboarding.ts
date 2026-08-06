@@ -37,7 +37,7 @@ export const TOTAL_STEPS = 5
 
 export const FORK_STEP = 0
 export const ASSISTANTS_MAX_STEP = 5
-export const ANALYTICS_MAX_STEP = 4
+export const ANALYTICS_MAX_STEP = 5
 
 export function getMaxStepForPath (productPath: OnboardingProductPath | null): number {
   if (productPath === 'analytics') return ANALYTICS_MAX_STEP

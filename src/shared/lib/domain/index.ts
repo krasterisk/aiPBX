@@ -9,4 +9,7 @@ export {
     getTenantCurrencyCode,
 } from './getDomainConfig'
 
+export { getAipbxTelegramBot } from './getAipbxTelegramBot'
+export type { AipbxTelegramBot } from './getAipbxTelegramBot'
+
 export type { DomainConfig, PaymentSystem, TenantCurrencyCode } from './getDomainConfig'

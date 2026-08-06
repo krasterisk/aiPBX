@@ -99,29 +99,10 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
     const renderAnalyticsContent = () => {
         if (report.analytics) {
             return (
-                <VStack gap="16" max>
-                    {isAdmin && onRegenerateAnalytics && (
-                        <HStack justify="end" max>
-                            <Button
-                                variant="glass-action"
-                                size="m"
-                                onClick={onRegenerateAnalytics}
-                                disabled={isAnalyticsLoading}
-                                id="regenerate-analytics-button"
-                                addonLeft={isAnalyticsLoading
-                                    ? <Loader className={cls.btnLoader} />
-                                    : <RefreshCw size={16} />
-                                }
-                            >
-                                {String(t('Переформировать аналитику'))}
-                            </Button>
-                        </HStack>
-                    )}
-                    <ReportShowAnalytics
-                        analytics={report.analytics}
-                        channelId={isOperatorAnalyticsSource(report.source) ? report.channelId : undefined}
-                    />
-                </VStack>
+                <ReportShowAnalytics
+                    analytics={report.analytics}
+                    channelId={isOperatorAnalyticsSource(report.source) ? report.channelId : undefined}
+                />
             )
         }
 
@@ -166,7 +147,22 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
             className={classNames(cls.ReportExpandedPanel, {}, [className])}
         >
             {isAdmin && (
-                <HStack justify="end" max className={cls.actionsBar}>
+                <HStack justify="end" max gap="8" className={cls.actionsBar}>
+                    {onRegenerateAnalytics && (
+                        <Button
+                            variant="glass-action"
+                            size="m"
+                            onClick={onRegenerateAnalytics}
+                            disabled={isAnalyticsLoading}
+                            id="regenerate-analytics-button"
+                            addonLeft={isAnalyticsLoading
+                                ? <Loader className={cls.btnLoader} />
+                                : <RefreshCw size={16} />
+                            }
+                        >
+                            {String(t('Переформировать аналитику'))}
+                        </Button>
+                    )}
                     <Button
                         variant="glass-action"
                         color="error"

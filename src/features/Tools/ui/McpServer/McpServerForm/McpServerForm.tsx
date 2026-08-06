@@ -265,7 +265,7 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
                 wrap="wrap"
                 className={cls.contentWrapper}
             >
-                {/* Left Column — General + Auth */}
+                {/* Left Column - General + Auth */}
                 <VStack gap="24" max className={cls.leftColumn}>
                     <GeneralMcpServerCard
                         name={name}
@@ -290,7 +290,7 @@ export const McpServerForm = memo((props: McpServerFormProps) => {
                     />
                 </VStack>
 
-                {/* Right Column — Connection (always) + Tools (edit mode only) */}
+                {/* Right Column - Connection (always) + Tools (edit mode only) */}
                 <VStack gap="24" max className={cls.rightColumn}>
                     <ConnectionMcpServerCard
                         server={isEdit ? server : undefined}

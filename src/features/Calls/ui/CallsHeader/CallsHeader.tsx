@@ -12,6 +12,7 @@ import { CdrSource, type CsatFilterValue, type UseBatchProgressReturn } from '@/
 import { AssistantOptions } from '@/entities/Assistants'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
+import { X } from 'lucide-react'
 import { BatchProgressBar } from '../BatchProgressBar/BatchProgressBar'
 import cls from './CallsHeader.module.scss'
 
@@ -38,6 +39,9 @@ interface CallsHeaderProps {
     totalCount?: number
     csatFilter?: string[]
     onToggleCsatFilter?: (value: CsatFilterValue) => void
+    tagId?: string
+    tagLabel?: string
+    onClearTagFilter?: () => void
 }
 
 export const CallsHeader = memo((props: CallsHeaderProps) => {
@@ -48,10 +52,12 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
         onChangeAssistant, onChangeUserId, clientId, assistants,
         batchProgress, exporting, totalCount,
         csatFilter, onToggleCsatFilter,
+        tagId, tagLabel, onClearTagFilter,
     } = props
 
     const { t } = useTranslation('reports')
     const [filterShow, setFilterShow] = useState(false)
+    const activeTagLabel = tagLabel || tagId
 
     return (
         <VStack gap="16" max>
@@ -90,13 +96,32 @@ export const CallsHeader = memo((props: CallsHeaderProps) => {
 
             <div className={cls.toolbarRow}>
                 <div className={cls.toolbarLeft}>
-                    {totalCount != null && (
-                        <Text
-                            text={`${String(t('Всего'))}: ${totalCount}`}
-                            size="s"
-                            bold
-                        />
-                    )}
+                    <HStack gap="8" wrap="wrap" align="center">
+                        {totalCount != null && (
+                            <Text
+                                text={`${String(t('Всего'))}: ${totalCount}`}
+                                size="s"
+                                bold
+                            />
+                        )}
+                        {tagId && onClearTagFilter && (
+                            <button
+                                type="button"
+                                className={cls.tagFilterChip}
+                                onClick={onClearTagFilter}
+                                data-testid="calls-tag-filter-clear"
+                                title={String(t('Сбросить фильтр по теме'))}
+                            >
+                                <span>
+                                    {String(t('Тема'))}
+                                    :
+                                    {' '}
+                                    {activeTagLabel}
+                                </span>
+                                <X size={14} aria-hidden />
+                            </button>
+                        )}
+                    </HStack>
                 </div>
 
                 {onToggleCsatFilter && (

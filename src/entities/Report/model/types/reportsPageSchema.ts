@@ -22,7 +22,11 @@ export interface ReportsPageSchema {
   // sorting
   sortField?: string
   sortOrder?: 'ASC' | 'DESC'
-  /** Bumped when filters/sort reset pagination — invalidates in-flight infinite-scroll merges */
+  /** Bumped when filters/sort reset pagination - invalidates in-flight infinite-scroll merges */
   listGeneration?: number
   csatFilter?: string[]
+  /** Filter journal by operator_call_tags.tagId */
+  tagId?: string
+  /** Display label for the active theme filter chip */
+  tagLabel?: string
 }

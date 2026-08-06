@@ -65,7 +65,7 @@
                 "ul": "Legal entity",
                 "ip": "Individual entrepreneur"
             },
-            "innHint": "Enter 10 digits for a legal entity or 12 for sole proprietor — details load automatically.",
+            "innHint": "Enter 10 digits for a legal entity or 12 for sole proprietor - details load automatically.",
             "innHintIncomplete": "{{count}} more digit(s)…",
             "kppHint": "KPP is required for legal entities when multiple branches match or lookup fails.",
             "kppRequired": "Enter KPP (9 digits) for legal entities.",
@@ -73,7 +73,7 @@
             "lookupSuccess": "Loaded by TIN",
             "lookupFailed": "Organization not found by TIN",
             "lookupRequiresKpp": "TIN alone is not enough. Enter KPP below.",
-            "chooseBranch": "Multiple organizations match this TIN — select one:"
+            "chooseBranch": "Multiple organizations match this TIN - select one:"
         }
     },
     "helpdesk": {
@@ -131,7 +131,7 @@
             "findClient": "Find client",
             "pickCandidate": "Select organization from the list",
             "clientLinked": "Client linked",
-            "clientNotFound": "Client not found — you can still create the ticket",
+            "clientNotFound": "Client not found - you can still create the ticket",
             "cancel": "Cancel",
             "submit": "Create"
         },
@@ -150,7 +150,7 @@
             "contextTab": "LLM context",
             "placeholder": "Bot context override…",
             "empty": "Context is empty",
-            "noClient": "No client linked — context unavailable"
+            "noClient": "No client linked - context unavailable"
         },
         "adminLink": "Open Helpdesk"
     }

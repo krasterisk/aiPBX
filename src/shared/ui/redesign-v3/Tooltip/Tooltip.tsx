@@ -16,7 +16,12 @@ interface TooltipProps {
 interface Position {
     top: number
     left: number
+    placement: TooltipPlacement
 }
+
+const VIEWPORT_PAD = 12
+const OFFSET = 10
+const MAX_TOOLTIP_WIDTH = 280
 
 export const Tooltip = memo((props: TooltipProps) => {
     const {
@@ -24,18 +29,17 @@ export const Tooltip = memo((props: TooltipProps) => {
         title,
         placement = 'top',
         className,
-        disabled = false
+        disabled = false,
     } = props
 
     const [isVisible, setIsVisible] = useState(false)
     const [isMobile, setIsMobile] = useState(false)
-    const [position, setPosition] = useState<Position>({ top: 0, left: 0 })
-    const timeoutRef = useRef<NodeJS.Timeout>()
+    const [position, setPosition] = useState<Position>({ top: 0, left: 0, placement: 'top' })
+    const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
     const wrapperRef = useRef<HTMLDivElement>(null)
     const tooltipRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        // Определяем мобильное устройство
         const checkMobile = () => {
             setIsMobile('ontouchstart' in window || navigator.maxTouchPoints > 0)
         }
@@ -45,7 +49,6 @@ export const Tooltip = memo((props: TooltipProps) => {
     }, [])
 
     useEffect(() => {
-        // Закрытие при клике вне элемента (для мобильных)
         if (!isMobile || !isVisible) return
 
         const handleClickOutside = (event: MouseEvent | TouchEvent) => {
@@ -68,54 +71,83 @@ export const Tooltip = memo((props: TooltipProps) => {
         }
     }, [isMobile, isVisible])
 
-    // Вычисляем позицию tooltip
+    const resolvePlacement = useCallback((): TooltipPlacement => {
+        if (isMobile && (placement === 'left' || placement === 'right')) {
+            return 'top'
+        }
+        return placement
+    }, [isMobile, placement])
+
     const calculatePosition = useCallback((): Position => {
-        if (!wrapperRef.current) return { top: 0, left: 0 }
+        if (!wrapperRef.current) {
+            return { top: 0, left: 0, placement: resolvePlacement() }
+        }
 
-        const rect = wrapperRef.current.getBoundingClientRect()
-        const scrollY = window.pageYOffset || document.documentElement.scrollTop
-        const scrollX = window.pageXOffset || document.documentElement.scrollLeft
+        const trigger = wrapperRef.current.getBoundingClientRect()
+        const tip = tooltipRef.current?.getBoundingClientRect()
+        const tipWidth = tip?.width || Math.min(MAX_TOOLTIP_WIDTH, window.innerWidth - VIEWPORT_PAD * 2)
+        const tipHeight = tip?.height || 48
 
-        const offset = 12 // Отступ от элемента
+        let nextPlacement = resolvePlacement()
+
+        const space = {
+            top: trigger.top,
+            bottom: window.innerHeight - trigger.bottom,
+            left: trigger.left,
+            right: window.innerWidth - trigger.right,
+        }
+
+        // Flip when preferred side does not fit.
+        if (nextPlacement === 'top' && space.top < tipHeight + OFFSET && space.bottom > space.top) {
+            nextPlacement = 'bottom'
+        } else if (nextPlacement === 'bottom' && space.bottom < tipHeight + OFFSET && space.top > space.bottom) {
+            nextPlacement = 'top'
+        } else if (nextPlacement === 'left' && space.left < tipWidth + OFFSET && space.right > space.left) {
+            nextPlacement = 'right'
+        } else if (nextPlacement === 'right' && space.right < tipWidth + OFFSET && space.left > space.right) {
+            nextPlacement = 'left'
+        }
+
         let top = 0
         let left = 0
 
-        // Определяем позицию в зависимости от placement
-        // На мобильных left/right заменяем на top
-        const actualPlacement = isMobile && (placement === 'left' || placement === 'right')
-            ? 'top'
-            : placement
-
-        switch (actualPlacement) {
+        switch (nextPlacement) {
             case 'top':
-                top = rect.top + scrollY - offset
-                left = rect.left + scrollX + rect.width / 2
+                top = trigger.top - tipHeight - OFFSET
+                left = trigger.left + trigger.width / 2 - tipWidth / 2
                 break
             case 'bottom':
-                top = rect.bottom + scrollY + offset
-                left = rect.left + scrollX + rect.width / 2
+                top = trigger.bottom + OFFSET
+                left = trigger.left + trigger.width / 2 - tipWidth / 2
                 break
             case 'left':
-                top = rect.top + scrollY + rect.height / 2
-                left = rect.left + scrollX - offset
+                top = trigger.top + trigger.height / 2 - tipHeight / 2
+                left = trigger.left - tipWidth - OFFSET
                 break
             case 'right':
-                top = rect.top + scrollY + rect.height / 2
-                left = rect.right + scrollX + offset
+                top = trigger.top + trigger.height / 2 - tipHeight / 2
+                left = trigger.right + OFFSET
                 break
         }
 
-        return { top, left }
-    }, [isMobile, placement])
+        const maxLeft = window.innerWidth - tipWidth - VIEWPORT_PAD
+        const maxTop = window.innerHeight - tipHeight - VIEWPORT_PAD
+        left = Math.min(Math.max(VIEWPORT_PAD, left), Math.max(VIEWPORT_PAD, maxLeft))
+        top = Math.min(Math.max(VIEWPORT_PAD, top), Math.max(VIEWPORT_PAD, maxTop))
+
+        return { top, left, placement: nextPlacement }
+    }, [resolvePlacement])
 
     useEffect(() => {
-        if (isVisible) {
+        if (!isVisible) return
+        // First paint may use estimated size; remeasure after portal mounts.
+        const frame = requestAnimationFrame(() => {
             setPosition(calculatePosition())
-        }
-    }, [isVisible, placement, isMobile, calculatePosition])
+        })
+        return () => { cancelAnimationFrame(frame) }
+    }, [isVisible, calculatePosition, title])
 
     useEffect(() => {
-        // Обновляем позицию при скролле
         if (!isVisible) return
 
         const updatePosition = () => {
@@ -129,7 +161,7 @@ export const Tooltip = memo((props: TooltipProps) => {
             window.removeEventListener('scroll', updatePosition, true)
             window.removeEventListener('resize', updatePosition)
         }
-    }, [isVisible, placement, isMobile, calculatePosition])
+    }, [isVisible, calculatePosition])
 
     const showTooltip = () => {
         if (disabled) return
@@ -138,7 +170,7 @@ export const Tooltip = memo((props: TooltipProps) => {
         }
         timeoutRef.current = setTimeout(() => {
             setIsVisible(true)
-        }, isMobile ? 0 : 300)
+        }, isMobile ? 0 : 200)
     }
 
     const hideTooltip = () => {
@@ -154,7 +186,7 @@ export const Tooltip = memo((props: TooltipProps) => {
         if (!isMobile) return
         e.preventDefault()
         e.stopPropagation()
-        setIsVisible(!isVisible)
+        setIsVisible(prev => !prev)
     }
 
     useEffect(() => {
@@ -167,25 +199,22 @@ export const Tooltip = memo((props: TooltipProps) => {
 
     if (!title) return <>{children}</>
 
-    const actualPlacement = isMobile && (placement === 'left' || placement === 'right')
-        ? 'top'
-        : placement
-
     const tooltipContent = isVisible && createPortal(
         <div
             ref={tooltipRef}
-            className={classNames(cls.tooltipPortal, {}, [cls[actualPlacement]])}
+            className={classNames(cls.tooltipPortal, {}, [cls[position.placement]])}
             style={{
                 top: `${position.top}px`,
-                left: `${position.left}px`
+                left: `${position.left}px`,
             }}
+            role="tooltip"
         >
             <div className={cls.tooltipInner}>
                 {title}
             </div>
             <div className={cls.tooltipArrow} />
         </div>,
-        document.body
+        document.body,
     )
 
     return (

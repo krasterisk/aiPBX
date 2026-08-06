@@ -19,6 +19,7 @@ interface UseCallsExportParams {
     sortField?: string
     sortOrder?: 'ASC' | 'DESC'
     csatFilter?: string[]
+    tagId?: string
 }
 
 /**
@@ -34,6 +35,7 @@ async function fetchAllReportsDirect(params: {
     sortField?: string
     sortOrder?: 'ASC' | 'DESC'
     csat?: string
+    tagId?: string
 }): Promise<AllReports> {
     const query = new URLSearchParams()
     query.set('page', '1')
@@ -47,6 +49,7 @@ async function fetchAllReportsDirect(params: {
     if (params.sortOrder) query.set('sortOrder', params.sortOrder)
     if (params.source) query.set('source', params.source)
     if (params.csat) query.set('csat', params.csat)
+    if (params.tagId) query.set('tagId', params.tagId)
 
     const token = localStorage.getItem(TOKEN_LOCALSTORAGE_KEY)
     const res = await fetch(`${__API__}/reports/page?${query.toString()}`, {
@@ -58,7 +61,7 @@ async function fetchAllReportsDirect(params: {
 }
 
 export const useCallsExport = (params: UseCallsExportParams) => {
-    const { data, startDate, endDate, search, source, sortField, sortOrder, csatFilter } = params
+    const { data, startDate, endDate, search, source, sortField, sortOrder, csatFilter, tagId } = params
     const { t } = useTranslation('reports')
     const [exporting, setExporting] = useState(false)
 
@@ -76,6 +79,7 @@ export const useCallsExport = (params: UseCallsExportParams) => {
                 sortField,
                 sortOrder,
                 csat: serializeCsatFilter(csatFilter),
+                tagId: tagId || undefined,
             })
 
             if (!allData?.rows?.length) return
@@ -95,7 +99,7 @@ export const useCallsExport = (params: UseCallsExportParams) => {
         } finally {
             setExporting(false)
         }
-    }, [data?.count, startDate, endDate, search, source, sortField, sortOrder, csatFilter, t])
+    }, [data?.count, startDate, endDate, search, source, sortField, sortOrder, csatFilter, tagId, t])
 
     return { exportToExcel, exporting }
 }

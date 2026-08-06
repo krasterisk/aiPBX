@@ -75,7 +75,7 @@ export const PaymentList = memo((props: PaymentListProps) => {
             cell: (info: any) => {
                 const row = info.row.original as { amount?: number, currency?: string }
                 const amount = Number(row.amount)
-                if (!Number.isFinite(amount)) return '—'
+                if (!Number.isFinite(amount)) return '-'
                 return formatCurrency(amount, (row.currency || 'USD').toUpperCase(), 2)
             },
         },
@@ -102,7 +102,7 @@ export const PaymentList = memo((props: PaymentListProps) => {
                 const url = row.receiptUrl
                 const description = row.description?.trim()
                 const rate = formatPaymentFxRate(row)
-                const hasRate = rate !== '—'
+                const hasRate = rate !== '-'
 
                 return (
                     <div className={cls.detailsCell}>
@@ -112,7 +112,7 @@ export const PaymentList = memo((props: PaymentListProps) => {
                                     {t('Чек')}
                                 </a>
                             )
-                            : (description || (!hasRate ? '—' : null))}
+                            : (description || (!hasRate ? '-' : null))}
                         {hasRate && (
                             <span className={cls.detailsRate}>{rate}</span>
                         )}

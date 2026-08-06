@@ -97,9 +97,14 @@ describe('OperatorPanelBody', () => {
         )
 
         expect(mockUseGetOperatorEvidence).toHaveBeenCalledWith(
-            expect.objectContaining({ operatorName: '' }),
+            expect.objectContaining({
+                startDate: '2026-07-01',
+                endDate: '2026-07-31',
+                projectId: 'proj-1',
+            }),
             expect.objectContaining({ skip: true }),
         )
+        expect(mockUseGetOperatorEvidence.mock.calls[0][0]).not.toHaveProperty('operatorName')
     })
 
     it('lists one row per returned metric with label and average', () => {

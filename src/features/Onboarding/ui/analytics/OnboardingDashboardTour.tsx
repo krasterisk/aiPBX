@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createPortal } from 'react-dom'
 import { Button } from '@/shared/ui/redesign-v3/Button'
@@ -6,96 +6,109 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { onboardingActions } from '../../model/slices/onboardingSlice'
+import {
+    DASHBOARD_TOUR_STEPS,
+    placeTourCard,
+    resolveVisibleTourSteps,
+    spotlightFromElement,
+    type DashboardTourStepDef,
+    type ViewportBox,
+} from '../../lib/dashboardTourSteps'
 
 import cls from './OnboardingDashboardTour.module.scss'
 
-const TOUR_TARGETS = [
-    'oa-insights',
-    'oa-scorecard',
-    'oa-upload-entry'
-] as const
-
-interface SpotlightRect {
-    top: number
-    left: number
-    width: number
-    height: number
-}
-
 interface OnboardingDashboardTourProps {
     active: boolean
+    /** Wait until the dashboard finished loading so tour anchors exist. */
+    ready?: boolean
     onFinished?: () => void
 }
 
-export const OnboardingDashboardTour = memo(({ active, onFinished }: OnboardingDashboardTourProps) => {
+function queryTourTarget(id: string): Element | null {
+    return document.querySelector(`[data-tour-id="${id}"]`)
+}
+
+export const OnboardingDashboardTour = memo(({
+    active,
+    ready = true,
+    onFinished,
+}: OnboardingDashboardTourProps) => {
     const { t } = useTranslation('onboarding')
     const dispatch = useAppDispatch()
     const [stepIndex, setStepIndex] = useState(0)
-    const [rect, setRect] = useState<SpotlightRect | null>(null)
+    const [rect, setRect] = useState<ViewportBox | null>(null)
+    const [visibleSteps, setVisibleSteps] = useState<DashboardTourStepDef[]>([])
 
-    const stepKeys = [
-        {
-            title: 'analytics_tour_insights_title',
-            titleFallback: 'AI-инсайты',
-            desc: 'analytics_tour_insights_desc',
-            descFallback: 'Здесь появляются выводы по звонкам: тренды, проблемы и рекомендации для руководителя.'
-        },
-        {
-            title: 'analytics_tour_scorecard_title',
-            titleFallback: 'Рейтинг операторов',
-            desc: 'analytics_tour_scorecard_desc',
-            descFallback: 'Таблица оценок по каждому оператору — основа отчётов для супервайзера.'
-        },
-        {
-            title: 'analytics_tour_upload_title',
-            titleFallback: 'Проекты и загрузка',
-            desc: 'analytics_tour_upload_desc',
-            descFallback: 'Переключайте проекты и загружайте новые записи — отсюда же доступ к API.'
+    const refreshVisibleSteps = useCallback(() => {
+        const next = resolveVisibleTourSteps(
+            DASHBOARD_TOUR_STEPS,
+            id => Boolean(queryTourTarget(id)),
+        )
+        setVisibleSteps(next)
+        setStepIndex(i => Math.min(i, Math.max(0, next.length - 1)))
+        return next
+    }, [])
+
+    const currentStep = visibleSteps[stepIndex] ?? null
+    const isLast = visibleSteps.length > 0 && stepIndex >= visibleSteps.length - 1
+
+    const measureTarget = useCallback(async (step?: DashboardTourStepDef | null) => {
+        const target = step ?? currentStep
+        if (!target) {
+            setRect(null)
+            return
         }
-    ] as const
 
-    const currentTarget = TOUR_TARGETS[stepIndex]
-    const currentStep = stepKeys[stepIndex]
-    const isLast = stepIndex >= stepKeys.length - 1
-
-    const measureTarget = useCallback(() => {
-        let el = document.querySelector(`[data-tour-id="${currentTarget}"]`)
-        if (!el && currentTarget === 'oa-insights') {
-            el = document.querySelector('[data-tour-id="oa-stats"]')
-        }
+        const el = queryTourTarget(target.id)
         if (!el) {
             setRect(null)
             return
         }
-        const box = el.getBoundingClientRect()
-        const padding = 8
-        setRect({
-            top: box.top - padding + window.scrollY,
-            left: box.left - padding + window.scrollX,
-            width: box.width + padding * 2,
-            height: box.height + padding * 2
-        })
-    }, [currentTarget])
 
-    useLayoutEffect(() => {
-        if (!active) return
-        measureTarget()
-        const onResize = () => { measureTarget() }
-        window.addEventListener('resize', onResize)
-        window.addEventListener('scroll', onResize, true)
-        const timer = window.setTimeout(measureTarget, 300)
-        return () => {
-            window.removeEventListener('resize', onResize)
-            window.removeEventListener('scroll', onResize, true)
-            window.clearTimeout(timer)
+        el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
+        await new Promise<void>(resolve => {
+            window.setTimeout(resolve, 350)
+        })
+
+        const stillThere = queryTourTarget(target.id)
+        if (!stillThere) {
+            setRect(null)
+            return
         }
-    }, [active, measureTarget, stepIndex])
+        setRect(spotlightFromElement(stillThere))
+    }, [currentStep])
 
     useEffect(() => {
-        if (active) {
-            setStepIndex(0)
+        if (!active || !ready) return
+        setStepIndex(0)
+        refreshVisibleSteps()
+    }, [active, ready, refreshVisibleSteps])
+
+    useLayoutEffect(() => {
+        if (!active || !ready || !currentStep) return
+
+        let cancelled = false
+        const run = async () => {
+            await measureTarget(currentStep)
+            if (cancelled) {
+                setRect(null)
+            }
         }
-    }, [active])
+        void run()
+
+        const onResize = () => {
+            const el = queryTourTarget(currentStep.id)
+            if (el) setRect(spotlightFromElement(el))
+        }
+        window.addEventListener('resize', onResize)
+        window.addEventListener('scroll', onResize, true)
+
+        return () => {
+            cancelled = true
+            window.removeEventListener('resize', onResize)
+            window.removeEventListener('scroll', onResize, true)
+        }
+    }, [active, ready, currentStep, measureTarget, stepIndex])
 
     const onSkip = useCallback(() => {
         dispatch(onboardingActions.skipOnboarding())
@@ -108,13 +121,41 @@ export const OnboardingDashboardTour = memo(({ active, onFinished }: OnboardingD
             onFinished?.()
             return
         }
-        setStepIndex((i) => i + 1)
+        setStepIndex(i => i + 1)
     }, [dispatch, isLast, onFinished])
+
+    const cardPos = useMemo(() => {
+        if (!rect) {
+            return { top: 96, left: 24 }
+        }
+        return placeTourCard(rect, {
+            width: window.innerWidth,
+            height: window.innerHeight,
+        })
+    }, [rect])
 
     if (!active) return null
 
-    const cardTop = rect ? Math.min(rect.top + rect.height + 16, window.innerHeight - 220) : 120
-    const cardLeft = rect ? Math.min(rect.left, window.innerWidth - 380) : 24
+    if (!ready) {
+        return createPortal(
+            <div className={cls.tourOverlay} data-testid="onboarding-dashboard-tour">
+                <div className={cls.tourBackdrop} />
+                <VStack gap="12" className={cls.tourCard} style={{ top: 96, left: 24 }}>
+                    <Text
+                        title={t('analytics_tour_loading_title', 'Загружаем дашборд...')}
+                        text={t(
+                            'analytics_tour_loading_desc',
+                            'Сейчас подтянем результаты анализа и покажем короткий обзор разделов.',
+                        )}
+                        size="s"
+                    />
+                </VStack>
+            </div>,
+            document.body,
+        )
+    }
+
+    if (!currentStep) return null
 
     return createPortal(
         <div className={cls.tourOverlay} data-testid="onboarding-dashboard-tour">
@@ -122,28 +163,30 @@ export const OnboardingDashboardTour = memo(({ active, onFinished }: OnboardingD
             {rect && (
                 <div
                     className={cls.tourSpotlight}
+                    data-testid="onboarding-dashboard-tour-spotlight"
                     style={{
                         top: rect.top,
                         left: rect.left,
                         width: rect.width,
-                        height: rect.height
+                        height: rect.height,
                     }}
                 />
             )}
             <VStack
                 gap="12"
                 className={cls.tourCard}
-                style={{ top: cardTop, left: Math.max(16, cardLeft) }}
+                data-testid="onboarding-dashboard-tour-card"
+                style={{ top: cardPos.top, left: cardPos.left }}
             >
                 <Text
-                    title={t(currentStep.title, currentStep.titleFallback)}
-                    text={t(currentStep.desc, currentStep.descFallback)}
+                    title={t(currentStep.titleKey, currentStep.titleFallback)}
+                    text={t(currentStep.descKey, currentStep.descFallback)}
                     size="s"
                 />
                 <Text
                     text={t('analytics_tour_step_counter', '{{current}} из {{total}}', {
                         current: stepIndex + 1,
-                        total: stepKeys.length
+                        total: visibleSteps.length,
                     })}
                     size="xs"
                 />
@@ -159,6 +202,6 @@ export const OnboardingDashboardTour = memo(({ active, onFinished }: OnboardingD
                 </HStack>
             </VStack>
         </div>,
-        document.body
+        document.body,
     )
 })

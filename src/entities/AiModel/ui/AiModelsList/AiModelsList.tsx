@@ -58,7 +58,7 @@ export const AiModelsList = memo((props: AiModelsListProps) => {
         }),
         columnHelper.accessor('publishName', {
             header: (t('Publish Name') ?? ''),
-            cell: info => info.getValue() || '—'
+            cell: info => info.getValue() || '-'
         }),
         columnHelper.display({
             id: 'actions',

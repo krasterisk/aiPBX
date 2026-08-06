@@ -549,6 +549,51 @@ export interface MetricOverrideInput {
 
 // ─── Project ──────────────────────────────────────────────────────────────────
 
+export type DigestSchedule = 'daily' | 'weekly' | 'monthly'
+export type DigestReportWindow = 'last_7_days' | 'last_30_days' | 'previous_calendar_month'
+
+export interface DigestConfig {
+  enabled: boolean
+  emails: string[]
+  telegramChatIds: string[]
+  schedule: DigestSchedule
+  reportWindow: DigestReportWindow
+  weeklyDay?: number
+  monthlyDay?: number
+  sendHour?: number
+  lastSentAt?: string | null
+  lastManualSentAt?: string | null
+}
+
+export interface AlertRuleCsatDrop {
+  enabled: boolean
+  dropPct: number
+  windowDays: number
+  minCalls: number
+}
+
+export interface AlertRuleNegativeSpike {
+  enabled: boolean
+  spikePp: number
+  windowDays: number
+  minCalls: number
+}
+
+export interface AlertRuleBudgetExceeded {
+  enabled: boolean
+}
+
+export interface AlertConfig {
+  enabled: boolean
+  inheritRecipientsFromDigest: boolean
+  emails: string[]
+  telegramChatIds: string[]
+  csatDrop: AlertRuleCsatDrop
+  negativeSpike: AlertRuleNegativeSpike
+  budgetExceeded: AlertRuleBudgetExceeded
+  lastTestSentAt?: string | null
+}
+
 export interface OperatorProject {
   id: string
   name: string
@@ -566,6 +611,8 @@ export interface OperatorProject {
   webhookEvents?: WebhookEvent[]
   monthlyBudgetUsd?: number | null
   budgetAlertEmails?: string[] | null
+  digestConfig?: DigestConfig | null
+  alertConfig?: AlertConfig | null
 }
 
 // ─── Project Template ─────────────────────────────────────────────────────────

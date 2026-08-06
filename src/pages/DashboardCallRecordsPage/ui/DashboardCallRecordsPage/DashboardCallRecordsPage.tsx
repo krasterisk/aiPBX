@@ -86,7 +86,11 @@ const DashboardCallRecordsContent = memo(() => {
                 onChangeProjectId={onChangeProjectId}
                 onOpenDashboardBuilder={handleOpenBuilder}
             />
-            <OnboardingDashboardTour active={tourActive} onFinished={handleTourFinished} />
+            <OnboardingDashboardTour
+                active={tourActive}
+                ready={Boolean(dashboardData) && !isLoading}
+                onFinished={handleTourFinished}
+            />
         </DashboardLayout>
     )
 })

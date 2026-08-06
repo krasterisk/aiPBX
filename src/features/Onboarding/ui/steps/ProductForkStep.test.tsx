@@ -39,7 +39,7 @@ describe('ProductForkStep', () => {
   it('tracks onboarding_product_assistants and step 1 on assistants selection', () => {
     render(<ProductForkStep />)
 
-    fireEvent.click(screen.getByText('Голосовые ассистенты'))
+    fireEvent.click(screen.getByTestId('onboarding-fork-assistants'))
 
     expect(mockTrack).toHaveBeenCalledWith('onboarding_product_assistants', { productPath: 'assistants' })
     expect(mockTrack).toHaveBeenCalledWith('onboarding_step_1', { productPath: 'assistants', step: 1 })
@@ -48,9 +48,17 @@ describe('ProductForkStep', () => {
   it('tracks onboarding_product_analytics and step 1 on analytics selection', () => {
     render(<ProductForkStep />)
 
-    fireEvent.click(screen.getByText('Речевая аналитика'))
+    fireEvent.click(screen.getByTestId('onboarding-fork-analytics'))
 
     expect(mockTrack).toHaveBeenCalledWith('onboarding_product_analytics', { productPath: 'analytics' })
     expect(mockTrack).toHaveBeenCalledWith('onboarding_step_1', { productPath: 'analytics', step: 1 })
+  })
+
+  it('keeps equal CTA affordances on both product cards', () => {
+    render(<ProductForkStep />)
+
+    expect(screen.getByText('Начать с ассистентов')).toBeInTheDocument()
+    expect(screen.getByText('Начать с аналитики')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Начать с ассистентов' })).not.toBeInTheDocument()
   })
 })

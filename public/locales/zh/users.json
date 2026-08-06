@@ -65,7 +65,7 @@
     "ourOrg.notFound": "未找到组织",
     "ourOrg.primaryBadge": "主要",
     "tenant.fieldLabel": "租户",
-    "tenant.fieldHint": "空 — 新租户所有者。选择客户 — 该用户成为其子用户。",
+    "tenant.fieldHint": "空 - 新租户所有者。选择客户 - 该用户成为其子用户。",
     "tenant.noTenantOwner": "无租户（所有者）",
     "tenant.selectPlaceholder": "选择租户",
     "canManageUsers.label": "管理用户",

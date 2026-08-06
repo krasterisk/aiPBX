@@ -41,7 +41,14 @@ export type {
   DashboardWidget,
   DashboardConfig,
   WebhookEvent,
-  ProjectTemplate
+  ProjectTemplate,
+  DigestConfig,
+  DigestSchedule,
+  DigestReportWindow,
+  AlertConfig,
+  AlertRuleCsatDrop,
+  AlertRuleNegativeSpike,
+  AlertRuleBudgetExceeded,
 } from './model/types/report'
 export type { ReportsPageSchema } from './model/types/reportsPageSchema'
 export {
@@ -84,6 +91,8 @@ export {
   useCreateOperatorProject,
   useDeleteOperatorProject,
   useUpdateOperatorProject,
+  useSendOperatorProjectDigest,
+  useSendOperatorProjectAlertTest,
   useGenerateMetricsFromPrompt,
   useGenerateOperatorApiToken,
   useListOperatorApiTokens,
@@ -127,6 +136,7 @@ export type { CsatFilterValue } from './lib/csatFilter'
 
 // ── Project Wizard Redux ──────────────────────────────────────────────────────
 export type { ProjectWizardSchema, MetricMethod } from './model/types/projectWizardSchema'
+export { DEFAULT_DIGEST_CONFIG, DEFAULT_ALERT_CONFIG, mergeAlertConfig } from './model/types/projectWizardSchema'
 export {
   projectWizardActions,
   projectWizardReducer
@@ -141,9 +151,13 @@ export {
   getWizardSystemPrompt,
   getWizardCustomMetrics,
   getWizardVisibleDefaultMetrics,
+  getWizardCallTaxonomy,
   getWizardWebhookUrl,
   getWizardWebhookHeaders,
   getWizardWebhookEvents,
   getWizardSelectedTemplateId,
   getWizardShowWebhooks,
+  getWizardDigestConfig,
+  getWizardShowDigest,
+  getWizardAlertConfig,
 } from './model/selectors/projectWizardSelectors'

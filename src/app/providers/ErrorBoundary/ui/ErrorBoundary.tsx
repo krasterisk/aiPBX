@@ -32,7 +32,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
         window.location.reload()
         return
       }
-      // Already tried reloading — clear flag and show error page
+      // Already tried reloading - clear flag and show error page
       sessionStorage.removeItem(reloadKey)
     }
   }

@@ -332,17 +332,32 @@
     @include glass-card-secondary;
     padding: 12px var(--card-padding-sm);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--space-3);
     transition: var(--transition-fast);
+    cursor: pointer;
 
     &.locked {
         opacity: 0.7;
+        cursor: default;
     }
 
     &:hover:not(.locked) {
         border-color: var(--accent-redesigned);
     }
+}
+
+.metricCheckContent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+}
+
+.metricDescription {
+    opacity: 0.75;
+    line-height: 1.35;
 }
 
 // ─── Webhook ──────────────────────────────────────────────────────────────────
@@ -352,6 +367,36 @@
     flex-direction: column;
     gap: var(--space-4);
     width: 100%;
+}
+
+.digestChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border-secondary);
+    background: color-mix(in srgb, var(--accent-redesigned) 10%, transparent);
+    color: var(--text-redesigned);
+    font-size: 12px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+
+    &:hover {
+        background: color-mix(in srgb, var(--status-error) 15%, transparent);
+        border-color: color-mix(in srgb, var(--status-error) 40%, transparent);
+    }
+}
+
+.telegramBotLink {
+    color: var(--accent-redesigned);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 // ─── Chat Messenger (Step 1) ──────────────────────────────────────────────────
@@ -482,4 +527,4 @@
         transform: rotate(360deg) scale(1);
     }
 }
-
+

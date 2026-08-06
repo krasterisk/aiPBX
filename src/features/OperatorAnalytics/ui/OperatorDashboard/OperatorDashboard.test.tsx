@@ -312,10 +312,12 @@ describe('OperatorDashboard layout', () => {
         expect(screen.queryByTestId('oa-section-ranking')).not.toBeInTheDocument()
     })
 
-    it('keeps all four onboarding tour anchors', () => {
+    it('keeps onboarding tour anchors including metrics, charts and topics', () => {
         render(<OperatorDashboard {...defaultProps} />)
         expect(document.querySelector('[data-tour-id="oa-stats"]')).toBeInTheDocument()
         expect(document.querySelector('[data-tour-id="oa-insights"]')).toBeInTheDocument()
+        expect(document.querySelector('[data-tour-id="oa-charts"]')).toBeInTheDocument()
+        expect(document.querySelector('[data-tour-id="oa-metrics"]')).toBeInTheDocument()
         expect(document.querySelector('[data-tour-id="oa-scorecard"]')).toBeInTheDocument()
         expect(document.querySelector('[data-tour-id="oa-upload-entry"]')).toBeInTheDocument()
     })

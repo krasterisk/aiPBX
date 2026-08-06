@@ -45,6 +45,9 @@ Prioritized for solo founder, RU B2B market.
 | GAP-30 | No backend e2e tests | BE | M | M | `jest-e2e.json` exists, no specs |
 | GAP-31 | Call export: formula-safe values for pre-existing columns | FE | M | S | Phase 10-09 scoped formula guard to «Теги» column only; keywords/summary/transcript still unescaped |
 | GAP-32 | Operator evidence sample-size tuning | BE | L | S | `OPERATOR_EVIDENCE_MAX_CALLS` env knob + per-metric evidence count; defaults from 10-01 may need UAT tuning |
+| GAP-33 | Operator analytics email/Telegram digest | both | H | M | Project `digestConfig` + cron + SVG→PNG charts; apply migration `2026-08-04-operator-project-digest.sql` |
+| GAP-34 | Critical analytics alerts (CSAT/negativity/budget) | both | H | M | Project `alertConfig` + Email/Telegram + Notifications UX; apply migration `2026-08-04-operator-project-alert.sql` |
+| GAP-35 | LLM closed-set callTaxonomy tagging | both | H | M | Done: `topic_tag_ids` in analysis schema; TaxonomyEditor name+description+optional hints; Phase 10 D-18 superseded |
 
 ## P3 — GTM / growth (RU B2B)
 

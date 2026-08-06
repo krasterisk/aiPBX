@@ -41,6 +41,16 @@
     }
 }
 
+.metricRowContent {
+    flex: 1;
+    min-width: 0;
+}
+
+.metricDescription {
+    opacity: 0.75;
+    line-height: 1.35;
+}
+
 .progressBar {
     width: 100%;
     height: 6px;

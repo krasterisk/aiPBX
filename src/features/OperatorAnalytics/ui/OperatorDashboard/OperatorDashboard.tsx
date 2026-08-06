@@ -37,7 +37,7 @@ import {
 } from '../../model/panelStack'
 import { DrilldownPanel } from './DrilldownPanel'
 import { TopicsSection } from './TopicsSection'
-import { ALL_DEFAULT_METRICS, metricVisual, normalizeRate } from '../../lib/metricVisual'
+import { ALL_DEFAULT_METRICS, getDefaultMetricDescriptionKey, metricVisual, normalizeRate } from '../../lib/metricVisual'
 import cls from './OperatorDashboard.module.scss'
 
 interface OperatorDashboardProps {
@@ -95,6 +95,14 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
             metricLabel,
         }))
     }, [currentEntry])
+
+    const handleSelectProjectMetric = useCallback((metricId: string, metricLabel: string) => {
+        setPanelStack([{
+            kind: 'operatorMetric',
+            metricId,
+            metricLabel,
+        }])
+    }, [])
 
     const handleOpenCall = useCallback((channelId: string, fromLabel: string) => {
         setPanelStack(prev => pushPanelEntry(prev, {
@@ -352,8 +360,8 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                     title={String(t('DASHBOARD_CUSTOM_LAYOUT'))}
                 />
             ) : (
-                <div data-testid="oa-section-mid-charts" className={cls.midChartsSection}>
-            {/* Sentiment / success / avg score — one adaptive row */}
+                <div data-testid="oa-section-mid-charts" data-tour-id="oa-charts" className={cls.midChartsSection}>
+            {/* Sentiment / success - adaptive row */}
             <div className={cls.chartsRow}>
                 <Card max variant={'glass'} border={'partial'} padding={'24'} className={cls.chartCard}>
                     <VStack gap={'12'} max>
@@ -369,33 +377,62 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                         <DonutChart data={successData} onSegmentClick={handleSuccessSegmentClick} />
                     </VStack>
                 </Card>
-                {radarMetrics.length > 0 && (
-                    <Card
-                        max
-                        variant={'glass'}
-                        border={'partial'}
-                        padding={'24'}
-                        className={`${cls.chartCard} ${cls.chartCardGrow}`}
-                    >
-                        <VStack gap={'16'} max>
-                            <HStack max justify={'between'} align={'center'}>
-                                <Text title={String(t('Средняя оценка'))} bold />
-                                {activeProject?.visibleDefaultMetrics && (
-                                    <Text
-                                        text={`${radarMetrics.length} / ${ALL_DEFAULT_METRICS.length} ${t('метрик')}`}
-                                        size={'s'}
-                                    />
-                                )}
-                            </HStack>
+            </div>
+
+            {(radarMetrics.length > 0 || customMetricsList.length > 0) && (
+                <Card
+                    max
+                    variant={'glass'}
+                    border={'partial'}
+                    padding={'24'}
+                    className={cls.chartCard}
+                    data-testid="oa-section-metrics"
+                    data-tour-id="oa-metrics"
+                >
+                    <VStack gap={'16'} max>
+                        <VStack gap={'4'} max>
+                            <Text title={String(t('Метрики'))} bold />
+                            <Text
+                                text={String(t('METRICS_CARD_HINT'))}
+                                size={'s'}
+                            />
+                        </VStack>
+
+                        {radarMetrics.length > 0 && (
                             <VStack gap={'8'} max className={cls.metricBars}>
                                 {radarMetrics.map(m => {
                                     const level = m.value >= 80 ? 'high' : m.value >= 50 ? 'mid' : 'low'
-                                    const color = level === 'high' ? 'var(--status-success)' : level === 'mid' ? 'var(--status-warning)' : 'var(--status-error)'
+                                    const color = level === 'high'
+                                        ? 'var(--status-success)'
+                                        : level === 'mid'
+                                            ? 'var(--status-warning)'
+                                            : 'var(--status-error)'
+                                    const descriptionKey = getDefaultMetricDescriptionKey(m.key)
                                     return (
-                                        <VStack key={m.key} gap={'4'} max>
-                                            <HStack max justify={'between'}>
-                                                <Text text={m.label} size={'s'} />
-                                                <Text text={String(m.value)} size={'s'} bold variant={level === 'high' ? 'success' : level === 'mid' ? 'warning' : 'error'} />
+                                        <button
+                                            key={m.key}
+                                            type="button"
+                                            className={cls.metricClickRow}
+                                            onClick={() => { handleSelectProjectMetric(m.key, m.label) }}
+                                            data-testid={`oa-metric-row-${m.key}`}
+                                        >
+                                            <HStack max justify={'between'} align={'start'} gap={'12'}>
+                                                <VStack gap={'4'} max className={cls.metricClickMain}>
+                                                    <Text text={m.label} size={'s'} bold />
+                                                    {descriptionKey && (
+                                                        <Text
+                                                            text={String(t(descriptionKey))}
+                                                            size={'xs'}
+                                                            className={cls.metricDesc}
+                                                        />
+                                                    )}
+                                                </VStack>
+                                                <Text
+                                                    text={String(m.value)}
+                                                    size={'s'}
+                                                    bold
+                                                    variant={level === 'high' ? 'success' : level === 'mid' ? 'warning' : 'error'}
+                                                />
                                             </HStack>
                                             <div className={cls.metricBarTrack}>
                                                 <div
@@ -403,98 +440,102 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                                                     style={{ width: `${m.value}%`, backgroundColor: color }}
                                                 />
                                             </div>
-                                        </VStack>
+                                        </button>
                                     )
                                 })}
                             </VStack>
-                        </VStack>
-                    </Card>
-                )}
-            </div>
+                        )}
 
-            {/* Phase 1: Custom Metrics Section */}
-            {customMetricsList.length > 0 && (
-                <Card max variant={'glass'} border={'partial'} padding={'24'}>
-                    <VStack gap={'16'} max>
-                        <Text title={String(t('Кастомные метрики'))} bold />
-                        <Text text={String(t('Пользовательские метрики проекта') + ` "${activeProject?.name}"`)} size={'s'} />
-                        <VStack gap={'8'} max>
-                            {customMetricsList.map(metric => {
-                                const agg = metric.aggregated
-                                return (
-                                    <Card key={metric.id} padding={'16'} border={'partial'} variant={'light'}>
-                                        <VStack gap={'8'} max>
-                                            <HStack max justify={'between'} align={'center'}>
-                                                <VStack gap={'4'}>
-                                                    <Text text={metric.name} bold size={'s'} />
-                                                    <Text text={metric.description} size={'s'} />
+                        {customMetricsList.length > 0 && (
+                            <VStack gap={'8'} max>
+                                {radarMetrics.length > 0 && (
+                                    <Text
+                                        text={String(t('Кастомные метрики проекта'))}
+                                        size={'s'}
+                                        bold
+                                        className={cls.metricGroupLabel}
+                                    />
+                                )}
+                                {customMetricsList.map(metric => {
+                                    const agg = metric.aggregated
+                                    const description = metric.description?.trim()
+                                    let valueText = String(t('Нет данных за выбранный период'))
+                                    let barPct: number | null = null
+                                    let barColor = 'var(--accent-redesigned)'
+
+                                    if (agg?.type === 'boolean' && agg.value != null) {
+                                        const vis = metricVisual(agg.value, {
+                                            isRate: true,
+                                            polarity: metric.polarity ?? 'neutral',
+                                        })
+                                        valueText = `${agg.value}%`
+                                        barPct = vis.pct
+                                        barColor = vis.color
+                                    } else if (agg?.type === 'number' && agg.value != null) {
+                                        const vis = metricVisual(agg.value, {
+                                            min: metric.min,
+                                            max: metric.max,
+                                            polarity: metric.polarity ?? 'positive',
+                                        })
+                                        valueText = metric.unit
+                                            ? `${agg.value} ${metric.unit}`
+                                            : (metric.max != null && metric.max !== 100)
+                                                ? `${agg.value} / ${metric.max}`
+                                                : String(agg.value)
+                                        barPct = vis.pct
+                                        barColor = vis.color
+                                    } else if (agg?.distribution) {
+                                        const top = Object.entries(agg.distribution)
+                                            .sort((a, b) => Number(b[1]) - Number(a[1]))[0]
+                                        valueText = top
+                                            ? `${top[0]}: ${top[1]}`
+                                            : valueText
+                                    }
+
+                                    return (
+                                        <button
+                                            key={metric.id}
+                                            type="button"
+                                            className={cls.metricClickRow}
+                                            onClick={() => { handleSelectProjectMetric(metric.id, metric.name) }}
+                                            data-testid={`oa-metric-row-${metric.id}`}
+                                        >
+                                            <HStack max justify={'between'} align={'start'} gap={'12'}>
+                                                <VStack gap={'4'} max className={cls.metricClickMain}>
+                                                    <Text text={metric.name} size={'s'} bold />
+                                                    {description && (
+                                                        <Text
+                                                            text={description}
+                                                            size={'xs'}
+                                                            className={cls.metricDesc}
+                                                        />
+                                                    )}
                                                 </VStack>
-                                                <Text text={metric.type} size={'xs'} variant={'accent'} />
+                                                <Text text={valueText} size={'s'} bold />
                                             </HStack>
-                                            {agg?.type === 'boolean' && agg.value != null && (() => {
-                                                const vis = metricVisual(agg.value, {
-                                                    isRate: true,
-                                                    polarity: metric.polarity ?? 'neutral',
-                                                })
-                                                return (
-                                                    <VStack gap={'4'} max>
-                                                        <HStack max justify={'between'}>
-                                                            <Text text={String(t('Да'))} size={'s'} />
-                                                            <Text text={`${agg.value}%`} size={'s'} bold />
-                                                        </HStack>
-                                                        <div className={cls.metricBarTrack}>
-                                                            <div
-                                                                className={cls.metricBarFill}
-                                                                style={{ width: `${vis.pct}%`, backgroundColor: vis.color }}
-                                                            />
-                                                        </div>
-                                                    </VStack>
-                                                )
-                                            })()}
-                                            {agg?.type === 'number' && agg.value != null && (() => {
-                                                const vis = metricVisual(agg.value, {
-                                                    min: metric.min,
-                                                    max: metric.max,
-                                                    polarity: metric.polarity ?? 'positive',
-                                                })
-                                                const valueText = metric.unit
-                                                    ? `${agg.value} ${metric.unit}`
-                                                    : (metric.max != null && metric.max !== 100)
-                                                        ? `${agg.value} / ${metric.max}`
-                                                        : String(agg.value)
-                                                return (
-                                                    <VStack gap={'4'} max>
-                                                        <HStack max justify={'between'}>
-                                                            <Text text={String(t('Среднее'))} size={'s'} />
-                                                            <Text text={valueText} size={'s'} bold />
-                                                        </HStack>
-                                                        <div className={cls.metricBarTrack}>
-                                                            <div
-                                                                className={cls.metricBarFill}
-                                                                style={{ width: `${vis.pct}%`, backgroundColor: vis.color }}
-                                                            />
-                                                        </div>
-                                                    </VStack>
-                                                )
-                                            })()}
-                                            {agg?.distribution && (
+                                            {barPct != null && (
+                                                <div className={cls.metricBarTrack}>
+                                                    <div
+                                                        className={cls.metricBarFill}
+                                                        style={{ width: `${barPct}%`, backgroundColor: barColor }}
+                                                    />
+                                                </div>
+                                            )}
+                                            {agg?.distribution && !barPct && (
                                                 <VStack gap={'4'} max>
                                                     {Object.entries(agg.distribution).map(([label, count]) => (
                                                         <HStack key={label} max justify={'between'}>
-                                                            <Text text={label} size={'s'} />
-                                                            <Text text={String(count)} size={'s'} bold />
+                                                            <Text text={label} size={'xs'} className={cls.metricDesc} />
+                                                            <Text text={String(count)} size={'xs'} bold />
                                                         </HStack>
                                                     ))}
                                                 </VStack>
                                             )}
-                                            {!agg && (
-                                                <Text text={String(t('Нет данных за выбранный период'))} size={'s'} />
-                                            )}
-                                        </VStack>
-                                    </Card>
-                                )
-                            })}
-                        </VStack>
+                                        </button>
+                                    )
+                                })}
+                            </VStack>
+                        )}
                     </VStack>
                 </Card>
             )}
@@ -510,7 +551,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                 />
             )}
 
-            {/* Operator quality ranking — bottom section */}
+            {/* Operator quality ranking - bottom section */}
             <Card
                 max
                 variant={'glass'}

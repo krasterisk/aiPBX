@@ -86,6 +86,11 @@ app/ → pages/ → widgets/ → features/ → entities/ → shared/
 **i18n:** i18next, `public/locales/{en,ru,de,zh}/`.  
 **Build:** Webpack 5 primary; compile-time globals `__API__`, `__WS__`, `__STATIC__`.
 
+**UI / copy conventions (required for new work):**
+- No em dash (`—`, U+2014) in labels, buttons, hints, empty states, or i18n keys/values - use hyphen `-` or rephrase.
+- No emoji in cabinet UI, i18n, or textual labels/descriptions - use shared icons (Lucide etc.).
+- Details: `.docs/FRONTEND_ARCHITECTURE.md` («Тексты в UI»).
+
 **UI generations (tech debt):**
 - `shared/ui/deprecated/` — do not use
 - `shared/ui/redesigned/` — legacy active

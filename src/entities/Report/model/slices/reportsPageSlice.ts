@@ -95,6 +95,17 @@ export const reportsPageSlice = createSlice({
       state.page = 1
       state.listGeneration = (state.listGeneration ?? 0) + 1
     },
+    setTagFilter: (state, action: PayloadAction<{ tagId: string, tagLabel?: string } | null>) => {
+      if (!action.payload) {
+        state.tagId = undefined
+        state.tagLabel = undefined
+      } else {
+        state.tagId = action.payload.tagId
+        state.tagLabel = action.payload.tagLabel
+      }
+      state.page = 1
+      state.listGeneration = (state.listGeneration ?? 0) + 1
+    },
     initState: (state) => {
       state.limit = 25
       state._inited = true

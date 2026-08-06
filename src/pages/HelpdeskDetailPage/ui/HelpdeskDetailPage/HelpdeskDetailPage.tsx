@@ -90,7 +90,7 @@ export const HelpdeskDetailPage = memo(() => {
                         <Button variant="clear" onClick={() => { navigate('/admin/helpdesk') }}>
                             {t('helpdesk.backToList')}
                         </Button>
-                        <Text title={`#${ticket.id} — ${ticket.subject}`} />
+                        <Text title={`#${ticket.id} - ${ticket.subject}`} />
                         <Text
                             text={ticket.clientName || t('helpdesk.table.unidentified')}
                             size="s"
@@ -122,8 +122,8 @@ export const HelpdeskDetailPage = memo(() => {
                     <Card variant="glass" padding="16" className={cls.mainColumn}>
                         <VStack gap="16" max>
                             <Text title={t('helpdesk.detail.clientInfo')} size="m" />
-                            <Text text={`${t('helpdesk.detail.inn')}: ${ticket.inn || '—'}`} size="s" />
-                            <Text text={`${t('helpdesk.detail.phone')}: ${ticket.callerPhone || ticket.contactPhone || '—'}`} size="s" />
+                            <Text text={`${t('helpdesk.detail.inn')}: ${ticket.inn || '-'}`} size="s" />
+                            <Text text={`${t('helpdesk.detail.phone')}: ${ticket.callerPhone || ticket.contactPhone || '-'}`} size="s" />
 
                             {ticket.transcript && (
                                 <VStack gap="8" max>

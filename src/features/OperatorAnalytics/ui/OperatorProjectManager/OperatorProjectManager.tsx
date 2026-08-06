@@ -13,6 +13,7 @@ import { Modal } from '@/shared/ui/redesigned/Modal'
 import { SearchInput } from '@/shared/ui/mui/SearchInput/SearchInput'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
+import { StateSchema } from '@/app/providers/StoreProvider'
 import {
     useGetOperatorProjects,
     useDeleteOperatorProject,
@@ -99,11 +100,16 @@ export const OperatorProjectManager = memo(() => {
     const [wizardTarget, setWizardTarget] = useState<OperatorProject | undefined>(undefined)
 
     const wizardIsOpen = useSelector(getWizardIsOpen)
+    // Signup lands on /analytics/projects under the onboarding overlay; never
+    // stack the create modal on top of the analytics onboarding create steps.
+    const onboardingActive = useSelector((s: StateSchema) => s.onboarding?.isActive ?? false)
+    const showWizardModal = wizardIsOpen && !onboardingActive
 
     const handleOpenWizardCreate = useCallback(() => {
+        if (onboardingActive) return
         setWizardTarget(undefined)
         dispatch(projectWizardActions.openCreate())
-    }, [dispatch])
+    }, [dispatch, onboardingActive])
 
     const handleOpenWizardEdit = useCallback((project: OperatorProject) => {
         setWizardTarget(project)
@@ -186,7 +192,7 @@ export const OperatorProjectManager = memo(() => {
                 }
 
                 {/* Wizard modal (create + edit) */}
-                <Modal isOpen={wizardIsOpen} onClose={handleCloseWizard} lazy size={'wide'}>
+                <Modal isOpen={showWizardModal} onClose={handleCloseWizard} lazy size={'wide'}>
                     <ProjectWizard
                         editProject={wizardTarget}
                         onClose={handleCloseWizard}

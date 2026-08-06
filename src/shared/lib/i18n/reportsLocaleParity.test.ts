@@ -17,10 +17,10 @@ export const PHASE_10_REPORT_KEYS = [
     'Нажмите на оператора, чтобы увидеть, из чего сложилась оценка',
     'Нажмите на тему, чтобы увидеть её звонки и статистику',
     'Темы звонков не настроены',
-    'Добавьте темы и ключевые слова в настройках проекта — звонки начнут размечаться при следующем анализе.',
+    'Добавьте темы в настройках проекта - звонки начнут размечаться при следующем анализе.',
     'Настроить темы проекта',
     'Совпадений по темам нет',
-    'За выбранный период ни один звонок не совпал со словарём тем. Измените период или дополните синонимы темы.',
+    'За выбранный период ни один звонок не получил тему. Измените период или уточните описания тем в настройках проекта.',
     'Показать все ({{count}})',
     'TOPICS_CALL_LIST_HEADER',
     'TOPICS_PAGE_INDICATOR',
@@ -44,16 +44,22 @@ export const PHASE_10_REPORT_KEYS = [
     'Изменить темы',
     'Готово',
     'Теги',
+    'Тема',
+    'Фильтровать по теме {{name}}',
+    'Сбросить фильтр по теме',
     'Не удалось сохранить теги. Изменения не применены.',
-    // Taxonomy editor
+    // Taxonomy editor (LLM closed-set tagging)
     'Темы звонков',
     'Добавить тему',
     'Новая тема',
     'Название темы',
-    'Ключевые слова (через запятую)',
-    'Добавьте темы и ключевые слова — звонки начнут размечаться при следующем анализе.',
-    'Темы — метки для звонков. При анализе система ищет в расшифровке ключевые слова темы и ставит метку автоматически.',
+    'Описание (когда ставить тему)',
+    'Формулировки (необязательно)',
+    'Добавьте темы - звонки начнут размечаться при следующем анализе.',
+    'Темы - метки для звонков. При анализе ИИ выбирает подходящие темы из справочника по смыслу разговора.',
     'TAXONOMY_NAME_HINT',
+    'TAXONOMY_DESCRIPTION_HINT',
+    'TAXONOMY_DESCRIPTION_PLACEHOLDER',
     'TAXONOMY_KEYWORDS_HINT',
     'TAXONOMY_KEYWORDS_PLACEHOLDER',
     'Удалить тему «{{name}}»?',
@@ -69,13 +75,16 @@ const ENGLISH_CONTRACT: Partial<Record<(typeof PHASE_10_REPORT_KEYS)[number], st
     'Назад к {{context}}': 'Back to {{context}}',
     'Закрыть панель': 'Close panel',
     'Убрать тему {{name}}': 'Remove topic {{name}}',
+    Тема: 'Topic',
+    'Фильтровать по теме {{name}}': 'Filter by topic {{name}}',
+    'Сбросить фильтр по теме': 'Clear topic filter',
     'Темы звонков не настроены': "Call topics aren't set up",
-    'Добавьте темы и ключевые слова в настройках проекта — звонки начнут размечаться при следующем анализе.':
-        'Add topics and their keywords in project settings — calls will be tagged from the next analysis onward.',
+    'Добавьте темы в настройках проекта - звонки начнут размечаться при следующем анализе.':
+        'Add topics in project settings - calls will be tagged from the next analysis onward.',
     'Настроить темы проекта': 'Set up project topics',
     'Совпадений по темам нет': 'No topic matches',
-    'За выбранный период ни один звонок не совпал со словарём тем. Измените период или дополните синонимы темы.':
-        'No call in the selected period matched the topic dictionary. Change the period or add more synonyms.',
+    'За выбранный период ни один звонок не получил тему. Измените период или уточните описания тем в настройках проекта.':
+        'No calls in this period received a topic. Change the period or refine topic descriptions in project settings.',
     'Нет обоснований по метрикам': 'No metric evidence',
     'В звонках за этот период анализ не оставил цитат и пояснений. Попробуйте расширить период.':
         'Analysis left no quotes or rationales for calls in this period. Try widening the period.',
@@ -111,7 +120,7 @@ const extractPlaceholders = (value: string): string[] => {
     return matches.map(token => token.slice(2, -2)).sort()
 }
 
-describe('reports locale parity — phase 10', () => {
+describe('reports locale parity - phase 10', () => {
     const namespaces = Object.fromEntries(
         LOCALES.map(locale => [locale, loadNamespace(locale)]),
     ) as Record<LocaleId, Record<string, string>>

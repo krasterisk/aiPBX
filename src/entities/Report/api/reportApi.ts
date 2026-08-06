@@ -1,6 +1,6 @@
 import { rtkApi } from '@/shared/api/rtkApi'
 import { mergeReportsCache, serializeReportsQueryArgs } from '../lib/mergeReportsCache'
-import { AIAnalyticsResponse, AllReports, Analytics, BatchStatusResponse, CdrSource, DashboardConfig, MetricDefinition, TagDefinition, MetricOverride, MetricOverrideInput, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorEvidenceResponse, OperatorInsightsResponse, OperatorProject, OperatorUploadResponse, Report, ReportDialog } from '../model/types/report'
+import { AIAnalyticsResponse, AlertConfig, AllReports, Analytics, BatchStatusResponse, CdrSource, DashboardConfig, DigestConfig, MetricDefinition, TagDefinition, MetricOverride, MetricOverrideInput, OperatorAnalysisResult, OperatorApiToken, OperatorCdrResponse, OperatorDashboardResponse, OperatorEvidenceResponse, OperatorInsightsResponse, OperatorProject, OperatorUploadResponse, Report, ReportDialog } from '../model/types/report'
 
 interface QueryArgs {
   page?: number
@@ -16,6 +16,7 @@ interface QueryArgs {
   source?: CdrSource
   listGeneration?: number
   csat?: string
+  tagId?: string
 }
 
 interface AIAnalyticsDashboardArgs {
@@ -193,6 +194,9 @@ export const reportApi = rtkApi.injectEndpoints({
       endDate?: string
       operatorName?: string
       operatorNameExact?: string
+      /** Filter by operator_call_tags.tagId */
+      tagId?: string
+      /** @deprecated use tagId */
       theme?: string
       projectId?: string
       page?: number
@@ -203,12 +207,19 @@ export const reportApi = rtkApi.injectEndpoints({
       sentiment?: 'positive' | 'neutral' | 'negative'
       success?: boolean
     }>({
-      query: (args) => ({
-        url: '/operator-analytics/cdrs',
-        params: Object.fromEntries(
-          Object.entries(args).filter(([, v]) => v !== undefined && v !== '')
-        )
-      }),
+      query: (args) => {
+        const { theme, tagId, ...rest } = args
+        const params = {
+          ...rest,
+          tagId: tagId ?? theme,
+        }
+        return {
+          url: '/operator-analytics/cdrs',
+          params: Object.fromEntries(
+            Object.entries(params).filter(([, v]) => v !== undefined && v !== '')
+          )
+        }
+      },
       providesTags: ['OperatorAnalytics']
     }),
     getOperatorDashboard: build.query<OperatorDashboardResponse, {
@@ -240,6 +251,8 @@ export const reportApi = rtkApi.injectEndpoints({
       webhookUrl?: string
       webhookHeaders?: Record<string, string>
       webhookEvents?: string[]
+      digestConfig?: DigestConfig | null
+      alertConfig?: AlertConfig | null
     }>({
       query: (body) => ({
         url: '/operator-analytics/projects',
@@ -295,6 +308,8 @@ export const reportApi = rtkApi.injectEndpoints({
       webhookEvents?: string[]
       monthlyBudgetUsd?: number | null
       budgetAlertEmails?: string[] | null
+      digestConfig?: DigestConfig | null
+      alertConfig?: AlertConfig | null
     }>({
       query: ({ id, ...body }) => ({
         url: `/operator-analytics/projects/${id}`,
@@ -302,6 +317,20 @@ export const reportApi = rtkApi.injectEndpoints({
         body
       }),
       invalidatesTags: ['OperatorProjects']
+    }),
+    sendOperatorProjectDigest: build.mutation<{ ok: true, emailed: number, telegram: number }, string>({
+      query: (id) => ({
+        url: `/operator-analytics/projects/${id}/digest/send`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['OperatorProjects'],
+    }),
+    sendOperatorProjectAlertTest: build.mutation<{ ok: true, emailed: number, telegram: number }, string>({
+      query: (id) => ({
+        url: `/operator-analytics/projects/${id}/alerts/test`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['OperatorProjects'],
     }),
     generateMetricsFromPrompt: build.mutation<MetricDefinition[], { messages: Array<{ role: 'ai' | 'user', text: string }>, systemPrompt?: string }>({
       query: (body) => ({
@@ -422,6 +451,8 @@ export const useGetOperatorProjects = reportApi.useGetOperatorProjectsQuery
 export const useCreateOperatorProject = reportApi.useCreateOperatorProjectMutation
 export const useDeleteOperatorProject = reportApi.useDeleteOperatorProjectMutation
 export const useUpdateOperatorProject = reportApi.useUpdateOperatorProjectMutation
+export const useSendOperatorProjectDigest = reportApi.useSendOperatorProjectDigestMutation
+export const useSendOperatorProjectAlertTest = reportApi.useSendOperatorProjectAlertTestMutation
 export const useGenerateMetricsFromPrompt = reportApi.useGenerateMetricsFromPromptMutation
 export const useGenerateOperatorApiToken = reportApi.useGenerateOperatorApiTokenMutation
 export const useListOperatorApiTokens = reportApi.useListOperatorApiTokensQuery

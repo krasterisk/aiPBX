@@ -27,7 +27,7 @@ const publishMethods = [
         descKey: 'publish_widget_desc',
         titleFallback: 'Кнопка на вашем сайте',
         badgeFallback: 'Самый простой способ',
-        descFallback: 'Добавьте виджет на сайт — клиенты смогут позвонить ассистенту прямо из браузера.'
+        descFallback: 'Добавьте виджет на сайт - клиенты смогут позвонить ассистенту прямо из браузера.'
     },
     {
         Icon: PhoneCall,

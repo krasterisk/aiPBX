@@ -105,7 +105,7 @@ export const WizardStep1_Chat = memo(({ systemPrompt, onChangeSystemPrompt, onMe
                 text: String(t('Произошла ошибка при генерации. Переходите к следующему шагу вручную.')),
                 time: getTime()
             }])
-            // Fallback — just go to step 2 after a delay
+            // Fallback - just go to step 2 after a delay
             setTimeout(() => {
                 onMetricsGenerated([], systemPrompt)
             }, 2000)
@@ -129,7 +129,7 @@ export const WizardStep1_Chat = memo(({ systemPrompt, onChangeSystemPrompt, onMe
             setQuestionIndex(nextIdx)
             addAiMessageWithDelay(AI_QUESTIONS[nextIdx])
         } else {
-            // Last question answered — trigger generation
+            // Last question answered - trigger generation
             setQuestionIndex(nextIdx)
             // Capture messages including the user's latest reply for the backend
             const allMessages: ChatMessage[] = [...messages, { role: 'user', text: input.trim(), time: now }]

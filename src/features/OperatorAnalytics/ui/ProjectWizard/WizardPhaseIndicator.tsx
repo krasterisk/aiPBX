@@ -1,57 +1,48 @@
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { HStack } from '@/shared/ui/redesigned/Stack'
-import { MetricMethod } from '@/entities/Report'
 import cls from './ProjectWizard.module.scss'
 
+export type CreateWizardStep = 1 | 2 | 3
+
 interface WizardPhaseIndicatorProps {
-    method: MetricMethod
-    isInMethodStep: boolean
-    isInReview: boolean
-    onBackToMethod: () => void
-    onBackToStep: () => void
+    createStep: CreateWizardStep
+    onGoToStep: (step: CreateWizardStep) => void
+}
+
+const STEP_LABELS: Record<CreateWizardStep, string> = {
+    1: 'Название',
+    2: 'Метрики',
+    3: 'Темы',
 }
 
 export const WizardPhaseIndicator = memo(({
-    method,
-    isInMethodStep,
-    isInReview,
-    onBackToMethod,
-    onBackToStep,
+    createStep,
+    onGoToStep,
 }: WizardPhaseIndicatorProps) => {
     const { t } = useTranslation('reports')
-
-    const methodLabel =
-        method === 'template' ? t('Шаблон')
-            : method === 'ai_interview' ? t('AI Интервью')
-                : t('Метрики')
+    const steps: CreateWizardStep[] = [1, 2, 3]
 
     return (
         <HStack gap={'8'} align={'center'} wrap={'wrap'} className={cls.phaseIndicator}>
-            <button type={'button'}
-                className={`${cls.phaseStep} ${cls.completed}`}
-                onClick={onBackToMethod}>
-                <span className={cls.phaseNumber}>{'✓'}</span>
-                {t('Способ')}
-            </button>
-
-            <div className={cls.phaseConnector} />
-
-            <button type={'button'}
-                className={`${cls.phaseStep} ${isInMethodStep ? cls.active : ''} ${isInReview ? cls.completed : ''}`}
-                onClick={() => { if (isInReview) onBackToStep() }}>
-                <span className={cls.phaseNumber}>{isInReview ? '✓' : '2'}</span>
-                {methodLabel}
-            </button>
-
-            <div className={cls.phaseConnector} />
-
-            <button type={'button'}
-                className={`${cls.phaseStep} ${isInReview ? cls.active : ''}`}
-                disabled={!isInReview}>
-                <span className={cls.phaseNumber}>3</span>
-                {t('Настройка')}
-            </button>
+            {steps.map((step, index) => {
+                const completed = createStep > step
+                const active = createStep === step
+                return (
+                    <HStack key={step} gap={'8'} align={'center'}>
+                        {index > 0 && <div className={cls.phaseConnector} />}
+                        <button
+                            type={'button'}
+                            className={`${cls.phaseStep} ${active ? cls.active : ''} ${completed ? cls.completed : ''}`}
+                            onClick={() => { if (completed) onGoToStep(step) }}
+                            disabled={!completed && !active}
+                        >
+                            <span className={cls.phaseNumber}>{completed ? '✓' : String(step)}</span>
+                            {String(t(STEP_LABELS[step]))}
+                        </button>
+                    </HStack>
+                )
+            })}
         </HStack>
     )
 })

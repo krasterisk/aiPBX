@@ -27,8 +27,9 @@ function toAnalytics(data: Record<string, unknown>): Analytics | null {
     }
     const metrics = data.metrics as Record<string, unknown> | undefined
     if (!metrics && !data.summary) return null
+    // Prefer channelId (operator_analytics.id) over aiCdr PK — tags/overrides key off channelId
     return {
-        channelId: String(data.id ?? data.channelId ?? ''),
+        channelId: String(data.channelId ?? data.id ?? ''),
         metrics: {
             ...metrics,
             custom_metrics: data.customMetrics,

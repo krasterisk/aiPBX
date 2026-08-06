@@ -19,9 +19,10 @@ describe('TaxonomyEditor', () => {
         id: 'returns',
         name: 'Возвраты',
         aliases: ['возврат'],
+        description: 'Клиент просит вернуть товар',
     }
 
-    it('renders one row per theme with name and keyword fields', () => {
+    it('renders name, description, and optional phrase fields', () => {
         render(
             <TaxonomyEditor
                 taxonomy={[baseTheme, { id: 'delivery', name: 'Доставка', aliases: ['курьер'] }]}
@@ -30,10 +31,12 @@ describe('TaxonomyEditor', () => {
         )
 
         expect(screen.getByDisplayValue('Возвраты')).toBeInTheDocument()
+        expect(screen.getByDisplayValue('Клиент просит вернуть товар')).toBeInTheDocument()
         expect(screen.getByDisplayValue('возврат')).toBeInTheDocument()
         expect(screen.getByDisplayValue('Доставка')).toBeInTheDocument()
         expect(screen.getByDisplayValue('курьер')).toBeInTheDocument()
         expect(screen.getAllByText('TAXONOMY_NAME_HINT')).toHaveLength(2)
+        expect(screen.getAllByText('TAXONOMY_DESCRIPTION_HINT')).toHaveLength(2)
         expect(screen.getAllByText('TAXONOMY_KEYWORDS_HINT')).toHaveLength(2)
     })
 
@@ -45,7 +48,7 @@ describe('TaxonomyEditor', () => {
 
         expect(onChange).toHaveBeenCalledWith([
             baseTheme,
-            expect.objectContaining({ name: '', aliases: [] }),
+            expect.objectContaining({ name: '', aliases: [], description: '' }),
         ])
     })
 
@@ -60,7 +63,20 @@ describe('TaxonomyEditor', () => {
         ])
     })
 
-    it('preserves in-progress keyword typing including trailing separators', () => {
+    it('updates description independently of name', () => {
+        const onChange = jest.fn()
+        render(<TaxonomyEditor taxonomy={[baseTheme]} onChange={onChange} />)
+
+        fireEvent.change(screen.getByDisplayValue('Клиент просит вернуть товар'), {
+            target: { value: 'Возврат или обмен' },
+        })
+
+        expect(onChange).toHaveBeenCalledWith([
+            expect.objectContaining({ id: 'returns', description: 'Возврат или обмен' }),
+        ])
+    })
+
+    it('preserves in-progress phrase typing including trailing separators', () => {
         const onChange = jest.fn()
         render(<TaxonomyEditor taxonomy={[baseTheme]} onChange={onChange} />)
 
@@ -73,7 +89,7 @@ describe('TaxonomyEditor', () => {
         ])
     })
 
-    it('reports trimmed keyword list with empty entries dropped', () => {
+    it('reports trimmed phrase list with empty entries dropped', () => {
         const onChange = jest.fn()
         render(<TaxonomyEditor taxonomy={[baseTheme]} onChange={onChange} />)
 
@@ -117,9 +133,9 @@ describe('TaxonomyEditor', () => {
     it('shows guidance when no themes are configured', () => {
         render(<TaxonomyEditor taxonomy={[]} onChange={jest.fn()} />)
 
-        expect(screen.getByText('Добавьте темы и ключевые слова — звонки начнут размечаться при следующем анализе.')).toBeInTheDocument()
+        expect(screen.getByText('Добавьте темы - звонки начнут размечаться при следующем анализе.')).toBeInTheDocument()
         expect(screen.getByText(
-            'Темы — метки для звонков. При анализе система ищет в расшифровке ключевые слова темы и ставит метку автоматически.',
+            'Темы - метки для звонков. При анализе ИИ выбирает подходящие темы из справочника по смыслу разговора.',
         )).toBeInTheDocument()
     })
 })

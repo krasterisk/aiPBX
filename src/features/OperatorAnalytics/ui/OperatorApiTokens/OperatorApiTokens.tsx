@@ -21,8 +21,8 @@ import cls from './OperatorApiTokens.module.scss'
 
 interface TokenItemProps {
     token: OperatorApiToken
-    onRevoke: (id: string) => void // PATCH /revoke — деактивация
-    onDelete: (id: string) => void // DELETE — физическое удаление
+    onRevoke: (id: string) => void // PATCH /revoke - деактивация
+    onDelete: (id: string) => void // DELETE - физическое удаление
 }
 
 const TokenItem = memo(({ token, onRevoke, onDelete }: TokenItemProps) => {
@@ -292,7 +292,7 @@ const ApiDocs = memo(() => {
             {/* Note */}
             <div className={cls.docNote}>
                 <KeyIcon sx={{ fontSize: 16, verticalAlign: 'middle', marginRight: 6 }} />
-                {String(t('Каждый токен привязан к конкретному проекту при генерации. Все звонки, загруженные через этот токен, автоматически попадают в привязанный проект. Разные проекты — разные токены.'))}
+                {String(t('Каждый токен привязан к конкретному проекту при генерации. Все звонки, загруженные через этот токен, автоматически попадают в привязанный проект. Разные проекты - разные токены.'))}
             </div>
 
             {/* Accordion */}
@@ -317,7 +317,7 @@ Content-Type: application/json`}</pre>
   "clientPhone":  "+7 999 123-45-67",              // ${t('необязательно')}
   "language":     "auto"                           // auto | ru | en | de | zh | kz | uk
 }`}</pre>
-                        <Text text={String(t('Пример (одиночный URL — синхронно):'))} bold size={'s'} />
+                        <Text text={String(t('Пример (одиночный URL - синхронно):'))} bold size={'s'} />
                         <pre className={cls.codeBlock}>{`curl -X POST ${base}/operator-analytics/analyze-url \\
   -H "Authorization: Bearer oa_xxx" \\
   -H "Content-Type: application/json" \\
@@ -326,7 +326,7 @@ Content-Type: application/json`}</pre>
     "operatorName": "Иван Петров",
     "language": "ru"
   }'`}</pre>
-                        <Text text={String(t('Пример (массив URL — асинхронно):'))} bold size={'s'} />
+                        <Text text={String(t('Пример (массив URL - асинхронно):'))} bold size={'s'} />
                         <pre className={cls.codeBlock}>{`curl -X POST ${base}/operator-analytics/analyze-url \\
   -H "Authorization: Bearer oa_xxx" \\
   -H "Content-Type: application/json" \\
@@ -365,7 +365,7 @@ Content-Type: multipart/form-data`}</pre>
 operatorName  ${t('имя оператора')}                                       ${t('необязательно')}
 clientPhone   ${t('номер телефона клиента')} (+7…)                        ${t('необязательно')}
 language      auto | ru | en | de | zh | kz | uk                  ${t('по умолчанию')}: auto
-sync          true — синхронный ответ (legacy, риск таймаута)     ${t('необязательно')}`}</pre>
+sync          true - синхронный ответ (legacy, риск таймаута)     ${t('необязательно')}`}</pre>
                         <Text text={String(t('Пример (один файл, async):'))} bold size={'s'} />
                         <pre className={cls.codeBlock}>{`curl -X POST ${base}/operator-analytics/analyze-file \\
   -H "Authorization: Bearer oa_xxx" \\
@@ -455,9 +455,9 @@ endDate    YYYY-MM-DD       (${t('фильтр по дате до')})`}</pre>
   "summary":    "..."
 }`}</pre>
                         <Text text={String(t('Статус:'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`completed   — ${t('анализ завершён, все поля заполнены')}
-processing  — ${t('ещё анализируется (metrics/transcript будут пустыми)')}
-error       — ${t('ошибка анализа, см. errorMessage')}`}</pre>
+                        <pre className={cls.codeBlock}>{`completed   - ${t('анализ завершён, все поля заполнены')}
+processing  - ${t('ещё анализируется (metrics/transcript будут пустыми)')}
+error       - ${t('ошибка анализа, см. errorMessage')}`}</pre>
                     </VStack>
                 </DocEntry>
 

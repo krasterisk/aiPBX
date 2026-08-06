@@ -80,7 +80,7 @@ export const useGoogleLogin = (onSuccess: (idToken: string) => void) => {
     }
 
     // One Tap / account chooser. If suppressed by the browser, GIS logs
-    // skipped/not displayed — user may need to allow third-party sign-in.
+    // skipped/not displayed - user may need to allow third-party sign-in.
     window.google.accounts.id.prompt()
   }
 }

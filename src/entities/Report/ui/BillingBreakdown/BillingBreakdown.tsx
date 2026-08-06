@@ -15,7 +15,7 @@ interface BillingBreakdownProps {
 
 /** Line cost in USD; use row FX snapshot only for the total column (amountCurrency is for totalCost). */
 const fmtCost = (row: BillingRecord, usd: number | undefined) => {
-    if (usd == null || usd <= 0) return '—'
+    if (usd == null || usd <= 0) return '-'
     const isRowTotal = Math.abs(Number(usd) - Number(row.totalCost)) < 1e-9
     return formatDisplayMoney(
         isRowTotal
@@ -102,7 +102,7 @@ export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingB
             helper.accessor('audioTokens', {
                 header: String(t('Audio токены')),
                 cell: info => isAnalyticType(info.row.original.type)
-                    ? '—'
+                    ? '-'
                     : info.getValue().toLocaleString(),
                 footer: () => null
             }),
@@ -116,14 +116,14 @@ export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingB
                     header: String(t('LLM вход')),
                     cell: info => info.getValue() != null
                         ? Number(info.getValue()).toLocaleString()
-                        : '—',
+                        : '-',
                     footer: () => null
                 }),
                 helper.accessor('textTokensOut', {
                     header: String(t('LLM выход')),
                     cell: info => info.getValue() != null
                         ? Number(info.getValue()).toLocaleString()
-                        : '—',
+                        : '-',
                     footer: () => null
                 })
             ] : []),
@@ -135,7 +135,7 @@ export const BillingBreakdown = memo(({ billingRecords, userCurrency }: BillingB
             helper.accessor('audioCost', {
                 header: String(t('Audio стоимость')),
                 cell: info => isAnalyticType(info.row.original.type)
-                    ? '—'
+                    ? '-'
                     : fmtCost(info.row.original, info.getValue()),
                 footer: () => null
             }),

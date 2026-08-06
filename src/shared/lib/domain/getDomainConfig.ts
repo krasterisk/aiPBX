@@ -5,7 +5,7 @@
  * Domain-specific behavior (payment system, region, branding, etc.)
  * is determined at runtime via `window.location.hostname`.
  *
- * API base URL is always relative (`/api`) — nginx proxies it to the backend.
+ * API base URL is always relative (`/api`) - nginx proxies it to the backend.
  */
 
 export type PaymentSystem = 'stripe' | 'robokassa'
@@ -112,7 +112,7 @@ export function getDomainConfig (): DomainConfig {
 
 /**
  * Returns the API base URL for the current domain.
- * Always relative — nginx handles proxying to the backend.
+ * Always relative - nginx handles proxying to the backend.
  */
 export function getApiBaseUrl (): string {
     return '/api'
@@ -171,7 +171,7 @@ export function getTenantCurrencyCode (): TenantCurrencyCode {
     if (typeof window === 'undefined') return 'USD'
 
     const hostname = window.location.hostname
-    // Local dev: DEFAULT_CONFIG has currency USD — still treat as RU tenant for billing display
+    // Local dev: DEFAULT_CONFIG has currency USD - still treat as RU tenant for billing display
     if (typeof __IS_DEV__ !== 'undefined' && __IS_DEV__ && LOCAL_DEV_HOSTNAMES.has(hostname)) {
         return 'RUB'
     }

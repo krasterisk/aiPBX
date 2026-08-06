@@ -7,7 +7,7 @@ interface QueryArgs {
   sort?: string
   order?: string
   search?: string
-  /** ADMIN: tenant owner id — owner + sub-users */
+  /** ADMIN: tenant owner id - owner + sub-users */
   ownerUserId?: string
 }
 

@@ -14,7 +14,7 @@
       "Desc": "Echtzeit-Sprach-KI-Assistent. Verarbeitet ein- und ausgehende Anrufe mit natürlichem Dialog.",
       "Unit": "1M Token",
       "UnitFull": "pro 1.000.000 Token",
-      "TableDesc": "Kosten für die Sprachdialogverarbeitung: Spracherkennung, LLM-Antwortgenerierung und Sprachsynthese — alles in einem Token-basierten Preis enthalten.",
+      "TableDesc": "Kosten für die Sprachdialogverarbeitung: Spracherkennung, LLM-Antwortgenerierung und Sprachsynthese - alles in einem Token-basierten Preis enthalten.",
       "Features": [
         "Ein- und ausgehende Anrufbearbeitung",
         "Natürlicher Sprachdialog mit LLM",
@@ -83,11 +83,11 @@
     },
     "Q2": {
       "Question": "Was ist der Unterschied zwischen Realtime AI und Text AI?",
-      "Answer": "Realtime AI verarbeitet Sprachanrufe — einschließlich Spracherkennung (STT), LLM-Antwortgenerierung und Sprachsynthese (TTS). Text AI arbeitet nur mit Text in Chats und Widgets, weshalb es günstiger ist."
+      "Answer": "Realtime AI verarbeitet Sprachanrufe - einschließlich Spracherkennung (STT), LLM-Antwortgenerierung und Sprachsynthese (TTS). Text AI arbeitet nur mit Text in Chats und Widgets, weshalb es günstiger ist."
     },
     "Q3": {
       "Question": "Wie wird Speech Analytics abgerechnet?",
-      "Answer": "Zuerst wird die Aufnahme transkribiert (abgerechnet unter STT — pro Minute). Dann wird die Transkription über LLM analysiert (abgerechnet unter Analytics — pro Token). Das sind zwei unabhängige Schritte mit unterschiedlichen Preisen."
+      "Answer": "Zuerst wird die Aufnahme transkribiert (abgerechnet unter STT - pro Minute). Dann wird die Transkription über LLM analysiert (abgerechnet unter Analytics - pro Token). Das sind zwei unabhängige Schritte mit unterschiedlichen Preisen."
     },
     "Q4": {
       "Question": "Gibt es eine Mindestzahlung oder ein Abonnement?",

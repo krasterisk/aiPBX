@@ -255,7 +255,7 @@ export const DashboardBuilder = memo((props: DashboardBuilderProps) => {
                     >
                         {String(t('Назад'))}
                     </Button>
-                    <Text title={`${t('Конструктор дашборда')} — ${project.name}`} bold size={'s'} />
+                    <Text title={`${t('Конструктор дашборда')} - ${project.name}`} bold size={'s'} />
                 </HStack>
 
                 <HStack gap={'8'} wrap={'wrap'}>

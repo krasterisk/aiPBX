@@ -33,7 +33,7 @@ const publishMethods = [
         descKey: 'publish_widget_desc',
         titleFallback: 'Кнопка на вашем сайте',
         badgeFallback: 'Самый простой способ',
-        descFallback: 'Добавьте виджет на сайт — клиенты смогут позвонить ассистенту прямо из браузера.'
+        descFallback: 'Добавьте виджет на сайт - клиенты смогут позвонить ассистенту прямо из браузера.'
     },
     {
         Icon: PhoneCall,
@@ -98,7 +98,7 @@ export const TrunkWidgetStep = memo(({ className }: TrunkWidgetStepProps) => {
                 title={t('trunk_widget_title', 'Как подключить ассистента к клиентам?')}
                 text={t(
                     'trunk_widget_subtitle',
-                    'Выберите способ публикации — можно настроить сейчас или вернуться позже.'
+                    'Выберите способ публикации - можно настроить сейчас или вернуться позже.'
                 )}
                 align="center"
                 size="l"

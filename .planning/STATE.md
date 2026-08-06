@@ -25,14 +25,17 @@ progress:
 
 **Current Plan:** 9
 
-**Last Activity:** 2026-07-30
+**Last Activity:** 2026-08-05
 
-**Stopped At:** Completed 10-09-PLAN.md (10-08 completed in same phase wave)
+**Stopped At:** GAP-35 LLM closed-set callTaxonomy tagging (PROMPT_VERSION 2026-08-05.1); Phase 10 D-18 superseded
 
 ## Accumulated Context
 
 ### Decisions
 
+- [GAP-34]: Critical alerts use project.alertConfig (inherit recipients from digest by default); Email+Telegram via OperatorAlertService; product path independent of OPERATOR_ANOMALY_ENABLED; POST …/alerts/test with 5‑min cooldown; domain-aware bots via getAipbxTelegramBot (RU=@AIPBXRUbot)
+- [GAP-33]: Analytics digest uses project.digestConfig + hourly cron; charts via SVG→sharp PNG; manual send allowed even if schedule disabled
+- [GAP-35]: callTaxonomy auto-tags via LLM closed-set `topic_tag_ids` in analysis schema (PROMPT_VERSION 2026-08-05.1); D-18 keyword matching superseded; aliases = optional prompt hints; description preferred; manual PATCH + regenerate merge unchanged
 - [Phase 10]: Tag panel stack entry carries full TagStat so card and panel D-16 figures stay aligned
 - [Phase 10]: Topics not-configured empty state links to getRouteAnalyticsProjects() route constant
 - [Phase 10]: Re-analysis deletes operator_call_tags where source=auto only; manual PATCH replaces full tag set

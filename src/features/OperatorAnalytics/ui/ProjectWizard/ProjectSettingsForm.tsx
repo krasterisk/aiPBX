@@ -8,7 +8,6 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch
 import SaveIcon from '@mui/icons-material/Save'
 import {
     OperatorProject,
-    TagDefinition,
     useUpdateOperatorProject,
     projectWizardActions,
     getWizardName,
@@ -16,9 +15,15 @@ import {
     getWizardSystemPrompt,
     getWizardCustomMetrics,
     getWizardVisibleDefaultMetrics,
+    getWizardCallTaxonomy,
     getWizardWebhookUrl,
     getWizardWebhookHeaders,
     getWizardWebhookEvents,
+    getWizardDigestConfig,
+    getWizardAlertConfig,
+    DEFAULT_DIGEST_CONFIG,
+    DEFAULT_ALERT_CONFIG,
+    mergeAlertConfig,
 } from '@/entities/Report'
 import { WizardReviewSection } from './WizardReviewSection'
 import { WizardHeader } from './WizardHeader'
@@ -46,13 +51,13 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
     const webhookUrl = useSelector(getWizardWebhookUrl)
     const webhookHeaders = useSelector(getWizardWebhookHeaders)
     const webhookEvents = useSelector(getWizardWebhookEvents)
+    const digestConfig = useSelector(getWizardDigestConfig) ?? DEFAULT_DIGEST_CONFIG
+    const alertConfig = mergeAlertConfig(useSelector(getWizardAlertConfig) ?? DEFAULT_ALERT_CONFIG)
+    const callTaxonomy = useSelector(getWizardCallTaxonomy)
 
     // Budget is edited locally (not part of the wizard slice) to keep the change additive.
     const [budgetInput, setBudgetInput] = useState(
         editProject.monthlyBudgetUsd != null ? String(editProject.monthlyBudgetUsd) : '',
-    )
-    const [callTaxonomy, setCallTaxonomy] = useState<TagDefinition[]>(
-        editProject.callTaxonomy ?? [],
     )
 
     const handleSave = useCallback(async () => {
@@ -74,6 +79,25 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                 webhookHeaders: Object.keys(webhookHeaders).length > 0 ? webhookHeaders : undefined,
                 webhookEvents: webhookEvents.length > 0 ? webhookEvents : undefined,
                 monthlyBudgetUsd,
+                digestConfig: {
+                    enabled: digestConfig.enabled,
+                    emails: digestConfig.emails,
+                    telegramChatIds: digestConfig.telegramChatIds,
+                    schedule: digestConfig.schedule,
+                    reportWindow: digestConfig.reportWindow,
+                    weeklyDay: digestConfig.weeklyDay,
+                    monthlyDay: digestConfig.monthlyDay,
+                    sendHour: digestConfig.sendHour,
+                },
+                alertConfig: {
+                    enabled: alertConfig.enabled,
+                    inheritRecipientsFromDigest: alertConfig.inheritRecipientsFromDigest,
+                    emails: alertConfig.emails,
+                    telegramChatIds: alertConfig.telegramChatIds,
+                    csatDrop: alertConfig.csatDrop,
+                    negativeSpike: alertConfig.negativeSpike,
+                    budgetExceeded: alertConfig.budgetExceeded,
+                },
             }).unwrap()
 
             dispatch(projectWizardActions.close())
@@ -82,7 +106,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
         } catch (err) {
             console.error('Settings save error:', err)
         }
-    }, [name, description, systemPrompt, customMetrics, callTaxonomy, visibleDefaults, webhookUrl, webhookHeaders, webhookEvents, budgetInput, editProject, updateProject, dispatch, onClose, onSuccess, t])
+    }, [name, description, systemPrompt, customMetrics, callTaxonomy, visibleDefaults, webhookUrl, webhookHeaders, webhookEvents, digestConfig, alertConfig, budgetInput, editProject, updateProject, dispatch, onClose, onSuccess, t])
 
     return (
         <VStack gap={'16'} max className={cls.ProjectWizard}>
@@ -121,7 +145,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
             />
 
             <Textarea
-                label={String(t('Месячный бюджет, USD (0 — без лимита)'))}
+                label={String(t('Месячный бюджет, USD (0 - без лимита)'))}
                 value={budgetInput}
                 onChange={e => { setBudgetInput(e.target.value) }}
                 size={'small'}
@@ -133,7 +157,10 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
             <Card variant={'glass'} border={'partial'} padding={'16'} max>
                 <VStack gap={'12'} max>
                     <Text text={String(t('Темы звонков'))} bold />
-                    <TaxonomyEditor taxonomy={callTaxonomy} onChange={setCallTaxonomy} />
+                    <TaxonomyEditor
+                        taxonomy={callTaxonomy}
+                        onChange={(taxonomy) => dispatch(projectWizardActions.setCallTaxonomy(taxonomy))}
+                    />
                 </VStack>
             </Card>
 

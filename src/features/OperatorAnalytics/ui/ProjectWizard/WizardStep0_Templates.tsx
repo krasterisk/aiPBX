@@ -11,6 +11,9 @@ import TechSupportIcon from '@/shared/assets/icons/templates/tech-support.svg'
 import BankingIcon from '@/shared/assets/icons/templates/banking.svg'
 import MedicineIcon from '@/shared/assets/icons/templates/medicine.svg'
 import FoodIcon from '@/shared/assets/icons/templates/food.svg'
+import AutoServiceIcon from '@/shared/assets/icons/templates/auto-service.svg'
+import InsuranceIcon from '@/shared/assets/icons/templates/insurance.svg'
+import EcommerceIcon from '@/shared/assets/icons/templates/ecommerce.svg'
 import CustomIcon from '@/shared/assets/icons/templates/custom.svg'
 import cls from './ProjectWizard.module.scss'
 
@@ -21,6 +24,9 @@ const TEMPLATE_ICONS: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = 
     banking: BankingIcon,
     medicine: MedicineIcon,
     food: FoodIcon,
+    auto_service: AutoServiceIcon,
+    insurance: InsuranceIcon,
+    ecommerce: EcommerceIcon,
     custom: CustomIcon,
 }
 
@@ -96,6 +102,105 @@ const TEMPLATES: ProjectTemplate[] = [
             { id: 'upsell_suggested', name: 'Допродажа', type: 'boolean', description: 'Предложил ли оператор дополнительные позиции' },
         ],
         visibleDefaultMetrics: ['greeting_quality', 'politeness_empathy', 'closing_quality', 'speech_clarity_pace'],
+    },
+    {
+        id: 'auto_service',
+        name: 'Автосервис',
+        description: 'Анализ звонков автосервисов и дилерских центров',
+        icon: 'car',
+        systemPrompt: 'Контекст: автосервис или дилерский центр. Операторы принимают заявки на ремонт и ТО, консультируют по работам и запчастям, записывают клиентов на визит.',
+        customMetricsSchema: [
+            {
+                id: 'service_booked',
+                name: 'Запись на сервис',
+                type: 'boolean',
+                description: 'Была ли оформлена запись клиента на ремонт, диагностику или ТО',
+            },
+            {
+                id: 'diagnostics_offered',
+                name: 'Диагностика предложена',
+                type: 'boolean',
+                description: 'Предложил ли оператор диагностику или осмотр при неясной жалобе на авто',
+            },
+            {
+                id: 'parts_availability_checked',
+                name: 'Наличие запчастей',
+                type: 'boolean',
+                description: 'Уточнил ли оператор наличие запчастей или сроки поставки, если это важно для клиента',
+            },
+        ],
+        visibleDefaultMetrics: [
+            'greeting_quality',
+            'product_knowledge',
+            'problem_resolution',
+            'closing_quality',
+        ],
+    },
+    {
+        id: 'insurance',
+        name: 'Страхование',
+        description: 'Анализ звонков страховых компаний и брокеров',
+        icon: 'shield',
+        systemPrompt: 'Контекст: страховая компания или брокер. Операторы консультируют по полисам, оформляют заявки, принимают обращения по страховым случаям и пролонгации.',
+        customMetricsSchema: [
+            {
+                id: 'policy_needs_clarified',
+                name: 'Потребность выявлена',
+                type: 'boolean',
+                description: 'Выяснил ли оператор, какой риск или продукт интересует клиента (ОСАГО, КАСКО, жизнь, имущество и т.п.)',
+            },
+            {
+                id: 'quote_or_application',
+                name: 'Расчёт или заявка',
+                type: 'boolean',
+                description: 'Был ли сделан расчёт стоимости или оформлена заявка на полис / урегулирование',
+            },
+            {
+                id: 'claim_next_steps',
+                name: 'Дальнейшие шаги по убытку',
+                type: 'boolean',
+                description: 'При страховом случае оператор объяснил документы и следующие шаги урегулирования',
+            },
+        ],
+        visibleDefaultMetrics: [
+            'script_compliance',
+            'active_listening',
+            'product_knowledge',
+            'politeness_empathy',
+        ],
+    },
+    {
+        id: 'ecommerce',
+        name: 'Интернет-магазин',
+        description: 'Анализ звонков интернет-магазинов и маркетплейсов',
+        icon: 'bag',
+        systemPrompt: 'Контекст: интернет-магазин или маркетплейс. Операторы помогают с заказами, статусом доставки, возвратами, обменом и консультацией по товарам.',
+        customMetricsSchema: [
+            {
+                id: 'order_status_explained',
+                name: 'Статус заказа',
+                type: 'boolean',
+                description: 'Дал ли оператор понятный статус заказа или доставки и сроки',
+            },
+            {
+                id: 'return_or_exchange_handled',
+                name: 'Возврат или обмен',
+                type: 'boolean',
+                description: 'Корректно ли обработан запрос на возврат, обмен или отмену заказа',
+            },
+            {
+                id: 'cross_sell_or_alternative',
+                name: 'Альтернатива или допродажа',
+                type: 'boolean',
+                description: 'При отсутствии товара или по запросу предложил ли оператор аналог или доп. позицию',
+            },
+        ],
+        visibleDefaultMetrics: [
+            'greeting_quality',
+            'problem_resolution',
+            'objection_handling',
+            'closing_quality',
+        ],
     },
     {
         id: 'custom',

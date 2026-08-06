@@ -71,7 +71,7 @@ export const PlaygroundGuideStep = memo(({ className }: PlaygroundGuideStepProps
                 title={t('playground_guide_title', 'Проверьте ассистента голосом')}
                 text={t(
                     'playground_guide_subtitle',
-                    'Следующий шаг — звонок в Playground. Это займёт пару минут и покажет, как ассистент отвечает клиентам.'
+                    'Следующий шаг - звонок в Playground. Это займёт пару минут и покажет, как ассистент отвечает клиентам.'
                 )}
                 align="center"
                 size="l"

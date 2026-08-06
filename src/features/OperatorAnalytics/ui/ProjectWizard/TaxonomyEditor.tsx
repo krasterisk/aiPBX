@@ -28,12 +28,16 @@ export const TaxonomyEditor = memo(({ taxonomy, onChange }: TaxonomyEditorProps)
     const handleAdd = useCallback(() => {
         onChange([
             ...taxonomy,
-            { id: `tag_${Date.now()}`, name: '', aliases: [] },
+            { id: `tag_${Date.now()}`, name: '', aliases: [], description: '' },
         ])
     }, [taxonomy, onChange])
 
     const handleNameChange = useCallback((idx: number, name: string) => {
         onChange(taxonomy.map((tag, i) => (i === idx ? { ...tag, name } : tag)))
+    }, [taxonomy, onChange])
+
+    const handleDescriptionChange = useCallback((idx: number, description: string) => {
+        onChange(taxonomy.map((tag, i) => (i === idx ? { ...tag, description } : tag)))
     }, [taxonomy, onChange])
 
     const handleAliasesDraftChange = useCallback((idx: number, tagId: string, raw: string) => {
@@ -63,14 +67,14 @@ export const TaxonomyEditor = memo(({ taxonomy, onChange }: TaxonomyEditorProps)
         <VStack gap={'12'} max>
             <Text
                 text={String(t(
-                    'Темы — метки для звонков. При анализе система ищет в расшифровке ключевые слова темы и ставит метку автоматически.',
+                    'Темы - метки для звонков. При анализе ИИ выбирает подходящие темы из справочника по смыслу разговора.',
                 ))}
                 size={'s'}
             />
 
             {taxonomy.length === 0 && (
                 <Text
-                    text={String(t('Добавьте темы и ключевые слова — звонки начнут размечаться при следующем анализе.'))}
+                    text={String(t('Добавьте темы - звонки начнут размечаться при следующем анализе.'))}
                     size={'s'}
                 />
             )}
@@ -109,7 +113,19 @@ export const TaxonomyEditor = memo(({ taxonomy, onChange }: TaxonomyEditorProps)
                         />
 
                         <Textarea
-                            label={String(t('Ключевые слова (через запятую)'))}
+                            label={String(t('Описание (когда ставить тему)'))}
+                            value={tag.description ?? ''}
+                            onChange={e => { handleDescriptionChange(idx, e.target.value) }}
+                            size={'small'}
+                            fullWidth
+                            multiline
+                            minRows={2}
+                            helperText={String(t('TAXONOMY_DESCRIPTION_HINT'))}
+                            placeholder={String(t('TAXONOMY_DESCRIPTION_PLACEHOLDER'))}
+                        />
+
+                        <Textarea
+                            label={String(t('Формулировки (необязательно)'))}
                             value={aliasDraftById[tag.id] ?? tag.aliases.join(', ')}
                             onChange={e => { handleAliasesDraftChange(idx, tag.id, e.target.value) }}
                             size={'small'}

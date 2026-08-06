@@ -170,7 +170,7 @@ export const TelegramStep = memo(({ className }: TelegramStepProps) => {
                                             2
                                         </HStack>
                                         <Text
-                                            text={t('telegram_instruction_2', 'Нажмите «Start» — бот пришлёт ваш ID. Вставьте его сюда:')}
+                                            text={t('telegram_instruction_2', 'Нажмите «Start» - бот пришлёт ваш ID. Вставьте его сюда:')}
                                             size="s"
                                         />
                                     </HStack>

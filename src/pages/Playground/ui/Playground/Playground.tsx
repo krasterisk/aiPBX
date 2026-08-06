@@ -54,7 +54,7 @@ const PlaygroundPage = memo((props: PlaygroundPageProps) => {
         }
 
         toast.success(
-            t('onboarding_call_success', 'Отлично! Звонок прошёл успешно — настройте публикацию ассистента.')
+            t('onboarding_call_success', 'Отлично! Звонок прошёл успешно - настройте публикацию ассистента.')
         )
     }, [dispatch, isOnboardingAssistants, onboardingFromUrl, setSearchParams, t])
 

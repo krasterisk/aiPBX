@@ -54,7 +54,7 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
     useEffect(() => {
         if (assistantData && selectedAssistant) {
             dispatch(playgroundAssistantFormActions.initForm(assistantData))
-            // Also init entity slice — reused components (MainInfoCard, VadSettingsCard, etc.) read from it
+            // Also init entity slice - reused components (MainInfoCard, VadSettingsCard, etc.) read from it
             dispatch(assistantFormActions.initEdit(assistantData))
         } else {
             dispatch(playgroundAssistantFormActions.resetForm())

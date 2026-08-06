@@ -271,7 +271,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                         bold
                     />
 
-                    {/* All features — template defaults + user-added, all deletable */}
+                    {/* All features - template defaults + user-added, all deletable */}
                     {customFeatures.map((feature, i) => (
                         <HStack key={i} gap="8" align="center">
                             <Check size={14} className={cls.checkIcon} />

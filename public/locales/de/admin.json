@@ -50,7 +50,7 @@
             "address": "Adresse"
         },
         "form": {
-            "hint": "INN eingeben — juristische Daten aus dem Register. Bankdaten manuell; werden bei Rechnungen verwendet.",
+            "hint": "INN eingeben - juristische Daten aus dem Register. Bankdaten manuell; werden bei Rechnungen verwendet.",
             "ogrn": "OGRN / OGRNIP",
             "director": "Unterzeichner (Name)",
             "bankSection": "Bankverbindung (für Zahlungsrechnungen)",
@@ -65,7 +65,7 @@
                 "ul": "Juristische Person",
                 "ip": "Einzelunternehmer"
             },
-            "innHint": "10 Ziffern für juristische Person oder 12 für Einzelunternehmer — Daten werden automatisch geladen.",
+            "innHint": "10 Ziffern für juristische Person oder 12 für Einzelunternehmer - Daten werden automatisch geladen.",
             "innHintIncomplete": "Noch {{count}} Ziffer(n)…",
             "kppHint": "KPP für juristische Personen, wenn mehrere Filialen gefunden werden oder die Suche fehlschlägt.",
             "kppRequired": "KPP (9 Ziffern) für juristische Personen angeben.",
@@ -73,7 +73,7 @@
             "lookupSuccess": "Per INN geladen",
             "lookupFailed": "Organisation per INN nicht gefunden",
             "lookupRequiresKpp": "INN allein reicht nicht. KPP unten angeben.",
-            "chooseBranch": "Mehrere Organisationen mit dieser INN — bitte auswählen:"
+            "chooseBranch": "Mehrere Organisationen mit dieser INN - bitte auswählen:"
         }
     },
     "helpdesk": {
@@ -105,7 +105,7 @@
             "contactPhone": "Kontakttelefon (falls abweichend)", "clientSection": "Kunde",
             "findClient": "Kunde suchen", "pickCandidate": "Organisation aus Liste wählen",
             "clientLinked": "Kunde verknüpft",
-            "clientNotFound": "Kunde nicht gefunden — Ticket kann ohne Verknüpfung erstellt werden",
+            "clientNotFound": "Kunde nicht gefunden - Ticket kann ohne Verknüpfung erstellt werden",
             "cancel": "Abbrechen", "submit": "Erstellen"
         },
         "detail": {

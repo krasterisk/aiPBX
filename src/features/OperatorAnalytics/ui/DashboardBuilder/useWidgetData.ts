@@ -138,7 +138,7 @@ const PIE_COLORS = [
 ]
 
 /**
- * Pure helper — exported for unit tests.
+ * Pure helper - exported for unit tests.
  */
 export function extractCustomWidgetData(
     widget: DashboardWidget,

@@ -258,7 +258,7 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
                                 />
                             </td>
                             <td>
-                                <Text text={row.avgCsat != null ? String(row.avgCsat) : '—'} />
+                                <Text text={row.avgCsat != null ? String(row.avgCsat) : '-'} />
                             </td>
                             <td>
                                 <Text

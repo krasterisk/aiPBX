@@ -29,7 +29,7 @@ interface CreateHelpdeskTicketModalProps {
 
 function formatClientLabel(client: AlfawebhookClient): string {
     const parts = [client.name, client.inn ? `ИНН ${client.inn}` : ''].filter(Boolean)
-    return parts.join(' — ') || client.id || '—'
+    return parts.join(' - ') || client.id || '-'
 }
 
 export const CreateHelpdeskTicketModal = memo((props: CreateHelpdeskTicketModalProps) => {

@@ -1,10 +1,10 @@
-/** RUB (or tenant currency) per 1 USD — same semantics as billing `fxRateUsdToCurrency`. */
+/** RUB (or tenant currency) per 1 USD - same semantics as billing `fxRateUsdToCurrency`. */
 export function formatFxRateUsdToCurrency (
     rate: number | string | null | undefined,
 ): string {
     const n = rate != null ? Number(rate) : NaN
     if (!Number.isFinite(n) || n <= 0) {
-        return '—'
+        return '-'
     }
     return `1 USD = ${n.toFixed(2)} ₽`
 }

@@ -20,6 +20,18 @@
     min-width: 0;
 }
 
+.chipButton {
+    cursor: pointer;
+    border: none;
+    font: inherit;
+    @include focus-visible;
+
+    &:hover {
+        border-color: var(--accent-redesigned);
+        color: var(--accent-redesigned);
+    }
+}
+
 .chipLabel {
     @include text-truncate;
     min-width: 0;

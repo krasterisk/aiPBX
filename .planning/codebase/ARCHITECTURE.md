@@ -317,6 +317,11 @@
 
 **i18n:** `i18next` initialized in `src/shared/config/i18n/i18n`; keys in `public/locales/{en,ru,de,zh}/`
 
+**UI / copy conventions (required for new work):**
+- Do **not** use the em dash (`—`, U+2014) in user-facing labels, button text, hints, empty states, or i18n keys/values. Use a regular hyphen `-` (U+002D) or rephrase.
+- Do **not** use emoji in cabinet UI, i18n strings, or textual labels/descriptions. Use shared icon components (e.g. Lucide) instead.
+- Full frontend rules: `.docs/FRONTEND_ARCHITECTURE.md` (section «Тексты в UI»).
+
 **Observability:** Sentry on both repos; Yandex Metrika + GA4 via `src/shared/config/analytics/initAnalytics.ts`
 
 **Rate limiting:** Global `ThrottlerGuard` 100 req/min (`aiPBX_backend/src/app.module.ts`)

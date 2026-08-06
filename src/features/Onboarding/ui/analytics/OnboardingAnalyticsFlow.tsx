@@ -18,6 +18,7 @@ import {
     AnalyticsWelcomeOverviewStep,
     AnalyticsProjectSetupStep,
     AnalyticsMetricsStep,
+    AnalyticsTopicsStep,
     AnalyticsUploadStep,
     AnalyticsUploadPhase
 } from './OnboardingAnalyticsSteps'
@@ -102,6 +103,8 @@ const OnboardingAnalyticsFlowContent = memo(({ className }: OnboardingAnalyticsF
             case 3:
                 return AnalyticsMetricsStep
             case 4:
+                return AnalyticsTopicsStep
+            case 5:
                 return AnalyticsUploadStep
             default:
                 return AnalyticsWelcomeOverviewStep
@@ -113,7 +116,7 @@ const OnboardingAnalyticsFlowContent = memo(({ className }: OnboardingAnalyticsF
             {error && (
                 <Text text={error} variant="error" align="center" size="s" />
             )}
-            {currentStep === 4
+            {currentStep === 5
                 ? (
                     <AnalyticsUploadStep
                         onBatchStarted={handleBatchStarted}

@@ -31,7 +31,7 @@ jest.mock('react-toastify', () => ({
 
 // ── Fixtures ─────────────────────────────────────────────────────────────────
 
-/** Flat operator metrics — from file-upload analytics */
+/** Flat operator metrics - from file-upload analytics */
 const operatorAnalytics: Analytics = {
     id: 207,
     channelId: '24',
@@ -88,7 +88,7 @@ const botAnalytics: Analytics = {
     csat: 5,
 }
 
-/** Analytics with no metrics at all — only summary fallback */
+/** Analytics with no metrics at all - only summary fallback */
 const summaryOnlyAnalytics: Analytics = {
     id: 300,
     channelId: '30',

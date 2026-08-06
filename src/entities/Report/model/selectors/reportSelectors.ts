@@ -18,3 +18,5 @@ export const getReportSortOrder = (state: StateSchema) => state.reportsPage?.sor
 export const getReportSource = (state: StateSchema) => state.reportsPage?.source
 export const getReportsListGeneration = (state: StateSchema) => state.reportsPage?.listGeneration ?? 0
 export const getReportCsatFilter = (state: StateSchema) => state.reportsPage?.csatFilter ?? []
+export const getReportTagId = (state: StateSchema) => state.reportsPage?.tagId ?? ''
+export const getReportTagLabel = (state: StateSchema) => state.reportsPage?.tagLabel ?? ''

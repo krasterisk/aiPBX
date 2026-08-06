@@ -7,7 +7,7 @@ export interface CreateInvoiceBody {
     subject?: string | null
     /** Admin only: issuer our-organization for this invoice */
     ourOrganizationId?: number | null
-    /** Create draft in SBIS; default false — local PDF only. Does not send via EDO. */
+    /** Create draft in SBIS; default false - local PDF only. Does not send via EDO. */
     sendViaEdo?: boolean
 }
 
@@ -161,7 +161,7 @@ function resolveFetchUrl(href: string): string {
 
 /**
  * Fetches PDF with Bearer token and opens in a new tab.
- * Use instead of window.open(url) — navigation does not send Authorization.
+ * Use instead of window.open(url) - navigation does not send Authorization.
  */
 export async function openPdfUrlWithAuth(href: string): Promise<void> {
     const token = localStorage.getItem(TOKEN_LOCALSTORAGE_KEY)

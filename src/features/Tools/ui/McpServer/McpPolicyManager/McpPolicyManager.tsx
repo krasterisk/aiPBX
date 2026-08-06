@@ -102,7 +102,7 @@ export const McpPolicyManager = memo((props: McpPolicyManagerProps) => {
         if (cfg.maxCallsPerMinute) parts.push(`max: ${cfg.maxCallsPerMinute}/min`)
         if (cfg.windowSeconds) parts.push(`window: ${cfg.windowSeconds}s`)
         if (cfg.blockedParams?.length) parts.push(`blocked: ${cfg.blockedParams.join(', ')}`)
-        return parts.length > 0 ? parts.join(' | ') : '—'
+        return parts.length > 0 ? parts.join(' | ') : '-'
     }
 
     return (

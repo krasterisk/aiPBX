@@ -20,7 +20,7 @@ export interface DonutChartProps {
 }
 
 /**
- * Donut chart — pure SVG. Hover tooltip; optional segment/legend click for drilldown.
+ * Donut chart - pure SVG. Hover tooltip; optional segment/legend click for drilldown.
  */
 export const DonutChart = memo(({
     data,

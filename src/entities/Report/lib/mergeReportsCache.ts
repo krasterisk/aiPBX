@@ -14,6 +14,7 @@ export interface ReportsListQueryArgs {
   source?: string
   listGeneration?: number
   csat?: string
+  tagId?: string
 }
 
 function dedupeReportsById(rows: AllReports['rows']): AllReports['rows'] {

@@ -226,4 +226,19 @@ describe('CallTagChips', () => {
         fireEvent.click(screen.getByTestId('call-tag-chips-picker-option-returns'))
         expect(onAdd).toHaveBeenCalledWith('returns')
     })
+
+    it('invokes onTagClick with id and display name for journal filtering', () => {
+        const onTagClick = jest.fn()
+        render(
+            <CallTagChips
+                tagIds={['billing']}
+                tagNames={{ billing: 'Счета' }}
+                taxonomy={taxonomy}
+                onTagClick={onTagClick}
+            />,
+        )
+
+        fireEvent.click(screen.getByTestId('call-tag-chips-chip-billing'))
+        expect(onTagClick).toHaveBeenCalledWith('billing', 'Счета')
+    })
 })

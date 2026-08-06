@@ -30,11 +30,11 @@ const CallsPage = ({ className }: CallsPageProps) => {
         tab, startDate, endDate, search, source,
         clientId, assistants,
         sortField, sortOrder, isInited,
-        csatFilter,
+        csatFilter, tagId, tagLabel,
         onChangeTab, onChangeStartDate, onChangeEndDate,
         onChangeSearch, onChangeSource, onChangeSort,
         onChangeAssistant, onChangeUserId,
-        onToggleCsatFilter,
+        onToggleCsatFilter, onFilterByTag, onClearTagFilter,
     } = useReportFilters()
 
     const drilldownAppliedRef = useRef(false)
@@ -48,6 +48,7 @@ const CallsPage = ({ className }: CallsPageProps) => {
         sortField,
         sortOrder,
         csatFilter,
+        tagId,
     })
 
     useInitialEffect(() => { dispatch(initReportsPage()) })
@@ -112,6 +113,9 @@ const CallsPage = ({ className }: CallsPageProps) => {
                         totalCount={data?.count}
                         csatFilter={csatFilter}
                         onToggleCsatFilter={onToggleCsatFilter}
+                        tagId={tagId}
+                        tagLabel={tagLabel}
+                        onClearTagFilter={onClearTagFilter}
                     />
                     <CallsList
                         reports={data}
@@ -119,6 +123,7 @@ const CallsPage = ({ className }: CallsPageProps) => {
                         sortField={sortField}
                         sortOrder={sortOrder}
                         onChangeSort={onChangeSort}
+                        onFilterByTag={onFilterByTag}
                         onUpload={() => { setUploadOpen(true) }}
                     />
                 </VStack>

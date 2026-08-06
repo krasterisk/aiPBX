@@ -2,21 +2,20 @@
 
 .Tooltip {
     display: inline-flex;
+    align-items: center;
     cursor: help;
 }
 
 .tooltipPortal {
-    position: absolute;
+    position: fixed;
     z-index: 99999;
     pointer-events: none;
-    animation: tooltipFadeIn 0.2s var(--ease-out);
-
-    // Предотвращаем обрезание
-    max-width: 280px;
+    max-width: min(280px, calc(100vw - 24px));
+    animation: tooltipFadeIn 0.15s var(--ease-out);
 
     @include mobile {
-        max-width: 240px;
-        pointer-events: auto; // На мобильных разрешаем взаимодействие
+        max-width: min(240px, calc(100vw - 24px));
+        pointer-events: auto;
     }
 }
 
@@ -28,16 +27,13 @@
     box-shadow: var(--shadow-lg), var(--shadow-accent-sm);
     color: var(--text-redesigned);
     font-size: var(--font-size-s);
-    line-height: 1.4;
+    line-height: 1.45;
     font-weight: 500;
     backdrop-filter: var(--glass-blur-md);
     white-space: normal;
-    word-wrap: break-word;
-
-    @include mobile {
-        font-size: 13px;
-        padding: var(--space-2);
-    }
+    overflow-wrap: anywhere;
+    word-break: normal;
+    text-align: left;
 }
 
 .tooltipArrow {
@@ -47,17 +43,10 @@
     background: var(--card-bg);
     border: 1px solid rgba(94, 211, 243, 0.3);
     transform: rotate(45deg);
-
-    @include mobile {
-        width: 6px;
-        height: 6px;
-    }
 }
 
-// Placement variants - используют transform для центрирования
+// Absolute coords already include size; no translate(-50%) centering.
 .top {
-    transform: translate(-50%, -100%);
-
     .tooltipArrow {
         bottom: -5px;
         left: 50%;
@@ -68,8 +57,6 @@
 }
 
 .bottom {
-    transform: translate(-50%, 0);
-
     .tooltipArrow {
         top: -5px;
         left: 50%;
@@ -80,8 +67,6 @@
 }
 
 .left {
-    transform: translate(-100%, -50%);
-
     .tooltipArrow {
         right: -5px;
         top: 50%;
@@ -92,8 +77,6 @@
 }
 
 .right {
-    transform: translate(0, -50%);
-
     .tooltipArrow {
         left: -5px;
         top: 50%;
@@ -103,46 +86,12 @@
     }
 }
 
-// Animations
 @keyframes tooltipFadeIn {
     from {
         opacity: 0;
-        transform: translate(-50%, calc(-100% - 4px));
     }
 
     to {
         opacity: 1;
-        transform: translate(-50%, -100%);
-    }
-}
-
-// Mobile specific adjustments
-@include mobile {
-    .tooltipPortal {
-
-        // На мобильных используем фиксированное позиционирование для лучшей видимости
-        &.top,
-        &.bottom {
-            // Предотвращаем выход за пределы экрана
-            max-width: calc(100vw - 32px);
-        }
-
-        &.left,
-        &.right {
-            // На мобильных показываем сверху для лучшей видимости
-            transform: translate(-50%, -100%);
-
-            .tooltipArrow {
-                bottom: -5px;
-                left: 50%;
-                right: auto;
-                top: auto;
-                transform: translateX(-50%) rotate(45deg);
-                border-top: none;
-                border-left: none;
-                border-bottom: 1px solid rgba(94, 211, 243, 0.3);
-                border-right: 1px solid rgba(94, 211, 243, 0.3);
-            }
-        }
     }
 }

@@ -14,7 +14,7 @@ function lookupSiteUrlLng (): string | undefined {
     if (siteUrl.includes('aipbx.ru')) return 'ru'
     if (siteUrl.includes('aipbx.net') || siteUrl.includes('aipbx.org')) return 'en'
   } catch {
-    // ignore — DefinePlugin may be absent in some test harnesses
+    // ignore - DefinePlugin may be absent in some test harnesses
   }
 
   if (typeof window !== 'undefined') {

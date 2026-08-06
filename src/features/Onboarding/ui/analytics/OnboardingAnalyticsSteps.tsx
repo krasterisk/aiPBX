@@ -23,6 +23,7 @@ import {
     DefaultMetricKey,
     MetricDefinition,
     ProjectTemplate,
+    TagDefinition,
     projectWizardActions,
     useCreateOperatorProject,
     getWizardName,
@@ -30,26 +31,20 @@ import {
     getWizardVisibleDefaultMetrics,
     getWizardCustomMetrics,
     getWizardSystemPrompt,
-    getWizardDescription
+    getWizardDescription,
+    getWizardCallTaxonomy,
 } from '@/entities/Report'
-import { WizardStep0_Templates, WizardStep2_MetricBuilder, OperatorUploadForm } from '@/features/OperatorAnalytics'
+import {
+    WizardStep0_Templates,
+    WizardStep2_MetricBuilder,
+    OperatorUploadForm,
+ ALL_DEFAULT_METRICS, TaxonomyEditor 
+} from '@/features/OperatorAnalytics'
 
 import { getRouteAnalyticsApi } from '@/shared/const/router'
 import { Link } from 'react-router-dom'
 import clsWizard from '../OnboardingWizard/OnboardingWizard.module.scss'
 import cls from './OnboardingAnalyticsFlow.module.scss'
-
-const DEFAULT_METRIC_LABELS: Record<DefaultMetricKey, string> = {
-    greeting_quality: 'Качество приветствия',
-    script_compliance: 'Следование скрипту',
-    politeness_empathy: 'Вежливость и эмпатия',
-    active_listening: 'Активное слушание',
-    objection_handling: 'Работа с возражениями',
-    product_knowledge: 'Знание продукта',
-    problem_resolution: 'Решение проблемы',
-    speech_clarity_pace: 'Темп речи',
-    closing_quality: 'Качество завершения'
-}
 
 // ─── Step 1: Welcome ─────────────────────────────────────────────────────────
 
@@ -99,7 +94,9 @@ export const AnalyticsProjectSetupStep = memo(({ className }: { className?: stri
     useEffect(() => {
         if (initializedRef.current) return
         initializedRef.current = true
-        dispatch(projectWizardActions.openCreate())
+        // Do not call openCreate(): that flips isOpen and opens the
+        // OperatorProjectManager modal on /analytics/projects underneath.
+        dispatch(projectWizardActions.initCreateDraft())
         dispatch(projectWizardActions.setMethod('template'))
     }, [dispatch])
 
@@ -124,7 +121,7 @@ export const AnalyticsProjectSetupStep = memo(({ className }: { className?: stri
         <VStack gap="16" max className={className}>
             <Text
                 title={t('analytics_project_title', 'Проект аналитики')}
-                text={t('analytics_project_subtitle', 'Выберите отрасль и назовите проект — мы подготовим метрики под ваши задачи')}
+                text={t('analytics_project_subtitle', 'Выберите отрасль и назовите проект - мы подготовим метрики под ваши задачи')}
                 size="l"
             />
 
@@ -153,18 +150,17 @@ export const AnalyticsProjectSetupStep = memo(({ className }: { className?: stri
     )
 })
 
-// ─── Step 3: Metrics + project create ────────────────────────────────────────
+// ─── Step 3: Metrics ─────────────────────────────────────────────────────────
 
 export const AnalyticsMetricsStep = memo(({ className }: { className?: string }) => {
     const { t } = useTranslation(['onboarding', 'reports'])
     const dispatch = useAppDispatch()
-    const name = useSelector(getWizardName)
-    const description = useSelector(getWizardDescription)
     const systemPrompt = useSelector(getWizardSystemPrompt)
     const customMetrics = useSelector(getWizardCustomMetrics)
     const visibleDefaults = useSelector(getWizardVisibleDefaultMetrics)
-    const [createProject, { isLoading }] = useCreateOperatorProject()
-    const existingProjectId = useSelector(getOnboardingOaProjectId)
+    const selectedTemplateId = useSelector(getWizardSelectedTemplateId)
+    const [showCustomMetrics, setShowCustomMetrics] = useState(false)
+    const isCustomTemplate = selectedTemplateId === 'custom'
 
     const onBack = useCallback(() => {
         dispatch(onboardingActions.prevStep())
@@ -176,6 +172,133 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
 
     const onChangeCustomMetrics = useCallback((metrics: MetricDefinition[]) => {
         dispatch(projectWizardActions.setCustomMetrics(metrics))
+    }, [dispatch])
+
+    const onNext = useCallback(() => {
+        if (visibleDefaults.length === 0) {
+            dispatch(onboardingActions.setError(
+                t('analytics_metrics_required', 'Выберите хотя бы одну метрику'),
+            ))
+            return
+        }
+        dispatch(onboardingActions.setError(null))
+        dispatch(onboardingActions.nextStep())
+    }, [dispatch, t, visibleDefaults.length])
+
+    const metricsSubtitle = isCustomTemplate
+        ? t(
+            'analytics_metrics_subtitle_custom',
+            'Выберите показатели для оценки звонков — отметьте то, что важно именно вам',
+        )
+        : t(
+            'analytics_metrics_subtitle',
+            'Выберите показатели для оценки звонков — шаблон уже предложил набор под вашу отрасль',
+        )
+
+    return (
+        <VStack gap="16" max className={className}>
+            <Text
+                title={t('analytics_metrics_title', 'Метрики качества')}
+                text={metricsSubtitle}
+                size="l"
+            />
+
+            <VStack gap="8" max className={cls.metricsList}>
+                {ALL_DEFAULT_METRICS.map(({ key, labelKey, descriptionKey }) => {
+                    const selected = visibleDefaults.includes(key)
+                    return (
+                        <HStack
+                            key={key}
+                            gap="12"
+                            align="start"
+                            className={cls.metricRow}
+                            onClick={() => { onToggleMetric(key) }}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => { if (e.key === 'Enter') onToggleMetric(key) }}
+                        >
+                            <HStack justify="center" align="center" style={{ width: 24, paddingTop: 2 }}>
+                                {selected ? <Check size={16} /> : null}
+                            </HStack>
+                            <VStack gap="4" max className={cls.metricRowContent}>
+                                <Text
+                                    text={String(t(labelKey, { ns: 'reports', defaultValue: labelKey }))}
+                                    size="s"
+                                    bold
+                                />
+                                <Text
+                                    text={String(t(descriptionKey, { ns: 'reports', defaultValue: descriptionKey }))}
+                                    size="s"
+                                    className={cls.metricDescription}
+                                />
+                            </VStack>
+                        </HStack>
+                    )
+                })}
+            </VStack>
+
+            <VStack gap="12" max>
+                <Button
+                    variant="clear"
+                    size="m"
+                    onClick={() => { setShowCustomMetrics(prev => !prev) }}
+                >
+                    {showCustomMetrics
+                        ? t('analytics_custom_metrics_hide', 'Скрыть кастомные метрики')
+                        : t('analytics_custom_metrics_show', 'Добавить кастомные метрики')}
+                </Button>
+                {showCustomMetrics && (
+                    <>
+                        <Text
+                            title={t('analytics_custom_metrics_title', 'Кастомные метрики')}
+                            text={t('analytics_custom_metrics_subtitle', 'Добавьте свои показатели - AI будет оценивать их по описанию')}
+                            size="s"
+                            bold
+                        />
+                        <WizardStep2_MetricBuilder
+                            metrics={customMetrics}
+                            systemPrompt={systemPrompt}
+                            visibleDefaultMetrics={visibleDefaults}
+                            onChangeMetrics={onChangeCustomMetrics}
+                        />
+                    </>
+                )}
+            </VStack>
+
+            <HStack gap="12" justify="between" max className={cls.stepFooter}>
+                <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
+                    {t('step_back', 'Назад')}
+                </Button>
+                <Button
+                    variant="primary"
+                    size="m"
+                    onClick={onNext}
+                    disabled={visibleDefaults.length === 0}
+                    addonRight={<ArrowRight size={16} />}
+                >
+                    {t('step_next', 'Далее')}
+                </Button>
+            </HStack>
+        </VStack>
+    )
+})
+
+// ─── Step 4: Topics + project create ─────────────────────────────────────────
+
+export const AnalyticsTopicsStep = memo(({ className }: { className?: string }) => {
+    const { t } = useTranslation(['onboarding', 'reports'])
+    const dispatch = useAppDispatch()
+    const name = useSelector(getWizardName)
+    const description = useSelector(getWizardDescription)
+    const systemPrompt = useSelector(getWizardSystemPrompt)
+    const customMetrics = useSelector(getWizardCustomMetrics)
+    const visibleDefaults = useSelector(getWizardVisibleDefaultMetrics)
+    const callTaxonomy = useSelector(getWizardCallTaxonomy)
+    const [createProject, { isLoading }] = useCreateOperatorProject()
+    const existingProjectId = useSelector(getOnboardingOaProjectId)
+
+    const onBack = useCallback(() => {
+        dispatch(onboardingActions.prevStep())
     }, [dispatch])
 
     const onCreateAndContinue = useCallback(async () => {
@@ -190,13 +313,14 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
                 description: description.trim(),
                 systemPrompt: systemPrompt.trim(),
                 customMetricsSchema: customMetrics,
-                visibleDefaultMetrics: visibleDefaults
+                visibleDefaultMetrics: visibleDefaults,
+                callTaxonomy,
             }).unwrap()
 
             dispatch(onboardingActions.setOaProjectId(project.id))
             trackOnboardingEvent('oa_project_created', {
                 productPath: 'analytics',
-                projectId: project.id
+                projectId: project.id,
             })
             dispatch(onboardingActions.nextStep())
         } catch (err: unknown) {
@@ -206,6 +330,7 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
         }
     }, [
         createProject,
+        callTaxonomy,
         customMetrics,
         description,
         dispatch,
@@ -213,54 +338,26 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
         name,
         systemPrompt,
         t,
-        visibleDefaults
+        visibleDefaults,
     ])
 
     return (
         <VStack gap="16" max className={className}>
             <Text
-                title={t('analytics_metrics_title', 'Метрики качества')}
-                text={t('analytics_metrics_subtitle', 'Выберите показатели для оценки звонков — шаблон уже предложил набор под вашу отрасль')}
+                title={t('analytics_topics_title', 'Темы звонков')}
+                text={t(
+                    'analytics_topics_subtitle',
+                    'Добавьте темы, которые ИИ будет ставить звонкам при анализе. Можно пропустить и настроить позже.',
+                )}
                 size="l"
             />
 
-            <VStack gap="8" max className={cls.metricsList}>
-                {(Object.keys(DEFAULT_METRIC_LABELS) as DefaultMetricKey[]).map((key) => {
-                    const selected = visibleDefaults.includes(key)
-                    return (
-                        <HStack
-                            key={key}
-                            gap="12"
-                            align="center"
-                            className={cls.metricRow}
-                            onClick={() => { onToggleMetric(key) }}
-                            role="button"
-                            tabIndex={0}
-                            onKeyDown={(e) => { if (e.key === 'Enter') onToggleMetric(key) }}
-                        >
-                            <HStack justify="center" align="center" style={{ width: 24 }}>
-                                {selected ? <Check size={16} /> : null}
-                            </HStack>
-                            <Text text={String(t(DEFAULT_METRIC_LABELS[key], { ns: 'reports', defaultValue: DEFAULT_METRIC_LABELS[key] }))} size="s" />
-                        </HStack>
-                    )
-                })}
-            </VStack>
-
-            <VStack gap="12" max>
-                <Text
-                    title={t('analytics_custom_metrics_title', 'Кастомные метрики')}
-                    text={t('analytics_custom_metrics_subtitle', 'Добавьте свои показатели — AI будет оценивать их по описанию')}
-                    size="s"
-                    bold
-                />
-                <WizardStep2_MetricBuilder
-                    metrics={customMetrics}
-                    systemPrompt={systemPrompt}
-                    visibleDefaultMetrics={visibleDefaults}
-                    onChangeMetrics={onChangeCustomMetrics}
-                />
-            </VStack>
+            <TaxonomyEditor
+                taxonomy={callTaxonomy}
+                onChange={(taxonomy: TagDefinition[]) => {
+                    dispatch(projectWizardActions.setCallTaxonomy(taxonomy))
+                }}
+            />
 
             <HStack gap="12" justify="between" max className={cls.stepFooter}>
                 <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
@@ -270,7 +367,7 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
                     variant="primary"
                     size="m"
                     onClick={onCreateAndContinue}
-                    disabled={isLoading || visibleDefaults.length === 0}
+                    disabled={isLoading}
                     addonRight={<ArrowRight size={16} />}
                 >
                     {isLoading
@@ -282,7 +379,7 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
     )
 })
 
-// ─── Step 4: Upload ────────────────────────────────────────────────────────
+// ─── Step 5: Upload ────────────────────────────────────────────────────────
 
 export type AnalyticsUploadPhase = 'idle' | 'processing' | 'success' | 'failed'
 
@@ -342,7 +439,7 @@ export const AnalyticsUploadStep = memo(({
             <Text
                 title={t('analytics_upload_title', 'Загрузите запись звонка')}
                 text={uploadPhase === 'idle'
-                    ? t('analytics_upload_subtitle', 'Загрузите аудиофайл — мы проанализируем разговор и покажем отчёт')
+                    ? t('analytics_upload_subtitle', 'Загрузите аудиофайл - мы проанализируем разговор и покажем отчёт')
                     : uploadPhase === 'success'
                         ? t('analytics_analysis_complete', 'Анализ завершён! Открываем дашборд с результатами...')
                         : uploadPhase === 'failed'
@@ -438,7 +535,7 @@ export const AnalyticsApiIntroPanel = memo(({ onBackToUpload }: AnalyticsApiIntr
             titleKey: 'analytics_api_card_upload_title',
             titleFallback: 'Загрузка по API',
             descKey: 'analytics_api_card_upload_desc',
-            descFallback: 'Отправляйте записи через analyze-file или analyze-url — удобно для интеграции с АТС'
+            descFallback: 'Отправляйте записи через analyze-file или analyze-url - удобно для интеграции с АТС'
         },
         {
             Icon: Link2,
@@ -455,7 +552,7 @@ export const AnalyticsApiIntroPanel = memo(({ onBackToUpload }: AnalyticsApiIntr
                 title={t('analytics_api_intro_title', 'Подключить API для автоматической выгрузки')}
                 text={t(
                     'analytics_api_intro_desc',
-                    'Для постоянного потока звонков из вашей АТС используйте REST API. Полная настройка коннектора — в документации.'
+                    'Для постоянного потока звонков из вашей АТС используйте REST API. Полная настройка коннектора - в документации.'
                 )}
                 size="l"
             />

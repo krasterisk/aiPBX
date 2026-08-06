@@ -35,7 +35,7 @@ export const SubUsersList = (props: SubUsersListProps) => {
 
   const filteredUsers = useMemo(() => {
     if (!subUsers) return []
-    // Owner is not in GET /sub-users — prepend self. Managers already appear in the list.
+    // Owner is not in GET /sub-users - prepend self. Managers already appear in the list.
     const isOwner =
       !!authData &&
       (!authData.vpbx_user_id || String(authData.vpbx_user_id) === String(authData.id))

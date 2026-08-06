@@ -90,7 +90,7 @@ export const PlaygroundHeader = memo((props: PlaygroundHeaderProps) => {
 
     const closePopover = useCallback(() => { setActiveTab(null) }, [])
 
-    // Prompt handler — directly dispatches to playground form
+    // Prompt handler - directly dispatches to playground form
     const onChangePrompt = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
         dispatch(playgroundAssistantFormActions.updateFormField({ instruction: e.target.value }))
     }, [dispatch])
@@ -116,7 +116,7 @@ export const PlaygroundHeader = memo((props: PlaygroundHeaderProps) => {
         dispatch(assistantFormActions.updateForm({ mcpServers: value }))
     }, [dispatch])
 
-    // Save to DB — reads from entity form (sub-components write there)
+    // Save to DB - reads from entity form (sub-components write there)
     const handleSave = useCallback(async () => {
         const data = entityFormData
         if (!data || !data.id) return
@@ -135,7 +135,7 @@ export const PlaygroundHeader = memo((props: PlaygroundHeaderProps) => {
         }
     }, [entityFormData, updateAssistant, dispatch, t, closePopover])
 
-    // Apply live to session — also reads from entity form
+    // Apply live to session - also reads from entity form
     const handleApplyToSession = useCallback(() => {
         const data = entityFormData
         if (!data || !onUpdateSession) return
@@ -197,7 +197,7 @@ export const PlaygroundHeader = memo((props: PlaygroundHeaderProps) => {
                     )}
                 </div>
 
-                {/* Settings buttons — only shown when assistant is selected */}
+                {/* Settings buttons - only shown when assistant is selected */}
                 {hasAssistant && formData && (
                     <div className={popCls.settingsButtons}>
                         <button
@@ -278,7 +278,7 @@ export const PlaygroundHeader = memo((props: PlaygroundHeaderProps) => {
                 )}
             </SettingsPopover>
 
-            {/* ===== MODEL/SETTINGS POPOVER — reuses existing AssistantForm components ===== */}
+            {/* ===== MODEL/SETTINGS POPOVER - reuses existing AssistantForm components ===== */}
             <SettingsPopover
                 isOpen={activeTab === 'model'}
                 onClose={closePopover}
@@ -300,7 +300,7 @@ export const PlaygroundHeader = memo((props: PlaygroundHeaderProps) => {
                 />
             </SettingsPopover>
 
-            {/* ===== VAD POPOVER — reuses existing VadSettingsCard ===== */}
+            {/* ===== VAD POPOVER - reuses existing VadSettingsCard ===== */}
             <SettingsPopover
                 isOpen={activeTab === 'vad'}
                 onClose={closePopover}

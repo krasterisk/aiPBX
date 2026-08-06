@@ -18,10 +18,11 @@ interface CallsListProps {
     sortOrder?: 'ASC' | 'DESC'
     onChangeSort: (field: string) => void
     onUpload: () => void
+    onFilterByTag?: (tagId: string, tagLabel: string) => void
 }
 
 export const CallsList = memo((props: CallsListProps) => {
-    const { reports, isLoading, sortField, sortOrder, onChangeSort, onUpload } = props
+    const { reports, isLoading, sortField, sortOrder, onChangeSort, onUpload, onFilterByTag } = props
     const { t } = useTranslation('reports')
     const rows = reports?.rows ?? []
 
@@ -33,6 +34,7 @@ export const CallsList = memo((props: CallsListProps) => {
                     sortField={sortField}
                     sortOrder={sortOrder}
                     onChangeSort={onChangeSort}
+                    onFilterByTag={onFilterByTag}
                 />
             )}
 

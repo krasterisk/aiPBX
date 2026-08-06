@@ -78,7 +78,7 @@ export const AuthMcpServerCard = memo((props: AuthMcpServerCardProps) => {
                     />
                 </VStack>
 
-                {/* Credentials — Bearer */}
+                {/* Credentials - Bearer */}
                 {authType === 'bearer' && (
                     <VStack gap="8" max className={cls.credentialsContainer}>
                         <Text text={t('Токен') || ''} size="s" bold className={cls.label} />
@@ -92,7 +92,7 @@ export const AuthMcpServerCard = memo((props: AuthMcpServerCardProps) => {
                     </VStack>
                 )}
 
-                {/* Credentials — API Key */}
+                {/* Credentials - API Key */}
                 {authType === 'apikey' && (
                     <VStack gap="8" max className={cls.credentialsContainer}>
                         <Text text={t('API ключ') || ''} size="s" bold className={cls.label} />
@@ -106,7 +106,7 @@ export const AuthMcpServerCard = memo((props: AuthMcpServerCardProps) => {
                     </VStack>
                 )}
 
-                {/* Credentials — Custom Headers */}
+                {/* Credentials - Custom Headers */}
                 {authType === 'custom_headers' && (
                     <VStack gap="8" max className={cls.credentialsContainer}>
                         <Text text={t('Заголовки') || ''} size="s" bold className={cls.label} />

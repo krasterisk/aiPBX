@@ -197,7 +197,7 @@ export const ComposioTestModal = memo((props: ComposioTestModalProps) => {
                                                 value={formValues[field.key] ?? ''}
                                                 onChange={(e) => { onFieldChange(field.key, e.target.value) }}
                                             >
-                                                <option value="">—</option>
+                                                <option value="">-</option>
                                                 {field.enum.map(v => (
                                                     <option key={v} value={v}>{v}</option>
                                                 ))}
@@ -210,7 +210,7 @@ export const ComposioTestModal = memo((props: ComposioTestModalProps) => {
                                                 value={formValues[field.key] ?? ''}
                                                 onChange={(e) => { onFieldChange(field.key, e.target.value) }}
                                             >
-                                                <option value="">—</option>
+                                                <option value="">-</option>
                                                 <option value="true">true</option>
                                                 <option value="false">false</option>
                                             </select>

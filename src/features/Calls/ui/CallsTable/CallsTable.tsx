@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { classNames } from '@/shared/lib/classNames/classNames'
-import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import {
@@ -38,9 +38,10 @@ const SOURCE_CONFIG: Record<string, { icon: React.ReactNode, labelKey: string }>
 // ── Row ───────────────────────────────────────────────────────────────────────
 interface CallsTableRowProps {
     report: Report
+    onFilterByTag?: (tagId: string, tagLabel: string) => void
 }
 
-const CallsTableRow = memo(({ report }: CallsTableRowProps) => {
+const CallsTableRow = memo(({ report, onFilterByTag }: CallsTableRowProps) => {
     const { t } = useTranslation('reports')
     const [isExpanded, setIsExpanded] = useState(false)
     const isAdmin = useSelector(isUserAdmin)
@@ -76,17 +77,17 @@ const CallsTableRow = memo(({ report }: CallsTableRowProps) => {
     const formattedDate = report.createdAt
         ? new Intl.DateTimeFormat(undefined, {
             year: 'numeric',
-month: '2-digit',
-day: '2-digit',
+            month: '2-digit',
+            day: '2-digit',
             hour: '2-digit',
-minute: '2-digit',
-hour12: false
+            minute: '2-digit',
+            hour12: false
         }).format(new Date(report.createdAt))
         : ''
 
     const source = report.source ?? ''
     const sourceCfg = SOURCE_CONFIG[source]
-    const duration = report.duration ? formatTime(report.duration, t) : '—'
+    const duration = report.duration ? formatTime(report.duration, t) : '-'
     const csat = report.analytics?.csat
     const scenarioSuccess = report.analytics?.metrics?.scenario_analysis?.success ??
         report.analytics?.metrics?.success
@@ -95,6 +96,8 @@ hour12: false
     const qualityReasons = report.qualityReasons ||
         report.analytics?.metrics?._quality?.reasons ||
         []
+    const topicTags = report.analytics?.metrics?._topics?.tags ?? []
+    const topicTagNames = report.analytics?.metrics?._topics?.tag_names
 
     return (
         <>
@@ -108,11 +111,11 @@ hour12: false
                 </td>
 
                 <td data-label={String(t('Ассистент'))}>
-                    {report.assistantName ? <Text text={report.assistantName} /> : '—'}
+                    {report.assistantName ? <Text text={report.assistantName} /> : '-'}
                 </td>
 
                 <td data-label={String(t('Звонивший'))}>
-                    {report.callerId ? <Text text={report.callerId} /> : '—'}
+                    {report.callerId ? <Text text={report.callerId} /> : '-'}
                 </td>
 
                 <td data-label={String(t('Источник'))}>
@@ -125,7 +128,7 @@ hour12: false
                             {sourceCfg.icon}
                             <span className={cls.badgeText}>{String(t(sourceCfg.labelKey))}</span>
                         </span>
-                    ) : '—'}
+                    ) : '-'}
                 </td>
 
                 <td data-label={String(t('Длительность'))}>
@@ -140,7 +143,7 @@ hour12: false
                                 bold
                             />
                         )
-                        : '—'}
+                        : '-'}
                 </td>
 
                 <td data-label={String(t('Оценка'))} className={cls.csatCell}>
@@ -149,39 +152,47 @@ hour12: false
                             <Star size={14} className={cls.csatStar} />
                             <Text text={String(csat)} bold />
                         </HStack>
-                    ) : '—'}
+                    ) : '-'}
                 </td>
 
                 <td data-label={String(t('Настроение'))}>
-                    <VStack gap="8" max>
-                        <HStack gap="4" align="center">
-                            {report.analytics?.sentiment ? (
-                                <span
-                                    className={cls.sentimentBadge}
-                                    data-sentiment={report.analytics.sentiment.toLowerCase()}
-                                >
-                                    {String(t(report.analytics.sentiment))}
-                                </span>
-                            ) : '—'}
-                            {isOperatorRecord && transcriptionQuality === 'low' && (
-                                <span
-                                    className={cls.qualityBadge}
-                                    data-quality="low"
-                                    data-tooltip={qualityReasons.map(code => String(t(code))).join(', ')}
-                                >
-                                    {String(t('LOW_STT_QUALITY_BADGE'))}
-                                </span>
-                            )}
-                        </HStack>
-                        {isOperatorRecord && report.analytics?.metrics ? (
-                            <CallTagChips
-                                mode="bounded"
-                                tagIds={report.analytics.metrics._topics?.tags ?? []}
-                                tagNames={report.analytics.metrics._topics?.tag_names}
-                                data-testid={`journal-tag-chips-${report.id}`}
-                            />
-                        ) : null}
-                    </VStack>
+                    <HStack gap="4" align="center">
+                        {report.analytics?.sentiment ? (
+                            <span
+                                className={cls.sentimentBadge}
+                                data-sentiment={report.analytics.sentiment.toLowerCase()}
+                            >
+                                {String(t(report.analytics.sentiment))}
+                            </span>
+                        ) : '-'}
+                        {isOperatorRecord && transcriptionQuality === 'low' && (
+                            <span
+                                className={cls.qualityBadge}
+                                data-quality="low"
+                                data-tooltip={qualityReasons.map(code => String(t(code))).join(', ')}
+                            >
+                                {String(t('LOW_STT_QUALITY_BADGE'))}
+                            </span>
+                        )}
+                    </HStack>
+                </td>
+
+                <td
+                    data-label={String(t('Темы'))}
+                    className={cls.topicsCell}
+                    onClick={e => { e.stopPropagation() }}
+                >
+                    {isOperatorRecord && topicTags.length > 0 ? (
+                        <CallTagChips
+                            mode="bounded"
+                            tagIds={topicTags}
+                            tagNames={topicTagNames}
+                            onTagClick={onFilterByTag}
+                            data-testid={`journal-tag-chips-${report.id}`}
+                        />
+                    ) : (
+                        <Text text="-" size="s" />
+                    )}
                 </td>
 
                 <td data-label={String(t('Результат'))}>
@@ -197,7 +208,7 @@ hour12: false
                             <span className={cls.badgeText}>{String(t('Эскалация'))}</span>
                         </span>
                     )}
-                    {scenarioSuccess == null && '—'}
+                    {scenarioSuccess == null && '-'}
                 </td>
 
                 <td onClick={e => { e.stopPropagation() }}>
@@ -213,7 +224,7 @@ hour12: false
 
             {isExpanded && (
                 <tr className={cls.DetailRow}>
-                    <td colSpan={10}>
+                    <td colSpan={11}>
                         <ReportExpandedPanel
                             report={report}
                             dialogs={dialogs}
@@ -221,7 +232,7 @@ hour12: false
                             isDialogError={isDialogError}
                             mediaUrl={report.recordUrl}
                             onGetAnalytics={isOperatorRecord ? undefined : onGetAnalytics}
-                            onRegenerateAnalytics={isAdmin && isOperatorRecord && report.recordUrl ? onRegenerateAnalytics : undefined}
+                            onRegenerateAnalytics={isAdmin && isOperatorRecord ? onRegenerateAnalytics : undefined}
                             isAnalyticsLoading={isAnalyticsLoading}
                         />
                     </td>
@@ -237,9 +248,12 @@ interface CallsTableProps {
     sortField?: string
     sortOrder?: 'ASC' | 'DESC'
     onChangeSort: (field: string) => void
+    onFilterByTag?: (tagId: string, tagLabel: string) => void
 }
 
-export const CallsTable = memo(({ reports, sortField, sortOrder, onChangeSort }: CallsTableProps) => {
+export const CallsTable = memo(({
+    reports, sortField, sortOrder, onChangeSort, onFilterByTag,
+}: CallsTableProps) => {
     const { t } = useTranslation('reports')
 
     const renderSortIcon = (field: string) => {
@@ -278,6 +292,9 @@ export const CallsTable = memo(({ reports, sortField, sortOrder, onChangeSort }:
                         <th className={cls.sortable} onClick={() => { onChangeSort('sentiment') }}>
                             <HStack gap="4">{String(t('Настроение'))} {renderSortIcon('sentiment')}</HStack>
                         </th>
+                        <th>
+                            <HStack gap="4">{String(t('Темы'))}</HStack>
+                        </th>
                         <th className={cls.sortable} onClick={() => { onChangeSort('scenarioSuccess') }}>
                             <HStack gap="4">{String(t('Результат'))} {renderSortIcon('scenarioSuccess')}</HStack>
                         </th>
@@ -286,7 +303,11 @@ export const CallsTable = memo(({ reports, sortField, sortOrder, onChangeSort }:
                 </thead>
                 <tbody className={cls.TableBody}>
                     {reports.map(report => (
-                        <CallsTableRow key={report.id} report={report} />
+                        <CallsTableRow
+                            key={report.id}
+                            report={report}
+                            onFilterByTag={onFilterByTag}
+                        />
                     ))}
                 </tbody>
             </table>

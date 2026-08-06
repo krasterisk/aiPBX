@@ -1,35 +1,38 @@
-import { memo, useCallback, useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Textarea } from '@/shared/ui/mui/Textarea'
+import { Card } from '@/shared/ui/redesigned/Card'
+import { Text } from '@/shared/ui/redesigned/Text'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import CheckIcon from '@mui/icons-material/Check'
 import {
     OperatorProject,
+    ProjectTemplate,
+    MetricDefinition,
+    DefaultMetricKey,
+    TagDefinition,
     useCreateOperatorProject,
     projectWizardActions,
-    getWizardMethod,
-    getWizardMethodStepDone,
     getWizardName,
     getWizardDescription,
     getWizardSystemPrompt,
     getWizardCustomMetrics,
     getWizardVisibleDefaultMetrics,
-    getWizardWebhookUrl,
-    getWizardWebhookHeaders,
-    getWizardWebhookEvents,
+    getWizardCallTaxonomy,
     getWizardSelectedTemplateId,
 } from '@/entities/Report'
-import { WizardMethodChooser } from './WizardMethodChooser'
-import { WizardPhaseIndicator } from './WizardPhaseIndicator'
-import { WizardReviewSection } from './WizardReviewSection'
+import { WizardPhaseIndicator, CreateWizardStep } from './WizardPhaseIndicator'
 import { WizardHeader } from './WizardHeader'
 import { ProjectSettingsForm } from './ProjectSettingsForm'
 import { WizardStep0_Templates } from './WizardStep0_Templates'
-import { WizardStep1_Chat } from './WizardStep1_Chat'
+import { WizardStep2_MetricBuilder } from './WizardStep2_MetricBuilder'
+import { WizardStep3_DefaultMetrics } from './WizardStep3_DefaultMetrics'
+import { TaxonomyEditor } from './TaxonomyEditor'
 import cls from './ProjectWizard.module.scss'
 
 interface ProjectWizardProps {
@@ -39,11 +42,9 @@ interface ProjectWizardProps {
 }
 
 export const ProjectWizard = memo(({ editProject, onClose, onSuccess }: ProjectWizardProps) => {
-    const { t } = useTranslation('reports')
     const dispatch = useAppDispatch()
     const [createProject, { isLoading: isCreating }] = useCreateOperatorProject()
 
-    // ── Init on mount ─────────────────────────────────────────────────────────
     const initializedRef = useRef(false)
     useEffect(() => {
         if (initializedRef.current) return
@@ -55,7 +56,6 @@ export const ProjectWizard = memo(({ editProject, onClose, onSuccess }: ProjectW
         }
     }, [dispatch, editProject])
 
-    // ── Edit mode → flat settings form ────────────────────────────────────────
     if (editProject) {
         return (
             <ProjectSettingsForm
@@ -66,7 +66,6 @@ export const ProjectWizard = memo(({ editProject, onClose, onSuccess }: ProjectW
         )
     }
 
-    // ── Create mode → wizard flow ─────────────────────────────────────────────
     return (
         <WizardCreateFlow
             onClose={onClose}
@@ -76,10 +75,6 @@ export const ProjectWizard = memo(({ editProject, onClose, onSuccess }: ProjectW
         />
     )
 })
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// Create-mode wizard flow (internal component)
-// ═══════════════════════════════════════════════════════════════════════════════
 
 interface WizardCreateFlowProps {
     onClose: () => void
@@ -91,38 +86,26 @@ interface WizardCreateFlowProps {
 const WizardCreateFlow = memo(({ onClose, onSuccess, isCreating, createProject }: WizardCreateFlowProps) => {
     const { t } = useTranslation('reports')
     const dispatch = useAppDispatch()
+    const [createStep, setCreateStep] = useState<CreateWizardStep>(1)
+    const [showCustomMetrics, setShowCustomMetrics] = useState(false)
 
-    const method = useSelector(getWizardMethod)
-    const methodStepDone = useSelector(getWizardMethodStepDone)
     const name = useSelector(getWizardName)
     const description = useSelector(getWizardDescription)
     const systemPrompt = useSelector(getWizardSystemPrompt)
     const customMetrics = useSelector(getWizardCustomMetrics)
     const visibleDefaults = useSelector(getWizardVisibleDefaultMetrics)
-    const webhookUrl = useSelector(getWizardWebhookUrl)
-    const webhookHeaders = useSelector(getWizardWebhookHeaders)
-    const webhookEvents = useSelector(getWizardWebhookEvents)
+    const callTaxonomy = useSelector(getWizardCallTaxonomy)
     const selectedTemplateId = useSelector(getWizardSelectedTemplateId)
-
-    const isChoosingMethod = !method
-    const isInMethodStep = !!method && !methodStepDone
-    const isInReview = !!method && methodStepDone
-
-    const handleBackToMethodSelect = useCallback(() => {
-        dispatch(projectWizardActions.backToMethodSelect())
-    }, [dispatch])
 
     const handleCreate = useCallback(async () => {
         try {
             await createProject({
-                name: name.trim() || t('Новый проект'),
+                name: name.trim() || String(t('Новый проект')),
                 description: description.trim(),
                 systemPrompt: systemPrompt.trim(),
                 customMetricsSchema: customMetrics,
                 visibleDefaultMetrics: visibleDefaults,
-                webhookUrl: webhookUrl.trim() || undefined,
-                webhookHeaders: Object.keys(webhookHeaders).length > 0 ? webhookHeaders : undefined,
-                webhookEvents: webhookEvents.length > 0 ? webhookEvents : undefined,
+                callTaxonomy,
             }).unwrap()
 
             dispatch(projectWizardActions.close())
@@ -131,36 +114,37 @@ const WizardCreateFlow = memo(({ onClose, onSuccess, isCreating, createProject }
         } catch (err) {
             console.error('Wizard create error:', err)
         }
-    }, [name, description, systemPrompt, customMetrics, visibleDefaults, webhookUrl, webhookHeaders, webhookEvents, createProject, dispatch, onClose, onSuccess, t])
+    }, [
+        name, description, systemPrompt, customMetrics, visibleDefaults, callTaxonomy,
+        createProject, dispatch, onClose, onSuccess, t,
+    ])
 
-    // ── Step content ──────────────────────────────────────────────────────────
-    const renderStepContent = () => {
-        if (!method) return null
-
-        if (!methodStepDone) {
-            switch (method) {
-                case 'template':
-                    return (
-                        <WizardStep0_Templates
-                            selectedTemplateId={selectedTemplateId}
-                            onSelect={(tpl) => dispatch(projectWizardActions.applyTemplate(tpl))}
-                        />
-                    )
-                case 'ai_interview':
-                    return (
-                        <WizardStep1_Chat
-                            systemPrompt={systemPrompt}
-                            onChangeSystemPrompt={(v) => dispatch(projectWizardActions.setSystemPrompt(v))}
-                            onMetricsGenerated={(m, p) => dispatch(projectWizardActions.applyGeneratedMetrics({ metrics: m, prompt: p }))}
-                        />
-                    )
-                default:
-                    return null
-            }
+    const handleNext = useCallback(() => {
+        if (createStep === 1) {
+            if (!name.trim()) return
+            setCreateStep(2)
+            return
         }
+        if (createStep === 2) {
+            if (visibleDefaults.length === 0) return
+            setCreateStep(3)
+            return
+        }
+        void handleCreate()
+    }, [createStep, name, visibleDefaults.length, handleCreate])
 
-        return <WizardReviewSection />
-    }
+    const handleBack = useCallback(() => {
+        if (createStep === 1) {
+            onClose()
+            return
+        }
+        setCreateStep((prev) => (prev === 3 ? 2 : 1))
+    }, [createStep, onClose])
+
+    const canProceed =
+        createStep === 1 ? Boolean(name.trim())
+            : createStep === 2 ? visibleDefaults.length > 0
+                : true
 
     return (
         <VStack gap={'16'} max className={cls.ProjectWizard}>
@@ -168,71 +152,109 @@ const WizardCreateFlow = memo(({ onClose, onSuccess, isCreating, createProject }
                 title={name.trim() || String(t('Новый проект'))}
                 onClose={onClose}
             />
-            {/* Name + Description */}
-            <HStack gap={'12'} max wrap={'wrap'}>
-                <Textarea
-                    label={String(t('Название проекта'))}
-                    value={name}
-                    onChange={e => dispatch(projectWizardActions.setName(e.target.value))}
-                    size={'small'}
-                    fullWidth
-                    multiline={false}
-                />
-                <Textarea
-                    label={String(t('Описание проекта'))}
-                    value={description}
-                    onChange={e => dispatch(projectWizardActions.setDescription(e.target.value))}
-                    size={'small'}
-                    fullWidth
-                    multiline={false}
-                />
-            </HStack>
 
-            {/* Phase indicator — not shown for manual (no intermediate step) */}
-            {method && method !== 'manual' && (
-                <WizardPhaseIndicator
-                    method={method}
-                    isInMethodStep={isInMethodStep}
-                    isInReview={isInReview}
-                    onBackToMethod={handleBackToMethodSelect}
-                    onBackToStep={() => dispatch(projectWizardActions.setMethodStepDone(false))}
-                />
-            )}
+            <WizardPhaseIndicator
+                createStep={createStep}
+                onGoToStep={setCreateStep}
+            />
 
-            {/* Content */}
-            <VStack max className={cls.wizardContent}>
-                {isChoosingMethod && (
-                    <WizardMethodChooser
-                        onSelect={(m) => dispatch(projectWizardActions.setMethod(m))}
-                    />
+            <VStack max className={cls.wizardContent} gap={'16'}>
+                {createStep === 1 && (
+                    <VStack gap={'16'} max>
+                        <Textarea
+                            label={String(t('Название проекта'))}
+                            value={name}
+                            onChange={e => dispatch(projectWizardActions.setName(e.target.value))}
+                            size={'small'}
+                            fullWidth
+                            multiline={false}
+                        />
+                        <Textarea
+                            label={String(t('Описание проекта'))}
+                            value={description}
+                            onChange={e => dispatch(projectWizardActions.setDescription(e.target.value))}
+                            size={'small'}
+                            fullWidth
+                            multiline={false}
+                        />
+                        <Text
+                            text={String(t('CREATE_TEMPLATE_HINT'))}
+                            size={'s'}
+                        />
+                        <WizardStep0_Templates
+                            selectedTemplateId={selectedTemplateId}
+                            onSelect={(tpl: ProjectTemplate) => dispatch(projectWizardActions.applyTemplate(tpl))}
+                        />
+                    </VStack>
                 )}
-                {!isChoosingMethod && renderStepContent()}
+
+                {createStep === 2 && (
+                    <VStack gap={'16'} max>
+                        <WizardStep3_DefaultMetrics
+                            visibleMetrics={visibleDefaults}
+                            onToggle={(key: DefaultMetricKey) => dispatch(projectWizardActions.toggleDefaultMetric(key))}
+                        />
+                        <Card variant={'glass'} border={'partial'} padding={'16'} max>
+                            <VStack gap={'8'} max>
+                                <HStack
+                                    max
+                                    justify={'between'}
+                                    align={'center'}
+                                    onClick={() => { setShowCustomMetrics(prev => !prev) }}
+                                    className={cls.clickable}
+                                >
+                                    <Text text={String(t('Кастомные метрики'))} bold />
+                                    <Text text={showCustomMetrics ? '▲' : '▼'} />
+                                </HStack>
+                                {showCustomMetrics && (
+                                    <WizardStep2_MetricBuilder
+                                        metrics={customMetrics}
+                                        systemPrompt={systemPrompt}
+                                        visibleDefaultMetrics={visibleDefaults}
+                                        onChangeMetrics={(m: MetricDefinition[]) => dispatch(projectWizardActions.setCustomMetrics(m))}
+                                    />
+                                )}
+                            </VStack>
+                        </Card>
+                    </VStack>
+                )}
+
+                {createStep === 3 && (
+                    <Card variant={'glass'} border={'partial'} padding={'16'} max>
+                        <VStack gap={'12'} max>
+                            <Text text={String(t('Темы звонков'))} bold />
+                            <TaxonomyEditor
+                                taxonomy={callTaxonomy}
+                                onChange={(taxonomy: TagDefinition[]) => {
+                                    dispatch(projectWizardActions.setCallTaxonomy(taxonomy))
+                                }}
+                            />
+                        </VStack>
+                    </Card>
+                )}
             </VStack>
 
-            {/* Navigation */}
             <HStack max justify={'end'} align={'center'} gap={'12'} wrap={'wrap'} className={cls.navSeparator}>
-                <Button variant={'glass-action'}
-                    onClick={
-                        isInReview
-                            ? (method === 'manual'
-                                ? handleBackToMethodSelect
-                                : () => dispatch(projectWizardActions.setMethodStepDone(false)))
-                            : isInMethodStep
-                                ? handleBackToMethodSelect
-                                : onClose
-                    }
-                    addonLeft={<ArrowBackIcon fontSize={'small'} />}>
-                    {isChoosingMethod ? String(t('Закрыть')) : String(t('Назад'))}
+                <Button
+                    variant={'glass-action'}
+                    onClick={handleBack}
+                    addonLeft={<ArrowBackIcon fontSize={'small'} />}
+                >
+                    {createStep === 1 ? String(t('Закрыть')) : String(t('Назад'))}
                 </Button>
-
-                {isInReview && (
-                    <Button variant={'glass-action'} color={'success'}
-                        onClick={handleCreate}
-                        addonRight={<CheckIcon fontSize={'small'} />}
-                        disabled={isCreating || !name.trim()}>
-                        {isCreating ? String(t('Сохранение...')) : String(t('Создать'))}
-                    </Button>
-                )}
+                <Button
+                    variant={'glass-action'}
+                    color={createStep === 3 ? 'success' : undefined}
+                    onClick={handleNext}
+                    addonRight={createStep === 3
+                        ? <CheckIcon fontSize={'small'} />
+                        : <ArrowForwardIcon fontSize={'small'} />}
+                    disabled={isCreating || !canProceed}
+                >
+                    {createStep === 3
+                        ? (isCreating ? String(t('Сохранение...')) : String(t('Создать')))
+                        : String(t('Далее'))}
+                </Button>
             </HStack>
         </VStack>
     )

@@ -22,14 +22,14 @@ const METRIC_TYPES = [
 ]
 
 const POLARITY_OPTIONS_NUMBER = [
-    { label: 'Больше — лучше', value: 'positive' },
-    { label: 'Меньше — лучше', value: 'negative' },
+    { label: 'Больше - лучше', value: 'positive' },
+    { label: 'Меньше - лучше', value: 'negative' },
     { label: 'Нейтрально (без оценки)', value: 'neutral' },
 ]
 
 const POLARITY_OPTIONS_BOOLEAN = [
-    { label: '«Да» — это хорошо', value: 'positive' },
-    { label: '«Да» — это плохо', value: 'negative' },
+    { label: '«Да» - это хорошо', value: 'positive' },
+    { label: '«Да» - это плохо', value: 'negative' },
     { label: 'Нейтрально (без оценки)', value: 'neutral' },
 ]
 
@@ -87,7 +87,7 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
         if (metrics.length > 0) {
             lines.push('[Custom Metrics]')
             metrics.forEach(m => {
-                lines.push(`  - ${m.id} (${m.type}): ${m.description || '—'}`)
+                lines.push(`  - ${m.id} (${m.type}): ${m.description || '-'}`)
                 if (m.type === 'enum' && m.enumValues?.length) {
                     lines.push(`    Values: ${m.enumValues.join(', ')}`)
                 }
@@ -109,7 +109,7 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                         max
                     >
                         <VStack gap={'12'} max>
-                            {/* Card header — name + delete */}
+                            {/* Card header - name + delete */}
                             <HStack max justify={'between'} align={'center'}>
                                 <Text text={metric.name || String(t('Новая метрика'))} bold />
                                 <Button
@@ -123,7 +123,7 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                                 </Button>
                             </HStack>
 
-                            {/* Fields — name + type side by side */}
+                            {/* Fields - name + type side by side */}
                             <HStack gap={'12'} max wrap={'wrap'}>
                                 <Textarea
                                     label={String(t('Название метрики'))}
@@ -144,7 +144,7 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                                 />
                             </HStack>
 
-                            {/* Enum values — before description, only for enum type */}
+                            {/* Enum values - before description, only for enum type */}
                             {metric.type === 'enum' && (
                                 <Textarea
                                     label={String(t('Значения (через запятую)'))}
@@ -205,7 +205,7 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                                 />
                             )}
 
-                            {/* Description — full width */}
+                            {/* Description - full width */}
                             <Textarea
                                 label={String(t('Описание для LLM'))}
                                 value={metric.description}
@@ -229,7 +229,7 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                 {String(t('Добавить метрику'))}
             </Button>
 
-            {/* Prompt Preview — collapsible, admin only */}
+            {/* Prompt Preview - collapsible, admin only */}
             {isAdmin && (
                 <VStack gap={'0'} max>
                     <Button

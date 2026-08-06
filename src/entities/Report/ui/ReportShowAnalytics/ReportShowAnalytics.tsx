@@ -346,7 +346,7 @@ export const ReportShowAnalytics = memo((props: ReportShowAnalyticsProps) => {
                     push(
                         'csat',
                         String(t('Удовлетворённость клиента (CSAT)')),
-                        String(t('CSAT (Customer Satisfaction) — оценка удовлетворённости клиента по шкале 1–5')),
+                        String(t('CSAT (Customer Satisfaction) - оценка удовлетворённости клиента по шкале 1–5')),
                         csat != null,
                     )
                     if (!items.length) return null

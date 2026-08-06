@@ -10,7 +10,7 @@ import {
     useGetOperatorEvidence,
 } from '@/entities/Report'
 import type { PanelEntry } from '../../../model/panelStack'
-import { formatEvidenceMetricAverage, getMetricLabelKey } from '../../../lib/metricVisual'
+import { formatEvidenceMetricAverage, formatEvidenceMetricValue, getMetricLabelKey } from '../../../lib/metricVisual'
 import cls from './OperatorPanelBody.module.scss'
 
 export interface DashboardFilters {
@@ -37,7 +37,7 @@ function buildQueryArgs(
     filters: DashboardFilters,
 ) {
     return {
-        operatorName,
+        ...(operatorName ? { operatorName } : {}),
         startDate: filters.startDate,
         endDate: filters.endDate,
         projectId: filters.projectId,
@@ -46,7 +46,7 @@ function buildQueryArgs(
 }
 
 function formatPeriodLabel(startDate?: string, endDate?: string): string {
-    if (startDate && endDate) return `${startDate} — ${endDate}`
+    if (startDate && endDate) return `${startDate} - ${endDate}`
     if (startDate) return startDate
     if (endDate) return endDate
     return ''
@@ -223,9 +223,8 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
         [entry.operatorName, filters],
     )
 
-    const { data: evidenceData, isLoading: evidenceLoading } = useGetOperatorEvidence(
+    const { data: evidenceData, isLoading: evidenceLoading, isError, refetch } = useGetOperatorEvidence(
         evidenceArgs,
-        { skip: !entry.operatorName },
     )
 
     const metric = evidenceData?.metrics.find(m => m.metricId === entry.metricId)
@@ -242,32 +241,51 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
         )
     }
 
+    if (isError) {
+        return (
+            <div className={cls.errorBlock} data-testid="operator-metric-error">
+                <Text title={String(t('Не удалось загрузить разбор'))} bold />
+                <Text
+                    text={String(t('Проверьте соединение и повторите. Если ошибка повторяется, обновите страницу.'))}
+                    size="m"
+                />
+                <Button variant="glass-action" size="s" onClick={() => { void refetch() }}>
+                    {String(t('Повторить'))}
+                </Button>
+            </div>
+        )
+    }
+
     const label = entry.metricLabel ?? (metric ? metricLabel(metric, t) : entry.metricId)
-    const display = formatEvidenceMetricAverage(entry.metricId, metric?.average ?? null, t)
-    const headlineLabel = entry.metricId === 'csat'
-        ? String(t('Средний CSAT'))
-        : entry.metricId === 'success'
-            ? String(t('Доля успешных обращений'))
-            : entry.metricId === 'customer_sentiment'
-                ? String(t('Преобладающий настрой'))
-                : String(t('Средний балл метрики'))
+    const evidenceValues = metric?.evidence.map(item => item.value) ?? []
+    const display = formatEvidenceMetricAverage(
+        entry.metricId,
+        metric?.average ?? null,
+        t,
+        { evidenceValues },
+    )
+    const sampleSize = metric?.sampleSize || metric?.evidence.length || 0
 
     return (
         <VStack gap="16" max align="stretch" className={cls.root} data-testid="operator-metric-panel">
             <div className={cls.headlineBlock}>
                 <Text
-                    text={headlineLabel}
+                    text={String(t(display.labelKey))}
                     size="xs"
                     className={cls.headlineLabel}
                 />
-                <div className={cls.headline}>{display.text}</div>
-                {metric && (
-                    <Text
-                        text={String(t('Оценок по метрике: {{count}}', { count: metric.sampleSize }))}
-                        size="xs"
-                        className={cls.cappedNotice}
-                    />
-                )}
+                <Text
+                    text={display.text}
+                    size="l"
+                    bold
+                    variant={display.variant}
+                    className={cls.headline}
+                />
+                <Text
+                    text={String(t('Оценок по метрике: {{count}}', { count: sampleSize }))}
+                    size="xs"
+                    className={cls.cappedNotice}
+                />
             </div>
 
             {evidenceData?.sampleCapped && (
@@ -278,32 +296,70 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
                 />
             )}
 
+            <div className={cls.listHeader}>
+                <Text
+                    text={String(t('METRIC_EVIDENCE_LIST_TITLE', { count: metric?.evidence.length ?? 0 }))}
+                    size="m"
+                    bold
+                />
+                <Text
+                    text={String(t('METRIC_EVIDENCE_LIST_HINT'))}
+                    size="xs"
+                    className={cls.listHint}
+                />
+            </div>
+
             <div className={cls.evidenceSection}>
                 {(metric?.evidence.length ?? 0) === 0 ? (
                     <div className={cls.emptyBlock} data-testid="operator-metric-evidence-empty">
                         <Text text={String(t('Нет обоснований по метрикам'))} size="m" />
                     </div>
-                ) : metric?.evidence.map(item => (
-                    <button
-                        key={`${item.channelId}-${item.createdAt}`}
-                        type="button"
-                        className={cls.evidenceItem}
-                        onClick={() => { onOpenCall(item.channelId, label) }}
-                        data-testid={`evidence-call-${item.channelId}`}
-                    >
-                        {item.quote && (
-                            <Text text={`«${item.quote}»`} size="m" className={cls.quote} />
-                        )}
-                        {item.rationale && (
-                            <Text text={item.rationale} size="m" className={cls.rationale} />
-                        )}
-                        <Text
-                            text={new Date(item.createdAt).toLocaleDateString()}
-                            size="xs"
-                            className={cls.cappedNotice}
-                        />
-                    </button>
-                ))}
+                ) : metric?.evidence.map(item => {
+                    const valueDisplay = formatEvidenceMetricValue(item.value, t)
+                    const dateLabel = new Date(item.createdAt).toLocaleString(undefined, {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                    })
+
+                    return (
+                        <button
+                            key={`${item.channelId}-${item.createdAt}`}
+                            type="button"
+                            className={cls.evidenceItem}
+                            onClick={() => { onOpenCall(item.channelId, label) }}
+                            data-testid={`evidence-call-${item.channelId}`}
+                        >
+                            <div className={cls.rowMain}>
+                                <HStack max justify="between" align="center" gap="8">
+                                    <Text text={dateLabel} size="s" bold className={cls.rowTitle} />
+                                    {valueDisplay && (
+                                        <Text
+                                            text={valueDisplay.text}
+                                            size="s"
+                                            bold
+                                            variant={valueDisplay.variant}
+                                        />
+                                    )}
+                                </HStack>
+                                {item.quote && (
+                                    <Text text={`«${item.quote}»`} size="m" className={cls.quote} />
+                                )}
+                                {item.rationale && (
+                                    <Text text={item.rationale} size="s" className={cls.rationale} />
+                                )}
+                            </div>
+                            <div className={cls.rowAside}>
+                                <HStack gap="4" align="center" className={cls.openHint}>
+                                    <span>{String(t('Открыть'))}</span>
+                                    <ChevronRight size={14} aria-hidden />
+                                </HStack>
+                            </div>
+                        </button>
+                    )
+                })}
             </div>
         </VStack>
     )

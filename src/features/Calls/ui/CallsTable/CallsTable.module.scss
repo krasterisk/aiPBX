@@ -10,7 +10,7 @@
 
 .Table {
     width: 100%;
-    min-width: 1100px;
+    min-width: 1240px;
     border-collapse: separate;
     border-spacing: 0 12px; // slightly more gap — shadow has room between rows
 }
@@ -181,6 +181,11 @@
 
 .csatCell {
     min-width: 70px;
+}
+
+.topicsCell {
+    min-width: 140px;
+    max-width: 220px;
 }
 
 .csatValue {
