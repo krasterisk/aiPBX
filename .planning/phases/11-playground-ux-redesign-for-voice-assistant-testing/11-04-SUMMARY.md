@@ -105,7 +105,7 @@ status: complete
 1. **Task 1: Swap AssistantForm cards for AssistantSettingsForm** - `8d06b4cc` (feat)
 2. **Task 2: Retire unused Assistants card modules + locale parity** - `ff7ea89b` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `6065bdb3` (docs: complete plan)
 
 ## Files Created/Modified
 
