@@ -446,6 +446,39 @@ Plans:
 
 **Manual step:** 10-03 ships two dialect migrations that must be applied by hand per server (no migration runner — RISKS R12). See `user_setup` in `10-03-PLAN.md`.
 
+### Phase 11: Playground UX redesign for voice assistant testing
+
+**Goal:** Redesign `PlaygroundPage` UX so voice-assistant testing is intuitive, scannable, and simple — keep existing functionality, rethink information architecture and visual hierarchy (current UI is oversaturated, hard to parse, poorly structured).
+
+**Requirements:** PG-UX-01…PG-UX-08 (provisional; CONTEXT D-01…D-44 + `11-UI-SPEC.md`)
+
+**Depends on:** Phase 10
+
+**Context:** `.planning/phases/11-playground-ux-redesign-for-voice-assistant-testing/11-CONTEXT.md`  
+**Research:** `11-RESEARCH.md` · **UI-SPEC:** `11-UI-SPEC.md` (approved) · **Validation:** `11-VALIDATION.md`
+
+**Repos:** `aiPBX` frontend only (`PlaygroundSession`, new `AssistantSettingsForm`, Assistants form migration). No telephony/ARI/billing/backend changes.
+
+**Scope / UI policy:** Call-first + Setup/Debug sheets; shared `AssistantSettingsForm`. **D-34 / UI-SPEC override:** MUI direct or `shared/ui/mui` (not redesign-v3-only). FSD still required. i18n ru+en+de+zh (D-44).
+
+**Plans:** 5 plans across 4 waves (TRACER_MODE — 11-01 leads with Call-first tracer)
+
+| Plan | Wave | Depends on | Scope | Decisions / Req |
+|------|------|------------|-------|-----------------|
+| 11-01 | 1 | — | Call chrome + center states; mic/mute/volume; mobile sticky; onboarding chrome; retire permanent split | D-01…D-02, D-09…D-30, D-37…D-41, D-22…D-24 · PG-UX-01/04/05/06/08 |
+| 11-02 | 2 | 11-01 | Setup sheet + `AssistantSettingsForm` + autosave + form-slice consolidation | D-03…D-08, D-31…D-36, D-42 · PG-UX-02/07 |
+| 11-03 | 3 | 11-01, 11-02 | Debug sheet + metrics off StatusBar + mic device select | D-09…D-12, D-28 · PG-UX-03 |
+| 11-04 | 3 | 11-02 | Assistants page migration to `AssistantSettingsForm`; keep Save header | D-35, D-36 · PG-UX-07 |
+| 11-05 | 4 | 11-02, 11-03, 11-04 | i18n polish + dead-code cleanup + WebRTC UAT checkpoint | D-43, D-44 · PG-UX-01…08 |
+
+Plans:
+
+- [ ] 11-01-PLAN.md — Call-first chrome tracer + states + mic/mobile/onboarding
+- [ ] 11-02-PLAN.md — Setup sheet + AssistantSettingsForm + autosave consolidation
+- [ ] 11-03-PLAN.md — Debug sheet + metrics + mic device select
+- [ ] 11-04-PLAN.md — Assistants page migration (keep Save)
+- [ ] 11-05-PLAN.md — i18n + cleanup + human WebRTC UAT
+
 ---
 
 ## Weekly agent cycle (from Phase 0b onward)
