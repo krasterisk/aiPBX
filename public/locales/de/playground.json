@@ -120,5 +120,7 @@
     "Длительность": "Dauer",
     "Вызовы инструментов": "Tool-Aufrufe",
     "Выключить звук": "Stummschalten",
-    "Включить звук": "Ton einschalten"
+    "Включить звук": "Ton einschalten",
+    "VAD": "VAD",
+    "Инструменты": "Werkzeuge"
 }

@@ -1,0 +1,94 @@
+.AssistantSettingsForm {
+    width: 100%;
+    max-width: 100%;
+}
+
+.accordion {
+    box-shadow: none !important;
+    background: transparent !important;
+    border-bottom: 1px solid rgba(20, 28, 31, 0.08);
+    &::before {
+        display: none;
+    }
+}
+
+.summary {
+    min-height: 48px !important;
+    padding: 0 8px !important;
+}
+
+.summaryTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-redesigned);
+}
+
+.details {
+    padding: 8px 8px 16px !important;
+}
+
+.fieldsGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    width: 100%;
+
+    @media (min-width: 900px) {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.fullWidth {
+    grid-column: 1 / -1;
+}
+
+.promptTextarea {
+    width: 100%;
+
+    :global(.MuiOutlinedInput-root) {
+        max-height: 320px;
+        overflow: auto;
+    }
+}
+
+.sliderBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.sliderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.sliderLabel {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-redesigned);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sliderValue {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-redesigned);
+}
+
+.helpIcon {
+    display: inline-flex;
+    color: var(--hint-redesigned, #6b7280);
+    cursor: help;
+}
+
+.checkStack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
