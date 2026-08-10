@@ -461,7 +461,7 @@ Plans:
 
 **Scope / UI policy:** Call-first + Setup/Debug sheets; shared `AssistantSettingsForm`. **D-34 / UI-SPEC override:** MUI direct or `shared/ui/mui` (not redesign-v3-only). FSD still required. i18n ru+en+de+zh (D-44).
 
-**Plans:** 3/5 plans executed
+**Plans:** 4/5 plans executed
 
 | Plan | Wave | Depends on | Scope | Decisions / Req |
 |------|------|------------|-------|-----------------|
@@ -476,7 +476,7 @@ Plans:
 - [x] 11-01-PLAN.md — Call-first chrome tracer + states + mic/mobile/onboarding
 - [x] 11-02-PLAN.md — Setup sheet + AssistantSettingsForm + autosave consolidation
 - [x] 11-03-PLAN.md — Debug sheet + metrics + mic device select
-- [ ] 11-04-PLAN.md — Assistants page migration (keep Save)
+- [x] 11-04-PLAN.md — Assistants page migration (keep Save)
 - [ ] 11-05-PLAN.md — i18n + cleanup + human WebRTC UAT
 
 ---

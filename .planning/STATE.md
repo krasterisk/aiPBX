@@ -3,16 +3,16 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 11
-current_plan: 4
+current_plan: 5
 status: in_progress
-stopped_at: Completed 11-03-PLAN.md
-last_updated: "2026-08-10T10:05:40.706Z"
+stopped_at: Completed 11-04-PLAN.md
+last_updated: "2026-08-10T10:25:00.000Z"
 last_activity: 2026-08-10
 progress:
   total_phases: 11
   completed_phases: 10
   total_plans: 47
-  completed_plans: 35
+  completed_plans: 36
 ---
 
 # Project State
@@ -23,11 +23,11 @@ progress:
 
 **Current Phase:** 11
 
-**Current Plan:** 4
+**Current Plan:** 5
 
 **Last Activity:** 2026-08-10
 
-**Stopped At:** Completed 11-03-PLAN.md
+**Stopped At:** Completed 11-04-PLAN.md
 
 ## Accumulated Context
 
@@ -80,6 +80,9 @@ progress:
 - [Phase ?]: Feature→feature AssistantSettingsForm import uses documented layer-imports eslint-disable (A5)
 - [Phase ?]: Reuse StatusBar inside DebugSheet metrics section rather than duplicating VAD/token UI
 - [Phase ?]: Mic device id is React session state only — no localStorage (RESEARCH Q3)
+- [Phase ?]: Assistants keeps explicit header Save; shared form remains Save-free (D-05 Playground-only)
+- [Phase ?]: Assistants passes translationNs=assistants for accordion titles; Playground keeps playground ns
+- [Phase ?]: PipelineCard stays Assistants-adjacent; not pulled into AssistantSettingsForm
 
 ### Roadmap Evolution
 
@@ -233,9 +236,10 @@ progress:
 | Phase 11 P01 | 45min | 3 tasks | 20 files |
 | Phase 11 P02 | 24min | 3 tasks | 25 files |
 | Phase 11 P03 | 21min | 2 tasks | 12 files |
+| Phase 11 P04 | 14 | 2 tasks | 16 files |
 
 ## Session
 
-**Last session:** 2026-08-10T10:05:40.655Z
-**Stopped at:** Completed 10-01-PLAN.md
+**Last session:** 2026-08-10T10:25:00.000Z
+**Stopped at:** Completed 11-04-PLAN.md
 **Resume file:** None
