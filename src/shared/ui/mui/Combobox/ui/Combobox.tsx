@@ -27,7 +27,11 @@ export const Combobox = memo((props: ComboBoxProps) => {
     '& .MuiOutlinedInput-root': {
       backgroundColor: 'var(--light-bg-redesigned)',
       borderRadius: 'var(--radius-lg)',
-      padding: '4px 12px',
+      // Keep end padding for popup/clear adornments (12px all-around was clipping labels)
+      paddingTop: '4px',
+      paddingBottom: '4px',
+      paddingLeft: '12px',
+      paddingRight: '40px',
       transition: 'var(--transition-colors)',
       color: 'var(--icon-redesigned)',
       '& fieldset': {
@@ -48,6 +52,9 @@ export const Combobox = memo((props: ComboBoxProps) => {
           borderWidth: '1px !important',
         },
       },
+      '&.MuiInputBase-adornedEnd': {
+        paddingRight: '8px',
+      },
     },
 
     // Текст внутри поля
@@ -55,18 +62,25 @@ export const Combobox = memo((props: ComboBoxProps) => {
       color: 'var(--text-redesigned)',
       fontSize: 'var(--font-size-m)',
       fontWeight: '500',
+      minWidth: 0,
+      textOverflow: 'ellipsis',
       '&::placeholder': {
         color: 'var(--hint-redesigned)',
         opacity: 1,
       },
     },
 
-    // Лейбл
+    // Лейбл — не заезжать под стрелку, пока не shrink
     '& .MuiInputLabel-root': {
       color: 'var(--text-redesigned)',
       transform: 'translate(14px, 12px) scale(1)',
+      maxWidth: 'calc(100% - 48px)',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
       '&.MuiInputLabel-shrink': {
         transform: 'translate(14px, -9px) scale(0.75)',
+        maxWidth: 'calc(133% - 32px)',
       },
       '&.Mui-focused': {
         color: 'var(--text-redesigned)',
