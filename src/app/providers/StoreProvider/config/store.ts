@@ -8,8 +8,6 @@ import { rtkApi } from '@/shared/api/rtkApi'
 import { setupListeners } from '@reduxjs/toolkit/query'
 // eslint-disable-next-line krasterisk-plugin/layer-imports
 import { toastMiddleware } from '@/app/middleware/toastMiddleware'
-// eslint-disable-next-line krasterisk-plugin/layer-imports
-import { playgroundAssistantFormReducer } from '@/pages/Playground'
 
 export function createReduxStore(
   initialState?: StateSchema,
@@ -19,7 +17,6 @@ export function createReduxStore(
     ...asyncReducers,
     user: userReducer,
     saveScroll: scrollSaveReducer,
-    playgroundAssistantForm: playgroundAssistantFormReducer,
     [rtkApi.reducerPath]: rtkApi.reducer
   }
 

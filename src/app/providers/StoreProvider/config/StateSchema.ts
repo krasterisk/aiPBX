@@ -10,7 +10,6 @@ import { ReportsPageSchema, ProjectWizardSchema } from '@/entities/Report'
 import { DashboardPageSchema } from '@/features/Dashboard'
 import { LoginSchema, SignupSchema } from '@/features/Auth'
 import { PbxServersPageSchema } from '@/entities/PbxServers'
-import { PlaygroundAssistantFormSchema } from '@/pages/Playground'
 import { PublishSipUrisFormSchema } from '@/features/PublishSipUris'
 import { PublishSipUrisPageSchema } from '@/entities/PublishSipUris'
 import { PublishWidgetsFormSchema } from '@/features/PublishWidgets'
@@ -28,7 +27,6 @@ import { ChatsPageSchema } from '@/entities/Chat'
 export interface StateSchema {
   user: UserSchema
   saveScroll: ScrollSaveSchema
-  playgroundAssistantForm: PlaygroundAssistantFormSchema
   [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>
 
   // Async reducers
