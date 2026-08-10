@@ -158,4 +158,23 @@ describe('eventProcessor', () => {
         expect(state.transcript[0].isStreaming).toBe(false)
         expect(state.metrics.functionCallCount).toBe(1)
     })
+
+    it('increments errorCount on error-category events (D-16 / Pitfall 6)', () => {
+        let state = createInitialProcessorState()
+        expect(state.metrics.errorCount).toBe(0)
+
+        state = processEvent(state, createEvent({
+            type: 'error',
+            timestamp: 1000,
+            error: { message: 'boom' },
+        }))
+        expect(state.metrics.errorCount).toBe(1)
+
+        state = processEvent(state, createEvent({
+            type: 'error',
+            timestamp: 1001,
+            error: { message: 'again' },
+        }))
+        expect(state.metrics.errorCount).toBe(2)
+    })
 })
