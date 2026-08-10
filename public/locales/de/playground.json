@@ -50,7 +50,7 @@
     "Температура": "Temperatur",
     "tooltip_temperature": "Steuert die 'Kreativität' des Modells. Niedrigere Werte (0.6) erzeugen stabilere und vorhersehbarere Antworten. Höhere Werte (1.2) erzeugen vielfältigere, aber weniger präzise Antworten.",
     "Выберите ассистента": "Assistent auswählen",
-    "Песочница": "Sandbox",
+    "Песочница": "Playground",
     "Прерывание речи": "Sprachunterbrechung",
     "interruptResponseTooltip": "Erlaubt dem Anrufer, die KI-Antwort durch Sprechen zu unterbrechen. Wenn deaktiviert, beendet die KI ihre Antwort, bevor sie zuhört.",
     "Отключено": "Getrennt",
@@ -78,7 +78,7 @@
     "Первый ответ": "Erste Antwort",
     "мс": "ms",
     "Ср. задержка": "Durchschn. Latenz",
-    "Реплики": "Replikationen",
+    "Реплики": "Äußerungen",
     "Прерывания": "Unterbrechungen",
     "Входящие токены": "Tokens Ein",
     "Исходящие токены": "Tokens Aus",
@@ -107,7 +107,7 @@
     "Нет доступа к микрофону": "Mikrofon blockiert",
     "Откройте настройки сайта в браузере → Разрешения → Микрофон → Разрешить, затем нажмите «Повторить проверку».": "Öffnen Sie die Website-Einstellungen im Browser → Berechtigungen → Mikrofon → Zulassen, dann auf Prüfung wiederholen tippen.",
     "Повторить проверку": "Prüfung wiederholen",
-    "Последний тест · {{n}} реплик": "Letzter Test · {{n}} Beiträge",
+    "Последний тест · {{n}} реплик": "Letzter Test · {{n}} Äußerungen",
     "Не удалось подключиться вовремя. Проверьте сеть и попробуйте снова.": "Verbindung nicht rechtzeitig hergestellt. Prüfen Sie das Netzwerk und versuchen Sie es erneut.",
     "Отменить подключение": "Verbindung abbrechen",
     "Ошибка соединения. Подробности — в «События».": "Verbindungsfehler. Details unter Ereignisse.",
@@ -124,5 +124,10 @@
     "VAD": "VAD",
     "Инструменты": "Werkzeuge",
     "Устройство микрофона": "Mikrofon-Gerät",
-    "По умолчанию": "Standard"
+    "По умолчанию": "Standard",
+    "Настройки": "Einstellungen",
+    "Инструкции": "Anweisungen",
+    "Инструкция для ассистента": "Assistentenanweisung",
+    "Подключено": "Verbunden",
+    "onboarding_call_success": "Super! Anruf abgeschlossen – als Nächstes die Assistenten-Veröffentlichung einrichten."
 }

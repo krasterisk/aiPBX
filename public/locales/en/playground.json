@@ -53,7 +53,7 @@
     "Температура": "Temperature",
     "tooltip_temperature": "Controls the model's 'creativity'. Lower values (0.6) produce more stable and predictable responses. Higher values (1.2) produce more diverse but less precise responses.",
     "Выберите ассистента": "Select an assistant",
-    "Песочница": "Sandbox",
+    "Песочница": "Playground",
     "Прерывание речи": "Speech Interruption",
     "interruptResponseTooltip": "Allows the caller to interrupt the AI response by speaking. When disabled, the AI will finish its response before listening.",
     "Подключено": "Connected",
