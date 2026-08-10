@@ -32,6 +32,7 @@ import {
 import { buildSessionSummary, SessionSummary } from '../../model/callCenterState'
 import { useMicPermission } from '../../model/useMicPermission'
 import { useAutosaveAssistant } from '../../model/useAutosaveAssistant'
+import { resolveMicDeviceIdForConnect } from '../../model/micDeviceSelect'
 
 const reducers: ReducersList = {
     assistantForm: assistantFormReducer
@@ -54,6 +55,9 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
 
     // --- Mode (Call-first; Setup/Debug closed by default) ---
     const [mode, setMode] = useState<PlaygroundMode>('call')
+
+    // Session-only mic device (D-28) — Debug sheet; no localStorage
+    const [micDeviceId, setMicDeviceId] = useState<string | null>(null)
 
     // --- Assistant selection ---
     const [selectedAssistant, setSelectedAssistant] = useState<AssistantOptions | null>(null)
@@ -240,8 +244,8 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
         setTypedEvents([])
         setHasCompletedSession(false)
         setLastSummary(null)
-        connect(selectedAssistant.id)
-    }, [autosave, connect, selectedAssistant, t])
+        connect(selectedAssistant.id, resolveMicDeviceIdForConnect(micDeviceId))
+    }, [autosave, connect, micDeviceId, selectedAssistant, t])
 
     const handleStopSession = useCallback(() => {
         disconnect()
@@ -401,6 +405,8 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
                 status={status === 'error' ? 'error' : status}
                 model={assistantData?.model}
                 pipelineMode={assistantData?.pipelineMode ?? undefined}
+                micDeviceId={micDeviceId}
+                onMicDeviceChange={setMicDeviceId}
             />
             {/* Assistant switch confirm (D-37) */}
             <Dialog
