@@ -469,23 +469,11 @@ useEffect(() => {
 
 **If empty table:** N/A — assumptions listed above need planner awareness.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **FSD import direction for AssistantSettingsForm**
-   - What we know: D-35 requires shared feature; current code already feature→features/Assistants with eslint-disable.
-   - What's unclear: Whether CI forbids new disables.
-   - Recommendation: Prefer PlaygroundSession → AssistantSettingsForm with one documented disable **or** page-level composition; planner picks one and sticks to it.
-
-2. **Assistants create mode**
-   - What we know: `assistantForm` supports `initCreate`; AssistantSettingsForm must work for create+edit.
-   - What's unclear: Whether Playground ever creates assistants (deferred — no).
-   - Recommendation: Form supports both; Playground only uses edit.
-
-3. **Mic device select persistence**
-   - What we know: `connect(assistantId, micDeviceId?)` already accepts device id but UI never passes it.
-   - What's unclear: Persist device id in localStorage?
-   - Recommendation: Session-only state in Debug sheet for Phase 11 (discretion).
-
+1. **FSD import direction for AssistantSettingsForm** — **RESOLVED:** PlaygroundSession → AssistantSettingsForm feature→feature import with one documented `eslint-disable` for layer-imports (same pattern as current Assistants import); plans 11-02 / 11-04 stick to this (A5).
+2. **Assistants create mode** — **RESOLVED:** `AssistantSettingsForm` supports create+edit via entity `assistantForm` (`initCreate`/`initEdit`); Playground uses edit-only; Assistants keeps explicit Save header (no Playground-style autosave on Assistants in Phase 11).
+3. **Mic device select persistence** — **RESOLVED:** Session-only state in Debug sheet for Phase 11; pass `micDeviceId` into `connect` when set; no localStorage persistence.
 ## Environment Availability
 
 | Dependency | Required By | Available | Version | Fallback |
@@ -624,9 +612,9 @@ useEffect(() => {
 | Architecture | HIGH | Verified coupling + clear ownership map |
 | Pitfalls | HIGH | Dual-slice, session unmount, onboarding confirmed in code |
 
-### Open Questions
-- FSD composition vs feature→feature import for AssistantSettingsForm
-- Whether Assistants should ever autosave (recommend no in Phase 11)
-
+### Open Questions (RESOLVED)
+- FSD: feature→feature import + documented eslint-disable (plans 11-02/11-04)
+- Assistants: keep explicit Save; form supports create+edit; no Assistants autosave in Phase 11
+- Mic device: session-only in Debug (no localStorage)
 ### Ready for Planning
 Research complete. Planner can now create PLAN.md files.
