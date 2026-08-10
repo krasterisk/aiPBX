@@ -4,6 +4,7 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Slider from '@mui/material/Slider'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { Settings2, ListTree, Play, Square, MicOff, Volume2 } from 'lucide-react'
 import { AssistantOptions, AssistantSelect } from '@/entities/Assistants'
 import { classNames } from '@/shared/lib/classNames/classNames'
@@ -13,6 +14,9 @@ import {
     statusLabelKey,
 } from '../../model/playgroundMode'
 import cls from './CallChrome.module.scss'
+
+/** UI-SPEC mobile breakpoint — prefer matchMedia over useDevice (Pitfall 8). */
+export const PLAYGROUND_MOBILE_MQ = '(max-width: 899px)'
 
 interface CallChromeProps {
     className?: string
@@ -27,12 +31,11 @@ interface CallChromeProps {
     isAdmin?: boolean
     /** When true, Setup/Debug look secondary (onboarding). */
     secondaryChrome?: boolean
-    /** Disable Start (e.g. mic not ready) — wired fully in Task 2. */
+    /** Disable Start (e.g. mic not ready). */
     startDisabled?: boolean
-    /** Show timer after hangup for current session summary (Task 2). */
+    /** Show timer after hangup for current session summary. */
     showPostCallTimer?: boolean
     postCallElapsedSeconds?: number
-    /** Mute/volume placeholders — wired in Task 2. */
     muted?: boolean
     volume?: number
     onToggleMute?: () => void
@@ -77,6 +80,7 @@ export const CallChrome = memo((props: CallChromeProps) => {
     } = props
 
     const { t } = useTranslation('playground')
+    const isMobile = useMediaQuery(PLAYGROUND_MOBILE_MQ)
     const isConnected = status === 'connected'
     const isConnecting = status === 'connecting'
     const selectDisabled = isConnected
@@ -106,8 +110,42 @@ export const CallChrome = memo((props: CallChromeProps) => {
     const openEventsLabel = t('Открыть события')
     const muteLabel = muted ? t('Включить звук') : t('Выключить звук')
 
+    const startStopButton = !isConnected
+        ? (
+            <Button
+                variant="contained"
+                size="small"
+                disabled={!selectedAssistant || isConnecting || startDisabled}
+                onClick={onStartSession}
+                startIcon={<Play size={16} />}
+                fullWidth={isMobile}
+                sx={{
+                    backgroundColor: 'var(--accent-redesigned, #00c8ff)',
+                    color: '#0c1214',
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    '&:hover': { backgroundColor: 'var(--accent-redesigned, #00c8ff)', filter: 'brightness(0.95)' },
+                }}
+            >
+                {isConnecting ? t('Подключение…') : t('Начать тест')}
+            </Button>
+            )
+        : (
+            <Button
+                variant="contained"
+                size="small"
+                color="error"
+                onClick={onStopSession}
+                startIcon={<Square size={16} />}
+                fullWidth={isMobile}
+                sx={{ textTransform: 'none', fontWeight: 600 }}
+            >
+                {t('Завершить звонок')}
+            </Button>
+            )
+
     return (
-        <div className={classNames(cls.CallChrome, {}, [className])}>
+        <div className={classNames(cls.CallChrome, { [cls.CallChromeMobile]: isMobile }, [className])}>
             <header className={cls.header}>
                 <div className={cls.left}>
                     <div className={cls.assistantSelect}>
@@ -171,67 +209,58 @@ export const CallChrome = memo((props: CallChromeProps) => {
                     )}
                 </div>
 
-                <div className={cls.primaryActions}>
-                    {(isConnected || selectedAssistant) && (
-                        <>
-                            <Tooltip title={muteLabel}>
-                                <IconButton
-                                    size="small"
-                                    aria-label={muteLabel}
-                                    onClick={onToggleMute}
-                                    color={muted ? 'warning' : 'default'}
-                                >
-                                    {muted ? <MicOff size={18} /> : <Volume2 size={18} />}
-                                </IconButton>
-                            </Tooltip>
-                            {onVolumeChange && (
-                                <Slider
-                                    size="small"
-                                    value={Math.round(volume * 100)}
-                                    onChange={(_, v) => {
-                                        onVolumeChange((Array.isArray(v) ? v[0] : v) / 100)
-                                    }}
-                                    aria-label={t('Аудио')}
-                                    sx={{ width: 72, mx: 0.5 }}
-                                    disabled={!isConnected && !selectedAssistant}
-                                />
-                            )}
-                        </>
-                    )}
-
-                    {!isConnected ? (
-                        <Button
-                            variant="contained"
-                            size="small"
-                            disabled={!selectedAssistant || isConnecting || startDisabled}
-                            onClick={onStartSession}
-                            startIcon={<Play size={16} />}
-                            sx={{
-                                backgroundColor: 'var(--accent-redesigned, #00c8ff)',
-                                color: '#0c1214',
-                                fontWeight: 600,
-                                textTransform: 'none',
-                                '&:hover': { backgroundColor: 'var(--accent-redesigned, #00c8ff)', filter: 'brightness(0.95)' },
-                            }}
-                        >
-                            {isConnecting ? t('Подключение…') : t('Начать тест')}
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="contained"
-                            size="small"
-                            color="error"
-                            onClick={onStopSession}
-                            startIcon={<Square size={16} />}
-                            sx={{ textTransform: 'none', fontWeight: 600 }}
-                        >
-                            {t('Завершить звонок')}
-                        </Button>
-                    )}
-                </div>
+                {!isMobile && (
+                    <div className={cls.primaryActions}>
+                        {(isConnected || selectedAssistant) && (
+                            <>
+                                <Tooltip title={muteLabel}>
+                                    <IconButton
+                                        size="small"
+                                        aria-label={muteLabel}
+                                        onClick={onToggleMute}
+                                        color={muted ? 'warning' : 'default'}
+                                    >
+                                        {muted ? <MicOff size={18} /> : <Volume2 size={18} />}
+                                    </IconButton>
+                                </Tooltip>
+                                {onVolumeChange && (
+                                    <Slider
+                                        size="small"
+                                        value={Math.round(volume * 100)}
+                                        onChange={(_, v) => {
+                                            onVolumeChange((Array.isArray(v) ? v[0] : v) / 100)
+                                        }}
+                                        aria-label={t('Аудио')}
+                                        sx={{ width: 72, mx: 0.5 }}
+                                        disabled={!isConnected && !selectedAssistant}
+                                    />
+                                )}
+                            </>
+                        )}
+                        {startStopButton}
+                    </div>
+                )}
             </header>
 
             <div className={cls.center}>{children}</div>
+
+            {isMobile && (
+                <div className={cls.stickyBar} data-testid="playground-sticky-bar">
+                    {(isConnected || selectedAssistant) && (
+                        <Tooltip title={muteLabel}>
+                            <IconButton
+                                size="small"
+                                aria-label={muteLabel}
+                                onClick={onToggleMute}
+                                color={muted ? 'warning' : 'default'}
+                            >
+                                {muted ? <MicOff size={18} /> : <Volume2 size={18} />}
+                            </IconButton>
+                        </Tooltip>
+                    )}
+                    <div className={cls.stickyStartStop}>{startStopButton}</div>
+                </div>
+            )}
         </div>
     )
 })

@@ -8,15 +8,14 @@ import { useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import {
- onboardingActions,
+    onboardingActions,
     getOnboardingProductPath,
-    getOnboardingPlaygroundCallCompleted
-, trackOnboardingEvent 
+    getOnboardingPlaygroundCallCompleted,
+    trackOnboardingEvent,
 } from '@/features/Onboarding'
 import { trackEvent } from '@/shared/config/analytics/initAnalytics'
 import { toast } from 'react-toastify'
-
-const MIN_CONNECTED_MS = 10_000
+import { shouldRecordOnboardingCallSuccess } from '../../model/playgroundOnboardingGate'
 
 interface PlaygroundPageProps {
     className?: string
@@ -41,8 +40,7 @@ const PlaygroundPage = memo((props: PlaygroundPageProps) => {
     }, [onboardingFromUrl, productPath, playgroundCallCompleted])
 
     const handleSessionDisconnect = useCallback((info: DisconnectInfo) => {
-        if (!isOnboardingAssistants) return
-        if (!info.wasConnected || info.connectedDurationMs < MIN_CONNECTED_MS) return
+        if (!shouldRecordOnboardingCallSuccess(info, isOnboardingAssistants)) return
 
         dispatch(onboardingActions.setPlaygroundCallCompleted(true))
         trackOnboardingEvent('playground_call_success', { productPath: 'assistants' })
@@ -63,6 +61,7 @@ const PlaygroundPage = memo((props: PlaygroundPageProps) => {
             <PlaygroundSessionV2
                 preselectedAssistantId={preselectedAssistantId}
                 onSessionDisconnect={handleSessionDisconnect}
+                secondaryChrome={isOnboardingAssistants}
             />
         </Page>
     )

@@ -2,6 +2,12 @@ import { memo, useCallback, useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import Drawer from '@mui/material/Drawer'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
 import { toast } from 'react-toastify'
 import {
     AssistantOptions,
@@ -126,6 +132,7 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
     const [lastSummary, setLastSummary] = useState<SessionSummary | null>(null)
     const [postCallElapsedSeconds, setPostCallElapsedSeconds] = useState(0)
     const connectedStartedAtRef = useRef<number | null>(null)
+    const [pendingAssistant, setPendingAssistant] = useState<AssistantOptions | null | undefined>(undefined)
 
     useEffect(() => {
         if (status === 'connected') {
@@ -217,11 +224,48 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
         disconnect()
     }, [disconnect])
 
-    const handleSelectAssistant = useCallback((_: any, value: AssistantOptions | null) => {
+    const applyAssistantSelection = useCallback((value: AssistantOptions | null) => {
         setSelectedAssistant(value)
         if (value) {
             setMode(modeAfterAssistantSelect())
         }
+        // Clear prior transcript/history on confirmed switch (D-37)
+        processorRef.current = createInitialProcessorState()
+        lastProcessedCountRef.current = 0
+        setProcessorState(createInitialProcessorState())
+        setTypedEvents([])
+        setHasCompletedSession(false)
+        setLastSummary(null)
+    }, [])
+
+    const handleSelectAssistant = useCallback((_: any, value: AssistantOptions | null) => {
+        if (status === 'connected') return
+
+        const hasHistory = processorState.transcript.length > 0 || hasCompletedSession
+        const isSwitch = !!selectedAssistant && value?.id !== selectedAssistant.id
+
+        if (hasHistory && isSwitch) {
+            setPendingAssistant(value)
+            return
+        }
+
+        applyAssistantSelection(value)
+    }, [
+        status,
+        processorState.transcript.length,
+        hasCompletedSession,
+        selectedAssistant,
+        applyAssistantSelection,
+    ])
+
+    const handleConfirmSwitch = useCallback(() => {
+        if (pendingAssistant === undefined) return
+        applyAssistantSelection(pendingAssistant)
+        setPendingAssistant(undefined)
+    }, [pendingAssistant, applyAssistantSelection])
+
+    const handleDismissSwitch = useCallback(() => {
+        setPendingAssistant(undefined)
     }, [])
 
     const handleOpenSetup = useCallback(() => {
@@ -332,6 +376,26 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
                     <p className={callChromeCls.drawerStub}>{t('События')}</p>
                 </div>
             </Drawer>
+            {/* Assistant switch confirm (D-37) */}
+            <Dialog
+                open={pendingAssistant !== undefined}
+                onClose={handleDismissSwitch}
+            >
+                <DialogTitle>{t('Сменить ассистента?')}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {t('Сменить ассистента: история текущего теста будет очищена. Продолжить?')}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDismissSwitch} sx={{ textTransform: 'none' }}>
+                        {t('Оставить текущего')}
+                    </Button>
+                    <Button onClick={handleConfirmSwitch} color="error" sx={{ textTransform: 'none' }} autoFocus>
+                        {t('Сменить ассистента')}
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </DynamicModuleLoader>
     )
 })
