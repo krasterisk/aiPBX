@@ -12,6 +12,7 @@ interface BaseAssistantSelectProps {
   error?: boolean
   helperText?: string
   fullWidth?: boolean
+  disabled?: boolean
 }
 
 interface SingleAssistantSelectProps extends BaseAssistantSelectProps {

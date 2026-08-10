@@ -1,19 +1,23 @@
 import { memo, useCallback, useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import Drawer from '@mui/material/Drawer'
 import { AssistantOptions, useAssistant, assistantFormActions, assistantFormReducer } from '@/entities/Assistants'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 // eslint-disable-next-line krasterisk-plugin/layer-imports
 import { playgroundAssistantFormActions } from '@/pages/Playground'
 import { usePlaygroundSession, DisconnectInfo } from '../../model/usePlaygroundSession'
-import { PlaygroundLayout } from '../PlaygroundLayout/PlaygroundLayout'
-import { PlaygroundHeader } from '../PlaygroundHeader/PlaygroundHeader'
-import { StatusBar } from '../StatusBar/StatusBar'
+import { CallChrome } from '../CallChrome/CallChrome'
 import { ConversationPanel } from '../ConversationPanel/ConversationPanel'
-import { DebugPanel } from '../DebugPanel/DebugPanel'
 import { PlaygroundEvent } from '../../model/types/playgroundEvent'
 import { ProcessorState, createInitialProcessorState, processEvent } from '../../lib/eventProcessor'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
+import {
+    PlaygroundMode,
+    modeAfterAssistantSelect,
+    resolveModeTransition,
+} from '../../model/playgroundMode'
+import callChromeCls from '../CallChrome/CallChrome.module.scss'
 
 const reducers: ReducersList = {
     assistantForm: assistantFormReducer
@@ -23,14 +27,19 @@ interface PlaygroundSessionV2Props {
     className?: string
     preselectedAssistantId?: string
     onSessionDisconnect?: (info: DisconnectInfo) => void
+    /** Onboarding assistants path — Setup/Debug subdued (D-22/D-23). */
+    secondaryChrome?: boolean
 }
 
 export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
-    const { className, preselectedAssistantId, onSessionDisconnect } = props
+    const { className, preselectedAssistantId, onSessionDisconnect, secondaryChrome = false } = props
     const { t } = useTranslation('playground')
     const dispatch = useDispatch()
     const userData = useSelector(getUserAuthData)
     const admin = useSelector(isUserAdmin)
+
+    // --- Mode (Call-first; Setup/Debug closed by default) ---
+    const [mode, setMode] = useState<PlaygroundMode>('call')
 
     // --- Assistant selection ---
     const [selectedAssistant, setSelectedAssistant] = useState<AssistantOptions | null>(null)
@@ -49,25 +58,22 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
             id: preselectedAssistantData.id,
             name: preselectedAssistantData.name || preselectedAssistantId
         })
+        setMode(modeAfterAssistantSelect())
     }, [preselectedAssistantId, preselectedAssistantData, selectedAssistant])
 
     useEffect(() => {
         if (assistantData && selectedAssistant) {
             dispatch(playgroundAssistantFormActions.initForm(assistantData))
-            // Also init entity slice - reused components (MainInfoCard, VadSettingsCard, etc.) read from it
             dispatch(assistantFormActions.initEdit(assistantData))
         } else {
             dispatch(playgroundAssistantFormActions.resetForm())
         }
     }, [assistantData, selectedAssistant, dispatch])
 
-    // --- Session hook ---
-    const { status, connect, disconnect, updateSession, events, analyserNode } = usePlaygroundSession({
+    // --- Session hook stays mounted across mode toggles (RESEARCH Pitfall 1) ---
+    const { status, connect, disconnect, events, analyserNode } = usePlaygroundSession({
         onDisconnect: onSessionDisconnect
     })
-
-    const isSessionActive = status === 'connected'
-    const isConnecting = status === 'connecting'
 
     // --- Event processor ---
     const processorRef = useRef<ProcessorState>(createInitialProcessorState())
@@ -136,9 +142,23 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
 
     const handleSelectAssistant = useCallback((_: any, value: AssistantOptions | null) => {
         setSelectedAssistant(value)
+        if (value) {
+            setMode(modeAfterAssistantSelect())
+        }
     }, [])
 
-    // --- Transcript actions ---
+    const handleOpenSetup = useCallback(() => {
+        setMode(prev => resolveModeTransition(prev, 'setup', status))
+    }, [status])
+
+    const handleOpenDebug = useCallback(() => {
+        setMode(prev => resolveModeTransition(prev, 'debug', status))
+    }, [status])
+
+    const handleCloseOverlay = useCallback(() => {
+        setMode('call')
+    }, [])
+
     const handleClearTranscript = useCallback(() => {
         processorRef.current = { ...processorRef.current, transcript: [] }
         setProcessorState(prev => ({ ...prev, transcript: [] }))
@@ -165,48 +185,53 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
 
     return (
         <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
-            <PlaygroundLayout
+            <CallChrome
                 className={className}
-                header={
-                    <PlaygroundHeader
-                        selectedAssistant={selectedAssistant}
-                        onSelectAssistant={handleSelectAssistant}
-                        isSessionActive={isSessionActive}
-                        isConnecting={isConnecting}
-                        onStartSession={handleStartSession}
-                        onStopSession={handleStopSession}
-                        onUpdateSession={updateSession}
-                        userId={userData?.id}
-                        isAdmin={admin}
-                        hasAssistant={!!(selectedAssistant && assistantData)}
-                    />
-                }
-                conversationPanel={
-                    <ConversationPanel
-                        transcript={processorState.transcript}
-                        sessionStartTime={processorState.metrics.sessionStartTime}
-                        analyserNode={analyserNode || undefined}
-                        onClearTranscript={handleClearTranscript}
-                        onExportTranscript={handleExportTranscript}
-                    />
-                }
-                debugPanel={
-                    <DebugPanel
-                        events={typedEvents}
-                        metrics={processorState.metrics}
-                        sessionStartTime={processorState.metrics.sessionStartTime}
-                    />
-                }
-                statusBar={
-                    <StatusBar
-                        status={status}
-                        vadState={processorState.vadState}
-                        metrics={processorState.metrics}
-                        model={assistantData?.model}
-                        pipelineMode={assistantData?.pipelineMode || undefined}
-                    />
-                }
-            />
+                selectedAssistant={selectedAssistant}
+                onSelectAssistant={handleSelectAssistant}
+                status={status}
+                onStartSession={handleStartSession}
+                onStopSession={handleStopSession}
+                onOpenSetup={handleOpenSetup}
+                onOpenDebug={handleOpenDebug}
+                userId={userData?.id}
+                isAdmin={admin}
+                secondaryChrome={secondaryChrome}
+            >
+                <ConversationPanel
+                    transcript={processorState.transcript}
+                    sessionStartTime={processorState.metrics.sessionStartTime}
+                    analyserNode={analyserNode || undefined}
+                    onClearTranscript={handleClearTranscript}
+                    onExportTranscript={handleExportTranscript}
+                />
+            </CallChrome>
+
+            {/* Setup stub drawer — full form lands in 11-02; closed by default (D-09/D-10) */}
+            <Drawer
+                anchor="right"
+                open={mode === 'setup'}
+                onClose={handleCloseOverlay}
+                PaperProps={{ sx: { width: { xs: '100%', sm: 420 }, maxWidth: '100%' } }}
+            >
+                <div className={callChromeCls.drawerBody}>
+                    <h2 className={callChromeCls.drawerTitle}>{t('Открыть настройки')}</h2>
+                    <p className={callChromeCls.drawerStub}>{t('Параметры')}</p>
+                </div>
+            </Drawer>
+
+            {/* Debug stub drawer — Events sheet lands in 11-03; closed by default (D-09/D-10) */}
+            <Drawer
+                anchor="right"
+                open={mode === 'debug'}
+                onClose={handleCloseOverlay}
+                PaperProps={{ sx: { width: { xs: '100%', sm: 400 }, maxWidth: '100%' } }}
+            >
+                <div className={callChromeCls.drawerBody}>
+                    <h2 className={callChromeCls.drawerTitle}>{t('Открыть события')}</h2>
+                    <p className={callChromeCls.drawerStub}>{t('События')}</p>
+                </div>
+            </Drawer>
         </DynamicModuleLoader>
     )
 })
