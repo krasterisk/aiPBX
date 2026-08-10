@@ -4,6 +4,10 @@ import { classNames } from '@/shared/lib/classNames/classNames'
 import { VadState, SessionMetrics } from '../../model/types/sessionMetrics'
 import cls from './StatusBar.module.scss'
 
+/**
+ * Dense session metrics (VAD / model / tokens / latency).
+ * Mount only inside DebugSheet — Call chrome shows status+timer only (D-12).
+ */
 interface StatusBarProps {
     className?: string
     status: 'idle' | 'connecting' | 'connected' | 'error'

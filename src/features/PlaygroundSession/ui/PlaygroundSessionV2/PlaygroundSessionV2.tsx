@@ -1,7 +1,6 @@
 import { memo, useCallback, useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import Drawer from '@mui/material/Drawer'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
@@ -21,6 +20,7 @@ import { usePlaygroundSession, DisconnectInfo } from '../../model/usePlaygroundS
 import { CallChrome } from '../CallChrome/CallChrome'
 import { CallCenter } from '../CallCenter/CallCenter'
 import { SetupSheet } from '../SetupSheet/SetupSheet'
+import { DebugSheet } from '../DebugSheet/DebugSheet'
 import { PlaygroundEvent } from '../../model/types/playgroundEvent'
 import { ProcessorState, createInitialProcessorState, processEvent } from '../../lib/eventProcessor'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
@@ -32,7 +32,6 @@ import {
 import { buildSessionSummary, SessionSummary } from '../../model/callCenterState'
 import { useMicPermission } from '../../model/useMicPermission'
 import { useAutosaveAssistant } from '../../model/useAutosaveAssistant'
-import callChromeCls from '../CallChrome/CallChrome.module.scss'
 
 const reducers: ReducersList = {
     assistantForm: assistantFormReducer
@@ -392,18 +391,17 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
                 autosaveError={autosaveError}
             />
 
-            {/* Debug stub drawer — Events sheet lands in 11-03; closed by default (D-09/D-10) */}
-            <Drawer
-                anchor="right"
+            <DebugSheet
                 open={mode === 'debug'}
                 onClose={handleCloseOverlay}
-                PaperProps={{ sx: { width: { xs: '100%', sm: 400 }, maxWidth: '100%' } }}
-            >
-                <div className={callChromeCls.drawerBody}>
-                    <h2 className={callChromeCls.drawerTitle}>{t('Открыть события')}</h2>
-                    <p className={callChromeCls.drawerStub}>{t('События')}</p>
-                </div>
-            </Drawer>
+                events={typedEvents}
+                metrics={processorState.metrics}
+                vadState={processorState.vadState}
+                sessionStartTime={processorState.metrics.sessionStartTime}
+                status={status === 'error' ? 'error' : status}
+                model={assistantData?.model}
+                pipelineMode={assistantData?.pipelineMode ?? undefined}
+            />
             {/* Assistant switch confirm (D-37) */}
             <Dialog
                 open={pendingAssistant !== undefined}

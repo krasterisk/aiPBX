@@ -2,6 +2,7 @@ import { memo, useCallback, useMemo, useRef, useState, useEffect } from 'react'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { PlaygroundEvent, EventCategory, getEventCategory } from '../../model/types/playgroundEvent'
 import { SessionMetrics } from '../../model/types/sessionMetrics'
+import { createDefaultDebugFilters } from '../../model/debugFilters'
 import cls from './DebugPanel.module.scss'
 import { useTranslation } from 'react-i18next'
 
@@ -38,7 +39,7 @@ export const DebugPanel = memo((props: DebugPanelProps) => {
     const { t } = useTranslation('playground')
 
     const [activeFilters, setActiveFilters] = useState<Set<EventCategory>>(
-        () => new Set<EventCategory>(['transcript', 'function', 'response', 'session', 'error', 'vad'])
+        () => createDefaultDebugFilters()
     )
     const [expandedEventIdx, setExpandedEventIdx] = useState<number | null>(null)
     const eventListRef = useRef<HTMLDivElement>(null)

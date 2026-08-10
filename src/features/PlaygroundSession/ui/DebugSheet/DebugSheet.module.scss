@@ -1,0 +1,45 @@
+.DebugSheet {
+    /* drawer root */
+}
+
+.paper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--bg-redesigned) !important;
+    color: var(--text-redesigned);
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    min-height: 48px;
+    border-bottom: 1px solid rgba(20, 28, 31, 0.08);
+    flex-shrink: 0;
+}
+
+.backBtn {
+    color: var(--text-redesigned) !important;
+}
+
+.title {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: var(--text-redesigned) !important;
+}
+
+.metrics {
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(20, 28, 31, 0.08);
+}
+
+.events {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
