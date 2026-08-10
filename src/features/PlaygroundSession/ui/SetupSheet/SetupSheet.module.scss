@@ -1,0 +1,50 @@
+.SetupSheet {
+    /* drawer root */
+}
+
+.paper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--bg-redesigned) !important;
+    color: var(--text-redesigned);
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    min-height: 48px;
+    border-bottom: 1px solid rgba(20, 28, 31, 0.08);
+    flex-shrink: 0;
+}
+
+.backBtn {
+    color: var(--text-redesigned) !important;
+}
+
+.title {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: var(--text-redesigned) !important;
+}
+
+.error {
+    margin: 8px 12px 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(220, 38, 38, 0.1);
+    color: #b91c1c;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.body {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px 4px 24px;
+    min-height: 0;
+}

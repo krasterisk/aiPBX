@@ -17,11 +17,10 @@ import {
     assistantFormReducer,
 } from '@/entities/Assistants'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
-// eslint-disable-next-line krasterisk-plugin/layer-imports
-import { playgroundAssistantFormActions } from '@/pages/Playground'
 import { usePlaygroundSession, DisconnectInfo } from '../../model/usePlaygroundSession'
 import { CallChrome } from '../CallChrome/CallChrome'
 import { CallCenter } from '../CallCenter/CallCenter'
+import { SetupSheet } from '../SetupSheet/SetupSheet'
 import { PlaygroundEvent } from '../../model/types/playgroundEvent'
 import { ProcessorState, createInitialProcessorState, processEvent } from '../../lib/eventProcessor'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
@@ -32,6 +31,7 @@ import {
 } from '../../model/playgroundMode'
 import { buildSessionSummary, SessionSummary } from '../../model/callCenterState'
 import { useMicPermission } from '../../model/useMicPermission'
+import { useAutosaveAssistant } from '../../model/useAutosaveAssistant'
 import callChromeCls from '../CallChrome/CallChrome.module.scss'
 
 const reducers: ReducersList = {
@@ -83,12 +83,28 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
 
     useEffect(() => {
         if (assistantData && selectedAssistant) {
-            dispatch(playgroundAssistantFormActions.initForm(assistantData))
             dispatch(assistantFormActions.initEdit(assistantData))
         } else {
-            dispatch(playgroundAssistantFormActions.resetForm())
+            dispatch(assistantFormActions.resetForm())
         }
     }, [assistantData, selectedAssistant, dispatch])
+
+    // --- Autosave (D-05 / D-06 / D-42) ---
+    const { autosave } = useAutosaveAssistant()
+    const autosaveRef = useRef(autosave)
+    autosaveRef.current = autosave
+    const [autosaveError, setAutosaveError] = useState<string | null>(null)
+    const modeRef = useRef(mode)
+    modeRef.current = mode
+
+    // Silent autosave on unmount during Setup (D-42) — no beforeunload
+    useEffect(() => {
+        return () => {
+            if (modeRef.current === 'setup') {
+                void autosaveRef.current()
+            }
+        }
+    }, [])
 
     // --- Mic checklist (D-25…D-27) — probe when assistant selected / Call entered ---
     const micEnabled = !!selectedAssistant
@@ -207,18 +223,26 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
     }, [status, t])
 
     // --- Session controls ---
-    const handleStartSession = useCallback(() => {
-        if (selectedAssistant) {
-            processorRef.current = createInitialProcessorState()
-            processorRef.current.metrics.sessionStartTime = Date.now()
-            lastProcessedCountRef.current = 0
-            setProcessorState(createInitialProcessorState())
-            setTypedEvents([])
-            setHasCompletedSession(false)
-            setLastSummary(null)
-            connect(selectedAssistant.id)
+    const handleStartSession = useCallback(async () => {
+        if (!selectedAssistant) return
+
+        const ok = await autosave()
+        if (!ok) {
+            setAutosaveError(t('Не удалось сохранить настройки. Исправьте ошибки и попробуйте снова.'))
+            setMode('setup')
+            return
         }
-    }, [connect, selectedAssistant])
+        setAutosaveError(null)
+
+        processorRef.current = createInitialProcessorState()
+        processorRef.current.metrics.sessionStartTime = Date.now()
+        lastProcessedCountRef.current = 0
+        setProcessorState(createInitialProcessorState())
+        setTypedEvents([])
+        setHasCompletedSession(false)
+        setLastSummary(null)
+        connect(selectedAssistant.id)
+    }, [autosave, connect, selectedAssistant, t])
 
     const handleStopSession = useCallback(() => {
         disconnect()
@@ -275,6 +299,17 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
     const handleOpenDebug = useCallback(() => {
         setMode(prev => resolveModeTransition(prev, 'debug', status))
     }, [status])
+
+    const handleCloseSetup = useCallback(async () => {
+        const ok = await autosave()
+        if (!ok) {
+            setAutosaveError(t('Не удалось сохранить настройки. Исправьте ошибки и попробуйте снова.'))
+            setMode('setup')
+            return
+        }
+        setAutosaveError(null)
+        setMode('call')
+    }, [autosave, t])
 
     const handleCloseOverlay = useCallback(() => {
         setMode('call')
@@ -351,18 +386,11 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
                 />
             </CallChrome>
 
-            {/* Setup stub drawer — full form lands in 11-02; closed by default (D-09/D-10) */}
-            <Drawer
-                anchor="right"
+            <SetupSheet
                 open={mode === 'setup'}
-                onClose={handleCloseOverlay}
-                PaperProps={{ sx: { width: { xs: '100%', sm: 420 }, maxWidth: '100%' } }}
-            >
-                <div className={callChromeCls.drawerBody}>
-                    <h2 className={callChromeCls.drawerTitle}>{t('Открыть настройки')}</h2>
-                    <p className={callChromeCls.drawerStub}>{t('Параметры')}</p>
-                </div>
-            </Drawer>
+                onClose={handleCloseSetup}
+                autosaveError={autosaveError}
+            />
 
             {/* Debug stub drawer — Events sheet lands in 11-03; closed by default (D-09/D-10) */}
             <Drawer
