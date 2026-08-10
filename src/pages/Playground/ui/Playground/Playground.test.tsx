@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import type { DisconnectInfo } from '@/features/PlaygroundSession'
+import PlaygroundPage from './Playground'
 
 const mockDispatch = jest.fn()
 const mockTrackOnboardingEvent = jest.fn()
@@ -58,8 +59,6 @@ jest.mock('@/features/PlaygroundSession', () => ({
         )
     },
 }))
-
-import PlaygroundPage from './Playground'
 
 describe('Playground page disconnect analytics (PG-UX-08)', () => {
     beforeEach(() => {

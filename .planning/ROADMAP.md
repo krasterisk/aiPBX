@@ -459,7 +459,7 @@ Plans:
 
 **Repos:** `aiPBX` frontend only (`PlaygroundSession`, new `AssistantSettingsForm`, Assistants form migration). No telephony/ARI/billing/backend changes.
 
-**Scope / UI policy:** Call-first + Setup/Debug sheets; shared `AssistantSettingsForm`. **D-34 / UI-SPEC override:** MUI direct or `shared/ui/mui` (not redesign-v3-only). FSD still required. i18n ru+en+de+zh (D-44).
+**Scope / UI policy:** Call-first + Setup/Debug sheets; shared `AssistantSettingsForm`. **D-34 / UI-SPEC override (supersedes redesign-v3-only):** implement with MUI direct and/or `shared/ui/mui` wrappers; FSD still required. i18n ru+en+de+zh (D-44). Dead V1 chrome (`PlaygroundSession`, resizable `PlaygroundLayout`, settings popovers) removed — page uses `PlaygroundSessionV2` only.
 
 **Plans:** 4/5 plans executed
 

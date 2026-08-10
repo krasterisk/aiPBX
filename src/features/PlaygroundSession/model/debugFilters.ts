@@ -1,7 +1,7 @@
 import { EventCategory } from './types/playgroundEvent'
 
 /** Default Debug event filters (D-11): everything except raw audio. */
-export const DEFAULT_DEBUG_FILTERS: ReadonlyArray<EventCategory> = [
+export const DEFAULT_DEBUG_FILTERS: readonly EventCategory[] = [
     'transcript',
     'function',
     'response',
