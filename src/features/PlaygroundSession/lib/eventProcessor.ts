@@ -326,6 +326,7 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
 
         // --- Errors ---
         case 'error':
+            next.metrics.errorCount += 1
             // Add system message to transcript
             next.transcript.push(createTranscriptItem(
                 `error-${timestamp}`,

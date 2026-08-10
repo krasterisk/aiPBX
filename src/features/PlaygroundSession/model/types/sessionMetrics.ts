@@ -19,6 +19,8 @@ export interface SessionMetrics {
     interruptCount: number
     /** Number of function calls executed */
     functionCallCount: number
+    /** Number of error-category events (D-16 / Pitfall 6) */
+    errorCount: number
     /** Individual response latency values for sparkline chart */
     responseTimes: number[]
     /** VAD state change events for timeline overlay */
@@ -46,6 +48,7 @@ export function createInitialMetrics(): SessionMetrics {
         turnCount: 0,
         interruptCount: 0,
         functionCallCount: 0,
+        errorCount: 0,
         responseTimes: [],
         vadEvents: [],
     }

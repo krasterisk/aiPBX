@@ -2,13 +2,20 @@ import { memo, useCallback, useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import Drawer from '@mui/material/Drawer'
-import { AssistantOptions, useAssistant, assistantFormActions, assistantFormReducer } from '@/entities/Assistants'
+import { toast } from 'react-toastify'
+import {
+    AssistantOptions,
+    useAssistant,
+    useAssistantsAll,
+    assistantFormActions,
+    assistantFormReducer,
+} from '@/entities/Assistants'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
 // eslint-disable-next-line krasterisk-plugin/layer-imports
 import { playgroundAssistantFormActions } from '@/pages/Playground'
 import { usePlaygroundSession, DisconnectInfo } from '../../model/usePlaygroundSession'
 import { CallChrome } from '../CallChrome/CallChrome'
-import { ConversationPanel } from '../ConversationPanel/ConversationPanel'
+import { CallCenter } from '../CallCenter/CallCenter'
 import { PlaygroundEvent } from '../../model/types/playgroundEvent'
 import { ProcessorState, createInitialProcessorState, processEvent } from '../../lib/eventProcessor'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
@@ -17,6 +24,8 @@ import {
     modeAfterAssistantSelect,
     resolveModeTransition,
 } from '../../model/playgroundMode'
+import { buildSessionSummary, SessionSummary } from '../../model/callCenterState'
+import { useMicPermission } from '../../model/useMicPermission'
 import callChromeCls from '../CallChrome/CallChrome.module.scss'
 
 const reducers: ReducersList = {
@@ -44,6 +53,11 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
     // --- Assistant selection ---
     const [selectedAssistant, setSelectedAssistant] = useState<AssistantOptions | null>(null)
 
+    const { data: assistantsList } = useAssistantsAll({
+        userId: admin ? undefined : userData?.id,
+    })
+    const hasAssistants = (assistantsList?.length ?? 0) > 0
+
     const { data: assistantData } = useAssistant(selectedAssistant?.id || '', {
         skip: !selectedAssistant?.id
     })
@@ -70,9 +84,37 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
         }
     }, [assistantData, selectedAssistant, dispatch])
 
+    // --- Mic checklist (D-25…D-27) — probe when assistant selected / Call entered ---
+    const micEnabled = !!selectedAssistant
+    const { checklist: micChecklist, startDisabled: micStartDisabled, retry: retryMic } = useMicPermission({
+        enabled: micEnabled,
+    })
+
     // --- Session hook stays mounted across mode toggles (RESEARCH Pitfall 1) ---
-    const { status, connect, disconnect, events, analyserNode } = usePlaygroundSession({
-        onDisconnect: onSessionDisconnect
+    const handleSessionError = useCallback((error: string) => {
+        if (error === 'microphone_lost') return
+        toast.error(t('Ошибка соединения. Подробности — в «События».'))
+    }, [t])
+
+    const handleMicLost = useCallback(() => {
+        toast.error(t('Нет доступа к микрофону'))
+    }, [t])
+
+    const {
+        status,
+        connect,
+        disconnect,
+        events,
+        analyserNode,
+        muted,
+        setMuted,
+        volume,
+        setVolume,
+        micLostDuringCall,
+    } = usePlaygroundSession({
+        onDisconnect: onSessionDisconnect,
+        onError: handleSessionError,
+        onMicLost: handleMicLost,
     })
 
     // --- Event processor ---
@@ -80,10 +122,21 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
     const [processorState, setProcessorState] = useState<ProcessorState>(createInitialProcessorState())
     const lastProcessedCountRef = useRef(0)
     const [typedEvents, setTypedEvents] = useState<PlaygroundEvent[]>([])
+    const [hasCompletedSession, setHasCompletedSession] = useState(false)
+    const [lastSummary, setLastSummary] = useState<SessionSummary | null>(null)
+    const [postCallElapsedSeconds, setPostCallElapsedSeconds] = useState(0)
+    const connectedStartedAtRef = useRef<number | null>(null)
+
+    useEffect(() => {
+        if (status === 'connected') {
+            connectedStartedAtRef.current = Date.now()
+        }
+    }, [status])
 
     useEffect(() => {
         if (events.length <= lastProcessedCountRef.current) {
             if (events.length === 0 && lastProcessedCountRef.current > 0) {
+                // New connect clears events — reset processor for live session
                 processorRef.current = createInitialProcessorState()
                 lastProcessedCountRef.current = 0
                 setProcessorState(createInitialProcessorState())
@@ -124,6 +177,28 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
         setProcessorState({ ...state })
     }, [events])
 
+    // Capture post-call summary on hangup (D-16)
+    const prevStatusRef = useRef(status)
+    useEffect(() => {
+        const prev = prevStatusRef.current
+        prevStatusRef.current = status
+        if (prev === 'connected' && status === 'idle') {
+            const started = connectedStartedAtRef.current
+            const durationMs = started ? Date.now() - started : 0
+            connectedStartedAtRef.current = null
+            setPostCallElapsedSeconds(Math.floor(durationMs / 1000))
+            setLastSummary(buildSessionSummary({
+                durationMs,
+                errorCount: processorRef.current.metrics.errorCount,
+                functionCallCount: processorRef.current.metrics.functionCallCount,
+            }))
+            setHasCompletedSession(true)
+        }
+        if (prev === 'connecting' && status === 'error') {
+            toast.error(t('Ошибка соединения. Подробности — в «События».'))
+        }
+    }, [status, t])
+
     // --- Session controls ---
     const handleStartSession = useCallback(() => {
         if (selectedAssistant) {
@@ -132,6 +207,8 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
             lastProcessedCountRef.current = 0
             setProcessorState(createInitialProcessorState())
             setTypedEvents([])
+            setHasCompletedSession(false)
+            setLastSummary(null)
             connect(selectedAssistant.id)
         }
     }, [connect, selectedAssistant])
@@ -183,13 +260,19 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
         URL.revokeObjectURL(url)
     }, [selectedAssistant, processorState, typedEvents])
 
+    const handleToggleMute = useCallback(() => {
+        setMuted(!muted)
+    }, [muted, setMuted])
+
+    const modelReady = !!(assistantData?.model)
+
     return (
         <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
             <CallChrome
                 className={className}
                 selectedAssistant={selectedAssistant}
                 onSelectAssistant={handleSelectAssistant}
-                status={status}
+                status={status === 'error' ? 'error' : status}
                 onStartSession={handleStartSession}
                 onStopSession={handleStopSession}
                 onOpenSetup={handleOpenSetup}
@@ -197,11 +280,28 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
                 userId={userData?.id}
                 isAdmin={admin}
                 secondaryChrome={secondaryChrome}
+                startDisabled={micStartDisabled}
+                showPostCallTimer={hasCompletedSession && status === 'idle'}
+                postCallElapsedSeconds={postCallElapsedSeconds}
+                muted={muted}
+                volume={volume}
+                onToggleMute={handleToggleMute}
+                onVolumeChange={setVolume}
             >
-                <ConversationPanel
+                <CallCenter
+                    hasAssistants={hasAssistants}
+                    hasSelectedAssistant={!!selectedAssistant}
+                    status={status}
+                    hasCompletedSession={hasCompletedSession}
                     transcript={processorState.transcript}
                     sessionStartTime={processorState.metrics.sessionStartTime}
                     analyserNode={analyserNode || undefined}
+                    summary={lastSummary}
+                    micChecklist={micChecklist}
+                    onRetryMic={retryMic}
+                    onCancelConnecting={handleStopSession}
+                    micLostDuringCall={micLostDuringCall}
+                    modelReady={modelReady}
                     onClearTranscript={handleClearTranscript}
                     onExportTranscript={handleExportTranscript}
                 />

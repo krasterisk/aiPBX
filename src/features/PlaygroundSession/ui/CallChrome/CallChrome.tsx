@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
+import Slider from '@mui/material/Slider'
 import { Settings2, ListTree, Play, Square, MicOff, Volume2 } from 'lucide-react'
 import { AssistantOptions, AssistantSelect } from '@/entities/Assistants'
 import { classNames } from '@/shared/lib/classNames/classNames'
@@ -69,7 +70,9 @@ export const CallChrome = memo((props: CallChromeProps) => {
         showPostCallTimer = false,
         postCallElapsedSeconds = 0,
         muted = false,
+        volume = 1,
         onToggleMute,
+        onVolumeChange,
         children,
     } = props
 
@@ -181,6 +184,18 @@ export const CallChrome = memo((props: CallChromeProps) => {
                                     {muted ? <MicOff size={18} /> : <Volume2 size={18} />}
                                 </IconButton>
                             </Tooltip>
+                            {onVolumeChange && (
+                                <Slider
+                                    size="small"
+                                    value={Math.round(volume * 100)}
+                                    onChange={(_, v) => {
+                                        onVolumeChange((Array.isArray(v) ? v[0] : v) / 100)
+                                    }}
+                                    aria-label={t('Аудио')}
+                                    sx={{ width: 72, mx: 0.5 }}
+                                    disabled={!isConnected && !selectedAssistant}
+                                />
+                            )}
                         </>
                     )}
 

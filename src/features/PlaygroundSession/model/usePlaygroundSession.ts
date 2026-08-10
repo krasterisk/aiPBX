@@ -17,6 +17,8 @@ interface UsePlaygroundSessionProps {
     onConnect?: () => void
     onDisconnect?: (info: DisconnectInfo) => void
     onError?: (error: string) => void
+    /** Mid-call mic track lost (D-29) — UI surfaces error; no auto-hangup. */
+    onMicLost?: () => void
 }
 
 export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
@@ -24,12 +26,18 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
     const [isMicAccessGranted, setIsMicAccessGranted] = useState(false)
     const [events, setEvents] = useState<any[]>([])
     const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(null)
+    const [muted, setMutedState] = useState(false)
+    const [volume, setVolumeState] = useState(1)
+    const [micLostDuringCall, setMicLostDuringCall] = useState(false)
 
     const socketRef = useRef<Socket | null>(null)
     const audioContextRef = useRef<AudioContext | null>(null)
     const analyserRef = useRef<AnalyserNode | null>(null)
     const audioWorkletNodeRef = useRef<AudioWorkletNode | null>(null)
     const mediaStreamRef = useRef<MediaStream | null>(null)
+    const playbackGainRef = useRef<GainNode | null>(null)
+    const mutedRef = useRef(false)
+    const volumeRef = useRef(1)
 
     // Event batching to prevent main thread blocking on high load
     const eventBufferRef = useRef<any[]>([])
@@ -94,6 +102,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             audioWorkletNodeRef.current.disconnect()
             audioWorkletNodeRef.current = null
         }
+        playbackGainRef.current = null
         if (audioContextRef.current) {
             audioContextRef.current.close()
             audioContextRef.current = null
@@ -102,11 +111,46 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         setAnalyserNode(null)
         interruptPlayback()
         setIsMicAccessGranted(false)
+        setMutedState(false)
+        mutedRef.current = false
+        setVolumeState(1)
+        volumeRef.current = 1
     }, [interruptPlayback])
+
+    const applyMuteToTracks = useCallback((nextMuted: boolean) => {
+        mutedRef.current = nextMuted
+        const stream = mediaStreamRef.current
+        if (!stream) return
+        stream.getAudioTracks().forEach(track => {
+            track.enabled = !nextMuted
+        })
+    }, [])
+
+    const setMuted = useCallback((next: boolean) => {
+        setMutedState(next)
+        applyMuteToTracks(next)
+    }, [applyMuteToTracks])
+
+    const setVolume = useCallback((next: number) => {
+        const clamped = Math.min(1, Math.max(0, next))
+        volumeRef.current = clamped
+        setVolumeState(clamped)
+        if (playbackGainRef.current) {
+            playbackGainRef.current.gain.value = clamped
+        }
+    }, [])
 
     const playAudioChunk = useCallback((arrayBuffer: ArrayBuffer) => {
         const ctx = audioContextRef.current
         if (!ctx) return
+
+        // Ensure playback gain node exists (D-30)
+        if (!playbackGainRef.current) {
+            const gain = ctx.createGain()
+            gain.gain.value = volumeRef.current
+            gain.connect(ctx.destination)
+            playbackGainRef.current = gain
+        }
 
         // 1. Decode PCM16 -> Float32
         const int16 = new Int16Array(arrayBuffer)
@@ -128,7 +172,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
 
         const source = ctx.createBufferSource()
         source.buffer = audioBuffer
-        source.connect(ctx.destination)
+        source.connect(playbackGainRef.current)
 
         if (analyserRef.current) {
             source.connect(analyserRef.current)
@@ -142,6 +186,19 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             activeSourcesRef.current = activeSourcesRef.current.filter(s => s !== source)
         }
         activeSourcesRef.current.push(source)
+    }, [])
+
+    const attachMicLostListeners = useCallback((stream: MediaStream) => {
+        stream.getAudioTracks().forEach(track => {
+            const onLost = () => {
+                // D-29: surface error; do NOT silent-reconnect or auto-disconnect
+                setMicLostDuringCall(true)
+                propsRef.current?.onMicLost?.()
+                propsRef.current?.onError?.('microphone_lost')
+            }
+            track.addEventListener('ended', onLost)
+            track.addEventListener('mute', onLost)
+        })
     }, [])
 
     // Initialize Audio Input (Mic) -> Worklet -> Socket
@@ -162,6 +219,8 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
                 }
             })
             mediaStreamRef.current = stream
+            applyMuteToTracks(mutedRef.current)
+            attachMicLostListeners(stream)
 
             // Get actual sample rate from the stream
             const audioTrack = stream.getAudioTracks()[0]
@@ -179,6 +238,12 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             if (ctx.state === 'suspended') {
                 await ctx.resume()
             }
+
+            // Playback gain for volume control (D-30)
+            const playbackGain = ctx.createGain()
+            playbackGain.gain.value = volumeRef.current
+            playbackGain.connect(ctx.destination)
+            playbackGainRef.current = playbackGain
 
             // Load worklet with resampling capability
             const blob = new Blob([AUDIO_WORKLET_CODE], { type: 'application/javascript' })
@@ -219,13 +284,14 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
 
             audioWorkletNodeRef.current = worklet
             setIsMicAccessGranted(true)
+            setMicLostDuringCall(false)
         } catch (e: any) {
             console.error('Audio Init Failed:', e)
             toast.error('Microphone initialization failed: ' + e.message)
             cleanupAudio()
             throw e
         }
-    }, [cleanupAudio])
+    }, [applyMuteToTracks, attachMicLostListeners, cleanupAudio])
 
     const connect = useCallback((assistantId: string, micDeviceId?: string) => {
         if (socketRef.current) return
@@ -233,6 +299,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         // Clear events from previous session only when starting a new one
         setEvents([])
         eventBufferRef.current = []
+        setMicLostDuringCall(false)
 
         setStatus('connecting')
 
@@ -295,8 +362,8 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
 
         socket.on('connect_error', (err) => {
             console.error('Socket Connect Error:', err)
-            // Ideally we retry or show status
-            // toast.error('Connection error')
+            setStatus('error')
+            propsRef.current?.onError?.(err.message || 'connection_error')
         })
     }, [cleanupAudio, initAudioInput, interruptPlayback, playAudioChunk])
 
@@ -332,6 +399,24 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         updateSession,
         isMicAccessGranted,
         events,
-        analyserNode
-    }), [status, connect, disconnect, updateSession, isMicAccessGranted, events, analyserNode])
+        analyserNode,
+        muted,
+        setMuted,
+        volume,
+        setVolume,
+        micLostDuringCall,
+    }), [
+        status,
+        connect,
+        disconnect,
+        updateSession,
+        isMicAccessGranted,
+        events,
+        analyserNode,
+        muted,
+        setMuted,
+        volume,
+        setVolume,
+        micLostDuringCall,
+    ])
 }
