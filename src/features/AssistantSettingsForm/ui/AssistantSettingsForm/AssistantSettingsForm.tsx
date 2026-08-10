@@ -30,6 +30,11 @@ interface AssistantSettingsFormProps {
     className?: string
     /** When true, shows create-only fields (e.g. admin ClientSelect). Playground uses edit. */
     mode?: 'create' | 'edit'
+    /**
+     * i18n namespace for accordion section titles.
+     * Playground Setup uses `playground`; Assistants page prefers `assistants` (D-44).
+     */
+    translationNs?: 'playground' | 'assistants'
 }
 
 const SECTION_TITLE_KEYS: Record<SetupSectionKey, string> = {
@@ -40,8 +45,8 @@ const SECTION_TITLE_KEYS: Record<SetupSectionKey, string> = {
 }
 
 export const AssistantSettingsForm = memo((props: AssistantSettingsFormProps) => {
-    const { className, mode: modeProp } = props
-    const { t } = useTranslation('playground')
+    const { className, mode: modeProp, translationNs = 'playground' } = props
+    const { t } = useTranslation(translationNs)
     const dispatch = useAppDispatch()
     const formFields = useSelector(getAssistantFormData)
     const sliceMode = useSelector(getAssistantFormMode)

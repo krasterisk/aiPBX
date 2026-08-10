@@ -1,25 +1,20 @@
-import { memo, useCallback, ChangeEvent, useEffect, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { classNames } from '@/shared/lib/classNames/classNames'
-import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
+import { VStack } from '@/shared/ui/redesigned/Stack'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import {
-    Assistant,
     assistantFormActions,
     getAssistantFormData,
-    useAssistant
-, assistantTemplates 
+    useAssistant,
+    assistantTemplates,
 } from '@/entities/Assistants'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
-import { Tool, toolsPageActions } from '@/entities/Tools'
-import { McpServer } from '@/entities/Mcp'
-import { PromptSection } from './components/PromptSection'
-import { MainInfoCard } from './components/MainInfoCard'
-import { ModelParametersCard } from './components/ModelParametersCard/ModelParametersCard'
+// eslint-disable-next-line krasterisk-plugin/layer-imports -- Assistants → AssistantSettingsForm (phase 11 D-35/D-36 / RESEARCH A5)
+import { AssistantSettingsForm } from '@/features/AssistantSettingsForm'
 import { PipelineCard } from './components/PipelineCard/PipelineCard'
-import { VadSettingsCard } from './components/VadSettingsCard/VadSettingsCard'
 
 import cls from './AssistantForm.module.scss'
 
@@ -31,7 +26,7 @@ interface AssistantFormProps {
 export const AssistantForm = memo((props: AssistantFormProps) => {
     const {
         className,
-        assistantId
+        assistantId,
     } = props
 
     const dispatch = useAppDispatch()
@@ -44,7 +39,7 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
     const [searchParams] = useSearchParams()
 
     const { data: assistant } = useAssistant(assistantId ?? '', {
-        skip: !assistantId
+        skip: !assistantId,
     })
 
     const isEdit = !!assistantId
@@ -69,7 +64,7 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
                     const lang = i18n.language?.substring(0, 2) ?? 'ru'
                     const prompt = template.prompts[lang] ?? template.prompts.en ?? template.prompts.ru
                     dispatch(assistantFormActions.updateForm({
-                        instruction: prompt
+                        instruction: prompt,
                     }))
                     isTemplateApplied.current = true
                 }
@@ -81,7 +76,7 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
                 const generatedInstruction = sessionStorage.getItem('generated_instruction')
                 if (generatedInstruction) {
                     dispatch(assistantFormActions.updateForm({
-                        instruction: generatedInstruction
+                        instruction: generatedInstruction,
                     }))
                     sessionStorage.removeItem('generated_instruction')
                     isTemplateApplied.current = true
@@ -114,8 +109,8 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
                     userId: clientData.id,
                     user: {
                         id: clientData.id,
-                        name: clientData.name
-                    }
+                        name: clientData.name,
+                    },
                 }))
             }
         }
@@ -132,134 +127,23 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
                     userId: clientData.id,
                     user: {
                         id: clientData.id,
-                        name: clientData.name
-                    }
+                        name: clientData.name,
+                    },
                 }))
             }
             isFormInited.current = true
         }
     }, [assistant, isEdit, dispatch, isAdmin, clientData, formFields])
 
-    const onChangeToolsHandler = useCallback((
-        event: any,
-        value: Tool[]
-    ) => {
-        const updatedFields = {
-            ...formFields,
-            tools: value
-        }
-        dispatch(assistantFormActions.updateForm(updatedFields))
-    }, [dispatch, formFields])
-
-    const onChangeMcpServersHandler = useCallback((
-        event: any,
-        value: McpServer[]
-    ) => {
-        const updatedFields = {
-            ...formFields,
-            mcpServers: value
-        }
-        dispatch(assistantFormActions.updateForm(updatedFields))
-    }, [dispatch, formFields])
-
-    const onChangeClientHandler = useCallback((id: string) => {
-        const updatedForm = {
-            ...formFields,
-            user: {
-                id,
-                name: ''
-            },
-            userId: id
-        }
-        dispatch(assistantFormActions.updateForm(updatedForm))
-        if (!id) {
-            dispatch(toolsPageActions.setUser({ id: '', name: '' }))
-        }
-    }, [dispatch, formFields])
-
-    const onChangeSelectHandler = useCallback((field: keyof Assistant) => (
-        event: any,
-        newValue: string
-    ) => {
-        const updatedFields = {
-            ...formFields,
-            [field]: newValue
-        }
-
-        if (field === 'model') {
-            updatedFields.voice = ''
-
-            if (newValue.startsWith('qwen')) {
-                updatedFields.input_audio_format = 'pcm16'
-                updatedFields.output_audio_format = 'pcm16'
-            } else if (newValue.startsWith('gpt')) {
-                updatedFields.input_audio_format = 'g711_alaw'
-                updatedFields.output_audio_format = 'g711_alaw'
-            }
-        }
-
-        dispatch(assistantFormActions.updateForm(updatedFields))
-    }, [dispatch, formFields])
-
-    const onChangeTextHandler = useCallback((field: keyof Assistant) =>
-        (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-            const value = event.target.value
-            const updatedFields = {
-                ...formFields,
-                [field]: value
-            }
-            dispatch(assistantFormActions.updateForm(updatedFields))
-        }, [dispatch, formFields])
-
-    const onChangeCheckboxHandler = useCallback((field: keyof Assistant) =>
-        (event: ChangeEvent<HTMLInputElement>) => {
-            const value = event.target.checked
-            const updatedFields = {
-                ...formFields,
-                [field]: value
-            }
-            dispatch(assistantFormActions.updateForm(updatedFields))
-        }, [dispatch, formFields])
-
     return (
         <div className={classNames(cls.AssistantForm, {}, [className])}>
-            <HStack max gap="16" align="start" className={cls.content}>
-                {/* Left Column - Prompt Section (60-70% width) */}
-                <div className={cls.leftColumn}>
-                    <PromptSection
-                        onChangeTextHandler={onChangeTextHandler}
-                    />
-                </div>
-
-                {/* Right Column - Main, Parameters, VAD (30-40% width) */}
-                <div className={cls.rightColumn}>
-                    <VStack max gap="16">
-                        {/* Main Info Card */}
-                        <MainInfoCard
-                            onChangeTextHandler={onChangeTextHandler}
-                            onChangeSelectHandler={onChangeSelectHandler}
-                            onChangeClientHandler={onChangeClientHandler}
-                            onChangeToolsHandler={onChangeToolsHandler}
-                            onChangeMcpServersHandler={onChangeMcpServersHandler}
-                            onChangeCheckboxHandler={onChangeCheckboxHandler}
-                        />
-
-                        <PipelineCard assistantId={assistantId} />
-
-                        {/* Model Parameters Card (Temp, Tokens, Models) */}
-                        <ModelParametersCard
-                            onChangeTextHandler={onChangeTextHandler}
-                        />
-
-                        {/* VAD Settings Card */}
-                        <VadSettingsCard
-                            onChangeTextHandler={onChangeTextHandler}
-                            onChangeSelectHandler={onChangeSelectHandler}
-                            onChangeCheckboxHandler={onChangeCheckboxHandler}
-                        />
-                    </VStack>
-                </div>
-            </HStack>
+            <VStack max gap="16" className={cls.content}>
+                <AssistantSettingsForm
+                    mode={isEdit ? 'edit' : 'create'}
+                    translationNs="assistants"
+                />
+                <PipelineCard assistantId={assistantId} />
+            </VStack>
         </div>
     )
 })
