@@ -33,6 +33,16 @@
     "Create": "Создать",
     "Publish": "Опубликовано",
     "Publish Name": "Имя публикации",
+    "Realtime provider": "Realtime-провайдер",
+    "Wire model ID": "ID модели на API (wire)",
+    "Wire model ID hint": "Опционально: значение для WebSocket ?model=. Если пусто - используется Name.",
+    "Wire model ID hint yandex": "Короткий id (speech-realtime-.../latest) или полный gpt://folder/.... Короткий дополнится YANDEX_FOLDER на сервере.",
+    "realtimeVendor": {
+        "openai": "OpenAI",
+        "yandex": "Yandex",
+        "qwen": "Qwen"
+    },
+    "Delete AI Model": "Удалить модель",
     "Actions": "Действия",
     "ourOrg": {
         "pageTitle": "Наши организации",

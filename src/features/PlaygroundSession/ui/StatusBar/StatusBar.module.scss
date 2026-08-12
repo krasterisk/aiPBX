@@ -2,14 +2,13 @@
 
 .StatusBar {
     @include flex-between;
-    padding: var(--space-1) var(--space-4);
-    background: var(--glass-bg-tertiary);
-    backdrop-filter: var(--glass-blur-sm);
-    border-top: var(--glass-border-subtle);
-    font-size: 11px;
-    color: var(--icon-redesigned);
+    padding: 8px 12px;
+    background: var(--bg-redesigned, #eff5f6);
+    border-bottom: 1px solid rgba(20, 28, 31, 0.08);
+    font-size: 12px;
+    color: var(--text-redesigned);
     flex-shrink: 0;
-    min-height: 28px;
+    min-height: 36px;
     gap: var(--space-4);
     font-family: var(--font-family-monospace, 'JetBrains Mono', monospace);
 }

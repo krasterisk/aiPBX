@@ -4,8 +4,6 @@ import { Page } from '@/widgets/Page'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { Textarea } from '@/shared/ui/mui/Textarea'
-import { Check } from '@/shared/ui/mui/Check'
 import { Modal } from '@/shared/ui/redesigned/Modal'
 import {
     useAiModels,
@@ -15,14 +13,16 @@ import {
     CreateAiModelDto,
     AiModel,
     AiModelsList,
-    AiModelsListHeader
+    AiModelsListHeader,
+    AiModelFormFields,
+    EMPTY_AI_MODEL_FORM,
+    toAiModelForm,
 } from '@/entities/AiModel'
 import cls from './ModelsPage.module.scss'
 
 export const ModelsPage = memo(() => {
     const { t } = useTranslation('admin')
 
-    // State
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [selectedModel, setSelectedModel] = useState<AiModel | null>(null)
@@ -30,21 +30,23 @@ export const ModelsPage = memo(() => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const [modelToDeleteId, setModelToDeleteId] = useState<number | null>(null)
 
-    // Form State
-    const [formData, setFormData] = useState<CreateAiModelDto>({ name: '', comment: '', publish: false, publishName: '' })
+    const [formData, setFormData] = useState<CreateAiModelDto>({ ...EMPTY_AI_MODEL_FORM })
 
-    // API
     const { data: models, isLoading, isError } = useAiModels()
-    const [createAiModel] = useCreateAiModel()
-    const [updateAiModel] = useUpdateAiModel()
-    const [deleteAiModels] = useDeleteAiModels()
+    const [createAiModel, { isLoading: isCreating }] = useCreateAiModel()
+    const [updateAiModel, { isLoading: isUpdating }] = useUpdateAiModel()
+    const [deleteAiModels, { isLoading: isDeleting }] = useDeleteAiModels()
 
-    // Handlers
     const handleCreate = async () => {
+        if (!formData.name.trim()) return
         try {
-            await createAiModel(formData).unwrap()
+            await createAiModel({
+                ...formData,
+                name: formData.name.trim(),
+                wireModelId: formData.wireModelId?.trim() || undefined,
+            }).unwrap()
             setIsCreateModalOpen(false)
-            setFormData({ name: '', comment: '', publish: false, publishName: '' })
+            setFormData({ ...EMPTY_AI_MODEL_FORM })
         } catch (e) {
             console.error('Failed to create model', e)
         }
@@ -52,8 +54,14 @@ export const ModelsPage = memo(() => {
 
     const handleUpdate = async () => {
         if (!selectedModel) return
+        if (!formData.name.trim()) return
         try {
-            await updateAiModel({ ...selectedModel, ...formData }).unwrap()
+            await updateAiModel({
+                ...selectedModel,
+                ...formData,
+                name: formData.name.trim(),
+                wireModelId: formData.wireModelId?.trim() || null,
+            }).unwrap()
             setIsEditModalOpen(false)
             setSelectedModel(null)
         } catch (e) {
@@ -78,13 +86,13 @@ export const ModelsPage = memo(() => {
     }
 
     const openCreateModal = () => {
-        setFormData({ name: '', comment: '', publish: false, publishName: '' })
+        setFormData({ ...EMPTY_AI_MODEL_FORM })
         setIsCreateModalOpen(true)
     }
 
     const openEditModal = (model: AiModel) => {
         setSelectedModel(model)
-        setFormData({ name: model.name, comment: model.comment, publish: model.publish, publishName: model.publishName })
+        setFormData(toAiModelForm(model))
         setIsEditModalOpen(true)
     }
 
@@ -102,76 +110,54 @@ export const ModelsPage = memo(() => {
                     onDelete={confirmDelete}
                 />
 
-                {/* Create Modal */}
                 <Modal isOpen={isCreateModalOpen} onClose={() => { setIsCreateModalOpen(false) }}>
                     <VStack gap="16" max>
                         <Text title={t('Create AI Model')} />
-                        <Textarea
-                            label={t('Name')}
-                            value={formData.name}
-                            onChange={(e) => { setFormData(prev => ({ ...prev, name: e.target.value })) }}
-                        />
-                        <Textarea
-                            label={t('Publish Name')}
-                            value={formData.publishName}
-                            onChange={(e) => { setFormData(prev => ({ ...prev, publishName: e.target.value })) }}
-                        />
-                        <Textarea
-                            label={t('Comment')}
-                            value={formData.comment}
-                            onChange={(e) => { setFormData(prev => ({ ...prev, comment: e.target.value })) }}
-                        />
-                        <Check
-                            checked={formData.publish}
-                            onChange={(e) => { setFormData(prev => ({ ...prev, publish: e.target.checked })) }}
-                            label={t('Publish') ?? ''}
-                        />
+                        <AiModelFormFields formData={formData} onChange={setFormData} />
                         <HStack justify="end" gap="16" max>
                             <Button onClick={() => { setIsCreateModalOpen(false) }} variant="clear">{t('Cancel')}</Button>
-                            <Button onClick={handleCreate} variant="outline">{t('Create')}</Button>
+                            <Button
+                                onClick={handleCreate}
+                                variant="outline"
+                                disabled={isCreating || !formData.name.trim()}
+                            >
+                                {t('Create')}
+                            </Button>
                         </HStack>
                     </VStack>
                 </Modal>
 
-                {/* Edit Modal */}
                 <Modal isOpen={isEditModalOpen} onClose={() => { setIsEditModalOpen(false) }}>
                     <VStack gap="16" max>
                         <Text title={t('Edit AI Model')} />
-                        <Textarea
-                            label={t('Name')}
-                            value={formData.name}
-                            onChange={(e) => { setFormData(prev => ({ ...prev, name: e.target.value })) }}
-                        />
-                        <Textarea
-                            label={t('Publish Name')}
-                            value={formData.publishName}
-                            onChange={(e) => { setFormData(prev => ({ ...prev, publishName: e.target.value })) }}
-                        />
-                        <Textarea
-                            label={t('Comment')}
-                            value={formData.comment}
-                            onChange={(e) => { setFormData(prev => ({ ...prev, comment: e.target.value })) }}
-                        />
-                        <Check
-                            checked={formData.publish}
-                            onChange={(e) => { setFormData(prev => ({ ...prev, publish: e.target.checked })) }}
-                            label={t('Publish') ?? ''}
-                        />
+                        <AiModelFormFields formData={formData} onChange={setFormData} />
                         <HStack justify="end" gap="16" max>
                             <Button onClick={() => { setIsEditModalOpen(false) }} variant="clear">{t('Cancel')}</Button>
-                            <Button onClick={handleUpdate} variant="outline">{t('Save')}</Button>
+                            <Button
+                                onClick={handleUpdate}
+                                variant="outline"
+                                disabled={isUpdating || !formData.name.trim()}
+                            >
+                                {t('Save')}
+                            </Button>
                         </HStack>
                     </VStack>
                 </Modal>
 
-                {/* Delete Confirmation Modal */}
                 <Modal isOpen={isDeleteModalOpen} onClose={() => { setIsDeleteModalOpen(false) }}>
                     <VStack gap="16" max>
                         <Text title={t('Delete AI Model')} />
                         <Text text={t('Are you sure you want to delete this model?')} />
                         <HStack justify="end" gap="16" max>
                             <Button onClick={() => { setIsDeleteModalOpen(false) }} variant="clear">{t('Cancel')}</Button>
-                            <Button onClick={handleDelete} variant="outline" color="error">{t('Delete')}</Button>
+                            <Button
+                                onClick={handleDelete}
+                                variant="outline"
+                                color="error"
+                                disabled={isDeleting}
+                            >
+                                {t('Delete')}
+                            </Button>
                         </HStack>
                     </VStack>
                 </Modal>

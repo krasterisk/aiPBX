@@ -21,21 +21,30 @@ const aiModelApi = rtkApi.injectEndpoints({
             query: (dto) => ({
                 url: '/aiModels',
                 method: 'POST',
-                body: dto,
+                body: {
+                    ...dto,
+                    wireModelId: dto.wireModelId?.trim() || undefined,
+                },
             }),
             invalidatesTags: [{ type: 'AiModels', id: 'LIST' }],
         }),
         updateAiModel: build.mutation<AiModel, UpdateAiModelDto>({
             query: (dto) => ({
-                url: '/aiModels', // Controller uses @Put() at root /aiModels
-                method: 'PUT',
-                body: dto,
+                url: '/aiModels',
+                method: 'PATCH',
+                body: {
+                    ...dto,
+                    wireModelId: dto.wireModelId?.trim() ? dto.wireModelId.trim() : null,
+                },
             }),
-            invalidatesTags: (result, error, { id }) => [{ type: 'AiModels', id }],
+            invalidatesTags: (result, error, { id }) => [
+                { type: 'AiModels', id },
+                { type: 'AiModels', id: 'LIST' },
+            ],
         }),
         deleteAiModels: build.mutation<void, DeleteAiModelsDto>({
             query: (body) => ({
-                url: '/aiModels', // Controller uses @Delete() at root /aiModels
+                url: '/aiModels',
                 method: 'DELETE',
                 body,
             }),

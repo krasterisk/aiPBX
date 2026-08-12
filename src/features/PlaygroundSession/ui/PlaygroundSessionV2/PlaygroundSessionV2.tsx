@@ -115,37 +115,9 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
         enabled: micEnabled,
     })
 
-    // --- Session hook stays mounted across mode toggles (RESEARCH Pitfall 1) ---
-    const handleSessionError = useCallback((error: string) => {
-        if (error === 'microphone_lost') return
-        toast.error(t('Ошибка соединения. Подробности — в «События».'))
-    }, [t])
-
-    const handleMicLost = useCallback(() => {
-        toast.error(t('Нет доступа к микрофону'))
-    }, [t])
-
-    const {
-        status,
-        connect,
-        disconnect,
-        events,
-        analyserNode,
-        muted,
-        setMuted,
-        volume,
-        setVolume,
-        micLostDuringCall,
-    } = usePlaygroundSession({
-        onDisconnect: onSessionDisconnect,
-        onError: handleSessionError,
-        onMicLost: handleMicLost,
-    })
-
-    // --- Event processor ---
+    // --- Event processor (fed via onEventsBatch — not via capped events[]) ---
     const processorRef = useRef<ProcessorState>(createInitialProcessorState())
     const [processorState, setProcessorState] = useState<ProcessorState>(createInitialProcessorState())
-    const lastProcessedCountRef = useRef(0)
     const [typedEvents, setTypedEvents] = useState<PlaygroundEvent[]>([])
     const [hasCompletedSession, setHasCompletedSession] = useState(false)
     const [lastSummary, setLastSummary] = useState<SessionSummary | null>(null)
@@ -153,28 +125,10 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
     const connectedStartedAtRef = useRef<number | null>(null)
     const [pendingAssistant, setPendingAssistant] = useState<AssistantOptions | null | undefined>(undefined)
 
-    useEffect(() => {
-        if (status === 'connected') {
-            connectedStartedAtRef.current = Date.now()
-        }
-    }, [status])
+    const handleEventsBatch = useCallback((batch: any[]) => {
+        if (batch.length === 0) return
 
-    useEffect(() => {
-        if (events.length <= lastProcessedCountRef.current) {
-            if (events.length === 0 && lastProcessedCountRef.current > 0) {
-                // New connect clears events — reset processor for live session
-                processorRef.current = createInitialProcessorState()
-                lastProcessedCountRef.current = 0
-                setProcessorState(createInitialProcessorState())
-                setTypedEvents([])
-            }
-            return
-        }
-
-        const newRawEvents = events.slice(lastProcessedCountRef.current)
-        lastProcessedCountRef.current = events.length
-
-        const newTypedEvents: PlaygroundEvent[] = newRawEvents.map(raw => ({
+        const newTypedEvents: PlaygroundEvent[] = batch.map(raw => ({
             type: raw.type || 'error',
             timestamp: Date.now(),
             item_id: raw.item_id,
@@ -201,7 +155,38 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
         }
         processorRef.current = state
         setProcessorState({ ...state })
-    }, [events])
+    }, [])
+
+    // --- Session hook stays mounted across mode toggles (RESEARCH Pitfall 1) ---
+    const handleSessionError = useCallback((error: string) => {
+        if (error === 'microphone_lost') return
+        toast.error(t('Ошибка соединения. Подробности — в «События».'))
+    }, [t])
+
+    const handleMicLost = useCallback(() => {
+        toast.error(t('Нет доступа к микрофону'))
+    }, [t])
+
+    const {
+        status,
+        connect,
+        disconnect,
+        analyserNode,
+        muted,
+        setMuted,
+        micLostDuringCall,
+    } = usePlaygroundSession({
+        onDisconnect: onSessionDisconnect,
+        onError: handleSessionError,
+        onMicLost: handleMicLost,
+        onEventsBatch: handleEventsBatch,
+    })
+
+    useEffect(() => {
+        if (status === 'connected') {
+            connectedStartedAtRef.current = Date.now()
+        }
+    }, [status])
 
     // Capture post-call summary on hangup (D-16)
     const prevStatusRef = useRef(status)
@@ -239,7 +224,6 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
 
         processorRef.current = createInitialProcessorState()
         processorRef.current.metrics.sessionStartTime = Date.now()
-        lastProcessedCountRef.current = 0
         setProcessorState(createInitialProcessorState())
         setTypedEvents([])
         setHasCompletedSession(false)
@@ -258,7 +242,6 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
         }
         // Clear prior transcript/history on confirmed switch (D-37)
         processorRef.current = createInitialProcessorState()
-        lastProcessedCountRef.current = 0
         setProcessorState(createInitialProcessorState())
         setTypedEvents([])
         setHasCompletedSession(false)
@@ -296,14 +279,21 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
     }, [])
 
     const handleOpenSetup = useCallback(() => {
+        if (!selectedAssistant) return
         setMode(prev => resolveModeTransition(prev, 'setup', status))
-    }, [status])
+    }, [selectedAssistant, status])
 
     const handleOpenDebug = useCallback(() => {
         setMode(prev => resolveModeTransition(prev, 'debug', status))
     }, [status])
 
     const handleCloseSetup = useCallback(async () => {
+        // Without an assistant there is nothing to save — always allow dismiss.
+        if (!selectedAssistant) {
+            setAutosaveError(null)
+            setMode('call')
+            return
+        }
         const ok = await autosave()
         if (!ok) {
             setAutosaveError(t('Не удалось сохранить настройки. Исправьте ошибки и попробуйте снова.'))
@@ -312,7 +302,7 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
         }
         setAutosaveError(null)
         setMode('call')
-    }, [autosave, t])
+    }, [autosave, selectedAssistant, t])
 
     const handleCloseOverlay = useCallback(() => {
         setMode('call')
@@ -346,8 +336,6 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
         setMuted(!muted)
     }, [muted, setMuted])
 
-    const modelReady = !!(assistantData?.model)
-
     return (
         <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
             <CallChrome
@@ -355,20 +343,20 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
                 selectedAssistant={selectedAssistant}
                 onSelectAssistant={handleSelectAssistant}
                 status={status === 'error' ? 'error' : status}
-                onStartSession={handleStartSession}
                 onStopSession={handleStopSession}
                 onOpenSetup={handleOpenSetup}
                 onOpenDebug={handleOpenDebug}
                 userId={userData?.id}
                 isAdmin={admin}
                 secondaryChrome={secondaryChrome}
-                startDisabled={micStartDisabled}
                 showPostCallTimer={hasCompletedSession && status === 'idle'}
                 postCallElapsedSeconds={postCallElapsedSeconds}
                 muted={muted}
-                volume={volume}
                 onToggleMute={handleToggleMute}
-                onVolumeChange={setVolume}
+                micChecklist={micChecklist}
+                onRetryMic={retryMic}
+                micDeviceId={micDeviceId}
+                onMicDeviceChange={setMicDeviceId}
             >
                 <CallCenter
                     hasAssistants={hasAssistants}
@@ -379,13 +367,12 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
                     sessionStartTime={processorState.metrics.sessionStartTime}
                     analyserNode={analyserNode || undefined}
                     summary={lastSummary}
-                    micChecklist={micChecklist}
-                    onRetryMic={retryMic}
                     onCancelConnecting={handleStopSession}
                     micLostDuringCall={micLostDuringCall}
-                    modelReady={modelReady}
                     onClearTranscript={handleClearTranscript}
                     onExportTranscript={handleExportTranscript}
+                    onStartSession={handleStartSession}
+                    startDisabled={micStartDisabled}
                 />
             </CallChrome>
 
@@ -405,8 +392,6 @@ export const PlaygroundSessionV2 = memo((props: PlaygroundSessionV2Props) => {
                 status={status === 'error' ? 'error' : status}
                 model={assistantData?.model}
                 pipelineMode={assistantData?.pipelineMode ?? undefined}
-                micDeviceId={micDeviceId}
-                onMicDeviceChange={setMicDeviceId}
             />
             {/* Assistant switch confirm (D-37) */}
             <Dialog

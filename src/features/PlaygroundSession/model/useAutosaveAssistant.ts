@@ -40,6 +40,11 @@ export async function runAutosaveAssistant (args: {
 }): Promise<AutosaveAttempt> {
     const { data, initialData, updateFn } = args
 
+    // No selected assistant / empty form — nothing to PATCH; allow Setup to close.
+    if (!data?.id) {
+        return { ok: true, skipped: true }
+    }
+
     if (!validateAssistantForAutosave(data)) {
         return { ok: false, reason: 'validation' }
     }
@@ -49,7 +54,7 @@ export async function runAutosaveAssistant (args: {
     }
 
     try {
-        await updateFn(data as Assistant)
+        await updateFn(data)
         return { ok: true, skipped: false }
     } catch {
         return { ok: false, reason: 'api' }

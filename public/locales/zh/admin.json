@@ -33,6 +33,16 @@
     "Create": "创建",
     "Publish": "已发布",
     "Publish Name": "发布名称",
+    "Realtime provider": "Realtime 提供商",
+    "Wire model ID": "API 模型 ID (wire)",
+    "Wire model ID hint": "可选：WebSocket ?model= 的值。为空时使用 Name。",
+    "Wire model ID hint yandex": "Yandex Realtime WS 的模型 ID（?model=）。为空时使用服务器环境变量 YANDEX_MODEL。",
+    "realtimeVendor": {
+        "openai": "OpenAI",
+        "yandex": "Yandex",
+        "qwen": "Qwen"
+    },
+    "Delete AI Model": "删除模型",
     "Actions": "操作",
     "ourOrg": {
         "pageTitle": "我方组织",

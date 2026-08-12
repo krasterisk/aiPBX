@@ -49,6 +49,10 @@
         max-height: 320px;
         overflow: auto;
     }
+
+    :global(.MuiInputBase-inputMultiline) {
+        padding-top: 4px !important;
+    }
 }
 
 .sliderBlock {

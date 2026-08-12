@@ -9,17 +9,13 @@ type TextAreaProps = TextFieldProps & {
 }
 
 const areaStyles = {
-  // '& .MuiInputBase-root': {
-  //   overflow: 'auto',
-  //   maxHeight: '200px' // или любая другая подходящая высота
-  // },
   // Основной контейнер поля ввода
   '& .MuiOutlinedInput-root': {
     backgroundColor: 'var(--light-bg-redesigned)',
     borderRadius: 'var(--radius-lg)',
     padding: '0 12px',
     transition: 'var(--transition-colors)',
-    color: 'var(--icon-redesigned)', // Цвет для иконок (svg) по умолчанию
+    color: 'var(--icon-redesigned)',
     display: 'flex',
     alignItems: 'center',
     minHeight: '44px',
@@ -47,7 +43,8 @@ const areaStyles = {
     },
     '&.MuiInputBase-multiline': {
       alignItems: 'flex-start',
-      padding: '12px',
+      // Extra top padding so first line never sits under the outline label
+      padding: '24px 12px 12px',
       minHeight: '80px',
     },
   },
@@ -69,35 +66,48 @@ const areaStyles = {
   },
   '& .MuiInputLabel-root': {
     color: 'var(--text-redesigned)',
-    transform: 'translate(14px, 12px) scale(1)', // Центрируем по вертикали для высоты 44px
+    transform: 'translate(14px, 12px) scale(1)',
     '&.MuiInputLabel-shrink': {
-      transform: 'translate(14px, -9px) scale(0.75)', // Позиция при фокусе (сверху)
+      transform: 'translate(14px, -9px) scale(0.75)',
     },
     '&.Mui-focused': {
       color: 'var(--text-redesigned)',
     },
   },
+  // size="small" otherwise overrides shrink position and leaves the label on the text
+  '& .MuiInputLabel-sizeSmall.MuiInputLabel-shrink': {
+    transform: 'translate(14px, -9px) scale(0.75)',
+  },
   '& .MuiSvgIcon-root': {
-    color: 'var(--icon-redesigned)'
+    color: 'var(--icon-redesigned)',
   },
   '& .MuiFormHelperText-root': {
     color: 'var(--text-redesigned)',
-    opacity: 0.8
-  }
+    opacity: 0.8,
+  },
 }
 
 export const Textarea = memo((props: TextAreaProps) => {
   const {
     className,
     sx,
+    InputLabelProps,
     ...otherProps
   } = props
+
+  // Always keep outline label in the notch for multiline (avoids overlap with content).
+  const mergedLabelProps = {
+    ...InputLabelProps,
+    shrink: InputLabelProps?.shrink ?? true,
+  }
+
   return (
     <div className={classNames(cls.Textarea, {}, [className])}>
       <TextField
         fullWidth
         sx={[areaStyles, ...(Array.isArray(sx) ? sx : sx ? [sx] : [])]}
         {...otherProps}
+        InputLabelProps={mergedLabelProps}
       />
     </div>
   )

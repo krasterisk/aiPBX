@@ -63,8 +63,10 @@
     --skeleton-color: #807d7d;
     --skeleton-shadow: #181717;
 
-    // Code
-    --code-bg: var(--bg-redesigned);
+    // Code — solid contrast on light surfaces (JSON / event payloads)
+    --code-bg: #ffffff;
+    --code-text: #141c1f;
+    --code-border: 1px solid rgba(20, 28, 31, 0.12);
 
     // card
     --card-bg: var(--bg-redesigned);

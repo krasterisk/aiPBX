@@ -94,7 +94,8 @@ app/ → pages/ → widgets/ → features/ → entities/ → shared/
 **UI generations (tech debt):**
 - `shared/ui/deprecated/` — do not use
 - `shared/ui/redesigned/` — legacy active
-- `shared/ui/redesign-v3/` — **use for all new UI**
+- `shared/ui/mui/` — legacy active
+- `shared/ui/redesign-v3/` — do not use
 
 ## Backend Architecture (NestJS Monolith)
 

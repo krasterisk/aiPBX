@@ -4,4 +4,6 @@ export interface AiModel {
   publish?: boolean
   publishName?: string
   comment?: string
+  realtimeVendor?: 'openai' | 'yandex' | 'qwen' | null
+  wireModelId?: string | null
 }

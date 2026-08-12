@@ -1,4 +1,6 @@
-import { memo, useCallback, useMemo, useRef, useState, useEffect } from 'react'
+import { memo, useCallback, useMemo, useRef, useState, useEffect, type MouseEvent } from 'react'
+import ToggleButton from '@mui/material/ToggleButton'
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { PlaygroundEvent, EventCategory, getEventCategory } from '../../model/types/playgroundEvent'
 import { SessionMetrics } from '../../model/types/sessionMetrics'
@@ -13,6 +15,16 @@ interface DebugPanelProps {
     sessionStartTime: number | null
 }
 
+const CATEGORY_ORDER: EventCategory[] = [
+    'audio',
+    'transcript',
+    'function',
+    'response',
+    'session',
+    'error',
+    'vad',
+]
+
 const CATEGORY_DOT: Record<EventCategory, string> = {
     audio: cls.dotAudio,
     transcript: cls.dotTranscript,
@@ -23,7 +35,7 @@ const CATEGORY_DOT: Record<EventCategory, string> = {
     vad: cls.dotVad,
 }
 
-function formatEventTime(ts: number, sessionStart: number | null): string {
+function formatEventTime (ts: number, sessionStart: number | null): string {
     if (!sessionStart) return '00:00.000'
     const diff = ts - sessionStart
     const totalMs = Math.max(0, diff)
@@ -38,34 +50,33 @@ export const DebugPanel = memo((props: DebugPanelProps) => {
 
     const { t } = useTranslation('playground')
 
-    const [activeFilters, setActiveFilters] = useState<Set<EventCategory>>(
-        () => createDefaultDebugFilters()
+    const [activeFilters, setActiveFilters] = useState<EventCategory[]>(
+        () => Array.from(createDefaultDebugFilters())
     )
     const [expandedEventIdx, setExpandedEventIdx] = useState<number | null>(null)
     const eventListRef = useRef<HTMLDivElement>(null)
 
-    // Auto-scroll event log
     useEffect(() => {
         if (eventListRef.current) {
             eventListRef.current.scrollTop = eventListRef.current.scrollHeight
         }
     }, [events.length])
 
-    const toggleFilter = useCallback((category: EventCategory) => {
-        setActiveFilters(prev => {
-            const next = new Set(prev)
-            if (next.has(category)) {
-                next.delete(category)
-            } else {
-                next.add(category)
-            }
-            return next
-        })
+    const handleFiltersChange = useCallback((
+        _: MouseEvent<HTMLElement>,
+        next: EventCategory[],
+    ) => {
+        // Keep at least one filter so the list never goes blank accidentally
+        if (next.length === 0) return
+        setActiveFilters(next)
+        setExpandedEventIdx(null)
     }, [])
 
+    const filterSet = useMemo(() => new Set(activeFilters), [activeFilters])
+
     const filteredEvents = useMemo(() => {
-        return events.filter(e => activeFilters.has(getEventCategory(e.type)))
-    }, [events, activeFilters])
+        return events.filter(e => filterSet.has(getEventCategory(e.type)))
+    }, [events, filterSet])
 
     const toggleExpand = useCallback((idx: number) => {
         setExpandedEventIdx(prev => prev === idx ? null : idx)
@@ -83,57 +94,72 @@ export const DebugPanel = memo((props: DebugPanelProps) => {
 
     return (
         <div className={classNames(cls.DebugPanel, {}, [className])}>
-            {/* Header: Event counts */}
             <div className={cls.header}>
                 <span className={cls.headerTitle}>{t('События')} ({events.length})</span>
             </div>
 
             <div className={cls.tabContent}>
-                {/* Filters */}
                 <div className={cls.eventFilter}>
-                    {(Object.keys(CATEGORY_LABELS) as EventCategory[]).map(cat => (
-                        <button
-                            key={cat}
-                            className={activeFilters.has(cat) ? cls.filterChipActive : cls.filterChip}
-                            onClick={() => { toggleFilter(cat) }}
-                        >
-                            {CATEGORY_LABELS[cat]}
-                        </button>
-                    ))}
+                    <ToggleButtonGroup
+                        value={activeFilters}
+                        onChange={handleFiltersChange}
+                        size="small"
+                        aria-label={String(t('События'))}
+                        className={cls.filterGroup}
+                    >
+                        {CATEGORY_ORDER.map(cat => (
+                            <ToggleButton
+                                key={cat}
+                                value={cat}
+                                aria-label={CATEGORY_LABELS[cat]}
+                                className={cls.filterToggle}
+                            >
+                                <span className={classNames(cls.filterDot, {}, [CATEGORY_DOT[cat]])} />
+                                {CATEGORY_LABELS[cat]}
+                            </ToggleButton>
+                        ))}
+                    </ToggleButtonGroup>
                 </div>
 
-                {/* Event list */}
                 <div className={cls.eventList} ref={eventListRef}>
+                    {filteredEvents.length === 0 && (
+                        <div className={cls.eventEmpty}>{t('Нет событий')}</div>
+                    )}
                     {filteredEvents.map((event, idx) => {
                         const category = getEventCategory(event.type)
                         const dotClass = CATEGORY_DOT[category] || cls.dotSession
                         const isExpanded = expandedEventIdx === idx
 
                         return (
-                            <div key={idx}>
-                                <div
+                            <div
+                                key={`${event.timestamp}-${event.type}-${idx}`}
+                                className={classNames(cls.eventBlock, {
+                                    [cls.eventBlockExpanded]: isExpanded,
+                                })}
+                            >
+                                <button
+                                    type="button"
                                     className={cls.eventItem}
                                     onClick={() => { toggleExpand(idx) }}
+                                    aria-expanded={isExpanded}
                                 >
                                     <span className={cls.eventTime}>
                                         {formatEventTime(event.timestamp, sessionStartTime)}
                                     </span>
                                     <span className={classNames(cls.eventDot, {}, [dotClass])} />
-                                    <span className={cls.eventType}>
-                                        {event.type}
+                                    <span className={cls.eventMain}>
+                                        <span className={cls.eventType}>{event.type}</span>
+                                        {event.delta && (
+                                            <span className={cls.eventDelta}>
+                                                {event.delta.slice(0, 80)}
+                                            </span>
+                                        )}
                                     </span>
-                                    {event.delta && (
-                                        <span className={cls.eventDelta}>
-                                            "{event.delta.slice(0, 30)}"
-                                        </span>
-                                    )}
-                                </div>
+                                </button>
                                 {isExpanded && (
-                                    <div className={cls.eventExpanded}>
-                                        <pre className={cls.eventJson}>
-                                            {JSON.stringify(event._raw, null, 2)}
-                                        </pre>
-                                    </div>
+                                    <pre className={cls.eventJson}>
+                                        {JSON.stringify(event._raw, null, 2)}
+                                    </pre>
                                 )}
                             </div>
                         )

@@ -1,6 +1,9 @@
 import {
     filterAudioInputDevices,
+    pickDefaultMicDeviceId,
     resolveMicDeviceIdForConnect,
+    resolveMicDeviceOption,
+    toMicDeviceOptions,
     type MicDeviceOption,
 } from './micDeviceSelect'
 
@@ -23,15 +26,31 @@ describe('micDeviceSelect (D-28)', () => {
             { deviceId: 'abc', kind: 'audioinput', label: 'USB Mic' },
         ] as MediaDeviceInfo[]
 
-        const options: MicDeviceOption[] = filterAudioInputDevices(devices).map((d, i) => ({
-            deviceId: d.deviceId,
-            label: d.label || `Microphone ${i + 1}`,
-        }))
-
-        expect(options).toEqual([
+        expect(toMicDeviceOptions(devices)).toEqual([
             { deviceId: 'default', label: 'Microphone 1' },
             { deviceId: 'abc', label: 'USB Mic' },
         ])
+    })
+
+    it('picks browser default device id when present', () => {
+        const options: MicDeviceOption[] = [
+            { deviceId: 'abc', label: 'USB Mic' },
+            { deviceId: 'default', label: 'Default' },
+        ]
+        expect(pickDefaultMicDeviceId(options)).toBe('default')
+        expect(pickDefaultMicDeviceId([{ deviceId: 'only', label: 'Only' }])).toBe('only')
+        expect(pickDefaultMicDeviceId([])).toBeNull()
+    })
+
+    it('resolves Combobox value to a concrete option (never empty when devices exist)', () => {
+        const options: MicDeviceOption[] = [
+            { deviceId: 'default', label: 'Default' },
+            { deviceId: 'abc', label: 'USB Mic' },
+        ]
+        expect(resolveMicDeviceOption(options, null)?.deviceId).toBe('default')
+        expect(resolveMicDeviceOption(options, 'abc')?.label).toBe('USB Mic')
+        expect(resolveMicDeviceOption(options, 'missing')?.deviceId).toBe('default')
+        expect(resolveMicDeviceOption([], null)).toBeNull()
     })
 
     it('passes selected device id into connect args when set', () => {

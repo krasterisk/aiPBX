@@ -1,11 +1,9 @@
-import { memo, useEffect, useState, type ReactNode } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button'
-import Chip from '@mui/material/Chip'
 import LinearProgress from '@mui/material/LinearProgress'
-import Tooltip from '@mui/material/Tooltip'
-import { CheckCircle2, XCircle, Circle, Mic } from 'lucide-react'
+import { Play } from 'lucide-react'
 import { getRouteAssistantCreate } from '@/shared/const/router'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { TranscriptItem } from '../../model/types/transcriptItem'
@@ -16,7 +14,6 @@ import {
     formatSummaryDuration,
     resolveCallCenterView,
 } from '../../model/callCenterState'
-import { MicChecklistItem } from '../../model/useMicPermission'
 import { ConversationPanel } from '../ConversationPanel/ConversationPanel'
 import cls from './CallCenter.module.scss'
 
@@ -30,37 +27,13 @@ interface CallCenterProps {
     sessionStartTime: number | null
     analyserNode?: AnalyserNode
     summary: SessionSummary | null
-    micChecklist: MicChecklistItem
-    onRetryMic: () => void
     onCancelConnecting: () => void
     micLostDuringCall?: boolean
-    modelReady?: boolean
     onClearTranscript?: () => void
     onExportTranscript?: () => void
     onConnectingTimeout?: () => void
-}
-
-function ChecklistRow (props: {
-    ok: boolean
-    pending?: boolean
-    label: string
-    action?: ReactNode
-}) {
-    const { ok, pending, label, action } = props
-    const Icon = ok ? CheckCircle2 : pending ? Circle : XCircle
-    return (
-        <div
-            className={classNames(cls.checklistItem, {
-                [cls.checklistItemOk]: ok,
-                [cls.checklistItemBad]: !ok && !pending,
-                [cls.checklistItemPending]: !!pending,
-            })}
-        >
-            <Icon size={16} aria-hidden />
-            <span>{label}</span>
-            {action}
-        </div>
-    )
+    onStartSession?: () => void
+    startDisabled?: boolean
 }
 
 function SummaryStrip (props: { summary: SessionSummary }) {
@@ -98,14 +71,13 @@ export const CallCenter = memo((props: CallCenterProps) => {
         sessionStartTime,
         analyserNode,
         summary,
-        micChecklist,
-        onRetryMic,
         onCancelConnecting,
         micLostDuringCall = false,
-        modelReady = true,
         onClearTranscript,
         onExportTranscript,
         onConnectingTimeout,
+        onStartSession,
+        startDisabled = false,
     } = props
 
     const { t } = useTranslation('playground')
@@ -208,70 +180,36 @@ export const CallCenter = memo((props: CallCenterProps) => {
         )
     }
 
-    // checklist (idle / error recovery) — D-13 / D-14
-    const micOk = micChecklist.status === 'ok'
-    const micPending = micChecklist.status === 'pending'
-    const micLabel = t(micChecklist.labelKey)
-    const retryBtn = micChecklist.showRetry
-        ? (
-            <Button size="small" onClick={onRetryMic} sx={{ textTransform: 'none', ml: 1 }}>
-                {t('Повторить проверку')}
-            </Button>
-            )
-        : null
-
-    const micChipColor = micOk ? 'success' : micPending ? 'default' : 'error'
-
+    // Idle — Start CTA centered in chat panel
     return (
-        <div className={classNames(cls.CallCenter, {}, [className, cls.checklist])}>
-            <div className={cls.checklistItems}>
-                <Tooltip
-                    title={micChecklist.tooltipKey ? t(micChecklist.tooltipKey) : ''}
-                    disableHoverListener={!micChecklist.tooltipKey}
+        <div className={classNames(cls.CallCenter, {}, [className, cls.idle])}>
+            <div className={cls.idleHero}>
+                <Button
+                    variant="contained"
+                    size="large"
+                    disabled={!hasSelectedAssistant || startDisabled}
+                    onClick={onStartSession}
+                    startIcon={<Play size={22} />}
+                    className={cls.startHeroBtn}
+                    sx={{
+                        backgroundColor: 'var(--accent-redesigned, #00c8ff)',
+                        color: '#0c1214',
+                        fontWeight: 600,
+                        textTransform: 'none',
+                        fontSize: 18,
+                        px: 4,
+                        py: 1.5,
+                        borderRadius: 2,
+                        minWidth: 220,
+                        '&:hover': {
+                            backgroundColor: 'var(--accent-redesigned, #00c8ff)',
+                            filter: 'brightness(0.95)',
+                        },
+                    }}
+                    data-testid="CallCenter.startTest"
                 >
-                    <div>
-                        <ChecklistRow
-                            ok={micOk}
-                            pending={micPending}
-                            label={micLabel}
-                            action={retryBtn}
-                        />
-                    </div>
-                </Tooltip>
-                <ChecklistRow
-                    ok={hasSelectedAssistant}
-                    label={t('Ассистент')}
-                />
-                <ChecklistRow
-                    ok={!!modelReady && hasSelectedAssistant}
-                    pending={hasSelectedAssistant && !modelReady}
-                    label={t('Модель')}
-                />
-            </div>
-
-            <div className={cls.chips}>
-                <Tooltip
-                    title={micChecklist.tooltipKey ? t(micChecklist.tooltipKey) : ''}
-                    disableHoverListener={!micChecklist.tooltipKey}
-                >
-                    <Chip
-                        size="small"
-                        icon={<Mic size={14} />}
-                        label={micLabel}
-                        color={micChipColor}
-                        onClick={micChecklist.showRetry ? onRetryMic : undefined}
-                    />
-                </Tooltip>
-                <Chip
-                    size="small"
-                    label={t('Ассистент')}
-                    color={hasSelectedAssistant ? 'success' : 'default'}
-                />
-                <Chip
-                    size="small"
-                    label={t('Модель')}
-                    color={modelReady && hasSelectedAssistant ? 'success' : 'default'}
-                />
+                    {t('Начать тест')}
+                </Button>
             </div>
 
             {transcript.length > 0 && (

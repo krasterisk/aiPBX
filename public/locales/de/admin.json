@@ -33,6 +33,16 @@
     "Create": "Erstellen",
     "Publish": "Veröffentlicht",
     "Publish Name": "Veröffentlichungsname",
+    "Realtime provider": "Realtime-Anbieter",
+    "Wire model ID": "Wire-Modell-ID",
+    "Wire model ID hint": "Optional: Wert für WebSocket ?model=. Wenn leer, wird Name verwendet.",
+    "Wire model ID hint yandex": "Modell-ID für Yandex Realtime WS (?model=). Wenn leer, wird YANDEX_MODEL aus der Server-Umgebung verwendet.",
+    "realtimeVendor": {
+        "openai": "OpenAI",
+        "yandex": "Yandex",
+        "qwen": "Qwen"
+    },
+    "Delete AI Model": "Modell löschen",
     "Actions": "Aktionen",
     "ourOrg": {
         "pageTitle": "Unsere Organisationen",

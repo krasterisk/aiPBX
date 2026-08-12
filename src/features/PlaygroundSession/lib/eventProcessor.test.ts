@@ -49,6 +49,33 @@ describe('eventProcessor', () => {
         expect(state.transcript).toHaveLength(1) // Should not duplicate
     })
 
+    it('should append text correctly on response.output_audio_transcript.delta (GA event name)', () => {
+        let state = createInitialProcessorState()
+
+        state = processEvent(state, createEvent({
+            type: 'response.output_item.added',
+            timestamp: 1000,
+            item: { id: 'item-ga', type: 'message' } as any,
+        }))
+
+        state = processEvent(state, createEvent({
+            type: 'response.output_audio_transcript.delta',
+            timestamp: 1001,
+            item_id: 'item-ga',
+            delta: 'Прошутто ',
+        }))
+
+        state = processEvent(state, createEvent({
+            type: 'response.output_audio_transcript.done',
+            timestamp: 1002,
+            item_id: 'item-ga',
+            transcript: 'Прошутто готова',
+        }))
+
+        expect(state.transcript[0].text).toBe('Прошутто готова')
+        expect(state.transcript[0].isStreaming).toBe(false)
+    })
+
     it('should append text correctly on response.audio_transcript.delta', () => {
         let state = createInitialProcessorState()
         

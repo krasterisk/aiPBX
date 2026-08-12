@@ -32,7 +32,7 @@ export const SetupSheet = memo((props: SetupSheetProps) => {
             PaperProps={{
                 className: cls.paper,
                 sx: {
-                    width: { xs: '100%', sm: 420 },
+                    width: { xs: '100%', md: '50%' },
                     maxWidth: '100%',
                 },
             }}
@@ -41,14 +41,14 @@ export const SetupSheet = memo((props: SetupSheetProps) => {
             <div className={cls.header}>
                 <IconButton
                     onClick={onClose}
-                    aria-label={String(t('Открыть настройки'))}
+                    aria-label={String(t('Настройки'))}
                     size="small"
                     className={cls.backBtn}
                 >
                     {isMobile ? <ArrowBackIcon /> : <CloseIcon />}
                 </IconButton>
                 <Typography className={cls.title} component="h2">
-                    {t('Открыть настройки')}
+                    {t('Настройки')}
                 </Typography>
             </div>
 

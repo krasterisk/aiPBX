@@ -33,6 +33,16 @@
     "Create": "Create",
     "Publish": "Publish",
     "Publish Name": "Publish Name",
+    "Realtime provider": "Realtime provider",
+    "Wire model ID": "Wire model ID",
+    "Wire model ID hint": "Optional: value for WebSocket ?model=. If empty, Name is used.",
+    "Wire model ID hint yandex": "Short id (speech-realtime-.../latest) or full gpt://folder/.... Short ids are prefixed with YANDEX_FOLDER on the server.",
+    "realtimeVendor": {
+        "openai": "OpenAI",
+        "yandex": "Yandex",
+        "qwen": "Qwen"
+    },
+    "Delete AI Model": "Delete AI Model",
     "Actions": "Actions",
     "ourOrg": {
         "pageTitle": "Our organizations",

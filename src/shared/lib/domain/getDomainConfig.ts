@@ -128,6 +128,12 @@ export function getWsUrl (): string {
     if (typeof __WS__ !== 'undefined' && __WS__) {
         return __WS__
     }
+    // Dev without DefinePlugin value: Nest Socket.IO listens on 3033, not the SPA port
+    if (typeof __IS_DEV__ !== 'undefined' && __IS_DEV__ && typeof window !== 'undefined') {
+        const { protocol, hostname } = window.location
+        const wsProto = protocol === 'https:' ? 'wss:' : 'ws:'
+        return `${wsProto}//${hostname}:3033`
+    }
     // Runtime: derive from current domain
     if (typeof window !== 'undefined') {
         const config = getDomainConfig()

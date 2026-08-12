@@ -19,7 +19,7 @@
     }
 
     @include desktop {
-        width: clamp(480px, 38vw, 560px);
+        width: 50vw;
     }
 }
 

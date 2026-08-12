@@ -23,7 +23,10 @@ export default (env: buildEnv) => {
   const isDev = mode === 'development'
   const PORT = Number(env?.port || process.env.PORT || 3000)
   const apiUrl = env?.apiUrl || process.env.API_URL || '/api'
-  const wsUrl = env?.wsUrl ?? process.env.WS_URL ?? ''
+  // Playground / live WS is Nest Socket.IO on :3033 — never fall back to the webpack host (:3000)
+  const wsUrl = env?.wsUrl ??
+    process.env.WS_URL ??
+    (isDev ? 'ws://localhost:3033' : '')
   const staticUrl = env?.staticUrl || process.env.STATIC_URL || '/static'
   const googleClientId =
     env?.googleClientId ||

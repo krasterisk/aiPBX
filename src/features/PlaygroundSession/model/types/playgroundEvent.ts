@@ -22,6 +22,8 @@ export type RealtimeEventType =
     | 'response.audio.done'
     | 'response.audio_transcript.delta'
     | 'response.audio_transcript.done'
+    | 'response.output_audio_transcript.delta'
+    | 'response.output_audio_transcript.done'
     | 'response.function_call_arguments.delta'
     | 'response.function_call_arguments.done'
     | 'response.done'

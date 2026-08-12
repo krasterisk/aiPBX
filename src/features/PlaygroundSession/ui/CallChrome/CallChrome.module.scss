@@ -1,6 +1,7 @@
 .CallChrome {
     display: flex;
     flex-direction: column;
+    flex: 1;
     height: 100%;
     min-height: 0;
     background: var(--bg-redesigned);
@@ -35,8 +36,22 @@
 .secondaryActions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
     flex-shrink: 0;
+    flex-wrap: nowrap;
+    min-width: 0;
+}
+
+.micGroup {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.micButton {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
 }
 
 .secondarySubdued {
@@ -101,6 +116,12 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+
+    > * {
+        flex: 1;
+        min-height: 0;
+        width: 100%;
+    }
 }
 
 .drawerBody {
@@ -134,17 +155,26 @@
     }
 
     .assistantSelect {
-        min-width: 140px;
-        max-width: 200px;
+        min-width: 0;
+        max-width: none;
+        flex: 1 1 auto;
     }
 
     .header {
         gap: 8px;
         padding: 8px 12px;
     }
+
+    .secondaryActions {
+        gap: 0;
+    }
+
+    .left {
+        gap: 4px;
+    }
 }
 
-.CallChromeMobile {
+.CallChromeMobileConnected {
     padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
 }
 

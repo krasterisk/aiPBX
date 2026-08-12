@@ -3,10 +3,13 @@ import { io, Socket } from 'socket.io-client'
 import { toast } from 'react-toastify'
 import { AUDIO_WORKLET_CODE } from '../lib/audioWorklet'
 import { getWsUrl } from '@/shared/lib/domain'
+import { shouldSkipPlaygroundRawEvent } from './playgroundEventFilter'
 
 const SAMPLE_RATE = 24000 // PCM16 from OpenAI Realtime API works at 24kHz
 const INITIAL_BUFFER_DELAY = 0.15 // 150ms buffering
 const RECONNECT_DELAY = 1000
+/** Debug panel ring buffer — must NOT gate transcript processing (see onEventsBatch). */
+const MAX_DEBUG_EVENTS = 500
 
 export interface DisconnectInfo {
     connectedDurationMs: number
@@ -19,6 +22,11 @@ interface UsePlaygroundSessionProps {
     onError?: (error: string) => void
     /** Mid-call mic track lost (D-29) — UI surfaces error; no auto-hangup. */
     onMicLost?: () => void
+    /**
+     * Fired with each flushed WS event batch BEFORE the UI ring-buffer truncates.
+     * Transcript processing must use this — indexing into capped `events` freezes after MAX_EVENTS.
+     */
+    onEventsBatch?: (batch: any[]) => void
 }
 
 export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
@@ -61,12 +69,13 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
                 const batch = eventBufferRef.current
                 eventBufferRef.current = []
 
+                // Process for transcript BEFORE truncating the debug ring buffer
+                propsRef.current?.onEventsBatch?.(batch)
+
                 setEvents(prev => {
-                    // Limit history to last 500 events to prevent memory leak
-                    const MAX_EVENTS = 500
                     const next = [...prev, ...batch]
-                    if (next.length > MAX_EVENTS) {
-                        return next.slice(next.length - MAX_EVENTS)
+                    if (next.length > MAX_DEBUG_EVENTS) {
+                        return next.slice(next.length - MAX_DEBUG_EVENTS)
                     }
                     return next
                 })
@@ -326,7 +335,7 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
             try {
                 await initAudioInput(socket, micDeviceId)
                 propsRef.current?.onConnect?.()
-                toast.success('Сессия установлена')
+                // Success is visible in Call chrome — toast covers Start/Stop controls.
             } catch (e) {
                 // If audio fails, we should disconnect
                 socket.disconnect()
@@ -338,14 +347,27 @@ export const usePlaygroundSession = (props?: UsePlaygroundSessionProps) => {
         })
 
         socket.on('playground.event', (event: any) => {
-            // Send to buffer instead of direct state update
+            if (shouldSkipPlaygroundRawEvent(event)) return
             eventBufferRef.current.push(event)
         })
 
         socket.on('playground.interrupt', () => {
+            // Normal barge-in / response cancel — stop local playback only.
+            // Do NOT surface as connection error (no toast, no Events error).
             console.warn('AI Interrupt')
             interruptPlayback()
-            propsRef.current?.onError?.('AI Interrupt')
+        })
+
+        // Server-side hangup (hangup_call tool, fatal errors, etc.)
+        socket.on('playground.stopped', () => {
+            console.log('Playground session stopped by server')
+            // Stop mic immediately — session is gone on backend; avoid "unknown session" spam
+            cleanupAudio()
+            interruptPlayback()
+            setStatus('idle')
+            if (socket.connected) {
+                socket.disconnect()
+            }
         })
 
         socket.on('disconnect', () => {

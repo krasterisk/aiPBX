@@ -17,6 +17,7 @@ import { Tool, toolsPageActions } from '@/entities/Tools'
 import { McpServer } from '@/entities/Mcp'
 import {
     DEFAULT_SETUP_SECTION,
+    SETUP_SECTIONS,
     SetupSectionKey,
     resolveExclusiveExpand,
 } from '../../model/setupAccordion'
@@ -39,9 +40,9 @@ interface AssistantSettingsFormProps {
 
 const SECTION_TITLE_KEYS: Record<SetupSectionKey, string> = {
     prompt: 'Промпт',
+    tools: 'Инструменты',
     parameters: 'Параметры',
     vad: 'VAD',
-    tools: 'Инструменты',
 }
 
 export const AssistantSettingsForm = memo((props: AssistantSettingsFormProps) => {
@@ -158,7 +159,7 @@ export const AssistantSettingsForm = memo((props: AssistantSettingsFormProps) =>
             className={classNames(cls.AssistantSettingsForm, {}, [className])}
             data-testid="AssistantSettingsForm"
         >
-            {(Object.keys(SECTION_TITLE_KEYS) as SetupSectionKey[]).map((key) => (
+            {SETUP_SECTIONS.map((key) => (
                 <Accordion
                     key={key}
                     expanded={expanded === key}

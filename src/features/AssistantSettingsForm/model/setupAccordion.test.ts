@@ -9,9 +9,8 @@ describe('AssistantSettingsForm exclusive accordion (D-31, D-08)', () => {
         expect(DEFAULT_SETUP_SECTION).toBe('prompt')
     })
 
-    it('keeps Tools as the last section', () => {
-        expect(SETUP_SECTIONS[SETUP_SECTIONS.length - 1]).toBe('tools')
-        expect(SETUP_SECTIONS).toEqual(['prompt', 'parameters', 'vad', 'tools'])
+    it('places Tools second after Prompt', () => {
+        expect(SETUP_SECTIONS).toEqual(['prompt', 'tools', 'parameters', 'vad'])
     })
 
     it('expands only the requested panel (exclusive)', () => {

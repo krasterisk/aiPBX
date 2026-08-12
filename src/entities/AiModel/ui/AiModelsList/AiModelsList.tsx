@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { AiModel } from '../../model/types/aiModel'
+import { AiModel, inferRealtimeVendorFromName } from '../../model/types/aiModel'
 import cls from './AiModelsList.module.scss'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { useTranslation } from 'react-i18next'
@@ -40,6 +40,15 @@ export const AiModelsList = memo((props: AiModelsListProps) => {
         columnHelper.accessor('name', {
             header: (t('Name') ?? ''),
             cell: info => info.getValue()
+        }),
+        columnHelper.accessor(row => row.realtimeVendor || inferRealtimeVendorFromName(row.name), {
+            id: 'realtimeVendor',
+            header: (t('Realtime provider') ?? ''),
+            cell: info => t(`realtimeVendor.${info.getValue()}`)
+        }),
+        columnHelper.accessor('wireModelId', {
+            header: (t('Wire model ID') ?? ''),
+            cell: info => info.getValue() || '-'
         }),
         columnHelper.accessor('comment', {
             header: (t('Comment') ?? ''),

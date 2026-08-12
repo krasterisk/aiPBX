@@ -1,11 +1,15 @@
 import { memo, ChangeEvent, useState, useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import Accordion from '@mui/material/Accordion'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { classNames } from '@/shared/lib/classNames/classNames'
-import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
-import { Text } from '@/shared/ui/redesigned/Text'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Combobox } from '@/shared/ui/mui/Combobox'
+import { Button } from '@/shared/ui/redesign-v3/Button'
 import { isUserAdmin } from '@/entities/User'
 import {
     getAssistantFormData,
@@ -16,15 +20,11 @@ import {
     getLlmModels,
     isLlmFreeText,
     getTtsVoices,
-    assistantFormActions
-, useUploadTtsVoice 
+    assistantFormActions,
+    useUploadTtsVoice,
 } from '@/entities/Assistants'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { toast } from 'react-toastify'
-import { Collapse, Radio, RadioGroup, FormControlLabel, FormControl, CircularProgress } from '@mui/material'
-import { Button } from '@/shared/ui/redesign-v3/Button'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import RouteIcon from '@mui/icons-material/Route'
 import cls from './PipelineCard.module.scss'
 
 interface PipelineCardProps {
@@ -41,7 +41,7 @@ export const isTtsUploadSupported = (provider: string | null | undefined): boole
 export const PipelineCard = memo((props: PipelineCardProps) => {
     const {
         className,
-        assistantId
+        assistantId,
     } = props
 
     const { t } = useTranslation('assistants')
@@ -53,10 +53,6 @@ export const PipelineCard = memo((props: PipelineCardProps) => {
     const [uploadVoice, { isLoading: isUploading }] = useUploadTtsVoice()
 
     const isNonRealtime = formFields?.pipelineMode === 'non-realtime'
-
-    const handleExpandClick = useCallback(() => {
-        setExpanded((prev) => !prev)
-    }, [])
 
     const handlePipelineModeChange = useCallback((_: ChangeEvent<HTMLInputElement>, value: string) => {
         if (value === 'non-realtime') {
@@ -121,7 +117,7 @@ export const PipelineCard = memo((props: PipelineCardProps) => {
             ttsVoice: newValue?.value || '',
         }))
     }, [dispatch])
-    
+
     const handleFileUpload = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
         if (!file || !assistantId) return
@@ -129,10 +125,10 @@ export const PipelineCard = memo((props: PipelineCardProps) => {
         try {
             await uploadVoice({ id: assistantId, file }).unwrap()
             toast.success(t('Голос успешно загружен'))
-        } catch (e) {
+        } catch {
             toast.error(t('Ошибка загрузки голоса'))
         }
-        
+
         if (fileInputRef.current) {
             fileInputRef.current.value = ''
         }
@@ -146,14 +142,11 @@ export const PipelineCard = memo((props: PipelineCardProps) => {
         fileInputRef.current?.click()
     }, [assistantId, t])
 
-    // Memoized options
     const sttOptions = useMemo(() =>
-        STT_PROVIDERS.map(p => ({ value: p.value, label: p.label })), []
-    )
+        STT_PROVIDERS.map(p => ({ value: p.value, label: p.label })), [])
 
     const llmProviderOptions = useMemo(() =>
-        LLM_PROVIDERS.map(p => ({ value: p.value, label: p.label })), []
-    )
+        LLM_PROVIDERS.map(p => ({ value: p.value, label: p.label })), [])
 
     const llmModelOptions = useMemo(() => {
         const provider = formFields?.llmProvider || NON_REALTIME_DEFAULTS.llmProvider
@@ -161,25 +154,21 @@ export const PipelineCard = memo((props: PipelineCardProps) => {
     }, [formFields?.llmProvider])
 
     const ttsProviderOptions = useMemo(() =>
-        TTS_PROVIDERS.map(p => ({ value: p.value, label: p.label })), []
-    )
+        TTS_PROVIDERS.map(p => ({ value: p.value, label: p.label })), [])
 
     const ttsVoiceOptions = useMemo(() => {
         const provider = formFields?.ttsProvider || NON_REALTIME_DEFAULTS.ttsProvider
         return getTtsVoices(provider).map(v => ({ value: v.value, label: v.label }))
     }, [formFields?.ttsProvider])
-    
-    // Derived values
+
     const currentLlmIsFreeText = useMemo(() =>
         isLlmFreeText(formFields?.llmProvider || NON_REALTIME_DEFAULTS.llmProvider),
-        [formFields?.llmProvider]
-    )
+    [formFields?.llmProvider])
 
-    const currentTtsSupportsUpload = useMemo(() => 
-        isTtsUploadSupported(formFields?.ttsProvider), 
-        [formFields?.ttsProvider]
-    )
-    
+    const currentTtsSupportsUpload = useMemo(() =>
+        isTtsUploadSupported(formFields?.ttsProvider),
+    [formFields?.ttsProvider])
+
     const isLlmAudioNative = formFields?.llmProvider === 'gemma4-audio'
 
     if (!isAdmin) {
@@ -197,48 +186,32 @@ export const PipelineCard = memo((props: PipelineCardProps) => {
         '.MuiFormControlLabel-label': {
             color: 'var(--text-redesigned)',
             fontSize: '14px',
-        }
+        },
     }
 
     return (
-        <div className={classNames(cls.PipelineCard, {}, [className])}>
-            <HStack
-                max
-                justify="between"
-                align="center"
-                className={cls.header}
-                onClick={handleExpandClick}
+        <div
+            className={classNames(cls.PipelineCard, {}, [className])}
+            data-testid="PipelineCard"
+        >
+            <Accordion
+                expanded={expanded}
+                onChange={(_, next) => { setExpanded(next) }}
+                disableGutters
+                className={cls.accordion}
             >
-                <HStack gap="8" align="center">
-                    <RouteIcon className={cls.routeIcon} fontSize="small" />
-                    <Text
-                        title={t('Режим работы')}
-                        className={cls.cardTitle}
-                        bold
-                    />
-                </HStack>
-
-                <Button
-                    className={classNames(cls.expandButton, { [cls.expanded]: expanded })}
-                    aria-expanded={expanded}
-                    aria-label={t('Показать больше') || 'Show more'}
-                    size="m"
-                    variant="clear"
-                    square
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    className={cls.summary}
+                    aria-controls="assistant-pipeline-content"
+                    id="assistant-pipeline-header"
                 >
-                    <ExpandMoreIcon />
-                </Button>
-            </HStack>
+                    <span className={cls.summaryTitle}>{t('Режим работы')}</span>
+                </AccordionSummary>
+                <AccordionDetails className={cls.details}>
+                    <p className={cls.adminHint}>{t('Доступно только администраторам')}</p>
 
-            <Text
-                text={t('Доступно только администраторам')}
-                className={cls.adminHint}
-                size="s"
-            />
-
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <VStack max gap="16" className={cls.content}>
-                    <FormControl>
+                    <FormControl className={cls.fullWidth}>
                         <RadioGroup
                             value={isNonRealtime ? 'non-realtime' : 'realtime'}
                             onChange={handlePipelineModeChange}
@@ -258,10 +231,8 @@ export const PipelineCard = memo((props: PipelineCardProps) => {
                         </RadioGroup>
                     </FormControl>
 
-                    {/* Non-Realtime Pipeline Settings */}
-                    <Collapse in={isNonRealtime} timeout="auto" unmountOnExit>
-                        <VStack max gap="12">
-                            {/* STT Provider */}
+                    {isNonRealtime && (
+                        <div className={cls.fields}>
                             <Combobox
                                 label={t('Провайдер распознавания речи') ?? ''}
                                 options={sttOptions}
@@ -273,10 +244,11 @@ export const PipelineCard = memo((props: PipelineCardProps) => {
                                 disabled={isLlmAudioNative}
                             />
                             {isLlmAudioNative && (
-                                <Text size="s" text={t('STT транскрипция отключена (аудио обрабатывается локально в Audio-Native модели)')} />
+                                <p className={cls.helperText}>
+                                    {t('STT транскрипция отключена (аудио обрабатывается локально в Audio-Native модели)')}
+                                </p>
                             )}
 
-                            {/* LLM Provider */}
                             <Combobox
                                 label={t('Провайдер языковой модели') ?? ''}
                                 options={llmProviderOptions}
@@ -287,28 +259,28 @@ export const PipelineCard = memo((props: PipelineCardProps) => {
                                 fullWidth
                             />
 
-                            {/* LLM Model */}
-                            {currentLlmIsFreeText ? (
-                                <Textarea
-                                    label={t('Модель LLM') ?? ''}
-                                    value={formFields?.llmModel || ''}
-                                    onChange={handleLlmModelTextChange}
-                                    placeholder={t('Введите название модели') ?? 'llama3.1:8b'}
-                                    minRows={1}
-                                />
-                            ) : (
-                                <Combobox
-                                    label={t('Модель LLM') ?? ''}
-                                    options={llmModelOptions}
-                                    value={llmModelOptions.find(o => o.value === (formFields?.llmModel || NON_REALTIME_DEFAULTS.llmModel)) || null}
-                                    onChange={handleLlmModelChange}
-                                    getOptionLabel={(option: { label: string }) => option.label}
-                                    isOptionEqualToValue={(option: { value: string }, val: { value: string }) => option.value === val.value}
-                                    fullWidth
-                                />
-                            )}
+                            {currentLlmIsFreeText
+                                ? (
+                                    <Textarea
+                                        label={t('Модель LLM') ?? ''}
+                                        value={formFields?.llmModel || ''}
+                                        onChange={handleLlmModelTextChange}
+                                        placeholder={t('Введите название модели') ?? 'llama3.1:8b'}
+                                        minRows={1}
+                                    />
+                                    )
+                                : (
+                                    <Combobox
+                                        label={t('Модель LLM') ?? ''}
+                                        options={llmModelOptions}
+                                        value={llmModelOptions.find(o => o.value === (formFields?.llmModel || NON_REALTIME_DEFAULTS.llmModel)) || null}
+                                        onChange={handleLlmModelChange}
+                                        getOptionLabel={(option: { label: string }) => option.label}
+                                        isOptionEqualToValue={(option: { value: string }, val: { value: string }) => option.value === val.value}
+                                        fullWidth
+                                    />
+                                    )}
 
-                            {/* TTS Provider */}
                             <Combobox
                                 label={t('Провайдер синтеза речи') ?? ''}
                                 options={ttsProviderOptions}
@@ -319,7 +291,6 @@ export const PipelineCard = memo((props: PipelineCardProps) => {
                                 fullWidth
                             />
 
-                            {/* TTS Voice */}
                             <Combobox
                                 label={t('Голос TTS') ?? ''}
                                 options={ttsVoiceOptions}
@@ -329,37 +300,39 @@ export const PipelineCard = memo((props: PipelineCardProps) => {
                                 isOptionEqualToValue={(option: { value: string }, val: { value: string }) => option.value === val.value}
                                 fullWidth
                             />
-                            
+
                             {currentTtsSupportsUpload && (
                                 <div className={cls.uploadContainer}>
-                                    <Text size="s" text={t('Или загрузите эталонный .wav файл для клонирования (5-10 сек)')} />
-                                    
-                                    <input 
-                                        type="file" 
-                                        ref={fileInputRef} 
-                                        style={{ display: 'none' }} 
-                                        accept=".wav" 
-                                        onChange={handleFileUpload} 
+                                    <p className={cls.helperText}>
+                                        {t('Или загрузите эталонный .wav файл для клонирования (5-10 сек)')}
+                                    </p>
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        style={{ display: 'none' }}
+                                        accept=".wav"
+                                        onChange={handleFileUpload}
                                     />
-                                    
-                                    {!isUploading ? (
-                                        <Button variant="outline" onClick={onUploadClick}>
-                                            {t('Загрузить .wav эталон')}
-                                        </Button>
-                                    ) : (
-                                        <CircularProgress size={24} />
-                                    )}
-                                    
+                                    {!isUploading
+                                        ? (
+                                            <Button variant="outline" onClick={onUploadClick}>
+                                                {t('Загрузить .wav эталон')}
+                                            </Button>
+                                            )
+                                        : (
+                                            <CircularProgress size={24} />
+                                            )}
                                     {formFields?.ttsVoice && formFields?.ttsVoice !== 'default' && (
-                                        <Text size="s" text={t('Активный голос: записан из файла')} />
+                                        <p className={cls.helperText}>
+                                            {t('Активный голос: записан из файла')}
+                                        </p>
                                     )}
                                 </div>
                             )}
-
-                        </VStack>
-                    </Collapse>
-                </VStack>
-            </Collapse>
+                        </div>
+                    )}
+                </AccordionDetails>
+            </Accordion>
         </div>
     )
 })

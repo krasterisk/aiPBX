@@ -10,18 +10,18 @@
 .toolbar {
     @include flex-between;
     padding: var(--space-2) var(--space-4);
-    border-bottom: var(--glass-border-subtle);
+    border-bottom: 1px solid rgba(20, 28, 31, 0.12);
     flex-shrink: 0;
-    min-height: 36px;
-    background: var(--glass-bg-tertiary);
+    min-height: 40px;
+    background: var(--bg-redesigned, #eff5f6);
 }
 
 .toolbarTitle {
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 12px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--icon-redesigned);
+    letter-spacing: 0.8px;
+    color: var(--text-redesigned);
 }
 
 .toolbarActions {
@@ -36,20 +36,19 @@
     align-items: center;
     justify-content: center;
     padding: var(--space-1) var(--space-2);
-    border: var(--glass-border-subtle);
-    background: var(--glass-overlay-medium);
-    color: var(--icon-redesigned);
+    border: 1px solid rgba(20, 28, 31, 0.14);
+    background: #fff;
+    color: var(--text-redesigned);
     border-radius: var(--radius-sm);
     font-size: 11px;
+    font-weight: 600;
     gap: var(--space-1);
     transition: var(--transition-fast);
-    backdrop-filter: var(--glass-blur-sm);
 
     &:hover {
-        background: var(--glass-bg-secondary);
+        background: rgba(0, 200, 255, 0.1);
+        border-color: var(--accent-redesigned);
         color: var(--text-redesigned);
-        border-color: rgba(255, 255, 255, 0.15);
-        transform: var(--hover-scale-sm);
     }
 }
 
@@ -180,21 +179,22 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    font-size: 10px;
-    color: var(--icon-redesigned);
+    font-size: 11px;
+    color: var(--text-secondary, #4b5563);
     padding: 0 var(--space-2);
 }
 
 .role {
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
+    color: var(--text-redesigned);
 }
 
 .time {
     font-family: var(--font-family-monospace, monospace);
-    font-size: 10px;
-    opacity: 0.6;
+    font-size: 11px;
+    color: var(--text-secondary, #4b5563);
 }
 
 .bubble {
@@ -224,15 +224,15 @@
 
 .bubbleAssistant {
     composes: bubble;
-    background: var(--glass-bg-secondary);
-    backdrop-filter: var(--glass-blur-sm);
-    border: var(--glass-border-primary);
+    background: #fff;
+    border: 1px solid rgba(20, 28, 31, 0.14);
     color: var(--text-redesigned);
     border-bottom-left-radius: var(--radius-xs);
+    box-shadow: 0 1px 2px rgba(20, 28, 31, 0.06);
 
     &:hover {
-        background: var(--glass-bg-primary);
-        border-color: rgba(255, 255, 255, 0.15);
+        border-color: rgba(20, 28, 31, 0.22);
+        background: #fff;
     }
 }
 

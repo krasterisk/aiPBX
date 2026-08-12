@@ -61,4 +61,15 @@ describe('useAutosaveAssistant (PG-UX-02)', () => {
     it('requires selected assistant id (T-11-04)', () => {
         expect(validateAssistantForAutosave({ ...base, id: undefined })).toBe(false)
     })
+
+    it('skips when no assistant is selected (allows Setup close)', async () => {
+        const updateFn = jest.fn()
+        const result = await runAutosaveAssistant({
+            data: undefined,
+            initialData: undefined,
+            updateFn,
+        })
+        expect(result).toEqual({ ok: true, skipped: true })
+        expect(updateFn).not.toHaveBeenCalled()
+    })
 })

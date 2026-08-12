@@ -1,13 +1,13 @@
-export type SetupSectionKey = 'prompt' | 'parameters' | 'vad' | 'tools'
+export type SetupSectionKey = 'prompt' | 'tools' | 'parameters' | 'vad'
 
-/** Exclusive accordion: Prompt open by default (D-31). Tools last (D-08). */
+/** Exclusive accordion: Prompt open by default (D-31). Tools second after Prompt (UAT). */
 export const DEFAULT_SETUP_SECTION: SetupSectionKey = 'prompt'
 
 export const SETUP_SECTIONS: readonly SetupSectionKey[] = [
     'prompt',
+    'tools',
     'parameters',
     'vad',
-    'tools',
 ] as const
 
 export function resolveExclusiveExpand (

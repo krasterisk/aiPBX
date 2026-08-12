@@ -135,6 +135,7 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
         // --- Streaming text/transcript deltas ---
         case 'response.text.delta':
         case 'response.audio_transcript.delta':
+        case 'response.output_audio_transcript.delta':
             if (event.item_id) {
                 const raw = event._raw as any
                 const deltaStr = event.delta || event.transcript || raw?.delta || raw?.transcript || ''
@@ -146,6 +147,7 @@ export function processEvent(state: ProcessorState, event: PlaygroundEvent): Pro
 
         case 'response.text.done':
         case 'response.audio_transcript.done':
+        case 'response.output_audio_transcript.done':
             if (event.item_id) {
                 const index = next.transcript.findIndex(t => t.id === event.item_id)
                 if (index !== -1) {
