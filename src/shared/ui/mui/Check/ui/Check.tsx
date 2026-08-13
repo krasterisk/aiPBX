@@ -26,6 +26,12 @@ export const Check = memo((props: CheckProps) => {
   return (
     <FormControlLabel
       label={label}
+      sx={{
+        '.MuiFormControlLabel-label': {
+          fontSize: '14px',
+          color: 'var(--text-redesigned)',
+        },
+      }}
       control={<Checkbox
         className={classNames(cls.Check, {}, [className])}
         sx={style}

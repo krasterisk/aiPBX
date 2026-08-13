@@ -7,10 +7,11 @@ import cls from '../AssistantSettingsForm.module.scss'
 
 interface PromptSectionProps {
     onChangeText: (field: keyof Assistant) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+    errorMessage?: string
 }
 
 export const PromptSection = memo((props: PromptSectionProps) => {
-    const { onChangeText } = props
+    const { onChangeText, errorMessage } = props
     const { t } = useTranslation('playground')
     const formFields = useSelector(getAssistantFormData)
 
@@ -28,6 +29,8 @@ export const PromptSection = memo((props: PromptSectionProps) => {
                 size="small"
                 fullWidth
                 className={cls.promptTextarea}
+                error={!!errorMessage}
+                helperText={errorMessage}
             />
         </div>
     )

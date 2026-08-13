@@ -1,11 +1,8 @@
 import { memo, ChangeEvent, useState, useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import Accordion from '@mui/material/Accordion'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material'
+import { Workflow } from 'lucide-react'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Combobox } from '@/shared/ui/mui/Combobox'
@@ -25,6 +22,8 @@ import {
 } from '@/entities/Assistants'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { toast } from 'react-toastify'
+// eslint-disable-next-line krasterisk-plugin/layer-imports -- Assistants → AssistantSettingsForm (shared accordion chrome)
+import { SettingsAccordion } from '@/features/AssistantSettingsForm'
 import cls from './PipelineCard.module.scss'
 
 interface PipelineCardProps {
@@ -194,21 +193,14 @@ export const PipelineCard = memo((props: PipelineCardProps) => {
             className={classNames(cls.PipelineCard, {}, [className])}
             data-testid="PipelineCard"
         >
-            <Accordion
+            <SettingsAccordion
+                id="assistant-pipeline"
+                title={String(t('Режим работы') ?? '')}
+                icon={Workflow}
                 expanded={expanded}
-                onChange={(_, next) => { setExpanded(next) }}
-                disableGutters
-                className={cls.accordion}
+                onChange={setExpanded}
+                detailsClassName={cls.details}
             >
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    className={cls.summary}
-                    aria-controls="assistant-pipeline-content"
-                    id="assistant-pipeline-header"
-                >
-                    <span className={cls.summaryTitle}>{t('Режим работы')}</span>
-                </AccordionSummary>
-                <AccordionDetails className={cls.details}>
                     <p className={cls.adminHint}>{t('Доступно только администраторам')}</p>
 
                     <FormControl className={cls.fullWidth}>
@@ -331,8 +323,7 @@ export const PipelineCard = memo((props: PipelineCardProps) => {
                             )}
                         </div>
                     )}
-                </AccordionDetails>
-            </Accordion>
+            </SettingsAccordion>
         </div>
     )
 })

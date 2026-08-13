@@ -44,6 +44,7 @@ import {
 
 import { getRouteAnalyticsApi } from '@/shared/const/router'
 import { Link } from 'react-router-dom'
+import { OnboardingStepLayout } from '../components/OnboardingStepLayout/OnboardingStepLayout'
 import clsWizard from '../OnboardingWizard/OnboardingWizard.module.scss'
 import cls from './OnboardingAnalyticsFlow.module.scss'
 
@@ -62,7 +63,15 @@ export const AnalyticsWelcomeOverviewStep = memo(({ className }: { className?: s
     }, [dispatch])
 
     return (
-        <VStack gap="16" align="center" max className={className}>
+        <OnboardingStepLayout
+            className={className}
+            footerAlign="end"
+            footer={(
+                <Button variant="clear" size="m" onClick={onSkip} className={clsWizard.skipLink}>
+                    {t('welcome_skip', 'Пропустить и настроить позже')}
+                </Button>
+            )}
+        >
             <BarChart3 size={48} />
             <Text
                 title={t('analytics_welcome_title', 'Речевая аналитика')}
@@ -76,10 +85,7 @@ export const AnalyticsWelcomeOverviewStep = memo(({ className }: { className?: s
             <Button variant="primary" size="l" onClick={onNext} addonRight={<ArrowRight size={18} />}>
                 {t('analytics_welcome_continue', 'Начать настройку')}
             </Button>
-            <Button variant="clear" size="m" onClick={onSkip} className={clsWizard.skipLink}>
-                {t('welcome_skip', 'Пропустить и настроить позже')}
-            </Button>
-        </VStack>
+        </OnboardingStepLayout>
     )
 })
 
@@ -119,7 +125,20 @@ export const AnalyticsProjectSetupStep = memo(({ className }: { className?: stri
     }, [dispatch, name, selectedTemplateId, t])
 
     return (
-        <VStack gap="16" max className={className}>
+        <OnboardingStepLayout
+            className={className}
+            bodyAlign="start"
+            footer={(
+                <>
+                    <Button variant="clear" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
+                        {t('step_back', 'Назад')}
+                    </Button>
+                    <Button variant="primary" size="l" onClick={onNext} addonRight={<ArrowRight size={16} />}>
+                        {t('step_next', 'Далее')}
+                    </Button>
+                </>
+            )}
+        >
             <Text
                 title={t('analytics_project_title', 'Проект аналитики')}
                 text={t('analytics_project_subtitle', 'Выберите отрасль и назовите проект - мы подготовим метрики под ваши задачи')}
@@ -138,16 +157,7 @@ export const AnalyticsProjectSetupStep = memo(({ className }: { className?: stri
                 selectedTemplateId={selectedTemplateId}
                 onSelect={(tpl: ProjectTemplate) => dispatch(projectWizardActions.applyTemplate(tpl))}
             />
-
-            <HStack gap="12" justify="between" max className={cls.stepFooter}>
-                <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
-                    {t('step_back', 'Назад')}
-                </Button>
-                <Button variant="primary" size="m" onClick={onNext} addonRight={<ArrowRight size={16} />}>
-                    {t('step_next', 'Далее')}
-                </Button>
-            </HStack>
-        </VStack>
+        </OnboardingStepLayout>
     )
 })
 
@@ -197,7 +207,26 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
         )
 
     return (
-        <VStack gap="16" max className={className}>
+        <OnboardingStepLayout
+            className={className}
+            bodyAlign="start"
+            footer={(
+                <>
+                    <Button variant="clear" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
+                        {t('step_back', 'Назад')}
+                    </Button>
+                    <Button
+                        variant="primary"
+                        size="l"
+                        onClick={onNext}
+                        disabled={visibleDefaults.length === 0}
+                        addonRight={<ArrowRight size={16} />}
+                    >
+                        {t('step_next', 'Далее')}
+                    </Button>
+                </>
+            )}
+        >
             <Text
                 title={t('analytics_metrics_title', 'Метрики качества')}
                 text={metricsSubtitle}
@@ -265,22 +294,7 @@ export const AnalyticsMetricsStep = memo(({ className }: { className?: string })
                     </>
                 )}
             </VStack>
-
-            <HStack gap="12" justify="between" max className={cls.stepFooter}>
-                <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
-                    {t('step_back', 'Назад')}
-                </Button>
-                <Button
-                    variant="primary"
-                    size="m"
-                    onClick={onNext}
-                    disabled={visibleDefaults.length === 0}
-                    addonRight={<ArrowRight size={16} />}
-                >
-                    {t('step_next', 'Далее')}
-                </Button>
-            </HStack>
-        </VStack>
+        </OnboardingStepLayout>
     )
 })
 
@@ -343,7 +357,28 @@ export const AnalyticsTopicsStep = memo(({ className }: { className?: string }) 
     ])
 
     return (
-        <VStack gap="16" max className={className}>
+        <OnboardingStepLayout
+            className={className}
+            bodyAlign="start"
+            footer={(
+                <>
+                    <Button variant="clear" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
+                        {t('step_back', 'Назад')}
+                    </Button>
+                    <Button
+                        variant="primary"
+                        size="l"
+                        onClick={onCreateAndContinue}
+                        disabled={isLoading}
+                        addonRight={<ArrowRight size={16} />}
+                    >
+                        {isLoading
+                            ? t('analytics_project_creating', 'Создаём проект...')
+                            : t('analytics_project_create', 'Создать проект и продолжить')}
+                    </Button>
+                </>
+            )}
+        >
             <Text
                 title={t('analytics_topics_title', 'Темы звонков')}
                 text={t(
@@ -359,24 +394,7 @@ export const AnalyticsTopicsStep = memo(({ className }: { className?: string }) 
                     dispatch(projectWizardActions.setCallTaxonomy(taxonomy))
                 }}
             />
-
-            <HStack gap="12" justify="between" max className={cls.stepFooter}>
-                <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
-                    {t('step_back', 'Назад')}
-                </Button>
-                <Button
-                    variant="primary"
-                    size="m"
-                    onClick={onCreateAndContinue}
-                    disabled={isLoading}
-                    addonRight={<ArrowRight size={16} />}
-                >
-                    {isLoading
-                        ? t('analytics_project_creating', 'Создаём проект...')
-                        : t('analytics_project_create', 'Создать проект и продолжить')}
-                </Button>
-            </HStack>
-        </VStack>
+        </OnboardingStepLayout>
     )
 })
 
@@ -426,17 +444,36 @@ export const AnalyticsUploadStep = memo(({
 
     if (!projectId) {
         return (
-            <VStack gap="16" max className={className}>
+            <OnboardingStepLayout
+                className={className}
+                footer={(
+                    <Button variant="clear" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
+                        {t('step_back', 'Назад')}
+                    </Button>
+                )}
+            >
                 <Text text={t('analytics_upload_no_project', 'Сначала создайте проект на предыдущем шаге')} variant="error" />
-                <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
-                    {t('step_back', 'Назад')}
-                </Button>
-            </VStack>
+            </OnboardingStepLayout>
         )
     }
 
     return (
-        <VStack gap="16" max className={className}>
+        <OnboardingStepLayout
+            className={className}
+            bodyAlign="start"
+            footer={uploadPhase === 'idle'
+                ? (
+                    <>
+                        <Button variant="clear" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
+                            {t('step_back', 'Назад')}
+                        </Button>
+                        <Button variant="clear" size="m" onClick={onSkip} className={clsWizard.skipLink}>
+                            {t('welcome_skip', 'Пропустить и настроить позже')}
+                        </Button>
+                    </>
+                )
+                : undefined}
+        >
             <Text
                 title={t('analytics_upload_title', 'Загрузите запись звонка')}
                 text={uploadPhase === 'idle'
@@ -506,18 +543,7 @@ export const AnalyticsUploadStep = memo(({
                     </HStack>
                 </VStack>
             )}
-
-            {uploadPhase === 'idle' && (
-                <HStack gap="12" justify="between" max className={cls.stepFooter}>
-                    <Button variant="outline" size="m" onClick={onBack} addonLeft={<ArrowLeft size={16} />}>
-                        {t('step_back', 'Назад')}
-                    </Button>
-                    <Button variant="clear" size="m" onClick={onSkip} className={clsWizard.skipLink}>
-                        {t('welcome_skip', 'Пропустить и настроить позже')}
-                    </Button>
-                </HStack>
-            )}
-        </VStack>
+        </OnboardingStepLayout>
     )
 })
 

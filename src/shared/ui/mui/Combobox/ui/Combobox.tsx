@@ -8,6 +8,8 @@ export interface ComboBoxProps extends Omit<AutocompleteProps<any, any, any, any
   label?: string
   renderInput?: (params: any) => ReactNode
   required?: boolean
+  error?: boolean
+  helperText?: ReactNode
 }
 
 export const Combobox = memo((props: ComboBoxProps) => {
@@ -17,10 +19,20 @@ export const Combobox = memo((props: ComboBoxProps) => {
     renderInput,
     options,
     required,
+    error,
+    helperText,
     ...otherProps
   } = props
 
-  const renderInputProp = renderInput || ((params) => <TextField {...params} label={label} required={required} />)
+  const renderInputProp = renderInput || ((params) => (
+    <TextField
+      {...params}
+      label={label}
+      required={required}
+      error={error}
+      helperText={helperText}
+    />
+  ))
 
   const acStyles = {
     // Основной контейнер поля ввода
@@ -52,6 +64,11 @@ export const Combobox = memo((props: ComboBoxProps) => {
           borderWidth: '1px !important',
         },
       },
+      '&.Mui-error': {
+        '& fieldset': {
+          borderColor: 'var(--status-error) !important',
+        },
+      },
       '&.MuiInputBase-adornedEnd': {
         paddingRight: '8px',
       },
@@ -60,8 +77,8 @@ export const Combobox = memo((props: ComboBoxProps) => {
     // Текст внутри поля
     '& .MuiInputBase-input': {
       color: 'var(--text-redesigned)',
-      fontSize: 'var(--font-size-m)',
-      fontWeight: '500',
+      fontSize: '14px',
+      fontWeight: '400',
       minWidth: 0,
       textOverflow: 'ellipsis',
       '&::placeholder': {
@@ -73,6 +90,7 @@ export const Combobox = memo((props: ComboBoxProps) => {
     // Лейбл — не заезжать под стрелку, пока не shrink
     '& .MuiInputLabel-root': {
       color: 'var(--text-redesigned)',
+      fontSize: '14px',
       transform: 'translate(14px, 12px) scale(1)',
       maxWidth: 'calc(100% - 48px)',
       overflow: 'hidden',
@@ -85,6 +103,13 @@ export const Combobox = memo((props: ComboBoxProps) => {
       '&.Mui-focused': {
         color: 'var(--text-redesigned)',
       },
+      '&.Mui-error': {
+        color: 'var(--status-error)',
+      },
+    },
+
+    '& .MuiFormHelperText-root.Mui-error': {
+      color: 'var(--status-error)',
     },
 
     // Иконка стрелки выпадающего списка
@@ -122,7 +147,7 @@ export const Combobox = memo((props: ComboBoxProps) => {
         '& .MuiAutocomplete-option': {
           borderRadius: 'var(--radius-md)',
           padding: '10px 12px',
-          fontSize: 'var(--font-size-m)',
+          fontSize: '14px',
           color: 'var(--text-redesigned)',
           '&:hover': {
             backgroundColor: 'rgba(94, 211, 243, 0.1) !important',
@@ -152,7 +177,7 @@ export const Combobox = memo((props: ComboBoxProps) => {
         borderColor: 'var(--accent-redesigned)',
       },
       '& .MuiChip-label': {
-        fontSize: 'var(--font-size-s)',
+        fontSize: '13px',
         fontWeight: 500,
         paddingLeft: '8px',
         paddingRight: '8px',

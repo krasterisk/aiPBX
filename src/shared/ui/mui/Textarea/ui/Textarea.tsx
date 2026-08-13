@@ -37,6 +37,11 @@ const areaStyles = {
         borderWidth: '1px !important',
       },
     },
+    '&.Mui-error': {
+      '& fieldset': {
+        borderColor: 'var(--status-error) !important',
+      },
+    },
     '&.Mui-disabled': {
       backgroundColor: 'var(--light-bg-redesigned)',
       opacity: 0.6,
@@ -51,8 +56,8 @@ const areaStyles = {
   '& .MuiInputBase-input': {
     padding: '0 !important',
     color: 'var(--text-redesigned)',
-    fontSize: 'var(--font-size-m) !important',
-    fontWeight: '500 !important',
+    fontSize: '14px !important',
+    fontWeight: '400 !important',
     '&::placeholder': {
       color: 'var(--hint-redesigned)',
       opacity: 1,
@@ -66,6 +71,7 @@ const areaStyles = {
   },
   '& .MuiInputLabel-root': {
     color: 'var(--text-redesigned)',
+    fontSize: '14px',
     transform: 'translate(14px, 12px) scale(1)',
     '&.MuiInputLabel-shrink': {
       transform: 'translate(14px, -9px) scale(0.75)',
@@ -84,6 +90,10 @@ const areaStyles = {
   '& .MuiFormHelperText-root': {
     color: 'var(--text-redesigned)',
     opacity: 0.8,
+    '&.Mui-error': {
+      color: 'var(--status-error)',
+      opacity: 1,
+    },
   },
 }
 

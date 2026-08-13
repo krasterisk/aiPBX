@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, ReactNode } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { AutocompleteInputChangeReason } from '@mui/material'
 import { useGetAllModels } from '../../api/aiModelApi'
@@ -16,6 +16,9 @@ interface ModelSelectProps {
   inputValue?: string
   fullWidth?: boolean
   required?: boolean
+  error?: boolean
+  helperText?: ReactNode
+  'data-testid'?: string
 }
 
 export const ModelSelect = memo((props: ModelSelectProps) => {

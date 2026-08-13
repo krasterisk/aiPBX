@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Radio, PackageCheck, Bell } from 'lucide-react'
+import { Radio, PackageCheck, Bell, Tags } from 'lucide-react'
 import { getRouteSignup, getRouteMain, getRoutePublicVoiceAssistants, getRoutePublicPricing } from '@/shared/const/router'
 import { usePageMeta } from '@/shared/lib/seo/usePageMeta'
 import { useSeoRenderReady } from '@/shared/lib/seo/useSeoRenderReady'
@@ -93,9 +93,6 @@ const SpeechAnalyticsLandingPage = () => {
                         <div className={cls.ctaGroup}>
                             <Link to={getRouteSignup()} className={cls.ctaBtn}>
                                 {t('SpeechAnalyticsPage.HeroCTA')}
-                            </Link>
-                            <Link to={getRouteSignup()} className={cls.ctaBtnOutline}>
-                                {t('landing.demoCta.label')}
                             </Link>
                         </div>
                     </motion.div>
@@ -209,6 +206,11 @@ const SpeechAnalyticsLandingPage = () => {
                             <p style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, marginBottom: 24 }}>
                                 {t('SpeechAnalyticsPage.MetricsDesc')}
                             </p>
+                            <div className={cls.glassCard} style={{ marginBottom: 24 }}>
+                                <div className={cls.featureIcon}><Tags size={24} /></div>
+                                <div className={cls.featureTitle}>{t('SpeechAnalyticsPage.TaggingTitle')}</div>
+                                <div className={cls.featureDesc}>{t('SpeechAnalyticsPage.TaggingDesc')}</div>
+                            </div>
                             <div className={cls.metricList} style={{ gridTemplateColumns: '1fr' }}>
                                 {METRICS.map((m) => (
                                     <div className={cls.metricItem} key={m.key}>

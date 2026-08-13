@@ -1,4 +1,5 @@
 export { AssistantSettingsForm } from './ui/AssistantSettingsForm/AssistantSettingsForm'
+export { SettingsAccordion } from './ui/AssistantSettingsForm/SettingsAccordion'
 export {
     DEFAULT_SETUP_SECTION,
     SETUP_SECTIONS,

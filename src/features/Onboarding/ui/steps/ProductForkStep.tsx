@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { Mic, BarChart3, ChevronRight } from 'lucide-react'
 import { Button } from '@/shared/ui/redesign-v3/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { VStack } from '@/shared/ui/redesigned/Stack'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { onboardingActions } from '../../model/slices/onboardingSlice'
 import { OnboardingProductPath } from '../../model/types/onboarding'
 import { trackOnboardingEvent } from '../../lib/onboardingAnalytics'
 import AipbxLogo from '@/shared/assets/icons/aipbx_logo_v3.svg'
+import { OnboardingStepLayout } from '../components/OnboardingStepLayout/OnboardingStepLayout'
 import cls from './ProductForkStep.module.scss'
 import clsWizard from '../OnboardingWizard/OnboardingWizard.module.scss'
 
@@ -81,12 +81,20 @@ export const ProductForkStep = memo(({ className }: ProductForkStepProps) => {
     }, [onSelect])
 
     return (
-        <VStack
-            gap="16"
-            align="center"
-            max
+        <OnboardingStepLayout
             className={className}
             data-testid="onboarding-product-fork"
+            footerAlign="end"
+            footer={(
+                <Button
+                    variant="clear"
+                    size="m"
+                    onClick={onSkip}
+                    className={clsWizard.skipLink}
+                >
+                    {t('welcome_skip', 'Пропустить и настроить позже')}
+                </Button>
+            )}
         >
             <AipbxLogo width={56} height={56} />
 
@@ -143,15 +151,6 @@ export const ProductForkStep = memo(({ className }: ProductForkStepProps) => {
                     </div>
                 ))}
             </div>
-
-            <Button
-                variant="clear"
-                size="m"
-                onClick={onSkip}
-                className={clsWizard.skipLink}
-            >
-                {t('welcome_skip', 'Пропустить и настроить позже')}
-            </Button>
-        </VStack>
+        </OnboardingStepLayout>
     )
 })

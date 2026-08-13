@@ -15,6 +15,7 @@ import {
     getRouteDocs,
     getRouteAssistants
 } from '@/shared/const/router'
+import { OnboardingStepLayout } from '../components/OnboardingStepLayout/OnboardingStepLayout'
 import {
     ArrowLeft,
     Mic,
@@ -66,7 +67,29 @@ export const PlaygroundGuideStep = memo(({ className }: PlaygroundGuideStepProps
     }, [dispatch])
 
     return (
-        <VStack gap="16" align="center" max className={className}>
+        <OnboardingStepLayout
+            className={className}
+            footer={(
+                <>
+                    <Button
+                        variant="clear"
+                        size="m"
+                        onClick={onBack}
+                        addonLeft={<ArrowLeft size={14} />}
+                    >
+                        {t('back', 'Назад')}
+                    </Button>
+                    <Button
+                        variant="clear"
+                        size="m"
+                        onClick={onSkip}
+                        className={cls.skipLink}
+                    >
+                        {t('welcome_skip', 'Пропустить и настроить позже')}
+                    </Button>
+                </>
+            )}
+        >
             <Text
                 title={t('playground_guide_title', 'Проверьте ассистента голосом')}
                 text={t(
@@ -78,31 +101,33 @@ export const PlaygroundGuideStep = memo(({ className }: PlaygroundGuideStepProps
             />
 
             <VStack gap="8" max className={cls.completionActions}>
-                <HStack gap="12">
+                <HStack gap="12" align="start">
                     <HStack justify="center" align="center" className={cls.nextStepIcon}>
                         <Mic size={14} />
                     </HStack>
                     <Text
                         text={t(
                             'playground_guide_hint',
-                            'Нажмите «Позвонить в Playground», разрешите микрофон и поговорите с ассистентом не менее 10 секунд.'
+                            'Нажмите «Проверить ассистента», чтобы открыть Playground. Там нажмите «Начать тест», разрешите микрофон и поговорите с ассистентом не менее 10 секунд.'
                         )}
                         size="xs"
                     />
                 </HStack>
             </VStack>
 
-            <Button
-                variant="primary"
-                size="l"
-                onClick={onGoPlayground}
-                addonLeft={<Mic size={16} />}
-                fullWidth
-            >
-                {t('playground_guide_cta', 'Позвонить в Playground')}
-            </Button>
+            <VStack gap="8" max className={cls.ctaStack}>
+                <Button
+                    variant="primary"
+                    size="l"
+                    onClick={onGoPlayground}
+                    addonLeft={<Mic size={16} />}
+                    fullWidth
+                >
+                    {t('playground_guide_cta', 'Проверить ассистента')}
+                </Button>
+            </VStack>
 
-            <HStack gap="12" justify="center" wrap="wrap">
+            <HStack gap="12" justify="center" wrap="wrap" max>
                 <Button
                     variant="clear"
                     size="m"
@@ -131,25 +156,6 @@ export const PlaygroundGuideStep = memo(({ className }: PlaygroundGuideStepProps
                     {t('completion_go_docs', 'Документация')}
                 </Button>
             </HStack>
-
-            <HStack gap="16" justify="center" max>
-                <Button
-                    variant="clear"
-                    size="m"
-                    onClick={onBack}
-                    addonLeft={<ArrowLeft size={14} />}
-                >
-                    {t('back', 'Назад')}
-                </Button>
-                <Button
-                    variant="clear"
-                    size="m"
-                    onClick={onSkip}
-                    className={cls.skipLink}
-                >
-                    {t('welcome_skip', 'Пропустить и настроить позже')}
-                </Button>
-            </HStack>
-        </VStack>
+        </OnboardingStepLayout>
     )
 })

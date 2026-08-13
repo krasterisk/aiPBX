@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from 'react'
+import React, { memo, useCallback } from 'react'
 import cls from '../OnboardingWizard/OnboardingWizard.module.scss'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/redesign-v3/Button'
@@ -8,15 +8,13 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch
 import { useSelector } from 'react-redux'
 import { onboardingActions } from '../../model/slices/onboardingSlice'
 import { getOnboardingTemplateId } from '../../model/selectors/onboardingSelectors'
+import { OnboardingStepLayout } from '../components/OnboardingStepLayout/OnboardingStepLayout'
 import {
     ArrowLeft,
     ArrowRight,
-    ChevronDown,
-    ChevronUp,
     MessageSquare,
     Mic,
-    Settings2,
-    ExternalLink
+    Settings2
 } from 'lucide-react'
 
 interface SimpleExampleStepProps {
@@ -51,7 +49,6 @@ export const SimpleExampleStep = memo(({ className }: SimpleExampleStepProps) =>
     const { t } = useTranslation('onboarding')
     const dispatch = useAppDispatch()
     const templateId = useSelector(getOnboardingTemplateId)
-    const [telegramExpanded, setTelegramExpanded] = useState(false)
 
     const scenarioKey = templateId === 'hotel_reception' || templateId === 'dental_clinic'
         ? 'simple_example_scenario_reception'
@@ -65,12 +62,30 @@ export const SimpleExampleStep = memo(({ className }: SimpleExampleStepProps) =>
         dispatch(onboardingActions.prevStep())
     }, [dispatch])
 
-    const toggleTelegram = useCallback(() => {
-        setTelegramExpanded(prev => !prev)
-    }, [])
-
     return (
-        <VStack gap="16" align="center" max className={className}>
+        <OnboardingStepLayout
+            className={className}
+            footer={(
+                <>
+                    <Button
+                        variant="clear"
+                        size="m"
+                        onClick={onBack}
+                        addonLeft={<ArrowLeft size={14} />}
+                    >
+                        {t('back', 'Назад')}
+                    </Button>
+                    <Button
+                        variant="primary"
+                        size="l"
+                        onClick={onNext}
+                        addonRight={<ArrowRight size={16} />}
+                    >
+                        {t('next', 'Далее')}
+                    </Button>
+                </>
+            )}
+        >
             <Text
                 title={t('simple_example_title', 'Простой пример')}
                 text={t(scenarioKey, 'Посмотрите, как работает ваш ассистент на примере записи клиента на приём.')}
@@ -78,69 +93,19 @@ export const SimpleExampleStep = memo(({ className }: SimpleExampleStepProps) =>
                 size="l"
             />
 
-            <VStack gap="12" max>
+            <VStack gap="12" max className={cls.cardsStack}>
                 {exampleCards.map(({ Icon, titleKey, descKey, titleFallback, descFallback }) => (
                     <HStack key={titleKey} gap="16" align="start" className={cls.publishCard}>
                         <HStack justify="center" align="center" className={cls.publishCardIconBox}>
                             <Icon size={20} />
                         </HStack>
-                        <VStack gap="4">
+                        <VStack gap="4" max>
                             <Text title={t(titleKey, titleFallback)} size="s" bold />
                             <Text text={t(descKey, descFallback)} size="xs" />
                         </VStack>
                     </HStack>
                 ))}
             </VStack>
-
-            <VStack gap="8" max className={cls.featuresBlock}>
-                <Button
-                    variant="clear"
-                    size="m"
-                    onClick={toggleTelegram}
-                    addonRight={telegramExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                >
-                    {t('simple_example_telegram_toggle', 'Подключить Telegram (необязательно)')}
-                </Button>
-                {telegramExpanded && (
-                    <VStack gap="8">
-                        <Text
-                            text={t(
-                                'simple_example_telegram_desc',
-                                'Telegram можно подключить позже для уведомлений о заявках. В некоторых регионах сервис недоступен - это не блокирует работу ассистента.'
-                            )}
-                            size="xs"
-                        />
-                        <a
-                            href="https://t.me/AIPBXbot"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={cls.botLink}
-                        >
-                            @AIPBXbot
-                            <ExternalLink size={12} />
-                        </a>
-                    </VStack>
-                )}
-            </VStack>
-
-            <HStack gap="16" justify="center" max>
-                <Button
-                    variant="clear"
-                    size="m"
-                    onClick={onBack}
-                    addonLeft={<ArrowLeft size={14} />}
-                >
-                    {t('back', 'Назад')}
-                </Button>
-                <Button
-                    variant="primary"
-                    size="l"
-                    onClick={onNext}
-                    addonRight={<ArrowRight size={16} />}
-                >
-                    {t('next', 'Далее')}
-                </Button>
-            </HStack>
-        </VStack>
+        </OnboardingStepLayout>
     )
 })

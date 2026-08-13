@@ -18,19 +18,31 @@ const inputStyles = {
         },
         '&.Mui-focused fieldset': {
             borderColor: 'var(--accent-redesigned)'
+        },
+        '&.Mui-error fieldset': {
+            borderColor: 'var(--status-error) !important'
         }
     },
     '& .MuiInputBase-input': {
-        color: 'var(--text-redesigned)'
+        color: 'var(--text-redesigned)',
+        fontSize: '14px',
+        fontWeight: 400
     },
     '& .MuiInputBase-input::placeholder': {
         color: 'var(--text-redesigned)'
     },
     '& .MuiInputLabel-root': {
-        color: 'var(--text-redesigned)'
+        color: 'var(--text-redesigned)',
+        fontSize: '14px'
     },
     '& .MuiInputLabel-root.Mui-focused': {
         color: 'var(--text-redesigned)'
+    },
+    '& .MuiInputLabel-root.Mui-error': {
+        color: 'var(--status-error)'
+    },
+    '& .MuiFormHelperText-root.Mui-error': {
+        color: 'var(--status-error)'
     },
     '& .MuiSvgIcon-root': {
         color: 'var(--icon-redesigned)'

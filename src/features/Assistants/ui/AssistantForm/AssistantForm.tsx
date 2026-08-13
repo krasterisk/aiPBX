@@ -15,18 +15,23 @@ import { getUserAuthData, isUserAdmin } from '@/entities/User'
 // eslint-disable-next-line krasterisk-plugin/layer-imports -- Assistants → AssistantSettingsForm (phase 11 D-35/D-36 / RESEARCH A5)
 import { AssistantSettingsForm } from '@/features/AssistantSettingsForm'
 import { PipelineCard } from './components/PipelineCard/PipelineCard'
+import { AssistantFieldError } from '../../model/validateAssistant'
 
 import cls from './AssistantForm.module.scss'
 
 interface AssistantFormProps {
     className?: string
     assistantId?: string
+    fieldError?: AssistantFieldError | null
+    onClearFieldError?: () => void
 }
 
 export const AssistantForm = memo((props: AssistantFormProps) => {
     const {
         className,
         assistantId,
+        fieldError,
+        onClearFieldError,
     } = props
 
     const dispatch = useAppDispatch()
@@ -137,10 +142,12 @@ export const AssistantForm = memo((props: AssistantFormProps) => {
 
     return (
         <div className={classNames(cls.AssistantForm, {}, [className])}>
-            <VStack max gap="16" className={cls.content}>
+            <VStack max gap="0" className={cls.content}>
                 <AssistantSettingsForm
                     mode={isEdit ? 'edit' : 'create'}
                     translationNs="assistants"
+                    fieldError={fieldError}
+                    onClearFieldError={onClearFieldError}
                 />
                 <PipelineCard assistantId={assistantId} />
             </VStack>

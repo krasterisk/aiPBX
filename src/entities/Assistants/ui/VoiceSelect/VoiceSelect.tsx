@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useMemo, useRef, useState, ReactNode } from 'react'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { AutocompleteInputChangeReason, IconButton } from '@mui/material'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
@@ -19,6 +19,9 @@ interface VoiceSelectProps {
   inputValue?: string
   fullWidth?: boolean
   required?: boolean
+  error?: boolean
+  helperText?: ReactNode
+  'data-testid'?: string
 }
 
 const GPT_VOICES = ['alloy', 'ash', 'ballad', 'cedar', 'coral', 'echo', 'sage', 'shimmer', 'marin', 'verse']

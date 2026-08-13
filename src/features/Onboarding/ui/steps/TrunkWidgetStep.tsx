@@ -12,6 +12,7 @@ import {
     getRoutePublishSipUrisCreate,
     getRouteDocs
 } from '@/shared/const/router'
+import { OnboardingStepLayout } from '../components/OnboardingStepLayout/OnboardingStepLayout'
 import {
     Globe,
     PhoneCall,
@@ -84,7 +85,35 @@ export const TrunkWidgetStep = memo(({ className }: TrunkWidgetStepProps) => {
     }, [dispatch, navigate])
 
     return (
-        <VStack gap="16" align="center" max className={className}>
+        <OnboardingStepLayout
+            className={className}
+            bodyAlign="start"
+            footer={(
+                <>
+                    <Button
+                        variant="clear"
+                        size="m"
+                        onClick={onOpenDocs}
+                        className={cls.skipLink}
+                    >
+                        {t('trunk_widget_docs', 'Документация')}
+                    </Button>
+                    <div className={cls.stepFooterActions}>
+                        <Button
+                            variant="clear"
+                            size="m"
+                            onClick={onDefer}
+                            className={cls.skipLink}
+                        >
+                            {t('trunk_widget_defer', 'Настрою позже')}
+                        </Button>
+                        <Button variant="primary" size="l" onClick={onFinish}>
+                            {t('trunk_widget_finish', 'Завершить обучение')}
+                        </Button>
+                    </div>
+                </>
+            )}
+        >
             <HStack gap="12" className={cls.connectedBanner}>
                 <CheckCircle2 size={22} />
                 <Text
@@ -104,13 +133,13 @@ export const TrunkWidgetStep = memo(({ className }: TrunkWidgetStepProps) => {
                 size="l"
             />
 
-            <VStack gap="12" max>
+            <VStack gap="12" max className={cls.cardsStack}>
                 {publishMethods.map(({ Icon, titleKey, badgeKey, descKey, titleFallback, badgeFallback, descFallback }) => (
                     <HStack key={titleKey} gap="16" align="start" className={cls.publishCard}>
                         <HStack justify="center" align="center" className={cls.publishCardIconBox}>
                             <Icon size={20} />
                         </HStack>
-                        <VStack gap="4">
+                        <VStack gap="4" max>
                             <Text title={t(titleKey, titleFallback)} size="s" bold />
                             <Text text={t(badgeKey, badgeFallback)} variant="accent" size="xs" />
                             <Text text={t(descKey, descFallback)} size="xs" />
@@ -119,7 +148,7 @@ export const TrunkWidgetStep = memo(({ className }: TrunkWidgetStepProps) => {
                 ))}
             </VStack>
 
-            <HStack gap="8" align="center">
+            <HStack gap="8" align="center" max>
                 <Info size={16} className={cls.hintIcon} />
                 <Text
                     text={t('publish_hint', 'Всё это можно настроить позже в разделе «Публикация»')}
@@ -127,7 +156,7 @@ export const TrunkWidgetStep = memo(({ className }: TrunkWidgetStepProps) => {
                 />
             </HStack>
 
-            <VStack gap="8" max>
+            <VStack gap="8" max className={cls.ctaStack}>
                 <Button
                     variant="primary"
                     size="l"
@@ -147,19 +176,6 @@ export const TrunkWidgetStep = memo(({ className }: TrunkWidgetStepProps) => {
                     {t('trunk_widget_sip_cta', 'Настроить SIP / АТС')}
                 </Button>
             </VStack>
-
-            <HStack gap="12" justify="center" wrap="wrap">
-                <Button variant="clear" size="m" onClick={onOpenDocs} className={cls.skipLink}>
-                    {t('trunk_widget_docs', 'Документация')}
-                </Button>
-                <Button variant="clear" size="m" onClick={onDefer} className={cls.skipLink}>
-                    {t('trunk_widget_defer', 'Настрою позже')}
-                </Button>
-            </HStack>
-
-            <Button variant="primary" size="m" onClick={onFinish}>
-                {t('trunk_widget_finish', 'Завершить обучение')}
-            </Button>
-        </VStack>
+        </OnboardingStepLayout>
     )
 })

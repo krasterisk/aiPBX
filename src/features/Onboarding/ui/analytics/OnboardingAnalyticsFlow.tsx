@@ -1,8 +1,9 @@
 import React, { memo, useCallback, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { classNames } from '@/shared/lib/classNames/classNames'
 import { Text } from '@/shared/ui/redesigned/Text'
-import { VStack } from '@/shared/ui/redesigned/Stack'
+import clsWizard from '../OnboardingWizard/OnboardingWizard.module.scss'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { projectWizardReducer, BatchStatusResponse, useBatchProgress } from '@/entities/Report'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
@@ -112,9 +113,15 @@ const OnboardingAnalyticsFlowContent = memo(({ className }: OnboardingAnalyticsF
     }, [currentStep])
 
     return (
-        <VStack gap="16" max className={className}>
+        <div className={classNames(clsWizard.stepShell, {}, [className])}>
             {error && (
-                <Text text={error} variant="error" align="center" size="s" />
+                <Text
+                    text={error}
+                    variant="error"
+                    align="center"
+                    size="s"
+                    className={clsWizard.stepBanner}
+                />
             )}
             {currentStep === 5
                 ? (
@@ -129,7 +136,7 @@ const OnboardingAnalyticsFlowContent = memo(({ className }: OnboardingAnalyticsF
                     />
                 )
                 : <StepComponent />}
-        </VStack>
+        </div>
     )
 })
 

@@ -122,13 +122,25 @@ const MainPage: FC = memo(() => {
           {!isRuDomain && <LangSwitcher short={isMobile} />}
         </div>
         <div className={cls.topBarCenter}>
-          <Button variant="clear" onClick={() => { navigate(getRoutePublicVoiceAssistants()) }}>
+          <Button
+            className={cls.navLink}
+            variant="clear"
+            onClick={() => { navigate(getRoutePublicVoiceAssistants()) }}
+          >
             {t('VoiceAssistantsPage.HeroBadge', { defaultValue: 'Ассистенты', ns: 'main' })}
           </Button>
-          <Button variant="clear" onClick={() => { navigate(getRoutePublicSpeechAnalytics()) }}>
+          <Button
+            className={cls.navLink}
+            variant="clear"
+            onClick={() => { navigate(getRoutePublicSpeechAnalytics()) }}
+          >
             {t('SpeechAnalyticsPage.HeroBadge', { defaultValue: 'Аналитика', ns: 'main' })}
           </Button>
-          <Button variant="clear" onClick={onPricing}>
+          <Button
+            className={cls.navLink}
+            variant="clear"
+            onClick={onPricing}
+          >
             {t('Pricing', { defaultValue: 'Pricing' })}
           </Button>
         </div>
@@ -158,8 +170,9 @@ const MainPage: FC = memo(() => {
               className={cls.title}
               align="center"
               sx={{
-                fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.5rem' },
-                mb: 4
+                fontSize: { xs: '2rem', sm: '3.5rem', md: '4.5rem' },
+                lineHeight: { xs: 1.3, sm: 1.2, md: 1.15 },
+                mb: { xs: 3, md: 4 }
               }}
             >
               {t('Hero.Title')}
@@ -177,13 +190,6 @@ const MainPage: FC = memo(() => {
               >
                 {t('Hero.CTA_Start')}
                 <ArrowRight size={20} style={{ marginLeft: 8 }} />
-              </Button>
-              <Button
-                size="xl"
-                variant="clear"
-                onClick={onRegister}
-              >
-                {t('landing.demoCta.label')}
               </Button>
             </div>
           </motion.div>

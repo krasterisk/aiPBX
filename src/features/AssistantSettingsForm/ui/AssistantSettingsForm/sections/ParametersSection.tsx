@@ -13,10 +13,16 @@ import cls from '../AssistantSettingsForm.module.scss'
 interface ParametersSectionProps {
     onChangeText: (field: keyof Assistant) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
     onChangeSelect: (field: keyof Assistant) => (event: any, newValue: string) => void
+    fieldError?: {
+        field: 'name' | 'instruction' | 'model' | 'voice'
+        section: string
+        messageKey: string
+    } | null
+    errorMessage?: string
 }
 
 export const ParametersSection = memo((props: ParametersSectionProps) => {
-    const { onChangeText, onChangeSelect } = props
+    const { onChangeText, onChangeSelect, fieldError, errorMessage } = props
     const { t } = useTranslation(['playground', 'assistants'])
     const isAdmin = useSelector(isUserAdmin)
     const formFields = useSelector(getAssistantFormData)
@@ -42,6 +48,8 @@ export const ParametersSection = memo((props: ParametersSectionProps) => {
                     required
                     size="small"
                     fullWidth
+                    error={fieldError?.field === 'name'}
+                    helperText={fieldError?.field === 'name' ? errorMessage : undefined}
                 />
             </div>
 
@@ -53,6 +61,9 @@ export const ParametersSection = memo((props: ParametersSectionProps) => {
                         onChangeValue={onChangeSelect('model')}
                         required
                         fullWidth
+                        data-testid="AssistantSettingsForm.model"
+                        error={fieldError?.field === 'model'}
+                        helperText={fieldError?.field === 'model' ? errorMessage : undefined}
                     />
                     <VoiceSelect
                         label={String(t('Голос'))}
@@ -60,6 +71,9 @@ export const ParametersSection = memo((props: ParametersSectionProps) => {
                         model={formFields?.model}
                         onChangeValue={onChangeSelect('voice')}
                         required
+                        data-testid="AssistantSettingsForm.voice"
+                        error={fieldError?.field === 'voice'}
+                        helperText={fieldError?.field === 'voice' ? errorMessage : undefined}
                     />
                 </>
             )}

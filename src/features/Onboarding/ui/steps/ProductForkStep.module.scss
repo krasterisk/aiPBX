@@ -5,6 +5,8 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-4);
   width: 100%;
+  max-width: 560px;
+  min-width: 0;
 }
 
 .productCard {
@@ -14,6 +16,9 @@
   align-items: center;
   gap: var(--space-3);
   min-height: 100%;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
   padding: var(--space-6) var(--space-5);
   border-radius: var(--radius-xl);
   background: var(--glass-overlay-light);

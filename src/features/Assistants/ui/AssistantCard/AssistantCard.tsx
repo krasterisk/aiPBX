@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRouteAssistants } from '@/shared/const/router'
 import { ErrorGetData } from '@/entities/ErrorGetData'
@@ -21,6 +21,10 @@ import { AssistantForm } from '../AssistantForm'
 import { AssistantFormHeader } from '../AssistantFormHeader'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
+import {
+  AssistantFieldError,
+  getAssistantValidationError,
+} from '../../model/validateAssistant'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { useSelector } from 'react-redux'
 
@@ -48,6 +52,7 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
   const navigate = useNavigate()
   const { t } = useTranslation('assistants')
   const formFields = useSelector(getAssistantFormData)
+  const [fieldError, setFieldError] = useState<AssistantFieldError | null>(null)
 
   const reducers: ReducersList = {
     assistantForm: assistantFormReducer
@@ -65,12 +70,10 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
   }, [assistantCreate, navigate])
 
   const validateAssistant = useCallback((data: Assistant) => {
-    if (!data.name || !data.model || !data.voice || !data.instruction) {
-      toast.error(t('Проверьте заполняемые поля и повторите ещё раз'))
-      return false
-    }
-    return true
-  }, [t])
+    const error = getAssistantValidationError(data)
+    setFieldError(error)
+    return error === null
+  }, [])
 
   const onCreate = useCallback(() => {
     if (!formFields) return
@@ -149,6 +152,8 @@ export const AssistantCard = memo((props: AssistantCardProps) => {
 
         <AssistantForm
           assistantId={assistantId}
+          fieldError={fieldError}
+          onClearFieldError={() => { setFieldError(null) }}
         />
 
         <AssistantFormHeader

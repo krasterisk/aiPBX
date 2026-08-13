@@ -8,11 +8,7 @@
 .content {
     width: 100%;
     align-items: stretch;
-    gap: var(--space-4);
-
-    @include tablet {
-        gap: var(--space-5);
-    }
+    gap: 0;
 }
 
 @include mobile {
@@ -21,6 +17,6 @@
     }
 
     .content {
-        gap: var(--space-4);
+        gap: 0;
     }
 }

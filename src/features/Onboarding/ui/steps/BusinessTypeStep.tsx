@@ -1,9 +1,10 @@
 import React, { memo, useCallback, useEffect, useState } from 'react'
 import cls from '../OnboardingWizard/OnboardingWizard.module.scss'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@/shared/ui/redesigned/Button'
+import { Button } from '@/shared/ui/redesign-v3/Button'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
+import { OnboardingStepLayout } from '../components/OnboardingStepLayout/OnboardingStepLayout'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Input } from '@/shared/ui/mui/Input'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
@@ -19,9 +20,9 @@ import {
 } from '../../model/selectors/onboardingSelectors'
 import { BusinessCard } from '../components/BusinessCard/BusinessCard'
 import { trackOnboardingEvent } from '../../lib/onboardingAnalytics'
-import { assistantTemplates, useSetAssistants, useGeneratePrompt, useUpdateAssistant, initAssistant } from '@/entities/Assistants'
-
-import { useMcpServersAll } from '@/entities/Mcp'
+import { buildOnboardingAssistant } from '../../model/buildOnboardingAssistant'
+import { assistantTemplates, useSetAssistants, useGeneratePrompt } from '@/entities/Assistants'
+import { getUserAuthData } from '@/entities/User'
 import {
     Wrench,
     UtensilsCrossed,
@@ -79,11 +80,10 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
     const isGenerating = useSelector(getOnboardingIsGenerating)
     const isCreating = useSelector(getOnboardingIsCreating)
     const error = useSelector(getOnboardingError)
+    const authData = useSelector(getUserAuthData)
 
     const [createAssistant] = useSetAssistants()
     const [generatePrompt] = useGeneratePrompt()
-    const [updateAssistant] = useUpdateAssistant()
-    const { refetch: refetchMcpServers } = useMcpServersAll(null)
     const [newFeature, setNewFeature] = useState('')
 
     const isCustom = selectedTemplate === 'custom'
@@ -151,39 +151,23 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                 finalPrompt += `\n\nAssistant tasks:\n${tasks}`
             }
 
-            const result = await createAssistant([{
-                ...initAssistant,
+            const result = await createAssistant([buildOnboardingAssistant({
                 name,
                 instruction: finalPrompt,
-                tools: []
-            }]).unwrap()
+                userId: authData?.id,
+            })]).unwrap()
 
             if (result?.[0]?.id) {
                 const assistantId = result[0].id
                 dispatch(onboardingActions.setCreatedAssistantId(assistantId))
                 trackOnboardingEvent('assistant_created', { productPath: 'assistants' })
-
-                // Auto-attach existing Telegram MCP server
-                try {
-                    const { data: servers } = await refetchMcpServers()
-                    const telegramServer = servers?.find(s => s.composioToolkit === 'telegram')
-                    if (telegramServer) {
-                        await updateAssistant({
-                            id: assistantId,
-                            mcpServers: [telegramServer]
-                        }).unwrap()
-                    }
-                } catch {
-                    // Non-critical: user can attach MCP server manually later
-                }
-
                 dispatch(onboardingActions.nextStep())
             }
         } catch (err: any) {
             dispatch(onboardingActions.setError(err?.data?.message || 'Error creating assistant'))
             dispatch(onboardingActions.setCreatingAssistant(false))
         }
-    }, [selectedTemplate, isCustom, dispatch, createAssistant, i18n.language, t, customFeatures, refetchMcpServers, updateAssistant])
+    }, [selectedTemplate, isCustom, dispatch, createAssistant, i18n.language, t, customFeatures, authData?.id])
 
     const onGenerateAndCreate = useCallback(async () => {
         if (!customDescription.trim()) return
@@ -202,32 +186,16 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             dispatch(onboardingActions.setGeneratedPrompt(generatedInstruction))
             dispatch(onboardingActions.setCreatingAssistant(true))
 
-            const result = await createAssistant([{
-                ...initAssistant,
+            const result = await createAssistant([buildOnboardingAssistant({
                 name: t('business_custom_name', 'Мой ассистент') || '',
                 instruction: generatedInstruction,
-                tools: []
-            }]).unwrap()
+                userId: authData?.id,
+            })]).unwrap()
 
             if (result?.[0]?.id) {
                 const assistantId = result[0].id
                 dispatch(onboardingActions.setCreatedAssistantId(assistantId))
                 trackOnboardingEvent('assistant_created', { productPath: 'assistants' })
-
-                // Auto-attach existing Telegram MCP server
-                try {
-                    const { data: servers } = await refetchMcpServers()
-                    const telegramServer = servers?.find(s => s.composioToolkit === 'telegram')
-                    if (telegramServer) {
-                        await updateAssistant({
-                            id: assistantId,
-                            mcpServers: [telegramServer]
-                        }).unwrap()
-                    }
-                } catch {
-                    // Non-critical: user can attach MCP server manually later
-                }
-
                 dispatch(onboardingActions.nextStep())
             }
         } catch (err: any) {
@@ -235,14 +203,53 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
             dispatch(onboardingActions.setGeneratingPrompt(false))
             dispatch(onboardingActions.setCreatingAssistant(false))
         }
-    }, [customDescription, dispatch, generatePrompt, createAssistant, t, refetchMcpServers, updateAssistant])
+    }, [customDescription, dispatch, generatePrompt, createAssistant, t, authData?.id])
 
     const onBack = useCallback(() => {
         dispatch(onboardingActions.prevStep())
     }, [dispatch])
 
     return (
-        <VStack gap="16" align="center" max className={className}>
+        <OnboardingStepLayout
+            className={className}
+            bodyAlign="start"
+            footer={(
+                <>
+                    <Button
+                        variant="clear"
+                        size="m"
+                        onClick={onBack}
+                        disabled={isLoading}
+                        addonLeft={<ArrowLeft size={14} />}
+                    >
+                        {t('back')}
+                    </Button>
+                    {isCustom
+                        ? (
+                            <Button
+                                variant="primary"
+                                size="l"
+                                onClick={onGenerateAndCreate}
+                                disabled={!customDescription.trim() || isLoading}
+                                addonLeft={<Sparkles size={16} />}
+                            >
+                                {t('business_generate')}
+                            </Button>
+                        )
+                        : (
+                            <Button
+                                variant="primary"
+                                size="l"
+                                onClick={onCreateFromTemplate}
+                                disabled={!selectedTemplate || isLoading}
+                                addonLeft={<Sparkles size={16} />}
+                            >
+                                {t('business_create')}
+                            </Button>
+                        )}
+                </>
+            )}
+        >
             <Text
                 title={t('business_title')}
                 text={t('business_subtitle')}
@@ -273,16 +280,17 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
 
                     {/* All features - template defaults + user-added, all deletable */}
                     {customFeatures.map((feature, i) => (
-                        <HStack key={i} gap="8" align="center">
+                        <HStack key={i} gap="8" align="center" max>
                             <Check size={14} className={cls.checkIcon} />
                             <Text text={feature} size="s" />
                             <Button
                                 variant="clear"
-                                size="s"
+                                size="m"
+                                square
                                 onClick={() => { onRemoveFeature(i) }}
-                                addonLeft={<X size={12} />}
+                                aria-label={String(t('business_features_remove', 'Удалить'))}
                             >
-                                {null}
+                                <X size={14} />
                             </Button>
                         </HStack>
                     ))}
@@ -299,7 +307,7 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                         />
                         <Button
                             variant="clear"
-                            size="s"
+                            size="m"
                             onClick={onAddFeature}
                             disabled={!newFeature.trim() || isLoading}
                             addonLeft={<Plus size={14} />}
@@ -353,41 +361,6 @@ export const BusinessTypeStep = memo(({ className }: BusinessTypeStepProps) => {
                 <Text text={error} variant="error" size="s" />
             )}
 
-            <HStack gap="16" justify="center" max>
-                <Button
-                    variant="clear"
-                    size="m"
-                    onClick={onBack}
-                    disabled={isLoading}
-                    addonLeft={<ArrowLeft size={14} />}
-                >
-                    {t('back')}
-                </Button>
-
-                {isCustom
-                    ? (
-                        <Button
-                            variant="glass-action"
-                            size="l"
-                            onClick={onGenerateAndCreate}
-                            disabled={!customDescription.trim() || isLoading}
-                            addonLeft={<Sparkles size={16} />}
-                        >
-                            {t('business_generate')}
-                        </Button>
-                    )
-                    : (
-                        <Button
-                            variant="glass-action"
-                            size="l"
-                            onClick={onCreateFromTemplate}
-                            disabled={!selectedTemplate || isLoading}
-                            addonLeft={<Sparkles size={16} />}
-                        >
-                            {t('business_create')}
-                        </Button>
-                    )}
-            </HStack>
-        </VStack>
+        </OnboardingStepLayout>
     )
 })

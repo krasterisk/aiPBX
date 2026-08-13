@@ -61,4 +61,10 @@ describe('ProductForkStep', () => {
     expect(screen.getByText('Начать с аналитики')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Начать с ассистентов' })).not.toBeInTheDocument()
   })
+
+  it('places skip action in the footer', () => {
+    render(<ProductForkStep />)
+
+    expect(screen.getByRole('button', { name: 'Пропустить и настроить позже' })).toBeInTheDocument()
+  })
 })

@@ -1,10 +1,7 @@
-import { memo, useCallback, useState, ChangeEvent } from 'react'
+import { memo, useCallback, useState, useEffect, ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import Accordion from '@mui/material/Accordion'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { FileText, Wrench, SlidersHorizontal, AudioLines, LucideIcon } from 'lucide-react'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import {
@@ -25,6 +22,7 @@ import { PromptSection } from './sections/PromptSection'
 import { ParametersSection } from './sections/ParametersSection'
 import { VadSection } from './sections/VadSection'
 import { ToolsSection } from './sections/ToolsSection'
+import { SettingsAccordion } from './SettingsAccordion'
 import cls from './AssistantSettingsForm.module.scss'
 
 interface AssistantSettingsFormProps {
@@ -36,6 +34,12 @@ interface AssistantSettingsFormProps {
      * Playground Setup uses `playground`; Assistants page prefers `assistants` (D-44).
      */
     translationNs?: 'playground' | 'assistants'
+    fieldError?: {
+        field: 'name' | 'instruction' | 'model' | 'voice'
+        section: SetupSectionKey
+        messageKey: string
+    } | null
+    onClearFieldError?: () => void
 }
 
 const SECTION_TITLE_KEYS: Record<SetupSectionKey, string> = {
@@ -45,8 +49,28 @@ const SECTION_TITLE_KEYS: Record<SetupSectionKey, string> = {
     vad: 'VAD',
 }
 
+const SECTION_ICONS: Record<SetupSectionKey, LucideIcon> = {
+    prompt: FileText,
+    tools: Wrench,
+    parameters: SlidersHorizontal,
+    vad: AudioLines,
+}
+
+const focusSettingsField = (field: string) => {
+    const root = document.querySelector(`[data-testid="AssistantSettingsForm.${field}"]`)
+    const el = root?.querySelector<HTMLElement>('input, textarea')
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    el?.focus()
+}
+
 export const AssistantSettingsForm = memo((props: AssistantSettingsFormProps) => {
-    const { className, mode: modeProp, translationNs = 'playground' } = props
+    const {
+        className,
+        mode: modeProp,
+        translationNs = 'playground',
+        fieldError,
+        onClearFieldError,
+    } = props
     const { t } = useTranslation(translationNs)
     const dispatch = useAppDispatch()
     const formFields = useSelector(getAssistantFormData)
@@ -55,17 +79,22 @@ export const AssistantSettingsForm = memo((props: AssistantSettingsFormProps) =>
 
     const [expanded, setExpanded] = useState<SetupSectionKey | false>(DEFAULT_SETUP_SECTION)
 
-    const handleAccordionChange = useCallback(
-        (panel: SetupSectionKey) => (_: React.SyntheticEvent, isExpanded: boolean) => {
-            setExpanded(resolveExclusiveExpand(expanded, panel, isExpanded))
-        },
-        [expanded],
-    )
+    useEffect(() => {
+        if (!fieldError) return
+        setExpanded(fieldError.section)
+        const timer = window.setTimeout(() => {
+            focusSettingsField(fieldError.field)
+        }, 350)
+        return () => { window.clearTimeout(timer) }
+    }, [fieldError])
 
     const onChangeText = useCallback((field: keyof Assistant) =>
         (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
             dispatch(assistantFormActions.updateForm({ [field]: event.target.value }))
-        }, [dispatch])
+            if (fieldError?.field === field) {
+                onClearFieldError?.()
+            }
+        }, [dispatch, fieldError, onClearFieldError])
 
     const onChangeSelect = useCallback((field: keyof Assistant) => (
         _event: any,
@@ -83,7 +112,10 @@ export const AssistantSettingsForm = memo((props: AssistantSettingsFormProps) =>
             }
         }
         dispatch(assistantFormActions.updateForm(updated))
-    }, [dispatch])
+        if (fieldError?.field === field || (field === 'model' && fieldError?.field === 'voice')) {
+            onClearFieldError?.()
+        }
+    }, [dispatch, fieldError, onClearFieldError])
 
     const onChangeCheckbox = useCallback((field: keyof Assistant) =>
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -124,12 +156,19 @@ export const AssistantSettingsForm = memo((props: AssistantSettingsFormProps) =>
     const renderSectionBody = (key: SetupSectionKey) => {
         switch (key) {
             case 'prompt':
-                return <PromptSection onChangeText={onChangeText} />
+                return (
+                    <PromptSection
+                        onChangeText={onChangeText}
+                        errorMessage={fieldError?.field === 'instruction' ? String(t(fieldError.messageKey)) : undefined}
+                    />
+                )
             case 'parameters':
                 return (
                     <ParametersSection
                         onChangeText={onChangeText}
                         onChangeSelect={onChangeSelect}
+                        fieldError={fieldError}
+                        errorMessage={fieldError ? String(t(fieldError.messageKey)) : undefined}
                     />
                 )
             case 'vad':
@@ -159,27 +198,26 @@ export const AssistantSettingsForm = memo((props: AssistantSettingsFormProps) =>
             className={classNames(cls.AssistantSettingsForm, {}, [className])}
             data-testid="AssistantSettingsForm"
         >
+            {fieldError && (
+                <p className={cls.formError} role="alert">
+                    {t(fieldError.messageKey)}
+                </p>
+            )}
             {SETUP_SECTIONS.map((key) => (
-                <Accordion
+                <SettingsAccordion
                     key={key}
+                    id={`assistant-settings-${key}`}
+                    title={String(t(SECTION_TITLE_KEYS[key]) ?? '')}
+                    icon={SECTION_ICONS[key]}
                     expanded={expanded === key}
-                    onChange={handleAccordionChange(key)}
-                    disableGutters
-                    className={cls.accordion}
+                    onChange={(isExpanded) => {
+                        setExpanded(resolveExclusiveExpand(expanded, key, isExpanded))
+                    }}
+                    error={fieldError?.section === key}
                     data-testid={`AssistantSettingsForm.section.${key}`}
                 >
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        className={cls.summary}
-                        aria-controls={`assistant-settings-${key}-content`}
-                        id={`assistant-settings-${key}-header`}
-                    >
-                        <span className={cls.summaryTitle}>{t(SECTION_TITLE_KEYS[key])}</span>
-                    </AccordionSummary>
-                    <AccordionDetails className={cls.details}>
-                        {renderSectionBody(key)}
-                    </AccordionDetails>
-                </Accordion>
+                    {renderSectionBody(key)}
+                </SettingsAccordion>
             ))}
         </div>
     )

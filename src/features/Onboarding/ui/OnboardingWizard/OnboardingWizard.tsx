@@ -91,7 +91,7 @@ const OnboardingWizardContent = memo(({ className }: OnboardingWizardProps) => {
     return (
         <VStack align="center" justify="center" max className={cls.OnboardingWizard}>
             <VStack className={cls.overlay}>{null}</VStack>
-            <VStack max className={cls.wizardContainer}>
+            <VStack className={cls.wizardContainer} align="stretch">
                 {showStepIndicator && (
                     <VStack max className={cls.stickyHeader}>
                         <StepIndicator
@@ -100,10 +100,10 @@ const OnboardingWizardContent = memo(({ className }: OnboardingWizardProps) => {
                         />
                     </VStack>
                 )}
-                <VStack gap="24" className={cls.wizardContent}>
-                    <VStack max className={cls.stepWrapper}>
+                <VStack max className={cls.wizardContent}>
+                    <div className={cls.stepWrapper}>
                         <StepComponent />
-                    </VStack>
+                    </div>
                 </VStack>
             </VStack>
         </VStack>

@@ -145,8 +145,8 @@
     "NavAssistants": "Voice Assistants",
     "NavStart": "Get Started",
     "HeroBadge": "Speech Analytics",
-    "HeroTitle": "Understand What Happens in Every Conversation",
-    "HeroSubtitle": "Upload recordings manually or send them automatically via API in real time - get detailed reports with quality scores, sentiment analysis, and AI recommendations.",
+    "HeroTitle": "AI-Powered Call Quality Analytics",
+    "HeroSubtitle": "Upload recordings or send them via API — get transcription, quality scores, sentiment, summaries, and automatic topic tags for every call.",
     "HeroCTA": "Try for Free",
     "HowTitle": "Two Ways to Analyze",
     "HowSubtitle": "Manual upload or automatic integration - choose your path",
@@ -155,13 +155,15 @@
     "Step1bTitle": "Or Send via API",
     "Step1bDesc": "Connect REST API with a project token - recordings from your CRM or PBX are sent and analyzed automatically, in real time. Results arrive via webhook.",
     "Step2Title": "AI Analyzes",
-    "Step2Desc": "The system automatically transcribes the recording (STT), then the LLM scores the conversation across 9 metrics, determines sentiment, highlights key moments, and generates a summary.",
+    "Step2Desc": "The system transcribes the recording (STT), scores the conversation across 9 metrics, detects sentiment, assigns a topic tag, highlights key moments, and generates a summary.",
     "Step3Title": "Get Your Report",
-    "Step3Desc": "Results appear on the dashboard: trend charts, sentiment distribution, average scores, activity heatmap, and AI Insights for spotting trends.",
+    "Step3Desc": "Results appear on the dashboard: quality trends, sentiment distribution, average scores, activity heatmap, topic-tag filters, and AI Insights.",
     "DashboardTitle": "Real-Time Dashboard",
-    "DashboardSubtitle": "KPI cards, charts, donut charts for sentiment and success rates, activity heatmap",
+    "DashboardSubtitle": "KPIs, charts, sentiment, success rates, activity heatmap, and filtering calls by topic",
     "MetricsTitle": "9 Quality Metrics",
-    "MetricsDesc": "Every conversation is scored across 9 criteria. You can choose which metrics to display per project and add your own custom metrics.",
+    "MetricsDesc": "Every conversation is scored across 9 criteria. Choose which metrics to show per project and add your own custom metrics.",
+    "TaggingTitle": "Automatic topic tags",
+    "TaggingDesc": "AI classifies each call by topic and assigns a tag — segment inquiries, report by category, and spot recurring scenarios.",
     "Metric_Качество приветствия": "Greeting Quality",
     "Metric_Следование скрипту": "Script Adherence",
     "Metric_Вежливость и эмпатия": "Politeness & Empathy",
@@ -184,7 +186,7 @@
     "CTAButton": "Start for Free",
     "meta": {
       "title": "Speech Analytics Software for Call Centers | AI PBX",
-      "description": "Analyze call recordings with AI: transcription, quality scoring, sentiment analysis, and custom metrics. API and webhook delivery for call centers.",
+      "description": "Analyze call recordings with AI: transcription, quality scoring, sentiment, topic tags, and custom metrics. API and webhooks for call centers.",
       "schemaName": "AI PBX Speech Analytics"
     },
     "metrics": {
@@ -268,12 +270,6 @@
       "title": "AI Voice Assistant Platform - Cloud PBX",
       "description": "Build voice AI assistants for phone and web. Real-time LLM calls, speech analytics, MCP integrations.",
       "schemaName": "AI PBX"
-    }
-  },
-  "landing": {
-    "demoCta": {
-      "label": "Request a Demo",
-      "subtitle": "See AI PBX in action - no commitment required"
     }
   }
 }
