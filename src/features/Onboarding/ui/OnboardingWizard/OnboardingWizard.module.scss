@@ -351,6 +351,7 @@
 
 .publishCard {
     @include glass-card-tertiary;
+
     width: 100%;
     min-width: 0;
     padding: var(--space-4) var(--space-5);
