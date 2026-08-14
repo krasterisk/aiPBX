@@ -14,6 +14,16 @@ import { Code } from '@/shared/ui/redesigned/Code'
 interface TranscriptionLine {
   speaker: 'operator' | 'customer'
   text: string
+  start?: number
+  end?: number
+}
+
+function formatTurnTs(sec?: number): string | null {
+  if (sec == null || !Number.isFinite(sec) || sec < 0) return null
+  const s = Math.floor(sec)
+  const m = Math.floor(s / 60)
+  const r = s % 60
+  return `${m}:${r.toString().padStart(2, '0')}`
 }
 
 interface ReportShowDialogProps {
@@ -78,6 +88,7 @@ export const ReportShowDialog = memo((props: ReportShowDialogProps) => {
         <VStack gap="24" max>
           {parsedTranscription.map((line, i) => {
             const isOperator = line.speaker === 'operator'
+            const ts = formatTurnTs(line.start)
             return (
               <HStack
                 key={i}
@@ -86,6 +97,7 @@ export const ReportShowDialog = memo((props: ReportShowDialogProps) => {
                 max
               >
                 <VStack gap="4" justify="start">
+                  {ts && <Text text={ts} />}
                   <Text
                     text={isOperator ? t('Оператор') : t('Клиент')}
                     variant={isOperator ? 'accent' : 'warning'}
