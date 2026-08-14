@@ -19,7 +19,7 @@ export function filterSelectableAssistantModels<T extends SelectableAssistantMod
         return models
     }
     return models.filter((model) => (
-        isAssistantModelPublished(model)
-        || Boolean(currentValue && model.name === currentValue)
+        isAssistantModelPublished(model) ||
+        Boolean(currentValue && model.name === currentValue)
     ))
 }
