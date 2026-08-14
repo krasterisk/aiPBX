@@ -3,6 +3,11 @@ import { Combobox } from '@/shared/ui/mui/Combobox'
 import { AutocompleteInputChangeReason, IconButton } from '@mui/material'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import StopIcon from '@mui/icons-material/Stop'
+import { useGetAllModels } from '../../api/aiModelApi'
+import {
+    getVoicesForRealtimeModel,
+    resolveRealtimeVendor,
+} from '../../model/lib/realtimeVoices'
 import cls from './VoiceSelect.module.scss'
 
 interface VoiceSelectProps {
@@ -24,28 +29,10 @@ interface VoiceSelectProps {
   'data-testid'?: string
 }
 
-const GPT_VOICES = ['alloy', 'ash', 'ballad', 'cedar', 'coral', 'echo', 'sage', 'shimmer', 'marin', 'verse']
-
-const QWEN_VOICES = [
-  'Cherry', 'Serena', 'Ethan', 'Chelsie', 'Momo', 'Vivian', 'Moon', 'Maia', 'Kai', 'Nofish',
-  'Bella', 'Jennifer', 'Ryan', 'Katerina', 'Aiden', 'Eldric Sage', 'Mia', 'Mochi', 'Bellona',
-  'Vincent', 'Bunny', 'Neil', 'Elias', 'Arthur', 'Nini', 'Ebona', 'Seren', 'Pip', 'Stella',
-  'Bodega', 'Sonrisa', 'Alek', 'Dolce', 'Sohee', 'Ono Anna', 'Lenn', 'Emilien', 'Andre',
-  'Radio Gol', 'Jada', 'Dylan', 'Li', 'Marcus', 'Roy', 'Peter', 'Sunny', 'Eric', 'Rocky', 'Kiki'
-]
-
-const YANDEX_VOICES = [
-  'alena', 'filipp', 'ermil', 'jane', 'omazh', 'zahar',
-  'dasha', 'julia', 'lera', 'masha', 'marina',
-  'alexander', 'kirill', 'anton',
-  'madi_ru', 'saule_ru', 'zamira_ru', 'zhanar_ru', 'yulduz_ru'
-]
-
-const getVoicePreviewUrl = (voice: string, model?: string): string => {
-  if (model?.startsWith('qwen')) {
+const getVoicePreviewUrl = (voice: string, vendor: string): string => {
+  if (vendor === 'qwen') {
     return `https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/en-US/20250804/beuyzk/${voice}.wav`
   }
-  // Default to GPT
   return `https://cdn.openai.com/API/voice-previews/${voice}.flac`
 }
 
@@ -63,18 +50,22 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
 
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [playingVoice, setPlayingVoice] = useState<string | null>(null)
+  const { data: catalog } = useGetAllModels(null)
 
-  const topics = useMemo(() => {
-    const voiceArray = model?.startsWith('qwen')
-? QWEN_VOICES
-      : model?.startsWith('yandex')
-? YANDEX_VOICES
-        : model?.startsWith('gpt')
-? GPT_VOICES
-          : GPT_VOICES
+  const catalogVendor = useMemo(() => {
+    const item = catalog?.find(m => m.name === model)
+    return item?.realtimeVendor ?? null
+  }, [catalog, model])
 
-    return voiceArray.map(voice => ({ id: voice, name: voice }))
-  }, [model])
+  const vendor = useMemo(
+    () => resolveRealtimeVendor(model, catalogVendor),
+    [model, catalogVendor]
+  )
+
+  const topics = useMemo(
+    () => getVoicesForRealtimeModel(model, catalogVendor).map(voice => ({ id: voice, name: voice })),
+    [model, catalogVendor]
+  )
 
   const selectedValue = useMemo(
     () => topics.find(item => item.id === value) ?? null,
@@ -103,7 +94,7 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
         audioRef.current.pause()
       }
 
-      const url = getVoicePreviewUrl(voice, model)
+      const url = getVoicePreviewUrl(voice, vendor)
       const audio = new Audio(url)
       audioRef.current = audio
 
@@ -118,10 +109,11 @@ export const VoiceSelect = memo((props: VoiceSelectProps) => {
 
       setPlayingVoice(voice)
     }
-  }, [playingVoice, model])
+  }, [playingVoice, vendor])
 
   return (
     <Combobox
+      key={vendor}
       label={label}
       options={topics}
       value={selectedValue}

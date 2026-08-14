@@ -1,7 +1,10 @@
-import { memo, ReactNode } from 'react'
+import { memo, ReactNode, useMemo } from 'react'
+import { useSelector } from 'react-redux'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { AutocompleteInputChangeReason } from '@mui/material'
+import { isUserAdmin } from '@/entities/User'
 import { useGetAllModels } from '../../api/aiModelApi'
+import { filterSelectableAssistantModels } from '../../model/lib/filterSelectableAssistantModels'
 
 interface ModelSelectProps {
   label?: string
@@ -32,14 +35,17 @@ export const ModelSelect = memo((props: ModelSelectProps) => {
     ...otherProps
   } = props
 
+  const isAdmin = useSelector(isUserAdmin)
   const { data } = useGetAllModels(null)
 
-  const modelItems = data?.map(item => ({
-    name: String(item.name),
-    publishName: item.publishName || item.name,
-    realtimeVendor: item.realtimeVendor || undefined,
-    id: item.id
-  })) || []
+  const modelItems = useMemo(() => (
+    filterSelectableAssistantModels(data, isAdmin, value).map(item => ({
+      name: String(item.name),
+      publishName: item.publishName || item.name,
+      realtimeVendor: item.realtimeVendor || undefined,
+      id: item.id,
+    }))
+  ), [data, isAdmin, value])
 
   const selectedValue = modelItems.find(item => item.name === value) || null
 
