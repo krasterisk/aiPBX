@@ -16,6 +16,6 @@
 | 8 | [Payment](./08-payments.md) | Balance, top-up, organizations |
 | 9 | [Calls](./09-calls.md) | CDR journal |
 | 10 | [Knowledge Bases](./10-knowledge-bases.md) | RAG for assistants |
-| 11 | [Analytics](./11-operator-analytics.md) | Projects, upload, API |
+| 11 | [Analytics](./11-operator-analytics.md) | Projects, upload, API, webhooks |
 
 *Updated: July 2026*

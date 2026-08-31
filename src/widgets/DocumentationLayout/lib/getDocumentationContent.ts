@@ -46,7 +46,8 @@ export const DOC_SECTIONS: DocSection[] = [
         titleKey: 'doc_analytics',
         subsections: [
             { id: 'analytics-projects', titleKey: 'doc_analytics_projects', anchor: 'проекты-аналитики' },
-            { id: 'analytics-api', titleKey: 'doc_analytics_api', anchor: 'api-аналитики' }
+            { id: 'analytics-api', titleKey: 'doc_analytics_api', anchor: 'api-аналитики' },
+            { id: 'analytics-webhooks', titleKey: 'doc_analytics_webhooks', anchor: 'oa-webhooks' }
         ]
     },
     {
@@ -79,6 +80,7 @@ const SECTION_FILES: Record<string, string> = {
     analytics: '11-operator-analytics.md',
     'analytics-projects': '11-operator-analytics.md',
     'analytics-api': '11-operator-analytics.md',
+    'analytics-webhooks': '11-operator-analytics.md',
     'ai-bots': '02-assistants.md'
 }
 

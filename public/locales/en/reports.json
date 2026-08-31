@@ -246,6 +246,7 @@
   "Событие: превышен бюджет": "Event: budget exceeded",
   "Событие: аномалия метрик": "Event: metric anomaly",
   "Тест вебхука": "Test Webhook",
+  "WEBHOOK_FORMAT_DOCS": "JSON format and analysis fields — see documentation",
   "Шаблон": "Template",
   "Стандартные": "Defaults",
   "Назад": "Back",

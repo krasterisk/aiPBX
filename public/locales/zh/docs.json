@@ -42,6 +42,7 @@
     "doc_analytics": "分析",
     "doc_analytics_projects": "项目",
     "doc_analytics_api": "API",
+    "doc_analytics_webhooks": "Webhooks",
     "doc_payments": "付款",
     "doc_payments_balance": "余额概览",
     "doc_payments_topup": "充值",

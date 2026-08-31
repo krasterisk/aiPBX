@@ -1,5 +1,6 @@
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import { VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
@@ -68,6 +69,13 @@ export const WizardStep4_Webhook = memo(({
                     value={webhookHeaders}
                     onChange={onChangeHeaders}
                 />
+
+                <Link
+                    to={'/docs?section=analytics-webhooks#oa-webhooks'}
+                    className={cls.webhookDocsLink}
+                >
+                    {String(t('WEBHOOK_FORMAT_DOCS'))}
+                </Link>
 
                 <VStack gap={'8'} max>
                     <Text text={String(t('События'))} bold size={'s'} />

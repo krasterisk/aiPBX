@@ -42,6 +42,7 @@
     "doc_analytics": "Analyse",
     "doc_analytics_projects": "Projekte",
     "doc_analytics_api": "API",
+    "doc_analytics_webhooks": "Webhooks",
     "doc_payments": "Zahlung",
     "doc_payments_balance": "Kontostand",
     "doc_payments_topup": "Aufladen",

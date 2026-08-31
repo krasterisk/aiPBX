@@ -28,6 +28,27 @@ POST /api/operator-analytics/analyze-file
 
 Token is bound to one project at creation time.
 
+<a id="oa-webhooks"></a>
+
+## Webhooks
+
+Configure under **Analytics → Projects → Settings → Webhooks**.
+
+Every request is `POST` JSON:
+
+```json
+{
+  "event": "analysis.completed",
+  "projectId": 12,
+  "timestamp": "2026-08-31T08:26:14.382Z",
+  "data": {}
+}
+```
+
+`analysis.completed` `data` includes the full call analysis: `recordId`, `filename`, `metrics`, `customMetrics`, `transcription`, `turns`, `assessments`, `topics`, quality and metadata. See the [English webhook reference](../en/11-operator-analytics.md#webhooks) for the complete field table.
+
+Other events: `analysis.error`, `budget.exceeded`, `anomaly.detected`. Success = HTTP 2xx, timeout 10 s, up to 3 retries. No HMAC — use your own headers.
+
 ## See also
 
 - [Calls](./09-calls.md)

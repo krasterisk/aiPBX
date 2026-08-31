@@ -369,6 +369,13 @@
     width: 100%;
 }
 
+.webhookDocsLink {
+    font-size: 13px;
+    color: var(--accent-redesigned);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
 .digestChip {
     display: inline-flex;
     align-items: center;
