@@ -1,5 +1,6 @@
-import { memo, useState, useCallback } from 'react'
+import { memo, useState, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import { IconButton, Skeleton } from '@mui/material'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import KeyIcon from '@mui/icons-material/Key'
@@ -14,6 +15,7 @@ import { Modal } from '@/shared/ui/redesigned/Modal'
 import { Textarea } from '@/shared/ui/mui/Textarea'
 import { ProjectSelect } from '../ProjectSelect/ProjectSelect'
 import { useGenerateOperatorApiToken, useListOperatorApiTokens, useRevokeOperatorApiToken, useDeleteOperatorApiToken, OperatorApiToken } from '@/entities/Report'
+import { ClientSelect, isUserAdmin, useGetAllUsers } from '@/entities/User'
 import { toast } from 'react-toastify'
 import cls from './OperatorApiTokens.module.scss'
 
@@ -21,11 +23,12 @@ import cls from './OperatorApiTokens.module.scss'
 
 interface TokenItemProps {
     token: OperatorApiToken
+    ownerLabel?: string
     onRevoke: (id: string) => void // PATCH /revoke - деактивация
     onDelete: (id: string) => void // DELETE - физическое удаление
 }
 
-const TokenItem = memo(({ token, onRevoke, onDelete }: TokenItemProps) => {
+const TokenItem = memo(({ token, ownerLabel, onRevoke, onDelete }: TokenItemProps) => {
     const { t } = useTranslation('reports')
     const [confirm, setConfirm] = useState(false)
     const preview = token.preview ? `${token.preview}...` : '••••••••••••••••'
@@ -48,6 +51,9 @@ const TokenItem = memo(({ token, onRevoke, onDelete }: TokenItemProps) => {
                     <VStack gap={'4'}>
                         <HStack gap={'8'} align={'center'}>
                             <Text text={token.name} bold />
+                            {ownerLabel && (
+                                <span className={cls.projectTag}>{ownerLabel}</span>
+                            )}
                             {token.projectName && (
                                 <span className={cls.projectTag}>{token.projectName}</span>
                             )}
@@ -97,9 +103,10 @@ const TokenItem = memo(({ token, onRevoke, onDelete }: TokenItemProps) => {
 interface GenerateModalProps {
     open: boolean
     onClose: () => void
+    ownerUserId?: string
 }
 
-const GenerateModal = memo(({ open, onClose }: GenerateModalProps) => {
+const GenerateModal = memo(({ open, onClose, ownerUserId }: GenerateModalProps) => {
     const { t } = useTranslation('reports')
     const [generateToken, { isLoading }] = useGenerateOperatorApiToken()
     const [tokenName, setTokenName] = useState('')
@@ -110,14 +117,18 @@ const GenerateModal = memo(({ open, onClose }: GenerateModalProps) => {
     const handleGenerate = useCallback(async () => {
         if (!tokenName.trim()) return
         try {
-            const result = await generateToken({ name: tokenName.trim(), projectId: projectId || undefined }).unwrap()
+            const result = await generateToken({
+                name: tokenName.trim(),
+                projectId: projectId || undefined,
+                ownerUserId: ownerUserId || undefined,
+            }).unwrap()
             setGeneratedToken(result.token)
             setTokenName('')
             setProjectId('')
         } catch (err: any) {
             if (!err?.status) toast.error(String(t('Ошибка сети')))
         }
-    }, [tokenName, projectId, generateToken, t])
+    }, [tokenName, projectId, ownerUserId, generateToken, t])
 
     const handleCopy = useCallback(() => {
         if (!generatedToken) return
@@ -471,10 +482,21 @@ error       - ${t('ошибка анализа, см. errorMessage')}`}</pre>
 
 export const OperatorApiTokens = memo(() => {
     const { t } = useTranslation('reports')
-    const { data: tokens, isLoading } = useListOperatorApiTokens()
+    const isAdmin = useSelector(isUserAdmin)
+    const [filterUserId, setFilterUserId] = useState('')
+    const { data: tokens, isLoading } = useListOperatorApiTokens(isAdmin ? (filterUserId || undefined) : undefined)
+    const { data: allUsers } = useGetAllUsers(null, { skip: !isAdmin })
     const [revokeToken] = useRevokeOperatorApiToken()
     const [deleteToken] = useDeleteOperatorApiToken()
     const [showModal, setShowModal] = useState(false)
+
+    const ownerNameById = useMemo(() => {
+        const map: Record<string, string> = {}
+        for (const user of allUsers || []) {
+            map[String(user.id)] = user.name || user.email || String(user.id)
+        }
+        return map
+    }, [allUsers])
 
     const handleRevoke = useCallback(async (id: string) => {
         try {
@@ -507,6 +529,15 @@ export const OperatorApiTokens = memo(() => {
                 </Button>
             </HStack>
 
+            {isAdmin && (
+                <ClientSelect
+                    label={String(t('Клиент'))}
+                    clientId={filterUserId}
+                    allowAll
+                    onChangeClient={setFilterUserId}
+                />
+            )}
+
             {isLoading
                 ? [1, 2].map(i => <Skeleton key={i} variant={'rounded'} height={72} className={cls.skeleton} />)
                 : (
@@ -516,6 +547,9 @@ export const OperatorApiTokens = memo(() => {
                                 <TokenItem
                                     key={tok.id}
                                     token={tok}
+                                    ownerLabel={isAdmin && !filterUserId
+                                        ? ownerNameById[String(tok.userId ?? '')]
+                                        : undefined}
                                     onRevoke={handleRevoke}
                                     onDelete={handleDelete}
                                 />
@@ -536,7 +570,11 @@ export const OperatorApiTokens = memo(() => {
 
             <ApiDocs />
 
-            <GenerateModal open={showModal} onClose={() => { setShowModal(false) }} />
+            <GenerateModal
+                open={showModal}
+                onClose={() => { setShowModal(false) }}
+                ownerUserId={isAdmin ? (filterUserId || undefined) : undefined}
+            />
         </VStack>
     )
 })

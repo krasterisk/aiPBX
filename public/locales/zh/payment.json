@@ -137,6 +137,8 @@
   "documents.table.pdf": "PDF",
   "documents.table.actions": "操作",
   "documents.actions.openPdf": "PDF",
+  "documents.actions.openingPdf": "生成中...",
+  "documents.actions.openingPdfHint": "正在生成文档，将在新标签页打开",
   "documents.actions.delete": "删除",
   "documents.actions.edit": "编辑",
   "documents.confirmDelete": "删除此文档？",

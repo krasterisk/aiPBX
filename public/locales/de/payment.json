@@ -136,6 +136,8 @@
   "documents.table.pdf": "PDF",
   "documents.table.actions": "Aktionen",
   "documents.actions.openPdf": "PDF",
+  "documents.actions.openingPdf": "Wird erstellt...",
+  "documents.actions.openingPdfHint": "Das Dokument wird erstellt und in einem neuen Tab geöffnet",
   "documents.actions.delete": "Löschen",
   "documents.actions.edit": "Bearbeiten",
   "documents.confirmDelete": "Dieses Dokument löschen?",

@@ -140,6 +140,8 @@
   "documents.table.pdf": "PDF",
   "documents.table.actions": "Действия",
   "documents.actions.openPdf": "PDF",
+  "documents.actions.openingPdf": "Формирование...",
+  "documents.actions.openingPdfHint": "Документ формируется, откроется в новой вкладке",
   "documents.actions.delete": "Удалить",
   "documents.actions.edit": "Редактировать",
   "documents.confirmDelete": "Удалить этот документ?",

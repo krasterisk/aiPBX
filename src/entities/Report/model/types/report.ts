@@ -636,6 +636,7 @@ export interface OperatorApiToken {
   createdAt: string
   lastUsedAt?: string
   isActive: boolean
+  userId?: string
   projectId?: string
   projectName?: string
 }

@@ -268,7 +268,10 @@ export const reportApi = rtkApi.injectEndpoints({
       }),
       invalidatesTags: ['OperatorProjects']
     }),
-    generateOperatorApiToken: build.mutation<{ token: string } & OperatorApiToken, { name: string, projectId?: string }>({
+    generateOperatorApiToken: build.mutation<
+      { token: string } & OperatorApiToken,
+      { name: string, projectId?: string, ownerUserId?: string }
+    >({
       query: (body) => ({
         url: '/operator-analytics/tokens/generate', // POST /api/operator-analytics/tokens/generate
         method: 'POST',
@@ -276,8 +279,11 @@ export const reportApi = rtkApi.injectEndpoints({
       }),
       invalidatesTags: ['OperatorApiTokens']
     }),
-    listOperatorApiTokens: build.query<OperatorApiToken[], void>({
-      query: () => '/operator-analytics/tokens', // GET /api/operator-analytics/tokens
+    listOperatorApiTokens: build.query<OperatorApiToken[], string | void>({
+      query: (userId) => ({
+        url: '/operator-analytics/tokens',
+        params: userId ? { userId } : undefined,
+      }),
       providesTags: ['OperatorApiTokens']
     }),
     revokeOperatorApiToken: build.mutation<void, string>({

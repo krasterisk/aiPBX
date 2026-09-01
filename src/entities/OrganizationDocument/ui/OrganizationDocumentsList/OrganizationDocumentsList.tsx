@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import type { CellContext } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { ExternalLink } from 'lucide-react'
+import { ExternalLink, Loader2 } from 'lucide-react'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
@@ -34,6 +34,7 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
     const { t } = useTranslation('payment')
     const [deleteDocument, { isLoading: isDeleting }] = useDeleteOrganizationDocumentMutation()
     const [documentToEdit, setDocumentToEdit] = useState<OrganizationDocument | null>(null)
+    const [openingPdfId, setOpeningPdfId] = useState<string | null>(null)
 
     const { data, isLoading, isError } = useGetOrganizationDocumentsQuery(organizationId, {
         skip: !organizationId,
@@ -65,6 +66,18 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
     const handleCloseEdit = useCallback(() => {
         setDocumentToEdit(null)
     }, [])
+
+    const handleOpenPdf = useCallback(async (doc: OrganizationDocument) => {
+        const docId = String(doc.id)
+        setOpeningPdfId(docId)
+        try {
+            await openOrganizationDocumentPdf(organizationId, docId)
+        } catch (e) {
+            console.error(e)
+        } finally {
+            setOpeningPdfId(null)
+        }
+    }, [organizationId])
 
     const columns = useMemo(() => [
         {
@@ -170,11 +183,18 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
                         {showPdf && (
                             <Button
                                 variant="glass-action"
+                                disabled={openingPdfId !== null}
+                                aria-busy={openingPdfId === String(doc.id)}
+                                addonLeft={openingPdfId === String(doc.id)
+                                    ? <Loader2 size={16} className={cls.spin} />
+                                    : undefined}
                                 onClick={() => {
-                                    void openOrganizationDocumentPdf(organizationId, doc.id)
+                                    void handleOpenPdf(doc)
                                 }}
                             >
-                                {t('documents.actions.openPdf')}
+                                {openingPdfId === String(doc.id)
+                                    ? t('documents.actions.openingPdf')
+                                    : t('documents.actions.openPdf')}
                             </Button>
                         )}
                         {canDeleteDocuments && (
@@ -204,7 +224,7 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
                 )
             },
         },
-    ], [t, organizationId, canDeleteDocuments, handleDeleteDocument, isDeleting])
+    ], [t, organizationId, canDeleteDocuments, handleDeleteDocument, handleOpenPdf, isDeleting, openingPdfId])
 
     if (isLoading) {
         return (
@@ -229,6 +249,12 @@ export const OrganizationDocumentsList = memo((props: OrganizationDocumentsListP
     return (
         <VStack gap="16" max>
             <Text title={t('documents.title')} size="s" bold />
+            {openingPdfId && (
+                <HStack gap="8" align="center" className={cls.pdfStatus} role="status" aria-live="polite">
+                    <Loader2 size={18} className={cls.spin} />
+                    <Text text={t('documents.actions.openingPdfHint')} size="s" />
+                </HStack>
+            )}
             <Table data={rows} columns={columns} rowVariant="glass" />
             {canDeleteDocuments && (
                 <OrganizationDocumentEditModal

@@ -139,6 +139,8 @@
   "documents.table.pdf": "PDF",
   "documents.table.actions": "Actions",
   "documents.actions.openPdf": "PDF",
+  "documents.actions.openingPdf": "Preparing...",
+  "documents.actions.openingPdfHint": "The document is being prepared and will open in a new tab",
   "documents.actions.delete": "Delete",
   "documents.actions.edit": "Edit",
   "documents.confirmDelete": "Delete this document?",
