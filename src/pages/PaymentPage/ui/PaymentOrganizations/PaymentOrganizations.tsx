@@ -47,14 +47,13 @@ export const PaymentOrganizations = memo((props: PaymentOrganizationsProps) => {
 
     const billingOwnerUserId = useSelector(getBillingOwnerUserId)
 
-    const [listUserId, setListUserId] = useState(billingOwnerUserId || userId)
+    const [listUserId, setListUserId] = useState(isAdmin ? '' : (billingOwnerUserId || userId))
 
     useEffect(() => {
         if (isAdmin) {
-            setListUserId(billingOwnerUserId || userId)
-        } else {
-            setListUserId(billingOwnerUserId)
+            return
         }
+        setListUserId(billingOwnerUserId || userId)
     }, [isAdmin, billingOwnerUserId, userId])
 
     const [isAddOrgModalOpen, setIsAddOrgModalOpen] = useState(false)

@@ -28,6 +28,7 @@ import {
 import { WizardReviewSection } from './WizardReviewSection'
 import { WizardHeader } from './WizardHeader'
 import { TaxonomyEditor } from './TaxonomyEditor'
+import { SectionChevron } from './SectionChevron'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Text } from '@/shared/ui/redesigned/Text'
 import cls from './ProjectWizard.module.scss'
@@ -59,6 +60,9 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
     const [budgetInput, setBudgetInput] = useState(
         editProject.monthlyBudgetUsd != null ? String(editProject.monthlyBudgetUsd) : '',
     )
+    const [showPrompt, setShowPrompt] = useState(false)
+    const [showBudget, setShowBudget] = useState(false)
+    const [showTaxonomy, setShowTaxonomy] = useState(false)
 
     const handleSave = useCallback(async () => {
         try {
@@ -109,12 +113,14 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
     }, [name, description, systemPrompt, customMetrics, callTaxonomy, visibleDefaults, webhookUrl, webhookHeaders, webhookEvents, digestConfig, alertConfig, budgetInput, editProject, updateProject, dispatch, onClose, onSuccess, t])
 
     return (
-        <VStack gap={'16'} max className={cls.ProjectWizard}>
+        <VStack gap={'16'} max align={'stretch'} className={`${cls.ProjectWizard} ${cls.ProjectSettings}`}>
             <WizardHeader
                 title={name.trim() || String(t('Настройки проекта'))}
                 onClose={onClose}
             />
 
+            <div className={cls.settingsScroll}>
+            <VStack gap={'16'} max align={'stretch'}>
             <HStack gap={'12'} max wrap={'wrap'}>
                 <Textarea
                     label={String(t('Название проекта'))}
@@ -134,37 +140,74 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                 />
             </HStack>
 
-            <Textarea
-                label={String(t('Системный промпт'))}
-                value={systemPrompt}
-                onChange={e => dispatch(projectWizardActions.setSystemPrompt(e.target.value))}
-                size={'small'}
-                fullWidth
-                multiline
-                rows={4}
-            />
-
-            <Textarea
-                label={String(t('Месячный бюджет, USD (0 - без лимита)'))}
-                value={budgetInput}
-                onChange={e => { setBudgetInput(e.target.value) }}
-                size={'small'}
-                fullWidth
-                multiline={false}
-                type={'number'}
-            />
+            <Card variant={'glass'} border={'partial'} padding={'16'} max>
+                <VStack gap={'8'} max>
+                    <HStack max justify={'between'} align={'center'}
+                        onClick={() => { setShowPrompt(prev => !prev) }}
+                        className={cls.clickable}>
+                        <Text text={String(t('Системный промпт'))} bold />
+                        <SectionChevron open={showPrompt} />
+                    </HStack>
+                    {showPrompt && (
+                        <Textarea
+                            value={systemPrompt}
+                            onChange={e => dispatch(projectWizardActions.setSystemPrompt(e.target.value))}
+                            size={'small'}
+                            fullWidth
+                            multiline
+                            rows={4}
+                            sx={{
+                                '& .MuiOutlinedInput-root.MuiInputBase-multiline': {
+                                    padding: '12px',
+                                },
+                            }}
+                        />
+                    )}
+                </VStack>
+            </Card>
 
             <Card variant={'glass'} border={'partial'} padding={'16'} max>
                 <VStack gap={'12'} max>
-                    <Text text={String(t('Темы звонков'))} bold />
-                    <TaxonomyEditor
-                        taxonomy={callTaxonomy}
-                        onChange={(taxonomy) => dispatch(projectWizardActions.setCallTaxonomy(taxonomy))}
-                    />
+                    <HStack max justify={'between'} align={'center'}
+                        onClick={() => { setShowTaxonomy(prev => !prev) }}
+                        className={cls.clickable}>
+                        <Text text={String(t('Темы звонков'))} bold />
+                        <SectionChevron open={showTaxonomy} />
+                    </HStack>
+                    {showTaxonomy && (
+                        <TaxonomyEditor
+                            taxonomy={callTaxonomy}
+                            onChange={(taxonomy) => dispatch(projectWizardActions.setCallTaxonomy(taxonomy))}
+                        />
+                    )}
                 </VStack>
             </Card>
 
             <WizardReviewSection />
+
+            <Card variant={'glass'} border={'partial'} padding={'16'} max>
+                <VStack gap={'8'} max>
+                    <HStack max justify={'between'} align={'center'}
+                        onClick={() => { setShowBudget(prev => !prev) }}
+                        className={cls.clickable}>
+                        <Text text={String(t('Месячный бюджет'))} bold />
+                        <SectionChevron open={showBudget} />
+                    </HStack>
+                    {showBudget && (
+                        <Textarea
+                            label={String(t('USD (0 - без лимита)'))}
+                            value={budgetInput}
+                            onChange={e => { setBudgetInput(e.target.value) }}
+                            size={'small'}
+                            fullWidth
+                            multiline={false}
+                            type={'number'}
+                        />
+                    )}
+                </VStack>
+            </Card>
+            </VStack>
+            </div>
 
             <HStack max justify={'end'} align={'center'} gap={'12'} wrap={'wrap'} className={cls.navSeparator}>
                 <Button variant={'glass-action'} color={'success'} onClick={handleSave}

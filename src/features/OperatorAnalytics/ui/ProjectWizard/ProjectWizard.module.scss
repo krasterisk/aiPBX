@@ -6,6 +6,34 @@
     margin: -8px auto 0;
 }
 
+.ProjectSettings {
+    flex: 1;
+    height: 100%;
+    min-height: 0;
+
+    .wizardHeader {
+        position: static;
+        top: auto;
+        padding-top: 0;
+        flex-shrink: 0;
+        background: transparent;
+    }
+}
+
+.settingsScroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    box-sizing: border-box;
+    // overflow-y:auto also clips X (CSS Overflow: visible on the other axis
+    // computes to auto). Full-width card shadows need room inside the scrollport.
+    padding: 16px 16px 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    @include custom-scrollbar;
+}
+
 .wizardHeader {
     position: sticky;
     top: -20px;
@@ -44,6 +72,31 @@
 
 .clickable {
     cursor: pointer;
+    padding: 4px 2px;
+    margin: -4px -2px;
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast);
+
+    &:hover {
+        background: var(--glass-overlay-light);
+
+        .sectionChevron {
+            color: var(--accent-redesigned);
+        }
+    }
+}
+
+.sectionChevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--icon-redesigned);
+    transition: transform 0.2s ease, color var(--transition-fast);
+}
+
+.sectionChevronOpen {
+    transform: rotate(180deg);
 }
 
 // ─── Method Chooser ───────────────────────────────────────────────────────────
@@ -229,6 +282,7 @@
 .navSeparator {
     padding-top: var(--space-4);
     border-top: 1px solid var(--glass-border-primary);
+    flex-shrink: 0;
 }
 
 // ─── Template Cards ───────────────────────────────────────────────────────────

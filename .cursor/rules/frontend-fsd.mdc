@@ -14,6 +14,12 @@ Architecture: Feature-Sliced Design (`app → pages → widgets → features →
 - Do not add code to `shared/ui/deprecated/`
 - Prefer `redesign-v3` components over MUI where equivalents exist
 
+## Overflow vs glass shadows
+
+Do **not** put `overflow-y: auto`, `overflow: hidden`, or `overflow-x: auto` on `Page` / `.PageRedesigned` / a table wrapper that contains glass cards or `Table` `rowVariant="glass"`. CSS Overflow: if one axis is not `visible`, the other computes to `auto` and **clips `box-shadow`**. Padding inside the clipper does not fix it.
+
+Pattern (CallsTable / shared `Table` `.TableWrapper`): no overflow on the shadow parent; page `overflow: visible`; narrow screens use `display: block` rows, not an X-scroll wrapper. Full rule: `.docs/FRONTEND_ARCHITECTURE.md` («Overflow не клипает тени»).
+
 ## API layer
 
 - RTK Query endpoints in `entities/*/api/*Api.ts`, injected via `rtkApi`

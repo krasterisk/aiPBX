@@ -32,6 +32,7 @@ import { WizardStep3_DefaultMetrics } from './WizardStep3_DefaultMetrics'
 import { WizardStep4_Webhook } from './WizardStep4_Webhook'
 import { WizardStep_DigestSettings } from './WizardStep_DigestSettings'
 import { WizardStep_AlertSettings } from './WizardStep_AlertSettings'
+import { SectionChevron } from './SectionChevron'
 import cls from './ProjectWizard.module.scss'
 
 export const WizardReviewSection = memo(() => {
@@ -62,7 +63,7 @@ export const WizardReviewSection = memo(() => {
                         onClick={() => { setShowCustom(prev => !prev) }}
                         className={cls.clickable}>
                         <Text text={String(t('Кастомные метрики'))} bold />
-                        <Text text={showCustom ? '▲' : '▼'} />
+                        <SectionChevron open={showCustom} />
                     </HStack>
                     {showCustom && (
                         <WizardStep2_MetricBuilder
@@ -82,7 +83,7 @@ export const WizardReviewSection = memo(() => {
                         onClick={() => { setShowDefault(prev => !prev) }}
                         className={cls.clickable}>
                         <Text text={String(t('Стандартные метрики'))} bold />
-                        <Text text={showDefault ? '▲' : '▼'} />
+                        <SectionChevron open={showDefault} />
                     </HStack>
                     {showDefault && (
                         <WizardStep3_DefaultMetrics
@@ -100,7 +101,7 @@ export const WizardReviewSection = memo(() => {
                         onClick={() => dispatch(projectWizardActions.setShowWebhooks(!showWebhooks))}
                         className={cls.clickable}>
                         <Text text={String(t('Webhooks (опционально)'))} bold />
-                        <Text text={showWebhooks ? '▲' : '▼'} />
+                        <SectionChevron open={showWebhooks} />
                     </HStack>
                     {showWebhooks && (
                         <WizardStep4_Webhook
@@ -121,7 +122,7 @@ export const WizardReviewSection = memo(() => {
                         onClick={() => dispatch(projectWizardActions.setShowDigest(!showDigest))}
                         className={cls.clickable}>
                         <Text text={String(t('NOTIFICATIONS_SECTION_TITLE'))} bold />
-                        <Text text={showDigest ? '▲' : '▼'} />
+                        <SectionChevron open={showDigest} />
                     </HStack>
                     {showDigest && (
                         <VStack gap={'16'} max>

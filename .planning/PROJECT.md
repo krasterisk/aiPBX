@@ -80,6 +80,7 @@ Disabled modules: `AmiModule`, `VoskServerModule` (commented in `app.module.ts`)
 3. New UI in `redesign-v3` only
 4. i18n: ru + en minimum for user-facing strings
 5. Definition of Done: lint passes, unit test, manual telephony checklist for voice changes
+6. Glass cards / table rows: never `overflow` on `Page` or the table wrapper — clips `box-shadow`. Pattern: CallsTable / `.docs/FRONTEND_ARCHITECTURE.md` («Overflow не клипает тени»)
 
 ## Current Focus
 

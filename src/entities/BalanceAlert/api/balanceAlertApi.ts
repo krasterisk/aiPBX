@@ -22,7 +22,7 @@ function invalidateBalanceAlertsTags(
     const id = ownerUserId != null && String(ownerUserId) !== '' ? String(ownerUserId) : ''
 
     if (id) {
-        return [alertsTag(id)]
+        return [alertsTag(id), { type: 'BalanceAlerts' }]
     }
 
     return [{ type: 'BalanceAlerts' }]

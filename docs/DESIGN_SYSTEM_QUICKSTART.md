@@ -189,6 +189,7 @@ var(--status-info)                // #3b82f6
 - [ ] Импортировать `@import '@/app/styles/variables/mixins';`
 - [ ] Использовать `@include glass-card-primary` для карточки
 - [ ] Добавить `@include hover-lift-card` для интерактивности
+- [ ] Родитель карточки/таблицы без `overflow` — иначе клипается `box-shadow` (паттерн CallsTable)
 - [ ] Использовать `var(--card-padding-md)` вместо hardcoded padding
 - [ ] Использовать `var(--space-*)` для gap/margin
 - [ ] Использовать `@include divider-gradient` для разделителей

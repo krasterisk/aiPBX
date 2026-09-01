@@ -1,5 +1,5 @@
 import cls from './Modal.module.scss'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect, useRef } from 'react'
 import { classNames, Mods } from '@/shared/lib/classNames/classNames'
 import { Portal } from '../Portal/Portal'
 import { Overlay } from '../Overlay/Overlay'
@@ -9,6 +9,27 @@ import { Icon } from '../Icon'
 import CloseIcon from '@/shared/assets/icons/close.svg'
 
 export type ModalSize = 'narrow' | 'wide'
+
+function shouldBlockBackgroundWheel(
+    root: HTMLElement,
+    target: EventTarget | null,
+    deltaY: number,
+): boolean {
+    let node = target instanceof HTMLElement ? target : null
+    while (node && root.contains(node)) {
+        const overflowY = window.getComputedStyle(node).overflowY
+        const canScroll = (overflowY === 'auto' || overflowY === 'scroll') &&
+            node.scrollHeight > node.clientHeight + 1
+        if (canScroll) {
+            if (deltaY < 0 && node.scrollTop <= 0) return true
+            if (deltaY > 0 && node.scrollTop + node.clientHeight >= node.scrollHeight - 1) return true
+            return false
+        }
+        if (node === root) break
+        node = node.parentElement
+    }
+    return true
+}
 
 interface ModalProps {
   className?: string
@@ -39,8 +60,25 @@ export const Modal = (props: ModalProps) => {
   } = props
 
   const { close, isClosing, isMounted } = useModal({ animationDelay: 300, onClose, isOpen })
+  const rootRef = useRef<HTMLDivElement>(null)
 
   const { theme } = useTheme()
+
+  useEffect(() => {
+      const root = rootRef.current
+      if (!root || !isOpen) return
+
+      const onWheel = (event: WheelEvent) => {
+          if (shouldBlockBackgroundWheel(root, event.target, event.deltaY)) {
+              event.preventDefault()
+          }
+      }
+
+      root.addEventListener('wheel', onWheel, { passive: false })
+      return () => {
+          root.removeEventListener('wheel', onWheel)
+      }
+  }, [isOpen])
 
   const mods: Mods = {
     [cls.opened]: isOpen,
@@ -55,7 +93,9 @@ export const Modal = (props: ModalProps) => {
 
   return (
     <Portal element={document.getElementById('app') ?? document.body}>
-      <div className={classNames(cls.Modal, mods, [
+      <div
+        ref={rootRef}
+        className={classNames(cls.Modal, mods, [
         className,
         theme,
         'app_modal',

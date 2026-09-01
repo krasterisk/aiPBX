@@ -320,6 +320,7 @@
 **UI / copy conventions (required for new work):**
 - Do **not** use the em dash (`—`, U+2014) in user-facing labels, button text, hints, empty states, or i18n keys/values. Use a regular hyphen `-` (U+002D) or rephrase.
 - Do **not** use emoji in cabinet UI, i18n strings, or textual labels/descriptions. Use shared icon components (e.g. Lucide) instead.
+- Do **not** set `overflow` on `Page` / a glass-card list / `.TableWrapper`. `overflow-x: auto` + `overflow-y: visible` still clips shadows. Pattern: `CallsTable` (no overflow); page modules use `overflow: visible`. Full rule: `.docs/FRONTEND_ARCHITECTURE.md` («Overflow не клипает тени»).
 - Full frontend rules: `.docs/FRONTEND_ARCHITECTURE.md` (section «Тексты в UI»).
 
 **Observability:** Sentry on both repos; Yandex Metrika + GA4 via `src/shared/config/analytics/initAnalytics.ts`

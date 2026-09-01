@@ -55,3 +55,31 @@
     border-radius: var(--radius-lg) !important;
     background: var(--glass-bg-secondary) !important;
 }
+
+.settingsModal {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: min(960px, 92vw) !important;
+    max-width: min(960px, 92vw) !important;
+    height: min(760px, calc(100dvh - 32px)) !important;
+    max-height: calc(100dvh - 32px) !important;
+    overflow: hidden !important;
+
+    @include tablet {
+        width: 95% !important;
+        max-width: 95% !important;
+        height: calc(100dvh - 20px) !important;
+        max-height: calc(100dvh - 20px) !important;
+        padding: 12px;
+    }
+
+    @include mobile {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        padding: 10px;
+        border-radius: 0;
+    }
+}

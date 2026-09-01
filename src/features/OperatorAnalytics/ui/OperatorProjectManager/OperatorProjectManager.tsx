@@ -192,7 +192,13 @@ export const OperatorProjectManager = memo(() => {
                 }
 
                 {/* Wizard modal (create + edit) */}
-                <Modal isOpen={showWizardModal} onClose={handleCloseWizard} lazy size={'wide'}>
+                <Modal
+                    isOpen={showWizardModal}
+                    onClose={handleCloseWizard}
+                    lazy
+                    size={'wide'}
+                    contentClassName={wizardTarget ? cls.settingsModal : undefined}
+                >
                     <ProjectWizard
                         editProject={wizardTarget}
                         onClose={handleCloseWizard}

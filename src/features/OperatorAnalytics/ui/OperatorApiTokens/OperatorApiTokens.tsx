@@ -222,6 +222,7 @@ const DocEntry = memo(({ method, path, description, fullUrl, children }: DocEntr
                 type={'button'}
                 className={cls.docEntryHeader}
                 onClick={() => { setOpen(p => !p) }}
+                aria-expanded={open}
             >
                 <HStack gap={'12'} align={'center'} className={cls.docEntryTitle}>
                     <span className={`${cls.method} ${method === 'GET' ? cls.methodGet : ''}`}>

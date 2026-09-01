@@ -89,7 +89,8 @@ app/ → pages/ → widgets/ → features/ → entities/ → shared/
 **UI / copy conventions (required for new work):**
 - No em dash (`—`, U+2014) in labels, buttons, hints, empty states, or i18n keys/values - use hyphen `-` or rephrase.
 - No emoji in cabinet UI, i18n, or textual labels/descriptions - use shared icons (Lucide etc.).
-- Details: `.docs/FRONTEND_ARCHITECTURE.md` («Тексты в UI»).
+- No `overflow` (`auto` / `hidden` / `scroll`) on `Page`, `.PageRedesigned`, or a table wrapper that owns glass cards / `rowVariant="glass"` rows. One-axis overflow clips the other (CSS Overflow) and cuts `box-shadow`. Reference: CallsTable, shared `Table` `.TableWrapper`.
+- Details: `.docs/FRONTEND_ARCHITECTURE.md` — «Тексты в UI», «Overflow не клипает тени».
 
 **UI generations (tech debt):**
 - `shared/ui/deprecated/` — do not use

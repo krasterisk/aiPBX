@@ -37,14 +37,14 @@ export const UsageLimitsPanel = memo((props: UsageLimitsPanelProps) => {
     const billingOwnerUserId = useSelector(getBillingOwnerUserId)
     const userId = String(authData?.id ?? '')
 
-    const [filterUserId, setFilterUserId] = useState(billingOwnerUserId || userId)
+    const [filterUserId, setFilterUserId] = useState('')
     const ownerUserId = isAdmin ? filterUserId : (billingOwnerUserId || userId)
 
     const [modalOpen, setModalOpen] = useState(false)
     const [editing, setEditing] = useState<BalanceThresholdAlert | null>(null)
 
     const { data: alerts, isLoading, isError } = useGetBalanceAlertsQuery(ownerUserId, {
-        skip: !ownerUserId,
+        skip: !isAdmin && !ownerUserId,
     })
 
     const [deleteAlert, { isLoading: isDeleting }] = useDeleteBalanceAlertMutation()
@@ -65,7 +65,10 @@ export const UsageLimitsPanel = memo((props: UsageLimitsPanelProps) => {
     const handleDelete = useCallback(async (row: BalanceThresholdAlert) => {
         if (!window.confirm(String(t('limits.deleteConfirm')))) return
         try {
-            await deleteAlert({ id: row.id, ownerUserId }).unwrap()
+            await deleteAlert({
+                id: row.id,
+                ownerUserId: String(row.ownerUserId || ownerUserId),
+            }).unwrap()
         } catch (e) {
             console.error(e)
         }
@@ -123,7 +126,7 @@ export const UsageLimitsPanel = memo((props: UsageLimitsPanelProps) => {
         },
     ], [t, currencyLabel, openEdit, handleDelete, isDeleting])
 
-    if (!ownerUserId) {
+    if (!isAdmin && !ownerUserId) {
         return null
     }
 
@@ -138,7 +141,8 @@ export const UsageLimitsPanel = memo((props: UsageLimitsPanelProps) => {
                 <ClientSelect
                     label={String(t('organization.form.client'))}
                     clientId={filterUserId}
-                    onChangeClient={(id) => { setFilterUserId(id || userId) }}
+                    allowAll
+                    onChangeClient={(id) => { setFilterUserId(id) }}
                 />
             )}
 

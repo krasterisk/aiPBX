@@ -186,6 +186,8 @@ src/app/styles/
 - Добавляется большая тень и акцентный glow
 - Граница становится голубой
 
+**Не клипать тень:** не ставить `overflow` (`auto` / `hidden` / `scroll`) на `Page`, список карточек или обёртку таблицы. Одна ось overflow по спецификации клипает и вторую — `box-shadow` обрезается. Эталон: `CallsTable` / `.TableWrapper` без overflow. Подробно: `.docs/FRONTEND_ARCHITECTURE.md` («Overflow не клипает тени»).
+
 ### Интерактивные элементы
 
 ```scss

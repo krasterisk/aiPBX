@@ -11,6 +11,7 @@ Before coding, read:
 - `.planning/PROJECT.md` — context and agent rules
 - `.planning/GAPS.md` — prioritized backlog
 - `.planning/intel/RISKS.md` — before touching telephony/billing
+- Frontend layout / glass UI: `.docs/FRONTEND_ARCHITECTURE.md` (overflow must not clip card/table shadows)
 
 Backend repo: `c:/Users/Professional/WebstormProjects/aiPBX_backend` (sibling).
 

@@ -1,6 +1,6 @@
 # DOCS-INDEX — Documentation Registry
 
-Last updated: 2026-06-24.  
+Last updated: 2026-09-01.  
 **Rule for agents:** prefer `.planning/intel/` over `.idea/` archives. Use `.idea`/`.docs` only for implementation details not yet migrated.
 
 ## Legend
@@ -31,6 +31,12 @@ Last updated: 2026-06-24.
 | `.planning/phases/01-dashboard-insights-upgrade/*` | ARCHIVE | Phase 1 executed 2026-06-19 |
 
 ---
+
+## Frontend `.docs/` (ACTIVE — architecture for agents + GSD)
+
+| File | Status | Content |
+|------|--------|---------|
+| `.docs/FRONTEND_ARCHITECTURE.md` | ACTIVE | FSD, glass UI, overflow vs `box-shadow`, i18n, PR checklist |
 
 ## Frontend `docs/` (ACTIVE — dev + design)
 

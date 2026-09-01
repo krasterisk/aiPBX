@@ -2,9 +2,9 @@
 
 .TableWrapper {
     width: 100%;
-    // Horizontal scroll when table min-width exceeds viewport (same idea as UsageTab / billing tables).
-    overflow-x: auto;
-    overflow-y: visible;
+    // No overflow — same as CallsTable: box-shadow on glass rows renders
+    // freely. overflow-x:auto would compute overflow-y to auto and clip.
+    // Narrow viewports use display:block styles below instead of X-scroll.
     @include custom-scrollbar;
     padding-bottom: var(--space-4);
 }
