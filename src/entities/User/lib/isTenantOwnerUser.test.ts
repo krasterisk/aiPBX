@@ -1,12 +1,10 @@
-import { UserRolesValues } from '../model/consts/consts'
 import { isTenantOwnerUser } from './isTenantOwnerUser'
 
 describe('isTenantOwnerUser', () => {
-  it('returns true for a USER without a parent tenant', () => {
+  it('returns true for a user without a parent tenant', () => {
     expect(isTenantOwnerUser({
       id: '10',
       vpbx_user_id: null,
-      roles: [{ value: UserRolesValues.USER }],
     })).toBe(true)
   })
 
@@ -14,7 +12,6 @@ describe('isTenantOwnerUser', () => {
     expect(isTenantOwnerUser({
       id: '10',
       vpbx_user_id: '10',
-      roles: [{ value: UserRolesValues.USER }],
     })).toBe(true)
   })
 
@@ -22,7 +19,6 @@ describe('isTenantOwnerUser', () => {
     expect(isTenantOwnerUser({
       id: '11',
       vpbx_user_id: '10',
-      roles: [{ value: UserRolesValues.USER }],
     })).toBe(false)
   })
 
@@ -30,7 +26,6 @@ describe('isTenantOwnerUser', () => {
     expect(isTenantOwnerUser({
       id: '1',
       vpbx_user_id: null,
-      roles: [{ value: UserRolesValues.ADMIN }],
     })).toBe(true)
   })
 
