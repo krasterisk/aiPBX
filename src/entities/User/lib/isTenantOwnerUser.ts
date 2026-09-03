@@ -1,4 +1,4 @@
-type TenantOwnerCheck = {
+interface TenantOwnerCheck {
   id?: string | number | null
   vpbx_user_id?: string | number | null
 }
