@@ -1,6 +1,7 @@
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { Wallet } from 'lucide-react'
 import { HStack, VStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
@@ -17,6 +18,7 @@ interface UserFormHeaderProps {
     userId?: string
     onSave?: () => void
     onDelete?: (id: string) => void
+    onTopUp?: () => void
     isLoading?: boolean
     variant?: 'diviner-top' | 'diviner-bottom'
 }
@@ -29,6 +31,7 @@ export const UserFormHeader = memo((props: UserFormHeaderProps) => {
         userId,
         onSave,
         onDelete,
+        onTopUp,
         isLoading,
         variant = 'diviner-top'
     } = props
@@ -69,6 +72,16 @@ export const UserFormHeader = memo((props: UserFormHeaderProps) => {
             )}
 
             <HStack gap="8" className={cls.actions}>
+                {variant === 'diviner-top' && onTopUp && (
+                    <Button
+                        variant="clear"
+                        onClick={onTopUp}
+                        disabled={isLoading}
+                        addonLeft={<Wallet size={16} />}
+                    >
+                        {t('Пополнить баланс')}
+                    </Button>
+                )}
                 {isEdit && onDelete && (
                     <Button
                         variant="clear"

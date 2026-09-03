@@ -596,6 +596,7 @@ export interface AlertConfig {
 
 export interface OperatorProject {
   id: string
+  userId?: string
   name: string
   description?: string
   createdAt: string

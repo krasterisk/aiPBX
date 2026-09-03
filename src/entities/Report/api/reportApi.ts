@@ -237,8 +237,11 @@ export const reportApi = rtkApi.injectEndpoints({
       }),
       providesTags: ['OperatorAnalytics']
     }),
-    getOperatorProjects: build.query<OperatorProject[], void>({
-      query: () => '/operator-analytics/projects',
+    getOperatorProjects: build.query<OperatorProject[], string | void>({
+      query: (userId) => ({
+        url: '/operator-analytics/projects',
+        params: userId ? { userId } : undefined,
+      }),
       providesTags: ['OperatorProjects']
     }),
     createOperatorProject: build.mutation<OperatorProject, {
@@ -253,6 +256,7 @@ export const reportApi = rtkApi.injectEndpoints({
       webhookEvents?: string[]
       digestConfig?: DigestConfig | null
       alertConfig?: AlertConfig | null
+      ownerUserId?: string
     }>({
       query: (body) => ({
         url: '/operator-analytics/projects',

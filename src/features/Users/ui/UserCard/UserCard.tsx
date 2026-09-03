@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from 'react'
+import React, { memo, Suspense, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRouteMain, getRouteUsers } from '@/shared/const/router'
 import { ErrorGetData } from '@/entities/ErrorGetData'
@@ -10,6 +10,7 @@ import cls from './UserCard.module.scss'
 import {
   isUserAdmin,
   isOwnerUser,
+  isTenantOwnerUser,
   canManageTenantUsers,
   useDeleteUser,
   User,
@@ -25,6 +26,9 @@ import { UserForm } from '../UserForm/UserForm'
 import { UserFormHeader } from '../UserFormHeader/UserFormHeader'
 import { toast } from 'react-toastify'
 import { useTranslation } from 'react-i18next'
+
+// eslint-disable-next-line krasterisk-plugin/layer-imports
+const AdminTopUpModal = React.lazy(async () => await import('@/features/AdminTopUp/ui/AdminTopUpModal/AdminTopUpModal').then(m => ({ default: m.AdminTopUpModal })))
 
 export interface UserCardProps {
   className?: string
@@ -72,6 +76,8 @@ export const UserCard = memo((props: UserCardProps) => {
   }
 
   const [formFields, setFormFields] = useState<User>(initUser)
+  const [isTopUpOpen, setIsTopUpOpen] = useState(false)
+  const canTopUp = isAdmin && !!isEdit && isTenantOwnerUser(formFields)
 
   const validateForm = useCallback(() => {
     if (!formFields.name) {
@@ -185,6 +191,7 @@ export const UserCard = memo((props: UserCardProps) => {
         userId={userId}
         onSave={onSave}
         onDelete={canDelete ? onDelete : undefined}
+        onTopUp={canTopUp ? () => { setIsTopUpOpen(true) } : undefined}
         isLoading={isBusy}
         variant="diviner-top"
       />
@@ -205,6 +212,17 @@ export const UserCard = memo((props: UserCardProps) => {
         isLoading={isBusy}
         variant="diviner-bottom"
       />
+
+      {canTopUp && (
+        <Suspense fallback={null}>
+          <AdminTopUpModal
+            isOpen={isTopUpOpen}
+            onClose={() => { setIsTopUpOpen(false) }}
+            userId={formFields.id}
+            userName={formFields.name || formFields.email || ''}
+          />
+        </Suspense>
+      )}
     </VStack>
   )
 })

@@ -39,9 +39,10 @@ interface ProjectWizardProps {
     editProject?: OperatorProject
     onClose: () => void
     onSuccess?: () => void
+    ownerUserId?: string
 }
 
-export const ProjectWizard = memo(({ editProject, onClose, onSuccess }: ProjectWizardProps) => {
+export const ProjectWizard = memo(({ editProject, onClose, onSuccess, ownerUserId }: ProjectWizardProps) => {
     const dispatch = useAppDispatch()
     const [createProject, { isLoading: isCreating }] = useCreateOperatorProject()
 
@@ -72,6 +73,7 @@ export const ProjectWizard = memo(({ editProject, onClose, onSuccess }: ProjectW
             onSuccess={onSuccess}
             isCreating={isCreating}
             createProject={createProject}
+            ownerUserId={ownerUserId}
         />
     )
 })
@@ -81,9 +83,10 @@ interface WizardCreateFlowProps {
     onSuccess?: () => void
     isCreating: boolean
     createProject: ReturnType<typeof useCreateOperatorProject>[0]
+    ownerUserId?: string
 }
 
-const WizardCreateFlow = memo(({ onClose, onSuccess, isCreating, createProject }: WizardCreateFlowProps) => {
+const WizardCreateFlow = memo(({ onClose, onSuccess, isCreating, createProject, ownerUserId }: WizardCreateFlowProps) => {
     const { t } = useTranslation('reports')
     const dispatch = useAppDispatch()
     const [createStep, setCreateStep] = useState<CreateWizardStep>(1)
@@ -106,6 +109,7 @@ const WizardCreateFlow = memo(({ onClose, onSuccess, isCreating, createProject }
                 customMetricsSchema: customMetrics,
                 visibleDefaultMetrics: visibleDefaults,
                 callTaxonomy,
+                ownerUserId: ownerUserId || undefined,
             }).unwrap()
 
             dispatch(projectWizardActions.close())
@@ -116,7 +120,7 @@ const WizardCreateFlow = memo(({ onClose, onSuccess, isCreating, createProject }
         }
     }, [
         name, description, systemPrompt, customMetrics, visibleDefaults, callTaxonomy,
-        createProject, dispatch, onClose, onSuccess, t,
+        ownerUserId, createProject, dispatch, onClose, onSuccess, t,
     ])
 
     const handleNext = useCallback(() => {

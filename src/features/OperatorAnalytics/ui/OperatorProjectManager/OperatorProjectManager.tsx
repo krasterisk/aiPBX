@@ -22,6 +22,7 @@ import {
     projectWizardReducer,
     getWizardIsOpen,
 } from '@/entities/Report'
+import { ClientSelect, isUserAdmin, useGetAllUsers } from '@/entities/User'
 import { toast } from 'react-toastify'
 import { ProjectWizard } from '../ProjectWizard/ProjectWizard'
 import cls from './OperatorProjectManager.module.scss'
@@ -34,11 +35,12 @@ const reducers: ReducersList = {
 
 interface ProjectItemProps {
     project: OperatorProject
+    ownerLabel?: string
     onEdit: (p: OperatorProject) => void
     onDelete: (id: string) => void
 }
 
-const ProjectItem = memo(({ project, onEdit, onDelete }: ProjectItemProps) => {
+const ProjectItem = memo(({ project, ownerLabel, onEdit, onDelete }: ProjectItemProps) => {
     const { t } = useTranslation('reports')
     const [confirm, setConfirm] = useState(false)
 
@@ -60,7 +62,12 @@ const ProjectItem = memo(({ project, onEdit, onDelete }: ProjectItemProps) => {
                 <HStack gap={'12'} align={'center'}>
                     <FolderOpenIcon sx={{ color: 'var(--accent-redesigned)', fontSize: 22 }} />
                     <VStack gap={'4'}>
-                        <Text text={project.name} bold />
+                        <HStack gap={'8'} align={'center'} wrap={'wrap'}>
+                            <Text text={project.name} bold />
+                            {ownerLabel && (
+                                <span className={cls.ownerTag}>{ownerLabel}</span>
+                            )}
+                        </HStack>
                         {project.description && <Text text={project.description} />}
                     </VStack>
                 </HStack>
@@ -93,11 +100,22 @@ const ProjectItem = memo(({ project, onEdit, onDelete }: ProjectItemProps) => {
 export const OperatorProjectManager = memo(() => {
     const { t } = useTranslation('reports')
     const dispatch = useAppDispatch()
-    const { data: projects, isLoading } = useGetOperatorProjects()
+    const isAdmin = useSelector(isUserAdmin)
+    const [filterUserId, setFilterUserId] = useState('')
+    const { data: projects, isLoading } = useGetOperatorProjects(isAdmin ? (filterUserId || undefined) : undefined)
+    const { data: allUsers } = useGetAllUsers(null, { skip: !isAdmin })
     const [deleteProject] = useDeleteOperatorProject()
 
     const [search, setSearch] = useState('')
     const [wizardTarget, setWizardTarget] = useState<OperatorProject | undefined>(undefined)
+
+    const ownerNameById = useMemo(() => {
+        const map: Record<string, string> = {}
+        for (const user of allUsers || []) {
+            map[String(user.id)] = user.name || user.email || String(user.id)
+        }
+        return map
+    }, [allUsers])
 
     const wizardIsOpen = useSelector(getWizardIsOpen)
     // Signup lands on /analytics/projects under the onboarding overlay; never
@@ -159,6 +177,15 @@ export const OperatorProjectManager = memo(() => {
                     </HStack>
                 </HStack>
 
+                {isAdmin && (
+                    <ClientSelect
+                        label={String(t('Клиент'))}
+                        clientId={filterUserId}
+                        allowAll
+                        onChangeClient={setFilterUserId}
+                    />
+                )}
+
                 {/* List */}
                 {isLoading
                     ? [1, 2, 3].map(i => <Skeleton key={i} variant={'rounded'} height={72} className={cls.skeleton} />)
@@ -169,6 +196,9 @@ export const OperatorProjectManager = memo(() => {
                                     <ProjectItem
                                         key={p.id}
                                         project={p}
+                                        ownerLabel={isAdmin && !filterUserId
+                                            ? ownerNameById[String(p.userId ?? '')]
+                                            : undefined}
                                         onEdit={handleOpenWizardEdit}
                                         onDelete={handleDelete}
                                     />
@@ -202,6 +232,7 @@ export const OperatorProjectManager = memo(() => {
                     <ProjectWizard
                         editProject={wizardTarget}
                         onClose={handleCloseWizard}
+                        ownerUserId={isAdmin ? (filterUserId || undefined) : undefined}
                     />
                 </Modal>
             </VStack>

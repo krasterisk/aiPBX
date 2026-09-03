@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import { memo, useCallback, ReactNode } from 'react'
+import { useSelector } from 'react-redux'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { useGetAllUsers } from '../../api/usersApi'
+import { isUserAdmin } from '../../model/selectors/roleSelector'
 import { Users } from 'lucide-react'
 import { TextField } from '@mui/material'
 
@@ -53,7 +55,20 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
     excludeClientIds,
   } = props
 
-  const { data, isLoading } = useGetAllUsers(null)
+  const isAdmin = useSelector(isUserAdmin)
+  const { data, isLoading } = useGetAllUsers(null, { skip: !isAdmin })
+
+  const handleChange = useCallback((event: any, value: ClientOption | null) => {
+    if (!value) {
+      onChangeClient?.('')
+    } else {
+      onChangeClient?.(value.id)
+    }
+  }, [onChangeClient])
+
+  if (!isAdmin) {
+    return null
+  }
 
   const excludeSet = new Set((excludeClientIds || []).map(String))
   const clientItems: ClientOption[] = (data || [])
@@ -74,14 +89,6 @@ export const ClientSelect = memo((props: ClientSelectProps) => {
     : clientId
       ? clientItems.find(item => item.id === clientId) || null
       : null
-
-  const handleChange = useCallback((event: any, value: ClientOption | null) => {
-    if (!value) {
-      onChangeClient?.('')
-    } else {
-      onChangeClient?.(value.id)
-    }
-  }, [onChangeClient])
 
   // Определяем иконку слева
   const leftAddon = addonLeft || (showIcon ? <Users size={18} style={{ marginRight: 8 }} /> : undefined)
