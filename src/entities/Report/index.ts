@@ -104,6 +104,7 @@ export {
   useLazyGetActiveBatches,
   useLazyGetOperatorInsights,
   useGetOperatorEvidence,
+  WITHOUT_PROJECT_FILTER,
   useLazyGetReports,
   useUpdateCallTags,
 } from './api/reportApi'

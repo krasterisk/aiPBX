@@ -27,6 +27,15 @@ interface AIAnalyticsDashboardArgs {
   source?: CdrSource
 }
 
+/** Dashboard chip value: calls analyzed with no project. */
+export const WITHOUT_PROJECT_FILTER = 'none'
+
+export function applyProjectQuery(projectId?: string): { projectId?: string; withoutProject?: string } {
+    if (projectId === WITHOUT_PROJECT_FILTER) return { withoutProject: '1' }
+    if (projectId) return { projectId }
+    return {}
+}
+
 export const reportApi = rtkApi.injectEndpoints({
   endpoints: (build) => ({
     getReports: build.query<AllReports, QueryArgs>({
@@ -208,10 +217,11 @@ export const reportApi = rtkApi.injectEndpoints({
       success?: boolean
     }>({
       query: (args) => {
-        const { theme, tagId, ...rest } = args
+        const { theme, tagId, projectId, ...rest } = args
         const params = {
           ...rest,
           tagId: tagId ?? theme,
+          ...applyProjectQuery(projectId),
         }
         return {
           url: '/operator-analytics/cdrs',
@@ -229,12 +239,15 @@ export const reportApi = rtkApi.injectEndpoints({
       projectId?: string
       userId?: string
     }>({
-      query: (args) => ({
-        url: '/operator-analytics/dashboard',
-        params: Object.fromEntries(
-          Object.entries(args).filter(([, v]) => v !== undefined && v !== '')
-        )
-      }),
+      query: (args) => {
+        const { projectId, ...rest } = args
+        return {
+          url: '/operator-analytics/dashboard',
+          params: Object.fromEntries(
+            Object.entries({ ...rest, ...applyProjectQuery(projectId) }).filter(([, v]) => v !== undefined && v !== '')
+          ),
+        }
+      },
       providesTags: ['OperatorAnalytics']
     }),
     getOperatorProjects: build.query<OperatorProject[], string | void>({
@@ -386,11 +399,12 @@ export const reportApi = rtkApi.injectEndpoints({
       }
     >({
       query: (args) => {
+        const { projectId, ...rest } = args
         const params = Object.fromEntries(
           Object.entries({
-            ...args,
+            ...rest,
             refresh: args.refresh === true || args.refresh === '1' ? '1' : undefined,
-            projectId: args.projectId,
+            ...applyProjectQuery(projectId),
           }).filter(([, v]) => v !== undefined && v !== '')
         )
         return {
@@ -411,12 +425,15 @@ export const reportApi = rtkApi.injectEndpoints({
         order?: string
       }
     >({
-      query: (args) => ({
-        url: '/operator-analytics/operator-evidence',
-        params: Object.fromEntries(
-          Object.entries(args).filter(([, v]) => v !== undefined && v !== '')
-        ),
-      }),
+      query: (args) => {
+        const { projectId, ...rest } = args
+        return {
+          url: '/operator-analytics/operator-evidence',
+          params: Object.fromEntries(
+            Object.entries({ ...rest, ...applyProjectQuery(projectId) }).filter(([, v]) => v !== undefined && v !== '')
+          ),
+        }
+      },
       providesTags: ['OperatorAnalytics'],
     }),
     updateCallTags: build.mutation<{ tagIds: string[] }, {

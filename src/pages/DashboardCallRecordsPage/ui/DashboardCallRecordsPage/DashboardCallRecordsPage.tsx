@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import { DashboardLayout } from '@/widgets/DashboardLayout'
 import { OperatorDashboard, DashboardBuilder } from '@/features/OperatorAnalytics'
-import { useGetOperatorDashboard, useGetOperatorProjects } from '@/entities/Report'
+import { WITHOUT_PROJECT_FILTER, useGetOperatorDashboard, useGetOperatorProjects } from '@/entities/Report'
 import { dashboardPageReducer, getDashboardStartDate, getDashboardEndDate, getDashboardUserId } from '@/features/Dashboard'
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader'
 import { getUserAuthData, isUserAdmin } from '@/entities/User'
@@ -26,7 +26,7 @@ const DashboardCallRecordsContent = memo(() => {
     const showOnboardingTour = searchParams.get('onboarding') === 'analytics' &&
         searchParams.get('tour') === '1'
 
-    const [projectId, setProjectId] = useState(queryProjectId)
+    const [projectId, setProjectId] = useState(queryProjectId || WITHOUT_PROJECT_FILTER)
     const [showBuilder, setShowBuilder] = useState(false)
     const [tourActive, setTourActive] = useState(showOnboardingTour)
 

@@ -360,11 +360,19 @@ describe('OperatorDashboard project id resolution', () => {
         expect(chip?.className).toMatch(/light/)
     })
 
-    it('marks all-projects chip active when no project id is set', () => {
+    it('places project chips before the without-project chip', () => {
+        render(<OperatorDashboard {...defaultProps} />)
+
+        const projectChip = screen.getByText('Numeric Project')
+        const withoutProject = screen.getByText('Без проекта')
+        expect(projectChip.compareDocumentPosition(withoutProject) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    })
+
+    it('marks the without-project chip active when no project id is set', () => {
         render(<OperatorDashboard {...defaultProps} projectId="" />)
 
-        const allProjectsChip = screen.getByText('Все проекты').closest('[class*="projectChip"]')
-        expect(allProjectsChip?.className).toMatch(/light/)
+        const withoutProjectChip = screen.getByText('Без проекта').closest('[class*="projectChip"]')
+        expect(withoutProjectChip?.className).toMatch(/light/)
     })
 
     it('renders without error when project id matches no project', () => {
@@ -376,8 +384,8 @@ describe('OperatorDashboard project id resolution', () => {
         )
 
         expect(screen.getByTestId('oa-section-stats')).toBeInTheDocument()
-        const allProjectsChip = screen.getByText('Все проекты').closest('[class*="projectChip"]')
-        expect(allProjectsChip?.className).not.toMatch(/light/)
+        const withoutProjectChip = screen.getByText('Без проекта').closest('[class*="projectChip"]')
+        expect(withoutProjectChip?.className).not.toMatch(/light/)
     })
 })
 

@@ -19,6 +19,7 @@ import {
     OperatorProject,
     TagStat,
     useGetOperatorProjects,
+    WITHOUT_PROJECT_FILTER,
 } from '@/entities/Report'
 import { AiInsightsBanner } from './AiInsightsBanner/AiInsightsBanner'
 import { DashboardConfigGrid } from '../DashboardBuilder/DashboardConfigGrid'
@@ -155,6 +156,8 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
         return m > 0 ? `${m} ${t('мин')} ${s} ${t('сек')}` : `${s} ${t('сек')}`
     }
 
+    const isWithoutProject = !projectId || projectId === WITHOUT_PROJECT_FILTER
+
     const activeProject = projects?.find(
         (p: OperatorProject) => String(p.id) === String(projectId ?? ''),
     )
@@ -251,15 +254,6 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                 {projects && projects.length > 0 && (
                     <HStack gap={'8'} align={'center'} wrap={'wrap'}>
                         <Text text={String(t('Проект')) + ':'} />
-                        <Card
-                            padding={'8'}
-                            border={'partial'}
-                            variant={!projectId ? 'light' : 'clear'}
-                            className={cls.projectChip}
-                            onClick={() => { onChangeProjectId('') }}
-                        >
-                            <Text text={String(t('Все проекты'))} />
-                        </Card>
                         {projects.map((p: OperatorProject) => (
                             <Card
                                 key={p.id}
@@ -272,10 +266,19 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                                 <Text text={p.name} />
                             </Card>
                         ))}
+                        <Card
+                            padding={'8'}
+                            border={'partial'}
+                            variant={isWithoutProject ? 'light' : 'clear'}
+                            className={cls.projectChip}
+                            onClick={() => { onChangeProjectId(WITHOUT_PROJECT_FILTER) }}
+                        >
+                            <Text text={String(t('Без проекта'))} />
+                        </Card>
                     </HStack>
                 )}
 
-                {onOpenDashboardBuilder && projectId && (
+                {onOpenDashboardBuilder && projectId && !isWithoutProject && (
                     <Button
                         variant={'glass-action'}
                         size={'s'}
@@ -542,7 +545,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                 </div>
             )}
 
-            {projectId && (
+            {projectId && !isWithoutProject && (
                 <TopicsSection
                     tagStats={data?.tagStats}
                     hasTaxonomy={(activeProject?.callTaxonomy?.length ?? 0) > 0}
