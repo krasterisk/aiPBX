@@ -2,6 +2,61 @@ import { memo, useState, useCallback, KeyboardEvent } from 'react'
 import { VStack, HStack } from '../Stack'
 import { Text } from '../Text'
 
+function polar(cx: number, cy: number, radius: number, angle: number): [number, number] {
+    return [cx + radius * Math.cos(angle), cy + radius * Math.sin(angle)]
+}
+
+function ringSlicePath(
+    cx: number,
+    cy: number,
+    outerRadius: number,
+    innerRadius: number,
+    startAngle: number,
+    endAngle: number,
+    angle: number,
+): string {
+    const [x1, y1] = polar(cx, cy, outerRadius, startAngle)
+    const [x2, y2] = polar(cx, cy, outerRadius, endAngle)
+    const [ix1, iy1] = polar(cx, cy, innerRadius, endAngle)
+    const [ix2, iy2] = polar(cx, cy, innerRadius, startAngle)
+    const largeArc = angle > Math.PI ? 1 : 0
+
+    return [
+        `M ${x1} ${y1}`,
+        `A ${outerRadius} ${outerRadius} 0 ${largeArc} 1 ${x2} ${y2}`,
+        `L ${ix1} ${iy1}`,
+        `A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${ix2} ${iy2}`,
+        'Z',
+    ].join(' ')
+}
+
+function fullRingPath(
+    cx: number,
+    cy: number,
+    outerRadius: number,
+    innerRadius: number,
+    startAngle: number,
+): string {
+    const mid = startAngle + Math.PI
+    const end = startAngle + Math.PI * 2
+    const [ox1, oy1] = polar(cx, cy, outerRadius, startAngle)
+    const [oxm, oym] = polar(cx, cy, outerRadius, mid)
+    const [ox2, oy2] = polar(cx, cy, outerRadius, end)
+    const [ix2, iy2] = polar(cx, cy, innerRadius, end)
+    const [ixm, iym] = polar(cx, cy, innerRadius, mid)
+    const [ix1, iy1] = polar(cx, cy, innerRadius, startAngle)
+
+    return [
+        `M ${ox1} ${oy1}`,
+        `A ${outerRadius} ${outerRadius} 0 1 1 ${oxm} ${oym}`,
+        `A ${outerRadius} ${outerRadius} 0 1 1 ${ox2} ${oy2}`,
+        `L ${ix2} ${iy2}`,
+        `A ${innerRadius} ${innerRadius} 0 1 0 ${ixm} ${iym}`,
+        `A ${innerRadius} ${innerRadius} 0 1 0 ${ix1} ${iy1}`,
+        'Z',
+    ].join(' ')
+}
+
 export interface DonutSegment {
     id: number | string
     value: number
@@ -55,31 +110,16 @@ export const DonutChart = memo(({
 
     if (total === 0) return null
 
-    // Build arcs
+    // Build arcs. A single 100% segment must be two semicircles: an SVG arc
+    // whose start and end are the same point draws nothing, so 0% and 100%
+    // success looked like an empty chart.
     let startAngle = -Math.PI / 2
     const arcs = data.map((segment, idx) => {
         const angle = (segment.value / total) * 2 * Math.PI
         const endAngle = startAngle + angle
-
-        const x1 = cx + outerRadius * Math.cos(startAngle)
-        const y1 = cy + outerRadius * Math.sin(startAngle)
-        const x2 = cx + outerRadius * Math.cos(endAngle)
-        const y2 = cy + outerRadius * Math.sin(endAngle)
-
-        const ix1 = cx + innerRadius * Math.cos(endAngle)
-        const iy1 = cy + innerRadius * Math.sin(endAngle)
-        const ix2 = cx + innerRadius * Math.cos(startAngle)
-        const iy2 = cy + innerRadius * Math.sin(startAngle)
-
-        const largeArc = angle > Math.PI ? 1 : 0
-
-        const d = [
-            `M ${x1} ${y1}`,
-            `A ${outerRadius} ${outerRadius} 0 ${largeArc} 1 ${x2} ${y2}`,
-            `L ${ix1} ${iy1}`,
-            `A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${ix2} ${iy2}`,
-            'Z'
-        ].join(' ')
+        const d = angle >= Math.PI * 2 - 1e-6
+            ? fullRingPath(cx, cy, outerRadius, innerRadius, startAngle)
+            : ringSlicePath(cx, cy, outerRadius, innerRadius, startAngle, endAngle, angle)
 
         const result = { ...segment, d, idx, pct: ((segment.value / total) * 100).toFixed(1) }
         startAngle = endAngle

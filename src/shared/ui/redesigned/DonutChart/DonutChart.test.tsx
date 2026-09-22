@@ -29,6 +29,16 @@ describe('DonutChart', () => {
         expect(onSegmentClick).not.toHaveBeenCalled()
     })
 
+    it('draws a ring when one segment is 100%', () => {
+        render(<DonutChart data={[
+            { id: 'success', value: 12, label: 'Успех', color: '#22c55e' },
+            { id: 'fail', value: 0, label: 'Нет', color: '#64748b' },
+        ]} />)
+
+        const ring = screen.getByTestId('donut-segment-success').getAttribute('d') ?? ''
+        expect(ring.match(/A /g)?.length).toBe(4)
+    })
+
     it('calls onSegmentClick from the legend row', async () => {
         const onSegmentClick = jest.fn()
         const user = userEvent.setup()
