@@ -30,7 +30,7 @@ interface AIAnalyticsDashboardArgs {
 /** Dashboard chip value: calls analyzed with no project. */
 export const WITHOUT_PROJECT_FILTER = 'none'
 
-export function applyProjectQuery(projectId?: string): { projectId?: string; withoutProject?: string } {
+export function applyProjectQuery(projectId?: string): { projectId?: string, withoutProject?: string } {
     if (projectId === WITHOUT_PROJECT_FILTER) return { withoutProject: '1' }
     if (projectId) return { projectId }
     return {}
