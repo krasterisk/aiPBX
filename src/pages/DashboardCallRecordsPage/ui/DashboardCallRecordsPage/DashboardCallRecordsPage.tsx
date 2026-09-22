@@ -26,15 +26,22 @@ const DashboardCallRecordsContent = memo(() => {
     const showOnboardingTour = searchParams.get('onboarding') === 'analytics' &&
         searchParams.get('tour') === '1'
 
-    const [projectId, setProjectId] = useState(queryProjectId || WITHOUT_PROJECT_FILTER)
+    const [selectedProjectId, setSelectedProjectId] = useState<string | null>(queryProjectId || null)
     const [showBuilder, setShowBuilder] = useState(false)
     const [tourActive, setTourActive] = useState(showOnboardingTour)
 
+    const { data: projects } = useGetOperatorProjects()
+
     useEffect(() => {
-        if (queryProjectId) {
-            setProjectId(queryProjectId)
-        }
+        if (queryProjectId) setSelectedProjectId(queryProjectId)
     }, [queryProjectId])
+
+    const projectId = selectedProjectId
+        ?? (projects?.length
+            ? String(projects[0].id)
+            : projects
+                ? WITHOUT_PROJECT_FILTER
+                : '')
 
     useEffect(() => {
         setTourActive(showOnboardingTour)
@@ -42,14 +49,13 @@ const DashboardCallRecordsContent = memo(() => {
 
     const { data: dashboardData, isLoading, isFetching } = useGetOperatorDashboard(
         { startDate, endDate, projectId, userId },
-        { skip: !startDate || !endDate }
+        { skip: !startDate || !endDate || !projectId }
     )
 
-    const { data: projects } = useGetOperatorProjects()
     const activeProject = projects?.find(p => String(p.id) === String(projectId ?? ''))
 
     const onChangeProjectId = useCallback((value: string) => {
-        setProjectId(value)
+        setSelectedProjectId(value)
         setShowBuilder(false)
     }, [])
 
