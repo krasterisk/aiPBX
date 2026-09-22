@@ -54,6 +54,32 @@ describe('buildCallsExportSheet', () => {
         expect(String(rows[0]['Обоснование метрик'])).toContain('Вежливое приветствие')
     })
 
+    it('exports operator custom metrics when greeting_quality is absent', () => {
+        const reports: Report[] = [{
+            id: '2',
+            channelId: '100',
+            callerId: '+7901',
+            userId: '1',
+            createdAt: '2026-06-19T10:00:00Z',
+            analytics: {
+                channelId: '100',
+                metrics: {
+                    politeness_empathy: 75,
+                    success: true,
+                    summary: 'Запись в клинику',
+                    custom_metrics: { greeting: true },
+                    _custom_meta: { greeting: { name: 'Приветствие', type: 'boolean' } },
+                },
+            },
+        }]
+
+        const { rows, headers } = buildCallsExportSheet(reports, t)
+
+        expect(headers.some(h => h.includes('Приветствие'))).toBe(true)
+        expect(rows[0]['Вежливость и эмпатия']).toBe(75)
+        expect(rows[0]['Кастомные метрики: Приветствие']).toBe('Да')
+    })
+
     it('exports comma-separated tag names beside the keywords column', () => {
         const reports: Report[] = [{
             id: '1',

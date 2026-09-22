@@ -240,6 +240,35 @@ describe('ReportShowAnalytics', () => {
             expect(screen.getByText('Да, 30 минут')).toBeInTheDocument()
         })
 
+        it('renders visible defaults and custom metrics when greeting_quality is absent', () => {
+            const panacea: Analytics = {
+                ...operatorAnalytics,
+                metrics: {
+                    politeness_empathy: 75,
+                    speech_clarity_pace: 80,
+                    customer_sentiment: 'Positive',
+                    summary: 'Администратор записала пациента.',
+                    success: true,
+                    csat: 4,
+                    custom_metrics: { greeting: true, branch: false },
+                    _custom_meta: {
+                        greeting: { name: 'Приветствие', type: 'boolean', polarity: 'positive' },
+                        branch: { name: 'Филиал', type: 'boolean', polarity: 'positive' },
+                    },
+                },
+            }
+            render(<ReportShowAnalytics analytics={panacea} />)
+
+            expect(screen.getByTestId('analytics-operator')).toBeInTheDocument()
+            expect(screen.queryByTestId('analytics-bot')).not.toBeInTheDocument()
+            expect(screen.getByTestId('metric-bar-politeness_empathy')).toBeInTheDocument()
+            expect(screen.getByTestId('metric-bar-speech_clarity_pace')).toBeInTheDocument()
+            expect(screen.queryByTestId('metric-bar-greeting_quality')).not.toBeInTheDocument()
+            expect(screen.getByTestId('custom-metrics-card')).toBeInTheDocument()
+            expect(screen.getByText('Приветствие')).toBeInTheDocument()
+            expect(screen.getByText('Филиал')).toBeInTheDocument()
+        })
+
         it('renders custom_metrics nested object', () => {
             const nested: Analytics = {
                 ...operatorAnalytics,

@@ -45,7 +45,9 @@ const OPERATOR_METRIC_LABELS: Array<{ key: DefaultMetricKey, labelKey: string }>
  * (greeting_quality, script_compliance, etc.) vs nested bot-call metrics.
  */
 const isOperatorMetrics = (metrics: Record<string, any>): boolean => {
-    return typeof metrics.greeting_quality === 'number'
+    if (OPERATOR_METRIC_LABELS.some(m => typeof metrics[m.key] === 'number')) return true
+    const custom = metrics.custom_metrics
+    return Boolean(custom && typeof custom === 'object' && !Array.isArray(custom) && Object.keys(custom).length > 0)
 }
 
 /** All known (non-custom) metric keys in the flat operator format */

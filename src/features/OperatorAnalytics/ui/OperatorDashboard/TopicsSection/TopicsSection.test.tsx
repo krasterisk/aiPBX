@@ -4,8 +4,6 @@ import userEvent from '@testing-library/user-event'
 import type { TagStat } from '@/entities/Report'
 import { TopicsSection } from './TopicsSection'
 
-const mockNavigate = jest.fn()
-
 jest.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key: string, opts?: Record<string, string | number>) => {
@@ -15,11 +13,6 @@ jest.mock('react-i18next', () => ({
         },
         i18n: { language: 'ru', changeLanguage: jest.fn() },
     }),
-}))
-
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useNavigate: () => mockNavigate,
 }))
 
 const sampleStats: TagStat[] = [
@@ -95,20 +88,13 @@ describe('TopicsSection', () => {
         expect(screen.getByText('Нажмите на тему, чтобы увидеть её звонки и статистику')).toBeInTheDocument()
     })
 
-    it('shows the not-configured empty state when the project has no taxonomy', () => {
-        render(<TopicsSection {...defaultProps} hasTaxonomy={false} tagStats={undefined} />)
+    it('does not render the section when the project has no taxonomy', () => {
+        const { container } = render(
+            <TopicsSection {...defaultProps} hasTaxonomy={false} tagStats={undefined} />,
+        )
 
-        expect(screen.getByTestId('topics-empty-not-configured')).toBeInTheDocument()
-        expect(screen.getByText('Темы звонков не настроены')).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: 'Настроить темы проекта' })).toBeInTheDocument()
-    })
-
-    it('navigates to project settings from the not-configured action', async () => {
-        const user = userEvent.setup()
-        render(<TopicsSection {...defaultProps} hasTaxonomy={false} />)
-
-        await user.click(screen.getByRole('button', { name: 'Настроить темы проекта' }))
-        expect(mockNavigate).toHaveBeenCalledWith('/analytics/projects')
+        expect(container).toBeEmptyDOMElement()
+        expect(screen.queryByTestId('oa-section-topics')).not.toBeInTheDocument()
     })
 
     it('shows the zero-matches empty state when taxonomy exists but statistics are empty', () => {

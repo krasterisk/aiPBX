@@ -30,8 +30,11 @@ const KNOWN_OPERATOR_KEYS = new Set<string>([
     'customer_sentiment', 'summary', 'success', 'csat', 'custom_metrics', 'metrics',
 ])
 
-const isOperatorMetrics = (metrics: AnalyticsMetrics): boolean =>
-    typeof metrics.greeting_quality === 'number'
+const isOperatorMetrics = (metrics: AnalyticsMetrics): boolean => {
+    if (OPERATOR_METRIC_KEYS.some(m => typeof metrics[m.key] === 'number')) return true
+    const custom = metrics.custom_metrics
+    return Boolean(custom && typeof custom === 'object' && !Array.isArray(custom) && Object.keys(custom).length > 0)
+}
 
 const isInternalMetaKey = (key: string): boolean => key.startsWith('_')
 

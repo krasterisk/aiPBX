@@ -1,6 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 import { Skeleton } from '@mui/material'
 import { ChevronRight } from 'lucide-react'
 import { VStack } from '@/shared/ui/redesigned/Stack'
@@ -8,7 +7,6 @@ import { Card } from '@/shared/ui/redesigned/Card'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import type { TagStat } from '@/entities/Report'
-import { getRouteAnalyticsProjects } from '@/shared/const/router'
 import { scoreVariant } from '../../../lib/metricVisual'
 import cls from './TopicsSection.module.scss'
 
@@ -25,7 +23,6 @@ export interface TopicsSectionProps {
 export const TopicsSection = memo((props: TopicsSectionProps) => {
     const { tagStats, hasTaxonomy, isLoading, onSelectTag } = props
     const { t } = useTranslation('reports')
-    const navigate = useNavigate()
     const [expanded, setExpanded] = useState(false)
 
     const visibleStats = useMemo(() => {
@@ -55,9 +52,7 @@ export const TopicsSection = memo((props: TopicsSectionProps) => {
         }
     }, [handleCardActivate])
 
-    const handleOpenProjectSettings = useCallback(() => {
-        navigate(getRouteAnalyticsProjects())
-    }, [navigate])
+    if (!hasTaxonomy) return null
 
     if (isLoading) {
         return (
@@ -87,40 +82,6 @@ export const TopicsSection = memo((props: TopicsSectionProps) => {
                                 className={cls.skeletonCard}
                             />
                         ))}
-                    </div>
-                </VStack>
-            </Card>
-        )
-    }
-
-    if (!hasTaxonomy) {
-        return (
-            <Card
-                max
-                variant="glass"
-                border="partial"
-                padding="24"
-                className={cls.section}
-                data-testid="oa-section-topics"
-                data-tour-id="oa-topics"
-            >
-                <VStack gap="16" max>
-                    <VStack gap="4" max>
-                        <Text title={String(t('Темы'))} bold />
-                        <Text
-                            text={String(t('Нажмите на тему, чтобы увидеть её звонки и статистику'))}
-                            size="s"
-                        />
-                    </VStack>
-                    <div className={cls.emptyState} data-testid="topics-empty-not-configured">
-                        <Text title={String(t('Темы звонков не настроены'))} bold />
-                        <Text
-                            text={String(t('Добавьте темы в настройках проекта - звонки начнут размечаться при следующем анализе.'))}
-                            size="m"
-                        />
-                        <Button variant="accent" size="s" onClick={handleOpenProjectSettings}>
-                            {String(t('Настроить темы проекта'))}
-                        </Button>
                     </div>
                 </VStack>
             </Card>
