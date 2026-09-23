@@ -36,8 +36,8 @@ const DashboardCallRecordsContent = memo(() => {
         if (queryProjectId) setSelectedProjectId(queryProjectId)
     }, [queryProjectId])
 
-    const projectId = selectedProjectId
-        ?? (projects?.length
+    const projectId = selectedProjectId ??
+        (projects?.length
             ? String(projects[0].id)
             : projects
                 ? WITHOUT_PROJECT_FILTER
