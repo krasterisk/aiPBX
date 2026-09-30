@@ -515,7 +515,7 @@
   "Средний балл метрики": "Metric average",
   "Оценок по метрике: {{count}}": "Scored calls: {{count}}",
   "METRIC_EVIDENCE_LIST_TITLE": "Calls for this metric: {{count}}",
-  "METRIC_EVIDENCE_LIST_HINT": "Sorted from the lowest score to the highest. Click a row to open the recording and full analysis",
+  "METRIC_EVIDENCE_LIST_HINT": "Scored calls come first, from the lowest score to the highest. Calls with no score are last. Click a row to open the recording and full analysis",
   "Доля «да»": "Share of yes",
   "Средний балл метрики": "Average metric score",
   "Средний CSAT": "Average CSAT",

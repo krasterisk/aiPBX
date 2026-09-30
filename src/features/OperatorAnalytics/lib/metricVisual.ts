@@ -156,8 +156,9 @@ export function formatEvidenceMetricAverage(
         booleanEvidence.length === evidenceValues.filter(v => v != null && v !== '').length
 
     if (looksBoolean && average != null && !Number.isNaN(average)) {
+        const rate = parseFloat(average.toFixed(2))
         return {
-            text: `${Math.round(average)}%`,
+            text: `${rate}%`,
             variant: scoreVariant(average),
             labelKey: 'Доля «да»',
         }
