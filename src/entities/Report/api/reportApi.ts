@@ -423,6 +423,9 @@ export const reportApi = rtkApi.injectEndpoints({
         userId?: string
         limit?: number
         order?: string
+        metricId?: string
+        evidencePage?: number
+        evidencePageSize?: number
       }
     >({
       query: (args) => {

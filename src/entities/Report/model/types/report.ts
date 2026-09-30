@@ -402,6 +402,9 @@ export interface OperatorEvidenceMetric {
   label?: string
   average: number | null
   sampleSize: number
+  evidenceTotal: number
+  evidencePage: number
+  evidencePageSize: number
   evidence: OperatorEvidenceItem[]
 }
 

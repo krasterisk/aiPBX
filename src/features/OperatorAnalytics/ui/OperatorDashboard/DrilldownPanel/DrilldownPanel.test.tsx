@@ -45,6 +45,9 @@ const evidenceData: OperatorEvidenceResponse = {
             label: 'Greeting',
             average: 70,
             sampleSize: 2,
+            evidenceTotal: 2,
+            evidencePage: 1,
+            evidencePageSize: 20,
             evidence: [
                 {
                     channelId: 'call-1',

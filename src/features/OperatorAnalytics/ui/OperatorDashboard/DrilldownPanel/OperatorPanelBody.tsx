@@ -13,6 +13,8 @@ import type { PanelEntry } from '../../../model/panelStack'
 import { formatEvidenceMetricAverage, formatEvidenceMetricValue, getMetricLabelKey } from '../../../lib/metricVisual'
 import cls from './OperatorPanelBody.module.scss'
 
+const EVIDENCE_PAGE_SIZE = 20
+
 export interface DashboardFilters {
     startDate?: string
     endDate?: string
@@ -217,10 +219,25 @@ export const OperatorPanelBody = memo((props: OperatorPanelBodyProps) => {
 export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps) => {
     const { entry, filters, onOpenCall } = props
     const { t } = useTranslation('reports')
+    const [page, setPage] = useState(1)
+    const scopeKey = `${entry.metricId}|${entry.operatorName ?? ''}|${filters.startDate ?? ''}|${filters.endDate ?? ''}|${filters.projectId ?? ''}`
+    const [seenScope, setSeenScope] = useState(scopeKey)
+    let evidencePage = page
+    if (seenScope !== scopeKey) {
+        setSeenScope(scopeKey)
+        setPage(1)
+        evidencePage = 1
+    }
 
     const evidenceArgs = useMemo(
-        () => buildQueryArgs(entry.operatorName, filters),
-        [entry.operatorName, filters],
+        () => ({
+            ...buildQueryArgs(entry.operatorName, filters),
+            metricId: entry.metricId,
+            order: 'worst',
+            evidencePage,
+            evidencePageSize: EVIDENCE_PAGE_SIZE,
+        }),
+        [entry.metricId, entry.operatorName, evidencePage, filters],
     )
 
     const { data: evidenceData, isLoading: evidenceLoading, isError, refetch } = useGetOperatorEvidence(
@@ -264,7 +281,10 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
         t,
         { evidenceValues },
     )
-    const sampleSize = metric?.sampleSize || metric?.evidence.length || 0
+    const sampleSize = metric?.sampleSize || metric?.evidenceTotal || metric?.evidence.length || 0
+    const evidenceTotal = metric?.evidenceTotal ?? metric?.evidence.length ?? 0
+    const pageSize = metric?.evidencePageSize || EVIDENCE_PAGE_SIZE
+    const totalPages = Math.max(1, Math.ceil(evidenceTotal / pageSize))
 
     return (
         <VStack gap="16" max align="stretch" className={cls.root} data-testid="operator-metric-panel">
@@ -298,7 +318,7 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
 
             <div className={cls.listHeader}>
                 <Text
-                    text={String(t('METRIC_EVIDENCE_LIST_TITLE', { count: metric?.evidence.length ?? 0 }))}
+                    text={String(t('METRIC_EVIDENCE_LIST_TITLE', { count: evidenceTotal }))}
                     size="m"
                     bold
                 />
@@ -310,7 +330,7 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
             </div>
 
             <div className={cls.evidenceSection}>
-                {(metric?.evidence.length ?? 0) === 0 ? (
+                {evidenceTotal === 0 ? (
                     <div className={cls.emptyBlock} data-testid="operator-metric-evidence-empty">
                         <Text text={String(t('Нет обоснований по метрикам'))} size="m" />
                     </div>
@@ -361,6 +381,33 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
                     )
                 })}
             </div>
+
+            {totalPages > 1 && (
+                <HStack max justify="between" align="center" className={cls.pagination} data-testid="operator-metric-pagination">
+                    <Button
+                        variant="glass-action"
+                        size="s"
+                        disabled={evidencePage <= 1}
+                        onClick={() => { setPage(p => Math.max(1, p - 1)) }}
+                        data-testid="operator-metric-prev-page"
+                    >
+                        {String(t('Назад'))}
+                    </Button>
+                    <Text
+                        text={String(t('TOPICS_PAGE_INDICATOR', { page: evidencePage, totalPages }))}
+                        size="xs"
+                    />
+                    <Button
+                        variant="glass-action"
+                        size="s"
+                        disabled={evidencePage >= totalPages}
+                        onClick={() => { setPage(p => Math.min(totalPages, p + 1)) }}
+                        data-testid="operator-metric-next-page"
+                    >
+                        {String(t('Далее'))}
+                    </Button>
+                </HStack>
+            )}
         </VStack>
     )
 })

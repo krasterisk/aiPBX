@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { OperatorPanelBody } from './OperatorPanelBody'
+import { OperatorMetricPanelBody, OperatorPanelBody } from './OperatorPanelBody'
 import type { OperatorEvidenceResponse } from '@/entities/Report'
 
 const mockUseGetOperatorEvidence = jest.fn()
@@ -39,6 +39,9 @@ const baseEvidence: OperatorEvidenceResponse = {
             label: 'Greeting',
             average: 68,
             sampleSize: 8,
+            evidenceTotal: 8,
+            evidencePage: 1,
+            evidencePageSize: 20,
             evidence: [
                 {
                     channelId: 'ch-1',
@@ -55,6 +58,9 @@ const baseEvidence: OperatorEvidenceResponse = {
             label: 'Closing',
             average: 80,
             sampleSize: 6,
+            evidenceTotal: 6,
+            evidencePage: 1,
+            evidencePageSize: 20,
             evidence: [
                 {
                     channelId: 'ch-2',
@@ -329,5 +335,96 @@ describe('OperatorPanelBody', () => {
         expect(screen.getByTestId('operator-metric-row-greeting_quality')).toBeInTheDocument()
         expect(screen.queryByTestId('operator-metric-row-closing_quality')).not.toBeInTheDocument()
         expect(screen.queryByText('нет данных')).not.toBeInTheDocument()
+    })
+})
+
+describe('OperatorMetricPanelBody', () => {
+    const onOpenCall = jest.fn()
+
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockUseGetOperatorEvidence.mockReturnValue({
+            data: {
+                ...baseEvidence,
+                metrics: [{
+                    ...baseEvidence.metrics[0],
+                    evidenceTotal: 25,
+                    evidencePage: 1,
+                    evidencePageSize: 20,
+                }],
+            },
+            isLoading: false,
+            isFetching: false,
+            isError: false,
+            refetch: jest.fn(),
+        })
+    })
+
+    it('requests the metric page sorted worst-first', () => {
+        render(
+            <OperatorMetricPanelBody
+                entry={{ kind: 'operatorMetric', operatorName: 'Alice', metricId: 'greeting_quality', metricLabel: 'Greeting' }}
+                filters={defaultFilters}
+                onOpenCall={onOpenCall}
+            />,
+        )
+
+        expect(mockUseGetOperatorEvidence).toHaveBeenCalledWith({
+            operatorName: 'Alice',
+            startDate: '2026-07-01',
+            endDate: '2026-07-31',
+            projectId: 'proj-1',
+            userId: undefined,
+            metricId: 'greeting_quality',
+            order: 'worst',
+            evidencePage: 1,
+            evidencePageSize: 20,
+        })
+        expect(screen.getByText('METRIC_EVIDENCE_LIST_TITLE:25')).toBeInTheDocument()
+        expect(screen.getByTestId('operator-metric-pagination')).toBeInTheDocument()
+        expect(screen.getByTestId('operator-metric-prev-page')).toBeDisabled()
+    })
+
+    it('requests the next page of calls', async () => {
+        const user = userEvent.setup()
+        render(
+            <OperatorMetricPanelBody
+                entry={{ kind: 'operatorMetric', metricId: 'greeting_quality', metricLabel: 'Greeting' }}
+                filters={defaultFilters}
+                onOpenCall={onOpenCall}
+            />,
+        )
+
+        await user.click(screen.getByTestId('operator-metric-next-page'))
+
+        expect(mockUseGetOperatorEvidence).toHaveBeenLastCalledWith(
+            expect.objectContaining({
+                metricId: 'greeting_quality',
+                evidencePage: 2,
+                evidencePageSize: 20,
+                order: 'worst',
+            }),
+        )
+    })
+
+    it('hides pagination when every call fits on one page', () => {
+        mockUseGetOperatorEvidence.mockReturnValue({
+            data: baseEvidence,
+            isLoading: false,
+            isFetching: false,
+            isError: false,
+            refetch: jest.fn(),
+        })
+
+        render(
+            <OperatorMetricPanelBody
+                entry={{ kind: 'operatorMetric', metricId: 'greeting_quality', metricLabel: 'Greeting' }}
+                filters={defaultFilters}
+                onOpenCall={onOpenCall}
+            />,
+        )
+
+        expect(screen.queryByTestId('operator-metric-pagination')).not.toBeInTheDocument()
+        expect(screen.getByTestId('evidence-call-ch-1')).toBeInTheDocument()
     })
 })

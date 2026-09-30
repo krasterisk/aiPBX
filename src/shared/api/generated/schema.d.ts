@@ -5170,6 +5170,15 @@ export interface components {
             average: number | null;
             /** @example 12 */
             sampleSize: number;
+            /**
+             * @description All scored calls for this metric
+             * @example 48
+             */
+            evidenceTotal: number;
+            /** @example 1 */
+            evidencePage: number;
+            /** @example 20 */
+            evidencePageSize: number;
             evidence: components["schemas"]["OperatorEvidenceItemDto"][];
         };
         OperatorEvidenceResponseDto: {
