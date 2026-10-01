@@ -5,7 +5,13 @@ import type { OperatorEvidenceResponse, TagStat } from '@/entities/Report'
 
 const mockUseGetOperatorEvidence = jest.fn()
 const mockUseGetOperatorCdrs = jest.fn()
+const mockFetchOperatorCdrs = jest.fn()
 const mockUseGetOperatorAnalysis = jest.fn()
+const mockSaveAs = jest.fn()
+
+jest.mock('file-saver', () => ({
+    saveAs: (...args: unknown[]) => mockSaveAs(...args),
+}))
 
 jest.mock('react-i18next', () => ({
     useTranslation: () => ({
@@ -24,6 +30,7 @@ jest.mock('@/entities/Report', () => {
         ...actual,
         useGetOperatorEvidence: (...args: unknown[]) => mockUseGetOperatorEvidence(...args),
         useGetOperatorCdrs: (...args: unknown[]) => mockUseGetOperatorCdrs(...args),
+        useLazyGetOperatorCdrs: () => [mockFetchOperatorCdrs, { isFetching: false }],
         useGetOperatorAnalysis: (...args: unknown[]) => mockUseGetOperatorAnalysis(...args),
     }
 })
@@ -456,6 +463,77 @@ describe('DrilldownPanel distribution body', () => {
 
         expect(screen.getByTestId('distribution-panel-call-count')).toHaveTextContent('TOPICS_CALL_LIST_HEADER:3')
         expect(screen.queryByTestId('distribution-panel-headline')).not.toBeInTheDocument()
+    })
+
+    it('exports every unsuccessful call in the segment, not only the current page', async () => {
+        mockFetchOperatorCdrs.mockReturnValue({
+            unwrap: async () => await Promise.resolve({
+                data: [
+                    {
+                        id: 'cdr-1',
+                        createdAt: '2026-07-02T10:00:00.000Z',
+                        assistantName: 'Bob',
+                        callerId: '+79001234567',
+                        duration: 125,
+                        analytics: {
+                            metrics: {
+                                success: false,
+                                summary: 'Не записали',
+                                _assessments: { success: { rationale: 'Клиент отказался' } },
+                            },
+                        },
+                    },
+                    {
+                        id: 'cdr-2',
+                        createdAt: '2026-07-03T10:00:00.000Z',
+                        assistantName: 'Ann',
+                        callerId: '+79007654321',
+                        duration: 40,
+                        analytics: { metrics: { success: false, summary: 'Нет врача' } },
+                    },
+                    {
+                        id: 'cdr-3',
+                        createdAt: '2026-07-04T10:00:00.000Z',
+                        assistantName: 'Kim',
+                        callerId: '+79001111111',
+                        duration: 15,
+                        analytics: { metrics: { success: false, summary: 'Сброс' } },
+                    },
+                ],
+                total: 3,
+                page: 1,
+                limit: 3,
+            }),
+        })
+        const user = userEvent.setup()
+        render(
+            <DrilldownPanel
+                entry={{
+                    kind: 'distribution',
+                    chart: 'success',
+                    segment: 'fail',
+                    label: 'Неуспешные звонки',
+                }}
+                filters={defaultFilters}
+                onSelectMetric={jest.fn()}
+                onOpenCall={jest.fn()}
+            />,
+        )
+
+        await user.click(screen.getByTestId('distribution-panel-export'))
+
+        expect(mockFetchOperatorCdrs).toHaveBeenCalledWith(expect.objectContaining({
+            success: false,
+            page: 1,
+            limit: 3,
+            startDate: '2026-07-01',
+            endDate: '2026-07-31',
+            projectId: 'proj-1',
+        }))
+        expect(mockSaveAs).toHaveBeenCalledWith(
+            expect.any(Blob),
+            'unsuccessful-calls_2026-07-01_2026-07-31.xlsx',
+        )
     })
 })
 

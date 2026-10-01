@@ -31,6 +31,7 @@ const initialState: ProjectWizardSchema = {
     name: '',
     description: '',
     systemPrompt: '',
+    successPrompt: '',
     customMetrics: [],
     visibleDefaultMetrics: [...ALL_DEFAULT_METRICS],
     callTaxonomy: [],
@@ -77,6 +78,7 @@ export const projectWizardSlice = createSlice({
             state.name = p.name
             state.description = p.description ?? ''
             state.systemPrompt = p.systemPrompt ?? ''
+            state.successPrompt = p.successPrompt ?? ''
             state.customMetrics = p.customMetricsSchema ?? []
             state.visibleDefaultMetrics = p.visibleDefaultMetrics ?? [...ALL_DEFAULT_METRICS]
             state.callTaxonomy = p.callTaxonomy ?? []
@@ -124,6 +126,9 @@ export const projectWizardSlice = createSlice({
         },
         setSystemPrompt: (state, action: PayloadAction<string>) => {
             state.systemPrompt = action.payload
+        },
+        setSuccessPrompt: (state, action: PayloadAction<string>) => {
+            state.successPrompt = action.payload
         },
         setCustomMetrics: (state, action: PayloadAction<MetricDefinition[]>) => {
             state.customMetrics = action.payload

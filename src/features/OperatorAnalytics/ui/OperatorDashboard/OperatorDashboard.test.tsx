@@ -25,6 +25,7 @@ jest.mock('@/entities/Report', () => {
         useGetOperatorProjects: () => mockUseGetOperatorProjects(),
         useGetOperatorEvidence: (...args: unknown[]) => mockUseGetOperatorEvidence(...args),
         useGetOperatorCdrs: () => ({ data: { data: [], total: 0, page: 1, limit: 20 }, isLoading: false }),
+        useLazyGetOperatorCdrs: () => [jest.fn(), { isFetching: false }],
         useGetOperatorAnalysis: () => ({ data: undefined, isLoading: false, isError: false, refetch: jest.fn() }),
     }
 })

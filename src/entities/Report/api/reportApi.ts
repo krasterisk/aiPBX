@@ -261,6 +261,7 @@ export const reportApi = rtkApi.injectEndpoints({
       name: string
       description?: string
       systemPrompt?: string
+      successPrompt?: string
       customMetricsSchema?: MetricDefinition[]
       callTaxonomy?: TagDefinition[]
       visibleDefaultMetrics?: string[]
@@ -322,6 +323,7 @@ export const reportApi = rtkApi.injectEndpoints({
       name?: string
       description?: string
       systemPrompt?: string
+      successPrompt?: string
       customMetricsSchema?: MetricDefinition[]
       callTaxonomy?: TagDefinition[]
       visibleDefaultMetrics?: string[]
@@ -476,6 +478,7 @@ export const useRegenerateOperatorAnalytics = reportApi.useRegenerateOperatorAna
 export const useUploadOperatorFiles = reportApi.useUploadOperatorFilesMutation
 export const useGetOperatorAnalysis = reportApi.useGetOperatorAnalysisQuery
 export const useGetOperatorCdrs = reportApi.useGetOperatorCdrsQuery
+export const useLazyGetOperatorCdrs = reportApi.useLazyGetOperatorCdrsQuery
 export const useGetOperatorDashboard = reportApi.useGetOperatorDashboardQuery
 export const useGetOperatorProjects = reportApi.useGetOperatorProjectsQuery
 export const useCreateOperatorProject = reportApi.useCreateOperatorProjectMutation

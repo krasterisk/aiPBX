@@ -1,12 +1,19 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Skeleton } from '@mui/material'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, Download } from 'lucide-react'
+import { saveAs } from 'file-saver'
+import * as XLSX from 'xlsx'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
-import { useGetOperatorCdrs, type OperatorAnalysisResult } from '@/entities/Report'
+import {
+    useGetOperatorCdrs,
+    useLazyGetOperatorCdrs,
+    type OperatorAnalysisResult,
+} from '@/entities/Report'
 import { ALL_DEFAULT_METRICS, scoreVariant } from '../../../lib/metricVisual'
+import { buildDistributionCallsSheet } from './distributionCallsExport'
 import type { PanelEntry } from '../../../model/panelStack'
 import type { DashboardFilters } from './OperatorPanelBody'
 import cls from './DistributionPanelBody.module.scss'
@@ -19,9 +26,26 @@ interface DistributionPanelBodyProps {
     onOpenCall: (channelId: string, fromLabel: string) => void
 }
 
+const EXPORT_FILE_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+
 type CdrListRow = OperatorAnalysisResult & {
     callerId?: string
-    analytics?: { metrics?: Record<string, unknown> }
+    analytics?: {
+        summary?: string
+        sentiment?: string
+        metrics?: Record<string, unknown>
+    }
+}
+
+function exportFileName(
+    entry: Extract<PanelEntry, { kind: 'distribution' }>,
+    filters: DashboardFilters,
+): string {
+    const kind = entry.chart === 'success'
+        ? (entry.segment === 'fail' ? 'unsuccessful-calls' : 'successful-calls')
+        : `calls-${entry.segment}`
+    const period = [filters.startDate, filters.endDate].filter(Boolean).join('_')
+    return period ? `${kind}_${period}.xlsx` : `${kind}.xlsx`
 }
 
 function formatCallDuration(seconds: number | undefined, t: (key: string) => string): string | null {
@@ -72,14 +96,14 @@ export const DistributionPanelBody = memo((props: DistributionPanelBodyProps) =>
     const { entry, filters, onOpenCall } = props
     const { t } = useTranslation('reports')
     const [page, setPage] = useState(1)
+    const [exporting, setExporting] = useState(false)
+    const [fetchAllCdrs] = useLazyGetOperatorCdrs()
 
-    const cdrArgs = useMemo(() => {
+    const queryBase = useMemo(() => {
         const base = {
             startDate: filters.startDate,
             endDate: filters.endDate,
             projectId: filters.projectId,
-            page,
-            limit: PAGE_SIZE,
         }
         if (entry.chart === 'sentiment') {
             return {
@@ -91,12 +115,48 @@ export const DistributionPanelBody = memo((props: DistributionPanelBodyProps) =>
             ...base,
             success: entry.segment === 'success',
         }
-    }, [entry.chart, entry.segment, filters, page])
+    }, [entry.chart, entry.segment, filters])
+
+    const cdrArgs = useMemo(() => ({
+        ...queryBase,
+        page,
+        limit: PAGE_SIZE,
+    }), [queryBase, page])
 
     const { data, isLoading, isFetching, isError, refetch } = useGetOperatorCdrs(cdrArgs)
 
-    const loading = (isLoading || isFetching) && !data
     const total = data?.total ?? 0
+
+    const handleExport = useCallback(async () => {
+        if (!total || exporting) return
+        setExporting(true)
+        try {
+            const result = await fetchAllCdrs({
+                ...queryBase,
+                page: 1,
+                limit: total,
+            }).unwrap()
+            const rows = (result.data ?? []) as CdrListRow[]
+            if (!rows.length) return
+            const sheet = buildDistributionCallsSheet(rows, key => String(t(key)))
+            const worksheet = XLSX.utils.json_to_sheet(sheet.rows, { header: sheet.headers })
+            worksheet['!cols'] = sheet.headers.map(header => ({
+                wch: header === String(t('Саммари')) || header === String(t('Итог обращения'))
+                    ? 48
+                    : Math.min(Math.max(header.length, 12), 28),
+            }))
+            const workbook = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'calls')
+            const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+            saveAs(new Blob([buffer], { type: EXPORT_FILE_TYPE }), exportFileName(entry, filters))
+        } catch {
+            // The list stays on screen; the button returns to idle below.
+        } finally {
+            setExporting(false)
+        }
+    }, [entry, exporting, fetchAllCdrs, filters, queryBase, t, total])
+
+    const loading = (isLoading || isFetching) && !data
     const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
 
     if (loading) {
@@ -127,12 +187,26 @@ export const DistributionPanelBody = memo((props: DistributionPanelBodyProps) =>
     return (
         <VStack gap="16" max align="stretch" className={cls.root} data-testid="distribution-panel-body">
             <div className={cls.summary}>
-                <div data-testid="distribution-panel-call-count">
-                    <Text
-                        text={String(t('TOPICS_CALL_LIST_HEADER', { count: total }))}
-                        size="m"
-                        bold
-                    />
+                <div className={cls.summaryHeader}>
+                    <div data-testid="distribution-panel-call-count">
+                        <Text
+                            text={String(t('TOPICS_CALL_LIST_HEADER', { count: total }))}
+                            size="m"
+                            bold
+                        />
+                    </div>
+                    {total > 0 && (
+                        <Button
+                            variant="glass-action"
+                            size="s"
+                            addonLeft={<Download size={16} aria-hidden />}
+                            onClick={() => { void handleExport() }}
+                            disabled={exporting}
+                            data-testid="distribution-panel-export"
+                        >
+                            {exporting ? String(t('Экспорт...')) : String(t('Выгрузить'))}
+                        </Button>
+                    )}
                 </div>
                 <Text
                     text={String(t('DISTRIBUTION_LIST_HINT'))}

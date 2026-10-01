@@ -605,6 +605,7 @@ export interface OperatorProject {
   createdAt: string
   isDefault?: boolean
   systemPrompt?: string
+  successPrompt?: string
   customMetricsSchema?: MetricDefinition[]
   callTaxonomy?: TagDefinition[]
   currentSchemaVersion?: number

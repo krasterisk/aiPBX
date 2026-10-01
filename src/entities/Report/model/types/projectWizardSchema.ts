@@ -56,6 +56,7 @@ export interface ProjectWizardSchema {
     name: string
     description: string
     systemPrompt: string
+    successPrompt: string
     customMetrics: MetricDefinition[]
     visibleDefaultMetrics: DefaultMetricKey[]
     callTaxonomy: TagDefinition[]

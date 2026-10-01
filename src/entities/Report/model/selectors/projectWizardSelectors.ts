@@ -8,6 +8,7 @@ export const getWizardMethodStepDone = (state: StateSchema) => state.projectWiza
 export const getWizardName = (state: StateSchema) => state.projectWizard?.name ?? ''
 export const getWizardDescription = (state: StateSchema) => state.projectWizard?.description ?? ''
 export const getWizardSystemPrompt = (state: StateSchema) => state.projectWizard?.systemPrompt ?? ''
+export const getWizardSuccessPrompt = (state: StateSchema) => state.projectWizard?.successPrompt ?? ''
 export const getWizardCustomMetrics = (state: StateSchema) => state.projectWizard?.customMetrics ?? []
 export const getWizardVisibleDefaultMetrics = (state: StateSchema) => state.projectWizard?.visibleDefaultMetrics ?? []
 export const getWizardCallTaxonomy = (state: StateSchema) => state.projectWizard?.callTaxonomy ?? []

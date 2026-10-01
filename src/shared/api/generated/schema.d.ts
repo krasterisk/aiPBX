@@ -5003,6 +5003,8 @@ export interface components {
             templateId?: string;
             /** @description Business context prompt for LLM (max 1000 chars) */
             systemPrompt?: string;
+            /** @description Project rule for call success (max 2000 chars). Empty keeps the built-in rule. */
+            successPrompt?: string;
             /** @description Custom metrics definitions */
             customMetricsSchema?: components["schemas"]["MetricDefinitionDto"][];
             /** @description Call topic taxonomy */
@@ -5045,6 +5047,8 @@ export interface components {
             description?: string;
             /** @description Business context prompt for LLM (max 1000 chars) */
             systemPrompt?: string;
+            /** @description Project rule for call success (max 2000 chars). Empty keeps the built-in rule. */
+            successPrompt?: string;
             /** @description Custom metrics definitions */
             customMetricsSchema?: components["schemas"]["MetricDefinitionDto"][];
             /** @description Call topic taxonomy */

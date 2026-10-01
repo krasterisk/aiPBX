@@ -13,6 +13,7 @@ import {
     getWizardName,
     getWizardDescription,
     getWizardSystemPrompt,
+    getWizardSuccessPrompt,
     getWizardCustomMetrics,
     getWizardVisibleDefaultMetrics,
     getWizardCallTaxonomy,
@@ -47,6 +48,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
     const name = useSelector(getWizardName)
     const description = useSelector(getWizardDescription)
     const systemPrompt = useSelector(getWizardSystemPrompt)
+    const successPrompt = useSelector(getWizardSuccessPrompt)
     const customMetrics = useSelector(getWizardCustomMetrics)
     const visibleDefaults = useSelector(getWizardVisibleDefaultMetrics)
     const webhookUrl = useSelector(getWizardWebhookUrl)
@@ -61,6 +63,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
         editProject.monthlyBudgetUsd != null ? String(editProject.monthlyBudgetUsd) : '',
     )
     const [showPrompt, setShowPrompt] = useState(false)
+    const [showSuccessPrompt, setShowSuccessPrompt] = useState(false)
     const [showBudget, setShowBudget] = useState(false)
     const [showTaxonomy, setShowTaxonomy] = useState(false)
 
@@ -76,6 +79,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                 name: name.trim() || String(t('Новый проект')),
                 description: description.trim(),
                 systemPrompt: systemPrompt.trim(),
+                successPrompt: successPrompt.trim(),
                 customMetricsSchema: customMetrics,
                 callTaxonomy,
                 visibleDefaultMetrics: visibleDefaults,
@@ -110,7 +114,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
         } catch (err) {
             console.error('Settings save error:', err)
         }
-    }, [name, description, systemPrompt, customMetrics, callTaxonomy, visibleDefaults, webhookUrl, webhookHeaders, webhookEvents, digestConfig, alertConfig, budgetInput, editProject, updateProject, dispatch, onClose, onSuccess, t])
+    }, [name, description, systemPrompt, successPrompt, customMetrics, callTaxonomy, visibleDefaults, webhookUrl, webhookHeaders, webhookEvents, digestConfig, alertConfig, budgetInput, editProject, updateProject, dispatch, onClose, onSuccess, t])
 
     return (
         <VStack gap={'16'} max align={'stretch'} className={`${cls.ProjectWizard} ${cls.ProjectSettings}`}>
@@ -162,6 +166,39 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                                 },
                             }}
                         />
+                    )}
+                </VStack>
+            </Card>
+
+            <Card variant={'glass'} border={'partial'} padding={'16'} max>
+                <VStack gap={'8'} max>
+                    <HStack max justify={'between'} align={'center'}
+                        onClick={() => { setShowSuccessPrompt(prev => !prev) }}
+                        className={cls.clickable}>
+                        <Text text={String(t('Промпт успешности'))} bold />
+                        <SectionChevron open={showSuccessPrompt} />
+                    </HStack>
+                    {showSuccessPrompt && (
+                        <VStack gap={'8'} max>
+                            <Text
+                                text={String(t('SUCCESS_PROMPT_HINT'))}
+                                size={'xs'}
+                            />
+                            <Textarea
+                                value={successPrompt}
+                                onChange={e => dispatch(projectWizardActions.setSuccessPrompt(e.target.value))}
+                                size={'small'}
+                                fullWidth
+                                multiline
+                                rows={6}
+                                placeholder={String(t('SUCCESS_PROMPT_PLACEHOLDER'))}
+                                sx={{
+                                    '& .MuiOutlinedInput-root.MuiInputBase-multiline': {
+                                        padding: '12px',
+                                    },
+                                }}
+                            />
+                        </VStack>
                     )}
                 </VStack>
             </Card>
