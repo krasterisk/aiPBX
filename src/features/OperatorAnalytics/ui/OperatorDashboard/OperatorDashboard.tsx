@@ -345,6 +345,16 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                 >
                     <AiInsightsBanner
                         projectName={activeProject?.name}
+                        metricNames={Object.fromEntries([
+                            ...ALL_DEFAULT_METRICS.map(metric => [metric.key, String(t(metric.labelKey))]),
+                            ['csat', String(t('csat'))],
+                            ['customer_sentiment', String(t('customer_sentiment'))],
+                            ['sentiment', String(t('customer_sentiment'))],
+                            ['success', String(t('success'))],
+                            ['avgScore', String(t('avgScore'))],
+                            ['successRate', String(t('successRate'))],
+                            ...(activeProject?.customMetricsSchema ?? []).map(metric => [metric.id, metric.name]),
+                        ])}
                         queryParams={{
                             startDate,
                             endDate,

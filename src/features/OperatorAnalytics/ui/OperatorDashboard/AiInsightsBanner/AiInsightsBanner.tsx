@@ -15,6 +15,7 @@ import cls from './AiInsightsBanner.module.scss'
 
 interface AiInsightsBannerProps {
     projectName?: string
+    metricNames?: Record<string, string>
     queryParams?: {
         startDate?: string
         endDate?: string
@@ -60,10 +61,21 @@ function canDrillDown(insight: OperatorInsight): boolean {
     return Boolean(evidence.channelIds?.length || evidence.operators?.length)
 }
 
-function formatEvidence(insight: OperatorInsight): string | null {
+function applyMetricNames(text: string, metricNames?: Record<string, string>): string {
+    if (!metricNames) return text
+    const ids = Object.keys(metricNames).sort((a, b) => b.length - a.length)
+    return ids.reduce((current, id) => {
+        const name = metricNames[id]
+        if (!name || name === id) return current
+        return current.replace(new RegExp(`\\b${id}\\b`, 'g'), name)
+    }, text)
+}
+
+function formatEvidence(insight: OperatorInsight, metricNames?: Record<string, string>): string | null {
     const { evidence } = insight
     if (evidence.metric != null && evidence.value != null) {
-        return `${evidence.metric}: ${evidence.value}`
+        const label = metricNames?.[evidence.metric] || evidence.metric
+        return `${label}: ${evidence.value}`
     }
     if (evidence.operators?.length) {
         return evidence.operators.join(', ')
@@ -74,7 +86,7 @@ function formatEvidence(insight: OperatorInsight): string | null {
     return null
 }
 
-export const AiInsightsBanner = memo(({ projectName, queryParams }: AiInsightsBannerProps) => {
+export const AiInsightsBanner = memo(({ projectName, metricNames, queryParams }: AiInsightsBannerProps) => {
     const { t } = useTranslation('reports')
     const navigate = useNavigate()
     const [triggerInsights, { data, isLoading, isFetching, isError }] = useLazyGetOperatorInsights()
@@ -158,7 +170,7 @@ export const AiInsightsBanner = memo(({ projectName, queryParams }: AiInsightsBa
                 {insights.length > 0 && (
                     <VStack gap={'8'} max className={cls.insightsList}>
                         {insights.map((insight, i) => {
-                            const evidenceText = formatEvidence(insight)
+                            const evidenceText = formatEvidence(insight, metricNames)
                             return (
                                 <div
                                     key={`${insight.title}-${i}`}
@@ -178,10 +190,14 @@ export const AiInsightsBanner = memo(({ projectName, queryParams }: AiInsightsBa
                                                 {String(t(`INSIGHT_TYPE_${insight.type}`))}
                                             </span>
                                         </HStack>
-                                        <Text text={insight.title} bold size={'s'} />
-                                        <Text text={insight.observation} size={'s'} />
+                                        <Text text={applyMetricNames(insight.title, metricNames)} bold size={'s'} />
+                                        <Text text={applyMetricNames(insight.observation, metricNames)} size={'s'} />
                                         {insight.recommendation && (
-                                            <Text text={insight.recommendation} size={'s'} className={cls.recommendation} />
+                                            <Text
+                                                text={applyMetricNames(insight.recommendation, metricNames)}
+                                                size={'s'}
+                                                className={cls.recommendation}
+                                            />
                                         )}
                                         {evidenceText && (
                                             canDrillDown(insight) ? (
