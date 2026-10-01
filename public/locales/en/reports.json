@@ -383,7 +383,7 @@
   "Системный промпт": "System Prompt",
   "Промпт успешности": "Success prompt",
   "SUCCESS_PROMPT_HINT": "Leave empty to keep the built-in rule for new analyses: success means the request was handled within what the company offers. Your text replaces that rule. Calls already analysed are not rescored.",
-  "SUCCESS_PROMPT_PLACEHOLDER": "true — the operator booked the patient or clearly explained why booking is impossible. false — the request was ignored or the customer left without an answer.",
+  "SUCCESS_PROMPT_PLACEHOLDER": "true — the customer's request was handled: answered, completed, or clearly explained as impossible with a next step. false — the request was ignored, answered incorrectly, or the customer left without a response.",
   "Создать": "Create",
   "Скопировать URL": "Copy URL",
   "Заголовки запроса:": "Request headers:",

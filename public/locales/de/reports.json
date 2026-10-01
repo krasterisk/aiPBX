@@ -422,7 +422,7 @@
   "Системный промпт": "Systemprompt",
   "Промпт успешности": "Erfolgs-Prompt",
   "SUCCESS_PROMPT_HINT": "Leer lassen, um die Standardregel für neue Analysen zu behalten: Erfolg bedeutet, die Anfrage wurde im Angebot des Unternehmens bearbeitet. Eigener Text ersetzt diese Regel. Bereits analysierte Anrufe werden nicht neu bewertet.",
-  "SUCCESS_PROMPT_PLACEHOLDER": "true — der Operator hat den Patienten eingetragen oder klar erklärt, warum ein Termin unmöglich ist. false — die Anfrage wurde ignoriert oder der Kunde blieb ohne Antwort.",
+  "SUCCESS_PROMPT_PLACEHOLDER": "true — die Anfrage wurde bearbeitet: beantwortet, abgeschlossen oder klar als unmöglich erklärt, mit einem nächsten Schritt. false — die Anfrage wurde ignoriert, falsch beantwortet oder der Kunde blieb ohne Antwort.",
   "Создать": "Erstellen",
   "Скопировать URL": "URL kopieren",
   "Заголовки запроса:": "Anfrage-Header:",
