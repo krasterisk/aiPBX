@@ -1,22 +1,28 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Skeleton } from '@mui/material'
-import { ChevronRight, CircleHelp } from 'lucide-react'
+import { ChevronRight, CircleHelp, Download } from 'lucide-react'
+import { saveAs } from 'file-saver'
+import * as XLSX from 'xlsx'
 import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Tooltip } from '@/shared/ui/redesign-v3/Tooltip'
-import { useGetOperatorCdrs, type OperatorAnalysisResult } from '@/entities/Report'
+import { useGetOperatorCdrs, useLazyGetOperatorCdrs, type OperatorAnalysisResult, type OperatorProject } from '@/entities/Report'
 import type { PanelEntry } from '../../../model/panelStack'
 import { ALL_DEFAULT_METRICS, normalizeRate, scoreVariant } from '../../../lib/metricVisual'
+import { operatorCallScore } from '../../../lib/operatorCallScore'
+import { buildDistributionCallsSheet } from './distributionCallsExport'
 import type { DashboardFilters } from './OperatorPanelBody'
 import cls from './TagPanelBody.module.scss'
 
 const PAGE_SIZE = 20
+const EXPORT_FILE_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
 
 interface TagPanelBodyProps {
     entry: Extract<PanelEntry, { kind: 'tag' }>
     filters: DashboardFilters
+    project?: OperatorProject
     onOpenCall: (channelId: string, fromLabel: string) => void
 }
 
@@ -43,21 +49,6 @@ function resolveCallMetrics(call: CdrListRow): Record<string, unknown> | undefin
         return call.analytics.metrics
     }
     return undefined
-}
-
-function averageScoreFromMetrics(metrics?: Record<string, unknown>): number | null {
-    if (!metrics) return null
-    let sum = 0
-    let count = 0
-    for (const { key } of ALL_DEFAULT_METRICS) {
-        const value = Number(metrics[key])
-        if (Number.isFinite(value)) {
-            sum += value
-            count += 1
-        }
-    }
-    if (!count) return null
-    return Math.round(sum / count)
 }
 
 function isMeaningfulFilename(filename?: string): boolean {
@@ -90,20 +81,28 @@ const MetricHintLabel = memo(({ label, hint }: MetricHintProps) => (
 ))
 
 export const TagPanelBody = memo((props: TagPanelBodyProps) => {
-    const { entry, filters, onOpenCall } = props
+    const { entry, filters, project, onOpenCall } = props
     const { stat } = entry
     const { t } = useTranslation('reports')
     const [page, setPage] = useState(1)
+    const [exporting, setExporting] = useState(false)
+    const [exportError, setExportError] = useState(false)
+    const [fetchAllCdrs] = useLazyGetOperatorCdrs()
 
-    const cdrArgs = useMemo(() => ({
+    const queryBase = useMemo(() => ({
         startDate: filters.startDate,
         endDate: filters.endDate,
         projectId: filters.projectId,
+        userId: filters.userId,
         // Backend getCdrs expects tagId (operator_call_tags), not legacy "theme".
         tagId: stat.tagId,
+    }), [filters, stat.tagId])
+
+    const cdrArgs = useMemo(() => ({
+        ...queryBase,
         page,
         limit: PAGE_SIZE,
-    }), [filters, stat.tagId, page])
+    }), [queryBase, page])
 
     const { data, isLoading, isFetching, isError, refetch } = useGetOperatorCdrs(cdrArgs, {
         skip: !stat.tagId,
@@ -114,6 +113,37 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
     const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
     const successRatePct = normalizeRate(stat.successRate)
     const delta = stat.deltaVsPeriodAverage
+    const defaultKeys = project
+        ? (project.visibleDefaultMetrics?.length ? project.visibleDefaultMetrics : ALL_DEFAULT_METRICS.map(({ key }) => key))
+        : undefined
+
+    const handleExport = useCallback(async () => {
+        if (!total || exporting) return
+        setExporting(true)
+        setExportError(false)
+        try {
+            const result = await fetchAllCdrs({ ...queryBase, page: 1, limit: total }).unwrap()
+            if (!result.data?.length) return
+            const sheet = buildDistributionCallsSheet(result.data as CdrListRow[], key => String(t(key)))
+            const worksheet = XLSX.utils.json_to_sheet(sheet.rows, { header: sheet.headers })
+            worksheet['!cols'] = sheet.headers.map(header => ({
+                wch: header === String(t('Саммари')) || header === String(t('Итог обращения'))
+                    ? 48
+                    : Math.min(Math.max(header.length, 12), 28),
+            }))
+            const workbook = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'calls')
+            const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+            const tag = stat.tagId.replace(/[^\p{L}\p{N}_.-]/gu, '_')
+            const period = [filters.startDate, filters.endDate].filter(Boolean).join('_')
+            const filename = [`topic-calls-${tag}`, period].filter(Boolean).join('_')
+            saveAs(new Blob([buffer], { type: EXPORT_FILE_TYPE }), `${filename}.xlsx`)
+        } catch {
+            setExportError(true)
+        } finally {
+            setExporting(false)
+        }
+    }, [exporting, fetchAllCdrs, filters.startDate, filters.endDate, queryBase, stat.tagId, t, total])
 
     if (loading) {
         return (
@@ -234,17 +264,36 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
             )}
 
             <div className={cls.listHeader} data-testid="tag-panel-call-count">
-                <Text
-                    text={String(t('TOPICS_CALL_LIST_TITLE', { count: total }))}
-                    size="m"
-                    bold
-                />
+                <div className={cls.listHeaderRow}>
+                    <Text
+                        text={String(t('TOPICS_CALL_LIST_TITLE', { count: total }))}
+                        size="m"
+                        bold
+                    />
+                    {total > 0 && (
+                        <Button
+                            variant="glass-action"
+                            size="s"
+                            addonLeft={<Download size={16} aria-hidden />}
+                            onClick={() => { void handleExport() }}
+                            disabled={exporting}
+                            data-testid="tag-panel-export"
+                        >
+                            {exporting ? String(t('Экспорт...')) : String(t('Выгрузить'))}
+                        </Button>
+                    )}
+                </div>
                 <Text
                     text={String(t('TOPICS_CALL_LIST_HINT'))}
                     size="xs"
                     className={cls.listHint}
                 />
             </div>
+            {exportError && (
+                <div role="alert">
+                    <Text text={String(t('Не удалось выгрузить звонки'))} variant="error" size="s" />
+                </div>
+            )}
 
             <div className={cls.callList} data-testid="tag-panel-call-list">
                 {(data?.data.length ?? 0) === 0 ? (
@@ -256,7 +305,7 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
                     const operator = call.assistantName || call.operatorName || String(t('Без оператора'))
                     const client = call.clientPhone || call.callerId
                     const durationLabel = formatCallDuration(call.duration, t)
-                    const score = averageScoreFromMetrics(resolveCallMetrics(call))
+                    const score = operatorCallScore(resolveCallMetrics(call), defaultKeys, Boolean(project))
                     const filename = isMeaningfulFilename(call.filename) ? call.filename : null
                     const dateLabel = new Date(call.createdAt).toLocaleString(undefined, {
                         day: '2-digit',

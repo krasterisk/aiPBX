@@ -1,4 +1,5 @@
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
+import * as XLSX from 'xlsx'
 import userEvent from '@testing-library/user-event'
 import { DrilldownPanel } from './DrilldownPanel'
 import type { OperatorEvidenceResponse, TagStat } from '@/entities/Report'
@@ -218,6 +219,82 @@ describe('DrilldownPanel tag body', () => {
         expect(row).toHaveTextContent('Открыть')
     })
 
+    it('uses the enabled project metrics and checklist in a theme call score', () => {
+        mockUseGetOperatorCdrs.mockReturnValue({
+            data: {
+                data: [{
+                    id: 'scored',
+                    createdAt: '2026-07-02T10:00:00.000Z',
+                    analytics: {
+                        metrics: { greeting_quality: 90, closing_quality: 0, custom_metrics: { checklist: true } },
+                    },
+                }],
+                total: 1,
+            },
+        })
+        render(<DrilldownPanel
+            entry={{ kind: 'tag', stat: tagStat }}
+            filters={defaultFilters}
+            project={{ id: 'proj-1', name: 'Project', createdAt: '', visibleDefaultMetrics: ['greeting_quality'] }}
+            onSelectMetric={jest.fn()}
+            onOpenCall={jest.fn()}
+        />)
+
+        expect(screen.getByTestId('tag-call-row-scored')).toHaveTextContent('Средний балл:95')
+    })
+
+    it('exports all calls of the selected theme with the dashboard filters', async () => {
+        const rows = Array.from({ length: 25 }, (_, index) => ({
+            id: String(index),
+            createdAt: '2026-07-02T10:00:00.000Z',
+            assistantName: `Operator ${index}`,
+            analytics: { metrics: { success: true, summary: `Summary ${index}` } },
+        }))
+        mockFetchOperatorCdrs.mockReturnValue({ unwrap: async () => ({ data: rows }) })
+        render(<DrilldownPanel
+            entry={{ kind: 'tag', stat: tagStat }}
+            filters={{ ...defaultFilters, userId: '42' }}
+            onSelectMetric={jest.fn()}
+            onOpenCall={jest.fn()}
+        />)
+
+        const user = userEvent.setup()
+        await user.click(screen.getByTestId('tag-panel-next-page'))
+        await user.click(screen.getByTestId('tag-panel-export'))
+
+        expect(mockFetchOperatorCdrs).toHaveBeenCalledWith({
+            ...defaultFilters, userId: '42', tagId: 'tag-sales', page: 1, limit: 25,
+        })
+        await waitFor(() => { expect(mockSaveAs).toHaveBeenCalled() })
+        const [blob, filename] = mockSaveAs.mock.calls[0]
+        expect(filename).toBe('topic-calls-tag-sales_2026-07-01_2026-07-31.xlsx')
+        const buffer = await new Promise<ArrayBuffer>((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = () => { resolve(reader.result as ArrayBuffer) }
+            reader.onerror = () => { reject(reader.error) }
+            reader.readAsArrayBuffer(blob)
+        })
+        const workbook = XLSX.read(buffer, { type: 'array' })
+        const exportedRows = XLSX.utils.sheet_to_json(workbook.Sheets.calls)
+        expect(exportedRows).toHaveLength(25)
+        expect(exportedRows[24]).toMatchObject({ Оператор: 'Operator 24', Саммари: 'Summary 24', Результат: 'Успех' })
+    })
+
+    it('shows an export failure and allows retry', async () => {
+        mockFetchOperatorCdrs.mockReturnValue({ unwrap: async () => { throw new Error('offline') } })
+        render(<DrilldownPanel
+            entry={{ kind: 'tag', stat: tagStat }}
+            filters={defaultFilters}
+            onSelectMetric={jest.fn()}
+            onOpenCall={jest.fn()}
+        />)
+
+        await userEvent.setup().click(screen.getByTestId('tag-panel-export'))
+        expect(await screen.findByRole('alert')).toHaveTextContent('Не удалось выгрузить звонки')
+        expect(screen.getByTestId('tag-panel-export')).toBeEnabled()
+        expect(mockSaveAs).not.toHaveBeenCalled()
+    })
+
     it('requests the next page when pagination advances', async () => {
         mockUseGetOperatorCdrs.mockReturnValue({
             data: {
@@ -270,6 +347,7 @@ describe('DrilldownPanel tag body', () => {
         )
 
         expect(screen.getByTestId('tag-panel-calls-empty')).toBeInTheDocument()
+        expect(screen.queryByTestId('tag-panel-export')).not.toBeInTheDocument()
     })
 
     it('shows inline error with retry on fetch failure', async () => {

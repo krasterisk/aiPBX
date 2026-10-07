@@ -609,6 +609,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                     <DrilldownPanel
                         entry={currentEntry}
                         filters={dashboardFilters}
+                        project={activeProject}
                         onSelectMetric={handleSelectMetric}
                         onOpenCall={handleOpenCall}
                     />

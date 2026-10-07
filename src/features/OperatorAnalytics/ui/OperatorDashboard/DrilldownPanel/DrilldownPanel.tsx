@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import type { OperatorProject } from '@/entities/Report'
 import type { PanelEntry } from '../../../model/panelStack'
 import { CallPanelBody } from './CallPanelBody'
 import { DistributionPanelBody } from './DistributionPanelBody'
@@ -8,12 +9,13 @@ import { TagPanelBody } from './TagPanelBody'
 export interface DrilldownPanelProps {
     entry: PanelEntry
     filters: DashboardFilters
+    project?: OperatorProject
     onSelectMetric: (metricId: string, metricLabel: string) => void
     onOpenCall: (channelId: string, fromLabel: string) => void
 }
 
 export const DrilldownPanel = memo((props: DrilldownPanelProps) => {
-    const { entry, filters, onSelectMetric, onOpenCall } = props
+    const { entry, filters, project, onSelectMetric, onOpenCall } = props
 
     switch (entry.kind) {
         case 'operator':
@@ -39,6 +41,7 @@ export const DrilldownPanel = memo((props: DrilldownPanelProps) => {
                 <TagPanelBody
                     entry={entry}
                     filters={filters}
+                    project={project}
                     onOpenCall={onOpenCall}
                 />
             )

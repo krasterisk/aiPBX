@@ -1,4 +1,4 @@
-@import '@/app/styles/variables/mixins';
+@import "@/app/styles/variables/mixins";
 
 .root {
     display: flex;
@@ -29,6 +29,7 @@
 
 .statItem {
     @include glass-card-tertiary;
+
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
@@ -95,6 +96,7 @@
 
 .contextItem {
     @include glass-card-tertiary;
+
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
@@ -113,6 +115,15 @@
     color: var(--hint-redesigned);
 }
 
+.listHeaderRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    width: 100%;
+}
+
 .callList {
     display: flex;
     flex-direction: column;
@@ -122,6 +133,7 @@
 
 .callRow {
     @include hover-card-row;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -180,15 +192,15 @@
     color: var(--text-redesigned);
     font-weight: 600;
 
-    &[data-score-variant='success'] {
+    &[data-score-variant="success"] {
         color: var(--status-success);
     }
 
-    &[data-score-variant='warning'] {
+    &[data-score-variant="warning"] {
         color: var(--status-warning);
     }
 
-    &[data-score-variant='error'] {
+    &[data-score-variant="error"] {
         color: var(--status-error);
     }
 }

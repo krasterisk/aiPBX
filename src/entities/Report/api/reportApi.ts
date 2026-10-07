@@ -199,6 +199,7 @@ export const reportApi = rtkApi.injectEndpoints({
       providesTags: (result, error, id) => [{ type: 'OperatorAnalytics', id }]
     }),
     getOperatorCdrs: build.query<OperatorCdrResponse, {
+      userId?: string
       startDate?: string
       endDate?: string
       operatorName?: string
