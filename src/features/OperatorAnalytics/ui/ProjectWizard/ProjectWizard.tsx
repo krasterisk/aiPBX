@@ -24,6 +24,7 @@ import {
     getWizardCustomMetrics,
     getWizardVisibleDefaultMetrics,
     getWizardCallTaxonomy,
+    getWizardSingleTopic,
     getWizardSelectedTemplateId,
 } from '@/entities/Report'
 import { WizardPhaseIndicator, CreateWizardStep } from './WizardPhaseIndicator'
@@ -98,6 +99,7 @@ const WizardCreateFlow = memo(({ onClose, onSuccess, isCreating, createProject, 
     const customMetrics = useSelector(getWizardCustomMetrics)
     const visibleDefaults = useSelector(getWizardVisibleDefaultMetrics)
     const callTaxonomy = useSelector(getWizardCallTaxonomy)
+    const singleTopic = useSelector(getWizardSingleTopic)
     const selectedTemplateId = useSelector(getWizardSelectedTemplateId)
 
     const handleCreate = useCallback(async () => {
@@ -109,6 +111,7 @@ const WizardCreateFlow = memo(({ onClose, onSuccess, isCreating, createProject, 
                 customMetricsSchema: customMetrics,
                 visibleDefaultMetrics: visibleDefaults,
                 callTaxonomy,
+                singleTopic,
                 ownerUserId: ownerUserId || undefined,
             }).unwrap()
 
@@ -119,7 +122,7 @@ const WizardCreateFlow = memo(({ onClose, onSuccess, isCreating, createProject, 
             console.error('Wizard create error:', err)
         }
     }, [
-        name, description, systemPrompt, customMetrics, visibleDefaults, callTaxonomy,
+        name, description, systemPrompt, customMetrics, visibleDefaults, callTaxonomy, singleTopic,
         ownerUserId, createProject, dispatch, onClose, onSuccess, t,
     ])
 
@@ -229,6 +232,8 @@ const WizardCreateFlow = memo(({ onClose, onSuccess, isCreating, createProject, 
                             <Text text={String(t('Темы звонков'))} bold />
                             <TaxonomyEditor
                                 taxonomy={callTaxonomy}
+                                singleTopic={singleTopic}
+                                onSingleTopicChange={value => dispatch(projectWizardActions.setSingleTopic(value))}
                                 onChange={(taxonomy: TagDefinition[]) => {
                                     dispatch(projectWizardActions.setCallTaxonomy(taxonomy))
                                 }}

@@ -35,6 +35,7 @@ const initialState: ProjectWizardSchema = {
     customMetrics: [],
     visibleDefaultMetrics: [...ALL_DEFAULT_METRICS],
     callTaxonomy: [],
+    singleTopic: false,
     webhookUrl: '',
     webhookHeaders: {},
     webhookEvents: [],
@@ -82,6 +83,7 @@ export const projectWizardSlice = createSlice({
             state.customMetrics = p.customMetricsSchema ?? []
             state.visibleDefaultMetrics = p.visibleDefaultMetrics ?? [...ALL_DEFAULT_METRICS]
             state.callTaxonomy = p.callTaxonomy ?? []
+            state.singleTopic = p.singleTopic ?? false
             state.webhookUrl = p.webhookUrl ?? ''
             state.webhookHeaders = p.webhookHeaders ?? {}
             state.webhookEvents = p.webhookEvents ?? []
@@ -144,6 +146,9 @@ export const projectWizardSlice = createSlice({
             } else {
                 state.visibleDefaultMetrics.push(key)
             }
+        },
+        setSingleTopic: (state, action: PayloadAction<boolean>) => {
+            state.singleTopic = action.payload
         },
         setCallTaxonomy: (state, action: PayloadAction<TagDefinition[]>) => {
             state.callTaxonomy = action.payload

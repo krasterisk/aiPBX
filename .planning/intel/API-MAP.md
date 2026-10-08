@@ -272,3 +272,8 @@ Base URL: `__API__` (e.g. `https://aipbx.ru/api`). WebSocket: `__WS__` (port 303
 | Assistant pipeline fields | non-realtime/OmniVoice fields added incrementally |
 | Billing records shape | `frontend_refactoring_prompt.md` — breakdown per response.done |
 | `aggregatedCustomMetrics` | Backend endpoint missing — GAP-12 |
+
+## Internal n8n email helpdesk (2026-10-08)
+
+POST /api/helpdesk/tools/email-project-context: Bearer API key with helpdesk:tools scope AND active ADMIN owner; body email + optional projectId. Exact normalized email -> cabinet owner -> unique/explicit owner-scoped project. Response includes whitelisted config/topics and bounded transcripts/analysis. Ambiguity returns found=false; no guessed project. Consumer: docker/helpdesk/bridge.py. No frontend consumer. Deployment evidence: ../initiatives/n8n-helpdesk/EXECUTION.md.
+

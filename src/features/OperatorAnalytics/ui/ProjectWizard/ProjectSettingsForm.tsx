@@ -17,6 +17,7 @@ import {
     getWizardCustomMetrics,
     getWizardVisibleDefaultMetrics,
     getWizardCallTaxonomy,
+    getWizardSingleTopic,
     getWizardWebhookUrl,
     getWizardWebhookHeaders,
     getWizardWebhookEvents,
@@ -58,6 +59,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
     const digestConfig = useSelector(getWizardDigestConfig) ?? DEFAULT_DIGEST_CONFIG
     const alertConfig = mergeAlertConfig(useSelector(getWizardAlertConfig) ?? DEFAULT_ALERT_CONFIG)
     const callTaxonomy = useSelector(getWizardCallTaxonomy)
+    const singleTopic = useSelector(getWizardSingleTopic)
 
     // Budget is edited locally (not part of the wizard slice) to keep the change additive.
     const [budgetInput, setBudgetInput] = useState(
@@ -83,6 +85,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                 successPrompt: successPrompt.trim(),
                 customMetricsSchema: customMetrics,
                 callTaxonomy,
+                singleTopic,
                 visibleDefaultMetrics: visibleDefaults,
                 webhookUrl: webhookUrl.trim() || undefined,
                 webhookHeaders: Object.keys(webhookHeaders).length > 0 ? webhookHeaders : undefined,
@@ -115,7 +118,7 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
         } catch (err) {
             console.error('Settings save error:', err)
         }
-    }, [name, description, systemPrompt, successPrompt, customMetrics, callTaxonomy, visibleDefaults, webhookUrl, webhookHeaders, webhookEvents, digestConfig, alertConfig, budgetInput, editProject, updateProject, dispatch, onClose, onSuccess, t])
+    }, [name, description, systemPrompt, successPrompt, customMetrics, callTaxonomy, singleTopic, visibleDefaults, webhookUrl, webhookHeaders, webhookEvents, digestConfig, alertConfig, budgetInput, editProject, updateProject, dispatch, onClose, onSuccess, t])
 
     return (
         <VStack gap={'16'} max align={'stretch'} className={`${cls.ProjectWizard} ${cls.ProjectSettings}`}>
@@ -203,6 +206,8 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                     {showTaxonomy && (
                         <TaxonomyEditor
                             taxonomy={callTaxonomy}
+                            singleTopic={singleTopic}
+                            onSingleTopicChange={value => dispatch(projectWizardActions.setSingleTopic(value))}
                             onChange={(taxonomy) => dispatch(projectWizardActions.setCallTaxonomy(taxonomy))}
                         />
                     )}

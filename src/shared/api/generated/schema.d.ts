@@ -5039,6 +5039,11 @@ export interface components {
              *     ]
              */
             budgetAlertEmails?: string[];
+            /**
+             * @description Require exactly one automatic topic when taxonomy is configured. Defaults to false.
+             * @example false
+             */
+            singleTopic?: boolean;
         };
         UpdateProjectDto: {
             /** @example Отдел продаж */
@@ -5083,6 +5088,11 @@ export interface components {
              *     ]
              */
             budgetAlertEmails?: string[];
+            /**
+             * @description Require exactly one automatic topic when taxonomy is configured. Defaults to false.
+             * @example false
+             */
+            singleTopic?: boolean;
         };
         OperatorInsightEvidenceDto: {
             /** @example greeting_quality */

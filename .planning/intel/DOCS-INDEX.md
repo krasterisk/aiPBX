@@ -213,3 +213,8 @@ These topics exist in 2–3 places — intel files are canonical:
 | Deploy | `.agent/workflows/deploy.md` | BE `.idea/deploy_architecture.md` |
 | Operator analytics env | BE `docs/OPERATOR_ANALYTICS_ENV.md` | `.env.example` |
 | Insights requirements | `.planning/REQUIREMENTS.md` | Phase 1 plans |
+
+## n8n email helpdesk (OPS)
+
+Plan and ownership: [n8n-helpdesk](../initiatives/n8n-helpdesk/EXECUTION.md). Independent server deployment; codex-direct; no product phase state changes.
+

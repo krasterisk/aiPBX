@@ -9,9 +9,13 @@ import { Textarea } from '@/shared/ui/mui/Textarea'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import { TagDefinition } from '@/entities/Report'
+import { Checkbox, FormControlLabel } from '@mui/material'
+import { MetricPromptEditor } from './MetricPromptEditor'
 
 interface TaxonomyEditorProps {
     taxonomy: TagDefinition[]
+    singleTopic?: boolean
+    onSingleTopicChange?: (value: boolean) => void
     onChange: (taxonomy: TagDefinition[]) => void
 }
 
@@ -19,7 +23,7 @@ function parseAliases(raw: string): string[] {
     return raw.split(',').map(s => s.trim()).filter(Boolean)
 }
 
-export const TaxonomyEditor = memo(({ taxonomy, onChange }: TaxonomyEditorProps) => {
+export const TaxonomyEditor = memo(({ taxonomy, onChange, singleTopic = false, onSingleTopicChange }: TaxonomyEditorProps) => {
     const { t } = useTranslation('reports')
     const [pendingDeleteIndex, setPendingDeleteIndex] = useState<number | null>(null)
     /** Raw comma-separated draft so typing spaces/commas does not fight controlled join() */
@@ -65,6 +69,15 @@ export const TaxonomyEditor = memo(({ taxonomy, onChange }: TaxonomyEditorProps)
 
     return (
         <VStack gap={'12'} max>
+            {onSingleTopicChange && (
+                <VStack gap={'4'} max>
+                    <FormControlLabel
+                        control={<Checkbox checked={singleTopic} onChange={(_, checked) => { onSingleTopicChange(checked) }} size="small" />}
+                        label={String(t('SINGLE_TOPIC_LABEL'))}
+                    />
+                    <Text text={String(t('SINGLE_TOPIC_HINT'))} size={'s'} />
+                </VStack>
+            )}
             <Text
                 text={String(t(
                     'Темы - метки для звонков. При анализе ИИ выбирает подходящие темы из справочника по смыслу разговора.',
@@ -112,14 +125,13 @@ export const TaxonomyEditor = memo(({ taxonomy, onChange }: TaxonomyEditorProps)
                             helperText={String(t('TAXONOMY_NAME_HINT'))}
                         />
 
-                        <Textarea
+                        <MetricPromptEditor
+                            kind="project"
+                            name={`${String(t('Темы звонков'))}: ${tag.name || String(t('Новая тема'))}`}
                             label={String(t('Описание (когда ставить тему)'))}
                             value={tag.description ?? ''}
-                            onChange={e => { handleDescriptionChange(idx, e.target.value) }}
-                            size={'small'}
-                            fullWidth
-                            multiline
-                            minRows={2}
+                            onChange={value => { handleDescriptionChange(idx, value) }}
+                            rows={2}
                             helperText={String(t('TAXONOMY_DESCRIPTION_HINT'))}
                             placeholder={String(t('TAXONOMY_DESCRIPTION_PLACEHOLDER'))}
                         />

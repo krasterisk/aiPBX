@@ -15,6 +15,15 @@ jest.mock('react-i18next', () => ({
 }))
 
 describe('TaxonomyEditor', () => {
+    it('shows and toggles the project single-topic setting', () => {
+        const onSingleTopicChange = jest.fn()
+        render(<TaxonomyEditor taxonomy={[]} onChange={jest.fn()} singleTopic onSingleTopicChange={onSingleTopicChange} />)
+        const checkbox = screen.getByRole('checkbox', { name: 'SINGLE_TOPIC_LABEL' })
+        expect(checkbox).toBeChecked()
+        fireEvent.click(checkbox)
+        expect(onSingleTopicChange).toHaveBeenCalledWith(false)
+        expect(screen.getByText('SINGLE_TOPIC_HINT')).toBeInTheDocument()
+    })
     const baseTheme: TagDefinition = {
         id: 'returns',
         name: 'Возвраты',

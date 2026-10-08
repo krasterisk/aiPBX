@@ -11,6 +11,7 @@ export const getWizardSystemPrompt = (state: StateSchema) => state.projectWizard
 export const getWizardSuccessPrompt = (state: StateSchema) => state.projectWizard?.successPrompt ?? ''
 export const getWizardCustomMetrics = (state: StateSchema) => state.projectWizard?.customMetrics ?? []
 export const getWizardVisibleDefaultMetrics = (state: StateSchema) => state.projectWizard?.visibleDefaultMetrics ?? []
+export const getWizardSingleTopic = (state: StateSchema) => state.projectWizard?.singleTopic ?? false
 export const getWizardCallTaxonomy = (state: StateSchema) => state.projectWizard?.callTaxonomy ?? []
 export const getWizardWebhookUrl = (state: StateSchema) => state.projectWizard?.webhookUrl ?? ''
 export const getWizardWebhookHeaders = (state: StateSchema) => state.projectWizard?.webhookHeaders ?? {}

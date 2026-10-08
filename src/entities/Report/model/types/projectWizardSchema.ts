@@ -60,6 +60,7 @@ export interface ProjectWizardSchema {
     customMetrics: MetricDefinition[]
     visibleDefaultMetrics: DefaultMetricKey[]
     callTaxonomy: TagDefinition[]
+    singleTopic: boolean
     webhookUrl: string
     webhookHeaders: Record<string, string>
     webhookEvents: WebhookEvent[]

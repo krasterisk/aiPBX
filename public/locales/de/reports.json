@@ -1,4 +1,6 @@
 {
+  "SINGLE_TOPIC_LABEL": "Nur ein Thema zuweisen",
+  "SINGLE_TOPIC_HINT": "Die KI wählt genau ein Thema aus. Eine manuelle Korrektur ersetzt das Thema. Gilt für neue und wiederholte Analysen.",
   "PROMPT_EXPAND": "„{{name}}“ vergrößern",
   "Развернуть": "Vergrößern",
   "Применить": "Übernehmen",

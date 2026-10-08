@@ -155,6 +155,7 @@ export {
   getWizardCustomMetrics,
   getWizardVisibleDefaultMetrics,
   getWizardCallTaxonomy,
+  getWizardSingleTopic,
   getWizardWebhookUrl,
   getWizardWebhookHeaders,
   getWizardWebhookEvents,

@@ -13,11 +13,13 @@ interface MetricPromptEditorProps {
     kind?: 'metric' | 'project'
     rows?: number
     placeholder?: string
+    label?: string
+    helperText?: string
 }
 
-export function MetricPromptEditor({ name, value, onChange, kind = 'metric', rows = 2, placeholder }: MetricPromptEditorProps) {
+export function MetricPromptEditor({ name, value, onChange, kind = 'metric', rows = 2, placeholder, label: customLabel, helperText }: MetricPromptEditorProps) {
     const { t } = useTranslation('reports')
-    const label = kind === 'project' ? name : String(t('Описание для LLM'))
+    const label = customLabel ?? (kind === 'project' ? name : String(t('Описание для LLM')))
     const title = kind === 'project' ? name : String(t('METRIC_PROMPT_TITLE', { name }))
     const expandLabel = String(t(kind === 'project' ? 'PROMPT_EXPAND' : 'METRIC_PROMPT_EXPAND', { name }))
     const [isOpen, setIsOpen] = useState(false)
@@ -58,6 +60,7 @@ export function MetricPromptEditor({ name, value, onChange, kind = 'metric', row
                 multiline
                 rows={rows}
                 placeholder={placeholder}
+                helperText={helperText}
             />
             {isOpen && (
                 <Modal isOpen onClose={close} size="wide" elevated>

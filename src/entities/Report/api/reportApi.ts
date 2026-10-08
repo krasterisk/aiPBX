@@ -265,6 +265,7 @@ export const reportApi = rtkApi.injectEndpoints({
       successPrompt?: string
       customMetricsSchema?: MetricDefinition[]
       callTaxonomy?: TagDefinition[]
+      singleTopic?: boolean
       visibleDefaultMetrics?: string[]
       webhookUrl?: string
       webhookHeaders?: Record<string, string>
@@ -327,6 +328,7 @@ export const reportApi = rtkApi.injectEndpoints({
       successPrompt?: string
       customMetricsSchema?: MetricDefinition[]
       callTaxonomy?: TagDefinition[]
+      singleTopic?: boolean
       visibleDefaultMetrics?: string[]
       dashboardConfig?: DashboardConfig
       webhookUrl?: string

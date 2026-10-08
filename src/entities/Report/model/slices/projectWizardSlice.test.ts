@@ -3,6 +3,17 @@ import type { ProjectWizardSchema } from '../types/projectWizardSchema'
 import type { OperatorProject, TagDefinition } from '../types/report'
 
 describe('projectWizardSlice callTaxonomy', () => {
+    it('hydrates, toggles and resets single-topic mode', () => {
+        let state = projectWizardReducer(undefined, { type: 'init' })
+        expect(state.singleTopic).toBe(false)
+        state = projectWizardReducer(state, projectWizardActions.openEdit({ id: '1', name: 'Клиника', singleTopic: true } as OperatorProject))
+        expect(state.singleTopic).toBe(true)
+        state = projectWizardReducer(state, projectWizardActions.setSingleTopic(false))
+        expect(state.singleTopic).toBe(false)
+        state = projectWizardReducer(state, projectWizardActions.setSingleTopic(true))
+        state = projectWizardReducer(state, projectWizardActions.openCreate())
+        expect(state.singleTopic).toBe(false)
+    })
     const taxonomy: TagDefinition[] = [
         { id: 'returns', name: 'Возвраты', aliases: ['возврат'], description: 'Клиент хочет вернуть товар' },
     ]

@@ -608,6 +608,7 @@ export interface OperatorProject {
   successPrompt?: string
   customMetricsSchema?: MetricDefinition[]
   callTaxonomy?: TagDefinition[]
+  singleTopic?: boolean
   currentSchemaVersion?: number
   visibleDefaultMetrics?: DefaultMetricKey[]
   dashboardConfig?: DashboardConfig

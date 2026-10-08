@@ -1,4 +1,6 @@
 {
+  "SINGLE_TOPIC_LABEL": "Assign only one topic",
+  "SINGLE_TOPIC_HINT": "AI selects exactly one topic from the taxonomy. A manual correction replaces the topic. Applies to new analyses and reanalyses.",
   "PROMPT_EXPAND": "Expand “{{name}}”",
   "Развернуть": "Expand",
   "Применить": "Apply",
