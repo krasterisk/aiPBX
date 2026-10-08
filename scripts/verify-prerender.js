@@ -3,8 +3,7 @@ const path = require('path')
 
 const BUILD = path.join(__dirname, '..', 'build')
 const SITE_URL = process.env.SITE_URL || 'https://aipbx.net'
-const SITE_HOST = 'aipbx.net'
-const FORBIDDEN_HOST = 'aipbx.ru'
+const SITE_HOST = new URL(SITE_URL).hostname
 const EXPECT_EN = !SITE_URL.includes('aipbx.ru')
 const CYRILLIC = /[а-яА-ЯёЁ]/
 
@@ -84,6 +83,15 @@ for (const { route, file, enTitle } of ROUTES) {
 
   assertNotContains(html, 'PageLoader', label)
   assertNotContains(html, 'http://localhost', label)
+  const htmlLanguage = html.match(/<html\b[^>]*\blang=["']([^"']+)["']/i)?.[1]
+  const expectedLanguage = EXPECT_EN ? 'en' : 'ru'
+  if (htmlLanguage !== expectedLanguage) {
+    fail(`${label}: html lang is ${htmlLanguage || 'missing'} (expected ${expectedLanguage} for ${SITE_URL})`)
+  }
+  const canonical = html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)?.[1]
+  if (canonical !== `${SITE_URL}${route}`) {
+    fail(`${label}: canonical is ${canonical || 'missing'} (expected ${SITE_URL}${route})`)
+  }
 
   // Dotted untranslated i18n keys (namespace.Key) leaking into visible HTML
   if (/SpeechAnalyticsPage\.[A-Za-z]/.test(html) ||
@@ -134,13 +142,16 @@ const ogPath = path.join(BUILD, 'assets', 'og-default.png')
 if (assertFileExists(sitemapPath, 'sitemap.xml')) {
   const sitemap = fs.readFileSync(sitemapPath, 'utf8')
   assertContains(sitemap, SITE_HOST, 'sitemap.xml')
-  assertNotContains(sitemap, FORBIDDEN_HOST, 'sitemap.xml')
+  const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)]
+  if (locations.length === 0 || locations.some(([, url]) => new URL(url).hostname !== SITE_HOST)) {
+    fail(`sitemap.xml: URLs must belong to ${SITE_HOST}`)
+  }
 }
 
 if (assertFileExists(robotsPath, 'robots.txt')) {
   const robots = fs.readFileSync(robotsPath, 'utf8')
   assertContains(robots, SITE_HOST, 'robots.txt')
-  assertNotContains(robots, FORBIDDEN_HOST, 'robots.txt')
+  assertContains(robots, `Sitemap: ${SITE_URL}/sitemap.xml`, 'robots.txt')
 }
 
 assertFileExists(ogPath, 'og-default.png')

@@ -104,6 +104,12 @@ jobs:
           # script_stop removed in appleboy/ssh-action@v1 — use `set -e` below
           script: |
             set -e
+            case "${{ matrix.server }}" in
+              aipbxru_production) SITE_URL=https://aipbx.ru ;;
+              aipbxnet_production) SITE_URL=https://aipbx.net ;;
+              aipbxorg_production) SITE_URL=https://aipbx.org ;;
+              *) echo "Unknown deployment target" >&2; exit 1 ;;
+            esac
             echo "Starting deployment to ${{ matrix.server }}..."
 
             cd /app
@@ -123,7 +129,10 @@ jobs:
 
             # ── Build & deploy ──
             echo "Building and deploying frontend..."
-            sudo docker compose -f docker-compose.production.yml --env-file .env.production up -d \
+            sudo env DEPLOY_SITE_URL="$SITE_URL" docker compose \
+              -f docker-compose.production.yml \
+              -f /app/aiPBX/deploy/frontend-site.override.yml \
+              --env-file .env.production up -d \
               --build \
               --force-recreate frontend \
               --remove-orphans

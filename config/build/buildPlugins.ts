@@ -19,7 +19,8 @@ export function buildPlugins ({
   const plugins = [
     new HtmlWebpackPlugin({
       template: paths.html,
-      siteUrl: siteUrl || 'https://aipbx.net'
+      siteUrl: siteUrl || 'https://aipbx.net',
+      siteLanguage: new URL(siteUrl || 'https://aipbx.net').hostname === 'aipbx.ru' ? 'ru' : 'en'
     }),
     new webpack.ProgressPlugin(),
     new webpack.DefinePlugin({
@@ -72,13 +73,23 @@ export function buildPlugins ({
       patterns: [
         { from: paths.locales, to: paths.buildLocales },
         { from: paths.favicon, to: paths.build },
-        { from: 'public/robots.txt', to: paths.build, noErrorOnMissing: true },
-        { from: 'public/sitemap.xml', to: paths.build, noErrorOnMissing: true },
+        {
+          from: 'public/robots.txt',
+          to: paths.build,
+          noErrorOnMissing: true,
+          transform: (content: Buffer) => content.toString().replace(/https:\/\/aipbx\.net/g, siteUrl || 'https://aipbx.net')
+        },
+        {
+          from: 'public/sitemap.xml',
+          to: paths.build,
+          noErrorOnMissing: true,
+          transform: (content: Buffer) => content.toString().replace(/https:\/\/aipbx\.net/g, siteUrl || 'https://aipbx.net')
+        },
         { from: paths.assets, to: paths.buildAssets },
         { from: 'public/docs', to: 'docs', noErrorOnMissing: true }
       ]
     }))
-    const prerenderSiteUrl = process.env.SITE_URL || 'https://aipbx.net'
+    const prerenderSiteUrl = siteUrl || 'https://aipbx.net'
     const prerenderLng = prerenderSiteUrl.includes('aipbx.ru') ? 'ru' : 'en'
 
     plugins.push(new PrerendererWebpackPlugin({

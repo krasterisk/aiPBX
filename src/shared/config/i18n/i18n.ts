@@ -32,6 +32,13 @@ languageDetector.addDetector({
   lookup: lookupSiteUrlLng,
 })
 
+// Keep the document language aligned with the UI, including saved user choices.
+i18n.on('languageChanged', (lng: string) => {
+  if (typeof document !== 'undefined') {
+    document.documentElement.lang = lng.split('-')[0]
+  }
+})
+
 i18n
   .use(Backend)
   .use(languageDetector)

@@ -93,7 +93,7 @@ export function setPageMeta ({ title, description, path, ogImage, jsonLd }: Page
   if (path) {
     upsertCanonical(`${SITE_URL}${path}`)
     upsertMeta('property', 'og:url', `${SITE_URL}${path}`)
-    upsertHreflang('en', `${SITE_URL}${path}`)
+    upsertHreflang('en', `https://aipbx.net${path}`)
     upsertHreflang('ru', `${RU_SITE_URL}${path}`)
     upsertHreflang('x-default', `${SITE_URL}${path}`)
   }

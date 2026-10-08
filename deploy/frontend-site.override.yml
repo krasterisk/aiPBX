@@ -1,0 +1,6 @@
+# The workflow passes the site URL explicitly to the Docker build.
+services:
+  frontend:
+    build:
+      args:
+        SITE_URL: ${DEPLOY_SITE_URL:?DEPLOY_SITE_URL must match the deployment target}
