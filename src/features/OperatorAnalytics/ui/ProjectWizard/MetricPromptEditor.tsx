@@ -28,6 +28,21 @@ export function MetricPromptEditor({ name, value, onChange }: MetricPromptEditor
 
     return (
         <div className={cls.root}>
+            <div className={cls.toolbar}>
+                <button
+                    ref={triggerRef}
+                    className={cls.expandButton}
+                    type="button"
+                    aria-label={String(t('METRIC_PROMPT_EXPAND', { name }))}
+                    title={String(t('METRIC_PROMPT_EXPAND', { name }))}
+                    onClick={() => {
+                        setDraft(value)
+                        setIsOpen(true)
+                    }}
+                >
+                    <Maximize2 size={16} aria-hidden />
+                </button>
+            </div>
             <Textarea
                 label={String(t('Описание для LLM'))}
                 value={value}
@@ -37,19 +52,6 @@ export function MetricPromptEditor({ name, value, onChange }: MetricPromptEditor
                 multiline
                 rows={2}
             />
-            <Button
-                ref={triggerRef}
-                variant="clear"
-                type="button"
-                aria-label={String(t('METRIC_PROMPT_EXPAND', { name }))}
-                addonLeft={<Maximize2 size={16} aria-hidden />}
-                onClick={() => {
-                    setDraft(value)
-                    setIsOpen(true)
-                }}
-            >
-                {String(t('Развернуть'))}
-            </Button>
             {isOpen && (
                 <Modal isOpen onClose={close} size="wide" elevated>
                     <div
