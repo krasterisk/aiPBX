@@ -32,10 +32,9 @@
 
 .chartCard {
     height: 100%;
-    transition: var(--transition-transform);
+    transition: var(--transition-card);
 
     &:hover {
-        transform: var(--hover-lift-sm);
         box-shadow: var(--shadow-md), var(--shadow-accent-sm);
     }
 

@@ -1,4 +1,4 @@
-@import '@/app/styles/variables/mixins';
+@import "@/app/styles/variables/mixins";
 
 .root {
     display: flex;
@@ -6,6 +6,30 @@
     gap: var(--space-4);
     width: 100%;
     min-width: 0;
+}
+
+.promptDetails {
+    width: 100%;
+    padding: var(--space-3);
+    box-sizing: border-box;
+    border: 1px solid var(--glass-border-secondary);
+    border-radius: var(--radius-md);
+    color: var(--hint-redesigned);
+    font-size: var(--font-s-redesigned);
+
+    summary {
+        cursor: pointer;
+    }
+}
+
+.promptText {
+    max-height: 35vh;
+    margin: var(--space-3) 0 0;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    color: var(--text-redesigned);
+    line-height: 1.5;
 }
 
 .headline {
@@ -54,6 +78,7 @@
 .metricRow {
     @include glass-card-tertiary;
     @include hover-card-row;
+
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -106,6 +131,7 @@
 .evidenceItem {
     @include glass-card-tertiary;
     @include hover-card-row;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -148,6 +174,7 @@
 
 .quote {
     @include text-clamp(4);
+
     font-style: italic;
 }
 
@@ -180,6 +207,7 @@
 
 .callRow {
     @include hover-card-row;
+
     display: flex;
     align-items: center;
     justify-content: space-between;

@@ -1,4 +1,5 @@
 {
+  "PROMPT_EXPAND": "展开“{{name}}”",
   "Развернуть": "展开",
   "Применить": "应用",
   "METRIC_PROMPT_EXPAND": "展开指标“{{name}}”的提示词",

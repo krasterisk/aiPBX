@@ -8,6 +8,16 @@ jest.mock('react-i18next', () => ({
 }))
 
 describe('MetricPromptEditor', () => {
+    it.each(['Системный промпт', 'Промпт успешности'])('edits %s with the correct project label', name => {
+        const onChange = jest.fn()
+        render(<MetricPromptEditor kind="project" name={name} value="Текст проекта" onChange={onChange} />)
+        fireEvent.click(screen.getByRole('button', { name: `PROMPT_EXPAND ${name}` }))
+        const dialog = screen.getByRole('dialog', { name })
+        fireEvent.change(within(dialog).getByRole('textbox', { name }), { target: { value: 'Новый текст проекта' } })
+        fireEvent.click(within(dialog).getByRole('button', { name: 'Применить' }))
+        expect(onChange).toHaveBeenCalledWith('Новый текст проекта')
+    })
+
     it('edits a long prompt in a dialog and applies the full text', () => {
         const onChange = jest.fn()
         render(<MetricPromptEditor name="Обращение к клиенту" value="Исходный промпт" onChange={onChange} />)

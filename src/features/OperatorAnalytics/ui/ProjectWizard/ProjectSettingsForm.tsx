@@ -30,6 +30,7 @@ import { WizardReviewSection } from './WizardReviewSection'
 import { WizardHeader } from './WizardHeader'
 import { TaxonomyEditor } from './TaxonomyEditor'
 import { SectionChevron } from './SectionChevron'
+import { MetricPromptEditor } from './MetricPromptEditor'
 import { Card } from '@/shared/ui/redesigned/Card'
 import { Text } from '@/shared/ui/redesigned/Text'
 import cls from './ProjectWizard.module.scss'
@@ -153,18 +154,12 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                         <SectionChevron open={showPrompt} />
                     </HStack>
                     {showPrompt && (
-                        <Textarea
+                        <MetricPromptEditor
+                            kind="project"
+                            name={String(t('Системный промпт'))}
                             value={systemPrompt}
-                            onChange={e => dispatch(projectWizardActions.setSystemPrompt(e.target.value))}
-                            size={'small'}
-                            fullWidth
-                            multiline
+                            onChange={value => dispatch(projectWizardActions.setSystemPrompt(value))}
                             rows={4}
-                            sx={{
-                                '& .MuiOutlinedInput-root.MuiInputBase-multiline': {
-                                    padding: '12px',
-                                },
-                            }}
                         />
                     )}
                 </VStack>
@@ -184,19 +179,13 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                                 text={String(t('SUCCESS_PROMPT_HINT'))}
                                 size={'xs'}
                             />
-                            <Textarea
+                            <MetricPromptEditor
+                                kind="project"
+                                name={String(t('Промпт успешности'))}
                                 value={successPrompt}
-                                onChange={e => dispatch(projectWizardActions.setSuccessPrompt(e.target.value))}
-                                size={'small'}
-                                fullWidth
-                                multiline
+                                onChange={value => dispatch(projectWizardActions.setSuccessPrompt(value))}
                                 rows={6}
                                 placeholder={String(t('SUCCESS_PROMPT_PLACEHOLDER'))}
-                                sx={{
-                                    '& .MuiOutlinedInput-root.MuiInputBase-multiline': {
-                                        padding: '12px',
-                                    },
-                                }}
                             />
                         </VStack>
                     )}

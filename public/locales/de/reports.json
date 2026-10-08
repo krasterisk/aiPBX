@@ -1,4 +1,5 @@
 {
+  "PROMPT_EXPAND": "„{{name}}“ vergrößern",
   "Развернуть": "Vergrößern",
   "Применить": "Übernehmen",
   "METRIC_PROMPT_EXPAND": "Prompt für die Metrik „{{name}}“ vergrößern",

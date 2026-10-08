@@ -2,12 +2,11 @@
 
 .BusinessImpactCard {
     position: relative;
-    transition: all var(--duration-slow) var(--ease-spring);
+    transition: var(--transition-card);
     overflow: hidden;
     height: 100%;
 
     &:hover {
-        transform: var(--hover-lift-md);
         box-shadow: var(--shadow-lg), var(--shadow-accent-md);
     }
 

@@ -95,6 +95,9 @@
     --transition-normal: all var(--duration-normal) var(--ease-in-out);
     --transition-medium: all var(--duration-medium) var(--ease-in-out);
     --transition-slow: all var(--duration-slow) var(--ease-spring);
+    --transition-card: background-color var(--duration-slow) var(--ease-spring),
+        border-color var(--duration-slow) var(--ease-spring),
+        box-shadow var(--duration-slow) var(--ease-spring);
     --transition-transform: transform var(--duration-medium) var(--ease-spring);
     --transition-opacity: opacity var(--duration-normal) var(--ease-in-out);
     --transition-colors: background-color var(--duration-normal) var(--ease-in-out),

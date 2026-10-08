@@ -29,6 +29,7 @@ interface OperatorPanelBodyProps {
 }
 
 interface OperatorMetricPanelBodyProps {
+    description?: string
     entry: Extract<PanelEntry, { kind: 'operatorMetric' }>
     filters: DashboardFilters
     onOpenCall: (channelId: string, fromLabel: string) => void
@@ -217,7 +218,7 @@ export const OperatorPanelBody = memo((props: OperatorPanelBodyProps) => {
 })
 
 export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps) => {
-    const { entry, filters, onOpenCall } = props
+    const { entry, filters, description, onOpenCall } = props
     const { t } = useTranslation('reports')
     const [page, setPage] = useState(1)
     const scopeKey = `${entry.metricId}|${entry.operatorName ?? ''}|${filters.startDate ?? ''}|${filters.endDate ?? ''}|${filters.projectId ?? ''}`
@@ -288,6 +289,12 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
 
     return (
         <VStack gap="16" max align="stretch" className={cls.root} data-testid="operator-metric-panel">
+            {description?.trim() && (
+                <details key={entry.metricId} className={cls.promptDetails}>
+                    <summary>{String(t('Описание для LLM'))}</summary>
+                    <p className={cls.promptText}>{description}</p>
+                </details>
+            )}
             <div className={cls.headlineBlock}>
                 <Text
                     text={String(t(display.labelKey))}

@@ -1,4 +1,5 @@
 {
+  "PROMPT_EXPAND": "Expand “{{name}}”",
   "Развернуть": "Expand",
   "Применить": "Apply",
   "METRIC_PROMPT_EXPAND": "Expand prompt for metric “{{name}}”",

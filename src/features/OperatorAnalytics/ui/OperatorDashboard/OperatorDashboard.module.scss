@@ -1,4 +1,4 @@
-@import '@/app/styles/variables/mixins';
+@import "@/app/styles/variables/mixins";
 
 .OperatorDashboard {
     width: 100%;
@@ -51,10 +51,9 @@
 .chartCard {
     width: 100%;
     min-width: 0;
-    transition: var(--transition-slow);
+    transition: var(--transition-card);
 
     &:hover {
-        transform: var(--hover-lift-sm);
         box-shadow: var(--shadow-lg), var(--shadow-accent-sm);
     }
 
@@ -74,10 +73,9 @@
 
 .projectChip {
     cursor: pointer;
-    transition: var(--transition-fast);
+    transition: var(--transition-card);
 
     &:hover {
-        transform: var(--hover-lift-sm);
         box-shadow: var(--shadow-sm), var(--shadow-accent-sm);
     }
 }
@@ -90,6 +88,7 @@
 
 .metricClickRow {
     @include hover-card-row;
+
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
@@ -115,6 +114,15 @@
 .metricDesc {
     color: var(--hint-redesigned);
     line-height: 1.35;
+
+    p {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
 }
 
 .metricGroupLabel {

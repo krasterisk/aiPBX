@@ -177,7 +177,7 @@ src/app/styles/
 ```scss
 .my-card {
     @include glass-card-primary;
-    @include hover-lift-card;  // Подъём + тени + изменение границы
+    @include hover-lift-card;  // Тени + изменение границы, без масштабирования текста
 }
 ```
 

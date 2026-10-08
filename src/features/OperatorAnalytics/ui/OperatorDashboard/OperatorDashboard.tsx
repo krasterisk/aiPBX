@@ -472,6 +472,10 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                                 {customMetricsList.map(metric => {
                                     const agg = metric.aggregated
                                     const description = metric.description?.trim()
+                                    const compactDescription = description?.replace(/\s+/g, ' ') ?? ''
+                                    const descriptionPreview = compactDescription.length > 160
+                                        ? `${compactDescription.slice(0, 157)}…`
+                                        : compactDescription
                                     let valueText = String(t('Нет данных за выбранный период'))
                                     let barPct: number | null = null
                                     let barColor = 'var(--accent-redesigned)'
@@ -518,7 +522,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                                                     <Text text={metric.name} size={'s'} bold />
                                                     {description && (
                                                         <Text
-                                                            text={description}
+                                                            text={descriptionPreview}
                                                             size={'xs'}
                                                             className={cls.metricDesc}
                                                         />

@@ -31,6 +31,7 @@ export const DrilldownPanel = memo((props: DrilldownPanelProps) => {
                 <OperatorMetricPanelBody
                     entry={entry}
                     filters={filters}
+                    description={project?.customMetricsSchema?.find(metric => metric.id === entry.metricId)?.description}
                     onOpenCall={onOpenCall}
                 />
             )

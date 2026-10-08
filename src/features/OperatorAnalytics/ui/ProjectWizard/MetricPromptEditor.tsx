@@ -10,10 +10,16 @@ interface MetricPromptEditorProps {
     name: string
     value: string
     onChange: (value: string) => void
+    kind?: 'metric' | 'project'
+    rows?: number
+    placeholder?: string
 }
 
-export function MetricPromptEditor({ name, value, onChange }: MetricPromptEditorProps) {
+export function MetricPromptEditor({ name, value, onChange, kind = 'metric', rows = 2, placeholder }: MetricPromptEditorProps) {
     const { t } = useTranslation('reports')
+    const label = kind === 'project' ? name : String(t('Описание для LLM'))
+    const title = kind === 'project' ? name : String(t('METRIC_PROMPT_TITLE', { name }))
+    const expandLabel = String(t(kind === 'project' ? 'PROMPT_EXPAND' : 'METRIC_PROMPT_EXPAND', { name }))
     const [isOpen, setIsOpen] = useState(false)
     const [draft, setDraft] = useState('')
     const titleId = useId()
@@ -33,8 +39,8 @@ export function MetricPromptEditor({ name, value, onChange }: MetricPromptEditor
                     ref={triggerRef}
                     className={cls.expandButton}
                     type="button"
-                    aria-label={String(t('METRIC_PROMPT_EXPAND', { name }))}
-                    title={String(t('METRIC_PROMPT_EXPAND', { name }))}
+                    aria-label={expandLabel}
+                    title={expandLabel}
                     onClick={() => {
                         setDraft(value)
                         setIsOpen(true)
@@ -44,13 +50,14 @@ export function MetricPromptEditor({ name, value, onChange }: MetricPromptEditor
                 </button>
             </div>
             <Textarea
-                label={String(t('Описание для LLM'))}
+                label={label}
                 value={value}
                 onChange={e => { onChange(e.target.value) }}
                 size="small"
                 fullWidth
                 multiline
-                rows={2}
+                rows={rows}
+                placeholder={placeholder}
             />
             {isOpen && (
                 <Modal isOpen onClose={close} size="wide" elevated>
@@ -80,13 +87,14 @@ export function MetricPromptEditor({ name, value, onChange }: MetricPromptEditor
                         }}
                     >
                         <h2 id={titleId} className={cls.title}>
-                            {String(t('METRIC_PROMPT_TITLE', { name }))}
+                            {title}
                         </h2>
-                        <label htmlFor={inputId}>{String(t('Описание для LLM'))}</label>
+                        <label htmlFor={inputId}>{label}</label>
                         <textarea
                             id={inputId}
                             className={cls.input}
                             value={draft}
+                            placeholder={placeholder}
                             onChange={event => { setDraft(event.target.value) }}
                             autoFocus
                         />

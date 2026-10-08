@@ -274,6 +274,30 @@ describe('OperatorDashboard layout', () => {
         expect(screen.getByRole('heading', { name: 'Продажи' })).toBeInTheDocument()
     })
 
+    it('previews long metric prompts and keeps the full text in the metric panel', async () => {
+        const description = `${'Подробное правило оценки.\n'.repeat(40)}Конец полного промпта`
+        mockUseGetOperatorProjects.mockReturnValue({
+            data: [{
+                ...baseProjects[0],
+                customMetricsSchema: [{ id: 'client_name', name: 'Обращение к клиенту', type: 'boolean', description }],
+            }],
+        })
+        mockUseGetOperatorEvidence.mockReturnValue({ data: { metrics: [] }, isLoading: false })
+        render(<OperatorDashboard {...defaultProps} projectId="proj-1" />)
+        const row = screen.getByTestId('oa-metric-row-client_name')
+        expect(row).not.toHaveTextContent('Конец полного промпта')
+        expect(row).toHaveTextContent('…')
+        const user = userEvent.setup()
+        await user.click(row)
+        const panel = screen.getByTestId('operator-drilldown-panel')
+        const summary = within(panel).getByText('Описание для LLM')
+        const details = summary.closest('details')
+        expect(details).not.toHaveAttribute('open')
+        await user.click(summary)
+        expect(details).toHaveAttribute('open')
+        expect(details).toHaveTextContent('Конец полного промпта')
+    })
+
     it('keeps both cost stat cards', () => {
         render(<OperatorDashboard {...defaultProps} />)
         expect(screen.getByText('Общая стоимость')).toBeInTheDocument()
