@@ -13,6 +13,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { MetricDefinition, DefaultMetricKey } from '@/entities/Report'
 import { isUserAdmin } from '@/entities/User'
+import { MetricPromptEditor } from './MetricPromptEditor'
 
 const METRIC_TYPES = [
     { label: 'Boolean (Да/Нет)', value: 'boolean' },
@@ -206,15 +207,10 @@ export const WizardStep2_MetricBuilder = memo((props: WizardStep2Props) => {
                             )}
 
                             {/* Description - full width */}
-                            <Textarea
-                                label={String(t('Описание для LLM'))}
+                            <MetricPromptEditor
+                                name={metric.name || String(t('Новая метрика'))}
                                 value={metric.description}
-                                onChange={e => { handleChange(idx, 'description', e.target.value) }}
-                                size={'small'}
-                                fullWidth
-                                multiline
-                                rows={2}
-                                helperText={`${metric.description.length}/500`}
+                                onChange={value => { handleChange(idx, 'description', value) }}
                             />
                         </VStack>
                     </Card>

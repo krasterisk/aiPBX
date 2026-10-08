@@ -1,4 +1,9 @@
 {
+  "Развернуть": "Vergrößern",
+  "Применить": "Übernehmen",
+  "METRIC_PROMPT_EXPAND": "Prompt für die Metrik „{{name}}“ vergrößern",
+  "METRIC_PROMPT_TITLE": "Prompt für die Metrik „{{name}}“",
+  "METRIC_PROMPT_SAVE_HINT": "Übernehmen Sie die Änderungen und speichern Sie dann das Projekt.",
   "Не удалось выгрузить звонки": "Anrufe konnten nicht exportiert werden. Bitte versuchen Sie es erneut.",
   "Доступ запрещён!": "Zugriff verweigert!",
   "Данные не найдены!": "Keine Daten gefunden!",

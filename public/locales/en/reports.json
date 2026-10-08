@@ -1,4 +1,9 @@
 {
+  "Развернуть": "Expand",
+  "Применить": "Apply",
+  "METRIC_PROMPT_EXPAND": "Expand prompt for metric “{{name}}”",
+  "METRIC_PROMPT_TITLE": "Prompt for metric “{{name}}”",
+  "METRIC_PROMPT_SAVE_HINT": "Apply the changes, then save the project.",
   "Не удалось выгрузить звонки": "Could not export calls. Please try again.",
   "Доступ запрещён!": "Access denied!",
   "Данные не найдены!": "No data found!",
