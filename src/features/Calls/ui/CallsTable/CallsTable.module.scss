@@ -94,6 +94,13 @@
     }
 }
 
+.detailPanel {
+    // Keep expanded content out of the table's intrinsic column sizing.
+    contain: inline-size;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 .badgeText {
     display: none;
 }

@@ -226,6 +226,7 @@ const CallsTableRow = memo(({ report, onFilterByTag }: CallsTableRowProps) => {
                 <tr className={cls.DetailRow}>
                     <td colSpan={11}>
                         <ReportExpandedPanel
+                            className={cls.detailPanel}
                             report={report}
                             dialogs={dialogs}
                             isDialogLoading={isDialogLoading}
