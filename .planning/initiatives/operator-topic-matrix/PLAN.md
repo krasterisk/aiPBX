@@ -1,6 +1,6 @@
 # Operator topic matrix
 
-Revision: 4. Coordinator: Codex /root. Mode: codex-direct.
+Revision: 6. Coordinator: Codex /root. Mode: codex-direct.
 
 User scope: matrix of operators by topics with call drilldown; operator breakdown in topic panels and topic breakdown in operator panels; all available CDRs including missing topics/operators; hide matrix when project taxonomy is empty.
 
@@ -32,3 +32,16 @@ User requests more readable, expressive tables and graphical topic data. Tasks 8
 8. Style matrix, contextual breakdowns and separate operator ranking: contrasting headers, heat levels per topic column, identity accents, numeric badges, share bars and distinct project totals. Use existing shared UI, token palette/mixins; preserve actions, missing buckets, light/dark and responsive stacked rows without clipping shadows.
 9. Add topic-volume bars with exact call drilldown and coverage donut (unique calls with at least one topic versus no topic). Include missing topics, zero and multi-topic cases; do not treat overlapping topic sums as mutually exclusive shares. Keep two existing main tabs, no new API/backend writes.
 10. Verify chart counts/interactions, no-taxonomy/empty behavior, existing dashboard navigation, scoped types/lints, visual component preview at 600/800/desktop in light/dark. Preview artifacts under reports/unit/operator-topic-preview (ignored local evidence).
+
+
+## Revision 5: scoped backend release (2026-10-15)
+
+User explicitly authorizes a separate backend matrix commit, patch version increase and push with [deploy:3]. This supersedes prior no-commit/no-remote-write restrictions only for these scoped changes. Tasks 11-13, coordinator only.
+11. Reconstruct the matrix-only backend diff on current HEAD; exclude unrelated helpdesk, insights, evidence, single-topic and build-info edits, including mixed service hunks. Preserve original working files and existing staged changes. Bump current package patch version.
+12. Validate the exact candidate tree in an isolated local directory, including production TypeScript build, matrix/query/topic tests and dashboard regressions. Review staged diff/contracts and preserve hashes of excluded edits.
+13. Commit only approved matrix paths and version, with [deploy:3] in the commit message; push the current backend branch without force. Verify remote commit and available deployment status, keeping local unrelated changes. No manual server mutations.
+
+
+## Revision 6: frontend corrections (2026-10-15)
+
+Task 14: align numeric matrix footers with body/header columns (including zero values), preserving stacked tablet/mobile labels; replace truncated numeric avatar labels with a neutral operator icon in matrix and rating, keeping name initials and navigation; remove all rating filters/state/controls, retaining header-click sorting and accessible header buttons on narrow screens. Coordinator only. Verify real component geometry at desktop and 600/800 px, numeric identity and sort/navigation regressions, scoped styles/lint/types. No new commit/push/deploy authorized for this frontend follow-up.

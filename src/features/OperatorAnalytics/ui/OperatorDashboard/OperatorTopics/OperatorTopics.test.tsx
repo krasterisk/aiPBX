@@ -33,6 +33,16 @@ export const sampleTopicStats: OperatorTopicStats = {
 }
 
 describe('operator topic matrix', () => {
+    it('does not show truncated numbers as avatar labels and preserves operator navigation', async () => {
+        const selectOperator = jest.fn()
+        render(<OperatorTopicMatrix stats={{ ...sampleTopicStats, operators: [{ ...sampleTopicStats.operators[0], operatorName: '221' }] }} onSelect={jest.fn()} onSelectOperator={selectOperator} />)
+        const operator = screen.getByRole('button', { name: '221', exact: true })
+        expect(within(operator).queryByText('22')).not.toBeInTheDocument()
+        expect(within(operator).getByText('221')).toBeInTheDocument()
+        await userEvent.click(operator)
+        expect(selectOperator).toHaveBeenCalledWith('221', expect.any(HTMLElement))
+    })
+
     it('opens exact cells including both missing dimensions and keeps unique totals', async () => {
         const select = jest.fn()
         render(

@@ -1,4 +1,6 @@
 {
+  "INSIGHT_EXCLUDED_CALLS": "Wegen geringer Qualität ausgeschlossene Anrufe",
+  "INSIGHT_SUCCESS_RATE_CHANGE": "Änderung der Erfolgsquote (Prozentpunkte)",
   "Подсказка": "Hinweis",
   "Доля": "Anteil",
   "Сортировать по": "Sortieren nach",

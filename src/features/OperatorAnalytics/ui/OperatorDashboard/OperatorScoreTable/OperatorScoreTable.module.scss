@@ -12,11 +12,6 @@
     font-variant-numeric: tabular-nums;
 }
 
-.filterRow th {
-    padding: var(--space-2);
-    vertical-align: middle;
-}
-
 .headerRow th {
     text-align: left;
     padding: var(--space-4) var(--space-3);
@@ -58,38 +53,6 @@
     display: inline-block;
     vertical-align: middle;
     flex-shrink: 0;
-}
-
-.filterInput {
-    width: 100%;
-    min-width: 0;
-    padding: var(--space-2);
-    font-size: 12px;
-    color: var(--text-redesigned);
-    background: var(--bg-redesigned);
-    border: 1px solid var(--divider-solid);
-    border-radius: var(--radius-sm);
-    transition: var(--transition-colors);
-
-    &::placeholder {
-        color: var(--text-redesigned);
-        opacity: 0.55;
-    }
-
-    &:focus {
-        outline: 2px solid var(--accent-redesigned);
-        outline-offset: 2px;
-    }
-
-    &::-webkit-outer-spin-button,
-    &::-webkit-inner-spin-button {
-        appearance: none;
-        margin: 0;
-    }
-
-    &[type="number"] {
-        appearance: textfield;
-    }
 }
 
 .bodyRow {
@@ -200,10 +163,6 @@
     text-align: center;
 }
 
-.filteredHint {
-    margin-top: var(--space-2);
-}
-
 @include tablet {
     .table,
     .table thead,
@@ -213,16 +172,18 @@
     }
 
     .headerRow {
-        display: none;
-    }
-
-    .filterRow {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: var(--space-2);
+        margin-bottom: var(--space-3);
     }
 
-    .filterRow th:first-child {
+    .headerRow th {
+        flex: 1 1 calc(33.333% - var(--space-2));
+        border-radius: var(--radius-sm);
+    }
+
+    .headerRow .rankCol {
         display: none;
     }
 
@@ -251,8 +212,8 @@
 }
 
 @include mobile {
-    .filterRow {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .headerRow th {
+        flex-basis: calc(50% - var(--space-2));
     }
 }
 
@@ -278,15 +239,6 @@
     background: var(--glass-overlay-dark);
 }
 
-.filterRow th::before {
-    content: attr(data-filter-label);
-    display: block;
-    margin-bottom: var(--space-1);
-    text-align: left;
-    font-size: 11px;
-    font-weight: 500;
-}
-
 .rateCell > div::before {
     content: "";
     position: absolute;
@@ -309,4 +261,14 @@
 
 .rateCell[data-score-level="none"] > div::before {
     background: var(--status-neutral);
+}
+
+.headerButton {
+    width: 100%;
+    font: inherit;
+    text-align: left;
+}
+
+.headerButton:focus-visible {
+    @include focus-visible;
 }

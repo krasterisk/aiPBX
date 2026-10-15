@@ -3,40 +3,17 @@ import { useTranslation } from 'react-i18next'
 import { ChevronDown, ChevronUp, UserRound } from 'lucide-react'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
+import { Button } from '@/shared/ui/redesigned/Button'
 import type { AgentScorecard } from '@/entities/Report'
 import { normalizeRate, scoreVariant } from '../../../lib/metricVisual'
 import visuals from '../OperatorTopics/TopicVisuals.module.scss'
+import { operatorInitials } from '../OperatorTopics/topicVisual'
 import cls from './OperatorScoreTable.module.scss'
 
 type SortField = 'operatorName' | 'callsCount' | 'averageScore' | 'successRatePct' | 'avgCsat' | 'negativeRate'
 
 interface ScoreRow extends AgentScorecard {
     successRatePct: number
-}
-
-interface ColumnFilters {
-    operatorName: string
-    callsMin: string
-    scoreMin: string
-    successMin: string
-    csatMin: string
-    negativeMax: string
-}
-
-const EMPTY_FILTERS: ColumnFilters = {
-    operatorName: '',
-    callsMin: '',
-    scoreMin: '',
-    successMin: '',
-    csatMin: '',
-    negativeMax: '',
-}
-
-const parseMin = (raw: string): number | null => {
-    const trimmed = raw.trim()
-    if (!trimmed) return null
-    const n = Number(trimmed)
-    return Number.isFinite(n) ? n : null
 }
 
 interface OperatorScoreTableProps {
@@ -48,7 +25,6 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
     const { t } = useTranslation('reports')
     const [sortField, setSortField] = useState<SortField>('averageScore')
     const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC')
-    const [filters, setFilters] = useState<ColumnFilters>(EMPTY_FILTERS)
 
     const enrichedRows = useMemo<ScoreRow[]>(() =>
         rows.map(row => ({
@@ -57,29 +33,9 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
         })),
     [rows])
 
-    const filteredRows = useMemo(() => {
-        const nameQ = filters.operatorName.trim().toLowerCase()
-        const callsMin = parseMin(filters.callsMin)
-        const scoreMin = parseMin(filters.scoreMin)
-        const successMin = parseMin(filters.successMin)
-        const csatMin = parseMin(filters.csatMin)
-        const negativeMax = parseMin(filters.negativeMax)
-
-        return enrichedRows.filter(row => {
-            const displayName = row.operatorName === 'Unknown Operator' ? String(t('Без оператора')) : row.operatorName
-            if (nameQ && !displayName.toLowerCase().includes(nameQ)) return false
-            if (callsMin != null && row.callsCount < callsMin) return false
-            if (scoreMin != null && (row.scoredCalls === 0 || row.averageScore < scoreMin)) return false
-            if (successMin != null && (row.scoredCalls === 0 || row.successRatePct < successMin)) return false
-            if (csatMin != null && (row.avgCsat == null || row.avgCsat < csatMin)) return false
-            if (negativeMax != null && (row.scoredCalls === 0 || row.negativeRate > negativeMax)) return false
-            return true
-        })
-    }, [enrichedRows, filters, t])
-
     const sortedRows = useMemo(() => {
         const dir = sortOrder === 'ASC' ? 1 : -1
-        return [...filteredRows].sort((a, b) => {
+        return [...enrichedRows].sort((a, b) => {
             if (sortField === 'operatorName') {
                 return dir * a.operatorName.localeCompare(b.operatorName, undefined, { sensitivity: 'base' })
             }
@@ -91,7 +47,7 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
             if (sortField !== 'callsCount' && (a.scoredCalls === 0) !== (b.scoredCalls === 0)) return a.scoredCalls === 0 ? 1 : -1
             return dir * ((a[sortField]) - (b[sortField]))
         })
-    }, [filteredRows, sortField, sortOrder])
+    }, [enrichedRows, sortField, sortOrder])
 
     const onSort = useCallback((field: SortField) => {
         if (sortField === field) {
@@ -102,15 +58,11 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
         }
     }, [sortField])
 
-    const onFilterChange = useCallback((key: keyof ColumnFilters, value: string) => {
-        setFilters(prev => ({ ...prev, [key]: value }))
-    }, [])
-
     const renderSortIcon = (field: SortField) => {
         if (sortField !== field) return null
         return sortOrder === 'ASC'
-            ? <ChevronUp size={14} className={cls.sortIcon} />
-            : <ChevronDown size={14} className={cls.sortIcon} />
+            ? <ChevronUp size={14} className={cls.sortIcon} aria-hidden />
+            : <ChevronDown size={14} className={cls.sortIcon} aria-hidden />
     }
 
     const scoreVariantFn = (value: number) => scoreVariant(value)
@@ -132,103 +84,28 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
         }
     }, [handleRowActivate])
 
+    const sortColumns: Array<{ field: SortField, label: string }> = [
+        { field: 'operatorName', label: String(t('Оператор')) },
+        { field: 'callsCount', label: String(t('Звонков')) },
+        { field: 'averageScore', label: String(t('Средний балл')) },
+        { field: 'successRatePct', label: String(t('Успех')) },
+        { field: 'avgCsat', label: String(t('CSAT')) },
+        { field: 'negativeRate', label: String(t('Негатив')) },
+    ]
+
     return (
         <div className={cls.tableWrapper}>
             <table className={cls.table}>
                 <thead>
                     <tr className={cls.headerRow}>
                         <th className={cls.rankCol}>#</th>
-                        <th className={cls.sortable} onClick={() => { onSort('operatorName') }}>
-                            <HStack gap="4">{String(t('Оператор'))} {renderSortIcon('operatorName')}</HStack>
-                        </th>
-                        <th className={cls.sortable} onClick={() => { onSort('callsCount') }}>
-                            <HStack gap="4">{String(t('Звонков'))} {renderSortIcon('callsCount')}</HStack>
-                        </th>
-                        <th className={cls.sortable} onClick={() => { onSort('averageScore') }}>
-                            <HStack gap="4">{String(t('Средний балл'))} {renderSortIcon('averageScore')}</HStack>
-                        </th>
-                        <th className={cls.sortable} onClick={() => { onSort('successRatePct') }}>
-                            <HStack gap="4">{String(t('Успех'))} {renderSortIcon('successRatePct')}</HStack>
-                        </th>
-                        <th className={cls.sortable} onClick={() => { onSort('avgCsat') }}>
-                            <HStack gap="4">CSAT {renderSortIcon('avgCsat')}</HStack>
-                        </th>
-                        <th className={cls.sortable} onClick={() => { onSort('negativeRate') }}>
-                            <HStack gap="4">{String(t('Негатив'))} {renderSortIcon('negativeRate')}</HStack>
-                        </th>
-                    </tr>
-                    <tr className={cls.filterRow}>
-                        <th />
-                        <th data-filter-label={String(t('OPERATOR_SCORE_FILTER_NAME'))}>
-                            <input
-                                className={cls.filterInput}
-                                type="search"
-                                aria-label={String(t('OPERATOR_SCORE_FILTER_NAME'))}
-                                value={filters.operatorName}
-                                placeholder={String(t('OPERATOR_SCORE_FILTER_NAME'))}
-                                onChange={e => { onFilterChange('operatorName', e.target.value) }}
-                            />
-                        </th>
-                        <th data-filter-label={String(t('TOPIC_FILTER_CALLS'))}>
-                            <input
-                                className={cls.filterInput}
-                                type="number"
-                                min={0}
-                                aria-label={String(t('TOPIC_FILTER_CALLS'))}
-                                value={filters.callsMin}
-                                placeholder="≥"
-                                onChange={e => { onFilterChange('callsMin', e.target.value) }}
-                            />
-                        </th>
-                        <th data-filter-label={String(t('TOPIC_FILTER_SCORE'))}>
-                            <input
-                                className={cls.filterInput}
-                                type="number"
-                                min={0}
-                                max={100}
-                                aria-label={String(t('TOPIC_FILTER_SCORE'))}
-                                value={filters.scoreMin}
-                                placeholder="≥"
-                                onChange={e => { onFilterChange('scoreMin', e.target.value) }}
-                            />
-                        </th>
-                        <th data-filter-label={String(t('TOPIC_FILTER_SUCCESS'))}>
-                            <input
-                                className={cls.filterInput}
-                                type="number"
-                                min={0}
-                                max={100}
-                                aria-label={String(t('TOPIC_FILTER_SUCCESS'))}
-                                value={filters.successMin}
-                                placeholder="≥ %"
-                                onChange={e => { onFilterChange('successMin', e.target.value) }}
-                            />
-                        </th>
-                        <th data-filter-label={String(t('TOPIC_FILTER_CSAT'))}>
-                            <input
-                                className={cls.filterInput}
-                                type="number"
-                                min={1}
-                                max={5}
-                                step={0.1}
-                                aria-label={String(t('TOPIC_FILTER_CSAT'))}
-                                value={filters.csatMin}
-                                placeholder="≥"
-                                onChange={e => { onFilterChange('csatMin', e.target.value) }}
-                            />
-                        </th>
-                        <th data-filter-label={String(t('TOPIC_FILTER_NEGATIVE'))}>
-                            <input
-                                className={cls.filterInput}
-                                type="number"
-                                min={0}
-                                max={100}
-                                aria-label={String(t('TOPIC_FILTER_NEGATIVE'))}
-                                value={filters.negativeMax}
-                                placeholder="≤ %"
-                                onChange={e => { onFilterChange('negativeMax', e.target.value) }}
-                            />
-                        </th>
+                        {sortColumns.map(({ field, label }) => <th key={field} className={cls.sortable}
+                            aria-sort={sortField === field ? (sortOrder === 'ASC' ? 'ascending' : 'descending') : 'none'}
+                            onClick={() => { onSort(field) }}>
+                            <Button variant="clear" className={cls.headerButton}>
+                                <HStack gap="4">{label} {renderSortIcon(field)}</HStack>
+                            </Button>
+                        </th>)}
                     </tr>
                 </thead>
                 <tbody>
@@ -254,7 +131,7 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
                             </td>
                             <td data-label={String(t('Оператор'))}>
                                 <HStack gap="8" className={visuals.identity}>
-                                    <span className={visuals.avatar} aria-hidden>{row.operatorName === 'Unknown Operator' ? <UserRound size={16} /> : row.operatorName.slice(0, 2).toLocaleUpperCase()}</span>
+                                    <span className={visuals.avatar} aria-hidden>{operatorInitials(row.operatorName) || <UserRound size={16} />}</span>
                                     <Text text={row.operatorName === 'Unknown Operator' ? String(t('Без оператора')) : row.operatorName} bold className={cls.operatorName} />
                                 </HStack>
                             </td>
@@ -283,16 +160,6 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
                     ))}
                 </tbody>
             </table>
-            {sortedRows.length > 0 && sortedRows.length < enrichedRows.length && (
-                <Text
-                    text={String(t('OPERATOR_SCORE_FILTERED_COUNT', {
-                        shown: sortedRows.length,
-                        total: enrichedRows.length,
-                    }))}
-                    size="xs"
-                    className={cls.filteredHint}
-                />
-            )}
         </div>
     )
 })

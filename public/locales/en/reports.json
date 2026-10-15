@@ -1,4 +1,6 @@
 {
+  "INSIGHT_EXCLUDED_CALLS": "Calls excluded due to low quality",
+  "INSIGHT_SUCCESS_RATE_CHANGE": "Success rate change (pp)",
   "Подсказка": "Help",
   "Доля": "Share",
   "Сортировать по": "Sort by",

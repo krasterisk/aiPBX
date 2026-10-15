@@ -36,6 +36,11 @@
             2px solid
             color-mix(in srgb, var(--accent-redesigned) 35%, transparent);
         border-bottom: 1px solid var(--divider-solid);
+
+        &:not(:first-child) > * {
+            width: fit-content;
+            margin-inline: auto;
+        }
     }
 
     @include tablet {
@@ -52,6 +57,10 @@
             justify-content: space-between;
             align-items: center;
             padding: var(--space-3) !important;
+
+            &:not(:first-child) > * {
+                margin-inline: 0;
+            }
 
             &:not(:first-child)::before {
                 content: attr(data-label);

@@ -11,6 +11,7 @@ import { OperatorInsight, useLazyGetOperatorInsights } from '@/entities/Report'
 import { classNames } from '@/shared/lib/classNames/classNames'
 import { getRouteCalls } from '@/shared/const/router'
 import { buildInsightDrilldownPayload, saveInsightDrilldown } from '../../../lib/insightDrilldown'
+import { applyInsightMetricNames, createInsightMetricNames, insightMetricLabel } from '../../../lib/insightMetrics'
 import cls from './AiInsightsBanner.module.scss'
 
 interface AiInsightsBannerProps {
@@ -61,20 +62,10 @@ function canDrillDown(insight: OperatorInsight): boolean {
     return Boolean(evidence.channelIds?.length || evidence.operators?.length)
 }
 
-function applyMetricNames(text: string, metricNames?: Record<string, string>): string {
-    if (!metricNames) return text
-    const ids = Object.keys(metricNames).sort((a, b) => b.length - a.length)
-    return ids.reduce((current, id) => {
-        const name = metricNames[id]
-        if (!name || name === id) return current
-        return current.replace(new RegExp(`\\b${id}\\b`, 'g'), name)
-    }, text)
-}
-
-function formatEvidence(insight: OperatorInsight, metricNames?: Record<string, string>): string | null {
+function formatEvidence(insight: OperatorInsight, metricNames: Record<string, string>): string | null {
     const { evidence } = insight
     if (evidence.metric != null && evidence.value != null) {
-        const label = metricNames?.[evidence.metric] || evidence.metric
+        const label = insightMetricLabel(evidence.metric, metricNames)
         return `${label}: ${evidence.value}`
     }
     if (evidence.operators?.length) {
@@ -87,7 +78,12 @@ function formatEvidence(insight: OperatorInsight, metricNames?: Record<string, s
 }
 
 export const AiInsightsBanner = memo(({ projectName, metricNames, queryParams }: AiInsightsBannerProps) => {
-    const { t } = useTranslation('reports')
+    const { t, i18n } = useTranslation('reports')
+    const localizedMetricNames = useMemo(() => createInsightMetricNames(
+        key => String(t(key)),
+        key => String(i18n.getFixedT('en', 'reports')(key)),
+        metricNames,
+    ), [t, i18n, metricNames])
     const navigate = useNavigate()
     const [triggerInsights, { data, isLoading, isFetching, isError }] = useLazyGetOperatorInsights()
     const queryKey = useMemo(() => serializeQueryKey(queryParams), [queryParams])
@@ -170,7 +166,7 @@ export const AiInsightsBanner = memo(({ projectName, metricNames, queryParams }:
                 {insights.length > 0 && (
                     <VStack gap={'8'} max className={cls.insightsList}>
                         {insights.map((insight, i) => {
-                            const evidenceText = formatEvidence(insight, metricNames)
+                            const evidenceText = formatEvidence(insight, localizedMetricNames)
                             return (
                                 <div
                                     key={`${insight.title}-${i}`}
@@ -190,11 +186,11 @@ export const AiInsightsBanner = memo(({ projectName, metricNames, queryParams }:
                                                 {String(t(`INSIGHT_TYPE_${insight.type}`))}
                                             </span>
                                         </HStack>
-                                        <Text text={applyMetricNames(insight.title, metricNames)} bold size={'s'} />
-                                        <Text text={applyMetricNames(insight.observation, metricNames)} size={'s'} />
+                                        <Text text={applyInsightMetricNames(insight.title, localizedMetricNames)} bold size={'s'} />
+                                        <Text text={applyInsightMetricNames(insight.observation, localizedMetricNames)} size={'s'} />
                                         {insight.recommendation && (
                                             <Text
-                                                text={applyMetricNames(insight.recommendation, metricNames)}
+                                                text={applyInsightMetricNames(insight.recommendation, localizedMetricNames)}
                                                 size={'s'}
                                                 className={cls.recommendation}
                                             />

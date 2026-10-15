@@ -11,7 +11,7 @@ import { Textarea } from '@/shared/ui/mui/Textarea'
 import { Combobox } from '@/shared/ui/mui/Combobox'
 import { Check } from '@/shared/ui/mui/Check'
 import { DashboardHint } from '../DashboardHint'
-import { heatLevel, topicTone } from './topicVisual'
+import { heatLevel, operatorInitials, topicTone } from './topicVisual'
 import visuals from './TopicVisuals.module.scss'
 import cls from './OperatorTopics.module.scss'
 
@@ -56,7 +56,7 @@ export const OperatorTopicMatrix = memo(({ stats, onSelect, onSelectOperator }: 
             cell: info => {
                 const name = info.row.original.operatorName
                 const identity = <HStack gap="8" className={visuals.identity}>
-                    <span className={visuals.avatar} aria-hidden>{name ? name.slice(0, 2).toLocaleUpperCase() : <UserRound size={16} />}</span>
+                    <span className={visuals.avatar} aria-hidden>{operatorInitials(name) || <UserRound size={16} />}</span>
                     <Text text={operatorLabel(name)} bold size="s" />
                 </HStack>
                 return onSelectOperator
