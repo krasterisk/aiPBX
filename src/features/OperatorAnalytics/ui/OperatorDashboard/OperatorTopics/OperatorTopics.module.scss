@@ -1,0 +1,249 @@
+@import "@/app/styles/variables/mixins";
+
+.matrix {
+    th,
+    td {
+        min-width: 0;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    th > div {
+        justify-content: center;
+    }
+
+    th:first-child > div {
+        justify-content: flex-start;
+    }
+
+    td:not(:first-child) > span {
+        display: flex;
+        justify-content: center;
+    }
+
+    th:where(:not(:first-child)),
+    td:where(:not(:first-child)) { text-align: center; }
+
+    tfoot th {
+        padding: var(--space-4) var(--space-3);
+        background:
+            color-mix(
+                in srgb,
+                var(--accent-redesigned) 10%,
+                var(--bg-redesigned)
+            );
+        border-top:
+            2px solid
+            color-mix(in srgb, var(--accent-redesigned) 35%, transparent);
+        border-bottom: 1px solid var(--divider-solid);
+    }
+
+    @include tablet {
+        td:not(:first-child) > span {
+            justify-content: flex-end;
+        }
+
+        tfoot tr {
+            display: block;
+        }
+
+        tfoot th {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-3) !important;
+
+            &:not(:first-child)::before {
+                content: attr(data-label);
+                font-weight: 600;
+            }
+        }
+    }
+}
+
+.matrix,
+.breakdown {
+    table {
+        min-width: 0;
+        font-variant-numeric: tabular-nums;
+    }
+
+    thead th {
+        padding: var(--space-4) var(--space-3);
+        background:
+            color-mix(
+                in srgb,
+                var(--accent-redesigned) 14%,
+                var(--bg-redesigned)
+            );
+        color: var(--text-redesigned);
+        font-size: 12px;
+        letter-spacing: 0;
+        text-transform: none;
+        opacity: 1;
+        border-bottom:
+            2px solid
+            color-mix(in srgb, var(--accent-redesigned) 40%, transparent);
+
+        &:first-child {
+            border-radius: var(--radius-md) 0 0 var(--radius-md);
+        }
+
+        &:last-child {
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        }
+    }
+
+    td {
+        padding: var(--space-3);
+    }
+
+    tbody tr {
+        background:
+            color-mix(
+                in srgb,
+                var(--bg-redesigned) 90%,
+                var(--accent-redesigned)
+            );
+
+        &:nth-child(even) {
+            background:
+                color-mix(
+                    in srgb,
+                    var(--bg-redesigned) 96%,
+                    var(--text-redesigned)
+                );
+        }
+    }
+
+    @include tablet {
+        td::before {
+            max-width: 60%;
+            white-space: normal;
+            overflow-wrap: anywhere;
+            flex-shrink: 1;
+            opacity: 0.85;
+            text-transform: none;
+        }
+
+        td:last-child::before {
+            display: block;
+        }
+    }
+}
+
+.countButton,
+.heatSwatch {
+    --heat-mix: 16%;
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--topic-color, var(--accent-redesigned)) 28%,
+            transparent
+        );
+    background:
+        color-mix(
+            in srgb,
+            var(--topic-color, var(--accent-redesigned)) var(--heat-mix),
+            var(--bg-redesigned)
+        );
+    border-radius: var(--radius-sm);
+}
+
+.countButton {
+    min-width: 44px;
+    justify-content: center;
+    padding: var(--space-2) var(--space-3);
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+    transition: var(--transition-card);
+
+    &:hover {
+        opacity: 1;
+        box-shadow: var(--shadow-accent-sm);
+        border-color: var(--topic-color, var(--accent-redesigned));
+    }
+
+    &:focus-visible {
+        @include focus-visible;
+    }
+}
+
+.heat1 {
+    --heat-mix: 12%;
+}
+
+.heat2 {
+    --heat-mix: 24%;
+}
+
+.heat3 {
+    --heat-mix: 38%;
+}
+
+.heat4 {
+    --heat-mix: 56%;
+}
+
+.heatSwatch {
+    width: var(--space-4);
+    height: var(--space-4);
+    border-radius: var(--radius-xs);
+}
+
+.operatorButton {
+    text-align: left;
+
+    &:focus-visible {
+        @include focus-visible;
+    }
+}
+
+.zero {
+    opacity: 0.4;
+    font-variant-numeric: tabular-nums;
+}
+
+.toolbar {
+    padding-top: var(--space-2);
+}
+
+.search {
+    width: min(100%, 320px);
+}
+
+.columnPicker {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--divider-solid);
+    border-radius: var(--radius-md);
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-redesigned) 92%,
+            var(--accent-redesigned)
+        );
+
+    summary {
+        cursor: pointer;
+        font-weight: 600;
+    }
+}
+
+.checkboxes {
+    padding: var(--space-3) 0;
+}
+
+.selector {
+    width: min(100%, 420px);
+}
+
+.mobileSort {
+    display: none;
+
+    @include tablet {
+        display: flex;
+    }
+}

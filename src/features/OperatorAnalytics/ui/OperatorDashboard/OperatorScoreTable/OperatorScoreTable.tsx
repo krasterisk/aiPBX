@@ -1,10 +1,11 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, UserRound } from 'lucide-react'
 import { HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import type { AgentScorecard } from '@/entities/Report'
 import { normalizeRate, scoreVariant } from '../../../lib/metricVisual'
+import visuals from '../OperatorTopics/TopicVisuals.module.scss'
 import cls from './OperatorScoreTable.module.scss'
 
 type SortField = 'operatorName' | 'callsCount' | 'averageScore' | 'successRatePct' | 'avgCsat' | 'negativeRate'
@@ -65,15 +66,16 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
         const negativeMax = parseMin(filters.negativeMax)
 
         return enrichedRows.filter(row => {
-            if (nameQ && !row.operatorName.toLowerCase().includes(nameQ)) return false
+            const displayName = row.operatorName === 'Unknown Operator' ? String(t('Без оператора')) : row.operatorName
+            if (nameQ && !displayName.toLowerCase().includes(nameQ)) return false
             if (callsMin != null && row.callsCount < callsMin) return false
-            if (scoreMin != null && row.averageScore < scoreMin) return false
-            if (successMin != null && row.successRatePct < successMin) return false
+            if (scoreMin != null && (row.scoredCalls === 0 || row.averageScore < scoreMin)) return false
+            if (successMin != null && (row.scoredCalls === 0 || row.successRatePct < successMin)) return false
             if (csatMin != null && (row.avgCsat == null || row.avgCsat < csatMin)) return false
-            if (negativeMax != null && row.negativeRate > negativeMax) return false
+            if (negativeMax != null && (row.scoredCalls === 0 || row.negativeRate > negativeMax)) return false
             return true
         })
-    }, [enrichedRows, filters])
+    }, [enrichedRows, filters, t])
 
     const sortedRows = useMemo(() => {
         const dir = sortOrder === 'ASC' ? 1 : -1
@@ -86,6 +88,7 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
                 const bv = b.avgCsat ?? -Infinity
                 return dir * (av - bv)
             }
+            if (sortField !== 'callsCount' && (a.scoredCalls === 0) !== (b.scoredCalls === 0)) return a.scoredCalls === 0 ? 1 : -1
             return dir * ((a[sortField]) - (b[sortField]))
         })
     }, [filteredRows, sortField, sortOrder])
@@ -156,65 +159,71 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
                     </tr>
                     <tr className={cls.filterRow}>
                         <th />
-                        <th>
+                        <th data-filter-label={String(t('OPERATOR_SCORE_FILTER_NAME'))}>
                             <input
                                 className={cls.filterInput}
                                 type="search"
+                                aria-label={String(t('OPERATOR_SCORE_FILTER_NAME'))}
                                 value={filters.operatorName}
                                 placeholder={String(t('OPERATOR_SCORE_FILTER_NAME'))}
                                 onChange={e => { onFilterChange('operatorName', e.target.value) }}
                             />
                         </th>
-                        <th>
+                        <th data-filter-label={String(t('TOPIC_FILTER_CALLS'))}>
                             <input
                                 className={cls.filterInput}
                                 type="number"
                                 min={0}
+                                aria-label={String(t('TOPIC_FILTER_CALLS'))}
                                 value={filters.callsMin}
                                 placeholder="≥"
                                 onChange={e => { onFilterChange('callsMin', e.target.value) }}
                             />
                         </th>
-                        <th>
+                        <th data-filter-label={String(t('TOPIC_FILTER_SCORE'))}>
                             <input
                                 className={cls.filterInput}
                                 type="number"
                                 min={0}
                                 max={100}
+                                aria-label={String(t('TOPIC_FILTER_SCORE'))}
                                 value={filters.scoreMin}
                                 placeholder="≥"
                                 onChange={e => { onFilterChange('scoreMin', e.target.value) }}
                             />
                         </th>
-                        <th>
+                        <th data-filter-label={String(t('TOPIC_FILTER_SUCCESS'))}>
                             <input
                                 className={cls.filterInput}
                                 type="number"
                                 min={0}
                                 max={100}
+                                aria-label={String(t('TOPIC_FILTER_SUCCESS'))}
                                 value={filters.successMin}
                                 placeholder="≥ %"
                                 onChange={e => { onFilterChange('successMin', e.target.value) }}
                             />
                         </th>
-                        <th>
+                        <th data-filter-label={String(t('TOPIC_FILTER_CSAT'))}>
                             <input
                                 className={cls.filterInput}
                                 type="number"
                                 min={1}
                                 max={5}
                                 step={0.1}
+                                aria-label={String(t('TOPIC_FILTER_CSAT'))}
                                 value={filters.csatMin}
                                 placeholder="≥"
                                 onChange={e => { onFilterChange('csatMin', e.target.value) }}
                             />
                         </th>
-                        <th>
+                        <th data-filter-label={String(t('TOPIC_FILTER_NEGATIVE'))}>
                             <input
                                 className={cls.filterInput}
                                 type="number"
                                 min={0}
                                 max={100}
+                                aria-label={String(t('TOPIC_FILTER_NEGATIVE'))}
                                 value={filters.negativeMax}
                                 placeholder="≤ %"
                                 onChange={e => { onFilterChange('negativeMax', e.target.value) }}
@@ -235,36 +244,39 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
                             className={cls.bodyRow}
                             role={onSelectOperator ? 'button' : undefined}
                             tabIndex={onSelectOperator ? 0 : undefined}
-                            aria-label={onSelectOperator ? row.operatorName : undefined}
+                            aria-label={onSelectOperator ? (row.operatorName === 'Unknown Operator' ? String(t('Без оператора')) : row.operatorName) : undefined}
                             onClick={onSelectOperator ? (e) => { handleRowActivate(row, e.currentTarget) } : undefined}
                             onKeyDown={onSelectOperator ? (e) => { handleRowKeyDown(e, row) } : undefined}
                             data-testid={`operator-score-row-${row.operatorName}`}
                         >
-                            <td className={cls.rankCol}>
+                            <td className={cls.rankCol} data-label="#">
                                 <Text text={String(index + 1)} size="s" bold />
                             </td>
-                            <td>
-                                <Text text={row.operatorName} bold className={cls.operatorName} />
+                            <td data-label={String(t('Оператор'))}>
+                                <HStack gap="8" className={visuals.identity}>
+                                    <span className={visuals.avatar} aria-hidden>{row.operatorName === 'Unknown Operator' ? <UserRound size={16} /> : row.operatorName.slice(0, 2).toLocaleUpperCase()}</span>
+                                    <Text text={row.operatorName === 'Unknown Operator' ? String(t('Без оператора')) : row.operatorName} bold className={cls.operatorName} />
+                                </HStack>
                             </td>
-                            <td><Text text={String(row.callsCount)} /></td>
-                            <td>
-                                <Text text={String(row.averageScore)} bold variant={scoreVariantFn(row.averageScore)} />
+                            <td data-label={String(t('Звонков'))}><Text text={String(row.callsCount)} className={visuals.total} /></td>
+                            <td data-label={String(t('Средний балл'))} className={cls.scoreCell} data-score-level={row.scoredCalls === 0 ? 'none' : scoreVariantFn(row.averageScore)}>
+                                <Text text={row.scoredCalls === 0 ? '-' : String(row.averageScore)} bold variant={row.scoredCalls === 0 ? undefined : scoreVariantFn(row.averageScore)} />
                             </td>
-                            <td>
+                            <td data-label={String(t('Успех'))} className={cls.rateCell} data-score-level={row.scoredCalls === 0 ? 'none' : scoreVariantFn(row.successRatePct)}>
                                 <Text
-                                    text={`${row.successRatePct.toFixed(0)}%`}
+                                    text={row.scoredCalls === 0 ? '-' : `${row.successRatePct.toFixed(0)}%`}
                                     bold
-                                    variant={scoreVariantFn(row.successRatePct)}
+                                    variant={row.scoredCalls === 0 ? undefined : scoreVariantFn(row.successRatePct)}
                                 />
                             </td>
-                            <td>
+                            <td data-label="CSAT">
                                 <Text text={row.avgCsat != null ? String(row.avgCsat) : '-'} />
                             </td>
-                            <td>
+                            <td data-label={String(t('Негатив'))} className={cls.rateCell} data-score-level={row.scoredCalls === 0 ? 'none' : negativeVariant(row.negativeRate)}>
                                 <Text
-                                    text={`${row.negativeRate.toFixed(0)}%`}
+                                    text={row.scoredCalls === 0 ? '-' : `${row.negativeRate.toFixed(0)}%`}
                                     bold
-                                    variant={negativeVariant(row.negativeRate)}
+                                    variant={row.scoredCalls === 0 ? undefined : negativeVariant(row.negativeRate)}
                                 />
                             </td>
                         </tr>

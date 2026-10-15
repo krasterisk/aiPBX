@@ -40,6 +40,44 @@ const defaultProps = {
 }
 
 describe('TopicsSection', () => {
+    const matrixStats = {
+        totalCalls: 3,
+        hasMultipleTopics: false,
+        topics: [{ tagId: 'tag-1', name: 'Продажи', callsCount: 1 }, { tagId: null, name: '', callsCount: 2 }],
+        operators: [
+            { operatorName: 'Alice', callsCount: 2, topics: [{ tagId: 'tag-1', callsCount: 1 }, { tagId: null, callsCount: 1 }] },
+            { operatorName: null, callsCount: 1, topics: [{ tagId: null, callsCount: 1 }] },
+        ],
+    }
+
+    it('groups the topic views into accessible tabs without an operator-rating tab', async () => {
+        render(<TopicsSection {...defaultProps} tagStats={sampleStats} topicStats={matrixStats} onSelectTopicCalls={jest.fn()} />)
+        expect(screen.getAllByRole('tab')).toHaveLength(2)
+        expect(screen.queryByRole('tab', { name: 'Рейтинг операторов' })).not.toBeInTheDocument()
+        const overview = screen.getByRole('tab', { name: 'Темы', exact: true })
+        overview.focus()
+        await userEvent.keyboard('{ArrowRight}{Enter}')
+        expect(screen.getByRole('tab', { name: 'Операторы по темам', exact: true })).toHaveAttribute('aria-selected', 'true')
+        expect(screen.getByTestId('operator-topic-matrix')).toBeInTheDocument()
+        expect(screen.queryByTestId('topics-card-grid')).not.toBeInTheDocument()
+        await userEvent.click(overview)
+        expect(screen.getByTestId('topics-card-grid')).toBeInTheDocument()
+    })
+
+    it('uses one matrix for missing dimensions and routes operator names to their panels', async () => {
+        const select = jest.fn()
+        const selectOperator = jest.fn()
+        render(<TopicsSection {...defaultProps} tagStats={sampleStats} topicStats={matrixStats} onSelectTopicCalls={select} onSelectOperator={selectOperator} />)
+        expect(screen.queryByRole('tab', { name: 'Операторы по теме', exact: true })).not.toBeInTheDocument()
+        expect(screen.queryByRole('tab', { name: 'Темы оператора', exact: true })).not.toBeInTheDocument()
+        await userEvent.click(screen.getByRole('tab', { name: 'Операторы по темам', exact: true }))
+        await userEvent.click(screen.getByRole('button', { name: 'Без оператора / Без темы: 1' }))
+        expect(select).toHaveBeenLastCalledWith(null, null, 1, expect.any(HTMLElement))
+        await userEvent.click(screen.getByRole('button', { name: 'Без оператора', exact: true }))
+        expect(selectOperator).toHaveBeenLastCalledWith('Unknown Operator', expect.any(HTMLElement))
+        await userEvent.click(screen.getByRole('button', { name: 'Alice', exact: true }))
+        expect(selectOperator).toHaveBeenLastCalledWith('Alice', expect.any(HTMLElement))
+    })
     beforeEach(() => {
         jest.clearAllMocks()
     })
@@ -81,11 +119,14 @@ describe('TopicsSection', () => {
         expect(onSelectTag).toHaveBeenCalledWith(sampleStats[0], card)
     })
 
-    it('renders the mandatory section title and subtitle', () => {
+    it('shows the section title and keeps long guidance in a tooltip', async () => {
         render(<TopicsSection {...defaultProps} tagStats={sampleStats} />)
 
-        expect(screen.getByText('Темы')).toBeInTheDocument()
-        expect(screen.getByText('Нажмите на тему, чтобы увидеть её звонки и статистику')).toBeInTheDocument()
+        expect(screen.getByRole('heading', { name: 'Темы звонков' })).toBeInTheDocument()
+        expect(screen.getByRole('tab', { name: 'Темы' })).toBeInTheDocument()
+        expect(screen.queryByText('Нажмите на тему, чтобы увидеть её звонки и статистику')).not.toBeInTheDocument()
+        await userEvent.click(screen.getByRole('button', { name: 'Подсказка' }))
+        expect(await screen.findByRole('tooltip')).toHaveTextContent('Нажмите на тему, чтобы увидеть её звонки и статистику')
     })
 
     it('does not render the section when the project has no taxonomy', () => {

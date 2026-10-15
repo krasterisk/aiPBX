@@ -7,6 +7,7 @@ export type PanelEntry =
     | { kind: 'operator', operatorName: string }
     | { kind: 'operatorMetric', operatorName?: string, metricId: string, metricLabel?: string }
     | { kind: 'tag', stat: TagStat }
+    | { kind: 'topicCalls', tagId: string | null, operatorName?: string | null, label: string, callsCount: number }
     | {
         kind: 'distribution'
         chart: DistributionChart
@@ -36,18 +37,20 @@ export function getCurrentPanelEntry(stack: PanelEntry[]): PanelEntry | undefine
     return stack[stack.length - 1]
 }
 
-export function resolvePanelTitle(entry: PanelEntry | undefined, _t: TranslateFn): string {
+export function resolvePanelTitle(entry: PanelEntry | undefined, t: TranslateFn): string {
     if (!entry) {
         return ''
     }
 
     switch (entry.kind) {
         case 'operator':
-            return entry.operatorName
+            return entry.operatorName === 'Unknown Operator' ? String(t('Без оператора')) : entry.operatorName
         case 'operatorMetric':
             return entry.metricLabel ?? entry.metricId
         case 'tag':
             return entry.stat.name
+        case 'topicCalls':
+            return entry.label
         case 'distribution':
             return entry.label
         case 'call':
@@ -67,18 +70,20 @@ export function resolveBackLabel(
         return undefined
     }
 
-    const context = entryContextLabel(previousEntry)
+    const context = entryContextLabel(previousEntry, t)
     return String(t('Назад к {{context}}', { context }))
 }
 
-function entryContextLabel(entry: PanelEntry): string {
+function entryContextLabel(entry: PanelEntry, t: TranslateFn): string {
     switch (entry.kind) {
         case 'operator':
-            return entry.operatorName
+            return entry.operatorName === 'Unknown Operator' ? String(t('Без оператора')) : entry.operatorName
         case 'operatorMetric':
             return entry.metricLabel ?? entry.metricId
         case 'tag':
             return entry.stat.name
+        case 'topicCalls':
+            return entry.label
         case 'distribution':
             return entry.label
         case 'call':

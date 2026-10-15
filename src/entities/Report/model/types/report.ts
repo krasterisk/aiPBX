@@ -338,6 +338,7 @@ export interface OperatorAggregatedMetrics {
 }
 
 export interface OperatorDashboardResponse {
+  operatorTopicStats?: OperatorTopicStats
   totalAnalyzed: number
   /** Display total: RUB sum on RU tenant, else USD */
   totalCost: number
@@ -379,7 +380,19 @@ export interface OperatorDashboardResponse {
   tagStats?: TagStat[]
 }
 
+export interface OperatorTopicStats {
+  totalCalls: number
+  hasMultipleTopics: boolean
+  topics: Array<{ tagId: string | null, name: string, callsCount: number }>
+  operators: Array<{
+    operatorName: string | null
+    callsCount: number
+    topics: Array<{ tagId: string | null, callsCount: number }>
+  }>
+}
+
 export interface AgentScorecard {
+  scoredCalls?: number
   operatorName: string
   callsCount: number
   averageScore: number
@@ -418,6 +431,7 @@ export interface OperatorEvidenceResponse {
 }
 
 export interface TagStat {
+  scoredCalls?: number
   tagId: string
   name: string
   callsCount: number

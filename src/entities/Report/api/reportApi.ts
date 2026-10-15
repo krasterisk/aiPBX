@@ -204,6 +204,8 @@ export const reportApi = rtkApi.injectEndpoints({
       endDate?: string
       operatorName?: string
       operatorNameExact?: string
+      withoutOperator?: boolean
+      withoutTopic?: boolean
       /** Filter by operator_call_tags.tagId */
       tagId?: string
       /** @deprecated use tagId */

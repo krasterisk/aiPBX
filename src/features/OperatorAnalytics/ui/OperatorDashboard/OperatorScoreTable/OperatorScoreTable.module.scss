@@ -1,136 +1,312 @@
-@import '@/app/styles/variables/mixins';
+@import "@/app/styles/variables/mixins";
 
 .tableWrapper {
     width: 100%;
-    overflow-x: auto;
-    @include custom-scrollbar;
 }
 
 .table {
     width: 100%;
-    min-width: 720px;
-    border-collapse: collapse;
+    color: var(--text-redesigned);
+    border-collapse: separate;
+    border-spacing: 0 var(--space-3);
+    font-variant-numeric: tabular-nums;
+}
+
+.filterRow th {
+    padding: var(--space-2);
+    vertical-align: middle;
 }
 
 .headerRow th {
     text-align: left;
-    padding: 10px 12px;
+    padding: var(--space-4) var(--space-3);
     font-weight: 700;
     font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     color: var(--text-redesigned);
-    opacity: 0.65;
-    border-bottom: 1px solid var(--glass-border-secondary);
-    white-space: nowrap;
-}
+    background:
+        color-mix(
+            in srgb,
+            var(--accent-redesigned) 14%,
+            var(--bg-redesigned)
+        );
+    border-bottom:
+        2px solid
+        color-mix(in srgb, var(--accent-redesigned) 40%, transparent);
+    white-space: normal;
 
-.filterRow th {
-    padding: 6px 8px 10px;
-    border-bottom: 1px solid var(--glass-border-secondary);
-    vertical-align: middle;
+    &:first-child {
+        border-radius: var(--radius-md) 0 0 var(--radius-md);
+    }
+
+    &:last-child {
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
 }
 
 .sortable {
     cursor: pointer;
     user-select: none;
-    transition: var(--transition-fast);
+    transition: var(--transition-colors);
 
     &:hover {
-        opacity: 1;
-        color: var(--accent-redesigned);
+        color: var(--accent-dark);
     }
 }
 
 .sortIcon {
-    color: var(--accent-redesigned);
+    color: var(--accent-dark);
     display: inline-block;
     vertical-align: middle;
+    flex-shrink: 0;
 }
 
 .filterInput {
     width: 100%;
-    min-width: 64px;
-    padding: 6px 8px;
+    min-width: 0;
+    padding: var(--space-2);
     font-size: 12px;
     color: var(--text-redesigned);
-    background: var(--glass-bg-secondary);
-    border: 1px solid var(--glass-border-secondary);
-    border-radius: var(--radius-md);
-    outline: none;
-    transition: var(--transition-fast);
+    background: var(--bg-redesigned);
+    border: 1px solid var(--divider-solid);
+    border-radius: var(--radius-sm);
+    transition: var(--transition-colors);
 
     &::placeholder {
-        color: var(--hint-redesigned);
-        opacity: 0.7;
+        color: var(--text-redesigned);
+        opacity: 0.55;
     }
 
     &:focus {
-        border-color: var(--accent-redesigned);
-        box-shadow: 0 0 0 2px rgba(94, 211, 243, 0.15);
+        outline: 2px solid var(--accent-redesigned);
+        outline-offset: 2px;
     }
 
-    // hide number spinners
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
-        -webkit-appearance: none;
+        appearance: none;
         margin: 0;
     }
 
-    &[type='number'] {
-        -moz-appearance: textfield;
+    &[type="number"] {
+        appearance: textfield;
     }
 }
 
 .bodyRow {
-    transition: var(--transition-fast);
+    @include glass-card-secondary;
+    @include hover-card-row;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-redesigned) 90%,
+            var(--accent-redesigned)
+        );
+
+    &:nth-child(even) {
+        background:
+            color-mix(
+                in srgb,
+                var(--bg-redesigned) 96%,
+                var(--text-redesigned)
+            );
+    }
 
     td {
-        padding: 12px;
+        padding: var(--space-3);
         vertical-align: middle;
-        border-bottom: 1px solid var(--glass-border-secondary);
+        border-top: 1px solid var(--divider-subtle);
+        border-bottom: 1px solid var(--divider-subtle);
+
+        &:first-child {
+            border-radius: var(--radius-md) 0 0 var(--radius-md);
+        }
+
+        &:last-child {
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        }
     }
 
-    // glass-overlay-medium matches the light glass card tint → invisible hover;
-    // mix from text color so both themes get a readable highlight.
-    &:hover td {
-        background: color-mix(in srgb, var(--text-redesigned) 7%, transparent);
-    }
-
-    &:last-child td {
-        border-bottom: none;
-    }
-
-    &[role='button'] {
+    &[role="button"] {
         cursor: pointer;
 
         &:focus-visible {
-            outline: 2px solid var(--accent-redesigned);
-            outline-offset: 2px;
+            @include focus-visible;
         }
     }
 }
 
 .rankCol {
-    width: 40px;
+    width: 48px;
     text-align: center;
-    color: var(--hint-redesigned);
+
+    p {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--space-8);
+        height: var(--space-8);
+        border-radius: var(--radius-full);
+        background:
+            color-mix(
+                in srgb,
+                var(--accent-redesigned) 18%,
+                var(--bg-redesigned)
+            );
+    }
+}
+
+.scoreCell.scoreCell p {
+    color: var(--text-redesigned);
+}
+
+.rateCell.rateCell p {
+    color: var(--text-redesigned);
+}
+
+.bodyRow:first-child .rankCol p {
+    background:
+        color-mix(
+            in srgb,
+            var(--chart-warning) 26%,
+            var(--bg-redesigned)
+        );
 }
 
 .operatorName {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 220px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.rateCell > div {
+    position: relative;
+    padding-left: var(--space-3);
+}
+
+.scoreCell > div {
+    display: inline-block;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    background:
+        color-mix(
+            in srgb,
+            var(--chart-success) 12%,
+            var(--bg-redesigned)
+        );
 }
 
 .emptyCell {
-    padding: 24px 12px;
+    padding: var(--space-6) var(--space-3);
     text-align: center;
-    color: var(--hint-redesigned);
 }
 
 .filteredHint {
     margin-top: var(--space-2);
-    color: var(--hint-redesigned);
+}
+
+@include tablet {
+    .table,
+    .table thead,
+    .table tbody {
+        display: block;
+        width: 100%;
+    }
+
+    .headerRow {
+        display: none;
+    }
+
+    .filterRow {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--space-2);
+    }
+
+    .filterRow th:first-child {
+        display: none;
+    }
+
+    .bodyRow {
+        display: block;
+        padding: var(--space-3);
+        margin-bottom: var(--space-4);
+        border-radius: var(--radius-lg);
+    }
+
+    .bodyRow td {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-3);
+        border: none;
+
+        &::before {
+            content: attr(data-label);
+            font-weight: 600;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+    }
+}
+
+@include mobile {
+    .filterRow {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.scoreCell[data-score-level="error"] > div {
+    background:
+        color-mix(
+            in srgb,
+            var(--chart-error) 16%,
+            var(--bg-redesigned)
+        );
+}
+
+.scoreCell[data-score-level="warning"] > div {
+    background:
+        color-mix(
+            in srgb,
+            var(--chart-warning) 16%,
+            var(--bg-redesigned)
+        );
+}
+
+.scoreCell[data-score-level="none"] > div {
+    background: var(--glass-overlay-dark);
+}
+
+.filterRow th::before {
+    content: attr(data-filter-label);
+    display: block;
+    margin-bottom: var(--space-1);
+    text-align: left;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.rateCell > div::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--chart-success);
+}
+
+.rateCell[data-score-level="error"] > div::before {
+    background: var(--chart-error);
+}
+
+.rateCell[data-score-level="warning"] > div::before {
+    background: var(--chart-warning);
+}
+
+.rateCell[data-score-level="none"] > div::before {
+    background: var(--status-neutral);
 }

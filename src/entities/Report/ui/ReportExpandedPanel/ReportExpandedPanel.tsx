@@ -147,7 +147,7 @@ export const ReportExpandedPanel = memo((props: ReportExpandedPanelProps) => {
             className={classNames(cls.ReportExpandedPanel, {}, [className])}
         >
             {isAdmin && (
-                <HStack justify="end" max gap="8" className={cls.actionsBar}>
+                <HStack justify="end" max gap="8" wrap="wrap" className={cls.actionsBar}>
                     {onRegenerateAnalytics && (
                         <Button
                             variant="glass-action"

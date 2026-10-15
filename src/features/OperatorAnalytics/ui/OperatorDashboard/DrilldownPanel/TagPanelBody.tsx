@@ -8,19 +8,20 @@ import { VStack, HStack } from '@/shared/ui/redesigned/Stack'
 import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { Tooltip } from '@/shared/ui/redesign-v3/Tooltip'
-import { useGetOperatorCdrs, useLazyGetOperatorCdrs, type OperatorAnalysisResult, type OperatorProject } from '@/entities/Report'
+import { useGetOperatorCdrs, useLazyGetOperatorCdrs, type OperatorAnalysisResult, type OperatorProject, type TagStat } from '@/entities/Report'
 import type { PanelEntry } from '../../../model/panelStack'
 import { ALL_DEFAULT_METRICS, normalizeRate, scoreVariant } from '../../../lib/metricVisual'
 import { operatorCallScore } from '../../../lib/operatorCallScore'
 import { buildDistributionCallsSheet } from './distributionCallsExport'
 import type { DashboardFilters } from './OperatorPanelBody'
+import { DashboardHint } from '../DashboardHint'
 import cls from './TagPanelBody.module.scss'
 
 const PAGE_SIZE = 20
 const EXPORT_FILE_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
 
 interface TagPanelBodyProps {
-    entry: Extract<PanelEntry, { kind: 'tag' }>
+    entry: Extract<PanelEntry, { kind: 'tag' | 'topicCalls' }>
     filters: DashboardFilters
     project?: OperatorProject
     onOpenCall: (channelId: string, fromLabel: string) => void
@@ -82,7 +83,17 @@ const MetricHintLabel = memo(({ label, hint }: MetricHintProps) => (
 
 export const TagPanelBody = memo((props: TagPanelBodyProps) => {
     const { entry, filters, project, onOpenCall } = props
-    const { stat } = entry
+    const stat: TagStat = entry.kind === 'tag' ? entry.stat : {
+        tagId: entry.tagId ?? '',
+        name: entry.label,
+        callsCount: entry.callsCount,
+        averageScore: 0,
+        scoredCalls: 0,
+        successRate: 0,
+        sentiment: { positive: 0, neutral: 0, negative: 0 },
+        shareOfPeriodCalls: undefined,
+        deltaVsPeriodAverage: undefined,
+    }
     const { t } = useTranslation('reports')
     const [page, setPage] = useState(1)
     const [exporting, setExporting] = useState(false)
@@ -95,8 +106,13 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
         projectId: filters.projectId,
         userId: filters.userId,
         // Backend getCdrs expects tagId (operator_call_tags), not legacy "theme".
-        tagId: stat.tagId,
-    }), [filters, stat.tagId])
+        ...(entry.kind === 'topicCalls' && entry.tagId === null ? { withoutTopic: true } : { tagId: stat.tagId }),
+        ...(entry.kind === 'topicCalls' && entry.operatorName === null
+            ? { withoutOperator: true }
+            : entry.kind === 'topicCalls' && entry.operatorName != null
+                ? { operatorNameExact: entry.operatorName }
+                : {}),
+    }), [filters, stat.tagId, entry])
 
     const cdrArgs = useMemo(() => ({
         ...queryBase,
@@ -105,7 +121,7 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
     }), [queryBase, page])
 
     const { data, isLoading, isFetching, isError, refetch } = useGetOperatorCdrs(cdrArgs, {
-        skip: !stat.tagId,
+        skip: entry.kind === 'tag' && !stat.tagId,
     })
 
     const loading = (isLoading || isFetching) && !data
@@ -134,7 +150,8 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
             const workbook = XLSX.utils.book_new()
             XLSX.utils.book_append_sheet(workbook, worksheet, 'calls')
             const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
-            const tag = stat.tagId.replace(/[^\p{L}\p{N}_.-]/gu, '_')
+            const exportLabel = entry.kind === 'tag' ? stat.tagId : entry.label
+            const tag = exportLabel.replace(/[^\p{L}\p{N}_.-]/gu, '_')
             const period = [filters.startDate, filters.endDate].filter(Boolean).join('_')
             const filename = [`topic-calls-${tag}`, period].filter(Boolean).join('_')
             saveAs(new Blob([buffer], { type: EXPORT_FILE_TYPE }), `${filename}.xlsx`)
@@ -143,7 +160,7 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
         } finally {
             setExporting(false)
         }
-    }, [exporting, fetchAllCdrs, filters.startDate, filters.endDate, queryBase, stat.tagId, t, total])
+    }, [exporting, fetchAllCdrs, filters.startDate, filters.endDate, queryBase, stat.tagId, entry, t, total])
 
     if (loading) {
         return (
@@ -172,18 +189,15 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
 
     return (
         <VStack gap="16" max className={cls.root} data-testid="tag-panel-body">
-            <div className={cls.headline} data-testid="tag-panel-headline">
+            {entry.kind === 'tag' && <>
+            <HStack gap="8" wrap="wrap" data-testid="tag-panel-headline">
                 <Text
                     text={String(t('TOPICS_DRILLDOWN_CALLS_COUNT', { count: stat.callsCount }))}
                     size="l"
                     bold
                 />
-                <Text
-                    text={String(t('TOPICS_DRILLDOWN_SUMMARY_HINT'))}
-                    size="xs"
-                    className={cls.headlineHint}
-                />
-            </div>
+                <DashboardHint hint={String(t('TOPICS_DRILLDOWN_SUMMARY_HINT'))} />
+            </HStack>
 
             <div className={cls.statStrip} data-testid="tag-panel-stat-strip">
                 <div className={cls.statItem}>
@@ -192,10 +206,10 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
                         hint={String(t('TOPICS_HINT_AVERAGE_SCORE'))}
                     />
                     <Text
-                        text={stat.averageScore.toFixed(1)}
+                        text={stat.scoredCalls === 0 ? '-' : stat.averageScore.toFixed(1)}
                         size="m"
                         bold
-                        variant={scoreVariant(stat.averageScore)}
+                        variant={stat.scoredCalls === 0 ? undefined : scoreVariant(stat.averageScore)}
                         className={cls.statValue}
                     />
                 </div>
@@ -222,10 +236,10 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
                         hint={String(t('TOPICS_HINT_SUCCESS_RATE'))}
                     />
                     <Text
-                        text={`${successRatePct.toFixed(0)}%`}
+                        text={stat.scoredCalls === 0 ? '-' : `${successRatePct.toFixed(0)}%`}
                         size="m"
                         bold
-                        variant={scoreVariant(successRatePct)}
+                        variant={stat.scoredCalls === 0 ? undefined : scoreVariant(successRatePct)}
                         className={cls.statValue}
                     />
                 </div>
@@ -263,13 +277,16 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
                 </div>
             )}
 
-            <div className={cls.listHeader} data-testid="tag-panel-call-count">
-                <div className={cls.listHeaderRow}>
+            </>}
+            <HStack gap="8" wrap="wrap" max justify="between" data-testid="tag-panel-call-count">
+                <HStack gap="8" wrap="wrap">
                     <Text
                         text={String(t('TOPICS_CALL_LIST_TITLE', { count: total }))}
                         size="m"
                         bold
                     />
+                    <DashboardHint hint={String(t('TOPICS_CALL_LIST_HINT'))} />
+                </HStack>
                     {total > 0 && (
                         <Button
                             variant="glass-action"
@@ -282,13 +299,7 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
                             {exporting ? String(t('Экспорт...')) : String(t('Выгрузить'))}
                         </Button>
                     )}
-                </div>
-                <Text
-                    text={String(t('TOPICS_CALL_LIST_HINT'))}
-                    size="xs"
-                    className={cls.listHint}
-                />
-            </div>
+            </HStack>
             {exportError && (
                 <div role="alert">
                     <Text text={String(t('Не удалось выгрузить звонки'))} variant="error" size="s" />
@@ -302,7 +313,8 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
                     </div>
                 ) : (data?.data as CdrListRow[] | undefined)?.map(call => {
                     const openId = call.channelId || call.id
-                    const operator = call.assistantName || call.operatorName || String(t('Без оператора'))
+                    const rawOperator = (call.assistantName || call.operatorName || '').trim()
+                    const operator = !rawOperator || rawOperator === 'Unknown Operator' ? String(t('Без оператора')) : rawOperator
                     const client = call.clientPhone || call.callerId
                     const durationLabel = formatCallDuration(call.duration, t)
                     const score = operatorCallScore(resolveCallMetrics(call), defaultKeys, Boolean(project))

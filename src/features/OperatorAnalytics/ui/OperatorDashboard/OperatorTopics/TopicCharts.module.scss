@@ -1,0 +1,91 @@
+@import "@/app/styles/variables/mixins";
+
+.charts {
+    @include tablet {
+        flex-direction: column;
+    }
+}
+
+.volumeCard,
+.coverageCard {
+    min-width: 0;
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-redesigned) 82%,
+            var(--accent-redesigned)
+        );
+    border: var(--glass-border-primary);
+}
+
+.volumeCard {
+    flex: 1 1 60%;
+    width: 100%;
+}
+
+.coverageCard {
+    flex: 1 1 40%;
+    width: 100%;
+    background: color-mix(in srgb, var(--bg-redesigned) 92%, var(--chart-info));
+}
+
+.icon {
+    color: var(--chart-info);
+}
+
+.muted {
+    opacity: 0.7;
+}
+
+.barButton {
+    padding: var(--space-2);
+    border-radius: var(--radius-sm);
+    transition: var(--transition-colors);
+    text-align: left;
+
+    &:hover {
+        opacity: 1;
+        background: color-mix(in srgb, var(--topic-color) 10%, transparent);
+    }
+
+    &:focus-visible {
+        @include focus-visible;
+    }
+}
+
+.barValues {
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.bar {
+    width: 100%;
+    height: var(--space-2);
+}
+
+.track {
+    fill: color-mix(in srgb, var(--text-redesigned) 8%, transparent);
+}
+
+.fill {
+    fill: var(--topic-color);
+}
+
+.donut {
+    position: relative;
+    width: 100%;
+}
+
+.donutValue {
+    position: absolute;
+    top: 90px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.coverageTotals {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--divider-solid);
+    font-variant-numeric: tabular-nums;
+}

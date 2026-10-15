@@ -1,0 +1,21 @@
+@import "@/app/styles/variables/mixins";
+
+.hint {
+    min-width: 28px;
+    min-height: 28px;
+    padding: var(--space-1);
+    border-radius: var(--radius-full);
+
+    &:hover {
+        background: color-mix(in srgb, var(--accent-redesigned) 15%, transparent);
+        opacity: 1;
+    }
+
+    &:focus-visible {
+        @include focus-visible;
+    }
+}
+
+.hint.hint svg {
+    color: color-mix(in srgb, var(--text-redesigned) 70%, var(--accent-redesigned));
+}

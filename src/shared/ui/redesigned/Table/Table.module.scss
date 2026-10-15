@@ -47,6 +47,13 @@
     margin-left: 4px;
 }
 
+.headerButton {
+    padding: 0;
+    font: inherit;
+    text-align: left;
+    white-space: normal;
+}
+
 // ─── Base row (common td layout) ─────────────────────────────────────────────
 .TableItem {
     // Split transition: transform on spring easing (smooth lift), colors on ease-in-out

@@ -1,6 +1,7 @@
 import { classNames, Mods } from '@/shared/lib/classNames/classNames'
 import cls from './TabsPanel.module.scss'
-import { memo, ReactNode } from 'react'
+import { memo, ReactNode, useId } from 'react'
+import { VStack } from '../../../redesigned/Stack'
 import { Box, Tab, Tabs, useMediaQuery } from '@mui/material'
 import { Card } from '../../../redesigned/Card'
 
@@ -10,6 +11,8 @@ export interface TabPanelItem {
 }
 
 interface TabsPanelProps {
+  embedded?: boolean
+  ariaLabel?: string
   className?: string
   tabItems: TabPanelItem[]
   value: number
@@ -17,24 +20,25 @@ interface TabsPanelProps {
 }
 
 interface CustomTabPanelProps {
+  idPrefix: string
+  embedded?: boolean
   children: ReactNode
   value: number
   index: number
 }
 
-function CustomTabPanel ({ children, value, index, ...other }: CustomTabPanelProps) {
+function CustomTabPanel ({ children, value, index, idPrefix, embedded, ...other }: CustomTabPanelProps) {
   return (
     <div
       role="tabpanel"
+      className={cls.panel}
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`${idPrefix}-panel-${index}`}
+      aria-labelledby={`${idPrefix}-tab-${index}`}
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <div>{children}</div>
-        </Box>
+        embedded ? <VStack gap="16" max className={cls.embeddedContent}>{children}</VStack> : <Box sx={{ p: 3 }}><div>{children}</div></Box>
       )}
     </div>
   )
@@ -45,10 +49,13 @@ export const TabsPanel = memo((props: TabsPanelProps) => {
     className,
     tabItems,
     value,
-    onChange
+    onChange,
+    embedded = false,
+    ariaLabel = 'endpoints options'
   } = props
 
   const isMobile = useMediaQuery('(max-width:800px)')
+  const idPrefix = useId()
 
   const mods: Mods = {
     [cls.TabsMobile]: isMobile
@@ -56,21 +63,22 @@ export const TabsPanel = memo((props: TabsPanelProps) => {
 
   function a11yProps (index: number) {
     return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`
+      id: `${idPrefix}-tab-${index}`,
+      'aria-controls': `${idPrefix}-panel-${index}`
     }
   }
 
+  const Container = embedded ? VStack : Card
   return (
-    <Card
+    <Container
       className={classNames(cls.TabsPanelMain, mods, [className])}
       max
-      border={'partial'}
+      {...(!embedded ? { border: 'partial' as const } : {})}
     >
       <Tabs
         value={value}
         onChange={onChange}
-        aria-label="endpoints options"
+        aria-label={ariaLabel}
         variant="scrollable"
         scrollButtons={'auto'}
         allowScrollButtonsMobile={isMobile}
@@ -91,10 +99,10 @@ export const TabsPanel = memo((props: TabsPanelProps) => {
         ))}
       </Tabs>
       {tabItems.map((item, index) => (
-        <CustomTabPanel key={index} value={value} index={index}>
+        <CustomTabPanel key={index} value={value} index={index} idPrefix={idPrefix} embedded={embedded}>
           {item.content}
         </CustomTabPanel>
       ))}
-    </Card>
+    </Container>
   )
 })

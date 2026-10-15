@@ -181,6 +181,68 @@ describe('OperatorDashboard layout', () => {
         mockUseGetOperatorProjects.mockReturnValue({ data: baseProjects })
     })
 
+    const matrixData: OperatorDashboardResponse = {
+        ...dashboardWithTags,
+        operatorTopicStats: {
+            totalCalls: 3,
+hasMultipleTopics: false,
+            topics: [{ tagId: 'tag-1', name: 'Продажи', callsCount: 2 }, { tagId: null, name: '', callsCount: 1 }],
+            operators: [
+                { operatorName: 'Alice', callsCount: 2, topics: [{ tagId: 'tag-1', callsCount: 2 }] },
+                { operatorName: null, callsCount: 1, topics: [{ tagId: null, callsCount: 1 }] },
+            ],
+        },
+    }
+
+    it('opens calls from a matrix cell and hides the matrix after switching to a project without topics', async () => {
+        const { rerender } = render(<OperatorDashboard {...defaultProps} projectId="proj-1" data={matrixData} />)
+        await userEvent.click(screen.getByRole('tab', { name: 'Операторы по темам' }))
+        expect(screen.getByTestId('operator-topic-matrix')).toBeInTheDocument()
+        const topicsSection = screen.getByTestId('oa-section-topics')
+        expect(within(topicsSection).getAllByRole('tab')).toHaveLength(2)
+        expect(within(topicsSection).queryByText('Рейтинг операторов')).not.toBeInTheDocument()
+        expect(screen.getByTestId('oa-section-ranking').closest('[data-testid="oa-section-topics"]')).toBeNull()
+        await userEvent.click(screen.getByRole('button', { name: 'Без оператора / Без темы: 1' }))
+        expect(screen.getByRole('heading', { name: 'Без оператора / Без темы' })).toBeInTheDocument()
+        expect(screen.getByTestId('tag-panel-call-list')).toBeInTheDocument()
+        mockUseGetOperatorProjects.mockReturnValue({ data: [{ ...baseProjects[0], id: 'proj-empty', callTaxonomy: [] }] })
+        rerender(<OperatorDashboard {...defaultProps} projectId="proj-empty" data={matrixData} />)
+        expect(screen.queryByRole('tab', { name: 'Операторы по темам' })).not.toBeInTheDocument()
+        expect(screen.queryByTestId('operator-topic-matrix')).not.toBeInTheDocument()
+    })
+
+    it('navigates from topic and operator breakdowns to calls and back', async () => {
+        mockUseGetOperatorEvidence.mockReturnValue({ data: { metrics: [] }, isLoading: false })
+        render(<OperatorDashboard {...defaultProps} projectId="proj-1" data={matrixData} />)
+        await userEvent.click(screen.getByTestId('topic-card-tag-1'))
+        await userEvent.click(within(screen.getByTestId('topic-breakdown')).getByRole('button', { name: 'Alice 2 (100.0%)' }))
+        expect(screen.getByRole('heading', { name: 'Alice / Продажи' })).toBeInTheDocument()
+        await userEvent.click(screen.getByRole('button', { name: 'Назад к {{context}}' }))
+        expect(screen.getByRole('heading', { name: 'Продажи' })).toBeInTheDocument()
+        await userEvent.click(screen.getByRole('button', { name: 'Закрыть панель' }))
+        await userEvent.click(screen.getByTestId('operator-score-row-Alice'))
+        await userEvent.click(within(screen.getByTestId('topic-breakdown')).getByRole('button', { name: 'Продажи 2 (100.0%)' }))
+        expect(screen.getByRole('heading', { name: 'Alice / Продажи' })).toBeInTheDocument()
+    })
+
+    it('opens the missing operator panel from the matrix and drills into its topics', async () => {
+        mockUseGetOperatorEvidence.mockReturnValue({ data: { metrics: [] }, isLoading: false })
+        render(<OperatorDashboard {...defaultProps} projectId="proj-1" data={matrixData} />)
+        await userEvent.click(screen.getByRole('tab', { name: 'Операторы по темам' }))
+        await userEvent.click(within(screen.getByTestId('operator-topic-matrix')).getByRole('button', { name: 'Без оператора', exact: true }))
+        expect(screen.getByRole('heading', { name: 'Без оператора', exact: true })).toBeInTheDocument()
+        await userEvent.click(within(screen.getByTestId('topic-breakdown')).getByRole('button', { name: 'Без темы 1 (100.0%)' }))
+        expect(screen.getByRole('heading', { name: 'Без оператора / Без темы' })).toBeInTheDocument()
+        expect(screen.getByTestId('tag-panel-call-list')).toBeInTheDocument()
+    })
+
+    it('opens the no-topic calls from the volume chart without restricting operators', async () => {
+        render(<OperatorDashboard {...defaultProps} projectId="proj-1" data={matrixData} />)
+        await userEvent.click(screen.getByRole('button', { name: 'Без темы: 1 (33.3%)' }))
+        expect(screen.getByRole('heading', { name: 'Без темы', exact: true })).toBeInTheDocument()
+        expect(screen.getByTestId('tag-panel-call-list')).toBeInTheDocument()
+    })
+
     it('renders stats, insights and ranking sections in document order', () => {
         const { container } = render(<OperatorDashboard {...defaultProps} />)
 

@@ -216,5 +216,9 @@ These topics exist in 2–3 places — intel files are canonical:
 
 ## n8n email helpdesk (OPS)
 
-Plan and ownership: [n8n-helpdesk](../initiatives/n8n-helpdesk/EXECUTION.md). Independent server deployment; codex-direct; no product phase state changes.
+Plan and ownership: [n8n-helpdesk](../initiatives/n8n-helpdesk/EXECUTION.md). Email helpdesk, client/source registry, JWT console/Mini App and ticket history; codex-direct; no product phase state changes.
+
+## Operator topic matrix
+
+Plan and ownership: [operator-topic-matrix](../initiatives/operator-topic-matrix/EXECUTION.md). Operator/topic counts and drilldown on call-records; codex-direct; all available records, including missing topics/operators.
 

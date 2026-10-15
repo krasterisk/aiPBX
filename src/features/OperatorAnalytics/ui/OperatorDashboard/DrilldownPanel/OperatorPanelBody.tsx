@@ -12,6 +12,7 @@ import {
 import type { PanelEntry } from '../../../model/panelStack'
 import { formatEvidenceMetricAverage, formatEvidenceMetricValue, getMetricLabelKey } from '../../../lib/metricVisual'
 import cls from './OperatorPanelBody.module.scss'
+import { DashboardHint } from '../DashboardHint'
 
 const EVIDENCE_PAGE_SIZE = 20
 
@@ -323,18 +324,14 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
                 />
             )}
 
-            <div className={cls.listHeader}>
+            <HStack gap="8" max wrap="wrap">
                 <Text
                     text={String(t('METRIC_EVIDENCE_LIST_TITLE', { count: evidenceTotal }))}
                     size="m"
                     bold
                 />
-                <Text
-                    text={String(t('METRIC_EVIDENCE_LIST_HINT'))}
-                    size="xs"
-                    className={cls.listHint}
-                />
-            </div>
+                <DashboardHint hint={String(t('METRIC_EVIDENCE_LIST_HINT'))} />
+            </HStack>
 
             <div className={cls.evidenceSection}>
                 {evidenceTotal === 0 ? (

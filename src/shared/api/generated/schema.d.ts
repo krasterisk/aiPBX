@@ -5347,6 +5347,31 @@ export interface components {
             /** @description login | signup | activation | manual */
             source?: string;
         };
+        OperatorTopicDto: {
+            /** @description Null means no topic */
+            tagId: string | null;
+            callsCount: number;
+            /** @description Display name; empty for the no-topic bucket */
+            name: string;
+        };
+        OperatorTopicCellDto: {
+            /** @description Null means no topic */
+            tagId: string | null;
+            callsCount: number;
+        };
+        OperatorTopicRowDto: {
+            /** @description Normalized name; null means no operator */
+            operatorName: string | null;
+            /** @description Unique call count, including low-quality calls */
+            callsCount: number;
+            topics: components["schemas"]["OperatorTopicCellDto"][];
+        };
+        OperatorTopicStatsDto: {
+            totalCalls: number;
+            hasMultipleTopics: boolean;
+            topics: components["schemas"]["OperatorTopicDto"][];
+            operators: components["schemas"]["OperatorTopicRowDto"][];
+        };
     };
     responses: never;
     parameters: never;
@@ -10018,7 +10043,12 @@ export interface operations {
     };
     OperatorAnalyticsController_getCdrs: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Calls without any stored topic */
+                withoutTopic?: boolean;
+                /** @description Calls with a missing or unknown operator */
+                withoutOperator?: boolean;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -10048,7 +10078,13 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": {
+                        operatorTopicStats?: components["schemas"]["OperatorTopicStatsDto"];
+                    } & {
+                        [key: string]: unknown;
+                    };
+                };
             };
         };
     };

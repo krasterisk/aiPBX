@@ -10,10 +10,12 @@ import {
   SortingState
 } from '@tanstack/react-table'
 import { VStack, HStack } from '../Stack'
+import { Button } from '../Button'
 
 export type TableRowVariant = 'clear' | 'outline' | 'filled' | 'glass'
 
 interface TableProps<T extends object> {
+  accessibleSort?: boolean
   data: T[] | undefined
   columns: any[]
   className?: string
@@ -36,7 +38,8 @@ export const Table = <T extends object>(props: TableProps<T>) => {
     renderExpandedRow,
     sorting,
     setSorting,
-    rowVariant = 'glass'
+    rowVariant = 'glass',
+    accessibleSort = false
   } = props
 
   const table = useReactTable({
@@ -66,11 +69,14 @@ export const Table = <T extends object>(props: TableProps<T>) => {
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
+                  aria-sort={accessibleSort ? (header.column.getIsSorted() === 'asc' ? 'ascending' : header.column.getIsSorted() === 'desc' ? 'descending' : 'none') : undefined}
                   className={classNames('', { [cls.sortable]: header.column.getCanSort() })}
                   onClick={header.column.getToggleSortingHandler()}
                 >
                   <HStack gap="4">
-                    {header.isPlaceholder
+                    {accessibleSort && header.column.getCanSort()
+                      ? <Button variant="clear" className={cls.headerButton}>{flexRender(header.column.columnDef.header, header.getContext())}</Button>
+                      : header.isPlaceholder
                       ? null
                       : flexRender(header.column.columnDef.header, header.getContext())}
                     {{
@@ -131,7 +137,7 @@ export const Table = <T extends object>(props: TableProps<T>) => {
             {table.getFooterGroups().map((footerGroup) => (
               <tr key={footerGroup.id}>
                 {footerGroup.headers.map((header) => (
-                  <th key={header.id}>
+                  <th key={header.id} data-label={typeof header.column.columnDef.header === 'string' ? header.column.columnDef.header : ''}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(header.column.columnDef.footer, header.getContext())}

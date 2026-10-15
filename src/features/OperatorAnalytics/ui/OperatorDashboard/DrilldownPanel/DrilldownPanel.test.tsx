@@ -115,6 +115,46 @@ describe('DrilldownPanel tag body', () => {
         expect(screen.getByTestId('tag-panel-body')).toBeInTheDocument()
     })
 
+    it('preserves exact topic/operator and tenant/date filters for matrix calls', async () => {
+        render(<DrilldownPanel entry={{ kind: 'topicCalls', tagId: 'tag-sales', operatorName: 'Alice', label: 'Alice / Sales', callsCount: 25 }}
+            filters={{ ...defaultFilters, userId: '42' }} onSelectMetric={jest.fn()} onOpenCall={jest.fn()} />)
+        expect(mockUseGetOperatorCdrs).toHaveBeenLastCalledWith(expect.objectContaining({
+            tagId: 'tag-sales',
+operatorNameExact: 'Alice',
+userId: '42',
+projectId: 'proj-1',
+            startDate: defaultFilters.startDate,
+endDate: defaultFilters.endDate,
+page: 1,
+limit: 20,
+        }), { skip: false })
+        expect(screen.queryByTestId('tag-panel-stat-strip')).not.toBeInTheDocument()
+    })
+
+    it('queries and paginates calls without a topic or an operator', async () => {
+        const { rerender } = render(<DrilldownPanel entry={{ kind: 'topicCalls', tagId: null, operatorName: null, label: 'No operator / No topic', callsCount: 25 }}
+            filters={defaultFilters} onSelectMetric={jest.fn()} onOpenCall={jest.fn()} />)
+        expect(mockUseGetOperatorCdrs).toHaveBeenLastCalledWith(expect.objectContaining({ withoutTopic: true, withoutOperator: true, page: 1 }), { skip: false })
+        const args = mockUseGetOperatorCdrs.mock.calls[mockUseGetOperatorCdrs.mock.calls.length - 1][0]
+        expect(args.tagId).toBeUndefined()
+        expect(args.operatorNameExact).toBeUndefined()
+        await userEvent.click(screen.getByTestId('tag-panel-next-page'))
+        expect(mockUseGetOperatorCdrs).toHaveBeenLastCalledWith(expect.objectContaining({ withoutTopic: true, withoutOperator: true, page: 2 }), { skip: false })
+        rerender(<DrilldownPanel entry={{ kind: 'topicCalls', tagId: null, operatorName: 'Alice', label: 'Alice / No topic', callsCount: 1 }}
+            filters={defaultFilters} onSelectMetric={jest.fn()} onOpenCall={jest.fn()} />)
+        expect(mockUseGetOperatorCdrs).toHaveBeenLastCalledWith(expect.objectContaining({ withoutTopic: true, operatorNameExact: 'Alice', page: 1 }), { skip: false })
+    })
+
+    it('resets pagination when moving from all operators to the missing operator within a topic', async () => {
+        const { rerender } = render(<DrilldownPanel entry={{ kind: 'topicCalls', tagId: null, label: 'No topic', callsCount: 25 }}
+            filters={defaultFilters} onSelectMetric={jest.fn()} onOpenCall={jest.fn()} />)
+        await userEvent.click(screen.getByTestId('tag-panel-next-page'))
+        expect(mockUseGetOperatorCdrs).toHaveBeenLastCalledWith(expect.objectContaining({ page: 2 }), { skip: false })
+        rerender(<DrilldownPanel entry={{ kind: 'topicCalls', tagId: null, operatorName: null, label: 'No operator / No topic', callsCount: 1 }}
+            filters={defaultFilters} onSelectMetric={jest.fn()} onOpenCall={jest.fn()} />)
+        expect(mockUseGetOperatorCdrs).toHaveBeenLastCalledWith(expect.objectContaining({ withoutTopic: true, withoutOperator: true, page: 1 }), { skip: false })
+    })
+
     it('shows labeled call count as the display headline', () => {
         render(
             <DrilldownPanel

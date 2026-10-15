@@ -18,6 +18,7 @@ export type {
   OperatorAnalysisStatus,
   OperatorCdrResponse,
   OperatorDashboardResponse,
+  OperatorTopicStats,
   OperatorAggregatedMetrics,
   OperatorInsight,
   OperatorInsightsResponse,

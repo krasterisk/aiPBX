@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Skeleton } from '@mui/material'
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk'
@@ -24,6 +24,8 @@ import {
 import { AiInsightsBanner } from './AiInsightsBanner/AiInsightsBanner'
 import { DashboardConfigGrid } from '../DashboardBuilder/DashboardConfigGrid'
 import { OperatorScoreTable } from './OperatorScoreTable/OperatorScoreTable'
+import type { SelectTopicCalls } from './OperatorTopics/OperatorTopics'
+import { DashboardHint } from './DashboardHint'
 import { DonutChart, type DonutSegment } from '@/shared/ui/redesigned/DonutChart'
 import { SidePanel } from '@/shared/ui/redesign-v3'
 import {
@@ -68,6 +70,9 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
     }), [startDate, endDate, projectId, userId])
 
     const currentEntry = getCurrentPanelEntry(panelStack)
+    useEffect(() => {
+        setPanelStack([])
+    }, [projectId, startDate, endDate, userId])
     const previousEntry = panelStack.length > 1 ? panelStack[panelStack.length - 2] : undefined
     const panelTitle = resolvePanelTitle(currentEntry, t)
     const backLabel = resolveBackLabel(previousEntry, t)
@@ -161,6 +166,14 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
     const activeProject = projects?.find(
         (p: OperatorProject) => String(p.id) === String(projectId ?? ''),
     )
+    const topicStats = !isLoading && !isWithoutProject && activeProject?.callTaxonomy?.length ? data?.operatorTopicStats : undefined
+    const handleSelectTopicCalls = useCallback<SelectTopicCalls>((tagId, operatorName, callsCount, element) => {
+        const topic = tagId === null ? String(t('Без темы')) : topicStats?.topics.find(item => item.tagId === tagId)?.name ?? tagId
+        const operator = operatorName === null ? String(t('Без оператора')) : operatorName
+        const entry: PanelEntry = { kind: 'topicCalls', tagId, operatorName, callsCount, label: operator !== undefined ? `${operator} / ${topic}` : topic }
+        if (!currentEntry) lastFocusedRowRef.current = element ?? null
+        setPanelStack(previous => pushPanelEntry(previous, entry))
+    }, [topicStats, currentEntry, t])
 
     // Phase 1: Filter radarMetrics by visibleDefaultMetrics when project is selected
     const radarMetrics = useMemo(() => {
@@ -561,7 +574,11 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
 
             {projectId && !isWithoutProject && (
                 <TopicsSection
+                    key={JSON.stringify([projectId, startDate, endDate, userId])}
                     tagStats={data?.tagStats}
+                    topicStats={topicStats}
+                    onSelectTopicCalls={handleSelectTopicCalls}
+                    onSelectOperator={handleSelectOperator}
                     hasTaxonomy={(activeProject?.callTaxonomy?.length ?? 0) > 0}
                     isLoading={isLoading}
                     onSelectTag={handleSelectTag}
@@ -579,13 +596,10 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                 data-testid="oa-section-ranking"
             >
                 <VStack gap={'16'} max>
-                    <VStack gap={'4'} max>
+                    <HStack gap="8" wrap="wrap">
                         <Text title={String(t('Рейтинг операторов'))} bold />
-                        <Text
-                            text={String(t('OPERATOR_SCORE_RANKING_SUBTITLE'))}
-                            size={'s'}
-                        />
-                    </VStack>
+                        <DashboardHint hint={String(t('OPERATOR_SCORE_RANKING_SUBTITLE'))} />
+                    </HStack>
                     {(data?.agentScorecards?.length ?? 0) > 0
                         ? (
                             <OperatorScoreTable
@@ -614,6 +628,8 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
                         entry={currentEntry}
                         filters={dashboardFilters}
                         project={activeProject}
+                        topicStats={topicStats}
+                        onSelectTopicCalls={handleSelectTopicCalls}
                         onSelectMetric={handleSelectMetric}
                         onOpenCall={handleOpenCall}
                     />

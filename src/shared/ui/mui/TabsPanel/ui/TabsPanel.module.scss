@@ -1,14 +1,22 @@
 .TabsPanelMain {
-  width: 100%;
+    width: 100%;
 }
 
 .TabsMobile {
-  max-width: 100%;
+    max-width: 100%;
+}
+
+.embeddedContent {
+    padding-top: var(--space-4);
+}
+
+.panel {
+    width: 100%;
 }
 
 .tab {
-  border: none;
-  outline: none;
-  color: var(--text-redesigned);
-  background: none;
+    border: none;
+    outline: none;
+    color: var(--text-redesigned);
+    background: none;
 }

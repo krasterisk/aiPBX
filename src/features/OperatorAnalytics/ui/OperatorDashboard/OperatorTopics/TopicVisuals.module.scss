@@ -1,0 +1,95 @@
+@import "@/app/styles/variables/mixins";
+
+.tone0 {
+    --topic-color: var(--chart-info);
+}
+
+.tone1 {
+    --topic-color: var(--chart-purple);
+}
+
+.tone2 {
+    --topic-color: var(--chart-teal);
+}
+
+.tone3 {
+    --topic-color: var(--chart-pink);
+}
+
+.tone4 {
+    --topic-color: var(--chart-primary);
+}
+
+.toneMissing {
+    --topic-color: var(--chart-warning);
+}
+
+.avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: var(--space-8);
+    height: var(--space-8);
+    border-radius: var(--radius-md);
+    background:
+        color-mix(
+            in srgb,
+            var(--accent-redesigned) 16%,
+            var(--bg-redesigned)
+        );
+    color: var(--text-redesigned);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.identity {
+    min-width: 0;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.dot {
+    flex-shrink: 0;
+    width: var(--space-2);
+    height: var(--space-2);
+    border-radius: var(--radius-full);
+    background: var(--topic-color);
+}
+
+.total {
+    display: inline-block;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    background:
+        color-mix(
+            in srgb,
+            var(--accent-redesigned) 12%,
+            var(--bg-redesigned)
+        );
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+}
+
+.share {
+    min-width: 76px;
+    font-variant-numeric: tabular-nums;
+}
+
+.shareTrack {
+    width: 100%;
+    height: var(--space-2);
+    fill: color-mix(in srgb, var(--text-redesigned) 8%, transparent);
+}
+
+.shareFill {
+    fill: var(--topic-color, var(--accent-redesigned));
+}
+
+.tone5 {
+    --topic-color: var(--chart-success);
+}
+
+.tone6 {
+    --topic-color: var(--chart-purple);
+}
