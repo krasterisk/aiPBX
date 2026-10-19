@@ -39,13 +39,15 @@ interface OperatorMetricPanelBodyProps {
 function buildQueryArgs(
     operatorName: string | undefined,
     filters: DashboardFilters,
+    operatorId?: string,
+    operatorAccountId?: string,
 ) {
     return {
-        ...(operatorName ? { operatorName } : {}),
+        ...(operatorId ? { operatorId } : operatorName ? { operatorName } : {}),
         startDate: filters.startDate,
         endDate: filters.endDate,
         projectId: filters.projectId,
-        userId: filters.userId,
+        userId: operatorAccountId ?? filters.userId,
     }
 }
 
@@ -71,8 +73,8 @@ export const OperatorPanelBody = memo((props: OperatorPanelBodyProps) => {
     const [expandedMetricId, setExpandedMetricId] = useState<string | null>(null)
 
     const queryArgs = useMemo(
-        () => buildQueryArgs(entry.operatorName, filters),
-        [entry.operatorName, filters],
+        () => buildQueryArgs(entry.operatorName, filters, entry.operatorId, entry.operatorAccountId),
+        [entry.operatorName, entry.operatorId, entry.operatorAccountId, filters],
     )
 
     const { data, isLoading, isFetching, isError, refetch } = useGetOperatorEvidence(
@@ -222,7 +224,7 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
     const { entry, filters, description, onOpenCall } = props
     const { t } = useTranslation('reports')
     const [page, setPage] = useState(1)
-    const scopeKey = `${entry.metricId}|${entry.operatorName ?? ''}|${filters.startDate ?? ''}|${filters.endDate ?? ''}|${filters.projectId ?? ''}`
+    const scopeKey = `${entry.metricId}|${entry.operatorAccountId ?? ''}|${entry.operatorId ?? entry.operatorName ?? ''}|${filters.startDate ?? ''}|${filters.endDate ?? ''}|${filters.projectId ?? ''}`
     const [seenScope, setSeenScope] = useState(scopeKey)
     let evidencePage = page
     if (seenScope !== scopeKey) {
@@ -233,13 +235,13 @@ export const OperatorMetricPanelBody = memo((props: OperatorMetricPanelBodyProps
 
     const evidenceArgs = useMemo(
         () => ({
-            ...buildQueryArgs(entry.operatorName, filters),
+            ...buildQueryArgs(entry.operatorName, filters, entry.operatorId, entry.operatorAccountId),
             metricId: entry.metricId,
             order: 'worst',
             evidencePage,
             evidencePageSize: EVIDENCE_PAGE_SIZE,
         }),
-        [entry.metricId, entry.operatorName, evidencePage, filters],
+        [entry.metricId, entry.operatorName, entry.operatorId, entry.operatorAccountId, evidencePage, filters],
     )
 
     const { data: evidenceData, isLoading: evidenceLoading, isError, refetch } = useGetOperatorEvidence(

@@ -78,9 +78,9 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
     const backLabel = resolveBackLabel(previousEntry, t)
     const isPanelOpen = panelStack.length > 0
 
-    const handleSelectOperator = useCallback((operatorName: string, rowElement: HTMLElement | null) => {
+    const handleSelectOperator = useCallback((operatorName: string, rowElement: HTMLElement | null, operatorId?: string, operatorAccountId?: string) => {
         lastFocusedRowRef.current = rowElement
-        setPanelStack([{ kind: 'operator', operatorName }])
+        setPanelStack([{ kind: 'operator', operatorName, ...(operatorId ? { operatorId, ...(operatorAccountId ? { operatorAccountId } : {}) } : {}) }])
     }, [])
 
     const handleClosePanel = useCallback(() => {
@@ -97,6 +97,7 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
         setPanelStack(prev => pushPanelEntry(prev, {
             kind: 'operatorMetric',
             operatorName: currentEntry.operatorName,
+            ...(currentEntry.operatorId ? { operatorId: currentEntry.operatorId, operatorAccountId: currentEntry.operatorAccountId } : {}),
             metricId,
             metricLabel,
         }))
@@ -167,10 +168,10 @@ export const OperatorDashboard = memo((props: OperatorDashboardProps) => {
         (p: OperatorProject) => String(p.id) === String(projectId ?? ''),
     )
     const topicStats = !isLoading && !isWithoutProject && activeProject?.callTaxonomy?.length ? data?.operatorTopicStats : undefined
-    const handleSelectTopicCalls = useCallback<SelectTopicCalls>((tagId, operatorName, callsCount, element) => {
+    const handleSelectTopicCalls = useCallback<SelectTopicCalls>((tagId, operatorName, callsCount, element, operatorId, operatorAccountId) => {
         const topic = tagId === null ? String(t('Без темы')) : topicStats?.topics.find(item => item.tagId === tagId)?.name ?? tagId
         const operator = operatorName === null ? String(t('Без оператора')) : operatorName
-        const entry: PanelEntry = { kind: 'topicCalls', tagId, operatorName, callsCount, label: operator !== undefined ? `${operator} / ${topic}` : topic }
+        const entry: PanelEntry = { kind: 'topicCalls', tagId, operatorName, ...(operatorId ? { operatorId, ...(operatorAccountId ? { operatorAccountId } : {}) } : {}), callsCount, label: operator !== undefined ? `${operator} / ${topic}` : topic }
         if (!currentEntry) lastFocusedRowRef.current = element ?? null
         setPanelStack(previous => pushPanelEntry(previous, entry))
     }, [topicStats, currentEntry, t])

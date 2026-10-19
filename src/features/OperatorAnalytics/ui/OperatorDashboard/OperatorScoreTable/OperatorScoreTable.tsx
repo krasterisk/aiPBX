@@ -18,7 +18,7 @@ interface ScoreRow extends AgentScorecard {
 
 interface OperatorScoreTableProps {
     rows: AgentScorecard[]
-    onSelectOperator?: (operatorName: string, rowElement: HTMLElement | null) => void
+    onSelectOperator?: (operatorName: string, rowElement: HTMLElement | null, operatorId?: string, operatorAccountId?: string) => void
 }
 
 export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScoreTableProps) => {
@@ -71,7 +71,9 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
         value >= 30 ? 'error' : value >= 15 ? 'warning' : undefined
 
     const handleRowActivate = useCallback((row: ScoreRow, target: HTMLElement) => {
-        onSelectOperator?.(row.operatorName, target)
+        if (row.operatorId && row.operatorAccountId) onSelectOperator?.(row.operatorName, target, row.operatorId, row.operatorAccountId)
+        else if (row.operatorId) onSelectOperator?.(row.operatorName, target, row.operatorId)
+        else onSelectOperator?.(row.operatorName, target)
     }, [onSelectOperator])
 
     const handleRowKeyDown = useCallback((
@@ -117,7 +119,7 @@ export const OperatorScoreTable = memo(({ rows, onSelectOperator }: OperatorScor
                         </tr>
                     ) : sortedRows.map((row, index) => (
                         <tr
-                            key={row.operatorName}
+                            key={row.operatorId ? JSON.stringify([row.operatorAccountId, row.operatorId]) : row.operatorName}
                             className={cls.bodyRow}
                             role={onSelectOperator ? 'button' : undefined}
                             tabIndex={onSelectOperator ? 0 : undefined}

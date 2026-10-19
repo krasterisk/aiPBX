@@ -49,6 +49,7 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted, fixed
     const { t } = useTranslation('reports')
     const [files, setFiles] = useState<Array<{ file: File }>>([])
     const [operatorName, setOperatorName] = useState('')
+    const [operatorExtension, setOperatorExtension] = useState('')
     const [clientPhone, setClientPhone] = useState('')
     const [language, setLanguage] = useState<{ id: string, name: string } | null>(LANGUAGE_OPTIONS[0])
     const [projectId, setProjectId] = useState('')
@@ -102,6 +103,7 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted, fixed
         const formData = new FormData()
         files.forEach(({ file }) => { formData.append(files.length === 1 ? 'file' : 'files', file) })
         if (operatorName) formData.append('operatorName', operatorName)
+        if (operatorExtension) formData.append('operatorExtension', operatorExtension)
         if (clientPhone) formData.append('clientPhone', clientPhone)
         if (language && language.id !== 'auto') formData.append('language', language.id)
         const effectiveProjectId = fixedProjectId || projectId
@@ -129,7 +131,7 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted, fixed
             const message = err?.data?.message || err?.message || t('Ошибка при загрузке')
             toast.error(String(message))
         }
-    }, [files, operatorName, clientPhone, language, projectId, fixedProjectId, uploadFiles, t, onClose, onBatchStarted, onUploadStart])
+    }, [files, operatorName, operatorExtension, clientPhone, language, projectId, fixedProjectId, uploadFiles, t, onClose, onBatchStarted, onUploadStart])
 
     const dropZoneClasses = [
         cls.dropZone,
@@ -217,6 +219,12 @@ export const OperatorUploadForm = memo(({ isOpen, onClose, onBatchStarted, fixed
                     label={String(t('Оператор'))}
                     value={operatorName}
                     onChange={e => { setOperatorName(e.target.value) }}
+                    size="small"
+                />
+                <Textarea
+                    label={String(t('Внутренний номер'))}
+                    value={operatorExtension}
+                    onChange={e => { setOperatorExtension(e.target.value) }}
                     size="small"
                 />
                 <Textarea

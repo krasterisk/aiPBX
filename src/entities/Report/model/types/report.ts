@@ -21,6 +21,8 @@ export interface Report {
   id: string
   callerId: string
   channelId: string
+  operatorId?: string
+  operatorExtension?: string
   assistantName?: string
   assistantId?: string
   tokens?: number
@@ -304,6 +306,8 @@ export interface OperatorAnalysisResult {
   sttCost?: number
   tokens?: number
   createdAt: string
+  operatorId?: string
+  operatorExtension?: string
   operatorName?: string
   assistantName?: string
   clientPhone?: string
@@ -385,6 +389,8 @@ export interface OperatorTopicStats {
   hasMultipleTopics: boolean
   topics: Array<{ tagId: string | null, name: string, callsCount: number }>
   operators: Array<{
+    operatorId?: string
+    operatorAccountId?: string
     operatorName: string | null
     callsCount: number
     topics: Array<{ tagId: string | null, callsCount: number }>
@@ -393,6 +399,8 @@ export interface OperatorTopicStats {
 
 export interface AgentScorecard {
   scoredCalls?: number
+  operatorId?: string
+  operatorAccountId?: string
   operatorName: string
   callsCount: number
   averageScore: number
@@ -422,6 +430,8 @@ export interface OperatorEvidenceMetric {
 }
 
 export interface OperatorEvidenceResponse {
+  operatorId?: string
+  operatorAccountId?: string
   operatorName: string
   callsCount: number
   scoredCalls: number

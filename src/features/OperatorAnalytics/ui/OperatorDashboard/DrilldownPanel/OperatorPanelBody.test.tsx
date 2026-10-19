@@ -113,6 +113,19 @@ describe('OperatorPanelBody', () => {
         expect(mockUseGetOperatorEvidence.mock.calls[0][0]).not.toHaveProperty('operatorName')
     })
 
+    it('filters an identified employee by ID rather than their current display name', () => {
+        mockUseGetOperatorEvidence.mockReturnValue({ data: baseEvidence, isLoading: false, isFetching: false, isError: false, refetch: jest.fn() })
+        render(<OperatorPanelBody entry={{ kind: 'operator', operatorName: 'Alice', operatorId: 'pbx:7' }} filters={defaultFilters} />)
+        expect(mockUseGetOperatorEvidence.mock.calls.at(-1)?.[0]).toMatchObject({ operatorId: 'pbx:7' })
+        expect(mockUseGetOperatorEvidence.mock.calls.at(-1)?.[0]).not.toHaveProperty('operatorName')
+    })
+
+    it('retains the owning account in an administrative employee drill-down', () => {
+        mockUseGetOperatorEvidence.mockReturnValue({ data: baseEvidence, isLoading: false, isFetching: false, isError: false, refetch: jest.fn() })
+        render(<OperatorPanelBody entry={{ kind: 'operator', operatorName: 'Alice', operatorId: 'pbx:7', operatorAccountId: '99' }} filters={{ ...defaultFilters, userId: '100' }} />)
+        expect(mockUseGetOperatorEvidence.mock.calls.at(-1)?.[0]).toMatchObject({ operatorId: 'pbx:7', userId: '99' })
+    })
+
     it('lists one row per returned metric with label and average', () => {
         mockUseGetOperatorEvidence.mockReturnValue({
             data: baseEvidence,

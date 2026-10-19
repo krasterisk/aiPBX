@@ -104,10 +104,12 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
         startDate: filters.startDate,
         endDate: filters.endDate,
         projectId: filters.projectId,
-        userId: filters.userId,
+        userId: entry.kind === 'topicCalls' ? entry.operatorAccountId ?? filters.userId : filters.userId,
         // Backend getCdrs expects tagId (operator_call_tags), not legacy "theme".
         ...(entry.kind === 'topicCalls' && entry.tagId === null ? { withoutTopic: true } : { tagId: stat.tagId }),
-        ...(entry.kind === 'topicCalls' && entry.operatorName === null
+        ...(entry.kind === 'topicCalls' && entry.operatorId
+            ? { operatorId: entry.operatorId }
+            : entry.kind === 'topicCalls' && entry.operatorName === null
             ? { withoutOperator: true }
             : entry.kind === 'topicCalls' && entry.operatorName != null
                 ? { operatorNameExact: entry.operatorName }
@@ -338,6 +340,10 @@ export const TagPanelBody = memo((props: TagPanelBodyProps) => {
                             <div className={cls.rowMain}>
                                 <Text text={operator} size="m" bold className={cls.rowTitle} />
                                 <div className={cls.metaRow}>
+                                    {call.operatorExtension && <span className={cls.metaItem}>
+                                        <span className={cls.metaLabel}>{String(t('Внутренний номер'))}:</span>
+                                        <span className={cls.metaValue}>{call.operatorExtension}</span>
+                                    </span>}
                                     {durationLabel && (
                                         <span className={cls.metaItem}>
                                             <span className={cls.metaLabel}>{String(t('Длительность'))}:</span>

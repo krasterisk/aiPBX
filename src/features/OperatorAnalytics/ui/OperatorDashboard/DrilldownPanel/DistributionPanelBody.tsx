@@ -240,6 +240,10 @@ export const DistributionPanelBody = memo((props: DistributionPanelBodyProps) =>
                             <div className={cls.rowMain}>
                                 <Text text={operator} size="m" bold className={cls.rowTitle} />
                                 <div className={cls.metaRow}>
+                                    {call.operatorExtension && <span className={cls.metaItem}>
+                                        <span className={cls.metaLabel}>{String(t('Внутренний номер'))}:</span>
+                                        <span className={cls.metaValue}>{call.operatorExtension}</span>
+                                    </span>}
                                     {durationLabel && (
                                         <span className={cls.metaItem}>
                                             <span className={cls.metaLabel}>{String(t('Длительность'))}:</span>

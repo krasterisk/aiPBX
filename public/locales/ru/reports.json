@@ -654,5 +654,6 @@
   "TOPIC_FILTER_SCORE": "Минимум балла",
   "TOPIC_FILTER_SUCCESS": "Минимум успеха, %",
   "TOPIC_FILTER_CSAT": "Минимум CSAT",
-  "TOPIC_FILTER_NEGATIVE": "Максимум негатива, %"
+  "TOPIC_FILTER_NEGATIVE": "Максимум негатива, %",
+  "Внутренний номер": "Внутренний номер"
 }

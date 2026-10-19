@@ -677,5 +677,6 @@
   "TOPIC_FILTER_SCORE": "Mindestpunktzahl",
   "TOPIC_FILTER_SUCCESS": "Mindesterfolg, %",
   "TOPIC_FILTER_CSAT": "Mindest-CSAT",
-  "TOPIC_FILTER_NEGATIVE": "Maximal negativ, %"
+  "TOPIC_FILTER_NEGATIVE": "Maximal negativ, %",
+  "Внутренний номер": "Interne Rufnummer"
 }

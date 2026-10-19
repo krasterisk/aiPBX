@@ -638,5 +638,6 @@
   "TOPIC_FILTER_SCORE": "Minimum score",
   "TOPIC_FILTER_SUCCESS": "Minimum success, %",
   "TOPIC_FILTER_CSAT": "Minimum CSAT",
-  "TOPIC_FILTER_NEGATIVE": "Maximum negative, %"
+  "TOPIC_FILTER_NEGATIVE": "Maximum negative, %",
+  "Внутренний номер": "Internal number"
 }

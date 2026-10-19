@@ -15,8 +15,8 @@ import { heatLevel, operatorInitials, topicTone } from './topicVisual'
 import visuals from './TopicVisuals.module.scss'
 import cls from './OperatorTopics.module.scss'
 
-export type SelectTopicOperator = (operatorName: string, element: HTMLElement | null) => void
-export type SelectTopicCalls = (tagId: string | null, operatorName: string | null | undefined, callsCount: number, element?: HTMLElement) => void
+export type SelectTopicOperator = (operatorName: string, element: HTMLElement | null, operatorId?: string, operatorAccountId?: string) => void
+export type SelectTopicCalls = (tagId: string | null, operatorName: string | null | undefined, callsCount: number, element?: HTMLElement, operatorId?: string, operatorAccountId?: string) => void
 type OperatorRow = OperatorTopicStats['operators'][number]
 export interface TopicChoice { id: string, label: string }
 export const topicCountHint = (t: (key: string) => string, multiple = false) =>
@@ -44,8 +44,8 @@ export const OperatorTopicMatrix = memo(({ stats, onSelect, onSelectOperator }: 
             })
     }, [stats, search, sort, t])
 
-    const countButton = (tagId: string | null, name: string | null | undefined, count: number, label: string, maximum: number) => count > 0
-        ? <Button variant="clear" size="s" className={`${cls.countButton} ${visuals[topicTone(tagId)]} ${cls[heatLevel(count, maximum)]}`} aria-label={label} onClick={e => { onSelect(tagId, name, count, e.currentTarget) }}>{count}</Button>
+    const countButton = (tagId: string | null, name: string | null | undefined, count: number, label: string, maximum: number, operatorId?: string, operatorAccountId?: string) => count > 0
+        ? <Button variant="clear" size="s" className={`${cls.countButton} ${visuals[topicTone(tagId)]} ${cls[heatLevel(count, maximum)]}`} aria-label={label} onClick={e => { operatorId && operatorAccountId ? onSelect(tagId, name, count, e.currentTarget, operatorId, operatorAccountId) : operatorId ? onSelect(tagId, name, count, e.currentTarget, operatorId) : onSelect(tagId, name, count, e.currentTarget) }}>{count}</Button>
         : <Text text="0" size="s" className={cls.zero} />
     const columns: Array<ColumnDef<OperatorRow>> = [
         {
@@ -60,7 +60,7 @@ export const OperatorTopicMatrix = memo(({ stats, onSelect, onSelectOperator }: 
                     <Text text={operatorLabel(name)} bold size="s" />
                 </HStack>
                 return onSelectOperator
-                    ? <Button variant="clear" size="s" className={cls.operatorButton} aria-label={operatorLabel(name)} onClick={e => { onSelectOperator(name ?? 'Unknown Operator', e.currentTarget) }}>{identity}</Button>
+                    ? <Button variant="clear" size="s" className={cls.operatorButton} aria-label={operatorLabel(name)} onClick={e => { info.row.original.operatorId && info.row.original.operatorAccountId ? onSelectOperator(name ?? 'Unknown Operator', e.currentTarget, info.row.original.operatorId, info.row.original.operatorAccountId) : info.row.original.operatorId ? onSelectOperator(name ?? 'Unknown Operator', e.currentTarget, info.row.original.operatorId) : onSelectOperator(name ?? 'Unknown Operator', e.currentTarget) }}>{identity}</Button>
                     : identity
             },
             footer: () => <Text text={String(t('Всего по проекту'))} bold />
@@ -73,7 +73,7 @@ export const OperatorTopicMatrix = memo(({ stats, onSelect, onSelectOperator }: 
                 enableMultiSort: false,
                 accessorFn: (row: OperatorRow) => row.topics.find(cell => cell.tagId === topic.tagId)?.callsCount ?? 0,
                 header: name,
-                cell: info => countButton(topic.tagId, info.row.original.operatorName, Number(info.getValue()), `${operatorLabel(info.row.original.operatorName)} / ${name}: ${info.getValue()}`, maximum),
+                cell: info => countButton(topic.tagId, info.row.original.operatorName, Number(info.getValue()), `${operatorLabel(info.row.original.operatorName)} / ${name}: ${info.getValue()}`, maximum, info.row.original.operatorId, info.row.original.operatorAccountId),
                 footer: () => countButton(topic.tagId, undefined, topic.callsCount, `${String(t('Все операторы'))} / ${name}: ${topic.callsCount}`, maximum),
             } satisfies ColumnDef<OperatorRow>
         }),
@@ -127,18 +127,18 @@ export const OperatorTopicMatrix = memo(({ stats, onSelect, onSelectOperator }: 
     )
 })
 
-interface BreakdownProps { stats?: OperatorTopicStats, tagId?: string | null, operatorName?: string, onSelect?: SelectTopicCalls }
-interface BreakdownRow { label: string, tagId: string | null, operatorName: string | null, count: number }
+interface BreakdownProps { stats?: OperatorTopicStats, tagId?: string | null, operatorId?: string, operatorAccountId?: string, operatorName?: string, onSelect?: SelectTopicCalls }
+interface BreakdownRow { label: string, tagId: string | null, operatorId?: string, operatorAccountId?: string, operatorName: string | null, count: number }
 
-export const TopicBreakdown = memo(({ stats, tagId, operatorName, onSelect }: BreakdownProps) => {
+export const TopicBreakdown = memo(({ stats, tagId, operatorId, operatorAccountId, operatorName, onSelect }: BreakdownProps) => {
     const { t } = useTranslation('reports')
     if (!stats || !onSelect) return null
     const name = operatorName?.trim()
     const operator = name === 'Unknown Operator' || !name ? null : name
-    const operatorRow = stats.operators.find(row => row.operatorName === operator)
+    const operatorRow = stats.operators.find(row => operatorId ? row.operatorId === operatorId && (!operatorAccountId || row.operatorAccountId === operatorAccountId) : row.operatorName === operator)
     const rows: BreakdownRow[] = tagId !== undefined
-        ? stats.operators.map(row => ({ label: row.operatorName ?? String(t('Без оператора')), tagId, operatorName: row.operatorName, count: row.topics.find(cell => cell.tagId === tagId)?.callsCount ?? 0 }))
-        : stats.topics.map(topic => ({ label: topic.tagId === null ? String(t('Без темы')) : topic.name, tagId: topic.tagId, operatorName: operator, count: operatorRow?.topics.find(cell => cell.tagId === topic.tagId)?.callsCount ?? 0 }))
+        ? stats.operators.map(row => ({ label: row.operatorName ?? String(t('Без оператора')), tagId, operatorId: row.operatorId, operatorAccountId: row.operatorAccountId, operatorName: row.operatorName, count: row.topics.find(cell => cell.tagId === tagId)?.callsCount ?? 0 }))
+        : stats.topics.map(topic => ({ label: topic.tagId === null ? String(t('Без темы')) : topic.name, tagId: topic.tagId, operatorId, operatorAccountId, operatorName: operator, count: operatorRow?.topics.find(cell => cell.tagId === topic.tagId)?.callsCount ?? 0 }))
     const total = tagId !== undefined ? stats.topics.find(topic => topic.tagId === tagId)?.callsCount ?? 0 : operatorRow?.callsCount ?? 0
     const populated = rows.filter(row => row.count > 0).sort((a, b) => b.count - a.count)
     const share = (count: number) => total ? (count / total * 100).toFixed(1) : '0.0'
@@ -157,7 +157,7 @@ enableSorting: false
             cell: info => {
                 const row = info.row.original
                 return <Button variant="clear" size="s" className={cls.countButton} aria-label={`${row.label} ${row.count} (${share(row.count)}%)`}
-                    onClick={e => { onSelect(row.tagId, row.operatorName, row.count, e.currentTarget) }}>{row.count}</Button>
+                    onClick={e => { row.operatorId && row.operatorAccountId ? onSelect(row.tagId, row.operatorName, row.count, e.currentTarget, row.operatorId, row.operatorAccountId) : row.operatorId ? onSelect(row.tagId, row.operatorName, row.count, e.currentTarget, row.operatorId) : onSelect(row.tagId, row.operatorName, row.count, e.currentTarget) }}>{row.count}</Button>
             },
             enableSorting: false
         },

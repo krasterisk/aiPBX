@@ -637,5 +637,6 @@
   "TOPIC_FILTER_SCORE": "最低评分",
   "TOPIC_FILTER_SUCCESS": "最低成功率，%",
   "TOPIC_FILTER_CSAT": "最低 CSAT",
-  "TOPIC_FILTER_NEGATIVE": "最高负面率，%"
+  "TOPIC_FILTER_NEGATIVE": "最高负面率，%",
+  "Внутренний номер": "内部分机号"
 }

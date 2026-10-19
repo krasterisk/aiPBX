@@ -4,10 +4,10 @@ export type DistributionChart = 'sentiment' | 'success'
 export type DistributionSegment = 'positive' | 'neutral' | 'negative' | 'success' | 'fail'
 
 export type PanelEntry =
-    | { kind: 'operator', operatorName: string }
-    | { kind: 'operatorMetric', operatorName?: string, metricId: string, metricLabel?: string }
+    | { kind: 'operator', operatorId?: string, operatorAccountId?: string, operatorName: string }
+    | { kind: 'operatorMetric', operatorId?: string, operatorAccountId?: string, operatorName?: string, metricId: string, metricLabel?: string }
     | { kind: 'tag', stat: TagStat }
-    | { kind: 'topicCalls', tagId: string | null, operatorName?: string | null, label: string, callsCount: number }
+    | { kind: 'topicCalls', operatorId?: string, operatorAccountId?: string, tagId: string | null, operatorName?: string | null, label: string, callsCount: number }
     | {
         kind: 'distribution'
         chart: DistributionChart

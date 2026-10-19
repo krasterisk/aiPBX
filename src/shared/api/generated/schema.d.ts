@@ -3975,6 +3975,10 @@ export interface components {
         };
         openAiMessage: Record<string, never>;
         AiCdr: {
+            /** @description Stable source-namespaced external employee ID; scoped by account */
+            operatorId?: string | null;
+            /** @description Internal number used for this call, independent of employee identity */
+            operatorExtension?: string | null;
             /**
              * @description Channel uniqueId
              * @example 123
@@ -5196,6 +5200,7 @@ export interface components {
             evidence: components["schemas"]["OperatorEvidenceItemDto"][];
         };
         OperatorEvidenceResponseDto: {
+            operatorId?: string;
             /** @example Иван */
             operatorName: string;
             /** @example 42 */
@@ -5360,6 +5365,10 @@ export interface components {
             callsCount: number;
         };
         OperatorTopicRowDto: {
+            /** @description Stable source-namespaced employee ID */
+            operatorId?: string;
+            /** @description Owning account for administrative cross-account views */
+            operatorAccountId?: string;
             /** @description Normalized name; null means no operator */
             operatorName: string | null;
             /** @description Unique call count, including low-quality calls */
@@ -5371,6 +5380,40 @@ export interface components {
             hasMultipleTopics: boolean;
             topics: components["schemas"]["OperatorTopicDto"][];
             operators: components["schemas"]["OperatorTopicRowDto"][];
+        };
+        AnalyzeBase64FileDto: {
+            /** @description Raw Base64 or data:audio/...;base64,... */
+            data?: string;
+            /** @example call.mp3 */
+            filename?: string;
+        };
+        AnalyzeRequestDto: {
+            /** @description Single audio URL (server downloads) */
+            url?: string;
+            /** @description Batch of audio URLs */
+            urls?: string[];
+            /** @description Single Base64 audio payload (raw or data-URI). Requires filename. */
+            file?: string;
+            /**
+             * @description Filename for single `file` field
+             * @example call.mp3
+             */
+            filename?: string;
+            files?: components["schemas"]["AnalyzeBase64FileDto"][];
+            operatorName?: string;
+            /** @description Stable source-namespaced employee ID (not an extension) */
+            operatorId?: string;
+            /** @description Internal number used for this call */
+            operatorExtension?: string;
+            clientPhone?: string;
+            language?: string;
+            customMetrics?: unknown[];
+            provider?: string;
+            projectId?: number;
+            /** @description Wait for analysis (single item only) */
+            sync?: Record<string, never>;
+            consentObtained?: Record<string, never>;
+            consentSource?: string;
         };
     };
     responses: never;
@@ -9963,7 +10006,9 @@ export interface operations {
     };
     OperatorAnalyticsController_getProjectDashboard: {
         parameters: {
-            query?: never;
+            query?: {
+                operatorId?: string;
+            };
             header?: never;
             path: {
                 id: string;
@@ -10001,7 +10046,9 @@ export interface operations {
     };
     OperatorAnalyticsController_getProjectInsights: {
         parameters: {
-            query?: never;
+            query?: {
+                operatorId?: string;
+            };
             header?: never;
             path: {
                 id: string;
@@ -10048,6 +10095,7 @@ export interface operations {
                 withoutTopic?: boolean;
                 /** @description Calls with a missing or unknown operator */
                 withoutOperator?: boolean;
+                operatorId?: string;
             };
             header?: never;
             path?: never;
@@ -10066,7 +10114,9 @@ export interface operations {
     };
     OperatorAnalyticsController_getDashboard: {
         parameters: {
-            query?: never;
+            query?: {
+                operatorId?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -10090,7 +10140,9 @@ export interface operations {
     };
     OperatorAnalyticsController_getDashboardInsights: {
         parameters: {
-            query?: never;
+            query?: {
+                operatorId?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -10110,7 +10162,9 @@ export interface operations {
     };
     OperatorAnalyticsController_getOperatorEvidence: {
         parameters: {
-            query?: never;
+            query?: {
+                operatorId?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;

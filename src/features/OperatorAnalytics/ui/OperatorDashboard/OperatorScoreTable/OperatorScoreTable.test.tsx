@@ -5,6 +5,18 @@ import { OperatorScoreTable } from './OperatorScoreTable'
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 
 describe('operator counts without usable scores', () => {
+    it('opens same-name employees using their stable IDs', async () => {
+        const select = jest.fn()
+        render(<OperatorScoreTable rows={[
+            { operatorId: 'pbx:7', operatorName: 'Anna', callsCount: 2, averageScore: 90, successRate: 80, avgCsat: 4, negativeRate: 10 },
+            { operatorId: 'pbx:8', operatorName: 'Anna', callsCount: 1, averageScore: 60, successRate: 50, avgCsat: 3, negativeRate: 20 },
+        ]} onSelectOperator={select} />)
+        const rows = screen.getAllByRole('button', { name: 'Anna', exact: true })
+        await userEvent.click(rows[0])
+        expect(select).toHaveBeenLastCalledWith('Anna', expect.any(HTMLElement), 'pbx:7')
+        await userEvent.click(rows[1])
+        expect(select).toHaveBeenLastCalledWith('Anna', expect.any(HTMLElement), 'pbx:8')
+    })
     it('shows numeric extensions without an extra numeric avatar badge', async () => {
         const select = jest.fn()
         render(<OperatorScoreTable rows={[

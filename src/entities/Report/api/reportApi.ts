@@ -202,6 +202,7 @@ export const reportApi = rtkApi.injectEndpoints({
       userId?: string
       startDate?: string
       endDate?: string
+      operatorId?: string
       operatorName?: string
       operatorNameExact?: string
       withoutOperator?: boolean
@@ -238,6 +239,7 @@ export const reportApi = rtkApi.injectEndpoints({
     getOperatorDashboard: build.query<OperatorDashboardResponse, {
       startDate?: string
       endDate?: string
+      operatorId?: string
       operatorName?: string
       projectId?: string
       userId?: string
@@ -399,7 +401,8 @@ export const reportApi = rtkApi.injectEndpoints({
       {
         startDate?: string
         endDate?: string
-        operatorName?: string
+        operatorId?: string
+      operatorName?: string
         projectId?: string
         userId?: string
         refresh?: boolean | string
@@ -423,7 +426,8 @@ export const reportApi = rtkApi.injectEndpoints({
     getOperatorEvidence: build.query<
       OperatorEvidenceResponse,
       {
-        operatorName?: string
+        operatorId?: string
+      operatorName?: string
         startDate?: string
         endDate?: string
         projectId?: string

@@ -102,6 +102,7 @@ export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
 
     return (
         <VStack gap="0" max align="stretch" className={cls.root} data-testid="call-panel-body">
+            {data?.operatorExtension && <Text text={`${String(t('Внутренний номер'))}: ${data.operatorExtension}`} size="s" />}
             {recordUrl && (
                 <div className={cls.recording} data-testid="call-panel-recording">
                     <MediaPlayer src={recordUrl} />

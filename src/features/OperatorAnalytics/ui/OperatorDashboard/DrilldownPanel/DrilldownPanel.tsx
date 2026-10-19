@@ -25,7 +25,7 @@ export const DrilldownPanel = memo((props: DrilldownPanelProps) => {
         case 'operator':
             return (
                 <VStack gap="24" max>
-                    <TopicBreakdown stats={topicStats} operatorName={entry.operatorName} onSelect={onSelectTopicCalls} />
+                    <TopicBreakdown stats={topicStats} operatorName={entry.operatorName} operatorId={entry.operatorId} operatorAccountId={entry.operatorAccountId} onSelect={onSelectTopicCalls} />
                     <OperatorPanelBody
                         entry={entry}
                         filters={filters}
@@ -60,7 +60,7 @@ export const DrilldownPanel = memo((props: DrilldownPanelProps) => {
         case 'topicCalls':
             return <VStack gap="24" max>
                 {entry.operatorName === undefined && <TopicBreakdown stats={topicStats} tagId={entry.tagId} onSelect={onSelectTopicCalls} />}
-                <TagPanelBody key={JSON.stringify({ tagId: entry.tagId, operatorName: entry.operatorName })} entry={entry} filters={filters} project={project} onOpenCall={onOpenCall} />
+                <TagPanelBody key={JSON.stringify({ tagId: entry.tagId, operatorId: entry.operatorId, operatorAccountId: entry.operatorAccountId, operatorName: entry.operatorName })} entry={entry} filters={filters} project={project} onOpenCall={onOpenCall} />
             </VStack>
         case 'distribution':
             return (
