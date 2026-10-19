@@ -104,9 +104,6 @@ jobs:
           BASE=ghcr.io/puppeteer/puppeteer:21.11.0
           docker pull --platform linux/amd64 "$BASE@sha256:3eec2cc84995bd9649cef83dbe92faf73ff0c327bdd32f7379d7635b4981968e"
           docker tag "$BASE@sha256:3eec2cc84995bd9649cef83dbe92faf73ff0c327bdd32f7379d7635b4981968e" "$BASE"
-          docker save "$BASE" | gzip -1 > "$RUNNER_TEMP/public-frontend-builder.tar.gz"
-          cd "$RUNNER_TEMP"
-          sha256sum public-frontend-builder.tar.gz > public-frontend-builder.tar.gz.sha256
       - name: Prepare temporary SSH access request
         if: matrix.server == 'aipbxru_production'
         env:
@@ -127,13 +124,23 @@ jobs:
           PRODUCTION_HOST: ${{ secrets.SERVER_HOST }}
           PRODUCTION_TARGET: ${{ matrix.server }}
         run: python3 .github/scripts/production-ssh-access.py wait
-      - name: Upload pinned public builder cache
+      - name: Read public frontend build configuration
         if: matrix.server == 'aipbxru_production'
         env:
           PRODUCTION_HOST: ${{ secrets.SERVER_HOST }}
           PRODUCTION_USER: ${{ secrets.SERVER_USER }}
           PRODUCTION_SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: python3 .github/scripts/upload-public-builder.py
+        run: python3 .github/scripts/frontend-release-artifact.py config
+      - name: Build and prerender frontend on Actions
+        if: matrix.server == 'aipbxru_production'
+        run: python3 .github/scripts/frontend-release-artifact.py build
+      - name: Upload compiled frontend artifact
+        if: matrix.server == 'aipbxru_production'
+        env:
+          PRODUCTION_HOST: ${{ secrets.SERVER_HOST }}
+          PRODUCTION_USER: ${{ secrets.SERVER_USER }}
+          PRODUCTION_SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: python3 .github/scripts/frontend-release-artifact.py upload
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
         with:
@@ -154,14 +161,6 @@ jobs:
 
             cd /app
 
-            if [[ "${{ matrix.server }}" == "aipbxru_production" ]]; then
-              CACHE_DIR=/tmp/aipbx-frontend-builder-${{ github.run_id }}-${{ github.run_attempt }}
-              (cd "$CACHE_DIR" && sha256sum -c public-frontend-builder.tar.gz.sha256)
-              sudo docker load -i "$CACHE_DIR/public-frontend-builder.tar.gz"
-              rm -- "$CACHE_DIR/public-frontend-builder.tar.gz" "$CACHE_DIR/public-frontend-builder.tar.gz.sha256"
-              rmdir -- "$CACHE_DIR"
-            fi
-
             # ── Mark repo as safe (Git 2.35.2+ ownership check) ──
             git config --global --add safe.directory /app/aiPBX
 
@@ -177,6 +176,16 @@ jobs:
 
             # ── Build & deploy ──
             echo "Building and deploying frontend..."
+            if [[ "${{ matrix.server }}" == "aipbxru_production" ]]; then
+              RELEASE_DIR=/app/aipbx-frontend-releases/${{ github.run_id }}-${{ github.run_attempt }}
+              python3 /app/aiPBX/.github/scripts/frontend-release-artifact.py verify "$RELEASE_DIR" "${{ github.sha }}"
+              sudo env DEPLOY_SITE_URL="$SITE_URL" docker compose \
+                -f docker-compose.production.yml \
+                -f /app/aiPBX/deploy/frontend-site.override.yml \
+                -f "$RELEASE_DIR/runtime.override.yml" \
+                --env-file .env.production up -d \
+                --build --no-deps --force-recreate frontend --remove-orphans
+            else
             sudo env DEPLOY_SITE_URL="$SITE_URL" docker compose \
               -f docker-compose.production.yml \
               -f /app/aiPBX/deploy/frontend-site.override.yml \
@@ -185,6 +194,7 @@ jobs:
               --no-deps \
               --force-recreate frontend \
               --remove-orphans
+            fi
 
             # ── Wait for startup ──
             echo "Waiting for services to start..."
@@ -193,6 +203,15 @@ jobs:
             # ── Verify deployment ──
             echo "Checking containers..."
             sudo docker compose -f docker-compose.production.yml --env-file .env.production ps frontend
+            if [[ "${{ matrix.server }}" == "aipbxru_production" ]]; then
+              for ATTEMPT in $(seq 1 12); do
+                HEALTH=$(sudo docker inspect --format='{{.State.Health.Status}}' app-frontend-1)
+                if [[ "$HEALTH" == "healthy" ]]; then break; fi
+                sleep 5
+              done
+              [[ "$HEALTH" == "healthy" ]] || exit 1
+              python3 /app/aiPBX/.github/scripts/frontend-release-artifact.py cleanup "$RELEASE_DIR"
+            fi
 
             # ── Cleanup (prevent disk space accumulation) ──
             echo "Cleaning up old images and build cache..."
