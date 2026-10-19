@@ -4,7 +4,7 @@
 # Use official Puppeteer image: Node + Google Chrome + libs already baked in.
 # Avoids apt→deb.debian.org during build (DNS often broken in Docker bridge on VPS)
 # and avoids BuildKit network.host (not allowed on this host).
-FROM ghcr.io/puppeteer/puppeteer:21.11.0 AS builder
+FROM ghcr.io/puppeteer/puppeteer:21.11.0@sha256:3eec2cc84995bd9649cef83dbe92faf73ff0c327bdd32f7379d7635b4981968e AS builder
 
 USER root
 WORKDIR /app

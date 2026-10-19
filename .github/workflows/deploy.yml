@@ -97,6 +97,16 @@ jobs:
       - name: Checkout bounded SSH access helper
         if: matrix.server == 'aipbxru_production'
         uses: actions/checkout@v4
+      - name: Prepare pinned public builder cache
+        if: matrix.server == 'aipbxru_production'
+        run: |
+          set -euo pipefail
+          BASE=ghcr.io/puppeteer/puppeteer:21.11.0
+          docker pull --platform linux/amd64 "$BASE@sha256:3eec2cc84995bd9649cef83dbe92faf73ff0c327bdd32f7379d7635b4981968e"
+          docker tag "$BASE@sha256:3eec2cc84995bd9649cef83dbe92faf73ff0c327bdd32f7379d7635b4981968e" "$BASE"
+          docker save "$BASE" | gzip -1 > "$RUNNER_TEMP/public-frontend-builder.tar.gz"
+          cd "$RUNNER_TEMP"
+          sha256sum public-frontend-builder.tar.gz > public-frontend-builder.tar.gz.sha256
       - name: Prepare temporary SSH access request
         if: matrix.server == 'aipbxru_production'
         env:
@@ -117,6 +127,13 @@ jobs:
           PRODUCTION_HOST: ${{ secrets.SERVER_HOST }}
           PRODUCTION_TARGET: ${{ matrix.server }}
         run: python3 .github/scripts/production-ssh-access.py wait
+      - name: Upload pinned public builder cache
+        if: matrix.server == 'aipbxru_production'
+        env:
+          PRODUCTION_HOST: ${{ secrets.SERVER_HOST }}
+          PRODUCTION_USER: ${{ secrets.SERVER_USER }}
+          PRODUCTION_SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: python3 .github/scripts/upload-public-builder.py
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
         with:
@@ -136,6 +153,14 @@ jobs:
             echo "Starting deployment to ${{ matrix.server }}..."
 
             cd /app
+
+            if [[ "${{ matrix.server }}" == "aipbxru_production" ]]; then
+              CACHE_DIR=/tmp/aipbx-frontend-builder-${{ github.run_id }}-${{ github.run_attempt }}
+              (cd "$CACHE_DIR" && sha256sum -c public-frontend-builder.tar.gz.sha256)
+              sudo docker load -i "$CACHE_DIR/public-frontend-builder.tar.gz"
+              rm -- "$CACHE_DIR/public-frontend-builder.tar.gz" "$CACHE_DIR/public-frontend-builder.tar.gz.sha256"
+              rmdir -- "$CACHE_DIR"
+            fi
 
             # ── Mark repo as safe (Git 2.35.2+ ownership check) ──
             git config --global --add safe.directory /app/aiPBX
