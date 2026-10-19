@@ -11,11 +11,13 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 
 if not __debug__:
     raise RuntimeError('Release validation requires Python assertions enabled')
 
 HOST_FINGERPRINT = 'SHA256:08WKSfiu4Dpx5QXU2MIe+rT8J5ijk7hTzEVsIsS+ehw'
+HOST_PUBLIC_KEY = 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIARpd/YonUy13Q3L3Cw1UXa899L5etIC8UUT2aRMF+5J'
 PUBLIC_ARGS = ('API_URL', 'STATIC_URL', 'PORT', 'TG_BOT_ID', 'GOOGLE_CLIENT_ID', 'STRIPE_PUBLISHABLE_KEY', 'SITE_URL', 'GA4_MEASUREMENT_ID', 'GOOGLE_ADS_ID', 'ADS_SIGNUP_LABEL')
 
 
@@ -40,8 +42,22 @@ def verified_host_keys(output, expected=HOST_FINGERPRINT):
 def run(args):
     result = subprocess.run(args, capture_output=True, text=True, timeout=900)
     if result.returncode:
-        raise RuntimeError('Release transport command failed')
+        raise RuntimeError('Release transport ' + args[0] + ' failed, exit ' + str(result.returncode))
     return result.stdout
+
+
+def wait_authenticated(command):
+    deadline = time.monotonic() + 900
+    while time.monotonic() < deadline:
+        try:result = subprocess.run(command, capture_output=True, text=True, timeout=50)
+        except subprocess.TimeoutExpired:
+            time.sleep(5);continue
+        if result.returncode == 0:
+            print('Authenticated production SSH ready');return
+        fatal = ['Permission denied', 'Host key verification failed', 'REMOTE HOST IDENTIFICATION', 'invalid format', 'Bad configuration']
+        if any(message in result.stderr for message in fatal):raise RuntimeError('SSH authentication or pinned host key failed')
+        time.sleep(5)
+    raise RuntimeError('Timed out waiting for authenticated production SSH')
 
 
 def canonical_hash(value):
@@ -127,7 +143,7 @@ def ssh_operation(mode):
     archive = Path(os.environ['RUNNER_TEMP']) / 'frontend-release.tar.gz'
     if mode == 'upload':
         assert archive.is_file() and archive.with_suffix('.gz.sha256').is_file(), 'Missing release archive'
-    known_hosts = verified_host_keys(run(['ssh-keyscan', '-T', '10', '-t', 'ed25519', host]))
+    known_hosts = verified_host_keys(host + ' ' + HOST_PUBLIC_KEY)
     with tempfile.TemporaryDirectory(prefix='frontend-release-ssh-', dir=os.environ['RUNNER_TEMP']) as folder:
         os.chmod(folder, 0o700)
         private_key, known_file = Path(folder) / 'key', Path(folder) / 'known_hosts'
@@ -135,9 +151,10 @@ def ssh_operation(mode):
             descriptor = os.open(file, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
             with os.fdopen(descriptor, 'w') as stream:
                 stream.write(value)
-        options = ['-i', str(private_key), '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes', '-o', 'StrictHostKeyChecking=yes', '-o', 'HostKeyAlgorithms=ssh-ed25519', '-o', 'UserKnownHostsFile=' + str(known_file), '-o', 'ConnectTimeout=10', '-o', 'IPQoS=none']
+        options = ['-4', '-i', str(private_key), '-o', 'BatchMode=yes', '-o', 'IdentitiesOnly=yes', '-o', 'StrictHostKeyChecking=yes', '-o', 'HostKeyAlgorithms=ssh-ed25519', '-o', 'UserKnownHostsFile=' + str(known_file), '-o', 'ConnectTimeout=10', '-o', 'ConnectionAttempts=3', '-o', 'IPQoS=none']
         remote = user + '@' + host
-        if mode == 'config':
+        if mode == 'wait':wait_authenticated(['ssh', *options, remote, 'true'])
+        elif mode == 'config':
             snapshot = validate_snapshot(json.loads(run(['ssh', *options, remote, read_config_command()])))
             (Path(os.environ['RUNNER_TEMP']) / 'frontend-source-snapshot.json').write_text(json.dumps(snapshot))
         else:
@@ -253,8 +270,8 @@ def verify_artifact(directory, revision):
 
 
 def main():
-    mode = sys.argv[1];assert mode in ['config', 'build', 'upload', 'verify', 'cleanup']
-    if mode in ['config', 'upload']:ssh_operation(mode)
+    mode = sys.argv[1];assert mode in ['wait', 'config', 'build', 'upload', 'verify', 'cleanup']
+    if mode in ['wait', 'config', 'upload']:ssh_operation(mode)
     elif mode == 'build':build_artifact()
     elif mode == 'verify':verify_artifact(sys.argv[2], sys.argv[3])
     else:

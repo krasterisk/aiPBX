@@ -123,7 +123,9 @@ jobs:
         env:
           PRODUCTION_HOST: ${{ secrets.SERVER_HOST }}
           PRODUCTION_TARGET: ${{ matrix.server }}
-        run: python3 .github/scripts/production-ssh-access.py wait
+          PRODUCTION_USER: ${{ secrets.SERVER_USER }}
+          PRODUCTION_SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: python3 .github/scripts/frontend-release-artifact.py wait
       - name: Read public frontend build configuration
         if: matrix.server == 'aipbxru_production'
         env:
