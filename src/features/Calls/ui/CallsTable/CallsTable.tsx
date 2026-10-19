@@ -111,8 +111,9 @@ const CallsTableRow = memo(({ report, onFilterByTag }: CallsTableRowProps) => {
                 </td>
 
                 <td data-label={String(t('Ассистент'))}>
-                    {report.assistantName ? <Text text={report.assistantName} /> : '-'}
-                    {report.operatorExtension && <Text text={`${String(t('Внутренний номер'))}: ${report.operatorExtension}`} size="s" />}
+                    <Text text={report.operatorExtension
+                        ? `${report.assistantName || '-'} (${report.operatorExtension})`
+                        : report.assistantName || '-'} />
                 </td>
 
                 <td data-label={String(t('Звонивший'))}>
