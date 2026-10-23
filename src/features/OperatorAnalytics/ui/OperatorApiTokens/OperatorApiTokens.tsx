@@ -267,213 +267,97 @@ const DocEntry = memo(({ method, path, description, fullUrl, children }: DocEntr
 
 // ─── API Docs ─────────────────────────────────────────────────────────────────
 
-const ApiDocs = memo(() => {
+export const ApiDocs = memo(() => {
     const { t } = useTranslation('reports')
-    const base = `${window.location.origin}/api`
-    const [copied, setCopied] = useState(false)
-
-    const handleCopyBase = useCallback(() => {
-        navigator.clipboard.writeText(base).then(() => {
-            setCopied(true)
-            setTimeout(() => { setCopied(false) }, 2000)
-        })
-    }, [base])
-
+    const base = window.location.origin + '/api'
+    const headers = 'Authorization: Bearer oa_xxx\nContent-Type: application/json'
+    const json = (value: unknown) => JSON.stringify(value, null, 2)
+    const sampleCall = {
+        id: 1042,
+        channelId: '42',
+        callerId: '+79991234567',
+        callType: 'outgoing',
+        assistantName: 'John Doe',
+        source: 'external-api',
+        projectId: 1,
+        duration: 183,
+        transcription: '...',
+        analytics: {
+            csat: 4,
+            summary: '...',
+            metrics: {
+                customer_sentiment: 'Positive',
+                greeting_quality: 85,
+                success: true,
+                custom_metrics: {},
+                _topics: { tags: ['booking'], tag_names: { booking: 'Booking' } }
+            }
+        }
+    }
     return (
-        <VStack gap={'16'} max>
-            {/* Title */}
-            <Text title={String(t('Документация API'))} bold size={'l'} />
-
-            {/* Base URL row */}
-            <HStack gap={'12'} align={'center'} className={cls.baseUrlRow}>
-                <span className={cls.baseUrlLabel}>{'Base URL'}</span>
+        <VStack gap="16" max>
+            <Text title={String(t('Документация API'))} bold size="l" />
+            <HStack gap="8" wrap="wrap" className={cls.baseUrlRow}>
+                <span className={cls.baseUrlLabel}>{String(t('apiDocsBaseUrl'))}</span>
                 <code className={cls.baseUrlValue}>{base}</code>
-                <button
-                    type={'button'}
-                    className={`${cls.baseUrlCopy} ${copied ? cls.baseUrlCopied : ''}`}
-                    onClick={handleCopyBase}
-                    title={String(t('Скопировать URL'))}
-                >
-                    {copied
-                        ? <><ContentCopyIcon sx={{ fontSize: 14 }} />{` ${String(t('Скопировано'))}`}</>
-                        : <><ContentCopyIcon sx={{ fontSize: 14 }} />{` ${String(t('Скопировать'))}`}</>
-                    }
-                </button>
             </HStack>
-
-            {/* Note */}
-            <div className={cls.docNote}>
-                <KeyIcon sx={{ fontSize: 16, verticalAlign: 'middle', marginRight: 6 }} />
-                {String(t('Каждый токен привязан к конкретному проекту при генерации. Все звонки, загруженные через этот токен, автоматически попадают в привязанный проект. Разные проекты - разные токены.'))}
-            </div>
-
-            {/* Accordion */}
+            <Text text={String(t('apiDocsAuth'))} />
+            <Text text={String(t('apiDocsOptions'))} />
+            <pre className={cls.codeBlock}>{json({ operatorName: 'John Doe', clientPhone: '+79991234567', callType: 'incoming', language: 'auto', consentObtained: true, consentSource: 'ivr' })}</pre>
+            <Text text={String(t('apiDocsDirection'))} />
+            <Text text={String(t('apiDocsAdvanced'))} />
             <div className={cls.docList}>
-
-                <DocEntry
-                    method={'POST'}
-                    path={'/operator-analytics/analyze-url'}
-                    description={String(t('Анализ записи по URL (single / batch)'))}
-                    fullUrl={`${base}/operator-analytics/analyze-url`}
-                >
-                    <VStack gap={'8'}>
-                        <Text text={String(t('Загружает и анализирует аудиозапись(и) по прямой ссылке. Проект определяется автоматически из токена. Поддерживает одиночный URL (синхронно) и массив URL (асинхронно).'))} />
-                        <Text text={String(t('Заголовки запроса:'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`Authorization: Bearer <${t('ваш_токен')}>
-Content-Type: application/json`}</pre>
-                        <Text text={String(t('Тело запроса:'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`{
-  "url":          "https://example.com/call.mp3",  // ${t('одиночный URL (синхронно)')}
-  "urls":         ["url1", "url2", "url3"],         // ${t('массив URL (асинхронно)')}
-  "operatorName": "John Doe",                       // ${t('необязательно')}
-  "clientPhone":  "+7 999 123-45-67",              // ${t('необязательно')}
-  "language":     "auto"                           // auto | ru | en | de | zh | kz | uk
-}`}</pre>
-                        <Text text={String(t('Пример (одиночный URL - синхронно):'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`curl -X POST ${base}/operator-analytics/analyze-url \\
-  -H "Authorization: Bearer oa_xxx" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "url": "https://your-storage.com/call.mp3",
-    "operatorName": "Иван Петров",
-    "language": "ru"
-  }'`}</pre>
-                        <Text text={String(t('Пример (массив URL - асинхронно):'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`curl -X POST ${base}/operator-analytics/analyze-url \\
-  -H "Authorization: Bearer oa_xxx" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "urls": [
-      "https://your-storage.com/call1.mp3",
-      "https://your-storage.com/call2.mp3",
-      "https://your-storage.com/call3.mp3"
-    ],
-    "operatorName": "Иван Петров",
-    "language": "ru"
-  }'`}</pre>
-                        <Text text={String(t('Ответ (batch):'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`{
-  "items": [
-    { "id": 42, "filename": "call1.mp3", "url": "https://...", "status": "processing" },
-    { "id": 43, "filename": "call2.mp3", "url": "https://...", "status": "processing" }
-  ]
-}`}</pre>
+                <DocEntry method="POST" path="/operator-analytics/analyze" fullUrl={base + '/operator-analytics/analyze'} description={String(t('apiDocsUnified'))}>
+                    <VStack gap="8" max>
+                        <Text text={String(t('apiDocsSources'))} />
+                        <pre className={cls.codeBlock}>{headers}</pre>
+                        <pre className={cls.codeBlock}>{json({ url: 'https://example.com/call.mp3', callType: 'outgoing', sync: false })}</pre>
+                        <pre className={cls.codeBlock}>{json({ file: 'BASE64_AUDIO', filename: 'call.mp3', callType: 'incoming', sync: true })}</pre>
+                        <pre className={cls.codeBlock}>{json({ files: [{ data: 'BASE64_AUDIO', filename: 'call1.mp3' }, { data: 'BASE64_AUDIO', filename: 'call2.mp3' }], callType: 'outgoing' })}</pre>
+                        <Text text={String(t('apiDocsSync'))} />
+                        <Text text={String(t('apiDocsUrlResponse'))} />
+                        <pre className={cls.codeBlock}>{json({ id: 42, filename: 'call.mp3', url: 'https://example.com/call.mp3', status: 'processing' })}</pre>
+                        <Text text={String(t('apiDocsUrlBatch'))} />
+                        <pre className={cls.codeBlock}>{json({ items: [{ id: 42, filename: 'call1.mp3', url: 'https://example.com/call1.mp3', status: 'processing' }] })}</pre>
+                        <Text text={String(t('apiDocsBase64Response'))} />
+                        <pre className={cls.codeBlock}>{json({ batchId: 'batch_1710000000_abc123', total: 1, items: [{ id: 42, filename: 'call.mp3', status: 'pending' }] })}</pre>
+                        <Text text={String(t('apiDocsSyncResponse'))} />
+                        <pre className={cls.codeBlock}>{json({ id: 42, filename: 'call.mp3', status: 'completed', operatorName: 'John Doe', clientPhone: '+79991234567', callType: 'outgoing', duration: 183, transcription: '...' })}</pre>
                     </VStack>
                 </DocEntry>
-
-                <DocEntry
-                    method={'POST'}
-                    path={'/operator-analytics/analyze-file'}
-                    description={String(t('Загрузка аудиофайла (single / batch)'))}
-                    fullUrl={`${base}/operator-analytics/analyze-file`}
-                >
-                    <VStack gap={'8'}>
-                        <Text text={String(t('Загружает аудиофайл(ы) через multipart/form-data. Проект определяется автоматически из токена. По умолчанию обработка асинхронная (batch), чтобы избежать таймаутов на длинных записях.'))} />
-                        <Text text={String(t('Заголовки запроса:'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`Authorization: Bearer <${t('ваш_токен')}>
-Content-Type: multipart/form-data`}</pre>
-                        <Text text={String(t('Поля формы:'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`file          ${t('аудиофайл')} (MP3/WAV/OGG/M4A/FLAC/WebM, ${t('до')} 50 ${t('МБ')})  ${t('обязательно')}
-operatorName  ${t('имя оператора')}                                       ${t('необязательно')}
-clientPhone   ${t('номер телефона клиента')} (+7…)                        ${t('необязательно')}
-language      auto | ru | en | de | zh | kz | uk                  ${t('по умолчанию')}: auto
-sync          true - синхронный ответ (legacy, риск таймаута)     ${t('необязательно')}`}</pre>
-                        <Text text={String(t('Пример (один файл, async):'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`curl -X POST ${base}/operator-analytics/analyze-file \\
-  -H "Authorization: Bearer oa_xxx" \\
-  -F "file=@/path/to/call.mp3" \\
-  -F "operatorName=Иван Петров" \\
-  -F "clientPhone=+79991234567" \\
-  -F "language=ru"`}</pre>
-                        <Text text={String(t('Ответ (async, 1 или N файлов):'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`{
-  "batchId": "batch_1710000000_abc123",
-  "total": 1,
-  "items": [
-    { "id": 42, "filename": "call.mp3", "status": "pending" }
-  ]
-}`}</pre>
-                        <Text text={String(t('Проверка статуса: GET /operator-analytics/batch/:batchId или GET /operator-analytics/results/:id'))} size={'s'} />
-                        <Text text={String(t('Ответ (batch, несколько файлов):'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`{
-  "items": [
-    { "id": 42, "filename": "call1.mp3", "status": "processing" },
-    { "id": 43, "filename": "call2.mp3", "status": "processing" }
-  ]
-}`}</pre>
+                <DocEntry method="POST" path="/operator-analytics/analyze-file" fullUrl={base + '/operator-analytics/analyze-file'} description={String(t('Загрузка аудиофайла (single / batch)'))}>
+                    <VStack gap="8" max>
+                        <Text text={String(t('apiDocsMultipart'))} />
+                        <pre className={cls.codeBlock}>{'curl -X POST ' + base + '/operator-analytics/analyze-file \\\n  -H "Authorization: Bearer oa_xxx" \\\n  -F "file=@/path/to/call.mp3" \\\n  -F "clientPhone=+79991234567" \\\n  -F "callType=outgoing"'}</pre>
                     </VStack>
                 </DocEntry>
-
-                <DocEntry
-                    method={'GET'}
-                    path={'/operator-analytics/results'}
-                    description={String(t('Список результатов анализа'))}
-                    fullUrl={`${base}/operator-analytics/results`}
-                >
-                    <VStack gap={'8'}>
-                        <Text text={String(t('Возвращает список проанализированных звонков из проекта токена с пагинацией и фильтрами.'))} />
-                        <Text text={String(t('Параметры запроса:'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`page       ${t('номер страницы')}   (${t('по умолчанию')}: 1)
-limit      ${t('записей на стр.')}  (${t('по умолчанию')}: 20)
-startDate  YYYY-MM-DD       (${t('фильтр по дате от')})
-endDate    YYYY-MM-DD       (${t('фильтр по дате до')})`}</pre>
-                        <Text text={String(t('Пример:'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`curl "${base}/operator-analytics/results?page=1&limit=20&startDate=2025-01-01" \\
-  -H "Authorization: Bearer oa_xxx"`}</pre>
-                        <Text text={String(t('Ответ:'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`{
-  "data": [ ... ],
-  "total": 156,
-  "page": 1,
-  "limit": 20
-}`}</pre>
+                <DocEntry method="POST" path="/operator-analytics/analyze-url" fullUrl={base + '/operator-analytics/analyze-url'} description={String(t('Анализ записи по URL (single / batch)'))}>
+                    <VStack gap="8" max>
+                        <Text text={String(t('apiDocsLegacyUrl'))} />
+                        <pre className={cls.codeBlock}>{json({ urls: ['https://example.com/call1.mp3', 'https://example.com/call2.mp3'], operatorName: 'John Doe', callType: 'outgoing' })}</pre>
                     </VStack>
                 </DocEntry>
-
-                <DocEntry
-                    method={'GET'}
-                    path={'/operator-analytics/results/:id'}
-                    description={String(t('Результат анализа конкретного звонка'))}
-                    fullUrl={`${base}/operator-analytics/results/:id`}
-                >
-                    <VStack gap={'8'}>
-                        <Text text={String(t('Возвращает детальный результат анализа включая транскрипт, метрики и резюме.'))} />
-                        <Text text={String(t('Пример:'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`curl "${base}/operator-analytics/results/42" \\
-  -H "Authorization: Bearer oa_xxx"`}</pre>
-                        <Text text={String(t('Ответ:'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`{
-  "id":            42,
-  "status":        "completed",
-  "operatorName":  "Иван Петров",
-  "clientPhone":   "+79991234567",
-  "duration":      183,
-  "language":      "ru",
-  "metrics": {
-    "customer_sentiment":  "Positive",
-    "csat":                85,
-    "greeting_quality":    85,
-    "script_compliance":   90,
-    "politeness_empathy":  88,
-    "active_listening":    76,
-    "objection_handling":  70,
-    "product_knowledge":   95,
-    "problem_resolution":  80,
-    "speech_clarity_pace": 82,
-    "closing_quality":     78,
-    "summary":             "..."
-  },
-  "transcript": "...",
-  "summary":    "..."
-}`}</pre>
-                        <Text text={String(t('Статус:'))} bold size={'s'} />
-                        <pre className={cls.codeBlock}>{`completed   - ${t('анализ завершён, все поля заполнены')}
-processing  - ${t('ещё анализируется (metrics/transcript будут пустыми)')}
-error       - ${t('ошибка анализа, см. errorMessage')}`}</pre>
+                <DocEntry method="GET" path="/operator-analytics/results" fullUrl={base + '/operator-analytics/results'} description={String(t('Список результатов анализа'))}>
+                    <VStack gap="8" max>
+                        <Text text={String(t('apiDocsList'))} />
+                        <pre className={cls.codeBlock}>{'curl "' + base + '/operator-analytics/results?page=1&limit=20&startDate=2026-10-01&endDate=2026-10-23" -H "Authorization: Bearer oa_xxx"'}</pre>
+                        <pre className={cls.codeBlock}>{json({ data: [sampleCall], total: 156, page: 1, limit: 20 })}</pre>
                     </VStack>
                 </DocEntry>
-
+                <DocEntry method="GET" path="/operator-analytics/results/:id" fullUrl={base + '/operator-analytics/results/:id'} description={String(t('Результат анализа конкретного звонка'))}>
+                    <VStack gap="8" max>
+                        <Text text={String(t('apiDocsResult'))} />
+                        <pre className={cls.codeBlock}>{json(sampleCall)}</pre>
+                        <Text text={String(t('apiDocsPolling'))} />
+                    </VStack>
+                </DocEntry>
             </div>
+            <Text title={String(t('apiDocsCompletionTitle'))} bold />
+            <Text text={String(t('apiDocsCompletion'))} />
+            <Text text={String(t('apiDocsBatchAuth'))} />
+            <Text title={String(t('apiDocsLimitsTitle'))} bold />
+            <Text text={String(t('apiDocsLimits'))} />
+            <Text text={String(t('apiDocsErrors'))} />
         </VStack>
     )
 })

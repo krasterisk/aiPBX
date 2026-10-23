@@ -61,6 +61,11 @@
         overflow-wrap: anywhere;
         max-width: 180px;
 
+        &.dateCell {
+            word-break: normal;
+            overflow-wrap: normal;
+        }
+
         &:first-child {
             border-left: 1px solid transparent;
             border-top-left-radius: var(--radius-lg);

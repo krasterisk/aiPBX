@@ -18,6 +18,7 @@ export interface AllReports {
 export type CdrSource = 'call' | 'widget' | 'playground'
 
 export interface Report {
+  callType?: 'incoming' | 'outgoing' | 'internal' | null
   id: string
   callerId: string
   channelId: string
@@ -294,6 +295,8 @@ export interface OperatorMetrics {
 export type OperatorAnalysisStatus = 'processing' | 'completed' | 'error'
 
 export interface OperatorAnalysisResult {
+  callType?: 'incoming' | 'outgoing' | 'internal' | null
+  callerId?: string
   id: string
   /** operator_analytics id used by GET /operator-analytics/:id (may differ from aiCdr PK) */
   channelId?: string

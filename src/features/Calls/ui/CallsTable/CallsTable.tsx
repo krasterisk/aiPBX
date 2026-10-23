@@ -14,6 +14,7 @@ import {
     isOperatorAnalyticsSource,
     OPERATOR_CDR_SOURCE,
     CallTagChips,
+    CallPhone,
 } from '@/entities/Report'
 import { isUserAdmin } from '@/entities/User'
 import { useSelector } from 'react-redux'
@@ -106,7 +107,7 @@ const CallsTableRow = memo(({ report, onFilterByTag }: CallsTableRowProps) => {
                 onClick={onToggle}
                 id={`calls-row-${report.id}`}
             >
-                <td data-label={String(t('Дата'))}>
+                <td data-label={String(t('Дата'))} className={cls.dateCell}>
                     <Text text={formattedDate} />
                 </td>
 
@@ -117,7 +118,7 @@ const CallsTableRow = memo(({ report, onFilterByTag }: CallsTableRowProps) => {
                 </td>
 
                 <td data-label={String(t('Звонивший'))}>
-                    {report.callerId ? <Text text={report.callerId} /> : '-'}
+                    <CallPhone phone={report.callerId} callType={report.callType} />
                 </td>
 
                 <td data-label={String(t('Источник'))}>

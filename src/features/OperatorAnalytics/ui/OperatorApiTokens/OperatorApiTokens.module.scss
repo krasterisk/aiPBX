@@ -270,13 +270,14 @@
     font-size: 13px;
     color: var(--text-redesigned);
     font-weight: 600;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
 }
 
 .docDesc {
     font-size: 13px;
     color: var(--hint-redesigned);
-    white-space: nowrap;
+    white-space: normal;
+    text-align: start;
 }
 
 .docChevron {
@@ -294,6 +295,7 @@
 }
 
 .docEntryBody {
+    min-width: 0;
     padding: 0 18px 18px 18px;
     animation: fadeIn 0.15s ease;
 
@@ -331,6 +333,8 @@
 
 // ─── Code Block ───────────────────────────────────────────────────────────────
 .codeBlock {
+    min-width: 0;
+    max-width: 100%;
     background: var(--bg-block-secondary);
     border: 1px solid var(--glass-border-secondary);
     border-radius: var(--radius-lg);

@@ -8,6 +8,7 @@ import { Text } from '@/shared/ui/redesigned/Text'
 import { Button } from '@/shared/ui/redesigned/Button'
 import { MediaPlayer } from '@/shared/ui/MediaPlayer'
 import {
+    CallPhone,
     ReportShowAnalytics,
     ReportShowDialog,
     useGetOperatorAnalysis,
@@ -103,6 +104,7 @@ export const CallPanelBody = memo(({ channelId }: CallPanelBodyProps) => {
     return (
         <VStack gap="0" max align="stretch" className={cls.root} data-testid="call-panel-body">
             {data?.operatorExtension && <Text text={`${String(t('Внутренний номер'))}: ${data.operatorExtension}`} size="s" />}
+            <CallPhone phone={data?.callerId || data?.clientPhone} callType={data?.callType} />
             {recordUrl && (
                 <div className={cls.recording} data-testid="call-panel-recording">
                     <MediaPlayer src={recordUrl} />

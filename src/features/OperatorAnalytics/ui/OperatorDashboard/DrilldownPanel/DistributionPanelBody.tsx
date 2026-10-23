@@ -1,3 +1,4 @@
+import { CallPhone } from '@/entities/Report'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Skeleton } from '@mui/material'
@@ -250,12 +251,10 @@ export const DistributionPanelBody = memo((props: DistributionPanelBodyProps) =>
                                             <span className={cls.metaValue}>{durationLabel}</span>
                                         </span>
                                     )}
-                                    {client && (
-                                        <span className={cls.metaItem}>
-                                            <span className={cls.metaLabel}>{String(t('Клиент'))}:</span>
-                                            <span className={cls.metaValue}>{client}</span>
-                                        </span>
-                                    )}
+                                    <HStack gap="4" wrap="wrap">
+                                        {client && <span className={cls.metaLabel}>{String(t('Клиент'))}:</span>}
+                                        <CallPhone phone={client} callType={call.callType} />
+                                    </HStack>
                                     {score != null && (
                                         <span className={cls.metaItem}>
                                             <span className={cls.metaLabel}>{String(t('Средний балл'))}:</span>

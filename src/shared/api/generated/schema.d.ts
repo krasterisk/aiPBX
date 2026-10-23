@@ -3015,7 +3015,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get aggregated per-metric evidence for one operator over the dashboard period */
+        /** Get aggregated per-metric evidence for an operator or the whole filtered set */
         get: operations["OperatorAnalyticsController_getOperatorEvidence"];
         put?: never;
         post?: never;
@@ -3267,6 +3267,60 @@ export interface paths {
         get: operations["LegalController_listMine"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/analyze": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Analyze audio by URL or Base64 body (External API)
+         * @description Exactly one source type per request: url/urls OR file/files. sync=true waits for a single item; multiple items are always async.
+         */
+        post: operations["OperatorAnalyticsController_analyzeUnified"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/projects/{id}/digest/send": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send analytics digest now (email + Telegram) */
+        post: operations["OperatorAnalyticsController_sendProjectDigest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/projects/{id}/alerts/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send a test critical alert (email + Telegram), does not stamp lastAlertAt */
+        post: operations["OperatorAnalyticsController_sendProjectAlertTest"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3989,6 +4043,12 @@ export interface components {
              * @example 1006
              */
             callerId: string;
+            /**
+             * @description Call direction; legacy null means incoming
+             * @default incoming
+             * @enum {string}
+             */
+            callType: "incoming" | "outgoing" | "internal";
             /**
              * @description Assistant name
              * @example Bob
@@ -5013,6 +5073,11 @@ export interface components {
             customMetricsSchema?: components["schemas"]["MetricDefinitionDto"][];
             /** @description Call topic taxonomy */
             callTaxonomy?: components["schemas"]["TagDefinitionDto"][];
+            /**
+             * @description Require exactly one automatic topic when taxonomy is configured. Defaults to false.
+             * @example false
+             */
+            singleTopic?: boolean;
             /** @description Which default metrics to show */
             visibleDefaultMetrics?: string[];
             /** @example https://example.com/webhook */
@@ -5043,11 +5108,12 @@ export interface components {
              *     ]
              */
             budgetAlertEmails?: string[];
-            /**
-             * @description Require exactly one automatic topic when taxonomy is configured. Defaults to false.
-             * @example false
-             */
-            singleTopic?: boolean;
+            /** @description Email/Telegram dashboard digest settings */
+            digestConfig?: components["schemas"]["DigestConfigDto"];
+            /** @description Critical analytics alert settings */
+            alertConfig?: components["schemas"]["AlertConfigDto"];
+            /** @description Admin only: create the project for this tenant owner */
+            ownerUserId?: string;
         };
         UpdateProjectDto: {
             /** @example Отдел продаж */
@@ -5062,6 +5128,11 @@ export interface components {
             customMetricsSchema?: components["schemas"]["MetricDefinitionDto"][];
             /** @description Call topic taxonomy */
             callTaxonomy?: components["schemas"]["TagDefinitionDto"][];
+            /**
+             * @description Require exactly one automatic topic when taxonomy is configured. Defaults to false.
+             * @example false
+             */
+            singleTopic?: boolean;
             /** @description Which default metrics to show */
             visibleDefaultMetrics?: string[];
             /** @example https://example.com/webhook */
@@ -5092,11 +5163,10 @@ export interface components {
              *     ]
              */
             budgetAlertEmails?: string[];
-            /**
-             * @description Require exactly one automatic topic when taxonomy is configured. Defaults to false.
-             * @example false
-             */
-            singleTopic?: boolean;
+            /** @description Email/Telegram dashboard digest settings */
+            digestConfig?: components["schemas"]["DigestConfigDto"];
+            /** @description Critical analytics alert settings */
+            alertConfig?: components["schemas"]["AlertConfigDto"];
         };
         OperatorInsightEvidenceDto: {
             /** @example greeting_quality */
@@ -5215,13 +5285,23 @@ export interface components {
         };
         UpdateCallTagsDto: {
             /**
-             * @description Theme ids from the project callTaxonomy
+             * @description Theme ids from the project callTaxonomy, or free-form ids when taxonomy is empty
              * @example [
              *       "returns",
              *       "billing"
              *     ]
              */
             tagIds: string[];
+            /**
+             * @description Optional display names for free-form tags (and snapshots)
+             * @example {
+             *       "returns": "Возвраты",
+             *       "my-topic": "Моя тема"
+             *     }
+             */
+            tagNames?: {
+                [key: string]: string;
+            };
         };
         SipTrunks: {
             /**
@@ -5388,6 +5468,12 @@ export interface components {
             filename?: string;
         };
         AnalyzeRequestDto: {
+            /**
+             * @description Call direction; omitted/null means incoming. Applies to every item in a batch.
+             * @default incoming
+             * @enum {string|null}
+             */
+            callType: "incoming" | "outgoing" | "internal" | null;
             /** @description Single audio URL (server downloads) */
             url?: string;
             /** @description Batch of audio URLs */
@@ -5414,6 +5500,164 @@ export interface components {
             sync?: Record<string, never>;
             consentObtained?: Record<string, never>;
             consentSource?: string;
+        };
+        DigestConfigDto: {
+            /** @example true */
+            enabled: boolean;
+            /**
+             * @example [
+             *       "ops@example.com"
+             *     ]
+             */
+            emails: string[];
+            /**
+             * @example [
+             *       "123456789"
+             *     ]
+             */
+            telegramChatIds: string[];
+            /** @enum {string} */
+            schedule: "daily" | "weekly" | "monthly";
+            /** @enum {string} */
+            reportWindow: "last_7_days" | "last_30_days" | "previous_calendar_month";
+            /**
+             * @description ISO weekday 1=Mon … 7=Sun
+             * @example 1
+             */
+            weeklyDay?: number;
+            /**
+             * @description Day of month 1–28
+             * @example 1
+             */
+            monthlyDay?: number;
+            /**
+             * @description Hour 0–23 in server TIMEZONE
+             * @example 9
+             */
+            sendHour?: number;
+        };
+        AlertConfigDto: {
+            /** @example true */
+            enabled: boolean;
+            /** @example true */
+            inheritRecipientsFromDigest: boolean;
+            emails: string[];
+            telegramChatIds: string[];
+        };
+        OperatorAnalytics: {
+            /** @description Stable source-namespaced external employee ID; scoped by account */
+            operatorId?: string | null;
+            /** @description Internal number used for this call, independent of employee identity */
+            operatorExtension?: string | null;
+            /**
+             * @description Primary key
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description Owner user ID
+             * @example 5
+             */
+            userId: string;
+            /**
+             * @description Original filename
+             * @example call_001.mp3
+             */
+            filename: string;
+            /**
+             * @description Upload source
+             * @example frontend
+             */
+            source: string;
+            /**
+             * @description Processing status
+             * @example completed
+             */
+            status: string;
+            /**
+             * @description Operator name
+             * @example Иванов А.
+             */
+            operatorName: string;
+            /**
+             * @description Client phone
+             * @example +79001234567
+             */
+            clientPhone: string;
+            /**
+             * @description Call direction; legacy null means incoming
+             * @default incoming
+             * @enum {string}
+             */
+            callType: "incoming" | "outgoing" | "internal";
+            /**
+             * @description Project (group) ID
+             * @example 1
+             */
+            projectId: number;
+            /**
+             * @description Language hint for STT
+             * @example ru
+             */
+            language: string;
+            /**
+             * @description Project custom-metrics schema version applied at analysis time
+             * @example 2
+             */
+            schemaVersion: number;
+            /**
+             * @description Analysis prompt/rubric artifact version used at analysis time
+             * @example 2026-06-18.1
+             */
+            promptVersion: string;
+            /** @description Full transcription text (encrypted at rest when OPERATOR_ENCRYPT_TRANSCRIPTS=true) */
+            transcription: string;
+            /**
+             * @description Audio duration in seconds
+             * @example 125.5
+             */
+            duration: number;
+            /** @description Error message if status=error */
+            errorMessage: string;
+            /** @description URL to the audio recording if provided via API */
+            recordUrl: string;
+            /**
+             * @description STT provider used (external / openai)
+             * @example external
+             */
+            sttProvider: string;
+            /**
+             * @description Transcription quality verdict: ok | low | unusable
+             * @example ok
+             */
+            transcriptionQuality: string;
+            /**
+             * @description Transcription confidence 0..1
+             * @example 0.85
+             */
+            transcriptionConfidence: number;
+            /**
+             * @description Detected transcription language
+             * @example ru
+             */
+            detectedLanguage: string;
+            /** @description Quality reason codes for i18n */
+            qualityReasons: string[];
+            /**
+             * @description Whether call-recording consent was obtained (nullable = unknown)
+             * @example true
+             */
+            consentObtained: boolean;
+            /**
+             * @description How consent was obtained (ivr / contract / verbal / ...)
+             * @example ivr
+             */
+            consentSource: string;
+            /**
+             * @description SHA-256 of uploaded audio (nullable; used for dedup when enabled)
+             * @example a1b2c3…
+             */
+            audioSha256: string;
         };
     };
     responses: never;
@@ -9713,10 +9957,40 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    operatorName?: string;
+                    operatorId?: string;
+                    operatorExtension?: string;
+                    clientPhone?: string;
+                    /**
+                     * @default incoming
+                     * @enum {string|null}
+                     */
+                    callType?: "incoming" | "outgoing" | "internal" | null;
+                    /** @default auto */
+                    language?: string;
+                    provider?: string;
+                    projectId?: string;
+                    consentObtained?: string;
+                    consentSource?: string;
+                    /** @description JSON array of metric definitions */
+                    customMetrics?: string;
+                    /** @description One or more audio files, at most 50 MiB each */
+                    file: string[];
+                    /**
+                     * @description Only a single file can be synchronous
+                     * @default false
+                     * @enum {string}
+                     */
+                    sync?: "true" | "false";
+                };
+            };
+        };
         responses: {
             /** @description Analysis result or batch status */
-            200: {
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -9731,10 +10005,37 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": {
+                    operatorName?: string;
+                    operatorId?: string;
+                    operatorExtension?: string;
+                    clientPhone?: string;
+                    /**
+                     * @default incoming
+                     * @enum {string|null}
+                     */
+                    callType?: "incoming" | "outgoing" | "internal" | null;
+                    /** @default auto */
+                    language?: string;
+                    provider?: string;
+                    /** @description Overrides the token project on ingestion */
+                    projectId?: number;
+                    consentObtained?: boolean;
+                    consentSource?: string;
+                    customMetrics?: {
+                        [key: string]: unknown;
+                    }[];
+                    /** Format: uri */
+                    url?: string;
+                    urls?: string[];
+                } | unknown | unknown;
+            };
+        };
         responses: {
             /** @description Analysis result (single) or batch status (multiple) */
-            200: {
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -9807,7 +10108,9 @@ export interface operations {
     };
     OperatorAnalyticsController_listTokens: {
         parameters: {
-            query?: never;
+            query: {
+                userId: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -9884,7 +10187,9 @@ export interface operations {
     };
     OperatorAnalyticsController_listProjects: {
         parameters: {
-            query?: never;
+            query: {
+                userId: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -10007,6 +10312,7 @@ export interface operations {
     OperatorAnalyticsController_getProjectDashboard: {
         parameters: {
             query?: {
+                /** @description Stable source-namespaced employee ID; takes precedence over name */
                 operatorId?: string;
             };
             header?: never;
@@ -10047,6 +10353,7 @@ export interface operations {
     OperatorAnalyticsController_getProjectInsights: {
         parameters: {
             query?: {
+                /** @description Stable source-namespaced employee ID; takes precedence over name */
                 operatorId?: string;
             };
             header?: never;
@@ -10091,10 +10398,11 @@ export interface operations {
     OperatorAnalyticsController_getCdrs: {
         parameters: {
             query?: {
-                /** @description Calls without any stored topic */
-                withoutTopic?: boolean;
                 /** @description Calls with a missing or unknown operator */
                 withoutOperator?: boolean;
+                /** @description Calls without any stored topic */
+                withoutTopic?: boolean;
+                /** @description Stable source-namespaced employee ID; takes precedence over name */
                 operatorId?: string;
             };
             header?: never;
@@ -10115,6 +10423,7 @@ export interface operations {
     OperatorAnalyticsController_getDashboard: {
         parameters: {
             query?: {
+                /** @description Stable source-namespaced employee ID; takes precedence over name */
                 operatorId?: string;
             };
             header?: never;
@@ -10141,6 +10450,7 @@ export interface operations {
     OperatorAnalyticsController_getDashboardInsights: {
         parameters: {
             query?: {
+                /** @description Stable source-namespaced employee ID; takes precedence over name */
                 operatorId?: string;
             };
             header?: never;
@@ -10163,6 +10473,7 @@ export interface operations {
     OperatorAnalyticsController_getOperatorEvidence: {
         parameters: {
             query?: {
+                /** @description Stable source-namespaced employee ID; takes precedence over name */
                 operatorId?: string;
             };
             header?: never;
@@ -10622,6 +10933,82 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OperatorAnalyticsController_analyzeUnified: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AnalyzeRequestDto"];
+            };
+        };
+        responses: {
+            /** @description Analysis result, processing stub, or batch status */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid source / Base64 / filename */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Decoded file too large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OperatorAnalyticsController_sendProjectDigest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Digest delivery result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OperatorAnalyticsController_sendProjectAlertTest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Test alert delivery result */
             200: {
                 headers: {
                     [name: string]: unknown;

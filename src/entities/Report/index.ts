@@ -166,3 +166,5 @@ export {
   getWizardShowDigest,
   getWizardAlertConfig,
 } from './model/selectors/projectWizardSelectors'
+
+export { CallPhone } from './ui/CallPhone/CallPhone'
