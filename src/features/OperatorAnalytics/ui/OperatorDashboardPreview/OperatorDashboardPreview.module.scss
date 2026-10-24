@@ -135,26 +135,7 @@
         border-color: var(--accent-redesigned);
     }
 }
-.finance {
-    font-size: 11px;
-    color: var(--preview-muted);
-    margin: 0 0 20px;
-    summary {
-        width: fit-content;
-        cursor: pointer;
-        padding: 6px 0;
-    }
-    > div {
-        display: flex;
-        gap: 24px;
-        padding-top: 8px;
-        flex-wrap: wrap;
-    }
-    b {
-        color: var(--text-redesigned);
-        margin-left: 6px;
-    }
-}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));

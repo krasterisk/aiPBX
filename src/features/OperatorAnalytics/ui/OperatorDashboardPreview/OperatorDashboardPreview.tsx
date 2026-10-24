@@ -9,7 +9,6 @@ import {
     type OperatorProject
 } from '@/entities/Report'
 import { SidePanel } from '@/shared/ui/redesign-v3'
-import { formatTenantMoney } from '@/shared/lib/functions/formatDisplayMoney'
 import { ALL_DEFAULT_METRICS, normalizeRate } from '../../lib/metricVisual'
 import { PreviewMainCalls, PreviewPanel, callsEntry, type PreviewEntry } from './PreviewPanel'
 import { dayQuery, hourQuery, trendSeries, operatorQuery, previewDuration, type PreviewFilters } from './previewModel'
@@ -112,7 +111,6 @@ export function OperatorDashboardPreview(props: Props) {
     const total = data?.totalAnalyzed ?? 0
     const success = Math.min(100, Math.max(0, normalizeRate(data?.successRate)))
     const successCount = Math.round((total * success) / 100)
-    const cost = data?.totalAmountCurrency ?? data?.totalCost ?? 0
     const defaults = ALL_DEFAULT_METRICS.filter(
         m => !props.project?.visibleDefaultMetrics?.length || props.project.visibleDefaultMetrics.includes(m.key)
     )
@@ -133,7 +131,6 @@ export function OperatorDashboardPreview(props: Props) {
     const max = Math.max(1, ...series.map(point => point.callsCount))
     const stats = data?.operatorTopicStats
     const topics = stats?.topics ?? data?.tagStats?.map(tag => ({ tagId: tag.tagId, name: tag.name, callsCount: tag.callsCount })) ?? []
-    const money = (value: number) => formatTenantMoney(value, 2) || '0'
     return (
         <div className={cls.root} data-testid="call-records-preview">
             <div className={cls.previewHeader}>
@@ -247,17 +244,6 @@ export function OperatorDashboardPreview(props: Props) {
                             </button>
                         ))}
                     </section>
-                    <details className={cls.finance}>
-                        <summary>{t('expenses')}</summary>
-                        <div>
-                            <span>
-                                {t('totalCost')} <b>{money(cost)}</b>
-                            </span>
-                            <span>
-                                {t('averageCost')} <b>{money(total ? cost / total : 0)}</b>
-                            </span>
-                        </div>
-                    </details>
                     {!total && <div className={cls.emptySummary}>{t('noCalls')}</div>}
                     <div className={cls.grid}>
                         <Section
