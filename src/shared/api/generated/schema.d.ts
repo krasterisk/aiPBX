@@ -5731,6 +5731,7 @@ export interface components {
             audioSha256: string;
         };
         DashboardTimePointDto: {
+            byCallType?: components["schemas"]["DashboardCallTypeCountsDto"];
             /** @description UTC date, month, or ISO hour-bucket start */
             label: string;
             callsCount: number;
@@ -5742,6 +5743,11 @@ export interface components {
             monthly: components["schemas"]["DashboardTimePointDto"][];
             /** @description Zero-filled UTC hours for single-day ranges (up to 25 hours including DST); empty for longer ranges or no records. Daily/monthly fields are unchanged. */
             hourly: components["schemas"]["DashboardTimePointDto"][];
+        };
+        DashboardCallTypeCountsDto: {
+            incoming: number;
+            outgoing: number;
+            internal: number;
         };
     };
     responses: never;
@@ -10488,6 +10494,9 @@ export interface operations {
                 withoutTopic?: boolean;
                 /** @description Stable source-namespaced employee ID; takes precedence over name */
                 operatorId?: string;
+                callType?: "incoming" | "outgoing" | "internal";
+                /** @description JSON array of account-scoped operator identities; union within authorized scope */
+                operatorFilters?: string;
             };
             header?: never;
             path?: never;
@@ -10509,6 +10518,9 @@ export interface operations {
             query?: {
                 /** @description Stable source-namespaced employee ID; takes precedence over name */
                 operatorId?: string;
+                callType?: "incoming" | "outgoing" | "internal";
+                /** @description JSON array of account-scoped operator identities; union within authorized scope */
+                operatorFilters?: string;
             };
             header?: never;
             path?: never;
@@ -10560,6 +10572,9 @@ export interface operations {
             query?: {
                 /** @description Stable source-namespaced employee ID; takes precedence over name */
                 operatorId?: string;
+                callType?: "incoming" | "outgoing" | "internal";
+                /** @description JSON array of account-scoped operator identities; union within authorized scope */
+                operatorFilters?: string;
             };
             header?: never;
             path?: never;

@@ -1,20 +1,35 @@
+import { Tooltip } from '@mui/material'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BarChart3, Check, ChevronRight, Clock3, Phone, Users } from 'lucide-react'
+import { BarChart3, Check, ChevronRight, Clock3, Phone, Users, ArrowDown, ArrowUp, ChevronsUpDown } from 'lucide-react'
 import {
     useGetOperatorDashboard,
     WITHOUT_PROJECT_FILTER,
-    type AgentScorecard,
     type OperatorDashboardResponse,
     type OperatorProject
 } from '@/entities/Report'
 import { SidePanel } from '@/shared/ui/redesign-v3'
 import { ALL_DEFAULT_METRICS, normalizeRate } from '../../lib/metricVisual'
 import { PreviewMainCalls, PreviewPanel, callsEntry, type PreviewEntry } from './PreviewPanel'
-import { dayQuery, hourQuery, trendSeries, operatorQuery, previewDuration, type PreviewFilters } from './previewModel'
+import {
+    dayQuery,
+    hourQuery,
+    trendSeries,
+    operatorQuery,
+    previewDuration,
+    operatorIdentity,
+    operatorSelection,
+    scoreTone,
+    sortedOperators,
+    customMetricDisplay,
+    type OperatorSortKey,
+    type PreviewFilters
+} from './previewModel'
+import { OperatorFilter } from './OperatorFilter'
 import cls from './OperatorDashboardPreview.module.scss'
 
 interface Props {
+    isAdmin?: boolean
     filters: PreviewFilters
     data?: OperatorDashboardResponse
     loading: boolean
@@ -52,30 +67,23 @@ function Section({
     )
 }
 
-const identity = (o: AgentScorecard) => JSON.stringify([o.operatorAccountId, o.operatorId, o.operatorName])
+const identity = operatorIdentity
 
 export function OperatorDashboardPreview(props: Props) {
     const { t, i18n } = useTranslation('call-records-preview')
     const { t: r } = useTranslation('reports')
-    const [operatorId, setOperatorId] = useState('')
-    const [allMetrics, setAllMetrics] = useState(false)
+    const [operatorIds, setOperatorIds] = useState<string[]>([])
+    const [sort, setSort] = useState<{ key: OperatorSortKey, descending: boolean }>({ key: 'averageScore', descending: true })
     const [stack, setStack] = useState<PreviewEntry[]>([])
     const focus = useRef<HTMLElement | null>(null)
-    const selected = props.data?.agentScorecards?.find(o => identity(o) === operatorId)
-    const scope = selected ? operatorQuery(selected) : {}
+    const selected = props.data?.agentScorecards?.filter(o => operatorIds.includes(identity(o))) ?? []
+    const single = selected.length === 1 ? selected[0] : undefined
+    const scope = operatorSelection(selected)
     const filters = { ...props.filters, ...scope }
-    const summaryQuery = useGetOperatorDashboard(
-        {
-            ...props.filters,
-            ...(scope.userId ? { userId: scope.userId } : {}),
-            ...(scope.operatorId ? { operatorId: scope.operatorId } : {}),
-            ...(scope.operatorNameExact ? { operatorName: scope.operatorNameExact } : {})
-        },
-        { skip: !selected || props.loading || props.error }
-    )
-    const data = selected ? summaryQuery.currentData : props.data
-    const loading = props.loading || Boolean(selected && (summaryQuery.isFetching || !data) && !summaryQuery.isError)
-    const error = props.error || Boolean(selected && summaryQuery.isError)
+    const summaryQuery = useGetOperatorDashboard(filters, { skip: !selected.length || props.loading || props.error })
+    const data = selected.length ? summaryQuery.currentData : props.data
+    const loading = props.loading || Boolean(selected.length && (summaryQuery.isFetching || !data) && !summaryQuery.isError)
+    const error = props.error || Boolean(selected.length && summaryQuery.isError)
     const open = (entry: PreviewEntry) => {
         if (!stack.length) focus.current = document.activeElement as HTMLElement
         setStack(old => [...old, entry])
@@ -86,7 +94,7 @@ export function OperatorDashboardPreview(props: Props) {
     }
     useEffect(() => {
         setStack([])
-    }, [operatorId])
+    }, [operatorIds])
     const current = stack.at(-1)
     const metric = (metricId: string, title: string) => {
         open({
@@ -96,11 +104,11 @@ export function OperatorDashboardPreview(props: Props) {
                 kind: 'operatorMetric',
                 metricId,
                 metricLabel: title,
-                ...(selected
+                ...(single
                     ? {
-                          operatorName: selected.operatorName,
-                          operatorId: selected.operatorId,
-                          operatorAccountId: selected.operatorAccountId
+                          operatorName: single.operatorName,
+                          operatorId: single.operatorId,
+                          operatorAccountId: single.operatorAccountId
                       }
                     : {})
             },
@@ -114,7 +122,8 @@ export function OperatorDashboardPreview(props: Props) {
     const defaults = ALL_DEFAULT_METRICS.filter(
         m => !props.project?.visibleDefaultMetrics?.length || props.project.visibleDefaultMetrics.includes(m.key)
     )
-    const displayMetrics = allMetrics ? defaults : defaults.slice(0, 4)
+    const displayMetrics = defaults
+    const operators = sortedOperators(data?.agentScorecards ?? [], sort.key, sort.descending)
     const trend = data ? trendSeries(data.timeSeries, filters) : { unit: 'day', points: [] }
     const useHourly = trend.unit === 'hour'
     const series = trend.points.slice().sort((a, b) => a.label.localeCompare(b.label))
@@ -133,10 +142,6 @@ export function OperatorDashboardPreview(props: Props) {
     const topics = stats?.topics ?? data?.tagStats?.map(tag => ({ tagId: tag.tagId, name: tag.name, callsCount: tag.callsCount })) ?? []
     return (
         <div className={cls.root} data-testid="call-records-preview">
-            <div className={cls.previewHeader}>
-                <span className={cls.previewBadge}>{t('preview')}</span>
-                <p>{t('previewHint')}</p>
-            </div>
             <div className={cls.filters}>
                 <label>
                     {t('project')}
@@ -155,26 +160,12 @@ export function OperatorDashboardPreview(props: Props) {
                         <option value={WITHOUT_PROJECT_FILTER}>{t('withoutProject')}</option>
                     </select>
                 </label>
-                <label>
-                    {t('operator')}
-                    <select
-                        aria-label={String(t('operator'))}
-                        value={operatorId}
-                        onChange={e => {
-                            setOperatorId(e.target.value)
-                        }}
-                        disabled={props.loading || props.error}
-                    >
-                        <option value="">{t('allOperators')}</option>
-                        {props.data?.agentScorecards
-                            ?.filter(o => o.operatorId || o.operatorName !== 'Unknown Operator')
-                            .map(o => (
-                                <option key={identity(o)} value={identity(o)}>
-                                    {noOperator(o.operatorName)}
-                                </option>
-                            ))}
-                    </select>
-                </label>
+                <OperatorFilter
+                    options={props.data?.agentScorecards?.filter(o => o.operatorId || o.operatorName !== 'Unknown Operator') ?? []}
+                    value={operatorIds}
+                    onChange={setOperatorIds}
+                    disabled={props.loading || props.error}
+                />
                 <p className={cls.caption}>{t('detailsHint')}</p>
             </div>
             {error ? (
@@ -183,7 +174,7 @@ export function OperatorDashboardPreview(props: Props) {
                     <button
                         className={cls.button}
                         onClick={() => {
-                            if (selected && !props.error) summaryQuery.refetch()
+                            if (selected.length && !props.error) summaryQuery.refetch()
                             else props.onRetry()
                         }}
                     >
@@ -196,7 +187,7 @@ export function OperatorDashboardPreview(props: Props) {
                 </div>
             ) : (
                 <>
-                    {(data.excludedLowQualityCount ?? 0) > 0 && (
+                    {props.isAdmin && (data.excludedLowQualityCount ?? 0) > 0 && (
                         <p className={cls.caption}>{r('DASHBOARD_EXCLUDED_LOW_QUALITY', { count: data.excludedLowQualityCount })}</p>
                     )}
                     <section className={cls.kpis} aria-label={String(t('summary'))}>
@@ -256,44 +247,115 @@ export function OperatorDashboardPreview(props: Props) {
                                 </span>
                             }
                         >
+                            <div className={cls.chartLegend}>
+                                {(['incoming', 'outgoing', 'internal'] as const).map(type => (
+                                    <span key={type}>
+                                        <i data-type={type} />
+                                        {t('type_' + type)}
+                                    </span>
+                                ))}
+                            </div>
                             {series.length ? (
                                 <div className={cls.chartScroll}>
                                     <div
                                         className={cls.chart}
                                         style={{ gridTemplateColumns: `repeat(${series.length}, minmax(34px, 1fr))` }}
                                     >
-                                        {series.map(point => (
-                                            <button
-                                                type="button"
-                                                key={point.label}
-                                                title={`${bucketTitle(point.label)}: ${point.callsCount}`}
-                                                onClick={() => {
-                                                    const query = useHourly
-                                                        ? hourQuery(point.label, filters)
-                                                        : dayQuery(point.label, filters)
-                                                    if (query) open(callsEntry(`${t('calls')} / ${bucketTitle(point.label)}`, query))
-                                                }}
-                                            >
-                                                <span>{point.callsCount}</span>
-                                                <i style={{ height: `${Math.max(2, (point.callsCount * 90) / max)}px` }} />
-                                                <small>
-                                                    {useHourly
-                                                        ? new Date(point.label).toLocaleTimeString(i18n.language, {
-                                                              hour: '2-digit',
-                                                              minute: '2-digit'
-                                                          })
-                                                        : /^\d{4}-\d{2}(-\d{2})?$/.test(point.label)
-                                                        ? new Date(
-                                                              `${point.label.length === 7 ? point.label + '-01' : point.label}T12:00:00Z`
-                                                          ).toLocaleDateString(i18n.language, {
-                                                              day: point.label.length === 7 ? undefined : 'numeric',
-                                                              month: 'short',
-                                                              timeZone: 'UTC'
-                                                          })
-                                                        : point.label}
-                                                </small>
-                                            </button>
-                                        ))}
+                                        {series.map(point => {
+                                            const openBucket = (callType?: 'incoming' | 'outgoing' | 'internal') => {
+                                                const query = useHourly ? hourQuery(point.label, filters) : dayQuery(point.label, filters)
+                                                if (query) {
+open(
+                                                        callsEntry(
+                                                            String(t('calls')) +
+                                                                ' / ' +
+                                                                bucketTitle(point.label) +
+                                                                (callType ? ' / ' + String(t('type_' + callType)) : ''),
+                                                            { ...query, ...(callType ? { callType } : {}) }
+                                                        )
+                                                    )
+}
+                                            }
+                                            return (
+                                                <div key={point.label} className={cls.chartBucket}>
+                                                    <button
+                                                        type="button"
+                                                        className={cls.bucketTotal}
+                                                        title={bucketTitle(point.label) + ': ' + point.callsCount}
+                                                        onClick={() => {
+                                                            openBucket()
+                                                        }}
+                                                    >
+                                                        {point.callsCount}
+                                                    </button>
+                                                    <div className={cls.barStack}>
+                                                        {point.byCallType ? (
+                                                            (['incoming', 'outgoing', 'internal'] as const)
+                                                                .filter(type => point.byCallType![type] > 0)
+                                                                .map(type => (
+                                                                    <Tooltip
+                                                                        key={type}
+                                                                        title={String(t('type_' + type)) + ': ' + point.byCallType![type]}
+                                                                        arrow
+                                                                        enterTouchDelay={0}
+                                                                    >
+                                                                        <button
+                                                                            type="button"
+                                                                            className={cls.barSegment}
+                                                                            data-type={type}
+                                                                            style={{ height: (point.byCallType![type] * 90) / max + 'px' }}
+                                                                            aria-label={
+                                                                                String(t('type_' + type)) +
+                                                                                ': ' +
+                                                                                point.byCallType![type] +
+                                                                                ' / ' +
+                                                                                bucketTitle(point.label)
+                                                                            }
+                                                                            onClick={() => {
+                                                                                openBucket(type)
+                                                                            }}
+                                                                        />
+                                                                    </Tooltip>
+                                                                ))
+                                                        ) : (
+                                                            <button
+                                                                type="button"
+                                                                className={cls.barSegment}
+                                                                data-type="incoming"
+                                                                style={{ height: Math.max(2, (point.callsCount * 90) / max) + 'px' }}
+                                                                aria-label={String(t('calls')) + ' / ' + bucketTitle(point.label)}
+                                                                onClick={() => {
+                                                                    openBucket()
+                                                                }}
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        className={cls.bucketDate}
+                                                        onClick={() => {
+                                                            openBucket()
+                                                        }}
+                                                    >
+                                                        {useHourly
+                                                            ? new Date(point.label).toLocaleTimeString(i18n.language, {
+                                                                  hour: '2-digit',
+                                                                  minute: '2-digit'
+                                                              })
+                                                            : /^\d{4}-\d{2}(-\d{2})?$/.test(point.label)
+                                                            ? new Date(
+                                                                  (point.label.length === 7 ? point.label + '-01' : point.label) +
+                                                                      'T12:00:00Z'
+                                                              ).toLocaleDateString(i18n.language, {
+                                                                  day: point.label.length === 7 ? undefined : 'numeric',
+                                                                  month: 'short',
+                                                                  timeZone: 'UTC'
+                                                              })
+                                                            : point.label}
+                                                    </button>
+                                                </div>
+                                            )
+                                        })}
                                     </div>
                                 </div>
                             ) : (
@@ -403,69 +465,112 @@ export function OperatorDashboardPreview(props: Props) {
                                                 <i style={{ width: `${Math.max(0, Math.min(100, value ?? 0))}%` }} />
                                             </i>
                                         </span>
-                                        <b>{total && Number.isFinite(value) ? Math.round(value) : '—'}</b>
+                                        <b className={cls.operatorScore} data-tone={scoreTone(total ? value : undefined)}>
+                                            <i aria-hidden />
+                                            {total && Number.isFinite(value) ? `${Math.round(value)}%` : '—'}
+                                        </b>
                                         <ChevronRight size={15} aria-hidden />
                                     </button>
                                 )
                             })}
-                            {defaults.length > 4 && (
-                                <button
-                                    type="button"
-                                    className={cls.textButton}
-                                    onClick={() => {
-                                        setAllMetrics(!allMetrics)
-                                    }}
-                                >
-                                    {t(allMetrics ? 'lessMetrics' : 'allMetrics', { count: defaults.length })}
-                                </button>
-                            )}
-                            {props.project?.customMetricsSchema?.length ? (
-                                <details className={cls.custom}>
-                                    <summary>{t('customMetrics')}</summary>
-                                    {props.project.customMetricsSchema.map(m => {
-                                        const aggregate = data.customMetricsAggregated?.[m.id]
-                                        return (
-                                            <button
-                                                type="button"
-                                                className={cls.metricRow}
-                                                key={m.id}
-                                                onClick={() => {
-                                                    metric(m.id, m.name)
-                                                }}
-                                            >
-                                                <span>
-                                                    {m.name}
-                                                    {aggregate?.distribution && (
-                                                        <small>
-                                                            {Object.entries(aggregate.distribution)
-                                                                .map(([label, count]) => `${label}: ${count}`)
-                                                                .join(' · ')}
-                                                        </small>
-                                                    )}
-                                                </span>
-                                                <b>{aggregate?.value != null ? Math.round(aggregate.value * 100) / 100 : '—'}</b>
-                                                <ChevronRight size={15} aria-hidden />
-                                            </button>
-                                        )
-                                    })}
-                                </details>
-                            ) : null}
+                            {props.project?.customMetricsSchema?.map(m => {
+                                const display = customMetricDisplay(m, data.customMetricsAggregated?.[m.id])
+                                return (
+                                    <button
+                                        type="button"
+                                        className={cls.metricRow}
+                                        key={m.id}
+                                        onClick={() => {
+                                            metric(m.id, m.name)
+                                        }}
+                                        title={display.distribution ?? m.description}
+                                    >
+                                        <span>
+                                            {m.name}
+                                            <i className={cls.metricTrack}>
+                                                <i style={{ width: (display.percent ?? 0) + '%' }} />
+                                            </i>
+                                        </span>
+                                        <b className={cls.operatorScore} data-tone={scoreTone(
+                                            !total || display.percent == null || (m.type !== 'number' && m.type !== 'boolean') || m.polarity === 'neutral'
+                                                ? undefined
+                                                : m.polarity === 'negative' ? 100 - display.percent : display.percent
+                                        )}>
+                                            <i aria-hidden />
+                                            {total ? display.text : '—'}
+                                        </b>
+                                        <ChevronRight size={15} aria-hidden />
+                                    </button>
+                                )
+                            })}
                         </Section>
                         <Section title={String(t('operators'))} hint={String(t('operatorsHint'))} className={cls.operators}>
+                            <div className={cls.mobileSort}>
+                                <label>
+                                    {t('sortBy')}
+                                    <select aria-label={String(t('sortBy'))} value={sort.key} onChange={e => {
+                                        setSort({ key: e.target.value as OperatorSortKey, descending: e.target.value !== 'operatorName' })
+                                    }}>
+                                        {(['operatorName', 'callsCount', 'averageScore', 'successRate', 'avgCsat', 'negativeRate'] as OperatorSortKey[]).map((key, index) => <option key={key} value={key}>{[t('operator'), t('calls'), t('score'), t('successful'), r('CSAT'), t('negative')][index]}</option>)}
+                                    </select>
+                                </label>
+                                <button type="button" className={cls.iconButton} aria-label={String(t(sort.descending ? 'sortAscending' : 'sortDescending'))} onClick={() => { setSort({ ...sort, descending: !sort.descending }) }}>
+                                    {sort.descending ? <ArrowDown size={16} aria-hidden /> : <ArrowUp size={16} aria-hidden />}
+                                </button>
+                            </div>
                             <div className={cls.tableWrap}>
                                 <table className={cls.table}>
                                     <thead>
                                         <tr>
-                                            <th>{t('operator')}</th>
-                                            <th>{t('calls')}</th>
-                                            <th>{t('score')}</th>
-                                            <th>{t('successful')}</th>
-                                            <th>{r('CSAT')}</th>
-                                            <th>{t('negative')}</th>
+                                            {(
+                                                [
+                                                    'operatorName',
+                                                    'callsCount',
+                                                    'averageScore',
+                                                    'successRate',
+                                                    'avgCsat',
+                                                    'negativeRate'
+                                                ] as OperatorSortKey[]
+                                            ).map((key, index) => (
+                                                <th
+                                                    key={key}
+                                                    aria-sort={sort.key === key ? (sort.descending ? 'descending' : 'ascending') : 'none'}
+                                                >
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setSort({
+                                                                key,
+                                                                descending: sort.key === key ? !sort.descending : key !== 'operatorName'
+                                                            })
+                                                        }}
+                                                    >
+                                                        {
+                                                            [
+                                                                t('operator'),
+                                                                t('calls'),
+                                                                t('score'),
+                                                                t('successful'),
+                                                                r('CSAT'),
+                                                                t('negative')
+                                                            ][index]
+                                                        }
+                                                        {sort.key === key ? (
+                                                            sort.descending ? (
+                                                                <ArrowDown size={13} aria-hidden />
+                                                            ) : (
+                                                                <ArrowUp size={13} aria-hidden />
+                                                            )
+                                                        ) : (
+                                                            <ChevronsUpDown size={13} aria-hidden />
+                                                        )}
+                                                    </button>
+                                                </th>
+                                            ))}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {data.agentScorecards?.map(o => (
+                                        {operators.map(o => (
                                             <tr key={identity(o)}>
                                                 <td>
                                                     <button
@@ -498,7 +603,13 @@ export function OperatorDashboardPreview(props: Props) {
                                                     </button>
                                                 </td>
                                                 <td data-label={String(t('score'))}>
-                                                    {o.scoredCalls === 0 ? '—' : o.averageScore.toFixed(1)}
+                                                    <span
+                                                        className={cls.operatorScore}
+                                                        data-tone={scoreTone(o.scoredCalls === 0 ? null : o.averageScore)}
+                                                    >
+                                                        <i />
+                                                        {o.scoredCalls === 0 ? '—' : Math.round(o.averageScore)}
+                                                    </span>
                                                 </td>
                                                 <td data-label={String(t('successful'))}>
                                                     {o.callsCount ? `${normalizeRate(o.successRate).toFixed(0)}%` : '—'}

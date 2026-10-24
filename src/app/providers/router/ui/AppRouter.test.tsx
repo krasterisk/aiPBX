@@ -1,7 +1,7 @@
 import React from 'react'
 import { componentRender } from '@/shared/lib/tests/componentRender/componentRender'
 import AppRouter from './AppRouter'
-import { getRouteAbout, getRouteAdmin, getRoutePayment } from '@/shared/const/router'
+import { getRouteAbout, getRouteAdmin, getRoutePayment, getRouteDashboardCallRecords, getRouteDashboardCallRecordsPreview } from '@/shared/const/router'
 import { UserRolesValues } from '@/entities/User'
 import { screen } from '@testing-library/react'
 
@@ -13,7 +13,20 @@ jest.mock('@/pages/PaymentPage', () => ({
   PaymentPage: () => <main data-testid="PaymentPage" />,
 }))
 
+jest.mock('@/pages/DashboardCallRecordsPreviewPage', () => ({
+  DashboardCallRecordsPreviewPage: () => <main data-testid="ReviewedCallRecordsDashboard" />,
+}))
+
 describe('app/router/AppRouter', function () {
+  test.each([getRouteDashboardCallRecords(), getRouteDashboardCallRecordsPreview()])('serves the reviewed dashboard at %s for an authenticated user', async route => {
+    componentRender(<AppRouter />, { route, initialState: { user: { authData: { id: '99', username: 'test', roles: [{ value: UserRolesValues.USER }] }, _mounted: true } } })
+    expect(await screen.findByTestId('ReviewedCallRecordsDashboard')).toBeInTheDocument()
+  })
+  test('keeps authentication required for the main call-records dashboard', async () => {
+    componentRender(<AppRouter />, { route: getRouteDashboardCallRecords(), initialState: {} })
+    expect(await screen.findByTestId('MainPage')).toBeInTheDocument()
+    expect(screen.queryByTestId('ReviewedCallRecordsDashboard')).not.toBeInTheDocument()
+  })
   test('Page must be render', async () => {
     componentRender(<AppRouter/>, {
       route: getRouteAbout()

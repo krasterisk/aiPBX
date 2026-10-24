@@ -1,6 +1,9 @@
-import type { AgentScorecard } from '@/entities/Report'
+import type { AgentScorecard, OperatorProject, OperatorDashboardResponse } from '@/entities/Report'
 
+export type PreviewCallType = 'incoming' | 'outgoing' | 'internal'
 export interface PreviewFilters {
+    operatorFilters?: string
+    callType?: PreviewCallType
     startDate?: string
     endDate?: string
     projectId?: string
@@ -97,7 +100,8 @@ export function isSingleDay(filters: PreviewFilters): boolean {
     return from !== null && from === key(filters.endDate)
 }
 
-interface TrendPoint {
+export interface TrendPoint {
+    byCallType?: Record<PreviewCallType, number>
     label: string
     callsCount: number
     avgScore: number
@@ -116,6 +120,10 @@ export function trendSeries(timeSeries: { daily: TrendPoint[], monthly: TrendPoi
     for (const point of timeSeries.daily.length ? timeSeries.daily : timeSeries.monthly) {
         const year = point.label.slice(0, monthly ? 7 : 4)
         const bucket = years.get(year) ?? { label: year, callsCount: 0, avgScore: 0, avgDuration: 0 }
+        if (point.byCallType) {
+            bucket.byCallType ??= { incoming: 0, outgoing: 0, internal: 0 }
+            for (const type of ['incoming', 'outgoing', 'internal'] as const) bucket.byCallType[type] += point.byCallType[type]
+        }
         bucket.callsCount += point.callsCount
         bucket.avgScore += point.avgScore * point.callsCount
         bucket.avgDuration += point.avgDuration * point.callsCount
@@ -128,5 +136,41 @@ export function trendSeries(timeSeries: { daily: TrendPoint[], monthly: TrendPoi
             avgScore: point.callsCount ? point.avgScore / point.callsCount : 0,
             avgDuration: point.callsCount ? point.avgDuration / point.callsCount : 0
         }))
+    }
+}
+
+export const operatorIdentity = (o: Pick<AgentScorecard, 'operatorId' | 'operatorAccountId' | 'operatorName'>) =>
+    JSON.stringify([o.operatorAccountId, o.operatorId, o.operatorName])
+export const operatorSelection = (operators: AgentScorecard[]) =>
+    operators.length ? { operatorFilters: JSON.stringify(operators.map(operatorQuery)) } : {}
+export const scoreTone = (score?: number | null) =>
+    score == null || !Number.isFinite(score) ? 'none' : score < 50 ? 'low' : score < 80 ? 'medium' : 'high'
+export type OperatorSortKey = 'operatorName' | 'callsCount' | 'averageScore' | 'successRate' | 'avgCsat' | 'negativeRate'
+export function sortedOperators(rows: AgentScorecard[], key: OperatorSortKey, descending: boolean): AgentScorecard[] {
+    return rows.slice().sort((a, b) => {
+        const first = key === 'averageScore' && a.scoredCalls === 0 ? null : a[key]
+            const second = key === 'averageScore' && b.scoredCalls === 0 ? null : b[key]
+        if (first == null || second == null) return first == null ? (second == null ? 0 : 1) : -1
+        const compare = typeof first === 'string' ? first.localeCompare(String(second)) : Number(first) - Number(second)
+        return (descending ? -compare : compare) || a.operatorName.localeCompare(b.operatorName)
+    })
+}
+export function customMetricDisplay(
+    metric: NonNullable<OperatorProject['customMetricsSchema']>[number],
+    aggregate: NonNullable<OperatorDashboardResponse['customMetricsAggregated']>[string] | undefined
+) {
+    if (aggregate?.value != null && Number.isFinite(aggregate.value)) {
+        const min = metric.type === 'number' ? metric.min ?? 0 : 0
+            const max = metric.type === 'number' ? metric.max ?? 100 : 100
+        const percent = max > min ? Math.max(0, Math.min(100, ((aggregate.value - min) * 100) / (max - min))) : null
+        return { text: percent != null ? Math.round(percent) + '%' : '—', percent, distribution: null }
+    }
+    const entries = Object.entries(aggregate?.distribution ?? {})
+        const total = entries.reduce((sum, [, count]) => sum + count, 0)
+    const leading = entries.sort((a, b) => b[1] - a[1])[0]
+    return {
+        text: leading && total ? leading[0] + ' · ' + Math.round((leading[1] * 100) / total) + '%' : '—',
+        percent: leading && total ? (leading[1] * 100) / total : null,
+        distribution: entries.map(([label, count]) => label + ': ' + (total ? Math.round((count * 100) / total) : 0) + '%').join(' · ')
     }
 }

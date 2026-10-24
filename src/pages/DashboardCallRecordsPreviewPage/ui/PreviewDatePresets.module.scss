@@ -50,6 +50,10 @@
             outline: 2px solid var(--accent-redesigned);
             outline-offset: 2px;
         }
+        &:disabled {
+            opacity: 0.35;
+            cursor: default;
+        }
     }
 
     margin: 7px 0 0;
@@ -98,5 +102,38 @@
     .custom label {
         flex: 1;
         min-width: 130px;
+    }
+}
+
+/* Fit all presets and the extended-filter trigger on one mobile row. */
+.root {
+    width: fit-content;
+    max-width: 100%;
+}
+.range {
+    justify-content: center;
+}
+@media (max-width: 650px) {
+    .root {
+        width: 100%;
+    }
+    .presets {
+        flex-wrap: nowrap;
+        gap: 3px;
+        width: 100%;
+    }
+    .presets button {
+        flex: 1 1 auto;
+        min-width: 0;
+        white-space: nowrap;
+        padding: 6px 5px;
+        font-size: 10px;
+    }
+    .presets button:last-child {
+        flex: 0 0 30px;
+        padding: 6px;
+    }
+    .range {
+        margin-top: 9px;
     }
 }

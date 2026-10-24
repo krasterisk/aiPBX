@@ -367,18 +367,21 @@ export interface OperatorDashboardResponse {
   timeSeries: {
     hourly?: Array<{
       label: string
+      byCallType?: { incoming: number, outgoing: number, internal: number }
       callsCount: number
       avgScore: number
       avgDuration: number
     }>
     monthly: Array<{
       label: string
+      byCallType?: { incoming: number, outgoing: number, internal: number }
       callsCount: number
       avgScore: number
       avgDuration: number
     }>
     daily: Array<{
       label: string
+      byCallType?: { incoming: number, outgoing: number, internal: number }
       callsCount: number
       avgScore: number
       avgDuration: number

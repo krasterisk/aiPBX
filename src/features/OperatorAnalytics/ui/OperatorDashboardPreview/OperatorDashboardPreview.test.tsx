@@ -67,7 +67,7 @@ const props = {
     data,
     loading: false,
     error: false,
-    filters: { projectId: '5', userId: 'admin-scope', startDate: '2026-10-24' },
+    filters: { projectId: '5', userId: '99', startDate: '2026-10-24' },
     projects: [],
     onProjectChange: jest.fn(),
     onRetry: jest.fn()
@@ -77,15 +77,37 @@ beforeEach(() => {
     summary.mockReturnValue({ currentData: data, isFetching: false })
 })
 
+it('colors metric dots consistently and respects negative and neutral custom metrics', () => {
+    const project: any = {
+ id: '5',
+customMetricsSchema: [
+        { id: 'conflict', name: 'Conflict', type: 'boolean', polarity: 'negative', description: '' },
+        { id: 'kind', name: 'Kind', type: 'enum', description: '' }
+    ] 
+}
+    render(<OperatorDashboardPreview {...props} project={project} data={{
+ ...data,
+        aggregatedMetrics: { greeting_quality: 86, script_compliance: 65, politeness_empathy: 42 },
+        customMetricsAggregated: { conflict: { type: 'boolean', value: 10 }, kind: { type: 'enum', distribution: { Phone: 3, Email: 1 } } }
+    }} />)
+    expect(screen.getByText('86%').closest('[data-tone]')).toHaveAttribute('data-tone', 'high')
+    expect(screen.getByText('65%').closest('[data-tone]')).toHaveAttribute('data-tone', 'medium')
+    expect(screen.getByText('42%').closest('[data-tone]')).toHaveAttribute('data-tone', 'low')
+    expect(screen.getByText('Conflict').closest('button')?.querySelector('[data-tone]')).toHaveAttribute('data-tone', 'high')
+    expect(screen.getByText('Phone · 75%').closest('[data-tone]')).toHaveAttribute('data-tone', 'none')
+})
+
 it('keeps the cabinet and stable operator ID in filtered summary and call queries', () => {
     render(<OperatorDashboardPreview {...props} />)
-    fireEvent.change(screen.getByLabelText('operator'), { target: { value: JSON.stringify(['99', '218', 'Operator']) } })
+    fireEvent.click(screen.getByRole('button', { name: 'operator', expanded: false }))
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Operator' }))
+    const selection = JSON.stringify([{ userId: '99', operatorId: '218' }])
     expect(summary).toHaveBeenLastCalledWith(
-        expect.objectContaining({ projectId: '5', userId: '99', operatorId: '218' }),
+        expect.objectContaining({ projectId: '5', userId: '99', operatorFilters: selection }),
         expect.objectContaining({ skip: false })
     )
     expect(JSON.parse(screen.getByTestId('main-query').textContent!)).toEqual(
-        expect.objectContaining({ userId: '99', operatorId: '218', projectId: '5' })
+        expect.objectContaining({ userId: '99', projectId: '5', operatorFilters: selection })
     )
 })
 
@@ -93,7 +115,7 @@ it('opens topic calls with tagId and restores the previous page when leaving a c
     render(<OperatorDashboardPreview {...props} />)
     fireEvent.click(screen.getByRole('button', { name: /Service/ }))
     expect(JSON.parse(screen.getByTestId('panel-entry').textContent!).query).toEqual(
-        expect.objectContaining({ tagId: 'service', projectId: '5', userId: 'admin-scope' })
+        expect.objectContaining({ tagId: 'service', projectId: '5', userId: '99' })
     )
     fireEvent.click(screen.getByText('page2'))
     fireEvent.click(screen.getByText('call'))
@@ -117,14 +139,77 @@ it('offers hourly buckets only for a single selected day and sends exact hour bo
         <OperatorDashboardPreview
             {...props}
             data={hourlyData}
-            filters={{ ...props.filters, startDate: new Date(2026, 9, 24).toISOString(), endDate: new Date(2026, 9, 24, 23, 59, 59, 999).toISOString() }}
+            filters={{
+                ...props.filters,
+                startDate: new Date(2026, 9, 24).toISOString(),
+                endDate: new Date(2026, 9, 24, 23, 59, 59, 999).toISOString()
+            }}
         />
     )
     expect(screen.getByText('byHour')).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: /^2 / }))
+    fireEvent.click(screen.getByRole('button', { name: '2' }))
     expect(JSON.parse(screen.getByTestId('panel-entry').textContent!).query).toEqual(
         expect.objectContaining({ startDate: point.label, endDate: new Date(Date.parse(point.label) + 3600000 - 1).toISOString() })
     )
     view.rerender(<OperatorDashboardPreview {...props} data={hourlyData} filters={{ ...props.filters, endDate: '2026-10-25' }} />)
     expect(screen.queryByText('byHour')).not.toBeInTheDocument()
+})
+
+it('only shows excluded-recognition warning to admins', () => {
+    const view = render(<OperatorDashboardPreview {...props} data={{ ...data, excludedLowQualityCount: 3 }} />)
+    expect(screen.queryByText('DASHBOARD_EXCLUDED_LOW_QUALITY')).not.toBeInTheDocument()
+    view.rerender(<OperatorDashboardPreview {...props} data={{ ...data, excludedLowQualityCount: 3 }} isAdmin />)
+    expect(screen.getByText('DASHBOARD_EXCLUDED_LOW_QUALITY')).toBeInTheDocument()
+})
+it('selects multiple identities and retains the same union on every drilldown', () => {
+    const extra = { ...data.agentScorecards[0], operatorId: '203', operatorName: 'Second' }
+    render(<OperatorDashboardPreview {...props} data={{ ...data, agentScorecards: [...data.agentScorecards, extra] }} />)
+    fireEvent.click(screen.getByRole('button', { name: 'operator', expanded: false }))
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Operator' }))
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Second' }))
+    const selected = JSON.parse(JSON.parse(screen.getByTestId('main-query').textContent!).operatorFilters)
+    expect(selected).toEqual([
+        { userId: '99', operatorId: '218' },
+        { userId: '99', operatorId: '203' }
+    ])
+    fireEvent.click(screen.getByRole('button', { name: /Service/ }))
+    expect(JSON.parse(JSON.parse(screen.getByTestId('panel-entry').textContent!).query.operatorFilters)).toEqual(selected)
+})
+it('sorts operators by score descending by default and reverses on header activation', () => {
+    const rows = [
+        { ...data.agentScorecards[0], operatorName: 'Low', averageScore: 20 },
+        { ...data.agentScorecards[0], operatorId: '203', operatorName: 'High', averageScore: 90 }
+    ]
+    render(<OperatorDashboardPreview {...props} data={{ ...data, agentScorecards: rows }} />)
+    expect(screen.getAllByRole('row')[1]).toHaveTextContent('High')
+    fireEvent.click(screen.getByRole('button', { name: 'score', exact: true }))
+    expect(screen.getAllByRole('row')[1]).toHaveTextContent('Low')
+})
+it('opens call-type segments using exact bucket and type filters', () => {
+    const point = {
+        label: new Date(2026, 9, 24, 13).toISOString(),
+        callsCount: 4,
+        avgScore: 75,
+        avgDuration: 60,
+        byCallType: { incoming: 2, outgoing: 1, internal: 1 }
+    }
+    render(
+        <OperatorDashboardPreview
+            {...props}
+            data={{ ...data, timeSeries: { daily: [], monthly: [], hourly: [point] } }}
+            filters={{
+                ...props.filters,
+                startDate: new Date(2026, 9, 24).toISOString(),
+                endDate: new Date(2026, 9, 24, 23, 59, 59, 999).toISOString()
+            }}
+        />
+    )
+    fireEvent.click(screen.getByRole('button', { name: /^type_outgoing: 1/ }))
+    expect(JSON.parse(screen.getByTestId('panel-entry').textContent!).query).toEqual(
+        expect.objectContaining({
+            callType: 'outgoing',
+            startDate: point.label,
+            endDate: new Date(Date.parse(point.label) + 3600000 - 1).toISOString()
+        })
+    )
 })

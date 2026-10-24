@@ -2,6 +2,19 @@ import { customDateRange, datePreset, localDateInput, shiftDateRange } from './d
 
 describe('preview date presets', () => {
     const now = new Date(2026, 9, 24, 12, 30)
+    it('selects a full calendar year and navigates across leap years', () => {
+        const year = datePreset('year', new Date(2024, 1, 29))
+        expect(localDateInput(year.startDate)).toBe('2024-01-01')
+        expect(localDateInput(year.endDate)).toBe('2024-12-31')
+        expect(new Date(year.endDate).getHours()).toBe(23)
+        const previous = shiftDateRange(year, -1)
+        expect(localDateInput(previous.startDate)).toBe('2023-01-01')
+        expect(localDateInput(previous.endDate)).toBe('2023-12-31')
+        expect(shiftDateRange(previous, 1)).toEqual(year)
+        const next = shiftDateRange(year, 1)
+        expect(localDateInput(next.startDate)).toBe('2025-01-01')
+        expect(localDateInput(next.endDate)).toBe('2025-12-31')
+    })
     it.each([
         ['today', 24],
         ['yesterday', 23],

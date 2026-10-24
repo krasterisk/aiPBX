@@ -109,7 +109,6 @@ import {
 } from '@/pages/PublishPage'
 import { DashboardOverviewPage } from '@/pages/DashboardOverviewPage'
 import { AIAnalyticsPage } from '@/pages/AIAnalyticsPage'
-import { DashboardCallRecordsPage } from '@/pages/DashboardCallRecordsPage'
 import { DashboardCallRecordsPreviewPage } from '@/pages/DashboardCallRecordsPreviewPage'
 import {
   LegalPage,
@@ -169,7 +168,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.DASHBOARD_CALL_RECORDS]: {
     path: getRouteDashboardCallRecords(),
     authOnly: true,
-    element: <DashboardCallRecordsPage />
+    element: <DashboardCallRecordsPreviewPage />
   },
   [AppRoutes.DASHBOARD_CALL_RECORDS_PREVIEW]: {
     path: getRouteDashboardCallRecordsPreview(),

@@ -31,8 +31,8 @@
     "topicsHint": "Ein Thema je Anruf. Thema für Details wählen.",
     "multipleTopics": "Mehrere Themen pro Anruf möglich; Anteile können zusammen über 100% liegen.",
     "noTopics": "Keine Themendaten für das gewählte Projekt.",
-    "quality": "Qualitätskriterien",
-    "qualityHint": "Durchschnittswerte. Kriterium für Belege und Beispiele wählen.",
+    "quality": "Metriken",
+    "qualityHint": "Alle Projektmetriken. Für Begründungen und Beispiele auswählen.",
     "lessMetrics": "Weniger Kriterien",
     "allMetrics": "Alle Kriterien ({{count}})",
     "customMetrics": "Weitere Projektkriterien",
@@ -77,5 +77,15 @@
     "byYear": "Nach Jahren",
     "previousPeriod": "Vorheriger Zeitraum",
     "nextPeriod": "Nächster Zeitraum",
-    "preset_week": "Woche"
+    "preset_week": "Woche",
+    "selectedOperators": "Ausgewählt: {{count}}",
+    "searchOperators": "Mitarbeiter suchen",
+    "type_incoming": "Eingehend",
+    "type_outgoing": "Ausgehend",
+    "type_internal": "Intern",
+    "callScoreHint": "Durchschnittliche Gesprächsbewertung (0–100). Metriken: {{metrics}}",
+    "sortBy": "Sortieren nach",
+    "sortAscending": "Aufsteigend sortieren",
+    "sortDescending": "Absteigend sortieren",
+    "preset_year": "Jahr"
 }

@@ -17,6 +17,8 @@ import { DashboardHint } from '../DashboardHint'
 const EVIDENCE_PAGE_SIZE = 20
 
 export interface DashboardFilters {
+    operatorFilters?: string
+    callType?: 'incoming' | 'outgoing' | 'internal'
     startDate?: string
     endDate?: string
     projectId?: string
@@ -44,6 +46,8 @@ function buildQueryArgs(
 ) {
     return {
         ...(operatorId ? { operatorId } : operatorName ? { operatorName } : {}),
+        operatorFilters: filters.operatorFilters,
+        callType: filters.callType,
         startDate: filters.startDate,
         endDate: filters.endDate,
         projectId: filters.projectId,

@@ -1,4 +1,4 @@
-export type DatePreset = 'today' | 'yesterday' | 'week' | 'last30' | 'month'
+export type DatePreset = 'today' | 'yesterday' | 'week' | 'last30' | 'month' | 'year'
 export interface DateRange {
     startDate: string
     endDate: string
@@ -19,6 +19,10 @@ export function datePreset(preset: DatePreset, now = new Date()): DateRange {
     if (preset === 'month') {
         start.setDate(1)
         end.setMonth(end.getMonth() + 1, 0)
+    }
+    if (preset === 'year') {
+        start.setMonth(0, 1)
+        end.setMonth(11, 31)
     }
     return { startDate: start.toISOString(), endDate: end.toISOString() }
 }

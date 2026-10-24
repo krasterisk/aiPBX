@@ -63,6 +63,7 @@ function PreviewContent() {
         >
             <OperatorDashboardPreview
                 key={JSON.stringify(filters)}
+                isAdmin={admin}
                 filters={filters}
                 data={query.data}
                 loading={query.isLoading || query.isFetching || !projects}

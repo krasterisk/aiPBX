@@ -11,6 +11,7 @@ import { PeriodPicker } from '@/entities/PeriodPicker'
 import { PeriodExtendedFilters } from '@/features/PeriodExtendedFilter'
 import { currencySymbols } from '@/entities/User'
 import { getTenantCurrencyCode } from '@/shared/lib/domain'
+import { DashboardPeriodHeader } from './DashboardPeriodHeader'
 
 interface FiltersGroupProps {
   className?: string
@@ -66,11 +67,15 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
   return (
     <Card variant={'clear'} padding={'16'} max className={className}>
       <VStack gap={'16'} max>
-        <HStack max justify="between" align="center" gap="16" wrap="wrap">
+        {periodControl ? (
+          <DashboardPeriodHeader title={title && <Text title={title} size="l" bold />}>
+            {periodControl(() => { setFilterShow(true) })}
+          </DashboardPeriodHeader>
+        ) : <HStack max justify="between" align="center" gap="16" wrap="wrap">
           {title && (
             <Text title={title} size="l" bold />
           )}
-          {periodControl ? periodControl(() => { setFilterShow(true) }) : <PeriodPicker
+          <PeriodPicker
             userId={userId}
             tab={tab}
             startDate={startDate}
@@ -81,8 +86,8 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
             onChangeStartDate={onChangeStartDate}
             onChangeDateRange={onChangeDateRange}
             onOpenFilters={() => { setFilterShow(true) }}
-          />}
-        </HStack>
+          />
+        </HStack>}
         <PeriodExtendedFilters
           assistantId={assistantId}
           assistants={assistants}

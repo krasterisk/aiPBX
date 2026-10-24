@@ -1,4 +1,4 @@
-import { trendSeries, isSingleDay, dayQuery, hourQuery, operatorQuery, previewCsv, previewDuration } from './previewModel'
+import { trendSeries, isSingleDay, dayQuery, hourQuery, operatorQuery, previewCsv, previewDuration, customMetricDisplay, scoreTone, sortedOperators } from './previewModel'
 
 describe('preview query boundaries', () => {
     it('preserves an operator account and stable identity, avoiding fuzzy names', () => {
@@ -25,6 +25,25 @@ describe('preview query boundaries', () => {
         expect(previewDuration(undefined)).toBe('—')
         expect(previewDuration(0)).toBe('0:00')
     })
+})
+
+it('normalizes every custom metric to the same percentage scale without fractions in labels', () => {
+    expect(customMetricDisplay({ id: 'a', name: 'A', description: 'Synthetic criterion', type: 'number', min: 1, max: 5 }, { type: 'number', value: 3.2 }).text).toBe('55%')
+    expect(customMetricDisplay({ id: 'a', name: 'A', description: 'Synthetic criterion', type: 'boolean' }, { type: 'boolean', value: 79.6 }).text).toBe('80%')
+    expect(customMetricDisplay({ id: 'a', name: 'A', description: 'Synthetic criterion', type: 'enum' }, { type: 'enum', distribution: { Yes: 3, No: 1 } })).toEqual({ text: 'Yes · 75%', percent: 75, distribution: 'Yes: 75% · No: 25%' })
+    expect(customMetricDisplay({ id: 'a', name: 'A', description: 'Synthetic criterion', type: 'number' }, undefined).text).toBe('—')
+})
+
+it('keeps unscored operators last and assigns stable score colors at threshold boundaries', () => {
+    const rows: any[] = [{ operatorName: 'Unscored', averageScore: 100, scoredCalls: 0 }, { operatorName: 'Low', averageScore: 42 }, { operatorName: 'High', averageScore: 86 }]
+    expect(sortedOperators(rows, 'averageScore', true).map(o => o.operatorName)).toEqual(['High', 'Low', 'Unscored'])
+    expect(sortedOperators(rows, 'averageScore', false).map(o => o.operatorName)).toEqual(['Low', 'High', 'Unscored'])
+    expect([undefined, 49, 50, 79, 80].map(scoreTone)).toEqual(['none', 'low', 'medium', 'medium', 'high'])
+})
+
+it('preserves all three call types when rolling daily buckets into a year', () => {
+    const time = { monthly: [], daily: [{ label: '2026-10-24', callsCount: 6, avgScore: 60, avgDuration: 30, byCallType: { incoming: 3, outgoing: 2, internal: 1 } }, { label: '2026-11-24', callsCount: 4, avgScore: 70, avgDuration: 40, byCallType: { incoming: 2, outgoing: 1, internal: 1 } }] }
+    expect(trendSeries(time, { startDate: '2025-01-01', endDate: '2026-12-31' }).points[0].byCallType).toEqual({ incoming: 5, outgoing: 3, internal: 2 })
 })
 
 it('intersects a UTC hour with the original partial-hour selection', () => {
