@@ -362,7 +362,12 @@ export interface OperatorDashboardResponse {
     negative: number
   }
   timeSeries: {
-    hourly?: Array<{ label: string; callsCount: number; avgScore: number; avgDuration: number }>
+    hourly?: Array<{
+      label: string
+      callsCount: number
+      avgScore: number
+      avgDuration: number
+    }>
     monthly: Array<{
       label: string
       callsCount: number
