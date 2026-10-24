@@ -52,7 +52,7 @@
     "callAnalysis": "Anrufanalyse",
     "topicOperatorsHint": "Kennzahlen zum Thema. Mitarbeiter wählen, um seine Anrufe anzuzeigen.",
     "openCall": "Anrufanalyse {{date}}, {{operator}}",
-    "search": "Rufnummer, Mitarbeiter oder Dateiname",
+    "search": "Nummer, Mitarbeiter oder Gespräch",
     "find": "Suchen",
     "exportPage": "Aktuelle Seite exportieren",
     "page": "{{page}} / {{pages}} · insgesamt {{total}}",

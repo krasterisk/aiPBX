@@ -52,7 +52,7 @@
     "callAnalysis": "通话分析",
     "topicOperatorsHint": "所选主题的指标，选择话务员查看其通话。",
     "openCall": "通话分析 {{date}}，{{operator}}",
-    "search": "号码、话务员或文件名",
+    "search": "号码、坐席或通话文本",
     "find": "搜索",
     "exportPage": "导出当前页",
     "page": "{{page}} / {{pages}} · 共{{total}}条",

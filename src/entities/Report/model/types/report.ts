@@ -318,6 +318,9 @@ export interface OperatorAnalysisResult {
   transcription?: string
   recordUrl?: string
   metrics?: OperatorMetrics
+  analytics?: {
+    metrics?: Record<string, unknown>
+  }
   customMetrics?: Record<string, any>
   summary?: string
   success?: boolean

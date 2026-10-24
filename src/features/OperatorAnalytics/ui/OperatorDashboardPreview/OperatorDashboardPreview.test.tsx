@@ -111,19 +111,19 @@ it('separates failures from empty data and never renders stale panels', () => {
 })
 
 it('offers hourly buckets only for a single selected day and sends exact hour bounds', () => {
-    const point = { label: '2026-10-24T06:00:00.000Z', callsCount: 2, avgScore: 70, avgDuration: 60 }
+    const point = { label: new Date(2026, 9, 24, 13).toISOString(), callsCount: 2, avgScore: 70, avgDuration: 60 }
     const hourlyData = { ...data, timeSeries: { daily: [], monthly: [], hourly: [point] } }
     const view = render(
         <OperatorDashboardPreview
             {...props}
             data={hourlyData}
-            filters={{ ...props.filters, startDate: '2026-10-24T00:00:00+07:00', endDate: '2026-10-24T23:59:59.999+07:00' }}
+            filters={{ ...props.filters, startDate: new Date(2026, 9, 24).toISOString(), endDate: new Date(2026, 9, 24, 23, 59, 59, 999).toISOString() }}
         />
     )
     expect(screen.getByText('byHour')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: /^2 / }))
     expect(JSON.parse(screen.getByTestId('panel-entry').textContent!).query).toEqual(
-        expect.objectContaining({ startDate: '2026-10-24T06:00:00.000Z', endDate: '2026-10-24T06:59:59.999Z' })
+        expect.objectContaining({ startDate: point.label, endDate: new Date(Date.parse(point.label) + 3600000 - 1).toISOString() })
     )
     view.rerender(<OperatorDashboardPreview {...props} data={hourlyData} filters={{ ...props.filters, endDate: '2026-10-25' }} />)
     expect(screen.queryByText('byHour')).not.toBeInTheDocument()

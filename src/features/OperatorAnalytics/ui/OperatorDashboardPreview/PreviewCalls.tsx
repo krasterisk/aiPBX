@@ -30,12 +30,13 @@ export function PreviewCalls({ query, project, page, search, onPage, onSearch, o
     const rows = data?.data ?? []
     const total = data?.total ?? 0
     const pages = Math.max(1, Math.ceil(total / limit))
-    const score = (call: (typeof rows)[number]) =>
-        operatorCallScore(
-            call.metrics
+    const score = (call: (typeof rows)[number]) => {
+        const metrics = call.metrics ?? call.analytics?.metrics
+        return operatorCallScore(
+            metrics
                 ? {
-                      ...call.metrics,
-                      custom_metrics: call.customMetrics ?? (call.metrics as unknown as Record<string, unknown>).custom_metrics
+                      ...metrics,
+                      custom_metrics: call.customMetrics ?? (metrics as unknown as Record<string, unknown>).custom_metrics
                   }
                 : undefined,
             project
@@ -45,6 +46,7 @@ export function PreviewCalls({ query, project, page, search, onPage, onSearch, o
                 : undefined,
             Boolean(project)
         )
+    }
     const operator = (call: (typeof rows)[number]) => {
         const name = (call.assistantName || call.operatorName || '').trim()
         return name && name !== 'Unknown Operator' ? name : String(t('noOperator'))

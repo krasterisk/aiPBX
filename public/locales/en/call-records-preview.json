@@ -52,7 +52,7 @@
     "callAnalysis": "Call analysis",
     "topicOperatorsHint": "Metrics for the selected topic. Select an operator to open their calls.",
     "openCall": "Call analysis {{date}}, {{operator}}",
-    "search": "Phone, operator or file name",
+    "search": "Phone, operator or transcript",
     "find": "Search",
     "exportPage": "Export current page",
     "page": "{{page}} / {{pages}} · {{total}} total",
