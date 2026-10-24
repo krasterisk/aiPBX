@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Alert, Box, Button, Checkbox, FormControlLabel, MenuItem, Stack, TextField, Typography } from '@mui/material'
 import { OperatorProject } from '@/entities/Report'
 import { SchemeResult, SchemeState, TopicScheme, topicSchemeApi } from './topicSchemeApi'
+import { runTopicSchemeChecks } from './topicSchemeChecks'
 
 export function initialTopicScheme(project: OperatorProject): TopicScheme {
     const topics = (project.callTaxonomy ?? []).map(t => ({
@@ -47,8 +48,14 @@ export function TopicSchemeEditor({ project, onApplied }: Props) {
     const [error, setError] = useState('')
     const [confirmApply, setConfirmApply] = useState(false)
     const [expandedTopicId, setExpandedTopicId] = useState<string | null>(null)
-    const busy = saving || checking || applying
+    const [running, setRunning] = useState(false)
+    const busy = saving || checking || applying || running
     const loadedVersion = useRef('')
+    const mounted = useRef(true)
+    useEffect(() => {
+        mounted.current = true
+        return () => { mounted.current = false }
+    }, [])
 
     useEffect(() => {
         const key = `${project.id}:${data?.active?.revision ?? ''}:${data?.draft?.revision ?? ''}`
@@ -111,15 +118,23 @@ export function TopicSchemeEditor({ project, onApplied }: Props) {
     }
     const run = async (cases: Array<{ text: string, expectedTopicId?: string }>) => {
         setError('')
+        setRunning(true)
+        setConfirmApply(false)
+        setResults([])
         try {
             const current = dirty || !state?.draft ? await save() : state
             if (!current?.draft) return
-            const response = await check({ id: project.id, revision: current.draft.revision, cases }).unwrap()
-            setState(response.state)
-            setResults(response.results)
-            setConfirmApply(false)
+            await runTopicSchemeChecks(cases,
+                async one => await check({ id: project.id, revision: current.draft!.revision, cases: one }).unwrap(),
+                response => { setState(response.state); setResults(response.results) },
+                () => !mounted.current)
         } catch {
-            setError(String(t('TOPIC_SCHEME_CHECK_ERROR')))
+            if (mounted.current) {
+                setError(String(t('TOPIC_SCHEME_CHECK_ERROR')))
+                setState(old => old?.draft ? { ...old, draft: { ...old.draft, checkRun: { id: old.draft.checkRun?.id ?? '', status: 'failed' } } } : old)
+            }
+        } finally {
+            if (mounted.current) setRunning(false)
         }
     }
     const applyDraft = async () => {

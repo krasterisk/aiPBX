@@ -40,10 +40,20 @@ def verified_host_keys(output, expected=HOST_FINGERPRINT):
 
 
 def run(args):
-    result = subprocess.run(args, capture_output=True, text=True, timeout=900)
-    if result.returncode:
-        raise RuntimeError('Release transport ' + args[0] + ' failed, exit ' + str(result.returncode))
-    return result.stdout
+    attempts = 3 if args[0] in ('ssh', 'scp') else 1
+    for attempt in range(attempts):
+        result = subprocess.run(args, capture_output=True, text=True, timeout=900)
+        if not result.returncode:
+            return result.stdout
+        # Do not print raw SSH stderr: it can include local key paths or remote data.
+        fatal = any(message in result.stderr for message in (
+            'Permission denied', 'Host key verification failed', 'REMOTE HOST IDENTIFICATION',
+            'invalid format', 'Bad configuration'))
+        if result.returncode != 255 or fatal or attempt == attempts - 1:
+            category = 'authentication_or_host_key' if fatal else 'transport' if result.returncode == 255 else 'remote_command'
+            raise RuntimeError('Release ' + args[0] + ' failed: ' + category + ', exit ' + str(result.returncode))
+        print('Transient ' + args[0] + ' transport interruption; retry ' + str(attempt + 1) + '/' + str(attempts))
+        time.sleep((5, 15)[attempt])
 
 
 def wait_authenticated(command):
@@ -132,7 +142,17 @@ assert p.is_dir() and p.stat().st_uid==os.getuid()
 marker=p/'.owner'
 if existed: assert marker.read_text()=='frontend-actions-artifacts-v1'
 else: marker.write_text('frontend-actions-artifacts-v1')
-pathlib.Path(TARGET).mkdir(mode=0o700)
+target=pathlib.Path(TARGET)
+assert not target.is_symlink()
+owner=target/'.owner'
+identity='frontend-actions-artifact:'+target.name
+if target.exists():
+ assert target.is_dir() and target.stat().st_uid==os.getuid()
+ assert owner.read_text()==identity
+ assert {item.name for item in target.iterdir()} <= {'.owner','frontend-release.tar.gz','frontend-release.tar.gz.sha256'}
+else:
+ target.mkdir(mode=0o700)
+ owner.write_text(identity)
 """.replace('TARGET', repr(target))
     return 'python3 -c ' + shlex.quote(code)
 
