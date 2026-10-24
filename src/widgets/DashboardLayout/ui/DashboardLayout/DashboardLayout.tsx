@@ -27,11 +27,12 @@ const reducers: ReducersList = {
 }
 
 interface DashboardLayoutInnerProps {
+    periodControl?: (onOpenFilters: () => void) => ReactNode
     title: string
     children: ReactNode
 }
 
-const DashboardLayoutInner = memo(({ title, children }: DashboardLayoutInnerProps) => {
+const DashboardLayoutInner = memo(({ title, children, periodControl }: DashboardLayoutInnerProps) => {
     const dispatch = useAppDispatch()
 
     const tab = useSelector(getDashboardTab)
@@ -81,6 +82,7 @@ const DashboardLayoutInner = memo(({ title, children }: DashboardLayoutInnerProp
         <VStack gap={'16'} max>
             <FiltersGroup
                 title={title}
+                periodControl={periodControl}
                 tab={tab}
                 isInited={isInited}
                 userId={userId}
@@ -102,12 +104,13 @@ const DashboardLayoutInner = memo(({ title, children }: DashboardLayoutInnerProp
 })
 
 interface DashboardLayoutProps {
+    periodControl?: (onOpenFilters: () => void) => ReactNode
     title: string
     children: ReactNode
 }
 
-export const DashboardLayout = memo(({ title, children }: DashboardLayoutProps) => (
+export const DashboardLayout = memo(({ title, children, periodControl }: DashboardLayoutProps) => (
     <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
-        <DashboardLayoutInner title={title}>{children}</DashboardLayoutInner>
+        <DashboardLayoutInner title={title} periodControl={periodControl}>{children}</DashboardLayoutInner>
     </DynamicModuleLoader>
 ))

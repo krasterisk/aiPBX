@@ -11,3 +11,5 @@ export { TaxonomyEditor } from './ui/ProjectWizard/TaxonomyEditor'
 export { ALL_DEFAULT_METRICS } from './lib/metricVisual'
 export { consumeInsightDrilldown } from './lib/insightDrilldown'
 export type { InsightDrilldownPayload } from './lib/insightDrilldown'
+
+export { OperatorDashboardPreview } from './ui/OperatorDashboardPreview/OperatorDashboardPreview'

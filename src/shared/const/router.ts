@@ -14,6 +14,7 @@ export enum AppRoutes {
   DASHBOARD_OVERVIEW = 'dashboard_overview',
   DASHBOARD_AI_ANALYTICS = 'dashboard_ai_analytics',
   DASHBOARD_CALL_RECORDS = 'dashboard_call_records',
+  DASHBOARD_CALL_RECORDS_PREVIEW = 'dashboard_call_records_preview',
   PAYMENT = 'payment',
   ASSISTANTS = 'assistants',
   ASSISTANT_CREATE = 'assistant_create',
@@ -82,6 +83,7 @@ export const getRouteDashboard = () => '/dashboard'
 export const getRouteDashboardOverview = () => '/dashboard/overview'
 export const getRouteDashboardAIAnalytics = () => '/dashboard/ai-analytics'
 export const getRouteDashboardCallRecords = () => '/dashboard/call-records'
+export const getRouteDashboardCallRecordsPreview = () => '/dashboard/call-records-preview'
 export const getRouteAssistantEdit = (id: string) => `/assistants/${id}`
 export const getRouteAssistantCreate = () => '/assistants/create'
 export const getRouteCalls = () => '/calls'
@@ -153,6 +155,7 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteDashboardOverview()]: AppRoutes.DASHBOARD_OVERVIEW,
   [getRouteDashboardAIAnalytics()]: AppRoutes.DASHBOARD_AI_ANALYTICS,
   [getRouteDashboardCallRecords()]: AppRoutes.DASHBOARD_CALL_RECORDS,
+  [getRouteDashboardCallRecordsPreview()]: AppRoutes.DASHBOARD_CALL_RECORDS_PREVIEW,
   [getRouteAssistants()]: AppRoutes.ASSISTANTS,
   [getRouteAssistantCreate()]: AppRoutes.ASSISTANT_CREATE,
   [getRouteAssistantEdit(':id')]: AppRoutes.ASSISTANT_EDIT,

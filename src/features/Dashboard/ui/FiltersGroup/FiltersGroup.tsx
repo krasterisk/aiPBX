@@ -15,6 +15,7 @@ import { getTenantCurrencyCode } from '@/shared/lib/domain'
 interface FiltersGroupProps {
   className?: string
   title?: string
+  periodControl?: (onOpenFilters: () => void) => React.ReactNode
   tab?: string
   userId?: string
   assistantId?: string[]
@@ -37,6 +38,7 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
   const {
     className,
     title,
+    periodControl,
     tab,
     userId,
     assistantId,
@@ -68,7 +70,7 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
           {title && (
             <Text title={title} size="l" bold />
           )}
-          <PeriodPicker
+          {periodControl ? periodControl(() => { setFilterShow(true) }) : <PeriodPicker
             userId={userId}
             tab={tab}
             startDate={startDate}
@@ -79,7 +81,7 @@ export const FiltersGroup = memo((props: FiltersGroupProps) => {
             onChangeStartDate={onChangeStartDate}
             onChangeDateRange={onChangeDateRange}
             onOpenFilters={() => { setFilterShow(true) }}
-          />
+          />}
         </HStack>
         <PeriodExtendedFilters
           assistantId={assistantId}

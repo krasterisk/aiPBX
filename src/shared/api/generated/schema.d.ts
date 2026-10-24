@@ -5730,6 +5730,19 @@ export interface components {
              */
             audioSha256: string;
         };
+        DashboardTimePointDto: {
+            /** @description UTC date, month, or ISO hour-bucket start */
+            label: string;
+            callsCount: number;
+            avgScore: number;
+            avgDuration: number;
+        };
+        DashboardTimeSeriesDto: {
+            daily: components["schemas"]["DashboardTimePointDto"][];
+            monthly: components["schemas"]["DashboardTimePointDto"][];
+            /** @description Zero-filled UTC hours for single-day ranges (up to 25 hours including DST); empty for longer ranges or no records. Daily/monthly fields are unchanged. */
+            hourly: components["schemas"]["DashboardTimePointDto"][];
+        };
     };
     responses: never;
     parameters: never;
@@ -10511,6 +10524,7 @@ export interface operations {
                 content: {
                     "application/json": {
                         operatorTopicStats?: components["schemas"]["OperatorTopicStatsDto"];
+                        timeSeries?: components["schemas"]["DashboardTimeSeriesDto"];
                     } & {
                         [key: string]: unknown;
                     };
