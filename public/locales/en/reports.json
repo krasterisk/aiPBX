@@ -697,5 +697,10 @@
   "TOPIC_SCHEME_REMOVE_TEST": "Remove from test set",
   "TOPIC_SCHEME_CONTEXT_HINT": "Describe your company and operator evaluation rules. Define topic criteria in Call topics.",
   "TOPIC_SCHEME_EDIT": "Edit",
-  "TOPIC_SCHEME_DRAFT_CONTEXT": "Context to apply together with this scheme"
+  "TOPIC_SCHEME_DRAFT_CONTEXT": "Context to apply together with this scheme",
+    "TOPIC_SCHEME_SETTINGS": "Settings",
+    "TOPIC_SCHEME_CHECK_TAB": "Testing",
+    "TOPIC_SCHEME_TABS": "Call topics",
+    "TOPIC_SCHEME_DRAG": "Drag topic",
+    "TOPIC_SCHEME_DRAG_HINT": "Drag a topic using its handle. Keyboard: Space to pick up, arrows to choose a position, Space to drop, Escape to cancel. The fallback topic always stays last."
 }

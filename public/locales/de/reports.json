@@ -736,5 +736,10 @@
   "TOPIC_SCHEME_REMOVE_TEST": "Aus Testsatz entfernen",
   "TOPIC_SCHEME_CONTEXT_HINT": "Beschreiben Sie Ihr Unternehmen und die Regeln zur Operatorbewertung. Themenkriterien gehören in den Bereich Anrufthemen.",
   "TOPIC_SCHEME_EDIT": "Bearbeiten",
-  "TOPIC_SCHEME_DRAFT_CONTEXT": "Mit diesem Schema anzuwendender Kontext"
+  "TOPIC_SCHEME_DRAFT_CONTEXT": "Mit diesem Schema anzuwendender Kontext",
+    "TOPIC_SCHEME_SETTINGS": "Einstellungen",
+    "TOPIC_SCHEME_CHECK_TAB": "Prüfung",
+    "TOPIC_SCHEME_TABS": "Anrufthemen",
+    "TOPIC_SCHEME_DRAG": "Thema ziehen",
+    "TOPIC_SCHEME_DRAG_HINT": "Ziehen Sie ein Thema am Griff. Tastatur: Leertaste zum Aufnehmen, Pfeiltasten für die Position, Leertaste zum Ablegen, Escape zum Abbrechen. Das Ersatzthema bleibt immer zuletzt."
 }
