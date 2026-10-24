@@ -29,7 +29,7 @@ import {
 } from '@/entities/Report'
 import { WizardReviewSection } from './WizardReviewSection'
 import { WizardHeader } from './WizardHeader'
-import { TaxonomyEditor } from './TaxonomyEditor'
+import { TopicSchemeEditor } from './TopicSchemeEditor'
 import { SectionChevron } from './SectionChevron'
 import { MetricPromptEditor } from './MetricPromptEditor'
 import { Card } from '@/shared/ui/redesigned/Card'
@@ -153,16 +153,17 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                     <HStack max justify={'between'} align={'center'}
                         onClick={() => { setShowPrompt(prev => !prev) }}
                         className={cls.clickable}>
-                        <Text text={String(t('Системный промпт'))} bold />
+                        <Text text={String(t('TOPIC_SCHEME_BUSINESS_CONTEXT'))} bold />
                         <SectionChevron open={showPrompt} />
                     </HStack>
                     {showPrompt && (
                         <MetricPromptEditor
                             kind="project"
-                            name={String(t('Системный промпт'))}
+                            name={String(t('TOPIC_SCHEME_BUSINESS_CONTEXT'))}
                             value={systemPrompt}
                             onChange={value => dispatch(projectWizardActions.setSystemPrompt(value))}
                             rows={4}
+                            helperText={String(t('TOPIC_SCHEME_CONTEXT_HINT'))}
                         />
                     )}
                 </VStack>
@@ -204,12 +205,11 @@ export const ProjectSettingsForm = memo(({ editProject, onClose, onSuccess }: Pr
                         <SectionChevron open={showTaxonomy} />
                     </HStack>
                     {showTaxonomy && (
-                        <TaxonomyEditor
-                            taxonomy={callTaxonomy}
-                            singleTopic={singleTopic}
-                            onSingleTopicChange={value => dispatch(projectWizardActions.setSingleTopic(value))}
-                            onChange={(taxonomy) => dispatch(projectWizardActions.setCallTaxonomy(taxonomy))}
-                        />
+                        <TopicSchemeEditor project={editProject} onApplied={() => {
+                            dispatch(projectWizardActions.close())
+                            onSuccess?.()
+                            onClose()
+                        }} />
                     )}
                 </VStack>
             </Card>

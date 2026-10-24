@@ -3327,6 +3327,77 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/operator-analytics/projects/{id}/topic-scheme": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read active topic scheme, pending draft and up to 20 applied versions */
+        get: operations["TopicSchemeController_read"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/projects/{id}/topic-scheme/draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Save a new unchecked draft using optimistic concurrency */
+        post: operations["TopicSchemeController_draft"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/projects/{id}/topic-scheme/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Preview full analysis without changing call analyses or billing records
+         * @description Text is sent to configured analytics providers. Draft/history store hashes and outcomes, never the test transcript. All labelled checks must match and cover every topic before apply.
+         */
+        post: operations["TopicSchemeController_check"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/projects/{id}/topic-scheme/apply": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Activate an unchanged, successfully checked draft for future analyses */
+        post: operations["TopicSchemeController_apply"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -11010,6 +11081,210 @@ export interface operations {
         responses: {
             /** @description Test alert delivery result */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TopicSchemeController_read: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Project id. Access is scoped to the authenticated owner or administrator. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid scheme, failed checks or missing topic coverage. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Project not accessible to this account. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Draft/project changed or another check is running; reload before retrying. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TopicSchemeController_draft: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Project id. Access is scoped to the authenticated owner or administrator. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    scheme: {
+                        /** @enum {integer} */
+                        version: 1;
+                        fallbackTopicId: string;
+                        /** @description Priority order; fallback is selected only if no other topic matches. */
+                        topics: {
+                            id: string;
+                            name: string;
+                            when: string;
+                            exclude: string;
+                            examples: string[];
+                        }[];
+                    };
+                    /** Format: uuid */
+                    expectedDraftRevision: string | null;
+                    /** @description Optional legacy context cleanup. Checked and activated atomically with this draft; omission preserves current context. */
+                    businessContext?: string | null;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid scheme, failed checks or missing topic coverage. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Project not accessible to this account. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Draft/project changed or another check is running; reload before retrying. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TopicSchemeController_check: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Project id. Access is scoped to the authenticated owner or administrator. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    revision: string;
+                    cases: {
+                        text: string;
+                        expectedTopicId?: string;
+                    }[];
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid scheme, failed checks or missing topic coverage. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Project not accessible to this account. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Draft/project changed or another check is running; reload before retrying. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TopicSchemeController_apply: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Project id. Access is scoped to the authenticated owner or administrator. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    revision: string;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid scheme, failed checks or missing topic coverage. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Project not accessible to this account. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Draft/project changed or another check is running; reload before retrying. */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
