@@ -153,6 +153,7 @@ export interface SpeechAndInteractionQuality {
 }
 
 export interface AnalyticsMetrics {
+  _criterion_statuses?: Record<string, 'assessed' | 'not_applicable' | 'insufficient_evidence'>
   // Nested bot-call metrics
   business_impact?: BusinessImpact
   scenario_analysis?: ScenarioAnalysis
@@ -160,15 +161,15 @@ export interface AnalyticsMetrics {
   accuracy_and_efficiency?: AccuracyAndEfficiency
   speech_and_interaction_quality?: SpeechAndInteractionQuality
   // Flat operator metrics (from file-upload analytics)
-  greeting_quality?: number
-  script_compliance?: number
-  politeness_empathy?: number
-  active_listening?: number
-  objection_handling?: number
-  product_knowledge?: number
-  problem_resolution?: number
-  speech_clarity_pace?: number
-  closing_quality?: number
+  greeting_quality?: number | null
+  script_compliance?: number | null
+  politeness_empathy?: number | null
+  active_listening?: number | null
+  objection_handling?: number | null
+  product_knowledge?: number | null
+  problem_resolution?: number | null
+  speech_clarity_pace?: number | null
+  closing_quality?: number | null
   customer_sentiment?: string
   summary?: string
   success?: boolean
@@ -199,6 +200,14 @@ export interface AnalyticsMetrics {
 }
 
 export interface Analytics {
+  qualityRunId?: string | null
+  qualityScorecardId?: string | null
+  qualityScore?: number | null
+  qualityStatus?: 'scored' | 'needs_review' | 'unscorable' | null
+  qualityCoverage?: number | null
+  qualityVersion?: string | null
+  qualityContextIncomplete?: boolean | null
+  qualitySummary?: { csat: number | null, sentiment: string | null, success: boolean | null } | null
   id?: number
   channelId: string
   metrics?: AnalyticsMetrics
@@ -280,15 +289,15 @@ export interface TopIssue {
 // Operator Analytics Types
 
 export interface OperatorMetrics {
-  greeting_quality: number
-  script_compliance: number
-  politeness_empathy: number
-  active_listening: number
-  objection_handling: number
-  product_knowledge: number
-  problem_resolution: number
-  speech_clarity_pace: number
-  closing_quality: number
+  greeting_quality: number | null
+  script_compliance: number | null
+  politeness_empathy: number | null
+  active_listening: number | null
+  objection_handling: number | null
+  product_knowledge: number | null
+  problem_resolution: number | null
+  speech_clarity_pace: number | null
+  closing_quality: number | null
   customer_sentiment: 'Positive' | 'Neutral' | 'Negative'
   summary?: string
   success?: boolean
@@ -320,9 +329,7 @@ export interface OperatorAnalysisResult {
   transcription?: string
   recordUrl?: string
   metrics?: OperatorMetrics
-  analytics?: {
-    metrics?: Record<string, unknown>
-  }
+  analytics?: { metrics?: Record<string, unknown> }
   customMetrics?: Record<string, any>
   summary?: string
   success?: boolean
@@ -350,6 +357,12 @@ export interface OperatorAggregatedMetrics {
 }
 
 export interface OperatorDashboardResponse {
+  successfulCount?: number
+  unsuccessfulCount?: number
+  qualityVersion?: string
+  scoredCalls?: number
+  scorecardRevisions?: number
+  historicalDerivedCalls?: number
   operatorTopicStats?: OperatorTopicStats
   totalAnalyzed: number
   /** Display total: RUB sum on RU tenant, else USD */
@@ -367,6 +380,7 @@ export interface OperatorDashboardResponse {
     negative: number
   }
   timeSeries: {
+    yearly?: Array<{ label: string, callsCount: number, avgScore: number, avgDuration: number, scoredCalls?: number, byCallType?: { incoming: number, outgoing: number, internal: number } }>
     hourly?: Array<{
       label: string
       byCallType?: { incoming: number, outgoing: number, internal: number }
@@ -391,6 +405,7 @@ export interface OperatorDashboardResponse {
   }
   insightsAvailable: boolean
   customMetricsAggregated?: Record<string, {
+    normalized?: number | null
     type: MetricDefinition['type']
     value?: number
     distribution?: Record<string, number>
@@ -427,6 +442,7 @@ export interface AgentScorecard {
 }
 
 export interface OperatorEvidenceItem {
+  normalizedScore?: number | null
   channelId: string
   createdAt: string
   value: number | boolean | string | null
@@ -435,6 +451,7 @@ export interface OperatorEvidenceItem {
 }
 
 export interface OperatorEvidenceMetric {
+  normalizedAverage?: number | null
   metricId: string
   origin: 'default' | 'custom' | 'summary'
   label?: string
@@ -568,6 +585,7 @@ export type MetricOverrideOrigin = 'default' | 'custom' | 'summary'
 
 /** Supervisor correction of an LLM metric value (stored separately from LLM output). */
 export interface MetricOverride {
+  status?: 'assessed' | 'not_applicable' | 'insufficient_evidence' | null
   id: number
   channelId: string
   userId: string
@@ -583,6 +601,7 @@ export interface MetricOverride {
 }
 
 export interface MetricOverrideInput {
+  status?: 'assessed' | 'not_applicable' | 'insufficient_evidence'
   metricId: string
   origin?: MetricOverrideOrigin
   numValue?: number | null

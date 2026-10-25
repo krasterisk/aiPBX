@@ -2,6 +2,7 @@ export type {
   AllReports,
   Report,
   ReportEvent,
+  ReportDialog,
   ReportFilters,
   BillingRecord,
   AIAnalyticsResponse,
@@ -35,6 +36,7 @@ export type {
   OperatorProject,
   OperatorApiToken,
   MetricDefinition,
+  MetricOverrideInput,
   TagDefinition,
   DefaultMetricKey,
   MetricPolarity,
@@ -65,6 +67,7 @@ export {
 export { initReportsPage } from './model/service/initReportsPage/initReportsPage'
 
 export { useReportDialog } from './hooks/useReportDialog'
+export { MetricOverridePanel } from './ui/ReportShowAnalytics/MetricOverridePanel'
 
 export {
   reportsPageSlice,
@@ -109,6 +112,8 @@ export {
   WITHOUT_PROJECT_FILTER,
   useLazyGetReports,
   useUpdateCallTags,
+  useSaveMetricOverrides,
+  useDeleteMetricOverride,
 } from './api/reportApi'
 
 export { ReportExpandedPanel } from './ui/ReportExpandedPanel/ReportExpandedPanel'
@@ -118,6 +123,7 @@ export {
   CallTagChips,
   resolveTagDisplayName,
   resolveTagColor,
+  slugifyTagId,
 } from './ui/CallTagChips'
 export type { CallTagChipsProps, CallTagChipsEditConfig } from './ui/CallTagChips'
 export { useReportFilters } from './lib/useReportFilters'
@@ -171,3 +177,8 @@ export { CallPhone } from './ui/CallPhone/CallPhone'
 
 export { useGetCallJournalQuery, useLazyGetCallJournalQuery, useGetCallJournalOptionsQuery } from './api/journalApi'
 export type { JournalQuery, JournalPersonOption } from './api/journalApi'
+export { useGetQualityDetailQuery, useGetQualityHistoryQuery, useGetQualityRulesQuery, useSaveQualityRulesMutation } from './api/qualityApi'
+export { publishedQuality, formatQualityScore, JOURNAL_METRIC_LABELS } from './model/types/quality'
+export type { QualityRule, QualityConfig, QualityDetail, QualityHistoryItem } from './model/types/quality'
+
+export { useAnalyzeQualityPreviewMutation, useQualityJournalQuery, useLazyQualityJournalQuery, useSaveQualityPreviewOverridesMutation, useDeleteQualityPreviewOverrideMutation } from './api/qualityPreviewApi'

@@ -1,0 +1,100 @@
+.editor {
+    display: grid;
+    gap: 16px;
+    width: 100%;
+    color: var(--text-redesigned);
+}
+
+.editor p {
+    margin: 0;
+}
+
+.editor label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.note {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.editor input:not([type="checkbox"]),
+.editor select,
+.editor textarea {
+    border: 1px solid var(--icon-redesigned);
+    border-radius: 8px;
+    background: var(--light-bg-redesigned);
+    color: inherit;
+    padding: 8px;
+    max-width: 100%;
+}
+
+.editor input[type="number"] {
+    width: 90px;
+}
+
+.rule {
+    border-bottom: 1px solid var(--light-bg-redesigned);
+    padding: 8px 0;
+}
+
+.rule summary {
+    cursor: pointer;
+}
+
+.rule summary span {
+    display: block;
+    font-size: 12px;
+    opacity: 0.7;
+    padding: 4px 0 4px 18px;
+}
+
+.fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 0;
+}
+
+.fields label {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.fields select {
+    min-width: 0;
+    width: 100%;
+}
+
+.mapping {
+    flex-direction: column;
+    align-items: stretch !important;
+    width: 100%;
+}
+
+.mapping textarea {
+    min-height: 90px;
+}
+
+.editor button {
+    justify-self: start;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--accent-redesigned);
+    color: inherit;
+    background: var(--light-bg-redesigned);
+    cursor: pointer;
+}
+
+.editor button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}

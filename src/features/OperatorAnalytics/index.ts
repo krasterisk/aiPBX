@@ -15,3 +15,5 @@ export type { InsightDrilldownPayload } from './lib/insightDrilldown'
 export { OperatorDashboardPreview } from './ui/OperatorDashboardPreview/OperatorDashboardPreview'
 
 export { operatorCallScore } from './lib/operatorCallScore'
+
+export { QualityRulesEditor } from './ui/ProjectWizard/QualityRulesEditor'

@@ -3398,6 +3398,199 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/operator-analytics/quality/{channelId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OperatorAnalyticsController_qualityDetail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/quality/{channelId}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OperatorAnalyticsController_qualityHistory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/operator-analytics/projects/{id}/quality-rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OperatorAnalyticsController_qualityRules"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["OperatorAnalyticsController_saveQualityRules"];
+        trace?: never;
+    };
+    "/api/quality-preview/projects/{id}/rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["QualityPreviewController_rules"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["QualityPreviewController_saveRules"];
+        trace?: never;
+    };
+    "/api/quality-preview/calls/{channelId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["QualityPreviewController_detail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/quality-preview/calls/{channelId}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["QualityPreviewController_history"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/quality-preview/calls/{channelId}/analyze": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["QualityPreviewController_analyze"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/quality-preview/calls/{channelId}/overrides": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["QualityPreviewController_correct"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/quality-preview/calls/{channelId}/overrides/{metricId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["QualityPreviewController_reset"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/quality-preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AiCdrController_qualityPreview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/journal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Preview journal with server-side multiselect (legacy page unchanged) */
+        get: operations["AiCdrController_journal"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/journal/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AiCdrController_journalOptions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -5304,6 +5497,8 @@ export interface components {
             targetProjectId: number;
         };
         OperatorEvidenceItemDto: {
+            /** @description Normalized quality value under this call rule snapshot, 0–100 */
+            normalizedScore?: number | null;
             /** @example 12345 */
             channelId: string;
             /** @example 2026-07-30T10:00:00.000Z */
@@ -5316,6 +5511,7 @@ export interface components {
             quote?: string;
         };
         OperatorEvidenceMetricDto: {
+            normalizedAverage?: number | null;
             /** @example greeting_quality */
             metricId: string;
             /**
@@ -5349,7 +5545,7 @@ export interface components {
             /** @example 38 */
             scoredCalls: number;
             /** @example 71.25 */
-            averageScore: number;
+            averageScore: number | null;
             /** @example false */
             sampleCapped: boolean;
             metrics: components["schemas"]["OperatorEvidenceMetricDto"][];
@@ -5748,6 +5944,116 @@ export interface components {
             incoming: number;
             outgoing: number;
             internal: number;
+        };
+        AiAnalytics: {
+            qualityRunId?: string | null;
+            qualitySummary?: Record<string, never> | null;
+            qualityScorecardId?: string | null;
+            /** @description Published deterministic quality score, 0–100. Null is not zero. */
+            qualityScore?: number | null;
+            /** @enum {string|null} */
+            qualityStatus?: "scored" | "needs_review" | "unscorable" | null;
+            qualityCoverage?: number | null;
+            qualityVersion?: string | null;
+            qualityContextIncomplete?: boolean | null;
+            /**
+             * @description Channel uniqueId
+             * @example 123
+             */
+            channelId: string;
+            /**
+             * @description Full analytics metrics JSON
+             * @example {"accuracy": 90}
+             */
+            metrics: Record<string, never>;
+            /**
+             * @description Short summary of the call
+             * @example Call was successful
+             */
+            summary: string;
+            /**
+             * @description Overall sentiment
+             * @example Positive
+             */
+            sentiment: string;
+            /**
+             * @description Model-predicted satisfaction (1-5), separate from quality and customer survey CSAT
+             * @example 5
+             */
+            csat: number;
+            /**
+             * @description Cost of the analysis
+             * @example 0.05
+             */
+            cost: number;
+            /**
+             * @description Total tokens used
+             * @example 100
+             */
+            tokens: number;
+        };
+        QualityCriterionDto: {
+            id: string;
+            /** @enum {string} */
+            origin: "default" | "custom";
+            /** @enum {string} */
+            status: "assessed" | "not_applicable" | "insufficient_evidence" | "missing" | "invalid";
+            /** @enum {string} */
+            source: "model" | "human" | "legacy";
+            value: (number | string | boolean) | null;
+            normalized: number | null;
+            included: boolean;
+            weight: number;
+            rationale?: string;
+            quote?: string;
+        };
+        QualityResultDto: {
+            score: number | null;
+            candidateScore: number | null;
+            /** @enum {string} */
+            status: "scored" | "needs_review" | "unscorable";
+            coverage: number;
+            formulaVersion: string;
+            contextIncomplete: boolean;
+            /** @enum {string} */
+            criticalStatus: "pass" | "fail" | "unknown";
+            criteria: components["schemas"]["QualityCriterionDto"][];
+        };
+        QualityEvaluationDto: {
+            id: string;
+            previousRunId: string | null;
+            scorecardRevisionId: string;
+            kind: string;
+            createdAt: string;
+            result: components["schemas"]["QualityResultDto"];
+        };
+        QualityDetailDto: {
+            /** @description Effective supervisor corrections for this revision. */
+            corrections: Record<string, never>[];
+            record: components["schemas"]["AiCdr"];
+            analytics: components["schemas"]["AiAnalytics"] | null;
+            evaluation: components["schemas"]["QualityEvaluationDto"] | null;
+            /** @description Public criterion rules; never internal prompts/context. */
+            criteria: Record<string, never>[];
+            minimumCoverage: number | null;
+        };
+        QualityHistoryDto: {
+            id: string;
+            scorecardRevisionId: string;
+            kind: string;
+            createdAt: string;
+            score: number | null;
+            status: string;
+            coverage: number;
+            formulaVersion: string;
+            contextIncomplete: boolean;
+        };
+        QualityRulesDto: {
+            enabled: boolean;
+            revisionId: string;
+            minimumCoverage: number;
+            criteria: Record<string, never>[];
+            config: Record<string, never>;
         };
     };
     responses: never;
@@ -11314,6 +11620,304 @@ export interface operations {
             };
             /** @description Draft/project changed or another check is running; reload before retrying. */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OperatorAnalyticsController_qualityDetail: {
+        parameters: {
+            query: {
+                runId: string;
+            };
+            header?: never;
+            path: {
+                channelId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QualityDetailDto"];
+                };
+            };
+        };
+    };
+    OperatorAnalyticsController_qualityHistory: {
+        parameters: {
+            query: {
+                limit: string;
+                before: string;
+            };
+            header?: never;
+            path: {
+                channelId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QualityHistoryDto"][];
+                };
+            };
+        };
+    };
+    OperatorAnalyticsController_qualityRules: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QualityRulesDto"];
+                };
+            };
+        };
+    };
+    OperatorAnalyticsController_saveQualityRules: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    minimumCoverage?: number;
+                    criteria?: {
+                        [key: string]: Record<string, never>;
+                    };
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QualityRulesDto"];
+                };
+            };
+        };
+    };
+    QualityPreviewController_rules: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QualityRulesDto"];
+                };
+            };
+        };
+    };
+    QualityPreviewController_saveRules: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QualityRulesDto"];
+                };
+            };
+        };
+    };
+    QualityPreviewController_detail: {
+        parameters: {
+            query: {
+                runId: string;
+            };
+            header?: never;
+            path: {
+                channelId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QualityDetailDto"];
+                };
+            };
+        };
+    };
+    QualityPreviewController_history: {
+        parameters: {
+            query: {
+                before: string;
+                limit: string;
+            };
+            header?: never;
+            path: {
+                channelId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QualityHistoryDto"][];
+                };
+            };
+        };
+    };
+    QualityPreviewController_analyze: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                channelId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QualityDetailDto"];
+                };
+            };
+        };
+    };
+    QualityPreviewController_correct: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                channelId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    QualityPreviewController_reset: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                channelId: string;
+                metricId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AiCdrController_qualityPreview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AiCdrController_journal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AiCdrController_journalOptions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };

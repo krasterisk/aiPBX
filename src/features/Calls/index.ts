@@ -8,3 +8,5 @@ export { useCallsExport } from './lib/useCallsExport'
 export { useBatchProgress } from '@/entities/Report'
 
 export { CallsJournal } from './ui/CallsJournal/CallsJournal'
+
+export { QualityJournal } from './ui/QualityJournal/CallsJournal'
