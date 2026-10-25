@@ -19,7 +19,7 @@
     "trend": "通话趋势",
     "trendHint": "点击柱形查看详情。",
     "outcome": "通话结果",
-    "outcomeHint": "根据所选项目的标准",
+    "outcomeHint": "在已知结果的通话中所占的比例。",
     "unsuccessful": "未成功",
     "sentiment": "客户情绪",
     "positive": "积极",
@@ -89,5 +89,6 @@
     "sortDescending": "降序排列",
     "preset_year": "年",
     "withoutTopic": "无主题",
-    "unnamedTopic": "未命名主题"
+    "unnamedTopic": "未命名主题",
+    "outcomeUnknown": "结果未知"
 }

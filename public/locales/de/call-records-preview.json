@@ -19,7 +19,7 @@
     "trend": "Anrufentwicklung",
     "trendHint": "Balken für Details wählen.",
     "outcome": "Gesprächsergebnis",
-    "outcomeHint": "Nach den Kriterien des gewählten Projekts",
+    "outcomeHint": "Anteil der Anrufe mit bekanntem Ergebnis.",
     "unsuccessful": "Nicht erfolgreich",
     "sentiment": "Kundenstimmung",
     "positive": "Positiv",
@@ -89,5 +89,6 @@
     "sortDescending": "Absteigend sortieren",
     "preset_year": "Jahr",
     "withoutTopic": "Ohne Thema",
-    "unnamedTopic": "Unbenanntes Thema"
+    "unnamedTopic": "Unbenanntes Thema",
+    "outcomeUnknown": "Ergebnis unbekannt"
 }

@@ -19,7 +19,7 @@
     "trend": "Call activity",
     "trendHint": "Select a bar to explore.",
     "outcome": "Call outcome",
-    "outcomeHint": "According to the selected project criteria",
+    "outcomeHint": "Share of calls with a known outcome.",
     "unsuccessful": "Unsuccessful",
     "sentiment": "Customer sentiment",
     "positive": "Positive",
@@ -89,5 +89,6 @@
     "sortDescending": "Sort descending",
     "preset_year": "Year",
     "withoutTopic": "Without a topic",
-    "unnamedTopic": "Unnamed topic"
+    "unnamedTopic": "Unnamed topic",
+    "outcomeUnknown": "Outcome unknown"
 }

@@ -10794,6 +10794,8 @@ export interface operations {
     OperatorAnalyticsController_getCdrs: {
         parameters: {
             query?: {
+                /** @description Missing, unusable or unrecognized conversation outcome */
+                withoutOutcome?: boolean;
                 /** @description Calls with a missing or unknown operator */
                 withoutOperator?: boolean;
                 /** @description Calls without any stored topic */

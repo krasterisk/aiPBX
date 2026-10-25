@@ -18,6 +18,7 @@ export interface PreviewCallsQuery extends PreviewFilters {
     withoutTopic?: boolean
     sentiment?: 'positive' | 'neutral' | 'negative'
     success?: boolean
+    withoutOutcome?: boolean
 }
 
 export function operatorQuery(

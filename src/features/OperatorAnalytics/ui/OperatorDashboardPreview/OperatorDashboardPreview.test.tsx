@@ -301,3 +301,14 @@ it('fits all 24 hourly buckets and keeps afternoon calls accessible after an emp
         endDate: new Date(Date.parse(hourly[14].label) + 3600000 - 1).toISOString()
     }))
 })
+
+it('shows exact outcome counts rather than reconstructing rounded rates, including unknown outcomes', () => {
+    render(<OperatorDashboardPreview {...props} data={{ ...data, totalAnalyzed: 100, successRate: 99.99, successfulCount: 1, unsuccessfulCount: 2, unknownOutcomeCount: 97 }} />)
+    const yes = screen.getByRole('button', { name: 'successful 1' })
+    const no = screen.getByRole('button', { name: 'unsuccessful 2' })
+    expect(yes).toBeInTheDocument(); expect(no).toBeInTheDocument()
+    fireEvent.click(yes)
+    expect(JSON.parse(screen.getByTestId('panel-entry').textContent!).query).toMatchObject({ ...props.filters, success: true })
+    fireEvent.click(screen.getByRole('button', { name: 'outcomeUnknown 97' }))
+    expect(JSON.parse(screen.getByTestId('panel-entry').textContent!).query).toMatchObject({ ...props.filters, withoutOutcome: true })
+})

@@ -117,8 +117,14 @@ export function OperatorDashboardPreview(props: Props) {
     }
     const noOperator = (name?: string | null) => (!name || name === 'Unknown Operator' ? String(t('noOperator')) : name)
     const total = data?.totalAnalyzed ?? 0
-    const success = Math.min(100, Math.max(0, normalizeRate(data?.successRate)))
-    const successCount = Math.round((total * success) / 100)
+    const successCount = data?.successfulCount
+    const unsuccessfulCount = data?.unsuccessfulCount
+    const unknownOutcomeCount = data?.unknownOutcomeCount ?? 0
+    const knownOutcomes = (successCount ?? 0) + (unsuccessfulCount ?? 0)
+    const success = successCount != null && unsuccessfulCount != null
+        ? (knownOutcomes ? successCount * 100 / knownOutcomes : 0)
+        : Math.min(100, Math.max(0, data?.successRate ?? 0))
+    const hasOutcome = successCount != null ? knownOutcomes > 0 : total > 0
     const defaults = ALL_DEFAULT_METRICS.filter(
         m => !props.project?.visibleDefaultMetrics?.length || props.project.visibleDefaultMetrics.includes(m.key)
     )
@@ -214,8 +220,8 @@ export function OperatorDashboardPreview(props: Props) {
                             },
                             {
                                 label: t('successful'),
-                                value: total ? `${success.toFixed(0)}%` : '—',
-                                hint: t('successCount', { count: successCount, total }),
+                                value: hasOutcome ? `${success.toFixed(0)}%` : '—',
+                                hint: successCount == null ? '' : t('successCount', { count: successCount, total: knownOutcomes }),
                                 icon: Check,
                                 query: { ...filters, success: true }
                             }
@@ -372,7 +378,7 @@ open(
                         </Section>
                         <Section title={String(t('outcome'))} hint={String(t('outcomeHint'))} className={cls.outcome}>
                             <div className={cls.outcomeValue}>
-                                <strong>{total ? `${success.toFixed(0)}%` : '—'}</strong>
+                                <strong>{hasOutcome ? `${success.toFixed(0)}%` : '—'}</strong>
                                 <span>{t('successful')}</span>
                             </div>
                             <div className={cls.successTrack} aria-hidden>
@@ -388,10 +394,13 @@ open(
                                         }}
                                     >
                                         <span>{t(ok ? 'successful' : 'unsuccessful')}</span>
-                                        <b>{ok ? successCount : Math.max(0, total - successCount)}</b>
+                                        <b>{(ok ? successCount : unsuccessfulCount) ?? '—'}</b>
                                         <ChevronRight size={14} aria-hidden />
                                     </button>
                                 ))}
+                                {unknownOutcomeCount > 0 && <button type="button" className={cls.unknownOutcome} onClick={() => {
+                                    open(callsEntry(String(t('outcomeUnknown')), { ...filters, withoutOutcome: true }))
+                                }}><span>{t('outcomeUnknown')}</span><b>{unknownOutcomeCount}</b><ChevronRight size={14} aria-hidden /></button>}
                             </div>
                             <details className={cls.sentiment}>
                                 <summary>{t('sentiment')}</summary>

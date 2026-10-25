@@ -358,6 +358,7 @@ export interface OperatorAggregatedMetrics {
 
 export interface OperatorDashboardResponse {
   successfulCount?: number
+  unknownOutcomeCount?: number
   unsuccessfulCount?: number
   qualityVersion?: string
   scoredCalls?: number

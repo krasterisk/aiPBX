@@ -221,6 +221,7 @@ export const reportApi = rtkApi.injectEndpoints({
       sortOrder?: 'ASC' | 'DESC'
       sentiment?: 'positive' | 'neutral' | 'negative'
       success?: boolean
+      withoutOutcome?: boolean
     }>({
       query: (args) => {
         const { theme, tagId, projectId, ...rest } = args
