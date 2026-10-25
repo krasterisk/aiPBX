@@ -17,7 +17,7 @@
     "successful": "Erfolgreich",
     "successCount": "{{count}} von {{total}} Gesprächen",
     "trend": "Anrufentwicklung",
-    "trendHint": "Nach Tagen; bei langen Zeiträumen nach Monaten. Balken für Details wählen.",
+    "trendHint": "Balken für Details wählen.",
     "outcome": "Gesprächsergebnis",
     "outcomeHint": "Nach den Kriterien des gewählten Projekts",
     "unsuccessful": "Nicht erfolgreich",
@@ -60,7 +60,7 @@
     "next": "Nächste Seite",
     "backTo": "Zurück zu {{title}}",
     "datePresets": "Zeitraum",
-    "preset_today": "Heute",
+    "preset_today": "Tag",
     "preset_yesterday": "Gestern",
     "preset_last30": "30 Tage",
     "preset_month": "Monat",
@@ -87,5 +87,7 @@
     "sortBy": "Sortieren nach",
     "sortAscending": "Aufsteigend sortieren",
     "sortDescending": "Absteigend sortieren",
-    "preset_year": "Jahr"
+    "preset_year": "Jahr",
+    "withoutTopic": "Ohne Thema",
+    "unnamedTopic": "Unbenanntes Thema"
 }

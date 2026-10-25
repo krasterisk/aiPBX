@@ -1,7 +1,7 @@
 import { Tooltip } from '@mui/material'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BarChart3, Check, ChevronRight, Clock3, Phone, Users, ArrowDown, ArrowUp, ChevronsUpDown } from 'lucide-react'
+import { BarChart3, Check, ChevronDown, ChevronRight, Clock3, Phone, Users, ArrowDown, ArrowUp, ChevronsUpDown } from 'lucide-react'
 import {
     useGetOperatorDashboard,
     WITHOUT_PROJECT_FILTER,
@@ -10,7 +10,7 @@ import {
 } from '@/entities/Report'
 import { SidePanel } from '@/shared/ui/redesign-v3'
 import { ALL_DEFAULT_METRICS, normalizeRate } from '../../lib/metricVisual'
-import { PreviewMainCalls, PreviewPanel, callsEntry, type PreviewEntry } from './PreviewPanel'
+import { PreviewPanel, callsEntry, type PreviewEntry } from './PreviewPanel'
 import {
     dayQuery,
     hourQuery,
@@ -139,11 +139,16 @@ export function OperatorDashboardPreview(props: Props) {
             : label
     const max = Math.max(1, ...series.map(point => point.callsCount))
     const stats = data?.operatorTopicStats
-    const topics = stats?.topics ?? data?.tagStats?.map(tag => ({ tagId: tag.tagId, name: tag.name, callsCount: tag.callsCount })) ?? []
+    const topics = (stats?.topics ?? data?.tagStats?.map(tag => ({ tagId: tag.tagId, name: tag.name, callsCount: tag.callsCount })) ?? [])
+        .filter(topic => topic.tagId !== null || topic.callsCount > 0)
+        .map(topic => ({
+            ...topic,
+            name: topic.tagId === null ? String(t('withoutTopic')) : topic.name?.trim() || String(t('unnamedTopic'))
+        }))
     return (
         <div className={cls.root} data-testid="call-records-preview">
             <div className={cls.filters}>
-                <label>
+                <label className={cls.filterControl}>
                     {t('project')}
                     <select
                         aria-label={String(t('project'))}
@@ -159,6 +164,7 @@ export function OperatorDashboardPreview(props: Props) {
                         ))}
                         <option value={WITHOUT_PROJECT_FILTER}>{t('withoutProject')}</option>
                     </select>
+                    <ChevronDown size={15} aria-hidden />
                 </label>
                 <OperatorFilter
                     options={props.data?.agentScorecards?.filter(o => o.operatorId || o.operatorName !== 'Unknown Operator') ?? []}
@@ -239,7 +245,7 @@ export function OperatorDashboardPreview(props: Props) {
                     <div className={cls.grid}>
                         <Section
                             title={String(t('trend'))}
-                            hint={String(t(useHourly ? 'hourlyHint' : 'trendHint'))}
+                            hint={String(t('trendHint'))}
                             className={cls.trend}
                             action={
                                 <span className={cls.caption}>
@@ -259,9 +265,10 @@ export function OperatorDashboardPreview(props: Props) {
                                 <div className={cls.chartScroll}>
                                     <div
                                         className={cls.chart}
-                                        style={{ gridTemplateColumns: `repeat(${series.length}, minmax(34px, 1fr))` }}
+                                        data-unit={trend.unit}
+                                        style={{ gridTemplateColumns: `repeat(${series.length}, minmax(${useHourly ? '0' : '34px'}, 1fr))` }}
                                     >
-                                        {series.map(point => {
+                                        {series.map((point, index) => {
                                             const openBucket = (callType?: 'incoming' | 'outgoing' | 'internal') => {
                                                 const query = useHourly ? hourQuery(point.label, filters) : dayQuery(point.label, filters)
                                                 if (query) {
@@ -295,7 +302,7 @@ open(
                                                                 .map(type => (
                                                                     <Tooltip
                                                                         key={type}
-                                                                        title={String(t('type_' + type)) + ': ' + point.byCallType![type]}
+                                                                        title={bucketTitle(point.label) + ' / ' + String(t('type_' + type)) + ': ' + point.byCallType![type]}
                                                                         arrow
                                                                         enterTouchDelay={0}
                                                                     >
@@ -333,6 +340,8 @@ open(
                                                     <button
                                                         type="button"
                                                         className={cls.bucketDate}
+                                                        data-axis-label={!useHourly || index % 4 === 0}
+                                                        aria-label={bucketTitle(point.label)}
                                                         onClick={() => {
                                                             openBucket()
                                                         }}
@@ -395,8 +404,11 @@ open(
                                             open(callsEntry(String(t(key)), { ...filters, sentiment: key }))
                                         }}
                                     >
-                                        <span>{t(key)}</span>
-                                        <b>{data.sentimentDistribution[key]}</b>
+                                        <span className={cls.operatorScore} data-tone={key === 'positive' ? 'high' : key === 'negative' ? 'low' : 'none'}>
+                                            <i aria-hidden />
+                                            {t(key)}
+                                        </span>
+                                        <b>{data.sentimentDistribution[key].toLocaleString(i18n.language, { maximumFractionDigits: 2 })}%</b>
                                         <ChevronRight size={14} aria-hidden />
                                     </button>
                                 ))}
@@ -622,16 +634,6 @@ open(
                                 </table>
                             </div>
                             {!data.agentScorecards?.length && <p className={cls.message}>{t('noCalls')}</p>}
-                        </Section>
-                        <Section title={String(t('calls'))} hint={String(t('callsHint'))} className={cls.callSection}>
-                            <PreviewMainCalls
-                                key={JSON.stringify(filters)}
-                                query={filters}
-                                project={props.project}
-                                onOpen={channelId => {
-                                    open({ kind: 'call', title: String(t('callAnalysis')), channelId })
-                                }}
-                            />
                         </Section>
                     </div>
                 </>

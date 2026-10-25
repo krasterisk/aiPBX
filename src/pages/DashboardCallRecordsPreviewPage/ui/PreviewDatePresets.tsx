@@ -13,7 +13,7 @@ export function PreviewDatePresets({
     onOpenFilters?: () => void
 }) {
     const { t } = useTranslation('call-records-preview')
-    const presets: DatePreset[] = ['today', 'yesterday', 'week', 'month', 'year']
+    const presets: DatePreset[] = ['today', 'week', 'month', 'year']
     const nextRange = shiftDateRange(value, 1)
     const canAdvance = Date.parse(nextRange.startDate) <= Date.parse(datePreset('today').endDate)
     return (
@@ -24,6 +24,7 @@ export function PreviewDatePresets({
                     const candidate = datePreset(preset)
                     const start = new Date(value.startDate)
                     const end = new Date(value.endDate)
+                    const calendarDay = preset === 'today' && start.toDateString() === end.toDateString()
                     const calendarWeek =
                         preset === 'week' &&
                         start.getDay() === 1 &&
@@ -49,6 +50,7 @@ export function PreviewDatePresets({
                             key={preset}
                             type="button"
                             aria-pressed={
+                                calendarDay ||
                                 calendarWeek ||
                                 calendarMonth ||
                                 calendarYear ||

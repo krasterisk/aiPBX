@@ -17,7 +17,7 @@
     "successful": "成功",
     "successCount": "{{total}}次通话中有{{count}}次",
     "trend": "通话趋势",
-    "trendHint": "按天显示，较长时段按月显示。点击柱形查看详情。",
+    "trendHint": "点击柱形查看详情。",
     "outcome": "通话结果",
     "outcomeHint": "根据所选项目的标准",
     "unsuccessful": "未成功",
@@ -60,7 +60,7 @@
     "next": "下一页",
     "backTo": "返回{{title}}",
     "datePresets": "选择时段",
-    "preset_today": "今天",
+    "preset_today": "日",
     "preset_yesterday": "昨天",
     "preset_last30": "30天",
     "preset_month": "月",
@@ -87,5 +87,7 @@
     "sortBy": "排序依据",
     "sortAscending": "升序排列",
     "sortDescending": "降序排列",
-    "preset_year": "年"
+    "preset_year": "年",
+    "withoutTopic": "无主题",
+    "unnamedTopic": "未命名主题"
 }

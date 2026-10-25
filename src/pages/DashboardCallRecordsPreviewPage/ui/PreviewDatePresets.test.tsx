@@ -31,6 +31,8 @@ it.each(['today', 'week', 'month', 'year'] as const)('stops %s navigation at the
 it('allows yesterday to advance to today and blocks a future arbitrary range', () => {
     const onChange = jest.fn()
     const view = render(<PreviewDatePresets value={datePreset('yesterday')} onChange={onChange} />)
+    expect(screen.queryByRole('button', { name: 'preset_yesterday' })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'preset_today' })).toHaveAttribute('aria-pressed', 'true')
     const next = screen.getByRole('button', { name: 'nextPeriod' })
     expect(next).toBeEnabled()
     fireEvent.click(next)
@@ -55,7 +57,7 @@ it('uses the extended filter for custom dates without a duplicate custom button'
  render(<PreviewDatePresets value={datePreset('week')} onChange={onChange} onOpenFilters={onOpenFilters} />)
  expect(screen.queryByRole('button', { name: 'preset_custom' })).not.toBeInTheDocument()
  fireEvent.click(screen.getByRole('button', { name: 'filters' })); expect(onOpenFilters).toHaveBeenCalledTimes(1)
- fireEvent.click(screen.getByRole('button', { name: 'preset_yesterday' })); expect(onChange).toHaveBeenCalledWith(datePreset('yesterday'))
+ fireEvent.click(screen.getByRole('button', { name: 'preset_today' })); expect(onChange).toHaveBeenCalledWith(datePreset('today'))
 })
 
 it('moves the selected period backward and forward through arrow controls', () => {

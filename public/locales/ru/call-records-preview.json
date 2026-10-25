@@ -17,7 +17,7 @@
     "successful": "Успешные",
     "successCount": "{{count}} из {{total}} разговоров",
     "trend": "Динамика звонков",
-    "trendHint": "По дням; для длинного периода — по месяцам. Нажмите столбец для подробностей.",
+    "trendHint": "Нажмите столбец для подробностей",
     "outcome": "Результат разговора",
     "outcomeHint": "По критериям выбранного проекта",
     "unsuccessful": "Неуспешные",
@@ -60,7 +60,7 @@
     "next": "Следующая страница",
     "backTo": "Назад к {{title}}",
     "datePresets": "Выбор периода",
-    "preset_today": "Сегодня",
+    "preset_today": "День",
     "preset_yesterday": "Вчера",
     "preset_last30": "30 дней",
     "preset_month": "Месяц",
@@ -87,5 +87,7 @@
     "sortBy": "Сортировка",
     "sortAscending": "По возрастанию",
     "sortDescending": "По убыванию",
-    "preset_year": "Год"
+    "preset_year": "Год",
+    "withoutTopic": "Без темы",
+    "unnamedTopic": "Тема без названия"
 }

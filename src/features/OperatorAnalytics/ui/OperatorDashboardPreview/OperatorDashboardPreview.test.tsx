@@ -2,7 +2,12 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { OperatorDashboardPreview } from './OperatorDashboardPreview'
 
 const summary = jest.fn()
-jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key, i18n: { language: 'en' } }) }))
+jest.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key: string) => key,
+        i18n: { language: 'en' }
+    })
+}))
 jest.mock('@/entities/Report', () => ({ WITHOUT_PROJECT_FILTER: 'none', useGetOperatorDashboard: (...args: any[]) => summary(...args) }))
 jest.mock('@/shared/ui/redesign-v3', () => ({
     SidePanel: ({ isOpen, onBack, onClose, title, children }: any) =>
@@ -42,7 +47,7 @@ const data: any = {
     successRate: 0.71,
     totalCost: 1,
     aggregatedMetrics: {},
-    sentimentDistribution: { positive: 4, neutral: 2, negative: 1 },
+    sentimentDistribution: { positive: 29.83, neutral: 69.08, negative: 1.09 },
     timeSeries: { daily: [], monthly: [] },
     agentScorecards: [
         {
@@ -77,6 +82,64 @@ beforeEach(() => {
     summary.mockReturnValue({ currentData: data, isFetching: false })
 })
 
+it('omits the bottom calls list while retaining call drilldowns from summary cards', () => {
+    render(<OperatorDashboardPreview {...props} />)
+    expect(screen.queryByRole('heading', { name: 'calls', exact: true })).not.toBeInTheDocument()
+    expect(screen.queryByTestId('main-query')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /^calls 7 analyzed/ }))
+    expect(JSON.parse(screen.getByTestId('panel-entry').textContent!).query).toEqual(expect.objectContaining(props.filters))
+})
+
+it('hides the empty unassigned bucket while preserving configured zero-count topics', () => {
+    render(<OperatorDashboardPreview {...props} data={{
+        ...data,
+        operatorTopicStats: {
+            ...data.operatorTopicStats,
+            topics: [
+                ...data.operatorTopicStats.topics,
+                { tagId: 'configured', name: 'Configured', callsCount: 0 },
+                { tagId: null, name: '', callsCount: 0 }
+            ]
+        }
+    }} />)
+    expect(screen.queryByText('withoutTopic')).not.toBeInTheDocument()
+    expect(screen.getByText('Configured')).toBeInTheDocument()
+    expect(screen.getByText('Service')).toBeInTheDocument()
+})
+
+it('labels nonempty unassigned calls and preserves the unassigned drilldown', () => {
+    render(<OperatorDashboardPreview {...props} data={{
+        ...data,
+        operatorTopicStats: { ...data.operatorTopicStats, topics: [{ tagId: null, name: '', callsCount: 2 }] }
+    }} />)
+    fireEvent.click(screen.getByText('withoutTopic'))
+    const entry = JSON.parse(screen.getByTestId('panel-entry').textContent!)
+    expect(entry.title).toBe('withoutTopic')
+    expect(entry.query).toEqual(expect.objectContaining({ withoutTopic: true, projectId: '5', userId: '99' }))
+    expect(entry.query.tagId).toBeUndefined()
+})
+
+it('uses a visible fallback for unnamed configured topics without losing their ID', () => {
+    render(<OperatorDashboardPreview {...props} data={{
+        ...data,
+        operatorTopicStats: { ...data.operatorTopicStats, topics: [{ tagId: 'unnamed', name: '  ', callsCount: 1 }] }
+    }} />)
+    fireEvent.click(screen.getByText('unnamedTopic'))
+    expect(JSON.parse(screen.getByTestId('panel-entry').textContent!).query.tagId).toBe('unnamed')
+})
+
+it('displays API sentiment percentages without rescaling and preserves sentiment filtering', () => {
+    render(<OperatorDashboardPreview {...props} />)
+    expect(screen.getByText('29.83%')).toBeInTheDocument()
+    expect(screen.getByText('69.08%')).toBeInTheDocument()
+    expect(screen.getByText('1.09%')).toBeInTheDocument()
+    expect(screen.getByText('29.83%').closest('button')?.querySelector('[data-tone]')).toHaveAttribute('data-tone', 'high')
+    expect(screen.getByText('69.08%').closest('button')?.querySelector('[data-tone]')).toHaveAttribute('data-tone', 'none')
+    expect(screen.getByText('1.09%').closest('button')?.querySelector('[data-tone]')).toHaveAttribute('data-tone', 'low')
+    fireEvent.click(screen.getByText('1.09%').closest('button')!)
+    expect(JSON.parse(screen.getByTestId('panel-entry').textContent!).query.sentiment).toBe('negative')
+})
+
 it('colors metric dots consistently and respects negative and neutral custom metrics', () => {
     const project: any = {
  id: '5',
@@ -106,7 +169,8 @@ it('keeps the cabinet and stable operator ID in filtered summary and call querie
         expect.objectContaining({ projectId: '5', userId: '99', operatorFilters: selection }),
         expect.objectContaining({ skip: false })
     )
-    expect(JSON.parse(screen.getByTestId('main-query').textContent!)).toEqual(
+    fireEvent.click(screen.getByRole('button', { name: /Service/ }))
+    expect(JSON.parse(screen.getByTestId('panel-entry').textContent!).query).toEqual(
         expect.objectContaining({ userId: '99', projectId: '5', operatorFilters: selection })
     )
 })
@@ -167,7 +231,7 @@ it('selects multiple identities and retains the same union on every drilldown', 
     fireEvent.click(screen.getByRole('button', { name: 'operator', expanded: false }))
     fireEvent.click(screen.getByRole('checkbox', { name: 'Operator' }))
     fireEvent.click(screen.getByRole('checkbox', { name: 'Second' }))
-    const selected = JSON.parse(JSON.parse(screen.getByTestId('main-query').textContent!).operatorFilters)
+    const selected = JSON.parse(summary.mock.calls.at(-1)[0].operatorFilters)
     expect(selected).toEqual([
         { userId: '99', operatorId: '218' },
         { userId: '99', operatorId: '203' }
@@ -212,4 +276,28 @@ it('opens call-type segments using exact bucket and type filters', () => {
             endDate: new Date(Date.parse(point.label) + 3600000 - 1).toISOString()
         })
     )
+})
+
+it('fits all 24 hourly buckets and keeps afternoon calls accessible after an empty night', () => {
+    const hourly = Array.from({ length: 24 }, (_, hour) => ({
+        label: new Date(2026, 9, 24, hour).toISOString(),
+        callsCount: hour === 14 ? 3 : 0,
+        avgScore: 75,
+        avgDuration: 60,
+        byCallType: { incoming: hour === 14 ? 3 : 0, outgoing: 0, internal: 0 }
+    }))
+    const { container } = render(<OperatorDashboardPreview {...props}
+        data={{ ...data, timeSeries: { daily: [], monthly: [], hourly } }}
+        filters={{ ...props.filters, startDate: new Date(2026, 9, 24).toISOString(), endDate: new Date(2026, 9, 24, 23, 59, 59, 999).toISOString() }}
+    />)
+    const chart = container.querySelector('[data-unit="hour"]')!
+    expect(chart).toHaveStyle({ gridTemplateColumns: 'repeat(24, minmax(0, 1fr))' })
+    expect(chart.querySelectorAll('[data-axis-label="true"]')).toHaveLength(6)
+    expect(screen.queryByText('hourlyHint')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /^type_incoming: 3/ }))
+    expect(JSON.parse(screen.getByTestId('panel-entry').textContent!).query).toEqual(expect.objectContaining({
+        callType: 'incoming',
+        startDate: hourly[14].label,
+        endDate: new Date(Date.parse(hourly[14].label) + 3600000 - 1).toISOString()
+    }))
 })

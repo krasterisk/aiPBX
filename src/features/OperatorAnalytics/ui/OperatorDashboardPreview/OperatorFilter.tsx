@@ -42,7 +42,7 @@ export function OperatorFilter({
         >
             <button
                 type="button"
-                className={cls.operatorTrigger}
+                className={`${cls.filterControl} ${cls.operatorTrigger}`}
                 aria-expanded={open}
                 aria-label={String(t('operator'))}
                 disabled={disabled}

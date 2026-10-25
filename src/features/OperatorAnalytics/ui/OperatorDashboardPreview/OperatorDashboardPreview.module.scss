@@ -65,8 +65,12 @@
     flex-wrap: wrap;
     align-items: center;
     margin: 0 0 20px;
-    label {
+    .filterControl {
+        box-sizing: border-box;
         display: flex;
+        width: 300px;
+        max-width: 100%;
+        height: 38px;
         align-items: center;
         gap: 9px;
         padding: 9px 12px;
@@ -81,6 +85,15 @@
         max-width: 240px;
         min-width: 0;
         font-size: 12px;
+    }
+    > .filterControl select {
+        appearance: none;
+        flex: 1;
+        padding: 0;
+        text-overflow: ellipsis;
+    }
+    > .filterControl > svg {
+        pointer-events: none;
     }
 }
 .caption {
@@ -190,6 +203,26 @@
     gap: 12px;
     align-items: end;
     padding-top: 4px;
+}
+.chart[data-unit='hour'] {
+    width: 100%;
+    gap: 4px;
+    .barStack {
+        width: 100%;
+        max-width: 32px;
+    }
+    .bucketDate {
+        white-space: nowrap;
+    }
+    .bucketDate[data-axis-label='false'] {
+        visibility: hidden;
+    }
+    .chartBucket:first-child .bucketDate {
+        align-self: flex-start;
+    }
+}
+.trend .sectionHeader > .caption {
+    white-space: nowrap;
 }
 .outcomeValue {
     display: flex;
@@ -681,6 +714,12 @@
     }
 }
 @media (max-width: 650px) {
+    .chart[data-unit='hour'] {
+        gap: 3px;
+        .bucketTotal {
+            display: none;
+        }
+    }
     .previewHeader {
         align-items: flex-start;
         gap: 9px;
@@ -690,6 +729,9 @@
     }
     .filters {
         gap: 9px;
+        .filterControl {
+            width: 100%;
+        }
         label {
             width: 100%;
             justify-content: space-between;
@@ -868,14 +910,17 @@
 }
 .operatorFilter {
     position: relative;
-    min-width: 230px;
+    width: 300px;
+    max-width: 100%;
 }
 .operatorTrigger {
+    box-sizing: border-box;
     display: flex;
     width: 100%;
+    height: 38px;
     align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
+    gap: 9px;
+    padding: 9px 12px;
     color: inherit;
     background: var(--preview-surface);
     border: 1px solid var(--divider-solid);
@@ -884,8 +929,13 @@
     font-size: 12px;
     cursor: pointer;
     strong {
-        font-weight: 500;
-        margin-left: auto;
+        font-weight: 400;
+        min-width: 0;
+        flex: 1;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
 .operatorOptions {
@@ -921,6 +971,8 @@
     max-height: 250px;
     overflow-y: auto;
     label {
+        display: flex;
+        gap: 9px;
         border: 0;
         padding: 9px 3px;
         background: none;

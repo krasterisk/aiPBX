@@ -17,7 +17,7 @@
     "successful": "Successful",
     "successCount": "{{count}} of {{total}} calls",
     "trend": "Call activity",
-    "trendHint": "Daily; monthly for longer periods. Select a bar to explore.",
+    "trendHint": "Select a bar to explore.",
     "outcome": "Call outcome",
     "outcomeHint": "According to the selected project criteria",
     "unsuccessful": "Unsuccessful",
@@ -60,7 +60,7 @@
     "next": "Next page",
     "backTo": "Back to {{title}}",
     "datePresets": "Date range",
-    "preset_today": "Today",
+    "preset_today": "Day",
     "preset_yesterday": "Yesterday",
     "preset_last30": "30 days",
     "preset_month": "Month",
@@ -87,5 +87,7 @@
     "sortBy": "Sort by",
     "sortAscending": "Sort ascending",
     "sortDescending": "Sort descending",
-    "preset_year": "Year"
+    "preset_year": "Year",
+    "withoutTopic": "Without a topic",
+    "unnamedTopic": "Unnamed topic"
 }
