@@ -1007,7 +1007,7 @@
     transition: background 120ms;
     &:hover,
     &:focus-within {
-        background: var(--glass-bg-primary);
+        background: color-mix(in srgb, var(--accent-redesigned) 12%, var(--dark-bg-redesigned));
     }
 }
 .operatorScore {

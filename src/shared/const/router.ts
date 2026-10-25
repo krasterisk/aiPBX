@@ -6,6 +6,7 @@ export enum AppRoutes {
   ADMIN = 'admin',
   SETTINGS = 'settings',
   CALLS = 'calls',
+  CALLS_PREVIEW = 'calls_preview',
   ANALYTICS = 'analytics',
   ANALYTICS_PROJECTS = 'analytics_projects',
   ANALYTICS_API = 'analytics_api',
@@ -87,6 +88,7 @@ export const getRouteDashboardCallRecordsPreview = () => '/dashboard/call-record
 export const getRouteAssistantEdit = (id: string) => `/assistants/${id}`
 export const getRouteAssistantCreate = () => '/assistants/create'
 export const getRouteCalls = () => '/calls'
+export const getRouteCallsPreview = () => '/calls-preview'
 export const getRouteAnalytics = () => '/analytics'
 export const getRouteAnalyticsProjects = () => '/analytics/projects'
 export const getRouteAnalyticsApi = () => '/analytics/api'
@@ -146,6 +148,7 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
   [getRouteAdmin()]: AppRoutes.ADMIN,
   [getRouteSettings()]: AppRoutes.SETTINGS,
   [getRouteCalls()]: AppRoutes.CALLS,
+  [getRouteCallsPreview()]: AppRoutes.CALLS_PREVIEW,
   [getRouteAnalytics()]: AppRoutes.ANALYTICS,
   [getRouteAnalyticsProjects()]: AppRoutes.ANALYTICS_PROJECTS,
   [getRouteAnalyticsApi()]: AppRoutes.ANALYTICS_API,

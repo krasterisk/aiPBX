@@ -21,6 +21,7 @@ import {
   getRouteToolsCreate,
   getRouteToolsEdit,
   getRouteCalls,
+  getRouteCallsPreview,
   getRouteAnalytics,
   getRouteAnalyticsProjects,
   getRouteAnalyticsApi,
@@ -84,6 +85,7 @@ import { AssistantsCreatePage, AssistantsPage, AssistantsEditPage } from '@/page
 import { UsersCreatePage, UsersEditPage, UsersPage } from '@/pages/UsersPage'
 import { ToolsCreatePage, ToolsEditPage, ToolsPage } from '@/pages/ToolsPage'
 import { CallsPage } from '@/pages/CallsPage'
+import { CallsPreviewPage } from '@/pages/CallsPreviewPage'
 import { AnalyticsProjectsPage } from '@/pages/AnalyticsProjectsPage'
 import { AnalyticsApiPage } from '@/pages/AnalyticsApiPage'
 import { OnlinePage } from '@/pages/OnlinePage'
@@ -180,6 +182,11 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     element: <PaymentPage />,
     authOnly: true,
     roles: [UserRolesValues.ADMIN, UserRolesValues.USER]
+  },
+  [AppRoutes.CALLS_PREVIEW]: {
+    path: getRouteCallsPreview(),
+    authOnly: true,
+    element: <CallsPreviewPage />
   },
   [AppRoutes.CALLS]: {
     path: getRouteCalls(),

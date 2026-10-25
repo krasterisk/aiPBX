@@ -28,7 +28,7 @@
     "topics": "Anrufthemen",
     "topic": "Thema",
     "share": "Anteil",
-    "topicsHint": "Ein Thema je Anruf. Thema für Details wählen.",
+    "topicsHint": "Thema für Details wählen.",
     "multipleTopics": "Mehrere Themen pro Anruf möglich; Anteile können zusammen über 100% liegen.",
     "noTopics": "Keine Themendaten für das gewählte Projekt.",
     "quality": "Metriken",

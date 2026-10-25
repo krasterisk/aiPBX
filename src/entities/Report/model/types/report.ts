@@ -18,6 +18,8 @@ export interface AllReports {
 export type CdrSource = 'call' | 'widget' | 'playground'
 
 export interface Report {
+  projectId?: number | string | null
+  status?: string
   callType?: 'incoming' | 'outgoing' | 'internal' | null
   id: string
   callerId: string

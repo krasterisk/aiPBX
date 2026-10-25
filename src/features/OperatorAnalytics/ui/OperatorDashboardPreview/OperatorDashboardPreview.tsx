@@ -172,7 +172,6 @@ export function OperatorDashboardPreview(props: Props) {
                     onChange={setOperatorIds}
                     disabled={props.loading || props.error}
                 />
-                <p className={cls.caption}>{t('detailsHint')}</p>
             </div>
             {error ? (
                 <div className={cls.message} role="alert">
@@ -416,7 +415,7 @@ open(
                         </Section>
                         <Section
                             title={String(t('topics'))}
-                            hint={String(t(stats?.hasMultipleTopics ? 'multipleTopics' : 'topicsHint'))}
+                            hint={String(t('topicsHint'))}
                             className={cls.topics}
                         >
                             <div className={cls.rowLabels}>

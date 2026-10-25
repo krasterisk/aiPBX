@@ -6,3 +6,5 @@ export { UploadModal } from './ui/UploadModal/UploadModal'
 export { BatchProgressBar } from './ui/BatchProgressBar/BatchProgressBar'
 export { useCallsExport } from './lib/useCallsExport'
 export { useBatchProgress } from '@/entities/Report'
+
+export { CallsJournal } from './ui/CallsJournal/CallsJournal'

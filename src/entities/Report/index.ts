@@ -168,3 +168,6 @@ export {
 } from './model/selectors/projectWizardSelectors'
 
 export { CallPhone } from './ui/CallPhone/CallPhone'
+
+export { useGetCallJournalQuery, useLazyGetCallJournalQuery, useGetCallJournalOptionsQuery } from './api/journalApi'
+export type { JournalQuery, JournalPersonOption } from './api/journalApi'

@@ -28,7 +28,7 @@
     "topics": "Call topics",
     "topic": "Topic",
     "share": "Share",
-    "topicsHint": "One topic per call. Select a topic for details.",
+    "topicsHint": "Select a topic for details.",
     "multipleTopics": "Calls can have multiple topics; shares may total more than 100%.",
     "noTopics": "No topic data for the selected project.",
     "quality": "Metrics",
