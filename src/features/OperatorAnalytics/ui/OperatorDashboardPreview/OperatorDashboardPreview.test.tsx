@@ -219,11 +219,11 @@ it('offers hourly buckets only for a single selected day and sends exact hour bo
     expect(screen.queryByText('byHour')).not.toBeInTheDocument()
 })
 
-it('only shows excluded-recognition warning to admins', () => {
+it('only shows the included low-recognition notice to admins', () => {
     const view = render(<OperatorDashboardPreview {...props} data={{ ...data, excludedLowQualityCount: 3 }} />)
-    expect(screen.queryByText('DASHBOARD_EXCLUDED_LOW_QUALITY')).not.toBeInTheDocument()
+    expect(screen.queryByText('lowQualityAdminHint')).not.toBeInTheDocument()
     view.rerender(<OperatorDashboardPreview {...props} data={{ ...data, excludedLowQualityCount: 3 }} isAdmin />)
-    expect(screen.getByText('DASHBOARD_EXCLUDED_LOW_QUALITY')).toBeInTheDocument()
+    expect(screen.getByText('lowQualityAdminHint')).toBeInTheDocument()
 })
 it('selects multiple identities and retains the same union on every drilldown', () => {
     const extra = { ...data.agentScorecards[0], operatorId: '203', operatorName: 'Second' }

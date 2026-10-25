@@ -199,7 +199,7 @@ export function OperatorDashboardPreview(props: Props) {
             ) : (
                 <>
                     {props.isAdmin && (data.excludedLowQualityCount ?? 0) > 0 && (
-                        <p className={cls.caption}>{r('DASHBOARD_EXCLUDED_LOW_QUALITY', { count: data.excludedLowQualityCount })}</p>
+                        <p className={cls.caption}>{t('lowQualityAdminHint', { count: data.excludedLowQualityCount })}</p>
                     )}
                     <section className={cls.kpis} aria-label={String(t('summary'))}>
                         {[

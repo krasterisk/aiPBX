@@ -90,5 +90,6 @@
     "preset_year": "Год",
     "withoutTopic": "Без темы",
     "unnamedTopic": "Тема без названия",
-    "outcomeUnknown": "Результат не определён"
+    "outcomeUnknown": "Результат не определён",
+    "lowQualityAdminHint": "Звонков с низким качеством распознавания: {{count}}. Они включены в показатели."
 }

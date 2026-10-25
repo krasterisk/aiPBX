@@ -90,5 +90,6 @@
     "preset_year": "年",
     "withoutTopic": "无主题",
     "unnamedTopic": "未命名主题",
-    "outcomeUnknown": "结果未知"
+    "outcomeUnknown": "结果未知",
+    "lowQualityAdminHint": "转录质量较低的通话：{{count}}。已计入所有指标。"
 }

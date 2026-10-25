@@ -90,5 +90,6 @@
     "preset_year": "Year",
     "withoutTopic": "Without a topic",
     "unnamedTopic": "Unnamed topic",
-    "outcomeUnknown": "Outcome unknown"
+    "outcomeUnknown": "Outcome unknown",
+    "lowQualityAdminHint": "Calls with low transcription quality: {{count}}. Included in all figures."
 }
