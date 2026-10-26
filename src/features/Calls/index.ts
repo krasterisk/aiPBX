@@ -10,3 +10,4 @@ export { useBatchProgress } from '@/entities/Report'
 export { CallsJournal } from './ui/CallsJournal/CallsJournal'
 
 export { QualityJournal } from './ui/QualityJournal/CallsJournal'
+export { CallAnalysisDetail } from './ui/QualityJournal/CallAnalysisDetail'

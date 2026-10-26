@@ -12,6 +12,7 @@ export interface JournalQuery {
     callTypes?: string
     people?: string
     csat?: string
+    tagIds?: string
     tagId?: string
     projectId?: string
     sortField: string

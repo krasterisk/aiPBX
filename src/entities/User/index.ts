@@ -79,3 +79,5 @@ export {
   useAdminTopUp
 } from './api/usersApi'
 export type { AdminTopUpDto } from './api/usersApi'
+
+export { ClientFilter } from './ui/ClientSelect/ClientFilter'

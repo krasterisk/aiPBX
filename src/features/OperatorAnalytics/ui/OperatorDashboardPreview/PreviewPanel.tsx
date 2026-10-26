@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ChevronRight } from 'lucide-react'
 import type { OperatorDashboardResponse, OperatorProject } from '@/entities/Report'
@@ -23,6 +23,7 @@ export type PreviewEntry =
     | { kind: 'metric', title: string, entry: Extract<PanelEntry, { kind: 'operatorMetric' }>, filters: PreviewFilters }
 
 interface Props {
+    renderCallDetail?: (channelId: string) => ReactNode
     entry: PreviewEntry
     data: OperatorDashboardResponse
     project?: OperatorProject
@@ -34,12 +35,13 @@ export function callsEntry(title: string, query: PreviewCallsQuery, topicId?: st
     return { kind: 'calls', title, query, topicId, page: 1, search: '', tab: 'calls' }
 }
 
-export function PreviewPanel({ entry, data, project, open, update }: Props) {
+export function PreviewPanel({ entry, data, project, open, update, renderCallDetail }: Props) {
     const { t } = useTranslation('call-records-preview')
     const openCall = (channelId: string) => {
         open({ kind: 'call', title: String(t('callAnalysis')), channelId })
     }
     if (entry.kind === 'call') {
+        if (renderCallDetail) return <>{renderCallDetail(entry.channelId)}</>
         return (
             <div className={cls.legacy}>
                 <CallPanelBody channelId={entry.channelId} />

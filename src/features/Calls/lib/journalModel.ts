@@ -1,3 +1,4 @@
+import { formatDuration } from '@/shared/lib/formatDuration'
 import type { JournalQuery, OperatorProject, Report } from '@/entities/Report'
 
 export type JournalPeriod = 'day' | 'week' | 'month' | 'year'
@@ -9,6 +10,7 @@ export interface JournalFilters extends JournalRange {
     callTypes: string[]
     people: string[]
     csat: string[]
+    tagIds?: string[]
     tagId: string
     projectId: string
     sortField: string
@@ -50,7 +52,8 @@ endDate: filters.endDate,
 callTypes: list(filters.callTypes),
         people: filters.people.length ? JSON.stringify(Array.from(new Set(filters.people)).sort().map(v => JSON.parse(v))) : undefined,
         csat: filters.csat.length ? Array.from(new Set(filters.csat)).sort().join(',') : undefined,
-        tagId: filters.tagId || undefined,
+        tagId: filters.tagIds?.length ? undefined : filters.tagId || undefined,
+        tagIds: list(filters.tagIds ?? []),
 projectId: filters.projectId || undefined,
 sortField: filters.sortField,
 sortOrder: filters.sortOrder
@@ -61,10 +64,7 @@ export function journalProject(report: Report, projects: OperatorProject[]): Ope
     return projects.find(p => String(p.id) === String(report.projectId) && (!p.userId || String(p.userId) === String(report.userId)))
 }
 
-export function journalDuration(value?: number): string {
-    if (value == null || !Number.isFinite(value) || value < 0) return '—'
-    return `${Math.floor(value / 60)}:${String(Math.floor(value % 60)).padStart(2, '0')}`
-}
+export const journalDuration = formatDuration
 
 export const journalScoreTone = (value: number | null) => value == null ? 'none' : value < 50 ? 'low' : value < 80 ? 'medium' : 'high'
 

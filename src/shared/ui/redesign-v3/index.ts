@@ -13,3 +13,9 @@ export type {
     ExtractOptionType,
     ComboboxChangeHandler
 } from './types'
+
+export { SelectControl } from './SelectControl'
+export type { SelectOption, SelectControlProps } from './SelectControl'
+export { AudioPlayback } from './AudioPlayback'
+export { FilterPanel } from './FilterPanel'
+export type { FilterPanelProps } from './FilterPanel'

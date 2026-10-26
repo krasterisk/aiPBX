@@ -77,7 +77,7 @@ export function journalTurns(report: Report, dialogs?: ReportDialog[]) {
         try {
             const parsed: unknown = JSON.parse(report.transcription)
             if (Array.isArray(parsed) && parsed.every(line => line && typeof line.text === 'string')) {
-                return parsed.map((line, index) => ({ id: String(index), role: String(line.speaker || ''), text: String(line.text), start: typeof line.start === 'number' && Number.isFinite(line.start) && line.start >= 0 ? line.start as number : undefined }))
+                return parsed.map((line, index) => ({ id: String(index), role: String(line.speaker || ''), text: String(line.text), start: line.start != null && line.start !== '' && Number.isFinite(Number(line.start)) && Number(line.start) >= 0 ? Number(line.start) : undefined }))
             }
         } catch { /* Preserve plain transcription below. */ }
         return [{ id: 'plain', role: '', text: report.transcription, start: undefined }]

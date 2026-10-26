@@ -1,5 +1,6 @@
 .root,
 .popper,
+.detail,
 .panel {
     --j-surface: var(--dark-bg-redesigned);
     --j-muted: color-mix(in srgb, var(--text-redesigned) 62%, var(--bg-redesigned));
@@ -504,7 +505,8 @@
 }
 
 .phone {
-    white-space: nowrap;
+    min-width: 0;
+    max-width: 100%;
     display: flex;
     align-items: center;
     gap: 7px;
@@ -514,6 +516,17 @@
         color: var(--accent-dark);
         flex-shrink: 0;
     }
+
+    > [role='img'] {
+        flex-shrink: 0;
+        display: inline-flex;
+    }
+}
+
+.phoneNumber {
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 .typeLabel {
@@ -668,7 +681,9 @@
 
     h2 {
         margin: 7px 0;
-        font-size: 22px;
+        font-size: 14px;
+        font-weight: 700;
+        overflow-wrap: anywhere;
     }
 
     small,
@@ -679,7 +694,7 @@
 }
 
 .recording {
-    margin-bottom: 20px;
+    margin-top: 12px;
     width: 100%;
     min-width: 0;
 }
@@ -903,7 +918,7 @@
     margin-bottom: 0;
 
     h2 {
-        font-size: 25px;
+        font-size: 14px;
     }
 }
 
@@ -913,6 +928,19 @@
     align-items: center;
     gap: 8px;
     margin-top: 14px;
+}
+
+.detailPhoneLine {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    column-gap: 10px;
+
+    .direction {
+        color: var(--j-muted);
+        font-size: 12px;
+        white-space: nowrap;
+    }
 }
 
 .detailTabs {
@@ -944,7 +972,7 @@
 }
 
 .detailBody {
-    padding: 24px 0;
+    padding: 16px 0;
     min-width: 0;
 
     p,
@@ -960,7 +988,7 @@
     border-block: 1px solid var(--j-line);
     padding: 17px 0;
     gap: 14px;
-    margin: 20px 0;
+    margin: 0 0 20px;
 
     > div {
         display: flex;
@@ -1126,6 +1154,42 @@
     }
 }
 
+.callCost {
+    padding: 16px 0;
+    border-top: 1px solid var(--j-line);
+
+    > summary {
+        cursor: pointer;
+        font-weight: 600;
+    }
+}
+
+.costRows {
+    margin: 12px 0 0;
+
+    > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 16px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--j-line);
+    }
+
+    dt {
+        color: var(--j-muted);
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    dd {
+        margin: 0;
+        flex-shrink: 0;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
 .detailMeta {
     margin: 0;
 
@@ -1287,3 +1351,13 @@
     justify-content: space-between;
     gap: 8px;
 }
+
+@media (min-width: 901px) { .sort { display: none; } }
+
+.adminActions { display: flex; flex-wrap: wrap; gap: 8px; }
+.danger { color: var(--red-dark, #bd4646) !important; }
+.deleteConfirmation { padding: 12px; margin-top: 12px; border: 1px solid var(--j-line); border-radius: 10px; }
+.direction { font-size: 12px; color: var(--j-muted); }
+.turn[data-role="operator"] { border-left: 3px solid var(--accent-redesigned); background: color-mix(in srgb,var(--accent-redesigned) 6%,var(--j-surface)); }
+.turn[data-role="customer"] { border-left: 3px solid #b89b61; background: color-mix(in srgb,#b89b61 7%,var(--j-surface)); }
+.turn { border-radius: 9px; padding: 12px; margin-bottom: 10px; }

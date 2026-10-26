@@ -1,7 +1,13 @@
+import { formatDuration } from '@/shared/lib/formatDuration'
 import type { AgentScorecard, OperatorProject, OperatorDashboardResponse } from '@/entities/Report'
 
 export type PreviewCallType = 'incoming' | 'outgoing' | 'internal'
 export interface PreviewFilters {
+    sources?: string
+     callTypes?: string
+     people?: string
+     tagIds?: string
+     csat?: string
     operatorFilters?: string
     callType?: PreviewCallType
     startDate?: string
@@ -54,11 +60,7 @@ export function dayQuery(label: string, filters: PreviewFilters): PreviewFilters
     return from <= to ? { ...filters, startDate: new Date(from).toISOString(), endDate: new Date(to).toISOString() } : null
 }
 
-export function previewDuration(seconds?: number): string {
-    if (seconds == null || !Number.isFinite(seconds) || seconds < 0) return '—'
-    const n = Math.floor(seconds)
-    return `${Math.floor(n / 60)}:${String(n % 60).padStart(2, '0')}`
-}
+export const previewDuration = formatDuration
 
 /** Prevent spreadsheet formulas in user-controlled names and phone numbers. */
 export function previewCsv(rows: Array<Array<string | number>>): string {

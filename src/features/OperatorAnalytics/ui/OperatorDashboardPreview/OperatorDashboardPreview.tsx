@@ -29,6 +29,8 @@ import { OperatorFilter } from './OperatorFilter'
 import cls from './OperatorDashboardPreview.module.scss'
 
 interface Props {
+    renderCallDetail?: (channelId: string, onDeleted: () => void) => ReactNode
+    peopleControl?: ReactNode
     isAdmin?: boolean
     filters: PreviewFilters
     data?: OperatorDashboardResponse
@@ -172,12 +174,12 @@ export function OperatorDashboardPreview(props: Props) {
                     </select>
                     <ChevronDown size={15} aria-hidden />
                 </label>
-                <OperatorFilter
+                {props.peopleControl ?? (<OperatorFilter
                     options={props.data?.agentScorecards?.filter(o => o.operatorId || o.operatorName !== 'Unknown Operator') ?? []}
                     value={operatorIds}
                     onChange={setOperatorIds}
                     disabled={props.loading || props.error}
-                />
+                />)}
             </div>
             {error ? (
                 <div className={cls.message} role="alert">
@@ -662,6 +664,7 @@ open(
             >
                 {current && data && (
                     <PreviewPanel
+                        renderCallDetail={props.renderCallDetail ? channelId => props.renderCallDetail!(channelId, () => { close(); props.onRetry() }) : undefined}
                         entry={current}
                         data={data}
                         project={props.project}

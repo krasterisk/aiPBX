@@ -182,3 +182,5 @@ export { publishedQuality, formatQualityScore, JOURNAL_METRIC_LABELS } from './m
 export type { QualityRule, QualityConfig, QualityDetail, QualityHistoryItem } from './model/types/quality'
 
 export { useAnalyzeQualityPreviewMutation, useQualityJournalQuery, useLazyQualityJournalQuery, useSaveQualityPreviewOverridesMutation, useDeleteQualityPreviewOverrideMutation } from './api/qualityPreviewApi'
+
+export { useRegenerateCallFreeMutation } from './api/qualityPreviewApi'

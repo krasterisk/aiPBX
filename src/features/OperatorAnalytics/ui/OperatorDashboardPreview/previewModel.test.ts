@@ -21,9 +21,9 @@ describe('preview query boundaries', () => {
     })
     it('exports quoted CSV without executable spreadsheet formulas', () => {
         expect(previewCsv([['=SUM(1,2)', '+79000000001', 'a"b']])).toBe('\ufeff"\'=SUM(1,2)";"\'+79000000001";"a""b"')
-        expect(previewDuration(72)).toBe('1:12')
+        expect(previewDuration(72)).toBe('01:12')
         expect(previewDuration(undefined)).toBe('—')
-        expect(previewDuration(0)).toBe('0:00')
+        expect(previewDuration(0)).toBe('00:00')
     })
 })
 

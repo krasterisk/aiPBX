@@ -9,6 +9,10 @@ export const qualityPreviewApi = rtkApi.injectEndpoints({
         keepUnusedDataFor: 10,
         providesTags: [{ type: 'OperatorAnalytics', id: 'QUALITY-PREVIEW' }]
     }),
+    regenerateCallFree: build.mutation<unknown, { channelId: string, operator: boolean }>({
+        query: ({ channelId, operator }) => ({ url: `/${operator ? 'operator-analytics' : 'ai-analytics'}/regenerate-free/${encodeURIComponent(channelId)}`, method: 'POST' }),
+        invalidatesTags: (_data, _error, { channelId }) => [{ type: 'OperatorAnalytics', id: `QUALITY-PREVIEW-CALL-${channelId}` }, { type: 'OperatorAnalytics', id: 'QUALITY-PREVIEW' }, { type: 'Reports', id: 'LIST' }]
+    }),
     analyzeQualityPreview: build.mutation<unknown, string>({
         query: channelId => ({ url: `/quality-preview/calls/${encodeURIComponent(channelId)}/analyze`, method: 'POST' }),
         invalidatesTags: (_data, _error, channelId) => [{ type: 'OperatorAnalytics', id: `QUALITY-PREVIEW-CALL-${channelId}` }, { type: 'OperatorAnalytics', id: 'QUALITY-PREVIEW' }]
@@ -23,4 +27,4 @@ export const qualityPreviewApi = rtkApi.injectEndpoints({
     })
 })
 })
-export const { useAnalyzeQualityPreviewMutation, useQualityJournalQuery, useLazyQualityJournalQuery, useSaveQualityPreviewOverridesMutation, useDeleteQualityPreviewOverrideMutation } = qualityPreviewApi
+export const { useRegenerateCallFreeMutation, useAnalyzeQualityPreviewMutation, useQualityJournalQuery, useLazyQualityJournalQuery, useSaveQualityPreviewOverridesMutation, useDeleteQualityPreviewOverrideMutation } = qualityPreviewApi

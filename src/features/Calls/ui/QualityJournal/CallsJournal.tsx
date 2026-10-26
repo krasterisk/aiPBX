@@ -8,13 +8,13 @@ import { Tooltip } from '@mui/material'
 import { ArrowDown, ArrowUp, Check, ChevronLeft, ChevronRight, Clock3, Download, Filter, Network, PhoneIncoming, PhoneOutgoing, RefreshCw, Search, X } from 'lucide-react'
 import * as XLSX from 'xlsx'
 import FileSaver from 'file-saver'
-import { getUserAuthData, isUserAdmin, ClientSelect } from '@/entities/User'
+import { getUserAuthData, isUserAdmin, ClientFilter } from '@/entities/User'
 import {
     useGetCallJournalOptionsQuery, useGetOperatorProjects,
     useBatchProgress, isOperatorAnalyticsSource, type JournalPersonOption, type Report
 } from '@/entities/Report'
 
-import { SidePanel } from '@/shared/ui/redesign-v3'
+import { SidePanel, FilterPanel } from '@/shared/ui/redesign-v3'
 import { getRouteCalls } from '@/shared/const/router'
 import { BatchProgressBar } from '../BatchProgressBar/BatchProgressBar'
 import { buildCallsExportSheet } from '../../lib/qualityCallsExportSheet'
@@ -33,7 +33,7 @@ export function QualityJournal() {
     const admin = useSelector(isUserAdmin)
     const auth = useSelector(getUserAuthData)
     const [filters, setFilters] = useState<JournalFilters>(() => ({
-        ...journalPeriod('week'), search: '', sources: [], callTypes: [], people: [], csat: [], tagId: '', projectId: '', sortField: 'createdAt', sortOrder: 'DESC'
+        ...journalPeriod('week'), search: '', sources: [], callTypes: [], people: [], csat: [], tagIds: [], tagId: '', projectId: '', sortField: 'createdAt', sortOrder: 'DESC'
     }))
     const [period, setPeriod] = useState<JournalPeriod | null>('week')
     const [page, setPage] = useState(1)
@@ -84,7 +84,7 @@ export function QualityJournal() {
     const closeFilters = () => { setFilterOpen(false); setDateError(false); setCustom({ start: journalDateInput(filters.startDate), end: journalDateInput(filters.endDate) }) }
     const open = (row: Report) => { focus.current = document.activeElement as HTMLElement; setSelectedId(row.id) }
     const emptyFilters = () => {
-        patch({ people: [], sources: [], callTypes: [], csat: [], projectId: '', tagId: '', search: '' })
+        patch({ people: [], sources: [], callTypes: [], csat: [], projectId: '', tagId: '', tagIds: [], search: '' })
         setSearch('')
     }
     const choosePeriod = (value: JournalPeriod) => {
@@ -105,17 +105,13 @@ export function QualityJournal() {
         setDateError(!range)
         if (range) { setPeriod(null); patch(range) }
     }
-    const peopleOptions = (optionsQuery.currentData?.people ?? []).map(option => {
-        if (!admin || filters.userId) return option
-        try { return { ...option, label: option.label + ' · ' + t('account') + ' ' + JSON.parse(option.value).userId } } catch { return option }
-    })
+    const peopleOptions = optionsQuery.currentData?.people ?? []
     const sourceOptions: JournalPersonOption[] = SOURCE_VALUES.map(value => ({ value, label: String(t('source_' + value)) }))
     const typeOptions: JournalPersonOption[] = TYPE_VALUES.map(value => ({ value, label: String(t('type_' + value)) }))
     const csatOptions: JournalPersonOption[] = ['1', '2', '3', '4', '5', 'none'].map(value => ({ value, label: value === 'none' ? String(t('withoutCsat')) : `${value} / 5` }))
     const tags = projects.filter(p => !filters.projectId || String(p.id) === filters.projectId).flatMap(p => p.callTaxonomy ?? [])
     const tagOptions = Array.from(new Map(tags.map(tag => [tag.id, tag])).values())
-    const tagLabel = tagOptions.find(tag => tag.id === filters.tagId)?.name || filters.tagId
-    const activeFilters = filters.people.length + filters.sources.length + filters.callTypes.length + filters.csat.length + Number(Boolean(filters.projectId)) + Number(Boolean(filters.tagId))
+    const activeFilters = filters.people.length + filters.sources.length + filters.callTypes.length + filters.csat.length + Number(Boolean(filters.projectId)) + (filters.tagIds?.length ?? 0)
     const sort = (field: string) => { patch({ sortField: field, sortOrder: filters.sortField === field && filters.sortOrder === 'DESC' ? 'ASC' : 'DESC' }) }
     const tableScore = (row: Report) => {
         if (isOperatorAnalyticsSource(row.source)) {
@@ -160,8 +156,8 @@ export function QualityJournal() {
         { label: 'date', field: 'createdAt' }, { label: 'client', field: 'callerId' }, { label: 'person', field: 'assistantName' },
         { label: 'topic', field: 'topic' }, { label: 'score', field: 'qualityScore' }, { label: 'csat', field: 'csat' }, { label: 'result', field: 'scenarioSuccess' }, { label: 'duration', field: 'duration' }
     ]
-    const multi = (key: 'people' | 'sources' | 'callTypes' | 'csat', label: string, options: JournalPersonOption[], disabled = false) =>
-        <JournalMultiSelect label={String(t(label))} options={options} value={filters[key]} onChange={value => { patch({ [key]: value }) }} disabled={disabled} />
+    const multi = (key: 'people' | 'sources' | 'callTypes' | 'csat' | 'tagIds', label: string, options: JournalPersonOption[], disabled = false) =>
+        <JournalMultiSelect label={String(t(label))} options={options} value={filters[key] ?? []} onChange={value => { patch({ [key]: value }) }} disabled={disabled} />
     return <section className={cls.root} data-testid="CallsJournal">
         <aside className={cls.note}>{t('previewNotice')}</aside>
         <header className={cls.header}>
@@ -183,12 +179,12 @@ export function QualityJournal() {
         <div className={cls.toolbar}>
             <form className={cls.search} onSubmit={e => { e.preventDefault(); patch({ search: search.trim() }) }}><Search size={15} aria-hidden /><input type="search" value={search} onChange={e => { setSearch(e.target.value) }} aria-label={String(t('search'))} placeholder={String(t('search'))} /><button type="submit" aria-label={String(t('find'))}><ChevronRight size={15} aria-hidden /></button></form>
             {multi('people', 'people', peopleOptions, optionsQuery.isFetching)}
-            <label className={cls.topicFilter}><span>{t('topic')}</span><select aria-label={String(t('topic'))} value={filters.tagId} onChange={e => { patch({ tagId: e.target.value }) }}><option value="">{t('allTopics')}</option>{tagOptions.map(tag => <option key={tag.id} value={tag.id}>{tag.name}</option>)}</select></label>
+            {multi('tagIds', 'topic', tagOptions.map(tag => ({ value: tag.id, label: tag.name })))}
             <button type="button" className={`${cls.button} ${cls.filtersButton}`} onClick={() => { setFilterOpen(true) }} aria-label={String(t('filters'))}><Filter size={16} aria-hidden /><span>{t('filters')}{activeFilters ? ` · ${activeFilters}` : ''}</span></button>
         </div>
         <div className={cls.metaLine}>
             <div className={cls.chips}><strong aria-live="polite">{data ? t('count', { count: total }) : t('loading')}</strong>
-                {filters.tagId && <button type="button" className={cls.chip} onClick={() => { patch({ tagId: '' }) }}>{tagLabel}<X size={12} aria-hidden /></button>}
+                {(filters.tagIds ?? []).map(id => <button type="button" className={cls.chip} key={id} onClick={() => { patch({ tagIds: filters.tagIds?.filter(value => value !== id) }) }}>{tagOptions.find(tag => tag.id === id)?.name || id}<X size={12} aria-hidden /></button>)}
                 {(activeFilters > 0 || filters.search) && <button type="button" className={cls.chip} onClick={emptyFilters}>{t('reset')}</button>}
                 {isFetching && <span className={cls.note}>{t('updating')}</span>}
             </div>
@@ -210,9 +206,9 @@ export function QualityJournal() {
                     return <tr key={row.id} className={cls.row} tabIndex={0} aria-label={String(t('openCall', { date: new Date(row.createdAt).toLocaleString(i18n.language) }))}
                         onClick={() => { open(row) }} onKeyDown={e => { if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(row) } }}>
                         <td className={cls.date}>{new Date(row.createdAt).toLocaleTimeString(i18n.language, { hour: '2-digit', minute: '2-digit' })}<small>{new Date(row.createdAt).toLocaleDateString(i18n.language, { day: 'numeric', month: 'short', year: 'numeric' })}</small></td>
-                        <td><span className={cls.phone}><Tooltip title={String(t('type_' + type))}><span role="img" aria-label={String(t('type_' + type))}><Icon size={14} aria-hidden /></span></Tooltip>{row.callerId || t('noPhone')}</span><small className={cls.typeLabel}>{t('type_' + type)}</small></td>
+                        <td><span className={cls.phone}><Tooltip title={String(t('type_' + type))}><span role="img" aria-label={String(t('type_' + type))}><Icon size={14} aria-hidden /></span></Tooltip><span className={cls.phoneNumber}>{row.callerId || t('noPhone')}</span></span></td>
                         <td><span className={cls.person}>{row.assistantName && row.assistantName !== 'Unknown Operator' ? row.assistantName : t('noOperator')}</span><small className={cls.sourceLabel}>{SOURCE_VALUES.includes(row.source || '') ? t('source_' + row.source) : row.source || '—'}{row.operatorExtension ? ` · ${t('extension')} ${row.operatorExtension}` : ''}</small></td>
-                        <td>{tags?.tags?.length ? tags.tags.map(tag => <button type="button" key={tag} className={cls.topic} onClick={e => { e.stopPropagation(); patch({ tagId: tag, projectId: row.projectId ? String(row.projectId) : '' }) }}>{tags.tag_names?.[tag] || tag}</button>) : <span className={cls.note}>—</span>}</td>
+                        <td>{tags?.tags?.length ? tags.tags.map(tag => <button type="button" key={tag} className={cls.topic} onClick={e => { e.stopPropagation(); patch({ tagId: '', tagIds: [tag], projectId: row.projectId ? String(row.projectId) : '' }) }}>{tags.tag_names?.[tag] || tag}</button>) : <span className={cls.note}>—</span>}</td>
                         <td>{value.value != null ? <Tooltip title={value.hint}><span className={cls.score} data-tone={value.tone}><i aria-hidden />{formatQualityScore(value.value)}<small>/{value.maximum}</small></span></Tooltip> : <Tooltip title={String(t('quality_' + (row.analytics?.qualityStatus || 'legacy')))}><span>—</span></Tooltip>}</td>
                         <td><Tooltip title={String(t('csatHint'))}><span className={cls.score}>{row.analytics?.csat ?? '—'}{row.analytics?.csat != null && <small>/5</small>}</span></Tooltip></td><td>{outcome(row)}</td><td>{journalDuration(row.duration)}</td><td><ChevronRight size={15} aria-hidden className={cls.chevron} /></td>
                     </tr>
@@ -226,20 +222,20 @@ export function QualityJournal() {
             </div></footer>
         </div>
         {filters.projectId && <details className={cls.note}><summary>{t('previewRules')}</summary><QualityRulesEditor projectId={Number(filters.projectId)} /></details>}
-        <SidePanel isOpen={filterOpen} onClose={closeFilters} title={String(t('filters'))} className={cls.panel}>
-            <div className={cls.filterForm}>
-                {admin && <ClientSelect allowAll clientId={filters.userId || ''} label={String(t('account'))} fullWidth onChangeClient={value => { patch({ userId: value, people: [], projectId: '', tagId: '', search: '' }); setSearch('') }} />}
-                <div className={cls.dateInputs}><label>{t('from')}<input type="date" value={custom.start} onChange={e => { customDate('start', e.target.value) }} /></label><label>{t('to')}<input type="date" value={custom.end} onChange={e => { customDate('end', e.target.value) }} /></label></div>
-                {dateError && <p className={cls.error} role="alert">{t('invalidDates')}</p>}
-                {multi('people', 'people', peopleOptions, optionsQuery.isFetching)}
-                {optionsQuery.isError && <p className={cls.error} role="alert">{t('optionsError')}</p>}
-                {optionsQuery.currentData?.limitReached && <p className={cls.note}>{t('optionsLimit')}</p>}
-                {multi('sources', 'sources', sourceOptions)}{multi('callTypes', 'types', typeOptions)}{multi('csat', 'csat', csatOptions)}
-                <label>{t('project')}<select value={filters.projectId} onChange={e => { patch({ projectId: e.target.value, tagId: '' }) }}><option value="">{t('allProjects')}</option>{projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select></label>
-                <label>{t('topic')}<select value={filters.tagId} onChange={e => { patch({ tagId: e.target.value }) }}><option value="">{t('allTopics')}</option>{tagOptions.map(tag => <option key={tag.id} value={tag.id}>{tag.name}</option>)}</select></label>
-                <div className={cls.actions}><button type="button" className={cls.button} onClick={emptyFilters}>{t('reset')}</button><button type="button" className={`${cls.button} ${cls.primary}`} disabled={dateError} onClick={() => { setFilterOpen(false) }}>{t('done')}</button></div>
-            </div>
-        </SidePanel>
-        <SidePanel isOpen={Boolean(selected)} onClose={close} title={String(t('details'))} className={cls.panel}>{selected && <JournalDetail key={selected.channelId} report={selected} project={journalProject(selected, projects)} />}</SidePanel>
+        <FilterPanel open={filterOpen} onClose={closeFilters} title={String(t('filters'))} onReset={emptyFilters} resetLabel={String(t('reset'))} applyLabel={String(t('done'))} invalid={dateError}
+            dates={{ ...custom, fromLabel: String(t('from')), toLabel: String(t('to')), onChange: customDate, error: dateError ? String(t('invalidDates')) : undefined }}
+            fields={[
+                { id: 'people', label: String(t('people')), options: peopleOptions, value: filters.people, onChange: (value: string[]) => { patch({ people: value }) }, disabled: optionsQuery.isFetching },
+                { id: 'sources', label: String(t('sources')), options: sourceOptions, value: filters.sources, onChange: (value: string[]) => { patch({ sources: value }) } },
+                { id: 'types', label: String(t('types')), options: typeOptions, value: filters.callTypes, onChange: (value: string[]) => { patch({ callTypes: value }) } },
+                { id: 'csat', label: String(t('csat')), options: csatOptions, value: filters.csat, onChange: (value: string[]) => { patch({ csat: value }) } },
+                { id: 'project', label: String(t('project')), options: projects.map(p => ({ value: String(p.id), label: p.name })), value: filters.projectId ? [filters.projectId] : [], multiple: false, onChange: (value: string[]) => { patch({ projectId: value[0] || '', tagIds: [] }) } },
+                { id: 'topics', label: String(t('topic')), options: tagOptions.map(tag => ({ value: tag.id, label: tag.name })), value: filters.tagIds ?? [], onChange: (value: string[]) => { patch({ tagIds: value }) } }
+            ].map(field => ({ ...field, messages: { all: String(t('all')), selected: count => String(t('selectedCount', { count })), search: String(t('find')), clear: String(t('clearSelection')), empty: String(t('noOptions')), unknown: String(t('selectedValue')) } }))}>
+            {admin && <ClientFilter value={filters.userId || ''} label={String(t('account'))} onChange={value => { patch({ userId: value, people: [], projectId: '', tagIds: [] }) }} messages={{ all: String(t('all')), selected: count => String(t('selectedCount', { count })), search: String(t('find')), clear: String(t('clearSelection')), empty: String(t('noOptions')), unknown: String(t('selectedValue')) }}/>}
+            {optionsQuery.isError && <p role="alert">{t('optionsError')}</p>}
+            {optionsQuery.currentData?.limitReached && <p>{t('optionsLimit')}</p>}
+        </FilterPanel>
+        <SidePanel isOpen={Boolean(selected)} onClose={close} title={String(t('details'))} className={cls.panel}>{selected && <JournalDetail key={selected.channelId} report={selected} project={journalProject(selected, projects)} onDeleted={() => { close(); void refetch() }} />}</SidePanel>
     </section>
 }

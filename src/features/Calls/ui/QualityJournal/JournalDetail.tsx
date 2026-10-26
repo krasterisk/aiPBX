@@ -2,19 +2,21 @@ import { useAnalyzeQualityPreviewMutation, useGetQualityDetailQuery, useGetQuali
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { ChevronRight, Copy, Download } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { isUserAdmin } from '@/entities/User'
 import { useGetReportDialogs, isOperatorAnalyticsSource, type Report, type OperatorProject } from '@/entities/Report'
 
-import { MediaPlayer } from '@/shared/ui/MediaPlayer'
-import { SidePanel } from '@/shared/ui/redesign-v3'
+import { AudioPlayback, SidePanel } from '@/shared/ui/redesign-v3'
+import { callCosts } from '../../lib/callCosts'
+import { CallAdminActions } from './CallAdminActions'
+
 import { journalDuration, journalScoreTone } from '../../lib/journalModel'
 import { journalMetrics, qualityJournalMetrics, journalTurns, metricPercent, type JournalMetric } from '../../lib/journalDetailModel'
 import cls from './CallsJournal.module.scss'
 import { QualityCorrectionEditor } from './QualityCorrectionEditor'
 
-type DetailTab = 'overview' | 'transcript' | 'metrics' | 'metadata'
-export function JournalDetail({ report: initialReport, project }: { report: Report, project?: OperatorProject }) {
+type DetailTab = 'overview' | 'transcript' | 'metadata'
+export function JournalDetail({ report: initialReport, project, onDeleted }: { report: Report, project?: OperatorProject, onDeleted?: () => void }) {
     const { t, i18n } = useTranslation('quality-journal')
     const { t: r } = useTranslation('reports')
     const admin = useSelector(isUserAdmin)
@@ -25,6 +27,7 @@ export function JournalDetail({ report: initialReport, project }: { report: Repo
     const detail = useGetQualityDetailQuery({ channelId: initialReport.channelId, runId })
     const history = useGetQualityHistoryQuery({ channelId: initialReport.channelId, before: historyBefore }, { skip: !operator || !showHistory })
     const report: Report = detail.currentData ? { ...initialReport, ...detail.currentData.record, analytics: detail.currentData.analytics ?? undefined } : initialReport
+    const tabs: DetailTab[] = admin ? ['overview', 'transcript', 'metadata'] : ['overview', 'transcript']
     const [tab, setTab] = useState<DetailTab>('overview')
     const [selectedMetric, setSelectedMetric] = useState<JournalMetric | null>(null)
     const { currentData: dialogs, isFetching, isError, refetch } = useGetReportDialogs(report.channelId, { skip: tab !== 'transcript' || Boolean(report.transcription) || Boolean(runId) })
@@ -42,6 +45,12 @@ export function JournalDetail({ report: initialReport, project }: { report: Repo
     const topics = metrics?._topics
     const [tagIds, setTagIds] = useState(topics?.tags ?? [])
     const [tagNames, setTagNames] = useState(topics?.tag_names ?? {})
+    const identity = <>
+        <small>{new Date(report.createdAt).toLocaleString(i18n.language)}</small>
+        <div className={cls.detailPhoneLine}><h2>{report.callerId || t('noPhone')}</h2><span className={cls.direction}>{t('type_' + (report.callType || 'incoming'))}</span></div>
+        <p>{report.assistantName || t('noOperator')}{report.operatorExtension ? ` · ${t('extension')} ${report.operatorExtension}` : ''} · {journalDuration(report.duration)}</p>
+        <div className={cls.detailBadges}>{tagIds.map(tag => <span className={cls.topic} key={tag}>{tagNames[tag] || project?.callTaxonomy?.find(item => item.id === tag)?.name || tag}</span>)}<span className={cls.result}>{report.status === 'processing' ? t('processing') : report.analytics ? t('analyzed') : t('notAnalyzed')}</span></div>
+    </>
     const metricValue = (item: JournalMetric) => item.status && item.status !== 'assessed' ? t('quality_' + item.status) : typeof item.value === 'boolean' ? t(item.value ? 'yes' : 'no') : `${typeof item.value === 'number' ? Number(item.value.toFixed(2)) : item.value}${item.unit ? ` ${item.unit}` : ''}`
     const metricTone = (item: JournalMetric) => {
         const percent = metricPercent(item)
@@ -66,16 +75,13 @@ export function JournalDetail({ report: initialReport, project }: { report: Repo
         {detail.isFetching && <p role="status">{t('loading')}</p>}
         {detail.isError && <p role="alert">{t('qualityLoadError')} <button type="button" onClick={() => { void detail.refetch() }}>{t('retry')}</button></p>}
         <header className={cls.detailHeader}>
-            <small>{t('type_' + (report.callType || 'incoming'))} · {new Date(report.createdAt).toLocaleString(i18n.language)}</small>
-            <h2>{report.callerId || t('noPhone')}</h2>
-            <p>{report.assistantName || t('noOperator')}{report.operatorExtension ? ` · ${t('extension')} ${report.operatorExtension}` : ''} · {journalDuration(report.duration)}</p>
-            <div className={cls.detailBadges}>{tagIds.map(tag => <span className={cls.topic} key={tag}>{tagNames[tag] || project?.callTaxonomy?.find(item => item.id === tag)?.name || tag}</span>)}<span className={cls.result}>{report.status === 'processing' ? t('processing') : report.analytics ? t('analyzed') : t('notAnalyzed')}</span></div>
+            {report.recordUrl ? <AudioPlayback src={report.recordUrl} label={String(t('listen'))} iconOnly>{identity}</AudioPlayback> : identity}
+            {!report.recordUrl && <p className={cls.note}>{t('noRecording')}</p>}
         </header>
-        <div className={cls.detailTabs} role="tablist" aria-label={String(t('detailSections'))}>{(['overview', 'transcript', 'metrics', 'metadata'] as const).map(value => <button type="button" role="tab" id={`journal-tab-${value}`} aria-controls={`journal-panel-${value}`} aria-selected={tab === value} tabIndex={tab === value ? 0 : -1} key={value} onClick={() => { setTab(value) }} onKeyDown={e => {
+        <div className={cls.detailTabs} role="tablist" aria-label={String(t('detailSections'))}>{tabs.map(value => <button type="button" role="tab" id={`journal-tab-${value}`} aria-controls={`journal-panel-${value}`} aria-selected={tab === value} tabIndex={tab === value ? 0 : -1} key={value} onClick={() => { setTab(value) }} onKeyDown={e => {
             if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Home' && e.key !== 'End') return
-            e.preventDefault(); const values: DetailTab[] = ['overview', 'transcript', 'metrics', 'metadata']; const next = e.key === 'Home' ? 0 : e.key === 'End' ? 3 : (values.indexOf(tab) + (e.key === 'ArrowRight' ? 1 : 3)) % 4; setTab(values[next]); document.getElementById(`journal-tab-${values[next]}`)?.focus()
+            e.preventDefault(); const values = tabs; const next = e.key === 'Home' ? 0 : e.key === 'End' ? values.length - 1 : (values.indexOf(tab) + (e.key === 'ArrowRight' ? 1 : values.length - 1)) % values.length; setTab(values[next]); document.getElementById(`journal-tab-${values[next]}`)?.focus()
         }}>{t('detail_' + value)}</button>)}</div>
-{report.recordUrl ? <div className={cls.recording}><MediaPlayer src={report.recordUrl} /></div> : <p className={cls.note}>{t('noRecording')}</p>}
         <div role="tabpanel" id={`journal-panel-${tab}`} aria-labelledby={`journal-tab-${tab}`} className={cls.detailBody}>
             {tab === 'overview' && <>
 
@@ -93,17 +99,7 @@ export function JournalDetail({ report: initialReport, project }: { report: Repo
                 </section>}
                 <section className={cls.detailSection}><h3>{t('summary')}</h3><p>{report.analytics?.summary || metrics?.summary || t('noSummary')}</p></section>
                 <section className={cls.detailSection}><h3>{t('result')}</h3><p>{success === true ? t('successful') : success === false ? t('unsuccessful') : t('noResult')}</p>{metrics?.scenario_analysis?.summary && <p>{metrics.scenario_analysis.summary}</p>}{assessment('success')}{assessment('customer_sentiment')}{assessment('csat')}</section>
-                {!report.analytics && <p className={cls.note}>{t(report.status === 'processing' ? 'processing' : 'notAnalyzed')}</p>}
-            </>}
-            {tab === 'transcript' && <>
-                {isFetching && <p role="status">{t('loading')}</p>}
-                {isError && <div role="alert"><p>{t('transcriptError')}</p><button type="button" className={cls.button} onClick={() => { void refetch() }}>{t('retry')}</button></div>}
-                {!turns.length && !isFetching && !isError && <p className={cls.note}>{t('noTranscript')}</p>}
-                <div className={cls.transcript}>{turns.map(turn => <div key={turn.id} className={cls.turn}>
-                    <div className={cls.turnRole}><span>{t(['operator', 'Assistant'].includes(turn.role) ? 'speakerOperator' : ['customer', 'User'].includes(turn.role) ? 'speakerClient' : 'transcriptText')}</span>{turn.start != null && <time>{journalDuration(turn.start)}</time>}</div><p>{turn.text}</p>
-                </div>)}</div>
-            </>}
-            {tab === 'metrics' && <>
+                <section className={cls.detailSection}><h3>{t('detail_metrics')}</h3>
                 <p className={cls.note}>{t('metricsHint')}</p>
                 {!items.length && <p>{t('noMetrics')}</p>}
                 {items.map(item => <button type="button" key={item.id} className={cls.detailMetric} onClick={() => { setSelectedMetric(item) }}>
@@ -111,8 +107,27 @@ export function JournalDetail({ report: initialReport, project }: { report: Repo
                     {metricPercent(item) != null && <span className={cls.metricTrack}><i style={{ width: `${metricPercent(item)}%` }} /></span>}
                 </button>)}
                 {operator && metrics && !runId && <details className={cls.supervisor}><summary>{t('supervisor')}</summary>{evaluation && detail.currentData ? <QualityCorrectionEditor channelId={report.channelId} detail={detail.currentData} /> : null}</details>}
+                </section>
+                <details className={cls.callCost}><summary>{t('callCost')}</summary>
+                    {callCosts(report).length ? callCosts(report).map(group => <dl className={cls.costRows} key={group.currency}>
+                        {Object.entries(group.items).map(([key, amount]) => <div key={key}><dt>{t('cost_' + key)}</dt><dd>{new Intl.NumberFormat(i18n.language, { style: 'currency', currency: group.currency, maximumFractionDigits: 4 }).format(amount)}</dd></div>)}
+                        <div><dt>{t('cost_total')}</dt><dd>{new Intl.NumberFormat(i18n.language, { style: 'currency', currency: group.currency, maximumFractionDigits: 4 }).format(group.total)}</dd></div>
+                        {group.freeRuns > 0 && <div><dt>{t('freeRuns')}</dt><dd>{group.freeRuns}</dd></div>}
+                    </dl>) : <p className={cls.note}>{t('noBilling')}</p>}
+                </details>
+                {!report.analytics && <p className={cls.note}>{t(report.status === 'processing' ? 'processing' : 'notAnalyzed')}</p>}
             </>}
-            {tab === 'metadata' && <>
+            {tab === 'transcript' && <>
+                {isFetching && <p role="status">{t('loading')}</p>}
+                {isError && <div role="alert"><p>{t('transcriptError')}</p><button type="button" className={cls.button} onClick={() => { void refetch() }}>{t('retry')}</button></div>}
+                {!turns.length && !isFetching && !isError && <p className={cls.note}>{t('noTranscript')}</p>}
+                {turns.some(turn => turn.start == null) && <p className={cls.note}>{t('timestampUnavailable')}</p>}
+                <div className={cls.transcript}>{turns.map(turn => <div key={turn.id} className={cls.turn} data-role={['operator', 'Assistant'].includes(turn.role) ? 'operator' : ['customer', 'User'].includes(turn.role) ? 'customer' : 'unknown'}>
+                    <div className={cls.turnRole}><span>{t(['operator', 'Assistant'].includes(turn.role) ? 'speakerOperator' : ['customer', 'User'].includes(turn.role) ? 'speakerClient' : 'transcriptText')}</span>{turn.start != null ? <time>{journalDuration(turn.start)}</time> : <span className={cls.note} title={String(t('timestampUnavailable'))}>—</span>}</div><p>{turn.text}</p>
+                </div>)}</div>
+            </>}
+            {admin && tab === 'metadata' && <>
+                <CallAdminActions report={report} operator={operator} disabled={Boolean(runId) || previewRequest.isLoading || detail.isFetching} onDeleted={onDeleted} onChanged={() => { void detail.refetch() }} onCopy={() => { void copyId() }} onExport={exportDetails} onPreview={operator && !runId ? () => { setMessage(''); void analyzePreview(report.channelId).unwrap().catch(() => { setMessage(String(t('analysisError'))) }) } : undefined} />
                 <dl className={cls.detailMeta}>{[
                     ['source', t('source_' + report.source)], ['type', t('type_' + (report.callType || 'incoming'))], ['date', new Date(report.createdAt).toLocaleString(i18n.language)],
                     ['person', report.assistantName], ['extension', report.operatorExtension], ['duration', journalDuration(report.duration)], ['project', project?.name || report.projectId],
@@ -122,13 +137,7 @@ export function JournalDetail({ report: initialReport, project }: { report: Repo
             </>}
         </div>
         {message && <p role="status" className={cls.note}>{message}</p>}
-        <footer className={cls.detailFooter}>
-            {admin && operator && !runId && <button type="button" className={cls.button} disabled={previewRequest.isLoading || detail.isFetching} title={String(t('previewAnalyzeHint'))} onClick={() => {
-                setMessage(''); void analyzePreview(report.channelId).unwrap().catch(() => { setMessage(String(t('analysisError'))) })
-            }}>{t(previewRequest.isLoading ? 'loading' : 'previewAnalyze')}</button>}
-            <button type="button" className={cls.button} onClick={() => { void copyId() }}><Copy size={14} aria-hidden />{t('copyId')}</button>
-            <button type="button" className={cls.button} onClick={exportDetails}><Download size={14} aria-hidden />{t('exportDetails')}</button>
-        </footer>
+
         <SidePanel isOpen={Boolean(selectedMetric)} onClose={() => { setSelectedMetric(null) }} onBack={() => { setSelectedMetric(null) }} backLabel={String(t('backToCall'))} title={selectedMetric ? String(r(selectedMetric.label)) : ''} className={cls.panel}>
             {selectedMetric && <div className={cls.detailBody}>
                 <strong className={cls.metricHero} data-tone={metricTone(selectedMetric)}>{metricValue(selectedMetric)}</strong>

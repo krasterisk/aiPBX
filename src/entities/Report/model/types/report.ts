@@ -113,6 +113,7 @@ export interface BillingRecord {
   totalCost: number
   currency?: string
   amountCurrency?: number | null
+  fxRateUsdToCurrency?: number | string | null
   sttCost?: number
   createdAt: string
 }

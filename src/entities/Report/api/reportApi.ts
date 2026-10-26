@@ -202,6 +202,11 @@ export const reportApi = rtkApi.injectEndpoints({
       userId?: string
       startDate?: string
       endDate?: string
+      sources?: string
+       callTypes?: string
+       people?: string
+       tagIds?: string
+       csat?: string
       operatorFilters?: string
       callType?: 'incoming' | 'outgoing' | 'internal'
       operatorId?: string
@@ -242,6 +247,11 @@ export const reportApi = rtkApi.injectEndpoints({
     getOperatorDashboard: build.query<OperatorDashboardResponse, {
       startDate?: string
       endDate?: string
+      sources?: string
+       callTypes?: string
+       people?: string
+       tagIds?: string
+       csat?: string
       operatorFilters?: string
       callType?: 'incoming' | 'outgoing' | 'internal'
       operatorId?: string
@@ -431,7 +441,12 @@ export const reportApi = rtkApi.injectEndpoints({
     getOperatorEvidence: build.query<
       OperatorEvidenceResponse,
       {
-        operatorFilters?: string
+        sources?: string
+         callTypes?: string
+         people?: string
+         tagIds?: string
+         csat?: string
+      operatorFilters?: string
         callType?: 'incoming' | 'outgoing' | 'internal'
         operatorId?: string
         operatorName?: string
