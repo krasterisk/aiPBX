@@ -180,10 +180,13 @@ export function QualityJournal() {
             <form className={cls.search} onSubmit={e => { e.preventDefault(); patch({ search: search.trim() }) }}><Search size={15} aria-hidden /><input type="search" value={search} onChange={e => { setSearch(e.target.value) }} aria-label={String(t('search'))} placeholder={String(t('search'))} /><button type="submit" aria-label={String(t('find'))}><ChevronRight size={15} aria-hidden /></button></form>
             {multi('people', 'people', peopleOptions, optionsQuery.isFetching)}
             {multi('tagIds', 'topic', tagOptions.map(tag => ({ value: tag.id, label: tag.name })))}
-            <button type="button" className={`${cls.button} ${cls.filtersButton}`} onClick={() => { setFilterOpen(true) }} aria-label={String(t('filters'))}><Filter size={16} aria-hidden /><span>{t('filters')}{activeFilters ? ` · ${activeFilters}` : ''}</span></button>
+            <div className={cls.toolbarActions}>
+                <strong className={cls.callCount} aria-live="polite">{data ? t('count', { count: total }) : t('loading')}</strong>
+                <button type="button" className={`${cls.button} ${cls.filtersButton}`} onClick={() => { setFilterOpen(true) }} aria-label={String(t('filters'))}><Filter size={16} aria-hidden /><span>{t('filters')}{activeFilters ? ` · ${activeFilters}` : ''}</span></button>
+            </div>
         </div>
-        <div className={cls.metaLine}>
-            <div className={cls.chips}><strong aria-live="polite">{data ? t('count', { count: total }) : t('loading')}</strong>
+        <div className={`${cls.metaLine} ${!(activeFilters > 0 || filters.search || isFetching) ? cls.metaLineEmpty : ''}`}>
+            <div className={cls.chips}>
                 {(filters.tagIds ?? []).map(id => <button type="button" className={cls.chip} key={id} onClick={() => { patch({ tagIds: filters.tagIds?.filter(value => value !== id) }) }}>{tagOptions.find(tag => tag.id === id)?.name || id}<X size={12} aria-hidden /></button>)}
                 {(activeFilters > 0 || filters.search) && <button type="button" className={cls.chip} onClick={emptyFilters}>{t('reset')}</button>}
                 {isFetching && <span className={cls.note}>{t('updating')}</span>}

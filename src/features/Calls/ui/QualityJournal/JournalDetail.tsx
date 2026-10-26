@@ -25,7 +25,7 @@ export function JournalDetail({ report: initialReport, project, onDeleted }: { r
     const [showHistory, setShowHistory] = useState(false)
     const [historyBefore, setHistoryBefore] = useState<string | undefined>()
     const detail = useGetQualityDetailQuery({ channelId: initialReport.channelId, runId })
-    const history = useGetQualityHistoryQuery({ channelId: initialReport.channelId, before: historyBefore }, { skip: !operator || !showHistory })
+    const history = useGetQualityHistoryQuery({ channelId: initialReport.channelId, before: historyBefore }, { skip: !admin || !operator || !showHistory })
     const report: Report = detail.currentData ? { ...initialReport, ...detail.currentData.record, analytics: detail.currentData.analytics ?? undefined } : initialReport
     const tabs: DetailTab[] = admin ? ['overview', 'transcript', 'metadata'] : ['overview', 'transcript']
     const [tab, setTab] = useState<DetailTab>('overview')
@@ -90,13 +90,7 @@ export function JournalDetail({ report: initialReport, project, onDeleted }: { r
                     <div><small>{t('csat')}</small><strong>{csat ?? '—'}{csat != null && <small> /5</small>}</strong></div>
                     <div><small>{t('sentiment')}</small><strong className={cls.mood} data-mood={sentiment}><i aria-hidden />{t('mood_' + sentiment)}</strong></div>
                 </div>
-                {operator && <section className={cls.detailSection}>
-                    <p>{t('quality_' + (report.analytics?.qualityStatus || 'legacy'))}{report.analytics?.qualityCoverage != null && ` · ${t('qualityCoverage')}: ${Math.round(report.analytics.qualityCoverage * 100)}%`}</p>
-                    {report.analytics?.qualityContextIncomplete && <p className={cls.note}>{t('qualityHistorical')}</p>}
-                    {evaluation && <p className={cls.note}>{evaluation.result.formulaVersion} · {t('qualityCritical_' + evaluation.result.criticalStatus)}</p>}
-                    <button type="button" className={cls.button} onClick={() => { setShowHistory(true) }}>{t('qualityHistory')}</button>
-                    {runId && <button type="button" className={cls.button} onClick={() => { setRunId(undefined) }}>{t('qualityCurrent')}</button>}
-                </section>}
+
                 <section className={cls.detailSection}><h3>{t('summary')}</h3><p>{report.analytics?.summary || metrics?.summary || t('noSummary')}</p></section>
                 <section className={cls.detailSection}><h3>{t('result')}</h3><p>{success === true ? t('successful') : success === false ? t('unsuccessful') : t('noResult')}</p>{metrics?.scenario_analysis?.summary && <p>{metrics.scenario_analysis.summary}</p>}{assessment('success')}{assessment('customer_sentiment')}{assessment('csat')}</section>
                 <section className={cls.detailSection}><h3>{t('detail_metrics')}</h3>
@@ -127,6 +121,13 @@ export function JournalDetail({ report: initialReport, project, onDeleted }: { r
                 </div>)}</div>
             </>}
             {admin && tab === 'metadata' && <>
+                {operator && <section className={cls.detailSection}>
+                    <p>{t('quality_' + (report.analytics?.qualityStatus || 'legacy'))}{report.analytics?.qualityCoverage != null && ` · ${t('qualityCoverage')}: ${Math.round(report.analytics.qualityCoverage * 100)}%`}</p>
+                    {report.analytics?.qualityContextIncomplete && <p className={cls.note}>{t('qualityHistorical')}</p>}
+                    {evaluation && <p className={cls.note}>{evaluation.result.formulaVersion} · {t('qualityCritical_' + evaluation.result.criticalStatus)}</p>}
+                    <button type="button" className={cls.button} onClick={() => { setShowHistory(true) }}>{t('qualityHistory')}</button>
+                    {runId && <button type="button" className={cls.button} onClick={() => { setRunId(undefined) }}>{t('qualityCurrent')}</button>}
+                </section>}
                 <CallAdminActions report={report} operator={operator} disabled={Boolean(runId) || previewRequest.isLoading || detail.isFetching} onDeleted={onDeleted} onChanged={() => { void detail.refetch() }} onCopy={() => { void copyId() }} onExport={exportDetails} onPreview={operator && !runId ? () => { setMessage(''); void analyzePreview(report.channelId).unwrap().catch(() => { setMessage(String(t('analysisError'))) }) } : undefined} />
                 <dl className={cls.detailMeta}>{[
                     ['source', t('source_' + report.source)], ['type', t('type_' + (report.callType || 'incoming'))], ['date', new Date(report.createdAt).toLocaleString(i18n.language)],
@@ -148,7 +149,7 @@ export function JournalDetail({ report: initialReport, project, onDeleted }: { r
                 {selectedMetric.quote && <section className={cls.detailSection}><h3>{t('supportingQuote')}</h3><blockquote>{selectedMetric.quote}</blockquote></section>}
             </div>}
         </SidePanel>
-        <SidePanel isOpen={showHistory} onClose={() => { setShowHistory(false) }} onBack={() => { setShowHistory(false) }} backLabel={String(t('backToCall'))} title={String(t('qualityHistory'))} className={cls.panel}>
+        <SidePanel isOpen={admin && showHistory} onClose={() => { setShowHistory(false) }} onBack={() => { setShowHistory(false) }} backLabel={String(t('backToCall'))} title={String(t('qualityHistory'))} className={cls.panel}>
             <div className={cls.detailBody}>
                 {history.isFetching && <p role="status">{t('loading')}</p>}
                 {history.isError && <p role="alert">{t('qualityLoadError')}</p>}

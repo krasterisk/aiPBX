@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ChevronRight } from 'lucide-react'
 import type { OperatorDashboardResponse, OperatorProject } from '@/entities/Report'
 import { CallPanelBody } from '../OperatorDashboard/DrilldownPanel/CallPanelBody'
-import { OperatorMetricPanelBody } from '../OperatorDashboard/DrilldownPanel/OperatorPanelBody'
+import { PreviewMetricCalls } from './PreviewMetricCalls'
 import type { PanelEntry } from '../../model/panelStack'
 import { PreviewCalls } from './PreviewCalls'
 import { operatorQuery, type PreviewCallsQuery, type PreviewFilters } from './previewModel'
@@ -20,7 +20,7 @@ export type PreviewEntry =
           tab: 'calls' | 'operators'
       }
     | { kind: 'call', title: string, channelId: string }
-    | { kind: 'metric', title: string, entry: Extract<PanelEntry, { kind: 'operatorMetric' }>, filters: PreviewFilters }
+    | { kind: 'metric', title: string, entry: Extract<PanelEntry, { kind: 'operatorMetric' }>, filters: PreviewFilters, page?: number }
 
 interface Props {
     renderCallDetail?: (channelId: string) => ReactNode
@@ -50,14 +50,13 @@ export function PreviewPanel({ entry, data, project, open, update, renderCallDet
     }
     if (entry.kind === 'metric') {
         return (
-            <div className={cls.legacy}>
-                <OperatorMetricPanelBody
+                <PreviewMetricCalls
                     entry={entry.entry}
                     filters={entry.filters}
-                    description={project?.customMetricsSchema?.find(m => m.id === entry.entry.metricId)?.description}
-                    onOpenCall={openCall}
+                    page={entry.page ?? 1}
+                    onPage={page => { update({ ...entry, page }) }}
+                    onOpen={openCall}
                 />
-            </div>
         )
     }
     const topics = data.operatorTopicStats

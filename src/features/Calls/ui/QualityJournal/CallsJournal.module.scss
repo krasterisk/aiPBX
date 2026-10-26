@@ -38,6 +38,7 @@
 }
 
 .root {
+    container: calls-journal / inline-size;
     width: 100%;
     padding: 6px 0 28px;
 }
@@ -325,8 +326,18 @@
     }
 }
 
-.filtersButton {
+.toolbarActions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     margin-left: auto;
+}
+
+.callCount {
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
 }
 
 .sources {
@@ -440,15 +451,15 @@
     }
 
     th:nth-child(2) {
-        width: 18%;
+        width: 170px;
     }
 
     th:nth-child(3) {
-        width: 21%;
+        width: auto;
     }
 
     th:nth-child(4) {
-        width: 17%;
+        width: auto;
     }
 
     th:nth-child(5) {
@@ -525,8 +536,7 @@
 
 .phoneNumber {
     min-width: 0;
-    white-space: normal;
-    overflow-wrap: anywhere;
+    white-space: nowrap;
 }
 
 .typeLabel {
@@ -714,7 +724,7 @@
     }
 }
 
-@media (max-width: 650px) {
+@container calls-journal (max-width: 900px) {
     .header {
         margin-bottom: 20px;
         gap: 10px;
@@ -947,10 +957,7 @@
     display: flex;
     gap: 18px;
     border-bottom: 1px solid var(--j-line);
-    position: sticky;
-    top: 0;
     background: var(--j-surface);
-    z-index: 2;
 
     button {
         border: 0;
@@ -1277,7 +1284,7 @@
     width: 65px;
 }
 
-@media (min-width: 651px) and (max-width: 1200px) {
+@container calls-journal (min-width: 901px) and (max-width: 1200px) {
     .table th:nth-child(6),
     .table td:nth-child(6) {
         display: table-cell;
@@ -1289,7 +1296,7 @@
     }
 }
 
-@media (max-width: 650px) {
+@container calls-journal (max-width: 900px) {
     .table td:nth-child(6) {
         display: block;
         grid-row: 3;
@@ -1352,7 +1359,10 @@
     gap: 8px;
 }
 
-@media (min-width: 901px) { .sort { display: none; } }
+@container calls-journal (min-width: 901px) {
+    .sort,
+    .metaLineEmpty { display: none; }
+}
 
 .adminActions { display: flex; flex-wrap: wrap; gap: 8px; }
 .danger { color: var(--red-dark, #bd4646) !important; }
