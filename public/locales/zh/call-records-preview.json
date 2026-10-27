@@ -91,5 +91,8 @@
     "withoutTopic": "无主题",
     "unnamedTopic": "未命名主题",
     "outcomeUnknown": "结果未知",
-    "lowQualityAdminHint": "转录质量较低的通话：{{count}}。已计入所有指标。"
+    "lowQualityAdminHint": "转录质量较低的通话：{{count}}。已计入所有指标。",
+    "exportAll": "导出所有筛选通话",
+    "exporting": "正在导出…",
+    "exportError": "无法导出全部记录。请重试。如果筛选结果已变化，请刷新列表。"
 }

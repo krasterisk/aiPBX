@@ -91,5 +91,8 @@
     "withoutTopic": "Without a topic",
     "unnamedTopic": "Unnamed topic",
     "outcomeUnknown": "Outcome unknown",
-    "lowQualityAdminHint": "Calls with low transcription quality: {{count}}. Included in all figures."
+    "lowQualityAdminHint": "Calls with low transcription quality: {{count}}. Included in all figures.",
+    "exportAll": "Export all selected calls",
+    "exporting": "Exporting…",
+    "exportError": "Could not export all records. Retry the export. If the selection changed, refresh the list."
 }

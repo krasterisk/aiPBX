@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import * as XLSX from 'xlsx'
+import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from '@mui/material'
 import { ChevronLeft, ChevronRight, Download, Search, PhoneIncoming, PhoneOutgoing, Network } from 'lucide-react'
-import { useGetOperatorCdrs, type OperatorProject } from '@/entities/Report'
+import { useGetOperatorCdrs, useLazyGetOperatorCdrs, type OperatorProject } from '@/entities/Report'
+import { collectCdrExport } from '../../lib/collectCdrExport'
 import { operatorCallScore } from '../../lib/operatorCallScore'
 import { ALL_DEFAULT_METRICS } from '../../lib/metricVisual'
-import { previewCsv, previewDuration, scoreTone, type PreviewCallsQuery } from './previewModel'
+import { previewDuration, scoreTone, type PreviewCallsQuery } from './previewModel'
 import cls from './OperatorDashboardPreview.module.scss'
 
 interface Props {
@@ -22,6 +25,10 @@ export function PreviewCalls({ query, project, page, search, onPage, onSearch, o
     const { t } = useTranslation('call-records-preview')
     const { t: r } = useTranslation('reports')
     const [input, setInput] = useState(search)
+    const [exporting, setExporting] = useState(false)
+    const [exportError, setExportError] = useState(false)
+    const exportLock = useRef(false)
+    const [fetchExportPage] = useLazyGetOperatorCdrs()
     const limit = 10
     const {
         currentData: data,
@@ -67,33 +74,40 @@ export function PreviewCalls({ query, project, page, search, onPage, onSearch, o
         ) : (
             <PhoneIncoming size={14} aria-hidden />
         )
-    const exportPage = () => {
-        const csv = previewCsv([
-            [
-                String(t('date')),
-                String(t('operator')),
-                String(t('extension')),
-                String(t('client')),
-                String(t('duration')),
-                String(t('score'))
-            ],
-            ...rows.map(call => [
-                new Date(call.createdAt).toLocaleString(),
-                operator(call),
-                call.operatorExtension ?? '',
-                call.clientPhone || call.callerId || '',
-                previewDuration(call.duration),
-                score(call) ?? ''
+    const exportAll = async () => {
+        if (exportLock.current) return
+        exportLock.current = true
+        setExporting(true)
+        setExportError(false)
+        try {
+            const selected = await collectCdrExport(async (page, limit) => {
+                // Unique ID order keeps equal call timestamps from shifting across pages.
+                const request = fetchExportPage({ ...query, page, limit, search: search || undefined, sortField: 'id', sortOrder: 'DESC' }, false)
+                try { return await request.unwrap() } finally { request.unsubscribe() }
+            })
+            const sheet = XLSX.utils.aoa_to_sheet([
+                [
+                    String(t('date')),
+                    String(t('operator')),
+                    String(t('extension')),
+                    String(t('client')),
+                    String(t('duration')),
+                    String(t('score'))
+                ],
+                ...selected.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).map(call => [
+                    new Date(call.createdAt).toLocaleString(),
+                    operator(call),
+                    call.operatorExtension ?? '',
+                    call.clientPhone || call.callerId || '',
+                    previewDuration(call.duration),
+                    score(call) ?? ''
+                ])
             ])
-        ])
-        const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }))
-        const link = document.createElement('a')
-        link.href = url
-        link.download = 'call-records-page.csv'
-        link.click()
-        setTimeout(() => {
-            URL.revokeObjectURL(url)
-        }, 1000)
+            const workbook = XLSX.utils.book_new()
+            XLSX.utils.book_append_sheet(workbook, sheet, 'calls')
+            const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+            saveAs(new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), 'call-records.xlsx')
+        } catch { setExportError(true) } finally { exportLock.current = false; setExporting(false) }
     }
     return (
         <div className={cls.calls}>
@@ -120,14 +134,15 @@ export function PreviewCalls({ query, project, page, search, onPage, onSearch, o
                 <button
                     type="button"
                     className={cls.iconButton}
-                    onClick={exportPage}
-                    disabled={!rows.length || isFetching}
-                    aria-label={String(t('exportPage'))}
-                    title={String(t('exportPage'))}
+                    onClick={() => { void exportAll() }}
+                    disabled={!total || isFetching || exporting}
+                    aria-label={String(t(exporting ? 'exporting' : 'exportAll'))}
+                    title={String(t(exporting ? 'exporting' : 'exportAll'))}
                 >
                     <Download size={17} aria-hidden />
                 </button>
             </div>
+            {exportError && <p className={cls.message} role="alert">{t('exportError')}</p>}
             {isError ? (
                 <div className={cls.message} role="alert">
                     <p>{t('loadError')}</p>

@@ -91,5 +91,8 @@
     "withoutTopic": "Ohne Thema",
     "unnamedTopic": "Unbenanntes Thema",
     "outcomeUnknown": "Ergebnis unbekannt",
-    "lowQualityAdminHint": "Anrufe mit geringer Transkriptionsqualität: {{count}}. In allen Kennzahlen enthalten."
+    "lowQualityAdminHint": "Anrufe mit geringer Transkriptionsqualität: {{count}}. In allen Kennzahlen enthalten.",
+    "exportAll": "Alle ausgewählten Anrufe exportieren",
+    "exporting": "Export läuft…",
+    "exportError": "Nicht alle Einträge konnten exportiert werden. Wiederholen Sie den Export. Bei Änderungen aktualisieren Sie die Liste."
 }
