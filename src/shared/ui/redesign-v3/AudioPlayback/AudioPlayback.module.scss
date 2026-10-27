@@ -1,4 +1,4 @@
-.player { width: 100%; button { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; border: 1px solid color-mix(in srgb,var(--text-redesigned) 12%,transparent); border-radius: 7px; padding: 5px 9px; color: var(--text-redesigned); background: transparent; font: inherit; font-size: 12px; line-height: 20px; cursor: pointer; &:hover { background: var(--dark-bg-redesigned); } &:focus-visible { outline: 2px solid var(--accent-redesigned); outline-offset: 2px; } } audio { display: block; width: 100%; margin-top: 8px; height: 36px; } }
+.player { width: 100%; button { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; border: 1px solid color-mix(in srgb,var(--text-redesigned) 12%,transparent); border-radius: 7px; padding: 5px 9px; color: var(--text-redesigned); background: transparent; font: inherit; font-size: 12px; line-height: 20px; cursor: pointer; &:hover { background: var(--dark-bg-redesigned); } &:focus-visible { outline: 2px solid var(--accent-redesigned); outline-offset: 2px; } } }
 
 .compact {
     display: grid;
