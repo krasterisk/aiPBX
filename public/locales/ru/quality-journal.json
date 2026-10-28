@@ -160,7 +160,7 @@
   "quality_assessed": "Оценено",
   "quality_not_applicable": "Неприменимо",
   "quality_insufficient_evidence": "Недостаточно доказательств",
-  "quality_missing": "Нет ответа",
+  "quality_missing": "Нет оценки",
   "quality_invalid": "Некорректный ответ",
   "qualitySource_model": "Модель",
   "qualitySource_human": "Корректировка руководителя",
