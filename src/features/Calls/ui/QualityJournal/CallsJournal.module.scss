@@ -190,8 +190,8 @@
     display: flex;
     align-items: center;
     gap: 9px;
-    flex: 1;
-    min-width: 180px;
+    flex: 1 1 280px;
+    min-width: min(100%, 280px);
     max-width: 440px;
     background: var(--j-surface);
     border: 1px solid var(--j-line);
@@ -780,8 +780,15 @@
     }
 
     .search {
+        flex-basis: 100%;
         min-width: 0;
         max-width: none;
+    }
+
+    .toolbarActions {
+        width: 100%;
+        margin-left: 0;
+        justify-content: space-between;
     }
 
     .filtersButton {
