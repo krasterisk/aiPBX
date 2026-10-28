@@ -1295,6 +1295,15 @@
     width: 65px;
 }
 
+.table th:nth-child(9) {
+    width: 100px;
+}
+
+.callCost {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
 @container calls-journal (min-width: 1051px) and (max-width: 1200px) {
     .table th:nth-child(6),
     .table td:nth-child(6) {
@@ -1328,6 +1337,20 @@
     }
 
     .table td:nth-child(9) {
+        grid-row: 5;
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 12px;
+
+        &::before {
+            content: attr(data-label);
+            color: var(--j-muted);
+        }
+    }
+
+    .table td:nth-child(10) {
         grid-row: 4;
         grid-column: 2;
         text-align: right;

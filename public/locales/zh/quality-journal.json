@@ -200,5 +200,6 @@
   "cost_other": "其他费用",
   "cost_total": "总扣费",
   "freeRuns": "管理员免费分析次数",
-  "timestampUnavailable": "原始分析中部分发言未保存时间戳。"
+  "timestampUnavailable": "原始分析中部分发言未保存时间戳。",
+  "cost": "费用"
 }

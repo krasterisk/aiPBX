@@ -7,7 +7,6 @@ import { Button } from '@/shared/ui/redesigned/Button'
 import {
     Report,
     ReportExpandedPanel,
-    reportDisplayMoneyInput,
     useGetReportDialogs,
     useCreateCallAnalytics,
     useRegenerateOperatorAnalytics,
@@ -20,7 +19,7 @@ import { isUserAdmin } from '@/entities/User'
 import { useSelector } from 'react-redux'
 
 import { formatTime } from '@/shared/lib/functions/formatTime'
-import { formatDisplayMoney } from '@/shared/lib/functions/formatDisplayMoney'
+import { formatCallCost } from '../../lib/formatCallCost'
 import {
     ChevronDown, ChevronUp, Star, CheckCircle, AlertCircle,
     Phone, Globe, Monitor, Save
@@ -43,7 +42,7 @@ interface CallsTableRowProps {
 }
 
 const CallsTableRow = memo(({ report, onFilterByTag }: CallsTableRowProps) => {
-    const { t } = useTranslation('reports')
+    const { t, i18n } = useTranslation('reports')
     const [isExpanded, setIsExpanded] = useState(false)
     const isAdmin = useSelector(isUserAdmin)
 
@@ -134,21 +133,6 @@ const CallsTableRow = memo(({ report, onFilterByTag }: CallsTableRowProps) => {
                     ) : '-'}
                 </td>
 
-                <td data-label={String(t('Длительность'))}>
-                    <Text text={String(duration)} />
-                </td>
-
-                <td data-label={String(t('Стоимость'))}>
-                    {(report.cost || report.amountCurrency)
-                        ? (
-                            <Text
-                                text={formatDisplayMoney(reportDisplayMoneyInput(report), 4)}
-                                bold
-                            />
-                        )
-                        : '-'}
-                </td>
-
                 <td data-label={String(t('Оценка'))} className={cls.csatCell}>
                     {csat != null ? (
                         <HStack gap="4" align="center" className={cls.csatValue}>
@@ -213,6 +197,9 @@ const CallsTableRow = memo(({ report, onFilterByTag }: CallsTableRowProps) => {
                     )}
                     {scenarioSuccess == null && '-'}
                 </td>
+
+                <td data-label={String(t('Длительность'))}><Text text={String(duration)} /></td>
+                <td data-label={String(t('Стоимость'))}><Text text={formatCallCost(report, i18n.language)} bold /></td>
 
                 <td onClick={e => { e.stopPropagation() }}>
                     <HStack justify="end">
@@ -284,12 +271,6 @@ export const CallsTable = memo(({
                         <th className={cls.sortable} onClick={() => { onChangeSort('source') }}>
                             <HStack gap="4">{String(t('Источник'))} {renderSortIcon('source')}</HStack>
                         </th>
-                        <th className={cls.sortable} onClick={() => { onChangeSort('duration') }}>
-                            <HStack gap="4">{String(t('Длительность'))} {renderSortIcon('duration')}</HStack>
-                        </th>
-                        <th className={cls.sortable} onClick={() => { onChangeSort('cost') }}>
-                            <HStack gap="4">{String(t('Стоимость'))} {renderSortIcon('cost')}</HStack>
-                        </th>
                         <th className={cls.sortable} onClick={() => { onChangeSort('csat') }}>
                             <HStack gap="4">{String(t('Оценка'))} {renderSortIcon('csat')}</HStack>
                         </th>
@@ -301,6 +282,12 @@ export const CallsTable = memo(({
                         </th>
                         <th className={cls.sortable} onClick={() => { onChangeSort('scenarioSuccess') }}>
                             <HStack gap="4">{String(t('Результат'))} {renderSortIcon('scenarioSuccess')}</HStack>
+                        </th>
+                        <th className={cls.sortable} onClick={() => { onChangeSort('duration') }}>
+                            <HStack gap="4">{String(t('Длительность'))} {renderSortIcon('duration')}</HStack>
+                        </th>
+                        <th className={cls.sortable} onClick={() => { onChangeSort('cost') }}>
+                            <HStack gap="4">{String(t('Стоимость'))} {renderSortIcon('cost')}</HStack>
                         </th>
                         <th />
                     </tr>

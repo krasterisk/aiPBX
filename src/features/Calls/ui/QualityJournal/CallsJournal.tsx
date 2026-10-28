@@ -2,7 +2,6 @@ import { useQualityJournalQuery as useGetCallJournalQuery, useLazyQualityJournal
 import { QualityRulesEditor } from '@/features/OperatorAnalytics'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from '@mui/material'
 import { ArrowDown, ArrowUp, Check, ChevronLeft, ChevronRight, Clock3, Download, Filter, Network, PhoneIncoming, PhoneOutgoing, RefreshCw, Search, X } from 'lucide-react'
@@ -15,8 +14,8 @@ import {
 } from '@/entities/Report'
 
 import { SidePanel, FilterPanel } from '@/shared/ui/redesign-v3'
-import { getRouteCalls } from '@/shared/const/router'
 import { BatchProgressBar } from '../BatchProgressBar/BatchProgressBar'
+import { formatCallCost } from '../../lib/formatCallCost'
 import { buildCallsExportSheet } from '../../lib/qualityCallsExportSheet'
 import { journalPeriod, journalQuery, journalDateInput, journalCustomRange, journalDuration, journalScoreTone, journalProject, shiftJournalRange, type JournalFilters, type JournalPeriod } from '../../lib/journalModel'
 import { JournalMultiSelect } from './JournalMultiSelect'
@@ -154,15 +153,14 @@ export function QualityJournal() {
     }
     const tableHeaders = [
         { label: 'date', field: 'createdAt' }, { label: 'client', field: 'callerId' }, { label: 'person', field: 'assistantName' },
-        { label: 'topic', field: 'topic' }, { label: 'score', field: 'qualityScore' }, { label: 'csat', field: 'csat' }, { label: 'result', field: 'scenarioSuccess' }, { label: 'duration', field: 'duration' }
+        { label: 'topic', field: 'topic' }, { label: 'score', field: 'qualityScore' }, { label: 'csat', field: 'csat' }, { label: 'result', field: 'scenarioSuccess' }, { label: 'duration', field: 'duration' }, { label: 'cost', field: 'cost' }
     ]
     const multi = (key: 'people' | 'sources' | 'callTypes' | 'csat' | 'tagIds', label: string, options: JournalPersonOption[], disabled = false) =>
         <JournalMultiSelect label={String(t(label))} options={options} value={filters[key] ?? []} onChange={value => { patch({ [key]: value }) }} disabled={disabled} />
     return <section className={cls.root} data-testid="CallsJournal">
-        <aside className={cls.note}>{t('previewNotice')}</aside>
         <header className={cls.header}>
-            <div><div className={cls.headerTitle}><h1>{t('title')}</h1><span className={cls.previewBadge}>{t('preview')}</span></div>
-                <p>{t('subtitle')} · <Link to={getRouteCalls()}>{t('legacy')}</Link></p></div>
+            <div><div className={cls.headerTitle}><h1>{t('title')}</h1></div>
+                <p>{t('subtitle')}</p></div>
             <div className={cls.actions}>
                 <button type="button" className={cls.button} onClick={() => { void exportAll() }} disabled={!total || isFetching || exporting || search.trim() !== filters.search} aria-label={String(t('export'))} title={String(t('export'))}><Download size={16} aria-hidden /><span>{t(exporting ? 'exporting' : 'export')}</span></button>
             </div>
@@ -213,7 +211,7 @@ export function QualityJournal() {
                         <td><span className={cls.person}>{row.assistantName && row.assistantName !== 'Unknown Operator' ? row.assistantName : t('noOperator')}</span><small className={cls.sourceLabel}>{SOURCE_VALUES.includes(row.source || '') ? t('source_' + row.source) : row.source || '—'}{row.operatorExtension ? ` · ${t('extension')} ${row.operatorExtension}` : ''}</small></td>
                         <td>{tags?.tags?.length ? tags.tags.map(tag => <button type="button" key={tag} className={cls.topic} title={tags.tag_names?.[tag] || tag} onClick={e => { e.stopPropagation(); patch({ tagId: '', tagIds: [tag], projectId: row.projectId ? String(row.projectId) : '' }) }}>{tags.tag_names?.[tag] || tag}</button>) : <span className={cls.note}>—</span>}</td>
                         <td>{value.value != null ? <Tooltip title={value.hint}><span className={cls.score} data-tone={value.tone}><i aria-hidden />{formatQualityScore(value.value)}<small>/{value.maximum}</small></span></Tooltip> : <Tooltip title={String(t('quality_' + (row.analytics?.qualityStatus || 'legacy')))}><span>—</span></Tooltip>}</td>
-                        <td><Tooltip title={String(t('csatHint'))}><span className={cls.score}>{row.analytics?.csat ?? '—'}{row.analytics?.csat != null && <small>/5</small>}</span></Tooltip></td><td>{outcome(row)}</td><td>{journalDuration(row.duration)}</td><td><ChevronRight size={15} aria-hidden className={cls.chevron} /></td>
+                        <td><Tooltip title={String(t('csatHint'))}><span className={cls.score}>{row.analytics?.csat ?? '—'}{row.analytics?.csat != null && <small>/5</small>}</span></Tooltip></td><td>{outcome(row)}</td><td>{journalDuration(row.duration)}</td><td className={cls.callCost} data-label={String(t('cost'))}>{formatCallCost(row, i18n.language)}</td><td><ChevronRight size={15} aria-hidden className={cls.chevron} /></td>
                     </tr>
                 })}</tbody>
             </table>}

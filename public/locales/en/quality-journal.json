@@ -200,5 +200,6 @@
   "cost_other": "Other charges",
   "cost_total": "Total charged",
   "freeRuns": "Free administrative analyses",
-  "timestampUnavailable": "The original analysis did not retain timestamps for some turns."
+  "timestampUnavailable": "The original analysis did not retain timestamps for some turns.",
+  "cost": "Cost"
 }

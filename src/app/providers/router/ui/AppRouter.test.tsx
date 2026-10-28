@@ -18,15 +18,16 @@ jest.mock('@/pages/DashboardCallRecordsPreviewPage', () => ({
 }))
 
 jest.mock('@/pages/CallsPage', () => ({ CallsPage: () => <main data-testid="LegacyCalls" /> }))
-jest.mock('@/pages/CallsPreviewPage', () => ({ CallsPreviewPage: () => <main data-testid="PreviewCalls" /> }))
+jest.mock('@/pages/CallsPreviewPage', () => ({ CallsPreviewPage: () => <main data-testid="PreviewCalls" data-path={jest.requireActual('react-router-dom').useLocation().pathname} /> }))
 
 describe('app/router/AppRouter', function () {
-  test.each([[getRouteCalls(), 'LegacyCalls'], [getRouteCallsPreview(), 'PreviewCalls']])('keeps journal route %s working independently', async (route, testId) => {
+  test.each([[getRouteCalls(), 'PreviewCalls'], [getRouteCallsPreview(), 'PreviewCalls']])('serves the new journal through primary and preview routes: %s', async (route, testId) => {
     componentRender(<AppRouter />, { route, initialState: { user: { authData: { id: '99', roles: [{ value: UserRolesValues.USER }] }, _mounted: true } } })
     expect(await screen.findByTestId(testId)).toBeInTheDocument()
+    expect(screen.getByTestId(testId)).toHaveAttribute('data-path', getRouteCalls())
   })
-  test('requires authentication for the preview journal', async () => {
-    componentRender(<AppRouter />, { route: getRouteCallsPreview(), initialState: {} })
+  test.each([getRouteCalls(), getRouteCallsPreview()])('requires authentication for journal route %s', async route => {
+    componentRender(<AppRouter />, { route, initialState: {} })
     expect(await screen.findByTestId('MainPage')).toBeInTheDocument()
     expect(screen.queryByTestId('PreviewCalls')).not.toBeInTheDocument()
   })

@@ -84,7 +84,6 @@ import { HelpdeskDetailPage } from '@/pages/HelpdeskDetailPage'
 import { AssistantsCreatePage, AssistantsPage, AssistantsEditPage } from '@/pages/AssistantsPage'
 import { UsersCreatePage, UsersEditPage, UsersPage } from '@/pages/UsersPage'
 import { ToolsCreatePage, ToolsEditPage, ToolsPage } from '@/pages/ToolsPage'
-import { CallsPage } from '@/pages/CallsPage'
 import { CallsPreviewPage } from '@/pages/CallsPreviewPage'
 import { AnalyticsProjectsPage } from '@/pages/AnalyticsProjectsPage'
 import { AnalyticsApiPage } from '@/pages/AnalyticsApiPage'
@@ -186,12 +185,12 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.CALLS_PREVIEW]: {
     path: getRouteCallsPreview(),
     authOnly: true,
-    element: <CallsPreviewPage />
+    element: <Navigate to={getRouteCalls()} replace />
   },
   [AppRoutes.CALLS]: {
     path: getRouteCalls(),
     authOnly: true,
-    element: <CallsPage />
+    element: <CallsPreviewPage />
   },
   [AppRoutes.ANALYTICS]: {
     path: getRouteAnalytics(),

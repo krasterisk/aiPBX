@@ -9,6 +9,7 @@ jest.mock('react-router-dom', () => ({ Link: ({ children }: any) => <span>{child
 jest.mock('@/entities/User', () => ({ getUserAuthData: () => ({ id: '1', vpbx_user_id: '99' }), isUserAdmin: () => true, ClientFilter: () => null }))
 jest.mock('@/entities/Report', () => ({
     ...jest.requireActual('@/entities/Report/model/types/quality'),
+    ...jest.requireActual('@/entities/Report/lib/reportDisplayMoneyInput'),
     useQualityJournalQuery: (...args: any[]) => query(...args),
     useLazyQualityJournalQuery: () => [jest.fn()],
     useGetCallJournalOptionsQuery: () => ({ currentData: { people: [] } }),
@@ -23,10 +24,21 @@ jest.mock('xlsx', () => ({}))
 jest.mock('file-saver', () => ({}))
 beforeEach(() => { query.mockReturnValue({ currentData: { rows: [row], count: 1 }, refetch: jest.fn() }) })
 
+it('shows the charged currency rounded to two places after duration and sorts by cost', () => {
+    query.mockReturnValue({ currentData: { rows: [{ ...row, duration: 60, cost: 0.15, amountCurrency: 12.345, costCurrency: 'RUB' }], count: 1 }, refetch: jest.fn() })
+    render(<QualityJournal />)
+    const cells = screen.getAllByRole('row')[1].querySelectorAll('td')
+    expect(cells[7]).toHaveTextContent('01:00')
+    expect(cells[8]).toHaveTextContent('RUB')
+    expect(cells[8].textContent).toContain('12.35')
+    fireEvent.click(screen.getByRole('button', { name: 'cost' }))
+    expect(query.mock.calls.at(-1)[0]).toMatchObject({ sortField: 'cost', sortOrder: 'DESC' })
+})
+
 it('shows published quality separately from CSAT and sorts through the isolated server endpoint', () => {
     render(<QualityJournal />)
     expect(screen.getByText('86.3')).toBeInTheDocument()
-    expect(screen.getByText('previewNotice')).toBeInTheDocument()
+    expect(screen.queryByText('previewNotice')).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'upload' })).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: /score/ }))
     expect(query.mock.calls.at(-1)[0]).toMatchObject({ sortField: 'qualityScore', sortOrder: 'DESC' })

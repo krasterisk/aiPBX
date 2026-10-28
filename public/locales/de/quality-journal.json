@@ -200,5 +200,6 @@
   "cost_other": "Weitere Kosten",
   "cost_total": "Insgesamt berechnet",
   "freeRuns": "Kostenlose administrative Analysen",
-  "timestampUnavailable": "Die ursprüngliche Analyse enthält für einige Beiträge keine Zeitstempel."
+  "timestampUnavailable": "Die ursprüngliche Analyse enthält für einige Beiträge keine Zeitstempel.",
+  "cost": "Kosten"
 }
