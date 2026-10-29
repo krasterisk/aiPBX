@@ -409,6 +409,7 @@
 .table {
     border-collapse: collapse;
     width: 100%;
+    min-width: 720px;
     font-size: 12px;
     font-variant-numeric: tabular-nums;
     th {
@@ -428,6 +429,7 @@
     td:first-child {
         text-align: left;
         padding-left: 0;
+        min-width: 240px;
     }
     tr:last-child td {
         border: 0;
@@ -446,7 +448,8 @@
         font-size: 12px;
         font-weight: 700;
         flex: 1;
-        overflow-wrap: anywhere;
+        overflow-wrap: normal;
+        word-break: normal;
     }
     > svg {
         color: var(--preview-muted);
@@ -795,6 +798,8 @@
         font-size: 12px;
     }
     .table {
+        min-width: 0;
+
         thead {
             display: none;
         }
@@ -823,6 +828,7 @@
                 margin-bottom: 3px;
             }
             &:first-child {
+                min-width: 0;
                 grid-column: 1 / -1;
             }
         }

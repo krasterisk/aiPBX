@@ -4,7 +4,7 @@ import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from '@mui/material'
 import { ChevronLeft, ChevronRight, Download, Search, PhoneIncoming, PhoneOutgoing, Network } from 'lucide-react'
-import { useQualityCdrsQuery as useGetOperatorCdrs, useLazyQualityCdrsQuery as useLazyGetOperatorCdrs, publishedQuality, type OperatorProject } from '@/entities/Report'
+import { useQualityCdrsQuery as useGetOperatorCdrs, useLazyQualityCdrsQuery as useLazyGetOperatorCdrs, publishedQuality, formatQualityScore, type OperatorProject } from '@/entities/Report'
 import { collectCdrExport } from '../../lib/collectCdrExport'
 import { ALL_DEFAULT_METRICS } from '../../lib/metricVisual'
 import { previewDuration, scoreTone, type PreviewCallsQuery } from './previewModel'
@@ -201,7 +201,7 @@ export function PreviewCalls({ query, project, page, search, onPage, onSearch, o
                                     }}
                                 >
                                     <i />
-                                    {score(call) ?? '—'}
+                                    {formatQualityScore(score(call))}
                                     <small>{score(call) != null ? '/ 100' : ''}</small>
                                 </span>
                             </Tooltip>

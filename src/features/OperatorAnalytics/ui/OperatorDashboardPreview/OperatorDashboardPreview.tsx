@@ -630,13 +630,13 @@ open(
                                                         data-tone={scoreTone(o.scoredCalls === 0 ? null : o.averageScore)}
                                                     >
                                                         <i />
-                                                        {o.scoredCalls === 0 ? '—' : Math.round(o.averageScore)}
+                                                        {o.scoredCalls === 0 ? '—' : Number(o.averageScore.toFixed(1))}
                                                     </span>
                                                 </td>
                                                 <td data-label={String(t('successful'))}>
                                                     {o.callsCount ? `${normalizeRate(o.successRate).toFixed(0)}%` : '—'}
                                                 </td>
-                                                <td data-label={String(r('CSAT'))}>{o.avgCsat ?? '—'}</td>
+                                                <td data-label={String(r('CSAT'))}>{typeof o.avgCsat === 'number' && Number.isFinite(o.avgCsat) ? Number(o.avgCsat.toFixed(2)) : '—'}</td>
                                                 <td data-label={String(t('negative'))}>{o.negativeRate.toFixed(0)}%</td>
                                             </tr>
                                         ))}

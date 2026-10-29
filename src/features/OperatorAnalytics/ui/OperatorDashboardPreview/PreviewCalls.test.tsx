@@ -20,7 +20,7 @@ it('renders native CDR nested metrics and opens the analysis channel rather than
                     assistantName: 'Demo operator',
                     callerId: '+7 900 000-00-00',
                     duration: 72,
-                    analytics: { qualityStatus: 'scored', qualityScore: 65, metrics: { greeting_quality: 100 } }
+                    analytics: { qualityStatus: 'scored', qualityScore: 77.77777777777777, metrics: { greeting_quality: 100 } }
                 }
             ],
             total: 1
@@ -32,14 +32,14 @@ it('renders native CDR nested metrics and opens the analysis channel rather than
     render(
         <PreviewCalls query={{ userId: '99', projectId: '5' }} page={1} search="" onPage={jest.fn()} onSearch={jest.fn()} onOpen={onOpen} />
     )
-    expect(screen.getByText('65')).toBeInTheDocument()
+    expect(screen.getByText('77.8')).toBeInTheDocument()
     expect(screen.getByText('Demo operator')).toBeInTheDocument()
     expect(screen.getByText('+7 900 000-00-00')).toBeInTheDocument()
     fireEvent.click(screen.getByLabelText('type_incoming'))
-    fireEvent.click(screen.getByText('65'))
+    fireEvent.click(screen.getByText('77.8'))
     expect(onOpen).not.toHaveBeenCalled()
-    fireEvent.focus(screen.getByText('65'))
-    expect(screen.getByText('65').closest('[tabindex]')).toHaveAttribute('aria-label', 'callScoreHint')
+    fireEvent.focus(screen.getByText('77.8'))
+    expect(screen.getByText('77.8').closest('[tabindex]')).toHaveAttribute('aria-label', 'callScoreHint')
     fireEvent.click(screen.getByRole('button', { name: 'openCall' }))
     expect(onOpen).toHaveBeenCalledWith('analysis-7')
     expect(cdrs).toHaveBeenCalledWith(expect.objectContaining({ userId: '99', projectId: '5', limit: 10, sortField: 'createdAt' }))
