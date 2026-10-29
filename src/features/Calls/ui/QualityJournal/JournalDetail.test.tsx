@@ -24,11 +24,24 @@ jest.mock('./QualityCorrectionEditor', () => ({ QualityCorrectionEditor: () => n
 beforeEach(() => { mockAdmin = false; jest.clearAllMocks() })
 it('shows the same published all-metric score used by the journal and dashboard adapter', () => {
     const original = report.analytics
-    report.analytics = { qualityStatus: 'scored', qualityScore: 37.5, metrics: {
-        politeness_empathy: 100, speech_clarity_pace: 100,
-        custom_metrics: { greeting: false, introduction: false, clinic: false, name: false,
-            branch: true, appointment: null, offer: false, source: null }
-    } }
+    report.analytics = {
+        qualityStatus: 'scored',
+        qualityScore: 37.5,
+        metrics: {
+            politeness_empathy: 100,
+            speech_clarity_pace: 100,
+            custom_metrics: {
+                greeting: false,
+                introduction: false,
+                clinic: false,
+                name: false,
+                branch: true,
+                appointment: null,
+                offer: false,
+                source: null
+            }
+        }
+    }
     try {
         render(<JournalDetail report={report} />)
         expect(screen.getByText('metricScore').parentElement).toHaveTextContent('37.5/100')
