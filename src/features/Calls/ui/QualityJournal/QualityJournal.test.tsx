@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { QualityJournal } from './CallsJournal'
 
 const query = jest.fn()
+const options = jest.fn()
 const row: any = { id: 'one', channelId: 'one', userId: '99', projectId: 5, source: 'external-api', callerId: '+70000000001', createdAt: '2026-10-25T07:00:00Z', analytics: { qualityStatus: 'scored', qualityScore: 86.25, csat: 4 } }
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key, i18n: { language: 'en' } }) }))
 jest.mock('react-redux', () => ({ useSelector: (fn: any) => fn() }))
@@ -12,7 +13,7 @@ jest.mock('@/entities/Report', () => ({
     ...jest.requireActual('@/entities/Report/lib/reportDisplayMoneyInput'),
     useQualityJournalQuery: (...args: any[]) => query(...args),
     useLazyQualityJournalQuery: () => [jest.fn()],
-    useGetCallJournalOptionsQuery: () => ({ currentData: { people: [] } }),
+    useGetCallJournalOptionsQuery: (...args: any[]) => { options(...args); return { currentData: { people: [] } } },
     useGetOperatorProjects: () => ({ currentData: [{ id: 5, userId: '99', name: 'Clinic', callTaxonomy: [{ id: 'a', name: 'Topic A' }, { id: 'b', name: 'Topic B' }] }] }),
     useBatchProgress: () => ({ isActive: false }),
     isOperatorAnalyticsSource: () => true
@@ -61,4 +62,14 @@ it('replaces selected topics through the row shortcut without leaving a hidden l
     fireEvent.click(screen.getAllByRole('row')[1].querySelector('button')!)
     expect(query.mock.calls.at(-1)[0]).toMatchObject({ tagIds: '["a"]' })
     expect(query.mock.calls.at(-1)[0].tagId).toBeUndefined()
+})
+it('requests people for the current search and topics without pagination or its own selection', () => {
+    render(<QualityJournal />)
+    const search = screen.getByRole('searchbox', { name: 'search' })
+    fireEvent.change(search, { target: { value: 'results' } })
+    fireEvent.submit(search.closest('form')!)
+    fireEvent.click(screen.getAllByRole('button', { name: 'topic' })[0])
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Topic A' }))
+    expect(options.mock.calls.at(-1)[0]).toMatchObject({ search: 'results', tagIds: '["a"]', startDate: expect.any(String), endDate: expect.any(String) })
+    for (const key of ['people', 'page', 'limit', 'sortField', 'sortOrder']) expect(options.mock.calls.at(-1)[0][key]).toBeUndefined()
 })

@@ -35,7 +35,7 @@ export const journalApi = rtkApi.injectEndpoints({
                 ])
             ]
         }),
-        getCallJournalOptions: build.query<{ people: JournalPersonOption[], limitReached: boolean }, Pick<JournalQuery, 'startDate' | 'endDate' | 'userId'>>({
+        getCallJournalOptions: build.query<{ people: JournalPersonOption[], limitReached: boolean }, Omit<JournalQuery, 'page' | 'limit' | 'sortField' | 'sortOrder' | 'people' | 'search'> & { search?: string }>({
             query: params => ({ url: '/reports/journal/options', params }),
             providesTags: [{ type: 'Reports', id: 'LIST' }]
         })

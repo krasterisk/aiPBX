@@ -55,7 +55,11 @@ export function QualityJournal() {
     const { currentData: data, isFetching, isError, refetch } = useGetCallJournalQuery(query, {
         skip: !auth, refetchOnFocus: true, refetchOnReconnect: true, pollingInterval: batch.isActive ? 5000 : poll
     })
-    const optionsQuery = useGetCallJournalOptionsQuery({ userId, startDate: filters.startDate, endDate: filters.endDate }, { skip: !auth })
+    const optionsSelection = useMemo(() => {
+        const { page: _page, limit: _limit, sortField: _sortField, sortOrder: _sortOrder, people: _people, ...selection } = query
+        return selection
+    }, [query])
+    const optionsQuery = useGetCallJournalOptionsQuery(optionsSelection, { skip: !auth })
     const { currentData: projects = [] } = useGetOperatorProjects(userId || undefined, { skip: !auth })
     const [fetchExportPage] = useLazyGetCallJournalQuery()
     const rows = data?.rows ?? []
