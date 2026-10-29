@@ -82,10 +82,10 @@ export function OperatorDashboardPreview(props: Props) {
     const single = selected.length === 1 ? selected[0] : undefined
     const scope = operatorSelection(selected)
     const filters = { ...props.filters, ...scope }
-    const summaryQuery = useGetOperatorDashboard(filters, { skip: !selected.length || props.loading || props.error, refetchOnMountOrArgChange: true, pollingInterval: 15000 })
+    const summaryQuery = useGetOperatorDashboard(filters, { skip: !selected.length || props.loading || props.error, refetchOnMountOrArgChange: true, pollingInterval: 60000 })
     const data = selected.length ? summaryQuery.currentData : props.data
-    const loading = props.loading || Boolean(selected.length && (summaryQuery.isFetching || !data) && !summaryQuery.isError)
-    const error = props.error || Boolean(selected.length && summaryQuery.isError)
+    const loading = props.loading || Boolean(selected.length && !data && !summaryQuery.isError)
+    const error = props.error || Boolean(selected.length && summaryQuery.isError && !data)
     const open = (entry: PreviewEntry) => {
         if (!stack.length) focus.current = document.activeElement as HTMLElement
         setStack(old => [...old, entry])
