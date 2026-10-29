@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useGetOperatorEvidence } from '@/entities/Report'
+import { useQualityEvidenceQuery as useGetOperatorEvidence } from '@/entities/Report'
 import type { PanelEntry } from '../../model/panelStack'
 import { formatEvidenceMetricAverage, formatEvidenceMetricValue } from '../../lib/metricVisual'
 import type { PreviewFilters } from './previewModel'

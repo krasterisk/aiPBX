@@ -5,6 +5,13 @@ export const qualityApi = rtkApi.injectEndpoints({
     endpoints: build => ({
         getQualityDetail: build.query<QualityDetail, { channelId: string, runId?: string }>({
             query: ({ channelId, runId }) => ({ url: `/quality-preview/calls/${encodeURIComponent(channelId)}`, params: { runId } }),
+            async onQueryStarted({ runId }, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled
+                    // Current detail may publish a corrected projection. Refresh all its readers.
+                    if (!runId) dispatch(rtkApi.util.invalidateTags([{ type: 'OperatorAnalytics', id: 'QUALITY-PREVIEW' }]))
+                } catch { /* Failed and historical reads cannot change the current projection. */ }
+            },
             providesTags: (_result, _error, arg) => [{ type: 'OperatorAnalytics', id: `QUALITY-PREVIEW-CALL-${arg.channelId}` }]
         }),
         getQualityHistory: build.query<QualityHistoryItem[], { channelId: string, before?: string }>({

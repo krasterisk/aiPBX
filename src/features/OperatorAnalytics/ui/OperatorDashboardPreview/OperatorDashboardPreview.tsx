@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BarChart3, Check, ChevronDown, ChevronRight, Clock3, Phone, Users, ArrowDown, ArrowUp, ChevronsUpDown } from 'lucide-react'
 import {
-    useGetOperatorDashboard,
+    useQualityDashboardQuery as useGetOperatorDashboard,
     WITHOUT_PROJECT_FILTER,
     type OperatorDashboardResponse,
     type OperatorProject
@@ -82,7 +82,7 @@ export function OperatorDashboardPreview(props: Props) {
     const single = selected.length === 1 ? selected[0] : undefined
     const scope = operatorSelection(selected)
     const filters = { ...props.filters, ...scope }
-    const summaryQuery = useGetOperatorDashboard(filters, { skip: !selected.length || props.loading || props.error })
+    const summaryQuery = useGetOperatorDashboard(filters, { skip: !selected.length || props.loading || props.error, refetchOnMountOrArgChange: true, pollingInterval: 15000 })
     const data = selected.length ? summaryQuery.currentData : props.data
     const loading = props.loading || Boolean(selected.length && (summaryQuery.isFetching || !data) && !summaryQuery.isError)
     const error = props.error || Boolean(selected.length && summaryQuery.isError)
@@ -208,7 +208,7 @@ export function OperatorDashboardPreview(props: Props) {
                             { label: t('calls'), value: total, hint: t('analyzed'), icon: Phone, query: filters },
                             {
                                 label: t('score'),
-                                value: total ? data.averageScore.toFixed(1) : '—',
+                                value: total && data.averageScore != null && data.scoredCalls !== 0 ? data.averageScore.toFixed(1) : '—',
                                 hint: t('scoreHint'),
                                 icon: BarChart3,
                                 query: filters

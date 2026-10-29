@@ -22,6 +22,18 @@ useDeleteReport: () => [mockRemove, {}]
 jest.mock('@/shared/ui/redesign-v3', () => ({ SidePanel: () => null, AudioPlayback: ({ label, children }: any) => <div><button>{label}</button>{children}</div> }))
 jest.mock('./QualityCorrectionEditor', () => ({ QualityCorrectionEditor: () => null }))
 beforeEach(() => { mockAdmin = false; jest.clearAllMocks() })
+it('shows the same published all-metric score used by the journal and dashboard adapter', () => {
+    const original = report.analytics
+    report.analytics = { qualityStatus: 'scored', qualityScore: 37.5, metrics: {
+        politeness_empathy: 100, speech_clarity_pace: 100,
+        custom_metrics: { greeting: false, introduction: false, clinic: false, name: false,
+            branch: true, appointment: null, offer: false, source: null }
+    } }
+    try {
+        render(<JournalDetail report={report} />)
+        expect(screen.getByText('metricScore').parentElement).toHaveTextContent('37.5/100')
+    } finally { report.analytics = original }
+})
 it('does not show internal provenance or request score history for customers', () => {
     render(<JournalDetail report={report} />)
     expect(screen.queryByText('quality_legacy')).not.toBeInTheDocument()

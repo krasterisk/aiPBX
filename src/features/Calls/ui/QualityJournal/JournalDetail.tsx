@@ -24,7 +24,7 @@ export function JournalDetail({ report: initialReport, project, onDeleted }: { r
     const [runId, setRunId] = useState<string | undefined>()
     const [showHistory, setShowHistory] = useState(false)
     const [historyBefore, setHistoryBefore] = useState<string | undefined>()
-    const detail = useGetQualityDetailQuery({ channelId: initialReport.channelId, runId })
+    const detail = useGetQualityDetailQuery({ channelId: initialReport.channelId, runId }, { refetchOnMountOrArgChange: true })
     const history = useGetQualityHistoryQuery({ channelId: initialReport.channelId, before: historyBefore }, { skip: !admin || !operator || !showHistory })
     const report: Report = detail.currentData ? { ...initialReport, ...detail.currentData.record, analytics: detail.currentData.analytics ?? undefined } : initialReport
     const tabs: DetailTab[] = admin ? ['overview', 'transcript', 'metadata'] : ['overview', 'transcript']

@@ -3,7 +3,7 @@ import { PreviewMetricCalls } from './PreviewMetricCalls'
 
 const mockQuery = jest.fn()
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key, i18n: { language: 'en' } }) }))
-jest.mock('@/entities/Report', () => ({ useGetOperatorEvidence: (args: unknown) => mockQuery(args) }))
+jest.mock('@/entities/Report', () => ({ useQualityEvidenceQuery: (args: unknown) => mockQuery(args) }))
 const entry: any = { kind: 'operatorMetric', metricId: 'politeness_empathy', operatorId: '203', operatorAccountId: '99' }
 const filters = { projectId: '5', sources: '["external-api"]', tagIds: '["a","b"]', callTypes: '["incoming"]' }
 

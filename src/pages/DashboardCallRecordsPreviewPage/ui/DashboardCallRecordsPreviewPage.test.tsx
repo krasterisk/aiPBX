@@ -11,7 +11,7 @@ jest.mock('@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader', () 
 jest.mock('@/widgets/DashboardLayout', () => ({ DashboardLayout: ({ children, periodControl }: any) => <>{periodControl(jest.fn())}{children}</> }))
 jest.mock('@/features/Calls', () => ({ CallAnalysisDetail: ({ channelId }: any) => <output data-testid="shared-call-detail">{channelId}</output> }))
 jest.mock('@/features/OperatorAnalytics', () => ({ OperatorDashboardPreview: ({ filters, renderCallDetail }: any) => <><output data-testid="filters">{JSON.stringify(filters)}</output>{renderCallDetail('native-id', jest.fn())}</> }))
-jest.mock('@/entities/Report', () => ({ WITHOUT_PROJECT_FILTER: 'none', useGetCallJournalOptionsQuery: () => ({ currentData: { people: [] } }), useGetOperatorProjects: () => ({ data: [{ id: 5, name: 'Demo' }] }), useGetOperatorDashboard: (...args: any[]) => { query(...args); return { data: {}, isFetching: false } } }))
+jest.mock('@/entities/Report', () => ({ WITHOUT_PROJECT_FILTER: 'none', useGetCallJournalOptionsQuery: () => ({ currentData: { people: [] } }), useGetOperatorProjects: () => ({ data: [{ id: 5, name: 'Demo' }] }), useQualityDashboardQuery: (...args: any[]) => { query(...args); return { data: {}, isFetching: false } } }))
 jest.mock('./PreviewDatePresets', () => ({ PreviewDatePresets: ({ onChange }: any) => <button onClick={() => onChange({ startDate: '2026-10-23T00:00:00.000Z', endDate: '2026-10-23T23:59:59.999Z' })}>previous</button> }))
 
 it('keeps exact preview dates local and preserves the original date-only Redux state', () => {

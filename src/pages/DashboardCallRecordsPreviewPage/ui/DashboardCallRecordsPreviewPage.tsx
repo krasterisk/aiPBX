@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { DashboardLayout } from '@/widgets/DashboardLayout'
 import { OperatorDashboardPreview } from '@/features/OperatorAnalytics'
 import { CallAnalysisDetail } from '@/features/Calls'
-import { useGetOperatorDashboard, useGetOperatorProjects, WITHOUT_PROJECT_FILTER, useGetCallJournalOptionsQuery } from '@/entities/Report'
+import { useQualityDashboardQuery as useGetOperatorDashboard, useGetOperatorProjects, WITHOUT_PROJECT_FILTER, useGetCallJournalOptionsQuery } from '@/entities/Report'
 import { getUserAuthData, isUserAdmin, ClientFilter } from '@/entities/User'
 import {
     dashboardPageReducer,
@@ -65,7 +65,7 @@ function PreviewContent() {
     const changeProject = (value: string) => { setSelected(value); setSelection(old => ({ ...old, tagIds: [] })); const next = new URLSearchParams(params); next.set('projectId', value); setParams(next, { replace: true }) }
     const field = (key: keyof typeof selection, label: string, values: Array<{ value: string, label: string }>) => ({ id: key, label: String(j(label)), options: values, value: selection[key], onChange: (value: string[]) => { setSelection(old => ({ ...old, [key]: value })) }, messages })
     const panelFields = [field('people', 'people', people), field('sources', 'sources', ['call', 'widget', 'playground', 'external-api', 'external-front'].map(value => ({ value, label: String(j('source_' + value)) }))), field('callTypes', 'types', ['incoming', 'outgoing', 'internal'].map(value => ({ value, label: String(j('type_' + value)) }))), field('csat', 'csat', ['1', '2', '3', '4', '5', 'none'].map(value => ({ value, label: value === 'none' ? String(j('withoutCsat')) : `${value} / 5` }))), { id: 'project', label: String(j('project')), options: [...(projects ?? []).map(project => ({ value: String(project.id), label: project.name })), { value: WITHOUT_PROJECT_FILTER, label: String(t('withoutProject')) }], value: [projectId], onChange: (value: string[]) => { changeProject(value[0] || '') }, multiple: false, messages }, field('tagIds', 'topic', (projects?.find(project => String(project.id) === projectId)?.callTaxonomy ?? []).map(tag => ({ value: tag.id, label: tag.name })))]
-    const query = useGetOperatorDashboard(filters, { skip: !startDate || !endDate || !projectId || projectError })
+    const query = useGetOperatorDashboard(filters, { skip: !startDate || !endDate || !projectId || projectError, refetchOnMountOrArgChange: true, refetchOnFocus: true, refetchOnReconnect: true, pollingInterval: 15000 })
     return (
         <DashboardLayout
             title={String(t('title'))}

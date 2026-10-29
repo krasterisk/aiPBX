@@ -184,3 +184,4 @@ export type { QualityRule, QualityConfig, QualityDetail, QualityHistoryItem } fr
 export { useAnalyzeQualityPreviewMutation, useQualityJournalQuery, useLazyQualityJournalQuery, useSaveQualityPreviewOverridesMutation, useDeleteQualityPreviewOverrideMutation } from './api/qualityPreviewApi'
 
 export { useRegenerateCallFreeMutation } from './api/qualityPreviewApi'
+export { useQualityDashboardQuery, useQualityCdrsQuery, useLazyQualityCdrsQuery, useQualityEvidenceQuery } from './api/qualityPreviewApi'

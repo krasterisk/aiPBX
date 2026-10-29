@@ -8,7 +8,7 @@ jest.mock('react-i18next', () => ({
         i18n: { language: 'en' }
     })
 }))
-jest.mock('@/entities/Report', () => ({ WITHOUT_PROJECT_FILTER: 'none', useGetOperatorDashboard: (...args: any[]) => summary(...args) }))
+jest.mock('@/entities/Report', () => ({ WITHOUT_PROJECT_FILTER: 'none', useQualityDashboardQuery: (...args: any[]) => summary(...args) }))
 jest.mock('@/shared/ui/redesign-v3', () => ({
     SidePanel: ({ isOpen, onBack, onClose, title, children }: any) =>
         isOpen ? (

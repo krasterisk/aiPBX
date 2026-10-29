@@ -53,7 +53,7 @@ export function QualityJournal() {
     const currentSignature = useRef(signature)
     currentSignature.current = signature
     const { currentData: data, isFetching, isError, refetch } = useGetCallJournalQuery(query, {
-        skip: !auth, refetchOnFocus: true, refetchOnReconnect: true, pollingInterval: batch.isActive ? 5000 : poll
+        skip: !auth, refetchOnMountOrArgChange: true, refetchOnFocus: true, refetchOnReconnect: true, pollingInterval: batch.isActive ? 5000 : poll || 15000
     })
     const optionsSelection = useMemo(() => {
         const { page: _page, limit: _limit, sortField: _sortField, sortOrder: _sortOrder, people: _people, ...selection } = query

@@ -330,7 +330,7 @@ export interface OperatorAnalysisResult {
   transcription?: string
   recordUrl?: string
   metrics?: OperatorMetrics
-  analytics?: { metrics?: Record<string, unknown> }
+  analytics?: { metrics?: Record<string, unknown>, qualityScore?: number | null, qualityStatus?: Analytics['qualityStatus'] }
   customMetrics?: Record<string, any>
   summary?: string
   success?: boolean

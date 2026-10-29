@@ -4,9 +4,8 @@ import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from '@mui/material'
 import { ChevronLeft, ChevronRight, Download, Search, PhoneIncoming, PhoneOutgoing, Network } from 'lucide-react'
-import { useGetOperatorCdrs, useLazyGetOperatorCdrs, type OperatorProject } from '@/entities/Report'
+import { useQualityCdrsQuery as useGetOperatorCdrs, useLazyQualityCdrsQuery as useLazyGetOperatorCdrs, publishedQuality, type OperatorProject } from '@/entities/Report'
 import { collectCdrExport } from '../../lib/collectCdrExport'
-import { operatorCallScore } from '../../lib/operatorCallScore'
 import { ALL_DEFAULT_METRICS } from '../../lib/metricVisual'
 import { previewDuration, scoreTone, type PreviewCallsQuery } from './previewModel'
 import cls from './OperatorDashboardPreview.module.scss'
@@ -39,23 +38,7 @@ export function PreviewCalls({ query, project, page, search, onPage, onSearch, o
     const rows = data?.data ?? []
     const total = data?.total ?? 0
     const pages = Math.max(1, Math.ceil(total / limit))
-    const score = (call: (typeof rows)[number]) => {
-        const metrics = call.metrics ?? call.analytics?.metrics
-        return operatorCallScore(
-            metrics
-                ? {
-                      ...metrics,
-                      custom_metrics: call.customMetrics ?? (metrics as unknown as Record<string, unknown>).custom_metrics
-                  }
-                : undefined,
-            project
-                ? project.visibleDefaultMetrics?.length
-                    ? project.visibleDefaultMetrics
-                    : ALL_DEFAULT_METRICS.map(m => m.key)
-                : undefined,
-            Boolean(project)
-        )
-    }
+    const score = (call: (typeof rows)[number]) => publishedQuality(call.analytics)
     const operator = (call: (typeof rows)[number]) => {
         const name = (call.assistantName || call.operatorName || '').trim()
         return name && name !== 'Unknown Operator' ? name : String(t('noOperator'))
