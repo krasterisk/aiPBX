@@ -14,7 +14,7 @@ jest.mock('@/pages/PaymentPage', () => ({
 }))
 
 jest.mock('@/pages/DashboardCallRecordsPreviewPage', () => ({
-  DashboardCallRecordsPreviewPage: () => <main data-testid="ReviewedCallRecordsDashboard" />,
+  DashboardCallRecordsPreviewPage: ({ insightsEnabled = false }: any) => <main data-testid="ReviewedCallRecordsDashboard" data-insights={String(insightsEnabled)} />,
 }))
 
 jest.mock('@/pages/CallsPage', () => ({ CallsPage: () => <main data-testid="LegacyCalls" /> }))
@@ -33,10 +33,10 @@ describe('app/router/AppRouter', function () {
   })
   test.each([getRouteDashboardCallRecords(), getRouteDashboardCallRecordsPreview()])('serves the reviewed dashboard at %s for an authenticated user', async route => {
     componentRender(<AppRouter />, { route, initialState: { user: { authData: { id: '99', username: 'test', roles: [{ value: UserRolesValues.USER }] }, _mounted: true } } })
-    expect(await screen.findByTestId('ReviewedCallRecordsDashboard')).toBeInTheDocument()
+    expect(await screen.findByTestId('ReviewedCallRecordsDashboard')).toHaveAttribute('data-insights', String(route === getRouteDashboardCallRecordsPreview()))
   })
-  test('keeps authentication required for the main call-records dashboard', async () => {
-    componentRender(<AppRouter />, { route: getRouteDashboardCallRecords(), initialState: {} })
+  test.each([getRouteDashboardCallRecords(), getRouteDashboardCallRecordsPreview()])('keeps authentication required for dashboard %s', async route => {
+    componentRender(<AppRouter />, { route, initialState: {} })
     expect(await screen.findByTestId('MainPage')).toBeInTheDocument()
     expect(screen.queryByTestId('ReviewedCallRecordsDashboard')).not.toBeInTheDocument()
   })

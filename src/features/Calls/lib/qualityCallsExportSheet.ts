@@ -205,13 +205,13 @@ export function buildCallsExportSheet(
         String(t('Длительность')),
         String(t('Токены')),
         String(t('Стоимость')),
-        'CSAT',
-        'Quality /100',
-        'Quality status',
-        'Evidence coverage %',
-        'Quality formula',
-        'Quality revision',
-        'Historical context incomplete',
+        String(t('EXPORT_CSAT')),
+        String(t('EXPORT_QUALITY_SCORE')),
+        String(t('EXPORT_QUALITY_STATUS')),
+        String(t('EXPORT_EVIDENCE_COVERAGE')),
+        String(t('EXPORT_QUALITY_FORMULA')),
+        String(t('EXPORT_QUALITY_REVISION')),
+        String(t('EXPORT_HISTORICAL_CONTEXT_INCOMPLETE')),
         String(t('Настроение')),
         String(t('Результат')),
     ]
@@ -244,13 +244,13 @@ export function buildCallsExportSheet(
         row[String(t('Стоимость'))] = (report.cost || report.amountCurrency || report.billingRecords?.length)
             ? formatDisplayMoney(reportDisplayMoneyInput(report), 4)
             : ''
-        row['Quality /100'] = publishedQuality(report.analytics) ?? ''
-        row['Quality status'] = report.analytics?.qualityStatus ?? ''
-        row['Evidence coverage %'] = report.analytics?.qualityCoverage == null ? '' : report.analytics.qualityCoverage * 100
-        row['Quality formula'] = report.analytics?.qualityVersion ?? ''
-        row['Quality revision'] = report.analytics?.qualityScorecardId ?? ''
-        row['Historical context incomplete'] = report.analytics?.qualityContextIncomplete == null ? '' : String(report.analytics.qualityContextIncomplete)
-        row.CSAT = report.analytics?.csat ?? metrics?.csat ?? ''
+        row[String(t('EXPORT_QUALITY_SCORE'))] = publishedQuality(report.analytics) ?? ''
+        row[String(t('EXPORT_QUALITY_STATUS'))] = report.analytics?.qualityStatus ?? ''
+        row[String(t('EXPORT_EVIDENCE_COVERAGE'))] = report.analytics?.qualityCoverage == null ? '' : report.analytics.qualityCoverage * 100
+        row[String(t('EXPORT_QUALITY_FORMULA'))] = report.analytics?.qualityVersion ?? ''
+        row[String(t('EXPORT_QUALITY_REVISION'))] = report.analytics?.qualityScorecardId ?? ''
+        row[String(t('EXPORT_HISTORICAL_CONTEXT_INCOMPLETE'))] = report.analytics?.qualityContextIncomplete == null ? '' : String(report.analytics.qualityContextIncomplete)
+        row[String(t('EXPORT_CSAT'))] = report.analytics?.csat ?? metrics?.csat ?? ''
         row[String(t('Настроение'))] = getSentiment(report)
         row[String(t('Результат'))] = formatResult(metrics, t)
 

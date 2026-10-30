@@ -40,6 +40,12 @@ export function QualityCorrectionEditor({ channelId, detail }: { channelId: stri
             .filter((item) => item.source === 'human')
             .map((item) => ({ metricId: item.id, origin: item.origin, status: item.status, value: item.value })) ??
         []
+    const answer = (item: (typeof corrections)[number]) => {
+        const value = 'value' in item ? item.value : item.numValue ?? item.boolValue ?? item.strValue
+        if (typeof value === 'boolean') return t(value ? 'yes' : 'no')
+        if (item.origin === 'summary' && item.metricId === 'customer_sentiment' && ['positive', 'neutral', 'negative'].includes(String(value).toLowerCase())) return t('mood_' + String(value).toLowerCase())
+        return String(value ?? '—')
+    }
     const payload = (): MetricOverrideInput | null => {
         if (!rule) return null
         const base = { metricId: rule.id, origin: rule.origin, status, note: note.trim() || null }
@@ -83,7 +89,7 @@ return Number.isFinite(Number(value.replace(',', '.')))
                         {label(item.metricId, item.origin ?? 'default')} ·{' '}
                         {item.status && item.status !== 'assessed'
                             ? t('quality_' + item.status)
-                            : String('value' in item ? item.value : item.numValue ?? item.boolValue ?? item.strValue)}
+                            : answer(item)}
                     </span>
                     <button
                         type="button"

@@ -20,7 +20,9 @@ import { DynamicModuleLoader, type ReducersList } from '@/shared/lib/components/
 
 const reducers: ReducersList = { dashboardPage: dashboardPageReducer }
 
-function PreviewContent() {
+interface DashboardCallRecordsPreviewPageProps { insightsEnabled?: boolean }
+
+function PreviewContent({ insightsEnabled = false }: DashboardCallRecordsPreviewPageProps) {
     const { t } = useTranslation('call-records-preview')
     const { t: j } = useTranslation('quality-journal')
     const [params, setParams] = useSearchParams()
@@ -54,7 +56,9 @@ function PreviewContent() {
         ...Object.fromEntries(Object.entries(selection).filter(([,values]) => values.length).map(([key, values]) => [key, key === 'csat' ? values.join(',') : JSON.stringify(key === 'people' ? values.map(value => JSON.parse(value)) : values)])),
         ...(userId ? { userId: String(userId) } : {})
     }
-    const options = useGetCallJournalOptionsQuery({ userId: userId ? String(userId) : undefined, startDate: filters.startDate || '', endDate: filters.endDate || '' }, { skip: !auth })
+    // Exclude this facet itself so operators can still be added to a multiselection.
+    const optionsSelection = Object.fromEntries(Object.entries(filters).filter(([key]) => key !== 'people'))
+    const options = useGetCallJournalOptionsQuery({ ...optionsSelection, startDate: filters.startDate || '', endDate: filters.endDate || '' }, { skip: !auth })
     const messages: SelectControlProps['messages'] = { all: String(j('all')), selected: count => String(j('selectedCount', { count })), search: String(j('find')), clear: String(j('clearSelection')), empty: String(j('noOptions')), unknown: String(j('selectedValue')) }
     const people = options.currentData?.people ?? []
     const dateValue = (value?: string) => { const date = new Date(value || ''); return Number.isNaN(date.getTime()) ? '' : `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}` }
@@ -80,6 +84,7 @@ function PreviewContent() {
             }
         >
             <OperatorDashboardPreview
+                insightsEnabled={insightsEnabled}
                 renderCallDetail={(channelId, onDeleted) => <CallAnalysisDetail channelId={channelId} project={projects?.find(p => String(p.id) === projectId)} onDeleted={onDeleted} />}
                 key={JSON.stringify(filters)}
                 peopleControl={<SelectControl label={String(j('people'))} options={people} value={selection.people} onChange={value => { setSelection(old => ({ ...old, people: value })) }} disabled={options.isFetching} messages={messages}/> }
@@ -105,10 +110,10 @@ function PreviewContent() {
     )
 }
 
-export default function DashboardCallRecordsPreviewPage() {
+export default function DashboardCallRecordsPreviewPage(props: DashboardCallRecordsPreviewPageProps) {
     return (
         <DynamicModuleLoader reducers={reducers} removeAfterUnmount={false}>
-            <PreviewContent />
+            <PreviewContent {...props} />
         </DynamicModuleLoader>
     )
 }

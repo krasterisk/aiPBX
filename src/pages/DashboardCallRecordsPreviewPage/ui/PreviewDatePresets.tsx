@@ -12,7 +12,7 @@ export function PreviewDatePresets({
     onChange: (value: DateRange) => void
     onOpenFilters?: () => void
 }) {
-    const { t } = useTranslation('call-records-preview')
+    const { t, i18n } = useTranslation('call-records-preview')
     const presets: DatePreset[] = ['today', 'week', 'month', 'year']
     const nextRange = shiftDateRange(value, 1)
     const canAdvance = Date.parse(nextRange.startDate) <= Date.parse(datePreset('today').endDate)
@@ -82,7 +82,7 @@ export function PreviewDatePresets({
                     <ChevronLeft size={18} aria-hidden />
                 </button>
                 <span aria-live="polite">
-                    {new Date(value.startDate).toLocaleDateString()} — {new Date(value.endDate).toLocaleDateString()}
+                    {new Date(value.startDate).toLocaleDateString(i18n.language)} — {new Date(value.endDate).toLocaleDateString(i18n.language)}
                 </span>
                 <button
                     type="button"

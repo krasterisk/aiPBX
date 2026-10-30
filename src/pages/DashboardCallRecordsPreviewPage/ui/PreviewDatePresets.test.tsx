@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { PreviewDatePresets } from './PreviewDatePresets'
 import { datePreset, shiftDateRange } from './datePresets'
 
-jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
+jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key, i18n: { language: 'ru' } }) }))
 
 beforeEach(() => {
     jest.useFakeTimers().setSystemTime(new Date(2026, 9, 24, 12, 30))

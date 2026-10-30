@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { OperatorDashboardPreview } from './OperatorDashboardPreview'
 
+jest.mock('./DashboardInsights', () => ({ DashboardInsights: () => <section data-testid="insights" /> }))
 const summary = jest.fn()
 jest.mock('react-i18next', () => ({
     useTranslation: () => ({
@@ -338,4 +339,11 @@ it('shows exact outcome counts rather than reconstructing rounded rates, includi
     expect(JSON.parse(screen.getByTestId('panel-entry').textContent!).query).toMatchObject({ ...props.filters, success: true })
     fireEvent.click(screen.getByRole('button', { name: 'outcomeUnknown 97' }))
     expect(JSON.parse(screen.getByTestId('panel-entry').textContent!).query).toMatchObject({ ...props.filters, withoutOutcome: true })
+})
+
+it('only mounts new insights when explicitly enabled', () => {
+    const view = render(<OperatorDashboardPreview {...props} />)
+    expect(screen.queryByTestId('insights')).not.toBeInTheDocument()
+    view.rerender(<OperatorDashboardPreview {...props} insightsEnabled />)
+    expect(screen.getByTestId('insights')).toBeInTheDocument()
 })

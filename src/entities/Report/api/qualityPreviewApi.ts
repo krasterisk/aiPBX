@@ -1,5 +1,6 @@
 import { rtkApi } from '@/shared/api/rtkApi'
 import type { AllReports, MetricOverrideInput, OperatorCdrResponse, OperatorDashboardResponse, OperatorEvidenceResponse } from '../model/types/report'
+import type { DashboardInsightsResponse } from '../model/types/dashboardInsights'
 import type { JournalQuery } from './journalApi'
 import type { reportApi } from './reportApi'
 import { applyProjectQuery } from './reportApi'
@@ -9,6 +10,10 @@ const qualityParams = ({ projectId, ...rest }: { projectId?: string, [key: strin
 
 export const qualityPreviewApi = rtkApi.injectEndpoints({
  endpoints: build => ({
+    qualityInsights: build.query<DashboardInsightsResponse, Parameters<typeof reportApi.endpoints.getOperatorDashboard.initiate>[0] & { refresh?: boolean, timezone?: string }>({
+        query: params => ({ url: '/quality-preview/insights', params: qualityParams({ ...params, refresh: params.refresh ? '1' : undefined }) }),
+        keepUnusedDataFor: 0
+    }),
     qualityDashboard: build.query<OperatorDashboardResponse, Parameters<typeof reportApi.endpoints.getOperatorDashboard.initiate>[0]>({
         query: params => ({ url: '/quality-preview/dashboard', params: qualityParams(params) }),
         providesTags: [{ type: 'OperatorAnalytics', id: 'QUALITY-PREVIEW' }]
@@ -45,4 +50,4 @@ export const qualityPreviewApi = rtkApi.injectEndpoints({
 })
 })
 export const { useRegenerateCallFreeMutation, useAnalyzeQualityPreviewMutation, useQualityJournalQuery, useLazyQualityJournalQuery, useSaveQualityPreviewOverridesMutation, useDeleteQualityPreviewOverrideMutation } = qualityPreviewApi
-export const { useQualityDashboardQuery, useQualityCdrsQuery, useLazyQualityCdrsQuery, useQualityEvidenceQuery } = qualityPreviewApi
+export const { useLazyQualityInsightsQuery, useQualityDashboardQuery, useQualityCdrsQuery, useLazyQualityCdrsQuery, useQualityEvidenceQuery } = qualityPreviewApi

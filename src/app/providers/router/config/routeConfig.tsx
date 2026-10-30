@@ -174,7 +174,7 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
   [AppRoutes.DASHBOARD_CALL_RECORDS_PREVIEW]: {
     path: getRouteDashboardCallRecordsPreview(),
     authOnly: true,
-    element: <DashboardCallRecordsPreviewPage />
+    element: <DashboardCallRecordsPreviewPage insightsEnabled />
   },
   [AppRoutes.PAYMENT]: {
     path: getRoutePayment(),

@@ -25,10 +25,12 @@ import {
     type OperatorSortKey,
     type PreviewFilters
 } from './previewModel'
+import { DashboardInsights } from './DashboardInsights'
 import { OperatorFilter } from './OperatorFilter'
 import cls from './OperatorDashboardPreview.module.scss'
 
 interface Props {
+    insightsEnabled?: boolean
     renderCallDetail?: (channelId: string, onDeleted: () => void) => ReactNode
     peopleControl?: ReactNode
     isAdmin?: boolean
@@ -248,6 +250,7 @@ export function OperatorDashboardPreview(props: Props) {
                             </button>
                         ))}
                     </section>
+                    {props.insightsEnabled && <DashboardInsights filters={filters} project={props.project} total={total} renderCallDetail={props.renderCallDetail} />}
                     {!total && <div className={cls.emptySummary}>{t('noCalls')}</div>}
                     <div className={cls.grid}>
                         <Section

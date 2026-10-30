@@ -185,3 +185,6 @@ export { useAnalyzeQualityPreviewMutation, useQualityJournalQuery, useLazyQualit
 
 export { useRegenerateCallFreeMutation } from './api/qualityPreviewApi'
 export { useQualityDashboardQuery, useQualityCdrsQuery, useLazyQualityCdrsQuery, useQualityEvidenceQuery } from './api/qualityPreviewApi'
+
+export { useLazyQualityInsightsQuery } from './api/qualityPreviewApi'
+export type { DashboardInsight, DashboardInsightsResponse } from './model/types/dashboardInsights'

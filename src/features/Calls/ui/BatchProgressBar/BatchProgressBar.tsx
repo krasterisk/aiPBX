@@ -64,6 +64,7 @@ export const BatchProgressBar = memo((props: BatchProgressBarProps) => {
 
                 <Button
                     variant="clear"
+                    aria-label={String(t('Скрыть прогресс обработки'))}
                     onClick={onDismiss}
                     className={cls.closeBtn}
                 >

@@ -134,7 +134,7 @@ export function JournalDetail({ report: initialReport, project, onDeleted }: { r
                     ['person', report.assistantName], ['extension', report.operatorExtension], ['duration', journalDuration(report.duration)], ['project', project?.name || report.projectId],
                     ['recordFile', report.recordUrl?.split('?')[0].split('/').pop()], ['recordId', report.id], ['channelId', report.channelId], ['account', report.userId], ['model', metrics?._model?.name]
                 ].map(([key, value]) => <div key={String(key)}><dt>{t(String(key))}</dt><dd>{value ?? '—'}</dd></div>)}</dl>
-                <details className={cls.supervisor}><summary>{t('billingDetails')}</summary>{report.billingRecords?.length ? report.billingRecords.map(row => <dl className={cls.detailMeta} key={row.id}><div><dt>{r(row.type)}</dt><dd>{row.totalCost} USD</dd></div><div><dt>{t('tokens')}</dt><dd>{row.totalTokens}</dd></div></dl>) : <p className={cls.note}>{t('noBilling')}</p>}</details>
+                <details className={cls.supervisor}><summary>{t('billingDetails')}</summary>{report.billingRecords?.length ? report.billingRecords.map(row => <dl className={cls.detailMeta} key={row.id}><div><dt>{r(row.type)}</dt><dd>{row.totalCost == null ? '—' : new Intl.NumberFormat(i18n.language, { style: 'currency', currency: 'USD', maximumFractionDigits: 6 }).format(row.totalCost)}</dd></div><div><dt>{t('tokens')}</dt><dd>{row.totalTokens}</dd></div></dl>) : <p className={cls.note}>{t('noBilling')}</p>}</details>
             </>}
         </div>
         {message && <p role="status" className={cls.note}>{message}</p>}

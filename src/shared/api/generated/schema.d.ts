@@ -3656,6 +3656,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/quality-preview/insights": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["QualityPreviewController_insights"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -12140,6 +12156,56 @@ export interface operations {
                 metricId?: string;
                 evidencePage?: number;
                 evidencePageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    QualityPreviewController_insights: {
+        parameters: {
+            query?: {
+                userId?: string;
+                projectId?: number;
+                withoutProject?: string;
+                startDate?: string;
+                endDate?: string;
+                sources?: string;
+                callTypes?: string;
+                people?: string;
+                operatorFilters?: string;
+                tagIds?: string;
+                csat?: string;
+                callType?: string;
+                operatorId?: string;
+                operatorName?: string;
+                operatorNameExact?: string;
+                tagId?: string;
+                withoutTopic?: string;
+                withoutOperator?: string;
+                sentiment?: string;
+                success?: string;
+                withoutOutcome?: string;
+                search?: string;
+                page?: number;
+                limit?: number;
+                sortField?: string;
+                sortOrder?: string;
+                order?: string;
+                metricId?: string;
+                evidencePage?: number;
+                evidencePageSize?: number;
+                timezone?: string;
+                refresh?: string;
             };
             header?: never;
             path?: never;
